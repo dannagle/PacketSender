@@ -1,0 +1,54 @@
+QLineEdit
+{
+}
+
+QListWidgetItem
+{
+    border: 1px solid black;
+}
+
+
+QStatusBar {
+
+color:white;
+}
+
+
+QMenuBar
+{
+}
+
+QLineEdit::focus
+{
+background-color: qlineargradient(x1: 0, y1: 0.5, x2: 1, y2: 0.5, stop: 0 #ffffff, stop: 1  #FCE5A6); /*#D7DEF0;*/
+
+
+}
+
+
+#packetSetupGroup {
+background-color: #FFFFFF;
+}
+
+
+#horizIPtestLayout
+{
+  background-color: #4C4C4C; /*#D7DEF0;*/
+}
+
+QStatusBar
+{
+background-color: #4C4C4C; /*#D7DEF0;*/
+}
+QStatusBar::item
+{
+    border: 1px solid black;
+    border-radius: 3px;
+    background-color: #ffffff;
+    border: none;
+    color: blue;
+}
+
+#centralWidget
+{
+}
