@@ -1,9 +1,6 @@
 # Packet Sender
 
-Packet Sender is a utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Ubuntu Desktop Linux. Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
-
-For more information
-http://PacketSender.com/
+Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Ubuntu Desktop Linux. Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
 ## Download
 
@@ -60,7 +57,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 
 ## Documentation (Command Line)
 
-The command line extension used in Windows installations is .com. Using .exe will launch the GUI. Leave off the extension and Windows will choose the correct program. The same executable conrols the command line and GUI for Mac and Linux operating systems.
+The command line extension used in Windows installations is .com. Using .exe will launch the GUI. Leave off the extension and Windows will choose the correct program. The same executable controls the command line and GUI for Mac and Linux operating systems.
 
 ![Packet Sender CLI screenshot](screenshots/packetsender_command_line.png)
 
@@ -105,4 +102,4 @@ GPL v2 or Later. [Contact me](http://dannagle.com/contact) if you require a diff
 
 ## Copyright
 
-Packet Sender is wholly owned and copyright &copy;  -  [@NagleCode](http://twitter.com/NagleCode) - [DanNagle.com](http://DanNagle.com)
+Packet Sender is wholly owned and copyright &copy;  -  [@NagleCode](http://twitter.com/NagleCode) - [DanNagle.com](http://DanNagle.com)  -  [PacketSender.com](http://PacketSender.com) 
