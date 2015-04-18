@@ -5,9 +5,11 @@
 Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Ubuntu Desktop Linux. Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
 ## Mobile Versions
-The mobile versions are written in Java and Swift and are MIT Licensed.  
+The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
 * [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
 * [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
+
+The desktop version is by far more capable and more popular and is now the sole focus of the project. 
 
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
