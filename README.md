@@ -4,17 +4,18 @@
 
 Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Ubuntu Desktop Linux. Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
-## Mobile Versions
-The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
-* [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
-* [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
-
-The desktop version is by far more capable and more popular and is now the sole focus of the project. 
 
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
 ![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/ubuntu-logo-transparent.png)
+
+## Mobile Versions
+The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
+* [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
+* [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
+
+The desktop version is by far more capable and more popular and is now the sole focus of the project.
 
 
 ## Packet Sender Documentation
@@ -24,14 +25,16 @@ Some knowledge of a basic network protocols is a prerequisite to using Packet Se
 
 ### Support
 
-
-
 * Stack Overflow: [stackoverflow.com/search?q=packet+sender](http://stackoverflow.com/search?q=packet+sender)
 * Twitter: [@NagleCode](http://twitter.com/naglecode)
 * You may also track this project on GitHub.
 * Secure Anonymous Email: [DanNagle.com/contact](http://DanNagle.com/contact)
 
-### Documentation (Desktop)
+### Portable Mode
+
+Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in its run-time directory. Windows users, this directory is the same place as the .exe. For Mac users, this run-time directory is at "PacketSender.app/Contents/MacOS". If INI files are found, it will use them instead of %APPDATA%" or "Library/Application Support".
+
+### Documentation (GUI)
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
@@ -87,6 +90,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -a, --ascii 	Parse data as mixed-ascii (like the GUI).
     -A, --ASCII 	Parse data as pure ascii (no \xx translation).
     -w, --wait <milliseconds> 	Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
+    -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.
     -b, --bind <port> 	Bind port. Default is dynamic.
     -t, --tcp 	Send TCP (default).
     -u, --udp 	Send UDP.
@@ -100,8 +104,8 @@ The command line system in Packet Sender follows the same pattern as other Linux
 ### Example CLI
 
 
-    packetsender -taw 500 ubuntu.com 22 "Hello\nWorld"
-    TCP (56620)://91.189.94.156:22 48 65 6c 6c 6f 0a 57 6f 72 6c 64
+    packetsender -taw 500 packetsender.com 22 "Hello\nWorld"
+    TCP (56620)://192.185.38.130 48 65 6c 6c 6f 0a 57 6f 72 6c 64
     Response HEX:53 53 48 2D 32 2E 30 2D 4F 70 65 6E 53 53 48 5F 35 2E 33 70 31 20 44 65 62 69 61 6E 2D 33 75 62 75 6E 74 75 33 2E 31 2E 49 53 2E 31 30 2E 30 34 0D 0A
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
