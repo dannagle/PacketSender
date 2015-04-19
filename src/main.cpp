@@ -7,7 +7,6 @@
  * Copyright Dan Nagle
  *
  */
-
 #include <QtWidgets/QApplication>
 #include <QDir>
 #include <QDesktopServices>
@@ -84,9 +83,6 @@ int main(int argc, char *argv[])
 
     if(args.size() > 1) {
         QDEBUG() << "Running command line mode.";
-        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        int udpPort = settings.value("udpPort", 55056).toInt();
-        int tcpPort = settings.value("tcpPort", 55056).toInt();
 
         Packet sendPacket;
         sendPacket.init();
@@ -111,15 +107,12 @@ int main(int argc, char *argv[])
         parser.addOption(quietOption);
 
 
-        // A boolean option with multiple names (-f, --force)
         QCommandLineOption hexOption(QStringList() << "x" << "hex", "Parse data as hex (default).");
         parser.addOption(hexOption);
 
-        // A boolean option with multiple names (-f, --force)
         QCommandLineOption asciiOption(QStringList() << "a" << "ascii", "Parse data as mixed-ascii (like the GUI).");
         parser.addOption(asciiOption);
 
-        // A boolean option with multiple names (-f, --force)
         QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data as pure ascii (no \\xx translation).");
         parser.addOption(pureAsciiOption);
 
@@ -130,6 +123,12 @@ int main(int argc, char *argv[])
                 "milliseconds");
         parser.addOption(waitOption);
 
+        // An option with a value
+        QCommandLineOption fileOption(QStringList() << "f" << "file",
+                "Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.",
+                "patch");
+        parser.addOption(fileOption);
+
 
         // An option with a value
         QCommandLineOption bindPortOption(QStringList() << "b" << "bind",
@@ -138,7 +137,6 @@ int main(int argc, char *argv[])
         parser.addOption(bindPortOption);
 
 
-        // A boolean option with multiple names (-f, --force)
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
 
@@ -172,6 +170,9 @@ int main(int argc, char *argv[])
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
         QString name = parser.value(nameOption);
+
+        QString filePath = parser.value(fileOption);
+
 
         QString address = "";
         unsigned int port = 0;
@@ -214,6 +215,13 @@ int main(int argc, char *argv[])
         if(tcp && udp) {
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
             udp = false;
+        }
+
+        if(!filePath.isEmpty() && !QFile::exists(filePath)) {
+            OUTIF() << "Error: specified path "<< filePath <<" does not exist.";
+            filePath.clear();
+            OUTPUT();
+            return -1;
         }
 
         //bind is now default 0
@@ -272,8 +280,29 @@ int main(int argc, char *argv[])
 
         }
 
-        if(!parser.isSet(bindPortOption)) {        
+        if(!parser.isSet(bindPortOption)) {
             bind = 0;
+        }
+
+        if(!filePath.isEmpty() && QFile::exists(filePath)) {
+            QFile dataFile(filePath);
+            if(dataFile.open(QFile::ReadOnly)) {
+
+                if(tcp) {
+                    QByteArray dataArray = dataFile.read(1024*1024*10);;
+                    dataString = Packet::byteArrayToHex(dataArray);
+                } else {
+
+                    QByteArray dataArray = dataFile.read(1024);
+                    dataString = Packet::byteArrayToHex(dataArray);
+                }
+
+                //data format is raw.
+                ascii = 0;
+                hex = 0;
+                mixedascii = 0;
+
+            }
         }
 
 
@@ -291,6 +320,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(udp);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
+        QDEBUGVAR(filePath);
 
 
         //NOW LETS DO THIS!

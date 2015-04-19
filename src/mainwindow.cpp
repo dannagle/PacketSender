@@ -7,7 +7,6 @@
  * Copyright Dan Nagle
  *
  */
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -84,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->buidDateLabel->setText("Build date: " + vDate.toString("yyyy-MM-dd"));
 
 
-    //TODO: not working yet
+    //TODO not working yet
     ui->persistentConnectCheck->hide();
 
     hyperLinkStyle = "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ";
@@ -273,16 +272,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    //Bruce is my pet poodle.
-    //Dog easter egg.  CTRL D, O, G.
-    //             or  CMD D, O, G.
+        //Bruce is my pet poodle.
+        //Dog easter egg.  CTRL D, O, G.
+        //             or  CMD D, O, G.
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D,Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G ), this);
     QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcut, SIGNAL(activated()), this, SLOT(poodlepic()));
-
-
-
-
-
 
 
     QDEBUG() << "Load time:" <<  timeSinceLaunch();
