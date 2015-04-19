@@ -21,7 +21,6 @@
 //Load local file if it exists
 #define SETTINGSFILE ((QFile::exists("ps_settings.ini")) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
 #define PACKETSFILE ((QFile::exists("packets.ini")) ? ("packets.ini") : ((SETTINGSPATH)  + "packets.ini"))
-#define TRAFFICFILE ((QFile::exists("traffic.ini")) ? ("traffic.ini") : ((SETTINGSPATH)  + "traffic.ini"))
 
 
 #define NAMEINIKEY "NAMES"

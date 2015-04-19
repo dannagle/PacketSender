@@ -283,7 +283,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
-    QDEBUG() << "Traffic file loaded" << TRAFFICFILE;
 
 }
 
@@ -1932,5 +1931,59 @@ void MainWindow::on_hideQuickSendCheck_clicked(bool checked)
     } else {
         ui->buttonScrollArea->show();
     }
+
+}
+
+void MainWindow::on_saveLogButton_clicked()
+{
+    static QString fileName = QDir::homePath() + QString("/trafficlog.log");
+
+    fileName = QFileDialog::getSaveFileName(this, tr("Save Traffic Log"),
+                               QDir::toNativeSeparators(fileName), tr("log (*.log)"));
+
+   QStringList testExt = fileName.split(".");
+   QString ext = "";
+   if(testExt.size() > 0) {
+       ext = testExt.last();
+   }
+   if(ext != "log") {
+       fileName.append(".log");
+   }
+   QDEBUG() << "Export log to" << fileName;
+
+   QString exportString = "";
+   QString delim = "\t";
+
+   QTextStream out;
+   out.setString(&exportString);
+
+   out << "TIME" << delim << "From IP" << delim << "From Port" << delim << "To IP"
+       << delim << "To Port" << delim << "Method" << delim << "Error" << delim << "ASCII" << delim << "Hex\n";
+
+
+   Packet tempPacket;
+   foreach(tempPacket, packetsLogged)
+   {
+
+       exportString.append(tempPacket.timestamp.toString(DATETIMEFORMAT));exportString.append(delim);
+       exportString.append(tempPacket.fromIP);exportString.append(delim);
+       exportString.append(QString::number(tempPacket.fromPort));exportString.append(delim);
+       exportString.append(tempPacket.toIP);exportString.append(delim);
+       exportString.append(QString::number(tempPacket.port));exportString.append(delim);
+       exportString.append(tempPacket.tcpOrUdp);exportString.append(delim);
+       exportString.append(tempPacket.errorString);exportString.append(delim);
+       exportString.append(tempPacket.hexToASCII(tempPacket.hexString));exportString.append(delim);
+       exportString.append(tempPacket.hexString);exportString.append(delim);
+       exportString.append("\n");
+   }
+
+
+   QFile file(fileName);
+   if(file.open(QFile::WriteOnly)) {
+       file.write(exportString.toLatin1());
+       file.close();
+   }
+
+   statusBarMessage("Save Log: " + fileName);
 
 }

@@ -168,6 +168,8 @@ private slots:
 
     void on_hideQuickSendCheck_clicked(bool checked);
 
+    void on_saveLogButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
