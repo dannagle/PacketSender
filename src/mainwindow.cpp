@@ -280,6 +280,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QDEBUG() << "Load time:" <<  timeSinceLaunch();
+
+    QDEBUG() << "Settings file loaded" << SETTINGSFILE;
+    QDEBUG() << "Packets file loaded" << PACKETSFILE;
+    QDEBUG() << "Traffic file loaded" << TRAFFICFILE;
+
 }
 
 QPushButton * MainWindow::generatePSLink()

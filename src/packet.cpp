@@ -390,12 +390,6 @@ void Packet::saveToDB()
 }
 
 
-Packet Packet::fetchFromDB(QString thename, QList<Packet> allPackets)
-{
-    Packet fromPacket;
-    return fromPacket;
-}
-
 Packet Packet::fetchFromDB(QString thename)
 {
     QList<Packet> packets =  Packet::fetchAllfromDB("");

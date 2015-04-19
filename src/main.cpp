@@ -16,28 +16,6 @@
 #include "mainwindow.h"
 #define DEBUGMODE 0
 
-void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    static QFile logfile(LOGFILE);
-    Q_UNUSED(context);
-    if(!logfile.isOpen())
-    {
-        logfile.open(QFile::Append);
-    } else {
-//        logfile.flush();
-    }
-    switch (type) {
-      default:
-        logfile.write("\n");
-        logfile.write(msg.toLatin1());
-        break;
-      case QtFatalMsg:
-         logfile.flush();
-         abort();
-      }
-}
-
-
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {

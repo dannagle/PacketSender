@@ -57,7 +57,6 @@ public:
     void saveToDB();
 
 
-    static Packet fetchFromDB(QString thename, QList<Packet> allPackets);
     static Packet fetchFromDB(QString thename);
     static QList<Packet> fetchAllfromDB(QString importFile);
     static bool removeFromDB(QString thename);

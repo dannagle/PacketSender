@@ -17,10 +17,12 @@
 
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + QDir::separator() + "PacketSender" + QDir::separator()
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ QDir::separator() +"PacketSender" + QDir::separator()
-#define SETTINGSFILE SETTINGSPATH  + "ps_settings.ini"
-#define PACKETSFILE SETTINGSPATH + "packets.ini"
-#define TRAFFICFILE SETTINGSPATH + "traffic.ini"
-#define LOGFILE SETTINGSPATH + "packetsender.log"
+
+//Load local file if it exists
+#define SETTINGSFILE ((QFile::exists("ps_settings.ini")) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
+#define PACKETSFILE ((QFile::exists("packets.ini")) ? ("packets.ini") : ((SETTINGSPATH)  + "packets.ini"))
+#define TRAFFICFILE ((QFile::exists("traffic.ini")) ? ("traffic.ini") : ((SETTINGSPATH)  + "traffic.ini"))
+
 
 #define NAMEINIKEY "NAMES"
 
