@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
         // An option with a value
         QCommandLineOption fileOption(QStringList() << "f" << "file",
                 "Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.",
-                "patch");
+                "path");
         parser.addOption(fileOption);
 
 
