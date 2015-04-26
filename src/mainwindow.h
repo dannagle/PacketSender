@@ -170,6 +170,8 @@ private slots:
 
     void on_saveLogButton_clicked();
 
+    void on_persistentConnectCheck_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;

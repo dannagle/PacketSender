@@ -16,6 +16,8 @@
 #include <QDir>
 #include <QSettings>
 
+#include "persistentconnection.h"
+
 PacketNetwork::PacketNetwork(QWidget *parent) :
     QTcpServer(parent)
 {
@@ -227,6 +229,15 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
 
+    if(sendpacket.persistent && (sendpacket.tcpOrUdp.toUpper() == "TCP")) {
+        //spawn a window.
+        PersistentConnection * pcWindow = new PersistentConnection();
+        pcWindow->sendPacket = sendpacket;
+        pcWindow->show();
+        return;
+
+    }
+
     QString hashAddress = sendpacket.toIP + ":" + sendpacket.port;
     if(tcpthreadList[hashAddress] != NULL) {
         if(tcpthreadList[hashAddress]->isRunning()) {
@@ -271,133 +282,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         emit packetSent(sendpacket);
     }
 
-
-/*
-    else {
-
-        sendpacket.fromPort = getTCPPort();
-
-        tcpSocket->connectToHost(address,  sendpacket.port);
-        tcpSocket->waitForConnected(5000);
-
-        if(tcpSocket->state() == QAbstractSocket::ConnectedState)
-        {
-            tcpSocket->write(sendpacket.getByteArray());
-
-            Packet tcpPacket;
-            tcpPacket.timestamp = QDateTime::currentDateTime();
-            tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-            tcpPacket.tcpOrUdp = "TCP";
-            tcpPacket.fromIP = tcpSocket->peerAddress().toString();
-            tcpPacket.toIP = "You";
-            tcpPacket.port = sendpacket.fromPort;
-            tcpPacket.fromPort =    tcpSocket->peerPort();
-
-            tcpSocket->waitForReadyRead(2000);
-            tcpPacket.hexString = Packet::byteArrayToHex(tcpSocket->readAll());
-            tcpSocket->disconnectFromHost();
-
-            emit packetSent(tcpPacket);
-
-
-
-            sendpacket.response = tcpSocket->readAll();
-        } else {
-                    QDEBUG() << "Could not connect";
-                    sendpacket.errorString = "Could not connect";
-        }
-
-        tcpSocket->disconnectFromHost();
-
-    }
-
-
-    emit packetSent(sendpacket);
-
-*/
-
-
 }
-
-/*
-public slots:
-    void packetReceivedECHO(Packet sendpacket);
-    void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
-    void packetSentECHO(Packet sendpacket);
-*/
-
 
 void PacketNetwork::newSession()
 {
-    /*
-    QDEBUG() <<"new TCP connection";
 
-    QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
-
-    QByteArray data = clientConnection->readAll();
-    QDEBUGVAR(QString(data));
-
-    TCPThread *thread = new TCPThread(clientConnection->socketDescriptor(), this);
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-    QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-             << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
-             << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-    thread->start();
-    */
-
-    /*
-    QByteArray data;
-    QTcpSocket *clientConnection = tcpServer->nextPendingConnection();
-    connect(clientConnection, SIGNAL(disconnected()),
-            clientConnection, SLOT(deleteLater()));
-
-    Packet tcpPacket;
-    tcpPacket.timestamp = QDateTime::currentDateTime();
-    tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
-    tcpPacket.tcpOrUdp = "TCP";
-    tcpPacket.fromIP = clientConnection->peerAddress().toString();
-    tcpPacket.toIP = "You";
-    tcpPacket.port = getTCPPort();
-    tcpPacket.fromPort = clientConnection->peerPort();
-
-    clientConnection->waitForReadyRead(2000);
-    data = clientConnection->readAll();
-    int loopCount = 0;
-    while(data.size() < 10000 && clientConnection->isOpen()) {
-        data.append(clientConnection->readAll());
-        clientConnection->waitForReadyRead(200);
-        loopCount++;
-        if(loopCount > 10) {
-            break;
-        }
-    }
-    tcpPacket.hexString = Packet::byteArrayToHex(data);
-    emit packetSent(tcpPacket);
-
-    if(sendResponse)
-    {
-        Packet tcpPacketreply;
-        tcpPacketreply.timestamp = QDateTime::currentDateTime();
-        tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
-        tcpPacketreply.tcpOrUdp = "TCP";
-        tcpPacketreply.fromIP = "You (Response)";
-        tcpPacketreply.toIP = clientConnection->peerAddress().toString();
-        tcpPacketreply.port = clientConnection->peerPort();
-        tcpPacketreply.fromPort = getTCPPort();
-        data = Packet::HEXtoByteArray(responseData);
-        tcpPacketreply.hexString = Packet::byteArrayToHex(data);
-        clientConnection->write(data);
-        clientConnection->waitForBytesWritten(2000);
-        emit packetSent(tcpPacketreply);
-
-    }
-
-    clientConnection->disconnectFromHost();
-    clientConnection->close();
-
-    return;
-*/
 
 }

@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //TODO not working yet
-    ui->persistentConnectCheck->hide();
+    ui->persistentConnectCheck->show();
 
     hyperLinkStyle = "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ";
 
@@ -1831,8 +1831,20 @@ void MainWindow::on_delayAfterConnectCheck_clicked(bool checked)
 
 void MainWindow::on_persistentConnectCheck_clicked(bool checked)
 {
-    Q_UNUSED(checked);
+
+    if(checked) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Persistent Connection");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText("This spawns a new window representing each connection. It can be very noisy.");
+        msgBox.exec();
+    }
+
     applyNetworkSettings();
+
 }
 
 void MainWindow::on_bugsLinkButton_clicked()
@@ -1986,4 +1998,8 @@ void MainWindow::on_saveLogButton_clicked()
 
    statusBarMessage("Save Log: " + fileName);
 
+}
+
+void MainWindow::on_persistentConnectCheck_toggled(bool checked)
+{
 }

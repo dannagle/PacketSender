@@ -189,7 +189,7 @@
        <enum>QTabWidget::North</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="movable">
        <bool>false</bool>
@@ -452,7 +452,7 @@
         <item>
          <widget class="QTabWidget" name="settingsTabWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_3">
            <attribute name="title">
