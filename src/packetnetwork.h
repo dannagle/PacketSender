@@ -26,6 +26,7 @@
 #include "globals.h"
 #include "tcpthread.h"
 #include "packet.h"
+#include "persistentconnection.h"
 
 
 class PacketNetwork : public QTcpServer
@@ -74,8 +75,8 @@ private slots:
 private:
 
     QUdpSocket *udpSocket;
-    QTcpSocket *tcpSocket;
     QHash<QString, TCPThread *> tcpthreadList;
+    QHash<QString, PersistentConnection *> pcList;
 
 };
 

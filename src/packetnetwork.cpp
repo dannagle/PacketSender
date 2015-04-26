@@ -27,12 +27,10 @@ PacketNetwork::PacketNetwork(QWidget *parent) :
 void PacketNetwork::kill()
 {
     udpSocket->close();
-    tcpSocket->close();
     close();
 
     QApplication::processEvents();
     udpSocket->deleteLater();
-    tcpSocket->deleteLater();
     QApplication::processEvents();
 
 }
@@ -73,12 +71,12 @@ void PacketNetwork::init()
 {
 
     udpSocket = new QUdpSocket(this);
-    tcpSocket = new QTcpSocket(this);
 
     receiveBeforeSend = false;
     delayAfterConnect = 0;
 
     tcpthreadList.clear();
+    pcList.clear();
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
@@ -233,7 +231,12 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //spawn a window.
         PersistentConnection * pcWindow = new PersistentConnection();
         pcWindow->sendPacket = sendpacket;
+        pcWindow->init();
         pcWindow->show();
+
+        //Prevent Qt from auto-destroying these windows.
+        //TODO: Use a real connection manager.
+        pcList[sendpacket.toIP + QString::number(pcList.size())] = pcWindow;
         return;
 
     }
@@ -262,6 +265,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
                  << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
         QDEBUG() << connect(thread, SIGNAL(destroyed()),this, SLOT(disconnected()));
 
+        //Prevent Qt from auto-destroying these threads.
+        //TODO: Develop a real thread manager.
         tcpthreadList[hashAddress] = thread;
         thread->start();
         return;

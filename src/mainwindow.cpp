@@ -1839,7 +1839,7 @@ void MainWindow::on_persistentConnectCheck_clicked(bool checked)
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("This spawns a new window representing each connection. It can be very noisy.");
+        msgBox.setText("This spawns a new window for each TCP connection. \n\nClose the window to close the connection.");
         msgBox.exec();
     }
 
