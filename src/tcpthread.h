@@ -32,6 +32,10 @@ signals:
     void packetReceived(Packet sendpacket);
     void toStatusBar(const QString & message, int timeout = 0, bool override = false);
     void packetSent(Packet sendpacket);
+    void connectStatus(QString message);
+
+public slots:
+    void sendPersistant(Packet sendpacket);
 
 private slots:
     void wasdisconnected();
@@ -40,6 +44,7 @@ private:
     int socketDescriptor;
     QString text;
     Packet sendPacket;
+    Packet sendPacketPersistant;
     void init();
     void writeResponse(QTcpSocket *sock, Packet tcpPacket);
     QTcpSocket * clientConnection;

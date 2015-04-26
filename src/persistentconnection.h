@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QList>
+
 #include "packet.h"
 #include "tcpthread.h"
 
@@ -20,17 +22,28 @@ public:
     Packet sendPacket;
 
     void init();
+
+signals:
+    void persistantPacketSend(Packet sendpacket);
+
+
 public slots:
     void packetToSend(Packet sendpacket);
     void refreshTimerTimeout();
     void aboutToClose();
+    void statusReceiver(QString message);
+
+    void packetSentSlot(Packet pkt);
 private slots:
     void on_buttonBox_rejected();
+
+    void on_asciiSendButton_clicked();
 
 private:
     Ui::PersistentConnection *ui;
     TCPThread *thread;
     QTimer refreshTimer;
+    QList<Packet> trafficList;
 
 };
 

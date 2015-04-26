@@ -1,6 +1,8 @@
 #include "persistentconnection.h"
 #include "ui_persistentconnection.h"
 
+#include <QTextStream>
+
 PersistentConnection::PersistentConnection(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PersistentConnection)
@@ -15,10 +17,8 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
              << connect ( this , SIGNAL ( dialogIsClosing() ) , this, SLOT ( aboutToClose (  ) ) );
     QDEBUG() << "Setup timer";
     refreshTimer.setInterval(2000);
-    QDEBUG() << "Starting timer";
     refreshTimer.start();
-    QDEBUG() << "Finished";
-
+    trafficList.clear();
 
 }
 
@@ -26,7 +26,15 @@ void PersistentConnection::aboutToClose() {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
     QDEBUG() << "Stopping thread";
-    thread->quit();
+    thread->terminate();
+
+}
+
+void PersistentConnection::statusReceiver(QString message)
+{
+    QDEBUGVAR(message);
+    ui->topLabel->setText(message);
+
 
 }
 
@@ -55,6 +63,14 @@ void PersistentConnection::init() {
 
     thread = new TCPThread(sendPacket, this);
 
+    QDEBUG() << ": thread Connection attempt " <<
+                connect ( this , SIGNAL ( persistantPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
+             << connect ( thread , SIGNAL ( connectStatus(QString) ) , this, SLOT ( statusReceiver(QString) ) )
+             << connect ( thread , SIGNAL ( packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
+                ;
+
+
+
     QApplication::processEvents();
 
     thread->start();
@@ -80,5 +96,46 @@ void PersistentConnection::on_buttonBox_rejected()
 
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
+
+}
+
+
+void PersistentConnection::packetSentSlot(Packet pkt) {
+
+    trafficList.prepend(pkt);
+    Packet loopPkt;
+    QString html ="<html>";
+    QTextStream out(&html);
+    out << "<b>" << trafficList.size() << " packets." << "</b><br>";
+    foreach(loopPkt, trafficList) {
+        if(loopPkt.fromIP.toLower() == "you") {
+            out << "<p style='color:blue'>";
+        } else {
+            out << "<p>";
+        }
+
+        out << "<pre>" << QString(loopPkt.hexToASCII(loopPkt.hexString)).toHtmlEscaped() << "</pre>";
+        out << "</p>";
+
+        out << "<hr>";
+    }
+
+    out << "</html>";
+    ui->trafficViewEdit->setHtml(html);
+
+}
+
+void PersistentConnection::on_asciiSendButton_clicked()
+{
+    QString ascii = ui->asciiLineEdit->text();
+    if(ascii.isEmpty()) {
+        return;
+    }
+    Packet asciiPacket = sendPacket;
+    asciiPacket.clear();
+    Packet::ASCIITohex(ascii);
+    asciiPacket.hexString = ascii;
+    emit persistantPacketSend(asciiPacket);
+    ui->asciiLineEdit->setText("");
 
 }
