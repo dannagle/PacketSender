@@ -64,7 +64,7 @@ void PersistentConnection::init() {
     thread = new TCPThread(sendPacket, this);
 
     QDEBUG() << ": thread Connection attempt " <<
-                connect ( this , SIGNAL ( persistantPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
+                connect ( this , SIGNAL ( persistentPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
              << connect ( thread , SIGNAL ( connectStatus(QString) ) , this, SLOT ( statusReceiver(QString) ) )
              << connect ( thread , SIGNAL ( packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
                 ;
@@ -102,19 +102,20 @@ void PersistentConnection::on_buttonBox_rejected()
 
 void PersistentConnection::packetSentSlot(Packet pkt) {
 
-    trafficList.prepend(pkt);
-    Packet loopPkt;
+    Packet loopPkt = pkt;
+    trafficList.prepend(loopPkt);
     QString html ="<html>";
     QTextStream out(&html);
     out << "<b>" << trafficList.size() << " packets." << "</b><br>";
+    int count = 0;
     foreach(loopPkt, trafficList) {
+        QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
         if(loopPkt.fromIP.toLower() == "you") {
             out << "<p style='color:blue'>";
         } else {
             out << "<p>";
         }
-
-        out << "<pre>" << QString(loopPkt.hexToASCII(loopPkt.hexString)).toHtmlEscaped() << "</pre>";
+        out << loopPkt.asciiString().toHtmlEscaped();
         out << "</p>";
 
         out << "<hr>";
@@ -131,11 +132,16 @@ void PersistentConnection::on_asciiSendButton_clicked()
     if(ascii.isEmpty()) {
         return;
     }
-    Packet asciiPacket = sendPacket;
+    Packet asciiPacket;
     asciiPacket.clear();
-    Packet::ASCIITohex(ascii);
-    asciiPacket.hexString = ascii;
-    emit persistantPacketSend(asciiPacket);
+
+    asciiPacket.tcpOrUdp = "TCP";
+    asciiPacket.fromIP = "You";
+    asciiPacket.toIP = sendPacket.toIP;
+    asciiPacket.port = sendPacket.port;
+    asciiPacket.hexString = Packet::ASCIITohex(ascii);
+
+    emit persistentPacketSend(asciiPacket);
     ui->asciiLineEdit->setText("");
 
 }

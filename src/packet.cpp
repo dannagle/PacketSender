@@ -57,7 +57,6 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(fromIP);
     OTHEREQUALS(toIP);
     OTHEREQUALS(errorString);
-    OTHEREQUALS(response);
     OTHEREQUALS(repeat);
     OTHEREQUALS(port);
     OTHEREQUALS(fromPort);
@@ -79,7 +78,6 @@ void Packet::init()
     port = 55005;
     tcpOrUdp = "TCP";
     sendResponse = 0;
-    response.clear();
     repeat = 0;
     timestamp = QDateTime::currentDateTime();
     receiveBeforeSend = false;
@@ -338,6 +336,13 @@ int Packet::hexToInt(QChar hex)
 QByteArray Packet::getByteArray()
 {
     return HEXtoByteArray(hexString);
+}
+
+QString Packet::asciiString()
+{
+    QString hex = hexString;
+    QString ascii = Packet::hexToASCII(hex);
+    return ascii;
 }
 
 

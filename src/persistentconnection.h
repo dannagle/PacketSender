@@ -24,7 +24,7 @@ public:
     void init();
 
 signals:
-    void persistantPacketSend(Packet sendpacket);
+    void persistentPacketSend(Packet sendpacket);
 
 
 public slots:
