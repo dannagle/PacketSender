@@ -148,16 +148,18 @@ void PersistentConnection::on_asciiSendButton_clicked()
     Packet asciiPacket;
     asciiPacket.clear();
 
-    if(ui->appendCRcheck->isChecked()) {
-        ascii.append("\\r");
-    }
-
-
     asciiPacket.tcpOrUdp = "TCP";
     asciiPacket.fromIP = "You";
     asciiPacket.toIP = sendPacket.toIP;
     asciiPacket.port = sendPacket.port;
     asciiPacket.hexString = Packet::ASCIITohex(ascii);
+
+    QDEBUGVAR(asciiPacket.hexString);
+    if(ui->appendCRcheck->isChecked()) {
+        asciiPacket.hexString.append(" 0d");
+    }
+
+
     asciiPacket.receiveBeforeSend = false;
 
     emit persistentPacketSend(asciiPacket);
