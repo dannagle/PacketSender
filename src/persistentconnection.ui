@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>445</width>
+    <width>493</width>
     <height>383</height>
    </rect>
   </property>
@@ -32,7 +32,7 @@
      <item>
       <widget class="QLineEdit" name="asciiLineEdit">
        <property name="placeholderText">
-        <string>ASCII to send</string>
+        <string>ASCII. Press Enter to Send.</string>
        </property>
       </widget>
      </item>
@@ -40,6 +40,16 @@
       <widget class="QPushButton" name="asciiSendButton">
        <property name="text">
         <string>Send</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="appendCRcheck">
+       <property name="text">
+        <string>Append \r</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

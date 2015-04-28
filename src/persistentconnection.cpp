@@ -17,7 +17,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
              << connect ( this , SIGNAL ( accepted() ) , this, SLOT ( aboutToClose (  ) ) )
              << connect ( this , SIGNAL ( dialogIsClosing() ) , this, SLOT ( aboutToClose (  ) ) );
     QDEBUG() << "Setup timer";
-    refreshTimer.setInterval(2000);
+    refreshTimer.setInterval(200);
     refreshTimer.start();
     trafficList.clear();
 
@@ -148,11 +148,17 @@ void PersistentConnection::on_asciiSendButton_clicked()
     Packet asciiPacket;
     asciiPacket.clear();
 
+    if(ui->appendCRcheck->isChecked()) {
+        ascii.append("\\r");
+    }
+
+
     asciiPacket.tcpOrUdp = "TCP";
     asciiPacket.fromIP = "You";
     asciiPacket.toIP = sendPacket.toIP;
     asciiPacket.port = sendPacket.port;
     asciiPacket.hexString = Packet::ASCIITohex(ascii);
+    asciiPacket.receiveBeforeSend = false;
 
     emit persistentPacketSend(asciiPacket);
     ui->asciiLineEdit->setText("");

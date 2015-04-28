@@ -137,6 +137,7 @@ void TCPThread::run()
                     clientConnection->waitForReadyRead(200);
                     if(!sendPacketPersistent.hexString.isEmpty()) {
                         sendPacket.hexString = sendPacketPersistent.hexString;
+                        sendPacket.fromIP = "You";
                         QDEBUGVAR(sendPacket.asciiString());
                         QDEBUGVAR(sendPacket.hexString);
                         sendPacketPersistent.clear();
