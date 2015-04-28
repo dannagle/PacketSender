@@ -2,6 +2,7 @@
 #include "ui_persistentconnection.h"
 
 #include <QTextStream>
+#include <QScrollBar>
 
 PersistentConnection::PersistentConnection(QWidget *parent) :
     QDialog(parent),
@@ -34,6 +35,14 @@ void PersistentConnection::statusReceiver(QString message)
 {
     QDEBUGVAR(message);
     ui->topLabel->setText(message);
+
+    if(message.toLower().startsWith("not connected")) {
+
+        QDEBUG() << "Setting style sheet";
+        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #EEEEEE }");
+        ui->asciiSendButton->setEnabled(false);
+        ui->asciiLineEdit->setEnabled(false);
+    }
 
 
 }
@@ -103,10 +112,12 @@ void PersistentConnection::on_buttonBox_rejected()
 void PersistentConnection::packetSentSlot(Packet pkt) {
 
     Packet loopPkt = pkt;
-    trafficList.prepend(loopPkt);
-    QString html ="<html>";
+    trafficList.append(loopPkt);
+    QString html;
+    html.clear();
     QTextStream out(&html);
-    out << "<b>" << trafficList.size() << " packets." << "</b><br>";
+    out << "<html>" << "<b>" << trafficList.size() << " packets." << "</b><br>";
+
     int count = 0;
     foreach(loopPkt, trafficList) {
         QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
@@ -117,12 +128,14 @@ void PersistentConnection::packetSentSlot(Packet pkt) {
         }
         out << loopPkt.asciiString().toHtmlEscaped();
         out << "</p>";
-
-        out << "<hr>";
     }
 
     out << "</html>";
     ui->trafficViewEdit->setHtml(html);
+
+
+    QScrollBar *vScrollBar = ui->trafficViewEdit->verticalScrollBar();
+    vScrollBar->triggerAction(QScrollBar::SliderToMaximum);
 
 }
 
