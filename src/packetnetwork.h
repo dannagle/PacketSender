@@ -75,8 +75,8 @@ private slots:
 private:
 
     QUdpSocket *udpSocket;
-    QHash<QString, TCPThread *> tcpthreadList;
-    QHash<QString, PersistentConnection *> pcList;
+    QList<TCPThread *> tcpthreadList;
+    QList<PersistentConnection *> pcList;
 
 };
 

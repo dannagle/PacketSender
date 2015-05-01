@@ -83,6 +83,12 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
 
 }
 
+void TCPThread::closeConnection()
+{
+    QDEBUG() << "Closing connection";
+    clientConnection->close();
+}
+
 void TCPThread::run()
 {
 
@@ -138,6 +144,7 @@ void TCPThread::run()
                     if(!sendPacketPersistent.hexString.isEmpty()) {
                         sendPacket.hexString = sendPacketPersistent.hexString;
                         sendPacket.fromIP = "You";
+                        sendPacket.receiveBeforeSend = false;
                         QDEBUGVAR(sendPacket.asciiString());
                         QDEBUGVAR(sendPacket.hexString);
                         sendPacketPersistent.clear();
@@ -194,9 +201,16 @@ void TCPThread::run()
                 tcpPacket.port = sendPacket.fromPort;
                 tcpPacket.fromPort =    clientConnection->peerPort();
 
-                clientConnection->waitForReadyRead(2000);
+                clientConnection->waitForReadyRead(500);
                 emit connectStatus("Waiting to receive");
-                tcpPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
+                tcpPacket.hexString.clear();
+                int hexcounter = 0;
+                while(clientConnection->bytesAvailable()) {
+                    tcpPacket.hexString.append(" ");
+                    tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
+                    tcpPacket.hexString = tcpPacket.hexString.simplified();
+                    clientConnection->waitForReadyRead(100);
+                }
 
 
                 if(!sendPacket.persistent) {

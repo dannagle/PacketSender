@@ -37,6 +37,7 @@ signals:
 public slots:
     void sendPersistant(Packet sendpacket);
 
+    void closeConnection();
 private slots:
     void wasdisconnected();
 

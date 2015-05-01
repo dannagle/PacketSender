@@ -236,17 +236,14 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         //Prevent Qt from auto-destroying these windows.
         //TODO: Use a real connection manager.
-        pcList[sendpacket.toIP + QString::number(pcList.size())] = pcWindow;
+        pcList.append(pcWindow);
+
+        //TODO: Use a real connection manager.
+        //prevent Qt from auto-destorying this thread while it tries to close.
+        tcpthreadList.append(pcWindow->thread);
+
         return;
 
-    }
-
-    QString hashAddress = sendpacket.toIP + ":" + sendpacket.port;
-    if(tcpthreadList[hashAddress] != NULL) {
-        if(tcpthreadList[hashAddress]->isRunning()) {
-            tcpthreadList[hashAddress]->sendAnother(sendpacket);
-            return;
-        }
     }
 
     QHostAddress address;
@@ -267,7 +264,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         //Prevent Qt from auto-destroying these threads.
         //TODO: Develop a real thread manager.
-        tcpthreadList[hashAddress] = thread;
+        tcpthreadList.append(thread);
         thread->start();
         return;
     }

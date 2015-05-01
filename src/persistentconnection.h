@@ -20,11 +20,13 @@ public:
     explicit PersistentConnection(QWidget *parent = 0);
     ~PersistentConnection();
     Packet sendPacket;
+    TCPThread *thread;
 
     void init();
 
 signals:
     void persistentPacketSend(Packet sendpacket);
+    void closeConnection();
 
 
 public slots:
@@ -41,9 +43,10 @@ private slots:
 
 private:
     Ui::PersistentConnection *ui;
-    TCPThread *thread;
     QTimer refreshTimer;
     QList<Packet> trafficList;
+    QDateTime startTime;
+    bool wasConnected;
 
 };
 

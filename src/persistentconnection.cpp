@@ -20,21 +20,26 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     refreshTimer.setInterval(200);
     refreshTimer.start();
     trafficList.clear();
+    startTime = QDateTime::currentDateTime();
+    wasConnected = false;
 
 }
+
 
 void PersistentConnection::aboutToClose() {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
-    QDEBUG() << "Stopping thread";
     thread->terminate();
-
 }
 
 void PersistentConnection::statusReceiver(QString message)
 {
     QDEBUGVAR(message);
     ui->topLabel->setText(message);
+
+    if(message.startsWith("Connected")) {
+        wasConnected = true;
+    }
 
     if(message.toLower().startsWith("not connected")) {
 
@@ -50,19 +55,10 @@ void PersistentConnection::statusReceiver(QString message)
 
 PersistentConnection::~PersistentConnection()
 {
-    aboutToClose();
     delete ui;
 }
 
 
-/*
-void PersistentConnection::reject()
-{
-    QDEBUG() << "Stopping timer";
-    refreshTimer.stop();
-
-}
-*/
 
 void PersistentConnection::init() {
 
@@ -74,11 +70,9 @@ void PersistentConnection::init() {
 
     QDEBUG() << ": thread Connection attempt " <<
                 connect ( this , SIGNAL ( persistentPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
+             << connect ( this , SIGNAL ( closeConnection() ) , thread, SLOT ( closeConnection() ) )
              << connect ( thread , SIGNAL ( connectStatus(QString) ) , this, SLOT ( statusReceiver(QString) ) )
              << connect ( thread , SIGNAL ( packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
-                ;
-
-
 
     QApplication::processEvents();
 
@@ -96,7 +90,28 @@ void PersistentConnection::packetToSend(Packet sendpacket)
 }
 
 void PersistentConnection::refreshTimerTimeout() {
-    QDEBUG();
+//    QDEBUG();
+
+    qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
+
+
+    qint64 hours = diff / (1000 * 60 * 60);
+    qint64 diffRem = diff - hours * (1000 * 60 * 60);
+    qint64 min = diffRem / (1000 * 60);
+    diffRem = diffRem - min * (1000 * 60);
+    qint64 sec = diffRem / (1000);
+
+    QString datestamp = QString("%1:%2:%3")
+            .arg(hours, 2, 10, QChar('0'))
+            .arg(min, 2, 10, QChar('0'))
+            .arg(sec, 2, 10, QChar('0'));
+
+    ui->timeLabel->setText(datestamp);
+
+
+
+//    QDEBUG() <<"Diff:" << diff;
+
 
 }
 
@@ -136,6 +151,7 @@ void PersistentConnection::packetSentSlot(Packet pkt) {
 
     QScrollBar *vScrollBar = ui->trafficViewEdit->verticalScrollBar();
     vScrollBar->triggerAction(QScrollBar::SliderToMaximum);
+    QApplication::processEvents();
 
 }
 
