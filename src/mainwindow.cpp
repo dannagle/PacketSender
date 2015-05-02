@@ -26,6 +26,8 @@
 #include <QShortcut>
 #include <QClipboard>
 #include "brucethepoodle.h"
+#include "settings.h"
+#include "about.h"
 
 
 int hexToInt(QChar hex);
@@ -67,37 +69,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
-    ui->mainTabWidget->setCurrentIndex(0);
-    ui->settingsTabWidget->setCurrentIndex(0);
-
-    ui->buttonScrollArea->setMaximumHeight(60);
-
     QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
 
 
     QDEBUGVAR(__DATE__);
     QDEBUGVAR(vDate.toString("yyyy-MM-dd"));
 
-    ui->buidDateLabel->setText("Build date: " + QString(__DATE__));
-
-    ui->buidDateLabel->setText("Build date: " + vDate.toString("yyyy-MM-dd"));
-
-
-    //TODO not working yet
-    ui->persistentConnectCheck->show();
 
     hyperLinkStyle = "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ";
 
     QIcon mIcon(":pslogo.png");
 
-    ui->displayOrderList->clear();
-    ui->displayOrderListTraffic->clear();
-    setDefaultTableHeaders();
-    setStoredTableHeaders();
-    loadTableHeaders();
 
 
-    sendButtonHolder.clear();
+    QStringList packetSavedTable = settings.value("packetSavedTableHeaders", packetSavedTableHeaders).toStringList();
+    QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
+
 
     lastSendPacket.clear();
 
@@ -106,45 +93,15 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("Packet Sender");
     setWindowIcon(mIcon);
 
-    ui->menuBar->hide();
-
     tableActive = false;
 
 
     maxLogSize = 0;
 
-    ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
-    ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
-    ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
-    ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
-    ui->persistentConnectCheck->setChecked(settings.value("persistentConnectCheck", false).toBool());
-
-
-    ui->hideQuickSendCheck->setChecked(settings.value("hideQuickSendCheck", false).toBool());
-
-
-    if(ui->hideQuickSendCheck->isChecked()) {
-        ui->buttonScrollArea->hide();
-        ui->selectedButtonsLabel->hide();
-    } else {
-        ui->buttonScrollArea->show();
-        ui->selectedButtonsLabel->show();
-    }
-
-    ui->rolling500entryCheck->setChecked(settings.value("rolling500entryCheck", false).toBool());
-    ui->copyUnformattedCheck->setChecked(settings.value("copyUnformattedCheck", false).toBool());
-
-
-    if(ui->rolling500entryCheck->isChecked()) {
+    if(settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
     }
-
-
-    ui->sendResponseSettingsCheck->setChecked(settings.value("sendReponse", false).toBool());
-
-    ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
-    on_hexResponseEdit_editingFinished();
 
 
     http = new QNetworkAccessManager(this); //the only http object (required by Qt)
@@ -159,8 +116,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     packetNetwork.init();
 
-    packetNetwork.responseData = ui->hexResponseEdit->text().trimmed();
-    packetNetwork.sendResponse = ui->sendResponseSettingsCheck->isChecked();
+    packetNetwork.responseData = settings.value("responseHex","").toString();
+    packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
 
 
     //http->get(QNetworkRequest(QUrl("http://packetsender.com/")));
@@ -177,6 +134,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     packetsSaved = Packet::fetchAllfromDB("");
+    QDEBUGVAR(packetsSaved.size());
+
     loadPacketsTable();
 
  //   statusBar()->insertPermanentWidget(0, generatePSLink());
@@ -237,37 +196,6 @@ MainWindow::MainWindow(QWidget *parent) :
     packetsLogged.clear();
     loadTrafficLogTable();
 
-    ui->DNLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
-    ui->DNLinkButton->setFlat(true);
-    ui->DNLinkButton->setCursor(Qt::PointingHandCursor);
-    connect(ui->DNLinkButton, SIGNAL(clicked()),
-            this, SLOT(gotoDanNagleDotCom()));
-
-
-    ui->twitterButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
-    ui->twitterButton->setIcon( QIcon(":Twitter_logo_blue.png"));
-    ui->twitterButton->setFlat(true);
-    ui->twitterButton->setCursor(Qt::PointingHandCursor);
-    connect(ui->twitterButton, SIGNAL(clicked()),
-            this, SLOT(gotoNagleCode()));
-
-
-    ui->DNAmazonLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
-    ui->DNAmazonLinkButton->setIcon( QIcon(":pslogo.png"));
-    ui->DNAmazonLinkButton->setFlat(true);
-    ui->DNAmazonLinkButton->setCursor(Qt::PointingHandCursor);
-    connect(ui->DNAmazonLinkButton, SIGNAL(clicked()),
-            this, SLOT(gotoDanNaglePayPal()));
-
-
-    ui->psLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
-    ui->psLinkButton->setIcon( QIcon(":pslogo.png"));
-    ui->psLinkButton->setFlat(true);
-    ui->psLinkButton->setCursor(Qt::PointingHandCursor);
-    connect(ui->psLinkButton, SIGNAL(clicked()),
-            this, SLOT(gotoPacketSenderDotCom()));
-
-
     refreshTimer.start();
 
 
@@ -318,7 +246,6 @@ void MainWindow::UDPServerStatus()
     if(packetNetwork.getUDPPort() > 0)
     {
         udpServerStatus->setText("UDP:"+QString::number(packetNetwork.getUDPPort()));
-        ui->udpServerPortEdit->setText(QString::number(packetNetwork.getUDPPort()));
 
     } else {
         udpServerStatus->setText("UDP Server Disabled");
@@ -335,7 +262,6 @@ void MainWindow::TCPServerStatus()
     if(packetNetwork.getTCPPort() > 0)
     {
         tcpServerStatus->setText("TCP:"+QString::number(packetNetwork.getTCPPort()));
-        ui->tcpServerPortEdit->setText(QString::number(packetNetwork.getTCPPort()));
     } else {
         tcpServerStatus->setText("TCP Server Disabled");
 
@@ -365,34 +291,23 @@ void MainWindow::loadTrafficLogTable()
     QTableWidgetItem * tItem;
     Packet tempPacket;
 
-    QListWidget * lw = ui->displayOrderListTraffic;
-    QListWidgetItem * item;
-    QStringList lwStringList;
-    lwStringList.clear();
-    QString text;
-    int size = lw->count();
-
-    QDEBUGVAR(size);
-    for(int i = 0; i < size; i++)
-    {
-        item = lw->item(i);
-        text = item->text();
-        lwStringList.append(text);
-    }
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
-    ui->trafficLogTable->setColumnCount(lwStringList.size());
+    packetTableHeaders  = Settings::defaultTrafficTableHeader();
+    packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
+    ui->trafficLogTable->setColumnCount(packetTableHeaders.size());
 
     ui->trafficLogTable->verticalHeader()->show();
     ui->trafficLogTable->horizontalHeader()->show();
-    ui->trafficLogTable->setHorizontalHeaderLabels(lwStringList);
+    ui->trafficLogTable->setHorizontalHeaderLabels(packetTableHeaders);
 
 
     QList<Packet> displayPackets;
     displayPackets.clear();
 
 
-    QString filterString = ui->searchTrafficEdit->text().toLower().trimmed();
+    QString filterString = ui->searchLineEdit->text().toLower().trimmed();
 
     if(filterString.isEmpty())
     {
@@ -428,7 +343,7 @@ void MainWindow::loadTrafficLogTable()
     unsigned int rowCounter = 0;
     unsigned int colCount = 0;
 
-    QDEBUGVAR(lwStringList);
+    QDEBUGVAR(packetTableHeaders);
 
     ui->trafficLogTable->setSortingEnabled(false);
 
@@ -446,19 +361,20 @@ lwStringList ("Time", "From IP", "From Port", "To IP", "To Port", "Method", "Err
         tItem = new QTableWidgetItem(tempPacket.timestamp.toString(DATETIMEFORMAT));
         tItem->setIcon(tempPacket.getIcon());
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "Time"), tItem);
+
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Time"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.fromIP);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "From IP"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From IP"), tItem);
 
         tItem = new QTableWidgetItem(QString::number(tempPacket.fromPort));
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "From Port"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From Port"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.toIP);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "To IP"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To IP"), tItem);
         /*
             packetTableHeaders <<"Time" << "From IP" <<"From Port" << "To IP" <<
         "To Port" <<
@@ -467,26 +383,26 @@ lwStringList ("Time", "From IP", "From Port", "To IP", "To Port", "Method", "Err
 
         tItem = new QTableWidgetItem(QString::number(tempPacket.port));
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "To Port"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To Port"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.tcpOrUdp);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "Method"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Method"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.errorString);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "Error"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Error"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
         QSize tSize = tItem->sizeHint();
         tSize.setWidth(200);
         tItem->setSizeHint(tSize);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "ASCII"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("ASCII"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.hexString);
         Packet::populateTableWidgetItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, findColumnIndex(lw, "Hex"), tItem);
+        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Hex"), tItem);
 
         rowCounter++;
 
@@ -505,6 +421,7 @@ lwStringList ("Time", "From IP", "From Port", "To IP", "To Port", "Method", "Err
 
 void MainWindow::loadPacketsTable()
 {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     tableActive = false;
     Packet tempPacket;
@@ -529,31 +446,22 @@ void MainWindow::loadPacketsTable()
         }
     }
 
+    QDEBUGVAR(packetsSavedFiltered.size());
+
 
 
     ui->packetsTable->clear();
 
 
-    QListWidget * lw = ui->displayOrderList;
-    QListWidgetItem * item;
-    QStringList lwStringList;
-    lwStringList.clear();
-    QString text;
-    int size = lw->count();
 
-    QDEBUGVAR(size);
-    for(int i = 0; i < size; i++)
-    {
-        item = lw->item(i);
-        text = item->text();
-        lwStringList.append(text);
-    }
+    packetSavedTableHeaders  = Settings::defaultPacketTableHeader();
+    packetSavedTableHeaders = settings.value("packetSavedTableHeaders", packetSavedTableHeaders).toStringList();
 
-    ui->packetsTable->setColumnCount(lwStringList.size());
+    ui->packetsTable->setColumnCount(packetSavedTableHeaders.size());
 
     ui->packetsTable->verticalHeader()->show();
     ui->packetsTable->horizontalHeader()->show();
-    ui->packetsTable->setHorizontalHeaderLabels(lwStringList);
+    ui->packetsTable->setHorizontalHeaderLabels(packetSavedTableHeaders);
     if(packetsSavedFiltered.isEmpty())
     {
         ui->packetsTable->setRowCount(0);
@@ -561,18 +469,14 @@ void MainWindow::loadPacketsTable()
         ui->packetsTable->setRowCount(packetsSavedFiltered.count());
     }
 
-
     unsigned int rowCounter = 0;
-    ui->responsePacketBox->clear();
-    ui->responsePacketBox->addItem("<Load..>");
     foreach(tempPacket, packetsSavedFiltered)
     {
         populateTableRow(rowCounter, tempPacket);
         rowCounter++;
-
-        ui->responsePacketBox->addItem(tempPacket.name);
-
     }
+
+
 
     ui->packetsTable->resizeColumnsToContents();
     ui->packetsTable->resizeRowsToContents();
@@ -1086,39 +990,38 @@ void MainWindow::populateTableRow(int rowCounter, Packet tempPacket)
 
      */
 
-    lw = ui->displayOrderList;
 
-    ui->packetsTable->setCellWidget(rowCounter,findColumnIndex(lw, "Send"), sendButton);
+    ui->packetsTable->setCellWidget(rowCounter,packetSavedTableHeaders.indexOf("Send"), sendButton);
 
     tItem = new QTableWidgetItem(QString::number(tempPacket.repeat));
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "repeat");
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "Resend (sec)"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Resend (sec)"), tItem);
     //QDEBUGVAR(tempPacket.name);
 
     tItem = new QTableWidgetItem(tempPacket.name);
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "name");
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "Name"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Name"), tItem);
     //QDEBUGVAR(tempPacket.name);
 
     tItem = new QTableWidgetItem(tempPacket.toIP);
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "toIP");
 
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "To Address"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("To Address"), tItem);
     //QDEBUGVAR(tempPacket.toIP);
 
     tItem = new QTableWidgetItem(QString::number(tempPacket.port));
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "port");
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "To Port"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("To Port"), tItem);
    // QDEBUGVAR(tempPacket.port);
 
     tItem = new QTableWidgetItem(tempPacket.tcpOrUdp);
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "tcpOrUdp");
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "Method"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Method"), tItem);
    // QDEBUGVAR(tempPacket.tcpOrUdp);
 
     tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
@@ -1129,13 +1032,13 @@ void MainWindow::populateTableRow(int rowCounter, Packet tempPacket)
     tSize.setWidth(200);
     tItem->setSizeHint(tSize);
 
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "ASCII"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("ASCII"), tItem);
     //QDEBUGVAR(tempPacket.hexString);
 
     tItem = new QTableWidgetItem(tempPacket.hexString);
     Packet::populateTableWidgetItem(tItem, tempPacket);
     tItem->setData(Packet::DATATYPE, "hexString");
-    ui->packetsTable->setItem(rowCounter, findColumnIndex(lw, "Hex"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Hex"), tItem);
     //QDEBUGVAR(tempPacket.hexString);
 }
 
@@ -1168,14 +1071,6 @@ void MainWindow::packetTable_checkMultiSelected() {
     int i = 0;
 
 
-    //clear out old, if any.
-    foreach(sendButton, sendButtonHolder) {
-        QDEBUG() << "Removing" << sendButton->text();
-        ui->selectedbuttonlayout->removeWidget(sendButton);
-        sendButton->deleteLater();
-    }
-    sendButtonHolder.clear();
-
     foreach(checkItem, totalSelected) {
         clickedPacket = Packet::fetchTableWidgetItemData(checkItem);
         if(buttonsList.contains(clickedPacket.name)) {
@@ -1186,37 +1081,6 @@ void MainWindow::packetTable_checkMultiSelected() {
         }
     }
 
-    int vert = 0;
-    if(!packetList.isEmpty()) {
-        ui->selectedButtonsLabel->hide();
-        QDEBUG() << "Need to add" << packetList.size();
-
-        foreach(clickedPacket, packetList) {
-            sendButton = clickedPacket.getSendButton(ui->packetsTable);
-            sendButton->setText(clickedPacket.name);
-            vert = sendButton->size().height();
-
-            connect(sendButton, SIGNAL(sendPacket(QString)),
-                this, SLOT(sendClick(QString)));
-
-                    //new QPushButton(clickedPacket.name);
-            QDEBUG() << "Adding" << (clickedPacket.name);
-            i++;
-            QDEBUGVAR( ui->selectedbuttonlayout->count());
-            ui->selectedbuttonlayout->addWidget(sendButton);
-            QDEBUGVAR( ui->selectedbuttonlayout->count());
-            sendButtonHolder.append(sendButton);
-        }
-
-    } else {
-        if(!ui->hideQuickSendCheck->isChecked()) {
-            ui->selectedButtonsLabel->show();
-        }
-    }
-
-//    ui->buttonScrollArea->resize(ui->buttonScrollArea->size().width(), vert+5);
-
-    QDEBUG() <<"Added" << i << "size is" << ui->selectedbuttonlayout->count();
 
     if(packetList.size() >= 2) {
         //We have multi!
@@ -1276,50 +1140,6 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
 
 void MainWindow::refreshTimerTimeout()
 {
-    //QDEBUGVAR(sendButtonHolder.size());
-    //QDEBUGVAR(ui->selectedbuttonlayout->count());
-    //QDEBUGVAR(packetsLogged.size());
-    static QStringList packetSavedHeaderBefore;
-    static QStringList packetSavedHeaderBeforeTraffic;
-    QListWidget * lw = ui->displayOrderList;
-    QListWidget * lwTraffic = ui->displayOrderListTraffic;
-
-    //Too bad Qt does not have a drag/drop signal.
-    //That would be more efficient than constantly polling for a change.
-    //I think one could be implemented, but this hack was quicker.
-
-    QStringList packetSavedHeaderNow;
-    packetSavedHeaderNow.clear();
-    for(int i = 0; i < lw->count(); i++)
-    {
-        packetSavedHeaderNow.append(lw->item(i)->text());
-    }
-
-    if(packetSavedHeaderBefore != packetSavedHeaderNow)
-    {
-        QSettings settings1(SETTINGSFILE, QSettings::IniFormat);
-        settings1.setValue("packetSavedTableHeaders", packetSavedHeaderNow);
-
-        loadPacketsTable();
-        packetSavedHeaderBefore = packetSavedHeaderNow;
-    }
-
-    packetSavedHeaderNow.clear();
-    for(int i = 0; i < lwTraffic->count(); i++)
-    {
-        packetSavedHeaderNow.append(lwTraffic->item(i)->text());
-    }
-
-    if(packetSavedHeaderBeforeTraffic != packetSavedHeaderNow)
-    {
-        QSettings settings2(SETTINGSFILE, QSettings::IniFormat);
-        settings2.setValue("packetTableHeaders", packetSavedHeaderNow);
-
-        loadTrafficLogTable();
-        packetSavedHeaderBeforeTraffic = packetSavedHeaderNow;
-    }
-
-
 
     Packet packet;
     QDateTime now = QDateTime::currentDateTime();
@@ -1356,42 +1176,10 @@ void MainWindow::refreshTimerTimeout()
 
         loadTrafficLogTable();
 
-        ui->mainTabWidget->setTabText(1,"Traffic Log (" + QString::number(packetsLogged.size()) +")");
+        //ui->mainTabWidget->setTabText(1,"Traffic Log (" + QString::number(packetsLogged.size()) +")");
 
     }
 
-
-}
-
-
-void MainWindow::gotoDanNagleDotCom()
-{
-
-    //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://dannagle.com/"));
-
-}
-void MainWindow::gotoDanNaglePayPal()
-{
-
-    //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://dannagle.com/paypal"));
-
-}
-
-void MainWindow::gotoNagleCode()
-{
-    //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://twitter.com/naglecode"));
-
-
-}
-
-void MainWindow::gotoPacketSenderDotCom()
-{
-
-    //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://packetsender.com/"));
 
 }
 
@@ -1401,7 +1189,6 @@ void MainWindow::on_trafficLogClearButton_clicked()
     ui->trafficLogTable->setRowCount(0);
     packetsLogged.clear();
     loadTrafficLogTable();
-    ui->mainTabWidget->setTabText(1,"Traffic Log");
 
 }
 
@@ -1450,30 +1237,12 @@ void MainWindow::on_saveTrafficPacket_clicked()
 }
 void MainWindow::applyNetworkSettings()
 {
-    if(ui->mainTabWidget->currentIndex() != 2) {
-        return;
-    }
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-    settings.setValue("udpPort", ui->udpServerPortEdit->text().toUInt());
-    settings.setValue("tcpPort", ui->tcpServerPortEdit->text().toUInt());
-    settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
-    settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
-    settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
-
-    settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
-    settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
-    settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
-
-    settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
-    settings.setValue("persistentConnectCheck", ui->persistentConnectCheck->isChecked());
-
 
     packetNetwork.kill();
     packetNetwork.init();
-    packetNetwork.responseData = ui->hexResponseEdit->text().trimmed();
-    packetNetwork.sendResponse = ui->sendResponseSettingsCheck->isChecked();
+    packetNetwork.responseData = settings.value("responseHex","").toString().trimmed();
+    packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
     UDPServerStatus();
     TCPServerStatus();
 
@@ -1484,60 +1253,6 @@ void MainWindow::cancelResends()
     stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
     stopResendingButton->setText("Resending");
     stopResending = 1;
-}
-
-
-void MainWindow::toggleUDPServer()
-{
-    ui->udpServerEnableCheck->setChecked(!ui->udpServerEnableCheck->isChecked());
-    on_udpServerEnableCheck_toggled(ui->udpServerEnableCheck->isChecked());
-//    applyNetworkSettings();
-}
-void MainWindow::toggleTCPServer()
-{
-    ui->tcpServerEnableCheck->setChecked(!ui->tcpServerEnableCheck->isChecked());
-    on_tcpServerEnableCheck_toggled(ui->tcpServerEnableCheck->isChecked());
-//    applyNetworkSettings();
-}
-
-void MainWindow::on_tcpServerPortEdit_textEdited(const QString &arg1)
-{
-    Q_UNUSED(arg1);
-    applyNetworkSettings();
-
-}
-
-void MainWindow::on_udpServerPortEdit_textEdited(const QString &arg1)
-{
-    Q_UNUSED(arg1);
-    applyNetworkSettings();
-
-}
-
-void MainWindow::on_sendResponseSettingsCheck_toggled(bool checked)
-{
-    Q_UNUSED(checked);
-    applyNetworkSettings();
-}
-
-void MainWindow::on_responsePacketBox_activated(int index)
-{
-    Q_UNUSED(index);
-    applyNetworkSettings();
-}
-
-
-void MainWindow::on_udpServerEnableCheck_toggled(bool checked)
-{
-    Q_UNUSED(checked);
-    applyNetworkSettings();
-}
-
-
-void MainWindow::on_tcpServerEnableCheck_toggled(bool checked)
-{
-    Q_UNUSED(checked);
-    applyNetworkSettings();
 }
 
 
@@ -1562,61 +1277,14 @@ void MainWindow::on_packetIPEdit_editingFinished()
     on_packetIPEdit_lostFocus();
 }
 
-void MainWindow::on_hexResponseEdit_editingFinished()
-{
 
-
-    QString quicktestHex =  ui->hexResponseEdit->text();
-
-    ui->asciiResponseEdit->setText(Packet::hexToASCII(quicktestHex));
-    applyNetworkSettings();
-
-}
-
-void MainWindow::on_asciiResponseEdit_editingFinished()
-{
-
-    QString quicktestASCII =  ui->asciiResponseEdit->text();
-    ui->hexResponseEdit->setText( Packet::ASCIITohex(quicktestASCII));
-
-     QString quicktestASCII2 =  ui->hexResponseEdit->text();
-
-    ui->asciiResponseEdit->setText(Packet::hexToASCII(quicktestASCII2));
-    applyNetworkSettings();
-
-
-
-}
-
-void MainWindow::on_responsePacketBox_currentIndexChanged(const QString &arg1)
-{
-    Q_UNUSED(arg1);
-
-    Packet tempPacket;
-    QString selectedName = ui->responsePacketBox->currentText();
-
-    //QDEBUGVAR(selectedName);
-    foreach(tempPacket, packetsSaved)
-    {
-        if(tempPacket.name == selectedName)
-        {
-            ui->hexResponseEdit->setText(tempPacket.hexString);
-            on_hexResponseEdit_editingFinished();
-            break;
-        }
-
-    }
-
-    ui->responsePacketBox->setCurrentIndex(0);
-    applyNetworkSettings();
-
-}
 
 void MainWindow::on_searchLineEdit_textEdited(const QString &arg1)
 {
     Q_UNUSED(arg1);
 
     loadPacketsTable();
+    loadTrafficLogTable();
 
 }
 
@@ -1626,37 +1294,13 @@ void MainWindow::on_clearSearch_clicked()
     on_searchLineEdit_textEdited("");
 }
 
-void MainWindow::dragDropEvent()
-{
-    QDEBUG();
-}
 
-void MainWindow::on_displayOrderList_indexesMoved(const QModelIndexList &indexes)
-{
-    Q_UNUSED(indexes);
-}
-
-void MainWindow::on_displayOrderList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-    Q_UNUSED(current);
-    Q_UNUSED(previous);
-}
-
-void MainWindow::on_searchTrafficEdit_textEdited(const QString &arg1)
-{
-    Q_UNUSED(arg1);
-    loadTrafficLogTable();
-
-}
-
-void MainWindow::on_clearTrafficSearchButton_clicked()
-{
-    ui->searchTrafficEdit->clear();
-    loadTrafficLogTable();
-}
 
 void MainWindow::on_toClipboardButton_clicked()
 {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+
     QClipboard *clipboard = QApplication::clipboard();
     QList<QTableWidgetItem *> items = ui->trafficLogTable->selectedItems();
     QDEBUG() << "Save traffic packets";
@@ -1700,7 +1344,8 @@ void MainWindow::on_toClipboardButton_clicked()
     }
 
     QMessageBox msgBox;
-    if(ui->copyUnformattedCheck->isChecked()) {
+
+    if(settings.value("copyUnformattedCheck", false).toBool()) {
         clipboard->setText(QString(savePacket.getByteArray()));
         msgBox.setText("Packet sent to your clipboard (raw data).");
     } else {
@@ -1719,75 +1364,6 @@ void MainWindow::on_toClipboardButton_clicked()
 }
 
 
-void MainWindow::setDefaultTableHeaders() {
-
-    packetSavedTableHeaders.clear();
-    packetSavedTableHeaders <<"Send" << "Name"<<"Resend (sec)" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
-    packetTableHeaders.clear();
-    packetTableHeaders <<"Time" << "From IP" <<"From Port" << "To IP" << "To Port" << "Method"<<"Error" << "ASCII" << "Hex";
-
-}
-
-void MainWindow::setStoredTableHeaders() {
-
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-    QStringList packetSavedTable = settings.value("packetSavedTableHeaders", packetSavedTableHeaders).toStringList();
-    QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
-
-
-    if(packetSavedTable.size() == packetSavedTableHeaders.size()) {
-        packetSavedTableHeaders = packetSavedTable;
-    }
-
-    if(packetTable.size() == packetTableHeaders.size()) {
-        packetTableHeaders = packetTable;
-    }
-
-}
-
-void MainWindow::loadTableHeaders()
-{
-
-    QString tempString;
-    tempString.clear();
-
-    QListWidgetItem * tItem;
-
-    ui->displayOrderList->clear();
-    ui->displayOrderListTraffic->clear();
-
-    foreach(tempString, packetSavedTableHeaders)
-    {
-        tItem = new QListWidgetItem(tempString);
-        tItem->setIcon(QIcon(UPDOWNICON));
-        ui->displayOrderList->addItem(tItem);
-    }
-
-    ui->displayOrderList->setCursor(Qt::CrossCursor);
-
-    foreach(tempString, packetTableHeaders)
-    {
-        tItem = new QListWidgetItem(tempString);
-        tItem->setIcon(QIcon(UPDOWNICON));
-        ui->displayOrderListTraffic->addItem(tItem);
-    }
-
-    ui->displayOrderListTraffic->setCursor(Qt::CrossCursor);
-
-    ui->displayOrderList->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->displayOrderList->setAlternatingRowColors(true);
-    ui->displayOrderListTraffic->setDragDropMode(QAbstractItemView::InternalMove);
-    ui->displayOrderListTraffic->setAlternatingRowColors(true);
-
-}
-
-
-void MainWindow::on_defaultDisplayButton_clicked()
-{
-    setDefaultTableHeaders();
-    loadTableHeaders();
-}
 
 void MainWindow::on_packetsTable_itemSelectionChanged()
 {
@@ -1795,56 +1371,6 @@ void MainWindow::on_packetsTable_itemSelectionChanged()
 
 }
 
-
-void MainWindow::on_attemptReceiveCheck_clicked(bool checked)
-{
-    Q_UNUSED(checked);
-    applyNetworkSettings();
-}
-
-void MainWindow::on_rolling500entryCheck_clicked(bool checked)
-{
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    if(checked) {
-        maxLogSize = 100;
-    } else {
-        maxLogSize = 0;
-    }
-
-    settings.setValue("rolling500entryCheck", checked);
-
-}
-
-void MainWindow::on_copyUnformattedCheck_clicked(bool checked)
-{
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.setValue("copyUnformattedCheck", checked);
-}
-
-void MainWindow::on_delayAfterConnectCheck_clicked(bool checked)
-{
-    Q_UNUSED(checked);
-    applyNetworkSettings();
-
-}
-
-void MainWindow::on_persistentConnectCheck_clicked(bool checked)
-{
-
-    if(checked) {
-
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Persistent Connection");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("This spawns a new window for each TCP connection. \n\nClose the window to close the connection.");
-        msgBox.exec();
-    }
-
-    applyNetworkSettings();
-
-}
 
 void MainWindow::on_bugsLinkButton_clicked()
 {
@@ -1859,91 +1385,6 @@ void MainWindow::on_forumsPacketSenderButton_clicked()
 
 }
 
-void MainWindow::on_exportPacketsButton_clicked()
-{
-    static QString fileName = QDir::homePath() + QString("/packetsender_export.ini");
-
-    fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                               QDir::toNativeSeparators(fileName), tr("INI db (*.ini)"));
-
-   QStringList testExt = fileName.split(".");
-   QString ext = "";
-   if(testExt.size() > 0) {
-       ext = testExt.last();
-   }
-   if(ext != "ini") {
-       fileName.append(".ini");
-   }
-   QDEBUGVAR(fileName);
-   QFile::copy(PACKETSFILE, fileName);
-   statusBarMessage("Export: " + fileName);
-
-}
-
-void MainWindow::on_importPacketsButton_clicked()
-{
-    static QString fileName = QDir::homePath() + QString("/packetsender_export.ini");
-
-
-    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
-                                              fileName,
-                                              tr("INI db (*.ini)"));
-
-    QDEBUGVAR(fileName);
-    QList<Packet> importList = Packet::fetchAllfromDB(fileName);
-    Packet importPacket;
-
-    foreach(importPacket, importList) {
-        QDEBUGVAR(importPacket.name);
-    }
-
-    if(!importList.isEmpty()) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
-        int yesno = msgBox.exec();
-        if(yesno == QMessageBox::No) {
-            statusBarMessage("Import Cancelled");
-            return;
-        } else {
-            foreach(importPacket, importList) {
-                importPacket.saveToDB();
-
-            }
-            packetsSaved = Packet::fetchAllfromDB("");
-            loadPacketsTable();
-            statusBarMessage("Import Finished");
-        }
-
-    } else {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Not a database");
-        msgBox.setStandardButtons(QMessageBox::Ok );
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
-        msgBox.exec();
-        return;
-        statusBarMessage("Import Cancelled");
-    }
-
-}
-
-void MainWindow::on_hideQuickSendCheck_clicked(bool checked)
-{
-
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.setValue("hideQuickSendCheck", checked);
-    if(checked) {
-        ui->buttonScrollArea->hide();
-    } else {
-        ui->buttonScrollArea->show();
-    }
-
-}
 
 void MainWindow::on_saveLogButton_clicked()
 {
@@ -1999,6 +1440,108 @@ void MainWindow::on_saveLogButton_clicked()
 
 }
 
-void MainWindow::on_persistentConnectCheck_toggled(bool checked)
+
+void MainWindow::on_actionAbout_triggered()
 {
+    About * about = new About(this);
+    about->show();
+}
+
+void MainWindow::on_actionSettings_triggered()
+{
+    Settings settings;
+    int accepted = settings.exec();
+    if(accepted) {
+        applyNetworkSettings();
+        loadPacketsTable();
+        loadTrafficLogTable();
+    }
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    QDEBUG();
+    exit(0);
+}
+
+void MainWindow::on_actionImport_Packets_triggered()
+{
+
+    static QString fileName = QDir::homePath() + QString("/packetsender_export.ini");
+
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                              fileName,
+                                              tr("INI db (*.ini)"));
+
+    QDEBUGVAR(fileName);
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+    QList<Packet> importList = Packet::fetchAllfromDB(fileName);
+    Packet importPacket;
+
+    foreach(importPacket, importList) {
+        QDEBUGVAR(importPacket.name);
+    }
+
+    if(!importList.isEmpty()) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
+        int yesno = msgBox.exec();
+        if(yesno == QMessageBox::No) {
+            statusBarMessage("Import Cancelled");
+            return;
+        } else {
+            foreach(importPacket, importList) {
+                importPacket.saveToDB();
+
+            }
+            packetsSaved = Packet::fetchAllfromDB("");
+            statusBarMessage("Import Finished");
+        }
+
+    } else {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Not a database");
+        msgBox.setStandardButtons(QMessageBox::Ok );
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
+        msgBox.exec();
+        return;
+        statusBarMessage("Import Cancelled");
+    }
+}
+
+void MainWindow::on_actionExport_Packets_triggered()
+{
+
+    static QString fileName = QDir::homePath() + QString("/packetsender_export.ini");
+
+    fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                               QDir::toNativeSeparators(fileName), tr("INI db (*.ini)"));
+
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+   QStringList testExt = fileName.split(".");
+   QString ext = "";
+   if(testExt.size() > 0) {
+       ext = testExt.last();
+   }
+   if(ext != "ini") {
+       fileName.append(".ini");
+   }
+   QDEBUGVAR(fileName);
+   QFile::copy(PACKETSFILE, fileName);
+   statusBarMessage("Export: " + fileName);
 }
