@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     packet.cpp \
     sendpacketbutton.cpp \
     brucethepoodle.cpp \
-    tcpthread.cpp
+    tcpthread.cpp \
+    persistentconnection.cpp \
+    settings.cpp \
+    about.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -27,10 +30,16 @@ HEADERS  += mainwindow.h \
     globals.h \
     sendpacketbutton.h \
     brucethepoodle.h \
-    tcpthread.h
+    tcpthread.h \
+    persistentconnection.h \
+    settings.h \
+    about.h
 
 FORMS    += mainwindow.ui \
-    brucethepoodle.ui
+    brucethepoodle.ui \
+    persistentconnection.ui \
+    settings.ui \
+    about.ui
 
 
 macx:CONFIG += app_bundle

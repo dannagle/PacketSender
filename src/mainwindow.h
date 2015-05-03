@@ -55,19 +55,17 @@ public:
     void TCPServerStatus();
     int findColumnIndex(QListWidget *lw, QString search);
     void packetTable_checkMultiSelected();
-    void applyNetworkSettings();
+    void generateConnectionMenu();
+
+
 signals:
     void sendPacket(Packet sendpacket);
 
 public slots:
-    void gotoPacketSenderDotCom();
-    void gotoDanNagleDotCom();
-    void gotoDanNaglePayPal();
-    void gotoNagleCode();
     void toTrafficLog(Packet logPacket);
     void cancelResends();
-    void dragDropEvent();
     void poodlepic();
+    void applyNetworkSettings();
 
 
 private slots:
@@ -99,21 +97,6 @@ private slots:
 
     void on_saveTrafficPacket_clicked();
 
-    void on_tcpServerPortEdit_textEdited(const QString &arg1);
-
-    void on_udpServerPortEdit_textEdited(const QString &arg1);
-
-    void on_sendResponseSettingsCheck_toggled(bool checked);
-
-    void on_responsePacketBox_activated(int index);
-
-    void on_udpServerEnableCheck_toggled(bool checked);
-
-    void on_tcpServerEnableCheck_toggled(bool checked);
-
-    void toggleUDPServer();
-    void toggleTCPServer();
-
 
     void on_packetASCIIEdit_editingFinished();
 
@@ -123,52 +106,32 @@ private slots:
 
     void on_packetIPEdit_editingFinished();
 
-    void on_hexResponseEdit_editingFinished();
-
-    void on_asciiResponseEdit_editingFinished();
-
-    void on_responsePacketBox_currentIndexChanged(const QString &arg1);
-
     void on_searchLineEdit_textEdited(const QString &arg1);
 
     void on_clearSearch_clicked();
 
-    void on_displayOrderList_indexesMoved(const QModelIndexList &indexes);
-
-    void on_displayOrderList_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-    void on_searchTrafficEdit_textEdited(const QString &arg1);
-
-    void on_clearTrafficSearchButton_clicked();
 
     void on_toClipboardButton_clicked();
 
-    void on_defaultDisplayButton_clicked();
-
     void on_packetsTable_itemSelectionChanged();
-
-    void on_attemptReceiveCheck_clicked(bool checked);
-
-    void on_rolling500entryCheck_clicked(bool checked);
-
-    void on_copyUnformattedCheck_clicked(bool checked);
-
-    void on_delayAfterConnectCheck_clicked(bool checked);
-
-    void on_persistentConnectCheck_clicked(bool checked);
 
     void on_bugsLinkButton_clicked();
 
     void on_forumsPacketSenderButton_clicked();
 
-
-    void on_exportPacketsButton_clicked();
-
-    void on_importPacketsButton_clicked();
-
-    void on_hideQuickSendCheck_clicked(bool checked);
-
     void on_saveLogButton_clicked();
+
+    void on_actionAbout_triggered();
+
+    void on_actionSettings_triggered();
+
+    void on_actionExit_triggered();
+
+    void on_actionImport_Packets_triggered();
+
+    void on_actionExport_Packets_triggered();
+
+    void on_persistentTCPCheck_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;
@@ -189,14 +152,8 @@ private:
 
     Packet lastSendPacket;
 
-    QList<SendPacketButton *> sendButtonHolder;
-
     int maxLogSize;
 
-
-    void setDefaultTableHeaders();
-    void setStoredTableHeaders();
-    void loadTableHeaders();
 
 };
 

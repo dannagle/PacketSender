@@ -34,7 +34,6 @@ public:
     QString fromIP;
     QString toIP;
     QString errorString;
-    QByteArray response;
     unsigned int repeat;
     unsigned int port;
     unsigned int fromPort;
@@ -42,6 +41,7 @@ public:
     unsigned int sendResponse;
     void init();
     void clear();
+    bool isTCP();
     QDateTime timestamp;
 
     bool receiveBeforeSend;
@@ -53,6 +53,7 @@ public:
     static QString byteArrayToHex(QByteArray data);
     static QByteArray HEXtoByteArray(QString thehex);
     QByteArray getByteArray();
+    QString asciiString();
 
     void saveToDB();
 
