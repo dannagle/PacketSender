@@ -22,6 +22,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     trafficList.clear();
     startTime = QDateTime::currentDateTime();
     wasConnected = false;
+    stopTimer = false;
 
 
     QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
@@ -58,6 +59,9 @@ void PersistentConnection::statusReceiver(QString message)
         ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #EEEEEE }");
         ui->asciiSendButton->setEnabled(false);
         ui->asciiLineEdit->setEnabled(false);
+        ui->packetComboBox->setEnabled(false);
+        ui->appendCRcheck->setEnabled(false);
+        stopTimer = true;
     }
 
 
@@ -117,7 +121,7 @@ void PersistentConnection::refreshTimerTimeout() {
             .arg(min, 2, 10, QChar('0'))
             .arg(sec, 2, 10, QChar('0'));
 
-    ui->timeLabel->setText(datestamp);
+    if(wasConnected && !stopTimer)  ui->timeLabel->setText(datestamp);
 
 
 

@@ -49,6 +49,7 @@ private:
     QList<Packet> trafficList;
     QDateTime startTime;
     bool wasConnected;
+    bool stopTimer;
 
 };
 
