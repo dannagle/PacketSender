@@ -23,6 +23,17 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     startTime = QDateTime::currentDateTime();
     wasConnected = false;
 
+
+    QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
+    ui->packetComboBox->clear();
+    ui->packetComboBox->addItem("<Load..>");
+    Packet tempPacket;
+    foreach(tempPacket, packetsSaved)
+    {
+        ui->packetComboBox->addItem(tempPacket.name);
+
+    }
+
 }
 
 
@@ -180,5 +191,28 @@ void PersistentConnection::on_asciiSendButton_clicked()
 
     emit persistentPacketSend(asciiPacket);
     ui->asciiLineEdit->setText("");
+
+}
+
+void PersistentConnection::on_packetComboBox_currentIndexChanged(const QString &arg1)
+{
+    Packet tempPacket;
+    QString selectedName = ui->packetComboBox->currentText();
+    QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
+
+
+    //QDEBUGVAR(selectedName);
+    foreach(tempPacket, packetsSaved)
+    {
+        if(tempPacket.name == selectedName)
+        {
+            ui->asciiLineEdit->setText(tempPacket.asciiString());
+            break;
+        }
+
+    }
+
+    ui->packetComboBox->setCurrentIndex(0);
+
 
 }

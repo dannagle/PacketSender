@@ -41,6 +41,8 @@ private slots:
 
     void on_asciiSendButton_clicked();
 
+    void on_packetComboBox_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::PersistentConnection *ui;
     QTimer refreshTimer;

@@ -30,7 +30,6 @@ Settings::Settings(QWidget *parent) :
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
     ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
-    ui->persistentConnectCheck->setChecked(settings.value("persistentConnectCheck", false).toBool());
 
     ui->rolling500entryCheck->setChecked(settings.value("rolling500entryCheck", false).toBool());
     ui->copyUnformattedCheck->setChecked(settings.value("copyUnformattedCheck", false).toBool());
@@ -90,7 +89,6 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
-    settings.setValue("persistentConnectCheck", ui->persistentConnectCheck->isChecked());
 
 
     //save traffic order
@@ -245,19 +243,3 @@ void Settings::on_defaultDisplayButton_clicked()
 
 }
 
-
-void Settings::on_persistentConnectCheck_clicked(bool checked)
-{
-
-    if(checked) {
-
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Persistent Connection");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("This spawns a new window for each TCP connection. \n\nClose the window to close the connection.");
-        msgBox.exec();
-    }
-
-}

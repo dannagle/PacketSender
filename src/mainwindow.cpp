@@ -69,13 +69,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
-    QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
-
-
-    QDEBUGVAR(__DATE__);
-    QDEBUGVAR(vDate.toString("yyyy-MM-dd"));
-
-
     hyperLinkStyle = "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ";
 
     QIcon mIcon(":pslogo.png");
@@ -198,6 +191,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     refreshTimer.start();
 
+    generateConnectionMenu();
 
 
         //Bruce is my pet poodle.
@@ -213,6 +207,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
 
 }
+
+
+void MainWindow::generateConnectionMenu() {
+
+
+}
+
 
 QPushButton * MainWindow::generatePSLink()
 {
@@ -1544,4 +1545,9 @@ void MainWindow::on_actionExport_Packets_triggered()
    QDEBUGVAR(fileName);
    QFile::copy(PACKETSFILE, fileName);
    statusBarMessage("Export: " + fileName);
+}
+
+void MainWindow::on_persistentTCPCheck_clicked(bool checked)
+{
+    packetNetwork.persistentConnectCheck = checked;
 }

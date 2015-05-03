@@ -212,6 +212,13 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="QCheckBox" name="persistentTCPCheck">
+            <property name="text">
+             <string>Persistent TCP</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -414,6 +421,11 @@
   <action name="actionExport_Packets">
    <property name="text">
     <string>Export Packets</string>
+   </property>
+  </action>
+  <action name="actionPersistent_Connection">
+   <property name="text">
+    <string>Persistent Connection</string>
    </property>
   </action>
  </widget>

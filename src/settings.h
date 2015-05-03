@@ -35,8 +35,6 @@ private slots:
 
     void on_defaultDisplayButton_clicked();
 
-    void on_persistentConnectCheck_clicked(bool checked);
-
 private:
     Ui::Settings *ui;
     QList<Packet> packetsSaved;

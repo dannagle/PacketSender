@@ -55,6 +55,9 @@ public:
     void TCPServerStatus();
     int findColumnIndex(QListWidget *lw, QString search);
     void packetTable_checkMultiSelected();
+    void generateConnectionMenu();
+
+
 signals:
     void sendPacket(Packet sendpacket);
 
@@ -127,6 +130,8 @@ private slots:
     void on_actionImport_Packets_triggered();
 
     void on_actionExport_Packets_triggered();
+
+    void on_persistentTCPCheck_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;

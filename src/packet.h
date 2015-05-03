@@ -41,6 +41,7 @@ public:
     unsigned int sendResponse;
     void init();
     void clear();
+    bool isTCP();
     QDateTime timestamp;
 
     bool receiveBeforeSend;

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>493</width>
+    <width>619</width>
     <height>383</height>
    </rect>
   </property>
@@ -29,6 +29,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QComboBox" name="packetComboBox"/>
+     </item>
      <item>
       <widget class="QLineEdit" name="asciiLineEdit">
        <property name="placeholderText">

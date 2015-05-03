@@ -44,6 +44,11 @@ void Packet::clear()
     init();
 }
 
+bool Packet::isTCP()
+{
+   return (tcpOrUdp.trimmed().toLower() == "tcp");
+}
+
 Packet::~Packet()
 {
     init();

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -298,13 +298,6 @@
            <widget class="QCheckBox" name="delayAfterConnectCheck">
             <property name="text">
              <string>500 ms delay after connect (slow devices)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="persistentConnectCheck">
-            <property name="text">
-             <string>Persistent Connections</string>
             </property>
            </widget>
           </item>

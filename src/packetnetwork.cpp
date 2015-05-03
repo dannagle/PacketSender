@@ -227,11 +227,19 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
 
-    if(sendpacket.persistent && (sendpacket.tcpOrUdp.toUpper() == "TCP")) {
+    if(sendpacket.persistent && (sendpacket.isTCP())) {
         //spawn a window.
         PersistentConnection * pcWindow = new PersistentConnection();
         pcWindow->sendPacket = sendpacket;
         pcWindow->init();
+
+
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),this, SLOT(disconnected()));
+
+
         pcWindow->show();
 
         //Prevent Qt from auto-destroying these windows.
