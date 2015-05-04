@@ -50,6 +50,7 @@ private:
     QDateTime startTime;
     bool wasConnected;
     bool stopTimer;
+    bool useraw;
 
 };
 

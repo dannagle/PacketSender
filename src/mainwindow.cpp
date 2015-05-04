@@ -1456,6 +1456,7 @@ void MainWindow::on_actionSettings_triggered()
         applyNetworkSettings();
         loadPacketsTable();
         loadTrafficLogTable();
+        on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
     }
 }
 

@@ -3,6 +3,10 @@
 
 #include <QTextStream>
 #include <QScrollBar>
+#include <QSettings>
+#include <QDesktopServices>
+#include <QFile>
+#include <QDir>
 
 PersistentConnection::PersistentConnection(QWidget *parent) :
     QDialog(parent),
@@ -34,6 +38,10 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
         ui->packetComboBox->addItem(tempPacket.name);
 
     }
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    useraw = settings.value("persistentTCPrawCheck", true).toBool();
+
 
 }
 
@@ -141,27 +149,49 @@ void PersistentConnection::on_buttonBox_rejected()
 
 void PersistentConnection::packetSentSlot(Packet pkt) {
 
+
     Packet loopPkt = pkt;
     trafficList.append(loopPkt);
     QString html;
     html.clear();
     QTextStream out(&html);
-    out << "<html>" << "<b>" << trafficList.size() << " packets." << "</b><br>";
 
-    int count = 0;
-    foreach(loopPkt, trafficList) {
-        QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
-        if(loopPkt.fromIP.toLower() == "you") {
-            out << "<p style='color:blue'>";
-        } else {
-            out << "<p>";
+    //        clipboard->setText(QString(savePacket.getByteArray()));
+
+    if(useraw) {
+        foreach(loopPkt, trafficList) {
+            if(loopPkt.fromIP.toLower() != "you") {
+                out << QString(loopPkt.getByteArray());
+            }
+
         }
-        out << loopPkt.asciiString().toHtmlEscaped();
-        out << "</p>";
+
+        ui->trafficViewEdit->setPlainText(html);
+
+    } else {
+
+
+
+        out << "<html>" << "<b>" << trafficList.size() << " packets." << "</b><br>";
+
+        int count = 0;
+        foreach(loopPkt, trafficList) {
+            QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
+            if(loopPkt.fromIP.toLower() == "you") {
+                out << "<p style='color:blue'>";
+            } else {
+                out << "<p>";
+            }
+            out << loopPkt.asciiString().toHtmlEscaped();
+            out << "</p>";
+        }
+
+        out << "</html>";
+        ui->trafficViewEdit->setHtml(html);
+
+
     }
 
-    out << "</html>";
-    ui->trafficViewEdit->setHtml(html);
 
 
     QScrollBar *vScrollBar = ui->trafficViewEdit->verticalScrollBar();
