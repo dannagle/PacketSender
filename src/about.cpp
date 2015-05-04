@@ -3,6 +3,7 @@
 
 #include <QDesktopServices>
 #include <QDate>
+#include <QUrl>
 
 
 About::About(QWidget *parent) :
