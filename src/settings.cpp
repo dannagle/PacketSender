@@ -19,6 +19,9 @@ Settings::Settings(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QIcon mIcon(":pslogo.png");

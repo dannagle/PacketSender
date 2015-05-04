@@ -18,6 +18,8 @@ About::About(QWidget *parent) :
     setWindowTitle("About Packet Sender");
     setWindowIcon(mIcon);
 
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
 
     ui->DNLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
     ui->DNLinkButton->setFlat(true);
@@ -48,6 +50,7 @@ About::About(QWidget *parent) :
     ui->psLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->psLinkButton, SIGNAL(clicked()),
             this, SLOT(gotoPacketSenderDotCom()));
+
 
 
 

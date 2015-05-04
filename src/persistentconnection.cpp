@@ -13,6 +13,10 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     ui(new Ui::PersistentConnection)
 {
     ui->setupUi(this);
+
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+
     QDEBUG();
     sendPacket.clear();
     QDEBUG() << ": refreshTimer Connection attempt " <<
