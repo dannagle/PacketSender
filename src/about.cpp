@@ -23,6 +23,7 @@ About::About(QWidget *parent) :
 
 
     ui->DNLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    ui->DNLinkButton->setIcon( QIcon(":dannagle32.jpg"));
     ui->DNLinkButton->setFlat(true);
     ui->DNLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->DNLinkButton, SIGNAL(clicked()),
@@ -38,7 +39,6 @@ About::About(QWidget *parent) :
 
 
     ui->DNAmazonLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
-    ui->DNAmazonLinkButton->setIcon( QIcon(":pslogo.png"));
     ui->DNAmazonLinkButton->setFlat(true);
     ui->DNAmazonLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->DNAmazonLinkButton, SIGNAL(clicked()),

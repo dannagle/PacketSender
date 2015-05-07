@@ -19,5 +19,7 @@
         <file>linkicon_black.png</file>
         <file>Twitter_logo_blue.png</file>
         <file>pslogo128.png</file>
+        <file>pslogo256.png</file>
+        <file>dannagle32.jpg</file>
     </qresource>
 </RCC>

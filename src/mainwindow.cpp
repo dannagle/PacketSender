@@ -1517,6 +1517,7 @@ void MainWindow::on_actionImport_Packets_triggered()
             }
             packetsSaved = Packet::fetchAllfromDB("");
             statusBarMessage("Import Finished");
+            loadPacketsTable();
         }
 
     } else {
