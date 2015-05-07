@@ -356,17 +356,17 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>31</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionExit"/>
     <addaction name="actionSettings"/>
     <addaction name="actionImport_Packets"/>
     <addaction name="actionExport_Packets"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
