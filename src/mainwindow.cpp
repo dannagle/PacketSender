@@ -194,6 +194,12 @@ MainWindow::MainWindow(QWidget *parent) :
     generateConnectionMenu();
 
 
+    if(packetsSaved.size() > 0) {
+        ui->searchLineEdit->setFocus(); //put cursor in search bar
+    }
+
+
+
         //Bruce is my pet poodle.
         //Dog easter egg.  CTRL D, O, G.
         //             or  CMD D, O, G.
@@ -309,6 +315,9 @@ void MainWindow::loadTrafficLogTable()
 
 
     QString filterString = ui->searchLineEdit->text().toLower().trimmed();
+
+
+    filterString.clear(); // don't search log
 
     if(filterString.isEmpty())
     {
@@ -439,7 +448,8 @@ void MainWindow::loadPacketsTable()
 
         if(tempPacket.name.toLower().contains(filterString) ||
                 tempPacket.hexToASCII(tempPacket.hexString).toLower().contains(filterString) ||
-                tempPacket.hexString.toLower().contains(filterString)
+                tempPacket.toIP.toLower().contains(filterString) ||
+                QString::number(tempPacket.port).contains(filterString)
                 )
         {
             packetsSavedFiltered.append(tempPacket);

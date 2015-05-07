@@ -190,12 +190,22 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPushButton" name="deletePacketButton">
-            <property name="enabled">
-             <bool>true</bool>
+           <widget class="QLineEdit" name="searchLineEdit">
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>16777215</height>
+             </size>
             </property>
+            <property name="placeholderText">
+             <string>Search Saved Packets...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearSearch">
             <property name="text">
-             <string>Delete Saved Packet</string>
+             <string>Clear</string>
             </property>
            </widget>
           </item>
@@ -211,6 +221,16 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="deletePacketButton">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Delete Saved Packet</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="persistentTCPCheck">
@@ -250,26 +270,9 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_16">
           <item>
-           <widget class="QPushButton" name="saveTrafficPacket">
-            <property name="text">
-             <string>Save Traffic Packet</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="trafficLogClearButton">
             <property name="text">
              <string>Clear Log</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="logTrafficCheck">
-            <property name="text">
-             <string>Log Traffic</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -287,9 +290,26 @@
            </spacer>
           </item>
           <item>
+           <widget class="QCheckBox" name="logTrafficCheck">
+            <property name="text">
+             <string>Log Traffic</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="saveLogButton">
             <property name="text">
              <string>Save Log</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveTrafficPacket">
+            <property name="text">
+             <string>Save Traffic Packet</string>
             </property>
            </widget>
           </item>
@@ -324,49 +344,9 @@
           </property>
          </widget>
         </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-        </item>
        </layout>
       </widget>
      </widget>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_19">
-      <item>
-       <widget class="QLineEdit" name="searchLineEdit">
-        <property name="maximumSize">
-         <size>
-          <width>500</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="placeholderText">
-         <string>Search Packets...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="clearSearch">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>
