@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>619</width>
-    <height>383</height>
+    <width>696</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,10 +28,60 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QComboBox" name="packetComboBox"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QComboBox" name="packetComboBox"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="LoadButton">
+         <property name="text">
+          <string>Load</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="searchEdit">
+         <property name="placeholderText">
+          <string>Search Packets...</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearButton">
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QRadioButton" name="rawCheck">
+         <property name="text">
+          <string>Raw</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="asciiCheck">
+         <property name="text">
+          <string>ASCII</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="asciiLineEdit">
        <property name="placeholderText">
@@ -43,6 +93,9 @@
       <widget class="QPushButton" name="asciiSendButton">
        <property name="text">
         <string>Send</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -60,6 +113,12 @@
    </item>
    <item>
     <widget class="QTextEdit" name="trafficViewEdit">
+     <property name="maximumSize">
+      <size>
+       <width>1500</width>
+       <height>1000</height>
+      </size>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>

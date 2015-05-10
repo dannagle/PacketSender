@@ -68,6 +68,8 @@ public slots:
     void applyNetworkSettings();
 
 
+    void toggleUDPServer();
+    void toggleTCPServer();
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
