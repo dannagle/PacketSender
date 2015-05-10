@@ -10,8 +10,8 @@ TARGET = PacketSender
 TEMPLATE = app
 
 #enable only if compiling .com for windows
-win32:CONFIG += console
-win32:DEFINES += CONSOLE_BUILD
+#win32:CONFIG += console
+#win32:DEFINES += CONSOLE_BUILD
 
 SOURCES += main.cpp\
         mainwindow.cpp \
