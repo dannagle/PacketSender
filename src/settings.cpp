@@ -39,7 +39,6 @@ Settings::Settings(QWidget *parent) :
 
 
     ui->sendResponseSettingsCheck->setChecked(settings.value("sendReponse", false).toBool());
-    ui->persistentTCPrawCheck->setChecked(settings.value("persistentTCPrawCheck", true).toBool());
 
     ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
 
@@ -93,7 +92,6 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
-    settings.setValue("persistentTCPrawCheck", ui->persistentTCPrawCheck->isChecked());
 
 
     //save traffic order

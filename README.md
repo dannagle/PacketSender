@@ -10,14 +10,6 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 
 ![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/ubuntu-logo-transparent.png)
 
-## Mobile Versions
-The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
-* [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
-* [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
-
-The desktop version is by far more capable and more popular and is now the sole focus of the project.
-
-
 ## Packet Sender Documentation
 
 Some knowledge of a basic network protocols is a prerequisite to using Packet Sender. Beyond that, Packet Sender was designed to be very easy to use. Simply start using it.
@@ -108,6 +100,17 @@ The command line system in Packet Sender follows the same pattern as other Linux
     TCP (56620)://192.185.38.130 48 65 6c 6c 6f 0a 57 6f 72 6c 64
     Response HEX:53 53 48 2D 32 2E 30 2D 4F 70 65 6E 53 53 48 5F 35 2E 33 70 31 20 44 65 62 69 61 6E 2D 33 75 62 75 6E 74 75 33 2E 31 2E 49 53 2E 31 30 2E 30 34 0D 0A
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
+
+
+    
+## Mobile Versions
+
+    The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
+    * [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
+    * [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
+
+    The desktop version is by far more capable and more popular and is now the sole focus of the project.
+
 
 
 ## License

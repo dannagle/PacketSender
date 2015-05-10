@@ -32,23 +32,32 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     wasConnected = false;
     stopTimer = false;
 
+    ui->searchEdit->setText("");
 
-    QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
-    ui->packetComboBox->clear();
-    ui->packetComboBox->addItem("<Load..>");
-    Packet tempPacket;
-    foreach(tempPacket, packetsSaved)
-    {
-        ui->packetComboBox->addItem(tempPacket.name);
+    loadComboBox();
 
-    }
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    useraw = true;
 
-    useraw = settings.value("persistentTCPrawCheck", true).toBool();
+    ui->asciiLineEdit->setFocus();
 
 
 }
 
+void PersistentConnection::loadComboBox() {
+
+    QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
+    ui->packetComboBox->clear();
+    Packet tempPacket;
+    QString search = ui->searchEdit->text().trimmed().toLower();
+    foreach(tempPacket, packetsSaved)
+    {
+        if(tempPacket.name.trimmed().toLower().contains(search)) {
+            ui->packetComboBox->addItem(tempPacket.name);
+        }
+
+    }
+
+}
 
 void PersistentConnection::aboutToClose() {
     QDEBUG() << "Stopping timer";
@@ -73,6 +82,10 @@ void PersistentConnection::statusReceiver(QString message)
         ui->asciiLineEdit->setEnabled(false);
         ui->packetComboBox->setEnabled(false);
         ui->appendCRcheck->setEnabled(false);
+        ui->searchEdit->setEnabled(false);
+        ui->packetComboBox->setEnabled(false);
+        ui->LoadButton->setEnabled(false);
+        ui->clearButton->setEnabled(false);
         stopTimer = true;
     }
 
@@ -150,12 +163,11 @@ void PersistentConnection::on_buttonBox_rejected()
 
 }
 
+void PersistentConnection::loadTrafficView() {
 
-void PersistentConnection::packetSentSlot(Packet pkt) {
 
+    Packet loopPkt;
 
-    Packet loopPkt = pkt;
-    trafficList.append(loopPkt);
     QString html;
     html.clear();
     QTextStream out(&html);
@@ -204,6 +216,13 @@ void PersistentConnection::packetSentSlot(Packet pkt) {
 
 }
 
+void PersistentConnection::packetSentSlot(Packet pkt) {
+
+    trafficList.append(pkt);
+    loadTrafficView();
+
+}
+
 void PersistentConnection::on_asciiSendButton_clicked()
 {
     QString ascii = ui->asciiLineEdit->text();
@@ -234,6 +253,45 @@ void PersistentConnection::on_asciiSendButton_clicked()
 
 void PersistentConnection::on_packetComboBox_currentIndexChanged(const QString &arg1)
 {
+
+
+}
+
+void PersistentConnection::on_searchEdit_textEdited(const QString &arg1)
+{
+    loadComboBox();
+
+}
+
+void PersistentConnection::on_clearButton_clicked()
+{
+
+    ui->searchEdit->setText("");
+    on_searchEdit_textEdited("");
+}
+
+void PersistentConnection::on_asciiCheck_clicked(bool checked)
+{
+    if(checked) {
+        useraw = false;
+    }
+    loadTrafficView();
+
+
+}
+
+void PersistentConnection::on_rawCheck_clicked(bool checked)
+{
+    if(checked) {
+        useraw = true;
+    }
+    loadTrafficView();
+
+
+}
+
+void PersistentConnection::on_LoadButton_clicked()
+{
     Packet tempPacket;
     QString selectedName = ui->packetComboBox->currentText();
     QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
@@ -249,8 +307,4 @@ void PersistentConnection::on_packetComboBox_currentIndexChanged(const QString &
         }
 
     }
-
-    ui->packetComboBox->setCurrentIndex(0);
-
-
 }

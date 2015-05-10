@@ -43,6 +43,16 @@ private slots:
 
     void on_packetComboBox_currentIndexChanged(const QString &arg1);
 
+    void on_searchEdit_textEdited(const QString &arg1);
+
+    void on_clearButton_clicked();
+
+    void on_asciiCheck_clicked(bool checked);
+
+    void on_rawCheck_clicked(bool checked);
+
+    void on_LoadButton_clicked();
+
 private:
     Ui::PersistentConnection *ui;
     QTimer refreshTimer;
@@ -52,6 +62,8 @@ private:
     bool stopTimer;
     bool useraw;
 
+    void loadComboBox();
+    void loadTrafficView();
 };
 
 #endif // PERSISTENTCONNECTION_H

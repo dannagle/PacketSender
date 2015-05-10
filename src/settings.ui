@@ -125,13 +125,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="persistentTCPrawCheck">
-            <property name="text">
-             <string>Persistent TCP displays raw data</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <spacer name="verticalSpacer_6">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
