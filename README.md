@@ -115,11 +115,11 @@ The command line system in Packet Sender follows the same pattern as other Linux
 
 ## Mobile Versions
 
-    The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
-    * [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
-    * [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
+The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
+* [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
+* [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
 
-    The desktop version is by far more capable and more popular and is now the sole focus of the project.
+The desktop version is by far more capable and more popular and is now the sole focus of the project.
 
 
 
