@@ -61,6 +61,8 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 * The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
 
+Persistent connections is not supported via the command line. 
+
 ### Additional Configuration Options
 
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
