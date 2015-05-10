@@ -30,7 +30,7 @@ Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` a
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/packetsender_windows_screenshot_crop.png)
+![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
 
 
 * In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these.
@@ -38,7 +38,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
 * In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
 * Select multiple packets to enable "Multi-Send". Selected packets are shown in a quick-send area above the traffic log.
-* Fields can be rearranged by drag-and-drop in the settings tab.
+* Fields can be rearranged by drag-and-drop in the settings menu.
 * A resend value of "0" means it is a single-shot packet.
 * A packet has a name, destination address (domains will trigger an IP lookup), port, and data associated with it.
 * Click "Send" to immediately send. Click "Save" to send later.
@@ -51,12 +51,21 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
 * An optional response can be sent. The same response is used for TCP and UDP.
 
+### Persistent TCP
+Packet Sender supports persistent connections via a separate UI dialog. It is enabled by  checkbox on the main window.
+* ![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
+* Any number of persistent connections can be created.
+* Previously saved packets can be loaded in the drop-down.
+* There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
+* Traffic is also saved in the main window traffic log.
+* The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
+
 ### Additional Configuration Options
 
-* The quick-send area in traffic log can be hidden.
+* The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
 * Traffic log can be set to roll at 100 entries.
-* Import/Export of packets.
+* Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
 
@@ -102,7 +111,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
 
-    
+
 ## Mobile Versions
 
     The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
