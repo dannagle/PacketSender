@@ -59,6 +59,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
 * Traffic is also saved in the main window traffic log.
 * The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
+* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
 
 ### Additional Configuration Options
 
