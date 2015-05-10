@@ -215,6 +215,19 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
+void MainWindow::toggleUDPServer()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("udpServerEnable", !settings.value("udpServerEnable", true).toBool());
+    applyNetworkSettings();
+}
+void MainWindow::toggleTCPServer()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("tcpServerEnable", !settings.value("tcpServerEnable", true).toBool());
+    applyNetworkSettings();
+}
+
 void MainWindow::generateConnectionMenu() {
 
 
@@ -351,7 +364,6 @@ void MainWindow::loadTrafficLogTable()
         ui->trafficLogTable->setRowCount(displayPackets.count());
     }
     unsigned int rowCounter = 0;
-    unsigned int colCount = 0;
 
     QDEBUGVAR(packetTableHeaders);
 
@@ -360,7 +372,6 @@ void MainWindow::loadTrafficLogTable()
     foreach(tempPacket, displayPackets)
     {
 
-        colCount = 0;
 /*
 
 lwStringList ("Time", "From IP", "From Port", "To IP", "To Port", "Method", "Error", "ASCII", "Hex")
@@ -980,7 +991,6 @@ int MainWindow::findColumnIndex(QListWidget * lw, QString search)
 void MainWindow::populateTableRow(int rowCounter, Packet tempPacket)
 {
     QTableWidgetItem * tItem;
-    QListWidget *lw;
 
     SendPacketButton * sendButton = tempPacket.getSendButton(ui->packetsTable);
 
@@ -1072,14 +1082,12 @@ void MainWindow::packetTable_checkMultiSelected() {
 
     //how many are selected?
     QTableWidgetItem * checkItem;
-    SendPacketButton *sendButton;
     QList<Packet> packetList;
     Packet clickedPacket;
     QList<QTableWidgetItem *> totalSelected = ui->packetsTable->selectedItems();
     packetList.clear();
     QStringList buttonsList;
     buttonsList.clear();
-    int i = 0;
 
 
     foreach(checkItem, totalSelected) {

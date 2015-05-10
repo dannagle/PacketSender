@@ -125,7 +125,8 @@ void PersistentConnection::init() {
 
 void PersistentConnection::packetToSend(Packet sendpacket)
 {
-    QDEBUG();
+
+    Q_UNUSED(sendpacket);
 
 }
 
@@ -253,12 +254,14 @@ void PersistentConnection::on_asciiSendButton_clicked()
 
 void PersistentConnection::on_packetComboBox_currentIndexChanged(const QString &arg1)
 {
+    Q_UNUSED(arg1);
 
 
 }
 
 void PersistentConnection::on_searchEdit_textEdited(const QString &arg1)
 {
+    Q_UNUSED(arg1);
     loadComboBox();
 
 }
