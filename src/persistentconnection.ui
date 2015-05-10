@@ -113,6 +113,12 @@
    </item>
    <item>
     <widget class="QTextEdit" name="trafficViewEdit">
+     <property name="maximumSize">
+      <size>
+       <width>1500</width>
+       <height>1000</height>
+      </size>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>
