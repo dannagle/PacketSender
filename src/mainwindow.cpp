@@ -1299,13 +1299,6 @@ void MainWindow::on_searchLineEdit_textEdited(const QString &arg1)
 
 }
 
-void MainWindow::on_clearSearch_clicked()
-{
-    ui->searchLineEdit->clear();
-    on_searchLineEdit_textEdited("");
-}
-
-
 
 void MainWindow::on_toClipboardButton_clicked()
 {
