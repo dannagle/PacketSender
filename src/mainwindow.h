@@ -110,8 +110,6 @@ private slots:
 
     void on_searchLineEdit_textEdited(const QString &arg1);
 
-    void on_clearSearch_clicked();
-
 
     void on_toClipboardButton_clicked();
 

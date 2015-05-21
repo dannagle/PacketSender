@@ -200,12 +200,8 @@
             <property name="placeholderText">
              <string>Search Saved Packets...</string>
             </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="clearSearch">
-            <property name="text">
-             <string>Clear</string>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -356,7 +352,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>31</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
