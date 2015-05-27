@@ -94,6 +94,9 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
 
+    settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());
+    settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
+
 
     //save traffic order
     QListWidget * lw = ui->displayOrderList;

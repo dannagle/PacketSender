@@ -15,8 +15,8 @@
 
 #define DATETIMEFORMAT "h:mm:ss.zzz ap"
 
-#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + QDir::separator() + "PacketSender" + QDir::separator()
-#define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ QDir::separator() +"PacketSender" + QDir::separator()
+#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
+#define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
 //Load local file if it exists
 #define SETTINGSFILE ((QFile::exists("ps_settings.ini")) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
