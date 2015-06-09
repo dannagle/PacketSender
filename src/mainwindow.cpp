@@ -28,6 +28,7 @@
 #include "brucethepoodle.h"
 #include "settings.h"
 #include "about.h"
+#include "subnetcalc.h"
 
 
 int hexToInt(QChar hex);
@@ -1563,4 +1564,12 @@ void MainWindow::on_actionExport_Packets_triggered()
 void MainWindow::on_persistentTCPCheck_clicked(bool checked)
 {
     packetNetwork.persistentConnectCheck = checked;
+}
+
+void MainWindow::on_actionSubnet_Calculator_triggered()
+{
+    QDEBUG();
+    SubnetCalc * sCalc = new SubnetCalc(this);
+    sCalc->show();
+
 }
