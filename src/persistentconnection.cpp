@@ -16,6 +16,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    suppressSlot = true;
 
     QDEBUG();
     sendPacket.clear();
@@ -39,6 +40,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     useraw = true;
 
     ui->asciiLineEdit->setFocus();
+    suppressSlot = false;
 
 
 }
@@ -85,7 +87,7 @@ void PersistentConnection::statusReceiver(QString message)
         ui->searchEdit->setEnabled(false);
         ui->packetComboBox->setEnabled(false);
         ui->LoadButton->setEnabled(false);
-        ui->clearButton->setEnabled(false);
+
         stopTimer = true;
     }
 
@@ -262,15 +264,11 @@ void PersistentConnection::on_packetComboBox_currentIndexChanged(const QString &
 void PersistentConnection::on_searchEdit_textEdited(const QString &arg1)
 {
     Q_UNUSED(arg1);
+    bool suppressSlotSave = suppressSlot;
+    suppressSlot = true;
     loadComboBox();
+    suppressSlot = suppressSlotSave;
 
-}
-
-void PersistentConnection::on_clearButton_clicked()
-{
-
-    ui->searchEdit->setText("");
-    on_searchEdit_textEdited("");
 }
 
 void PersistentConnection::on_asciiCheck_clicked(bool checked)
@@ -310,4 +308,13 @@ void PersistentConnection::on_LoadButton_clicked()
         }
 
     }
+}
+
+void PersistentConnection::on_packetComboBox_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    if(!suppressSlot) {
+        on_LoadButton_clicked();
+    }
+
 }
