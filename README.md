@@ -30,7 +30,7 @@ Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` a
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
+![Packet Sender screenshot](screenshots/packetsender_windows_screenshot.png)
 
 
 * In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these.
@@ -61,7 +61,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 * The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
 
-Persistent connections is not supported via the command line. 
+Persistent connections is not supported via the command line.
 
 ### Additional Configuration Options
 

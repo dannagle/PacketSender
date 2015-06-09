@@ -14,7 +14,7 @@
 #include <QHostInfo>
 
 #include "mainwindow.h"
-#define DEBUGMODE 1
+#define DEBUGMODE 0
 
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -359,6 +359,7 @@ int main(int argc, char *argv[])
                     if(quiet) {
                         o << "\n" << hexString;
                     } else {
+                        o << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                         o << "\nResponse HEX:" << hexString;
                         o << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
                     }
@@ -408,6 +409,7 @@ int main(int argc, char *argv[])
                     if(quiet) {
                         o << "\n" << hexString;
                     } else {
+                        o << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                         o << "\nResponse HEX:" << hexString;
                         o << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
                     }

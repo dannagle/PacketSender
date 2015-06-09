@@ -204,7 +204,7 @@ void TCPThread::run()
                 clientConnection->waitForReadyRead(500);
                 emit connectStatus("Waiting to receive");
                 tcpPacket.hexString.clear();
-                int hexcounter = 0;
+
                 while(clientConnection->bytesAvailable()) {
                     tcpPacket.hexString.append(" ");
                     tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));

@@ -74,6 +74,7 @@ Settings::~Settings()
 
 void Settings::statusBarMessage(QString msg)
 {
+    Q_UNUSED(msg);
 
 }
 
@@ -92,6 +93,9 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
+
+    settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());
+    settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
 
 
     //save traffic order
@@ -118,6 +122,7 @@ void Settings::on_buttonBox_accepted()
 
 void Settings::on_asciiResponseEdit_textEdited(const QString &arg1)
 {
+    Q_UNUSED(arg1);
 
     QString quicktestASCII =  ui->asciiResponseEdit->text();
     ui->hexResponseEdit->setText( Packet::ASCIITohex(quicktestASCII));
@@ -126,6 +131,7 @@ void Settings::on_asciiResponseEdit_textEdited(const QString &arg1)
 
 void Settings::on_hexResponseEdit_textEdited(const QString &arg1)
 {
+    Q_UNUSED(arg1);
 
     QString quicktestHex =  ui->hexResponseEdit->text();
 
