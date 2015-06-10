@@ -72,6 +72,10 @@ Persistent connections is not supported via the command line.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
 
+### Tools
+
+Subnet Calculator (place holder until finished)
+
 ## Documentation (Command Line)
 
 The command line extension used in Windows installations is .com. Using .exe will launch the GUI. Leave off the extension and Windows will choose the correct program. The same executable controls the command line and GUI for Mac and Linux operating systems.
