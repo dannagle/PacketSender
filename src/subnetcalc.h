@@ -23,6 +23,8 @@ private slots:
 
     void on_clearButton_clicked();
 
+    void on_ipsubnetCheckEdit_textChanged(const QString &arg1);
+
 private:
     Ui::SubnetCalc *ui;
 };
