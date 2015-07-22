@@ -318,3 +318,10 @@ void PersistentConnection::on_packetComboBox_currentIndexChanged(int index)
     }
 
 }
+
+void PersistentConnection::on_clearButton_clicked()
+{
+    trafficList.clear();
+    loadTrafficView();
+
+}

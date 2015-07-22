@@ -53,6 +53,8 @@ private slots:
 
     void on_packetComboBox_currentIndexChanged(int index);
 
+    void on_clearButton_clicked();
+
 private:
     Ui::PersistentConnection *ui;
     QTimer refreshTimer;
