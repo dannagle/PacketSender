@@ -82,9 +82,6 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
 
-### Tools
-
-Subnet Calculator (place holder until finished)
 
 ## Documentation (Command Line)
 
