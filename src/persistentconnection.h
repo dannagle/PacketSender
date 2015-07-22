@@ -45,13 +45,13 @@ private slots:
 
     void on_searchEdit_textEdited(const QString &arg1);
 
-    void on_clearButton_clicked();
-
     void on_asciiCheck_clicked(bool checked);
 
     void on_rawCheck_clicked(bool checked);
 
     void on_LoadButton_clicked();
+
+    void on_packetComboBox_currentIndexChanged(int index);
 
 private:
     Ui::PersistentConnection *ui;
@@ -61,6 +61,7 @@ private:
     bool wasConnected;
     bool stopTimer;
     bool useraw;
+    bool suppressSlot;
 
     void loadComboBox();
     void loadTrafficView();

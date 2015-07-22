@@ -133,6 +133,10 @@ private slots:
 
     void on_persistentTCPCheck_clicked(bool checked);
 
+
+    void on_actionSubnet_Calculator_triggered();
+
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;

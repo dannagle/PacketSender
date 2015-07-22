@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     tcpthread.cpp \
     persistentconnection.cpp \
     settings.cpp \
-    about.cpp
+    about.cpp \
+    subnetcalc.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -33,13 +34,15 @@ HEADERS  += mainwindow.h \
     tcpthread.h \
     persistentconnection.h \
     settings.h \
-    about.h
+    about.h \
+    subnetcalc.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
     persistentconnection.ui \
     settings.ui \
-    about.ui
+    about.ui \
+    subnetcalc.ui
 
 
 macx:CONFIG += app_bundle

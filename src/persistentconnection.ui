@@ -46,12 +46,8 @@
          <property name="placeholderText">
           <string>Search Packets...</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="clearButton">
-         <property name="text">
-          <string>Clear</string>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

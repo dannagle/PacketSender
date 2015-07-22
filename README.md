@@ -53,7 +53,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 
 ### Persistent TCP
 Packet Sender supports persistent connections via a separate UI dialog. It is enabled by  checkbox on the main window.
-* ![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
+![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
 * Any number of persistent connections can be created.
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
@@ -63,6 +63,16 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 
 Persistent connections is not supported via the command line.
 
+
+### IPv4 Subnet Calculator
+Packet Sender has a built-in subnet calculator. It is under the Tools menu.
+![Packet Sender Direct TCP](screenshots/packetsender_subnetcalc_ubuntu.png)
+* The log window will display non-loopback IPv4 addresses found on your computer.
+* The top left field allow inputting an IPv4 address.
+* The field below is for a subnet, either X.X.X.X or /XX notation.
+* The results of the calculation are on the right.
+* The field below is a quick check to see if an IPv4 is within one of your subnets.
+
 ### Additional Configuration Options
 
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
@@ -71,6 +81,7 @@ Persistent connections is not supported via the command line.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
+
 
 ## Documentation (Command Line)
 
