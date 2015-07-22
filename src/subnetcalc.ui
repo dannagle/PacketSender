@@ -130,7 +130,7 @@
      <item>
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Check if IP is in your subnet</string>
+        <string>Within subnet check</string>
        </property>
       </widget>
      </item>
@@ -143,6 +143,12 @@
      </item>
      <item>
       <widget class="QLineEdit" name="checkSubnetResultEdit">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>

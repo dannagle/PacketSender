@@ -180,6 +180,14 @@ void SubnetCalc::on_subnetEdit_textChanged(const QString &arg1)
 void SubnetCalc::on_clearButton_clicked()
 {
     ui->resultEdit->clear();
+    ui->broadcastEdit->clear();
+    ui->ipEdit->clear();
+    ui->subnetEdit->clear();
+    ui->ipsubnetCheckEdit->clear();
+    ui->startEdit->clear();
+    ui->endEdit->clear();
+    ui->broadcastEdit->clear();
+    ui->checkSubnetResultEdit->clear();
 }
 
 void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
@@ -231,7 +239,7 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
 
 
             if(found) {
-                QString resultText = "Yes, using ";
+                QString resultText = "Within ";
                 resultText.append(entry.ip().toString());
                 resultText.append(" / ");
                 resultText.append(entry.netmask().toString());
