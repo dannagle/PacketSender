@@ -30,7 +30,7 @@
          <item>
           <widget class="QLineEdit" name="ipEdit">
            <property name="placeholderText">
-            <string>IPv4 or IPv6</string>
+            <string>IPv4 address</string>
            </property>
           </widget>
          </item>
@@ -48,7 +48,7 @@
          <item>
           <widget class="QLineEdit" name="subnetEdit">
            <property name="placeholderText">
-            <string>Dotted, colons, or number of bits </string>
+            <string>Dotted or number of bits </string>
            </property>
           </widget>
          </item>

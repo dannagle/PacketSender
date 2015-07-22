@@ -18,9 +18,9 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
     QList<QNetworkInterface> allInterfaces = QNetworkInterface::allInterfaces();
     QNetworkInterface eth;
 
-    setWindowTitle("Subnet Calculator");
+    setWindowTitle("IPv4 Subnet Calculator");
 
-    QString startLog = "IP addresses found: \n";
+    QString startLog = "Your IPv4 non-loopback addresses: \n";
     QTextStream out (&startLog);
 
     foreach(eth, allInterfaces) {
@@ -40,6 +40,11 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
 
         foreach (entry, allEntries) {
             if(!entry.ip().isLoopback()) {
+                if(entry.ip().toString().contains(":")) {
+
+                    //ignore ipv6 for now
+                    continue;
+                }
                 nonLoopBack = 1;
                 ethOut << entry.ip().toString() << "  /  " << entry.netmask().toString() << "\n";
             }
