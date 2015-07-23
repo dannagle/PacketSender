@@ -183,7 +183,7 @@ MainWindow::MainWindow(QWidget *parent) :
     TCPServerStatus();
 
 
-    refreshTimer.setInterval(500);
+    refreshTimer.setInterval(100);
     qDebug() << __FILE__ << "/" <<__LINE__  << ": refreshTimer Connection attempt " <<
                 connect ( &refreshTimer , SIGNAL ( timeout() ) , this, SLOT ( refreshTimerTimeout (  ) ) ) ;
 
