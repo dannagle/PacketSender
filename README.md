@@ -64,7 +64,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 Persistent connections is not supported via the command line.
 
 
-### IPv4 Subnet Calculator
+### IPv4 Subnet Calculator (Not released yet. Still in beta.)
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 ![Packet Sender Direct TCP](screenshots/packetsender_subnetcalc_ubuntu.png)
 * The log window will display non-loopback IPv4 addresses found on your computer.
