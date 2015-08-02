@@ -15,6 +15,9 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QList<QNetworkInterface> allInterfaces = QNetworkInterface::allInterfaces();
     QNetworkInterface eth;
 
