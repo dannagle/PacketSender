@@ -34,7 +34,7 @@ public:
     QString fromIP;
     QString toIP;
     QString errorString;
-    unsigned int repeat;
+    float repeat;
     unsigned int port;
     unsigned int fromPort;
     QString tcpOrUdp;

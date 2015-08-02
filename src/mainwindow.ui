@@ -133,7 +133,7 @@
               </size>
              </property>
              <property name="placeholderText">
-              <string>0 for off</string>
+              <string>0.0/blank off</string>
              </property>
             </widget>
            </item>

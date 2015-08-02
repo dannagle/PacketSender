@@ -33,6 +33,7 @@ const int Packet::REPEAT = Qt::UserRole + 10;
 
 //macro to get value from DB
 #define FROMDB_UINT(a) packet.a = settings.value(nameFound + "/"+ # a).toUInt()
+#define FROMDB_FLOAT(a) packet.a = settings.value(nameFound + "/"+ # a).toFloat()
 #define FROMDB_ULONG(a) packet.a = settings.value(nameFound + "/"+ # a).toULongLong()
 #define FROMDB_STRING(a) packet.a = settings.value(nameFound + "/" + # a).toString()
 
@@ -485,7 +486,7 @@ QList<Packet> Packet::fetchAllfromDB(QString importFile)
         FROMDB_STRING(name);
         FROMDB_STRING(toIP);
         FROMDB_UINT(port);
-        FROMDB_UINT(repeat);
+        FROMDB_FLOAT(repeat);
         FROMDB_UINT(fromPort);
         FROMDB_STRING(tcpOrUdp);
         FROMDB_STRING(hexString);
@@ -540,7 +541,7 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.tcpOrUdp = tItem->data(Packet::TCP_UDP).toString();
     returnPacket.fromPort= tItem->data(Packet::FROM_PORT).toUInt();
     returnPacket.fromIP = tItem->data(Packet::FROM_IP).toString();
-    returnPacket.repeat = tItem->data(Packet::REPEAT).toUInt();
+    returnPacket.repeat = tItem->data(Packet::REPEAT).toFloat();
     return returnPacket;
 }
 

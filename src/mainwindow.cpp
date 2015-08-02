@@ -75,11 +75,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon mIcon(":pslogo.png");
 
 
-
-    QStringList packetSavedTable = settings.value("packetSavedTableHeaders", packetSavedTableHeaders).toStringList();
-    QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
-
-
     lastSendPacket.clear();
 
 
@@ -657,7 +652,7 @@ void MainWindow::on_savePacketButton_clicked()
     testPacket.tcpOrUdp = ui->udptcpComboBox->currentText();
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
-    testPacket.repeat = ui->resendEdit->text().toUInt();
+    testPacket.repeat = ui->resendEdit->text().toFloat();
 
     testPacket.saveToDB();
     packetsSaved = Packet::fetchAllfromDB("");
@@ -707,7 +702,7 @@ void MainWindow::on_testPacketButton_clicked()
     testPacket.tcpOrUdp = ui->udptcpComboBox->currentText();
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
-    testPacket.repeat = ui->resendEdit->text().toUInt();
+    testPacket.repeat = ui->resendEdit->text().toFloat();
 
 
     if(testPacket.toIP.isEmpty()) {
@@ -1161,19 +1156,21 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
 void MainWindow::refreshTimerTimeout()
 {
 
-    Packet packet;
     QDateTime now = QDateTime::currentDateTime();
 
     for(int i = 0; i < packetsRepeat.size() && !stopResending; i++)
     {
-            if(packetsRepeat[i].timestamp.addMSecs(packetsRepeat[i].repeat * 1000 - 100) < now)
-            {
-                packetsRepeat[i].timestamp = now;
-                emit sendPacket(packetsRepeat[i]);
+
+        int repeatMS = (int) (packetsRepeat[i].repeat * 1000 - 100);
+
+        if(packetsRepeat[i].timestamp.addMSecs(repeatMS) < now)
+        {
+            packetsRepeat[i].timestamp = now;
+            emit sendPacket(packetsRepeat[i]);
 
 
-                statusBarMessage("Send: " + packetsRepeat[i].name + " (Resend)");
-            }
+            statusBarMessage("Send: " + packetsRepeat[i].name + " (Resend)");
+        }
     }
 
 
@@ -1572,4 +1569,15 @@ void MainWindow::on_actionSubnet_Calculator_triggered()
     SubnetCalc * sCalc = new SubnetCalc(this);
     sCalc->show();
 
+}
+
+void MainWindow::on_resendEdit_editingFinished()
+{
+    //truncate to 1 deciminal place.
+    float resendVal = ui->resendEdit->text().toFloat();
+    resendVal = resendVal * 10;
+    int resendint = (int) resendVal;
+    resendVal = (float) resendint;
+    resendVal = resendVal / 10;
+    ui->resendEdit->setText(QString::number(resendVal));
 }

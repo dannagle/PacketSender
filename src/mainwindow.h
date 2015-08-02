@@ -137,6 +137,8 @@ private slots:
     void on_actionSubnet_Calculator_triggered();
 
 
+    void on_resendEdit_editingFinished();
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
