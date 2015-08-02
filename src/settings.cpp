@@ -22,6 +22,11 @@ Settings::Settings(QWidget *parent) :
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
+    //not working yet...
+    ui->multiSendDelayLabel->hide();
+    ui->multiSendDelayEdit->hide();
+
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QIcon mIcon(":pslogo.png");
@@ -45,6 +50,23 @@ Settings::Settings(QWidget *parent) :
     ui->sendResponseSettingsCheck->setChecked(settings.value("sendReponse", false).toBool());
 
     ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
+
+
+
+    unsigned int resendNum = settings.value("cancelResendNum", 0).toInt();
+    if(resendNum == 0) {
+        ui->cancelResendNumEdit->setText("");
+    } else {
+        ui->cancelResendNumEdit->setText(QString::number(resendNum));
+    }
+
+    float multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
+    if(multiSendDelay == 0) {
+        ui->multiSendDelayEdit->setText("");
+    } else {
+        ui->multiSendDelayEdit->setText(QString::number(multiSendDelay));
+    }
+
 
 
     ui->settingsTabWidget->setCurrentIndex(0);
@@ -100,6 +122,16 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
+
+    settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
+
+
+    settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
+
+    float multiSend = ui->multiSendDelayEdit->text().toFloat() * 10;
+    int multiSendInt = (int) multiSend;
+    multiSend = ((float) multiSendInt) / 10;
+    settings.setValue("multiSendDelay", multiSend);
 
 
     //save traffic order

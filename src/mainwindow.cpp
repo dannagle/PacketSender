@@ -177,6 +177,11 @@ MainWindow::MainWindow(QWidget *parent) :
     UDPServerStatus();
     TCPServerStatus();
 
+    multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
+    cancelResendNum = settings.value("cancelResendNum", 0).toInt();
+    resendCounter = 0;
+
+
 
     refreshTimer.setInterval(100);
     qDebug() << __FILE__ << "/" <<__LINE__  << ": refreshTimer Connection attempt " <<
@@ -682,6 +687,7 @@ void MainWindow::on_testPacketButton_clicked()
                 } else {
                     usedRows.append(item->row());
                     Packet clickedPacket = Packet::fetchTableWidgetItemData(item);
+
                     emit sendPacket(clickedPacket);
                     packetCount++;
 
@@ -1166,10 +1172,17 @@ void MainWindow::refreshTimerTimeout()
         if(packetsRepeat[i].timestamp.addMSecs(repeatMS) < now)
         {
             packetsRepeat[i].timestamp = now;
-            emit sendPacket(packetsRepeat[i]);
 
+            if(((resendCounter+1) < cancelResendNum) || (cancelResendNum == 0)) {
 
-            statusBarMessage("Send: " + packetsRepeat[i].name + " (Resend)");
+                emit sendPacket(packetsRepeat[i]);
+                statusBarMessage("Send: " + packetsRepeat[i].name + " (Resend)");
+                resendCounter++;
+
+            } else {
+                    stopResending = 1;
+            }
+
         }
     }
 
@@ -1179,6 +1192,7 @@ void MainWindow::refreshTimerTimeout()
         stopResendingButton->hide();
         packetsRepeat.clear();
         stopResending = 0;
+        resendCounter = 0;
 
     } else {
         stopResendingButton->show();
@@ -1255,6 +1269,13 @@ void MainWindow::on_saveTrafficPacket_clicked()
 void MainWindow::applyNetworkSettings()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    packetsRepeat.clear();
+
+    multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
+    cancelResendNum = settings.value("cancelResendNum", 0).toInt();
+    resendCounter = 0;
+
 
     packetNetwork.kill();
     packetNetwork.init();

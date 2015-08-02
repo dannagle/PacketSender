@@ -160,6 +160,10 @@ private:
 
     int maxLogSize;
 
+    float multiSendDelay;
+    int cancelResendNum;
+    int resendCounter;
+
 
 };
 
