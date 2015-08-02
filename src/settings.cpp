@@ -28,6 +28,10 @@ Settings::Settings(QWidget *parent) :
     setWindowTitle("Packet Sender Settings");
     setWindowIcon(mIcon);
 
+    ui->udpServerPortEdit->setText(settings.value("udpPort","55056").toString());
+    ui->tcpServerPortEdit->setText(settings.value("tcpPort","55056").toString());
+
+
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
