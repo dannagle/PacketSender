@@ -657,7 +657,7 @@ void MainWindow::on_savePacketButton_clicked()
     testPacket.tcpOrUdp = ui->udptcpComboBox->currentText();
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
-    testPacket.repeat = ui->resendEdit->text().toFloat();
+    testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
 
     testPacket.saveToDB();
     packetsSaved = Packet::fetchAllfromDB("");
@@ -708,7 +708,7 @@ void MainWindow::on_testPacketButton_clicked()
     testPacket.tcpOrUdp = ui->udptcpComboBox->currentText();
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
-    testPacket.repeat = ui->resendEdit->text().toFloat();
+    testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
 
 
     if(testPacket.toIP.isEmpty()) {
@@ -920,7 +920,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
     }
     if(datatype == "repeat")
     {
-        int repeat = newText.toUInt();
+        float repeat = Packet::oneDecimal(newText.toFloat());
         updatePacket.repeat = repeat;
     }
     if(datatype == "tcpOrUdp")
@@ -1594,11 +1594,6 @@ void MainWindow::on_actionSubnet_Calculator_triggered()
 
 void MainWindow::on_resendEdit_editingFinished()
 {
-    //truncate to 1 deciminal place.
-    float resendVal = ui->resendEdit->text().toFloat();
-    resendVal = resendVal * 10;
-    int resendint = (int) resendVal;
-    resendVal = (float) resendint;
-    resendVal = resendVal / 10;
+    float resendVal = Packet::oneDecimal(ui->resendEdit->text().toFloat());
     ui->resendEdit->setText(QString::number(resendVal));
 }

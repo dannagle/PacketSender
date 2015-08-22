@@ -50,6 +50,13 @@ bool Packet::isTCP()
    return (tcpOrUdp.trimmed().toLower() == "tcp");
 }
 
+float Packet::oneDecimal(float value) {
+    float valueFloat = value * 10;
+    int valueInt = (int) valueFloat;
+    valueFloat = ((float) valueInt) / 10;
+    return valueFloat;
+}
+
 Packet::~Packet()
 {
     init();

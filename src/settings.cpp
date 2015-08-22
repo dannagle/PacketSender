@@ -128,9 +128,7 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 
-    float multiSend = ui->multiSendDelayEdit->text().toFloat() * 10;
-    int multiSendInt = (int) multiSend;
-    multiSend = ((float) multiSendInt) / 10;
+    float multiSend = Packet::oneDecimal(ui->multiSendDelayEdit->text().toFloat());
     settings.setValue("multiSendDelay", multiSend);
 
 
