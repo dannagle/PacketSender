@@ -17,9 +17,8 @@ Some knowledge of a basic network protocols is a prerequisite to using Packet Se
 
 ### Support
 
-* Stack Overflow: [stackoverflow.com/search?q=packet+sender](http://stackoverflow.com/search?q=packet+sender)
 * Twitter: [@NagleCode](http://twitter.com/naglecode)
-* You may also track this project on GitHub.
+* You may also track this project on [GitHub](http://github.com/dannagle/PacketSender).
 * Secure Anonymous Email: [DanNagle.com/contact](http://DanNagle.com/contact)
 
 ### Portable Mode
@@ -77,6 +76,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
+* Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
 * Traffic log can be set to roll at 100 entries.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
