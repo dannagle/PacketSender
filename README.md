@@ -8,7 +8,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP and U
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
-![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/ubuntu-logo-transparent.png)
+![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/Tux150.png)
 
 ## Packet Sender Documentation
 
