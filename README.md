@@ -4,11 +4,19 @@
 
 Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Ubuntu Desktop Linux. Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
+## Uses
+
+* Controlling network-based devices in ways beyond their original apps
+* Test automation (using its command line tool)
+* Testing network APIs (using the built-in TCP and UDP clients)
+* Malware analysis (using the built-in UDP and TCP servers)
+* Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
+* Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
-![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/ubuntu-logo-transparent.png)
+![Packet Sender logo](screenshots/WindowsLogo_Transparent_670x600-150x150.png)![Packet Sender logo](screenshots/mac_logo.png)![Packet Sender logo](screenshots/Tux150.png)
 
 ## Packet Sender Documentation
 
@@ -17,9 +25,8 @@ Some knowledge of a basic network protocols is a prerequisite to using Packet Se
 
 ### Support
 
-* Stack Overflow: [stackoverflow.com/search?q=packet+sender](http://stackoverflow.com/search?q=packet+sender)
 * Twitter: [@NagleCode](http://twitter.com/naglecode)
-* You may also track this project on GitHub.
+* You may also track this project on [GitHub](http://github.com/dannagle/PacketSender).
 * Secure Anonymous Email: [DanNagle.com/contact](http://DanNagle.com/contact)
 
 ### Portable Mode
@@ -64,7 +71,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 Persistent connections is not supported via the command line.
 
 
-### IPv4 Subnet Calculator (Not released yet. Still in beta.)
+### IPv4 Subnet Calculator
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 ![Packet Sender Direct TCP](screenshots/packetsender_subnetcalc_ubuntu.png)
 * The log window will display non-loopback IPv4 addresses found on your computer.
@@ -77,6 +84,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
+* Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
 * Traffic log can be set to roll at 100 entries.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
