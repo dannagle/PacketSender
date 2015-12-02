@@ -20,7 +20,7 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 
 ## Packet Sender Documentation
 
-Some knowledge of a basic network protocols is a prerequisite to using Packet Sender. Beyond that, Packet Sender was designed to be very easy to use. Simply start using it.
+Some knowledge of basic network protocols is a prerequisite to using Packet Sender. Beyond that, Packet Sender was designed to be very easy to use. Simply start using it.
 
 
 ### Support
