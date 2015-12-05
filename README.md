@@ -133,6 +133,40 @@ The command line system in Packet Sender follows the same pattern as other Linux
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
 
+## Building Packet Sender
+The only dependency is Qt SDK. Here is how to build the app.
+
+### Build for Windows and Mac
+1. Download the Qt installer from http://www.qt.io/download-open-source/
+1. Let it install MingGW if you don't have a compiler.
+1. Open the project PacketSender.pro
+1. Build! Qt is the only dependency!
+
+### Build for Linux
+Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK.
+
+If you are feeling adventurous, feel free to build from the master branch. 
+
+```
+sudo apt-get update
+sudo apt-get install qt5-default
+wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
+tar -xzvf (Version).tar.gz
+cd PacketSender-(Version)/src
+qmake
+make
+```
+
+To run use:
+```
+./PacketSender
+```
+
+If it doesn't run, you may need to set it executable
+```
+chmod a+x PacketSender
+```
+
 
 ## Mobile Versions
 
