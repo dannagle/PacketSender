@@ -626,7 +626,8 @@ void MainWindow::sendClick(QString packetName)
             }
 
             lastSendPacket = toSend;
-            statusBarMessage("Send: " + packetName);
+            QByteArray sendData = toSend.getByteArray();
+            statusBarMessage("Send: " + packetName + "  (" + QString::number(sendData.size()) + " bytes)");
             emit sendPacket(toSend);
         }
     }
