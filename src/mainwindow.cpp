@@ -626,7 +626,8 @@ void MainWindow::sendClick(QString packetName)
             }
 
             lastSendPacket = toSend;
-            statusBarMessage("Send: " + packetName);
+            QByteArray sendData = toSend.getByteArray();
+            statusBarMessage("Send: " + packetName + "  (" + QString::number(sendData.size()) + " bytes)");
             emit sendPacket(toSend);
         }
     }
@@ -765,6 +766,25 @@ void MainWindow::on_testPacketButton_clicked()
 
     if(testPacket.repeat > 0)
     {
+        if(testPacket.tcpOrUdp == "TCP" && ui->persistentTCPCheck->isChecked()) {
+
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Resend TCP with persistent connections!");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("You are resending a TCP packet with presistent connecitons. The UI could go nuts! \n\nUncheck persistent connection? (Recommended)");
+            int yesno = msgBox.exec();
+            if(yesno == QMessageBox::Yes) {
+                ui->persistentTCPCheck->setChecked(false);
+                on_persistentTCPCheck_clicked(false);
+            }
+            if(yesno == QMessageBox::Cancel) {
+                return;
+            }
+
+        }
+
         testPacket.timestamp = QDateTime::currentDateTime();
 
         stopResendingButton->setStyleSheet("QPushButton { color: green; } QPushButton::hover { color: #BC810C; } ");
