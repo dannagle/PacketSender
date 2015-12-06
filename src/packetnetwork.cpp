@@ -15,6 +15,7 @@
 #include <QDesktopServices>
 #include <QDir>
 #include <QSettings>
+#include <QMessageBox>
 
 #include "persistentconnection.h"
 
@@ -82,11 +83,40 @@ void PacketNetwork::init()
 
     int udpPort = settings.value("udpPort", 55056).toInt();
 
-    qDebug() << __FILE__ << "/" <<__LINE__ << "udpSocket bind: " << udpSocket->bind(QHostAddress::Any, udpPort);
+    bool bindResult = udpSocket->bind(QHostAddress::Any, udpPort);
+
+    if(udpPort < 1024 && !bindResult) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Binding to low port number.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Packet Sender attempted (and failed) to bind to a UDP port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
+        msgBox.exec();
+
+
+    }
+
+    qDebug() << __FILE__ << "/" <<__LINE__ << "udpSocket bind: " << bindResult;
 
     int tcpPort = settings.value("tcpPort", 55056).toInt();
 
     qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(QHostAddress::Any, tcpPort);
+
+
+    if(tcpPort < 1024 && getTCPPort() == 0) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Binding to low port number.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Packet Sender attempted (and failed) to bind to a TCP port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
+        msgBox.exec();
+
+
+    }
 
 
     sendResponse = settings.value("sendReponse", false).toBool();
