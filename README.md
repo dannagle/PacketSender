@@ -149,7 +149,7 @@ If you are feeling adventurous, feel free to build from the master branch.
 
 ```
 sudo apt-get update
-sudo apt-get install qt5-default
+sudo apt-get install qt5-default build-essential
 wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
 tar -xzvf (Version).tar.gz
 cd PacketSender-(Version)/src
