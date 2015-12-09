@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
 
         if(tcp) {
             QTcpSocket sock;
-            sock.bind(QHostAddress::Any, bind);
+            sock.bind(QHostAddress::AnyIPv4, bind);
             sock.connectToHost(addy, port);
             sock.waitForConnected(1000);
             if(sock.state() == QAbstractSocket::ConnectedState)
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
-            if(!sock.bind(QHostAddress::Any, bind)) {
+            if(!sock.bind(QHostAddress::AnyIPv4, bind)) {
                 OUTIF() << "Error: Could not bind to " << bind;
 
                 OUTPUT();

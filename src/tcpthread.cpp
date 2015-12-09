@@ -99,9 +99,6 @@ void TCPThread::run()
         QDEBUG() << "We are threaded sending!";
         clientConnection = new QTcpSocket(this);
 
-        QHostAddress address;
-        address.setAddress(sendPacket.toIP);
-
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
         sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
@@ -114,7 +111,7 @@ void TCPThread::run()
         }
 
 
-        clientConnection->connectToHost(address,  sendPacket.port);
+        clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
         clientConnection->waitForConnected(5000);
 
 
@@ -174,6 +171,7 @@ void TCPThread::run()
                         tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                         tcpRCVPacket.tcpOrUdp = "TCP";
                         tcpRCVPacket.fromIP = clientConnection->peerAddress().toString();
+                        QDEBUGVAR(tcpRCVPacket.fromIP);
                         tcpRCVPacket.toIP = "You";
                         tcpRCVPacket.port = sendPacket.fromPort;
                         tcpRCVPacket.fromPort =    clientConnection->peerPort();

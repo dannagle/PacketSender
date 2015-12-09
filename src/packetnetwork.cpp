@@ -83,7 +83,7 @@ void PacketNetwork::init()
 
     int udpPort = settings.value("udpPort", 55056).toInt();
 
-    bool bindResult = udpSocket->bind(QHostAddress::Any, udpPort);
+    bool bindResult = udpSocket->bind(QHostAddress::AnyIPv4, udpPort);
 
     if(udpPort < 1024 && !bindResult) {
 
@@ -102,7 +102,7 @@ void PacketNetwork::init()
 
     int tcpPort = settings.value("tcpPort", 55056).toInt();
 
-    qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(QHostAddress::Any, tcpPort);
+    qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(QHostAddress::AnyIPv4, tcpPort);
 
 
     if(tcpPort < 1024 && getTCPPort() == 0) {
