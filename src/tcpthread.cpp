@@ -69,7 +69,7 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
         tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
         tcpPacketreply.tcpOrUdp = "TCP";
         tcpPacketreply.fromIP = "You (Response)";
-        tcpPacketreply.toIP = sock->peerAddress().toString();
+        tcpPacketreply.toIP = Packet::removeIPv6Mapping(sock->peerAddress());
         tcpPacketreply.port = sock->peerPort();
         tcpPacketreply.fromPort = sock->localPort();
         QByteArray data = Packet::HEXtoByteArray(responseData);
@@ -88,6 +88,7 @@ void TCPThread::closeConnection()
     QDEBUG() << "Closing connection";
     clientConnection->close();
 }
+
 
 void TCPThread::run()
 {
@@ -170,7 +171,9 @@ void TCPThread::run()
                         tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                         tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                         tcpRCVPacket.tcpOrUdp = "TCP";
-                        tcpRCVPacket.fromIP = clientConnection->peerAddress().toString();
+                        tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+
+
                         QDEBUGVAR(tcpRCVPacket.fromIP);
                         tcpRCVPacket.toIP = "You";
                         tcpRCVPacket.port = sendPacket.fromPort;
@@ -194,7 +197,9 @@ void TCPThread::run()
                 tcpPacket.timestamp = QDateTime::currentDateTime();
                 tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                 tcpPacket.tcpOrUdp = "TCP";
-                tcpPacket.fromIP = clientConnection->peerAddress().toString();
+                tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                QDEBUGVAR(tcpPacket.fromIP);
+
                 tcpPacket.toIP = "You";
                 tcpPacket.port = sendPacket.fromPort;
                 tcpPacket.fromPort =    clientConnection->peerPort();
@@ -291,7 +296,7 @@ void TCPThread::run()
     tcpPacket.timestamp = QDateTime::currentDateTime();
     tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
     tcpPacket.tcpOrUdp = "TCP";
-    tcpPacket.fromIP = sock.peerAddress().toString();
+    tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
     tcpPacket.toIP = "You";
     tcpPacket.port = sock.localPort();
     tcpPacket.fromPort = sock.peerPort();

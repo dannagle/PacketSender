@@ -197,7 +197,7 @@ void PacketNetwork::readPendingDatagrams()
         udpPacket.timestamp = QDateTime::currentDateTime();
         udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
         udpPacket.tcpOrUdp = "UDP";
-        udpPacket.fromIP = sender.toString();
+        udpPacket.fromIP = Packet::removeIPv6Mapping(sender);
         udpPacket.toIP = "You";
         udpPacket.port = getUDPPort();
         udpPacket.fromPort = senderPort;
@@ -214,7 +214,7 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
             udpPacket.tcpOrUdp = "UDP";
             udpPacket.fromIP = "You (Response)";
-            udpPacket.toIP = sender.toString();
+            udpPacket.toIP = Packet::removeIPv6Mapping(sender);
             udpPacket.port = senderPort;
             udpPacket.fromPort = getUDPPort();
             udpPacket.hexString = responseData;

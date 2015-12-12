@@ -52,6 +52,7 @@ public:
     static QString hexToASCII(QString &hex);
     static QString byteArrayToHex(QByteArray data);
     static QByteArray HEXtoByteArray(QString thehex);
+    static QString removeIPv6Mapping(QHostAddress ipv6);
     QByteArray getByteArray();
     QString asciiString();
 
