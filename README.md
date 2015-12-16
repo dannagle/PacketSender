@@ -177,6 +177,11 @@ The abandoned mobile versions are written in Java and Swift and are MIT Licensed
 The desktop version is by far more capable and more popular and is now the sole focus of the project.
 
 
+## Web site
+
+The Packet Sender web site is also open source. 
+* [Repo for Packet Sender web site](https://github.com/dannagle/PacketSender-Website).
+
 
 ## License
 GPL v2 or Later. [Contact me](http://dannagle.com/contact) if you require a different license.
