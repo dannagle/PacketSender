@@ -105,10 +105,9 @@ void TCPThread::run()
         sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
         bool portpass = false;
 
-        //TODO should remember last successful port so can just +1 it
-        for(int localport=5000; localport<60000 && !portpass; localport++) {
-            portpass = clientConnection->bind(localport);
-            sendPacket.fromPort = localport;
+        portpass = clientConnection->bind(); //use random port.
+        if(portpass) {
+            sendPacket.fromPort = clientConnection->localPort();
         }
 
 
