@@ -37,7 +37,7 @@ Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` a
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/packetsender_windows_screenshot.png)
+![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
 
 
 * In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these.
