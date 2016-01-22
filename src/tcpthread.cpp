@@ -111,7 +111,7 @@ void TCPThread::run()
         }
 
 
-        clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+        clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
         clientConnection->waitForConnected(5000);
 
 

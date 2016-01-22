@@ -598,15 +598,7 @@ QByteArray Packet::HEXtoByteArray(QString thehex)
 
 QString Packet::removeIPv6Mapping(QHostAddress ipv6)
 {
-    quint32 ipv4 = ipv6.toIPv4Address();
-
-    //valid address will have a result greater than 0
-    if(ipv4 > 0) {
-        QHostAddress new_ipv4(ipv4);
-        return new_ipv4.toString();
-    } else {
         return ipv6.toString();
-    }
 
 }
 
