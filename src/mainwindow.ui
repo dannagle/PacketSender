@@ -83,14 +83,14 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>IP Address</string>
+              <string>IPv6 Address</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLineEdit" name="packetIPEdit">
              <property name="placeholderText">
-              <string>IPv4, IPv6, DNS Lookup</string>
+              <string>IPv6, DNS Lookup</string>
              </property>
             </widget>
            </item>
@@ -352,7 +352,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
