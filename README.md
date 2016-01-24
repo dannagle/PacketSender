@@ -50,6 +50,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 
 
 * In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these.
+* There is also IPv4 Mode and IPv6 Mode. Click to toggle between server modes.
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
 * In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
@@ -58,9 +59,10 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 * A resend value of "0" means it is a single-shot packet.
 * A packet has a name, destination address (domains will trigger an IP lookup), port, and data associated with it.
 * Click "Send" to immediately send. Click "Save" to send later.
+* For IPv6 sending, you will also need the scope ID.
 * Packet Sender supports mixed ASCII and HEX notation:
   * \XX gets translated to XX in hex
-  * \n and \r will get translated to 0A and 0D
+  * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
@@ -77,7 +79,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 * The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
 
-Persistent connections is not supported via the command line.
+Persistent connections is not supported via the command line. Persistent connections are not supported in the server.
 
 
 ### IPv4 Subnet Calculator
@@ -91,6 +93,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 ### Additional Configuration Options
 
+* IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch. 
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
 * Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
