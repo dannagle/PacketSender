@@ -93,7 +93,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 ### Additional Configuration Options
 
-* IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch. 
+* IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch.
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
 * Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
@@ -180,6 +180,9 @@ If it doesn't run, you may need to set it executable
 chmod a+x PacketSender
 ```
 
+## Enhancements
+
+Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements). 
 
 ## Mobile Versions
 
