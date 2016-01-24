@@ -1,6 +1,6 @@
 # Packet Sender
 
-![Packet Sender Banner](screenshots/packetsender_dot_com.png)
+![Packet Sender Banner](screenshots/packetsender_banner.png)
 
 Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
@@ -32,6 +32,15 @@ Some knowledge of basic network protocols is a prerequisite to using Packet Send
 ### Portable Mode
 
 Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in its run-time directory. Windows users, this directory is the same place as the .exe. For Mac users, this run-time directory is at "PacketSender.app/Contents/MacOS". If INI files are found, it will use them instead of %APPDATA%" or "Library/Application Support".
+
+
+### IPv4 and IPv6 Support
+By default, Packet Sender's built-in servers are configured to support IPv4. If you wish to use IPv6, there is a toggle switch at the bottom right. Click switch between IPv4 / IPv6.
+
+![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
+
+Packet Sender's GUI client sender and CLI will detect the type of IP address being used and bind appropriately to send the packet. Note that you must include a scope ID to send.
+
 
 ### Documentation (GUI)
 
@@ -129,6 +138,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
 
     packetsender -taw 500 packetsender.com 22 "Hello\nWorld"
     TCP (56620)://192.185.38.130 48 65 6c 6c 6f 0a 57 6f 72 6c 64
+    Response Time:5:51:37.042 pm
     Response HEX:53 53 48 2D 32 2E 30 2D 4F 70 65 6E 53 53 48 5F 35 2E 33 70 31 20 44 65 62 69 61 6E 2D 33 75 62 75 6E 74 75 33 2E 31 2E 49 53 2E 31 30 2E 30 34 0D 0A
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
@@ -145,7 +155,7 @@ The only dependency is Qt SDK. Here is how to build the app.
 ### Build for Linux
 Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK.
 
-If you are feeling adventurous, feel free to build from the master branch. 
+If you are feeling adventurous, feel free to build from the master branch.
 
 ```
 sudo apt-get update
@@ -179,7 +189,7 @@ The desktop version is by far more capable and more popular and is now the sole 
 
 ## Web site
 
-The Packet Sender web site is also open source. 
+The Packet Sender web site is also open source.
 * [Repo for Packet Sender web site](https://github.com/dannagle/PacketSender-Website).
 
 
