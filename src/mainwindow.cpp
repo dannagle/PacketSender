@@ -174,6 +174,35 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->insertPermanentWidget(3, tcpServerStatus);
 
 
+
+    IPv4Stylesheet = "QPushButton {width:50px; color: green; } QPushButton::hover { color: #BC810C; } ";
+    IPv6Stylesheet = "QPushButton {width:50px; color: blue; } QPushButton::hover { color: #BC810C; } ";
+
+    //updatewidget
+
+    int ipMode = packetNetwork.getIPmode();
+
+    if(ipMode < 6) {
+        IPmodeButton = new QPushButton("IPv4 Mode");
+        IPmodeButton->setStyleSheet(IPv4Stylesheet);
+
+    } else {
+        IPmodeButton = new QPushButton("IPv6 Mode");
+        IPmodeButton->setStyleSheet(IPv6Stylesheet);
+
+    }
+    IPmodeButton->setFlat(true);
+    IPmodeButton->setCursor(Qt::PointingHandCursor);
+
+    statusBar()->insertPermanentWidget(4, IPmodeButton);
+
+
+    connect(IPmodeButton, SIGNAL(clicked()),
+            this, SLOT(toggleIPv4_IPv6()));
+
+
+
+
     UDPServerStatus();
     TCPServerStatus();
 
@@ -838,11 +867,11 @@ void MainWindow::on_packetIPEdit_lostFocus()
     QHostAddress address(ipPacket);
     if (QAbstractSocket::IPv4Protocol == address.protocol())
     {
-       qDebug("Valid IPv4 address.");
+       QDEBUG() << "Valid IPv4 address.";
     }
     else if (QAbstractSocket::IPv6Protocol == address.protocol())
     {
-       qDebug("Valid IPv6 address.");
+       QDEBUG() << "Valid IPv6 address.";
     }
     else
     {
@@ -1177,6 +1206,26 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
             ui->packetASCIIEdit->setText(Packet::hexToASCII(clickedPacket.hexString));
         }
     }
+}
+
+
+void MainWindow::toggleIPv4_IPv6()
+{
+    QString currentMode = IPmodeButton->text();
+    if(currentMode.contains("4")) {
+        IPmodeButton->setText("IPv6 Mode");
+        IPmodeButton->setStyleSheet(IPv6Stylesheet);
+        packetNetwork.setIPmode(6);
+
+    } else {
+        IPmodeButton->setText("IPv4 Mode");
+        IPmodeButton->setStyleSheet(IPv4Stylesheet);
+        packetNetwork.setIPmode(4);
+    }
+
+    applyNetworkSettings();
+
+
 }
 
 void MainWindow::refreshTimerTimeout()

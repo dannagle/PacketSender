@@ -14,7 +14,7 @@
 #include <QHostInfo>
 
 #include "mainwindow.h"
-#define DEBUGMODE 0
+#define DEBUGMODE 1
 
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -94,7 +94,6 @@ int main(int argc, char *argv[])
         QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data as pure ascii (no \\xx translation).");
         parser.addOption(pureAsciiOption);
 
-
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
                 "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
@@ -147,6 +146,8 @@ int main(int argc, char *argv[])
         unsigned int bind = parser.value(bindPortOption).toUInt();
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
+        bool ipv6  = false;
+
         QString name = parser.value(nameOption);
 
         QString filePath = parser.value(fileOption);
@@ -300,7 +301,6 @@ int main(int argc, char *argv[])
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
 
-
         //NOW LETS DO THIS!
 
         if(ascii) { //pure ascii
@@ -332,6 +332,13 @@ int main(int argc, char *argv[])
             }
         }
 
+        QHostAddress theAddress(address);
+        if (QAbstractSocket::IPv6Protocol == theAddress.protocol())
+        {
+           QDEBUG() << "Valid IPv6 address.";
+           ipv6 = true;
+        }
+
 
         QByteArray sendData = sendPacket.HEXtoByteArray(dataString);
         QByteArray recvData;
@@ -342,7 +349,13 @@ int main(int argc, char *argv[])
 
         if(tcp) {
             QTcpSocket sock;
-            sock.bind(QHostAddress::AnyIPv6, bind);
+
+
+            if(ipv6) {
+                sock.bind(QHostAddress::AnyIPv6, bind);
+            } else {
+                sock.bind(QHostAddress::AnyIPv4, bind);
+            }
             sock.connectToHost(addy, port);
             sock.waitForConnected(1000);
             if(sock.state() == QAbstractSocket::ConnectedState)
@@ -382,11 +395,22 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
-            if(!sock.bind(QHostAddress::AnyIPv6, bind)) {
-                OUTIF() << "Error: Could not bind to " << bind;
+            if(ipv6) {
+                if(!sock.bind(QHostAddress::AnyIPv6, bind)) {
+                    OUTIF() << "Error: Could not bind to " << bind;
 
-                OUTPUT();
-                return -1;
+                    OUTPUT();
+                    return -1;
+                }
+
+            } else {
+                if(!sock.bind(QHostAddress::AnyIPv4, bind)) {
+                    OUTIF() << "Error: Could not bind to " << bind;
+
+                    OUTPUT();
+                    return -1;
+                }
+
             }
             OUTIF() << "UDP (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
 
