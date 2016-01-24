@@ -35,7 +35,7 @@ Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` a
 
 
 ### IPv4 and IPv6 Support
-By default, Packet Sender's built-in servers are configured to support IPv4. If you wish to use IPv6, there is a toggle switch at the bottom right. Click switch between IPv4 / IPv6.
+By default, Packet Sender's built-in servers are configured to support IPv4. If you wish to use IPv6, there is a toggle switch at the bottom right. Click to switch between IPv4 / IPv6.
 
 ![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
 
@@ -182,7 +182,7 @@ chmod a+x PacketSender
 
 ## Enhancements
 
-Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements). 
+Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
 
 ## Mobile Versions
 
