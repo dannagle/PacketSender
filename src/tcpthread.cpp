@@ -60,6 +60,8 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     bool sendResponse = settings.value("sendReponse", false).toBool();
     QString responseData = (settings.value("responseHex","")).toString();
+    int ipMode = settings.value("ipMode", 4).toInt();
+
 
 
     if(sendResponse)
@@ -69,7 +71,11 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
         tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
         tcpPacketreply.tcpOrUdp = "TCP";
         tcpPacketreply.fromIP = "You (Response)";
-        tcpPacketreply.toIP = Packet::removeIPv6Mapping(sock->peerAddress());
+        if(ipMode < 6) {
+            tcpPacketreply.toIP = Packet::removeIPv6Mapping(sock->peerAddress());
+        } else {
+            tcpPacketreply.toIP = (sock->peerAddress()).toString();
+        }
         tcpPacketreply.port = sock->peerPort();
         tcpPacketreply.fromPort = sock->localPort();
         QByteArray data = Packet::HEXtoByteArray(responseData);
@@ -93,8 +99,12 @@ void TCPThread::closeConnection()
 void TCPThread::run()
 {
 
-    //TODO this should use exec() signals/slots event loop!!!
-    QDEBUG();
+    //determine IP mode based on send address.
+    int ipMode = 4;
+    QHostAddress theAddress(sendPacket.toIP);
+    if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
+        ipMode = 6;
+    }
 
     if(sendFlag) {
         QDEBUG() << "We are threaded sending!";
@@ -111,7 +121,13 @@ void TCPThread::run()
         }
 
 
-        clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+        if(ipMode > 4) {
+            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+
+        } else {
+            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+        }
         clientConnection->waitForConnected(5000);
 
 
@@ -170,7 +186,12 @@ void TCPThread::run()
                         tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                         tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                         tcpRCVPacket.tcpOrUdp = "TCP";
-                        tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+
+                        if(ipMode < 6) {
+                            tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                        } else {
+                            tcpRCVPacket.fromIP = (clientConnection->peerAddress()).toString();
+                        }
 
 
                         QDEBUGVAR(tcpRCVPacket.fromIP);
@@ -196,7 +217,13 @@ void TCPThread::run()
                 tcpPacket.timestamp = QDateTime::currentDateTime();
                 tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                 tcpPacket.tcpOrUdp = "TCP";
-                tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                if(ipMode < 6) {
+                    tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+
+                } else {
+                    tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
+
+                }
                 QDEBUGVAR(tcpPacket.fromIP);
 
                 tcpPacket.toIP = "You";
@@ -295,7 +322,13 @@ void TCPThread::run()
     tcpPacket.timestamp = QDateTime::currentDateTime();
     tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
     tcpPacket.tcpOrUdp = "TCP";
-    tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
+
+    if(ipMode < 6) {
+        tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
+    } else {
+        tcpPacket.fromIP = (sock.peerAddress()).toString();
+    }
+
     tcpPacket.toIP = "You";
     tcpPacket.port = sock.localPort();
     tcpPacket.fromPort = sock.peerPort();

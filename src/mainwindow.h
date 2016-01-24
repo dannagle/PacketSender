@@ -70,6 +70,7 @@ public slots:
 
     void toggleUDPServer();
     void toggleTCPServer();
+    void toggleIPv4_IPv6();
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
@@ -152,6 +153,11 @@ private:
     QPushButton * udpServerStatus;
     QPushButton * tcpServerStatus;
     QPushButton * stopResendingButton;
+    QPushButton * IPmodeButton;
+
+    QString IPv4Stylesheet;
+    QString IPv6Stylesheet;
+
 
     QStringList packetTableHeaders;
     QStringList packetSavedTableHeaders;
@@ -165,6 +171,7 @@ private:
     int resendCounter;
 
 
+    void setIPMode();
 };
 
 #endif // MAINWINDOW_H
