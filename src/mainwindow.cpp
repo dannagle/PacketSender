@@ -178,24 +178,13 @@ MainWindow::MainWindow(QWidget *parent) :
     IPv4Stylesheet = "QPushButton {width:50px; color: green; } QPushButton::hover { color: #BC810C; } ";
     IPv6Stylesheet = "QPushButton {width:50px; color: blue; } QPushButton::hover { color: #BC810C; } ";
 
-    //updatewidget
-
-    int ipMode = packetNetwork.getIPmode();
-
-    if(ipMode < 6) {
-        IPmodeButton = new QPushButton("IPv4 Mode");
-        IPmodeButton->setStyleSheet(IPv4Stylesheet);
-
-    } else {
-        IPmodeButton = new QPushButton("IPv6 Mode");
-        IPmodeButton->setStyleSheet(IPv6Stylesheet);
-
-    }
+    //ipmode toggle
+    IPmodeButton = new QPushButton("IPv4 Mode");
     IPmodeButton->setFlat(true);
     IPmodeButton->setCursor(Qt::PointingHandCursor);
-
     statusBar()->insertPermanentWidget(4, IPmodeButton);
 
+    setIPMode();
 
     connect(IPmodeButton, SIGNAL(clicked()),
             this, SLOT(toggleIPv4_IPv6()));
@@ -1213,15 +1202,12 @@ void MainWindow::toggleIPv4_IPv6()
 {
     QString currentMode = IPmodeButton->text();
     if(currentMode.contains("4")) {
-        IPmodeButton->setText("IPv6 Mode");
-        IPmodeButton->setStyleSheet(IPv6Stylesheet);
         packetNetwork.setIPmode(6);
-
     } else {
-        IPmodeButton->setText("IPv4 Mode");
-        IPmodeButton->setStyleSheet(IPv4Stylesheet);
         packetNetwork.setIPmode(4);
     }
+
+    setIPMode();
 
     applyNetworkSettings();
 
@@ -1540,6 +1526,20 @@ void MainWindow::on_saveLogButton_clicked()
 
 }
 
+void MainWindow::setIPMode() {
+
+    int ipMode = packetNetwork.getIPmode();
+
+    if(ipMode > 4) {
+        IPmodeButton->setText("IPv6 Mode");
+        IPmodeButton->setStyleSheet(IPv6Stylesheet);
+    } else {
+        IPmodeButton->setText("IPv4 Mode");
+        IPmodeButton->setStyleSheet(IPv4Stylesheet);
+    }
+
+
+}
 
 void MainWindow::on_actionAbout_triggered()
 {
@@ -1552,10 +1552,12 @@ void MainWindow::on_actionSettings_triggered()
     Settings settings;
     int accepted = settings.exec();
     if(accepted) {
+        setIPMode();
         applyNetworkSettings();
         loadPacketsTable();
         loadTrafficLogTable();
         on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
+
     }
 }
 

@@ -171,6 +171,7 @@ private:
     int resendCounter;
 
 
+    void setIPMode();
 };
 
 #endif // MAINWINDOW_H

@@ -51,6 +51,15 @@ Settings::Settings(QWidget *parent) :
 
     ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
 
+    int ipMode = settings.value("ipMode", 4).toInt();
+    if (ipMode > 4) {
+        ui->ipv6Radio->setChecked(true);
+        ui->ipv4Radio->setChecked(false);
+    } else {
+        ui->ipv6Radio->setChecked(false);
+        ui->ipv4Radio->setChecked(true);
+    }
+
 
 
     unsigned int resendNum = settings.value("cancelResendNum", 0).toInt();
@@ -130,6 +139,14 @@ void Settings::on_buttonBox_accepted()
 
     float multiSend = Packet::oneDecimal(ui->multiSendDelayEdit->text().toFloat());
     settings.setValue("multiSendDelay", multiSend);
+
+    if(ui->ipv6Radio->isChecked()) {
+        settings.setValue("ipMode", 6);
+    }
+
+    if(ui->ipv4Radio->isChecked()) {
+        settings.setValue("ipMode", 4);
+    }
 
 
     //save traffic order

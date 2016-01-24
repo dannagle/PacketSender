@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>853</width>
+    <width>950</width>
     <height>545</height>
    </rect>
   </property>
@@ -286,34 +286,23 @@
          <property name="title">
           <string>Additional TCP/UDP Settings</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_20">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QCheckBox" name="attemptReceiveCheck">
-            <property name="text">
-             <string>Attempt Receive Before Send</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="delayAfterConnectCheck">
-            <property name="text">
-             <string>500 ms delay after connect (slow devices)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
-             <widget class="QLabel" name="label_2">
+             <widget class="QRadioButton" name="ipv4Radio">
               <property name="text">
-               <string>Cancel Resending after # packets</string>
+               <string>Server IPv4 Mode</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="cancelResendNumEdit">
-              <property name="placeholderText">
-               <string>0 for off</string>
+             <widget class="QRadioButton" name="ipv6Radio">
+              <property name="text">
+               <string>Server IPv6 Mode</string>
               </property>
              </widget>
             </item>
@@ -338,6 +327,38 @@
            </layout>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Cancel Resending after # packets</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="cancelResendNumEdit">
+              <property name="placeholderText">
+               <string>0 for off</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="attemptReceiveCheck">
+            <property name="text">
+             <string>Attempt Receive Before Send</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="delayAfterConnectCheck">
+            <property name="text">
+             <string>500 ms delay after connect (slow devices)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -346,19 +367,6 @@
              <size>
               <width>20</width>
               <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_9">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
              </size>
             </property>
            </spacer>
