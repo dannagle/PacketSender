@@ -48,7 +48,8 @@ public:
     bool receiveBeforeSend;
     int delayAfterConnect;
     bool persistentConnectCheck;
-
+    void setIPmode(int mode);
+    static int getIPmode();
 protected:
     void incomingConnection(qintptr socketDescriptor);
 

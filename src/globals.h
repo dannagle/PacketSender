@@ -32,5 +32,7 @@
 #define PSLOGO ":pslogo.png"
 #define UPDOWNICON ":icons/moveupdown.png"
 
+//used when binding
+#define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
 
 #endif // GLOBALS_H

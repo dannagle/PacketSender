@@ -68,6 +68,27 @@ void PacketNetwork::packetSentECHO(Packet sendpacket)
 
 }
 
+int PacketNetwork::getIPmode() {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    int ipMode = settings.value("ipMode", 4).toInt();
+    QDEBUGVAR(ipMode);
+    return ipMode;
+}
+
+void PacketNetwork::setIPmode(int mode) {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+
+    if(mode > 4) {
+        QDEBUG() << "Saving IPv6";
+        settings.setValue("ipMode", 6);
+    } else {
+        QDEBUG() << "Saving IPv4";
+        settings.setValue("ipMode", 4);
+    }
+
+}
+
 void PacketNetwork::init()
 {
 
@@ -82,8 +103,11 @@ void PacketNetwork::init()
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     int udpPort = settings.value("udpPort", 55056).toInt();
+    int ipMode = settings.value("ipMode", 4).toInt();
 
-    bool bindResult = udpSocket->bind(QHostAddress::AnyIPv4, udpPort);
+    bool bindResult = udpSocket->bind(
+                IPV4_OR_IPV6
+                , udpPort);
 
     if(udpPort < 1024 && !bindResult) {
 
@@ -102,7 +126,9 @@ void PacketNetwork::init()
 
     int tcpPort = settings.value("tcpPort", 55056).toInt();
 
-    qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(QHostAddress::AnyIPv4, tcpPort);
+    qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(
+                    IPV4_OR_IPV6
+                    , tcpPort);
 
 
     if(tcpPort < 1024 && getTCPPort() == 0) {
@@ -180,6 +206,8 @@ int PacketNetwork::getTCPPort()
 
 void PacketNetwork::readPendingDatagrams()
 {
+    int ipMode = getIPmode();
+
     //QDEBUG() << " got a datagram";
     while (udpSocket->hasPendingDatagrams()) {
         QByteArray datagram;
@@ -197,7 +225,11 @@ void PacketNetwork::readPendingDatagrams()
         udpPacket.timestamp = QDateTime::currentDateTime();
         udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
         udpPacket.tcpOrUdp = "UDP";
-        udpPacket.fromIP = sender.toString();
+        if(ipMode < 6) {
+            udpPacket.fromIP = Packet::removeIPv6Mapping(sender);
+        } else {
+            udpPacket.fromIP = (sender).toString();
+        }
         udpPacket.toIP = "You";
         udpPacket.port = getUDPPort();
         udpPacket.fromPort = senderPort;
@@ -214,7 +246,12 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
             udpPacket.tcpOrUdp = "UDP";
             udpPacket.fromIP = "You (Response)";
-            udpPacket.toIP = sender.toString();
+            if(ipMode < 6) {
+                udpPacket.toIP = Packet::removeIPv6Mapping(sender);
+
+            } else {
+                udpPacket.toIP = (sender).toString();
+            }
             udpPacket.port = senderPort;
             udpPacket.fromPort = getUDPPort();
             udpPacket.hexString = responseData;
