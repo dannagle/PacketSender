@@ -14,7 +14,7 @@
 #include <QHostInfo>
 
 #include "mainwindow.h"
-#define DEBUGMODE 0
+#define DEBUGMODE 1
 
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)

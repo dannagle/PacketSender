@@ -72,6 +72,8 @@ public:
     static bool removeFromDB(QString thename);
     static void populateTableWidgetItem(QTableWidgetItem *tItem, Packet thepacket);
     static Packet fetchTableWidgetItemData(QTableWidgetItem *tItem);
+    static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
+    static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
 
     static const int PACKET_NAME;
     static const int PACKET_HEX;
@@ -80,10 +82,11 @@ public:
     static const int TCP_UDP;
     static const int TO_PORT;
     static const int TO_IP;
-    static const int SEND_RESPONSE;
+
     static const int TIMESTAMP;
     static const int DATATYPE;
     static const int REPEAT;
+
 
     bool operator()(const Packet* a, const Packet* b) const;
 

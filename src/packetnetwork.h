@@ -83,8 +83,6 @@ private:
     QUdpSocket *udpSocket;
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
-
-    SmartResponseConfig loadSmartConfig(int num);
 };
 
 #endif // PACKETNETWORK_H

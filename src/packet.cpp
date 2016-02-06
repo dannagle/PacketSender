@@ -25,11 +25,13 @@ const int Packet::FROM_IP = Qt::UserRole +     2;
 const int Packet::FROM_PORT = Qt::UserRole +       3;
 const int Packet::TO_PORT = Qt::UserRole +4;
 const int Packet::TO_IP = Qt::UserRole +     5;
-const int Packet::SEND_RESPONSE = Qt::UserRole +     6;
+
 const int Packet::TIMESTAMP = Qt::UserRole + 7;
 const int Packet::DATATYPE = Qt::UserRole + 8;
 const int Packet::TCP_UDP = Qt::UserRole + 9;
 const int Packet::REPEAT = Qt::UserRole + 10;
+
+
 
 //macro to get value from DB
 #define FROMDB_UINT(a) packet.a = settings.value(nameFound + "/"+ # a).toUInt()
@@ -550,6 +552,39 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.fromIP = tItem->data(Packet::FROM_IP).toString();
     returnPacket.repeat = tItem->data(Packet::REPEAT).toFloat();
     return returnPacket;
+}
+
+SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
+{
+    QSettings settings(importFile, QSettings::IniFormat);
+
+    SmartResponseConfig smart;
+    smart.id = num;
+    smart.encoding = settings.value("responseEncodingBox" + QString::number(num), "").toString();
+    smart.ifEquals = settings.value("responseIfEdit" + QString::number(num), "").toString();
+    smart.replyWith = settings.value("responseReplyEdit" + QString::number(num), "").toString();
+    smart.enabled = settings.value("responseEnableCheck" + QString::number(num), false).toBool();
+
+    return smart;
+}
+
+QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data)
+{
+    SmartResponseConfig config;
+
+    QDEBUG() <<"Checking smart "<< smartList.size() << "For" << QString(data);
+    foreach(config, smartList) {
+        if(config.enabled) {
+            if(config.ifEquals == QString(data)) {
+                QDEBUG() <<"Match! Sending:" << config.replyWith;
+                return config.replyWith.toLatin1();
+            }
+        }
+    }
+
+    QByteArray noData;
+    noData.clear();
+    return noData;
 }
 
 bool Packet::operator()(const Packet *a, const Packet *b) const

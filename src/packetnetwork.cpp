@@ -89,21 +89,6 @@ void PacketNetwork::setIPmode(int mode) {
 
 }
 
-SmartResponseConfig PacketNetwork::loadSmartConfig(int num) {
-
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-    SmartResponseConfig smart;
-    smart.id = num;
-    smart.encoding = settings.value("responseEncodingBox" + QString::number(num), "").toString();
-    smart.ifEquals = settings.value("responseIfEdit" + QString::number(num), "").toString();
-    smart.replyWith = settings.value("responseReplyEdit" + QString::number(num), "").toString();
-    smart.enabled = settings.value("responseEnableCheck" + QString::number(num), false).toBool();
-
-    return smart;
-
-}
-
 void PacketNetwork::init()
 {
 
@@ -169,11 +154,11 @@ void PacketNetwork::init()
     smartResponseEnableCheck = settings.value("smartResponseEnableCheck", false).toBool();
 
     smartList.clear();
-    smartList.append(loadSmartConfig(1));
-    smartList.append(loadSmartConfig(2));
-    smartList.append(loadSmartConfig(3));
-    smartList.append(loadSmartConfig(4));
-    smartList.append(loadSmartConfig(5));
+    smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(2, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
 
 
 

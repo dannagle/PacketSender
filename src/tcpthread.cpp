@@ -59,12 +59,29 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     bool sendResponse = settings.value("sendReponse", false).toBool();
+    bool sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
+    QList<SmartResponseConfig> smartList;
+    smartList.clear();
+    smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(2, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
+
+
+
     QString responseData = (settings.value("responseHex","")).toString();
     int ipMode = settings.value("ipMode", 4).toInt();
 
+    QByteArray smartData;
+    smartData.clear();
+
+    if(sendSmartResponse) {
+        smartData = Packet::smartResponseMatch(smartList, tcpPacket.getByteArray());
+    }
 
 
-    if(sendResponse)
+    if(sendResponse || !smartData.isEmpty())
     {
         Packet tcpPacketreply;
         tcpPacketreply.timestamp = QDateTime::currentDateTime();
@@ -80,7 +97,10 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
         tcpPacketreply.fromPort = sock->localPort();
         QByteArray data = Packet::HEXtoByteArray(responseData);
         tcpPacketreply.hexString = Packet::byteArrayToHex(data);
-        sock->write(data);
+        if(!smartData.isEmpty()) {
+            tcpPacketreply.hexString = Packet::byteArrayToHex(smartData);
+        }
+        sock->write(tcpPacketreply.getByteArray());
         sock->waitForBytesWritten(2000);
         QDEBUG() << "packetSent " << tcpPacketreply.name << tcpPacketreply.hexString;
         emit packetSent(tcpPacketreply);
