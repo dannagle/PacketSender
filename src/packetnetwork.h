@@ -43,7 +43,7 @@ public:
     void kill();
     QString responseData;
     bool sendResponse;
-    bool smartResponseEnableCheck;
+    bool sendSmartResponse;
     bool activateUDP;
     bool activateTCP;
     bool receiveBeforeSend;

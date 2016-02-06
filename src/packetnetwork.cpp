@@ -151,7 +151,7 @@ void PacketNetwork::init()
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
     persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
-    smartResponseEnableCheck = settings.value("smartResponseEnableCheck", false).toBool();
+    sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
 
     smartList.clear();
     smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
@@ -250,7 +250,15 @@ void PacketNetwork::readPendingDatagrams()
         udpPacket.hexString = Packet::byteArrayToHex(datagram);
         emit packetSent(udpPacket);
 
-        if(sendResponse)
+        QByteArray smartData;
+        smartData.clear();
+
+        if(sendSmartResponse) {
+            smartData = Packet::smartResponseMatch(smartList, udpPacket.getByteArray());
+        }
+
+
+        if(sendResponse || !smartData.isEmpty())
         {
             udpPacket.timestamp = QDateTime::currentDateTime();
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
@@ -265,6 +273,9 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.port = senderPort;
             udpPacket.fromPort = getUDPPort();
             udpPacket.hexString = responseData;
+            if(!smartData.isEmpty()) {
+                udpPacket.hexString = Packet::byteArrayToHex(smartData);
+            }
 
             udpSocket->writeDatagram(udpPacket.getByteArray(),sender,senderPort);
             emit packetSent(udpPacket);
