@@ -568,6 +568,28 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
     return smart;
 }
 
+QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
+
+    encoding = encoding.trimmed().toLower();
+
+    if(encoding == "ascii") {
+        return data.toLatin1();
+    }
+
+    if(encoding == "ebcdic") {
+        return QByteArray("Not yet supported");
+    }
+
+    if(encoding == "hex") {
+        return Packet::HEXtoByteArray(data);
+    }
+
+    //fallback mixed ascii
+    QString hex = Packet::ASCIITohex(data);
+    return (Packet::HEXtoByteArray(hex));
+
+}
+
 QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data)
 {
     SmartResponseConfig config;
@@ -577,7 +599,7 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
         if(config.enabled) {
             if(config.ifEquals == QString(data)) {
                 QDEBUG() <<"Match! Sending:" << config.replyWith;
-                return config.replyWith.toLatin1();
+                return Packet::encodingToByteArray(config.encoding, config.replyWith);
             }
         }
     }

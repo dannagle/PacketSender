@@ -74,6 +74,7 @@ public:
     static Packet fetchTableWidgetItemData(QTableWidgetItem *tItem);
     static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
     static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
+    static QByteArray encodingToByteArray(QString encoding, QString data);
 
     static const int PACKET_NAME;
     static const int PACKET_HEX;
