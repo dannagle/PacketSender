@@ -51,6 +51,10 @@ public:
     bool persistentConnectCheck;
     void setIPmode(int mode);
     static int getIPmode();
+
+    QList<SmartResponseConfig> smartList;
+
+
 protected:
     void incomingConnection(qintptr socketDescriptor);
 
@@ -80,6 +84,7 @@ private:
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
 
+    SmartResponseConfig loadSmartConfig(int num);
 };
 
 #endif // PACKETNETWORK_H

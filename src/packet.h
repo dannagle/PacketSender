@@ -21,6 +21,14 @@
 #include "sendpacketbutton.h"
 
 
+struct SmartResponseConfig {
+    int id;
+    QString ifEquals;
+    QString replyWith;
+    QString encoding;
+    bool enabled;
+};
+
 class Packet
 {
 public:

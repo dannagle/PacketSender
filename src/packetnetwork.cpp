@@ -89,6 +89,21 @@ void PacketNetwork::setIPmode(int mode) {
 
 }
 
+SmartResponseConfig PacketNetwork::loadSmartConfig(int num) {
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    SmartResponseConfig smart;
+    smart.id = num;
+    smart.encoding = settings.value("responseEncodingBox" + QString::number(num), "").toString();
+    smart.ifEquals = settings.value("responseIfEdit" + QString::number(num), "").toString();
+    smart.replyWith = settings.value("responseReplyEdit" + QString::number(num), "").toString();
+    smart.enabled = settings.value("responseEnableCheck" + QString::number(num), false).toBool();
+
+    return smart;
+
+}
+
 void PacketNetwork::init()
 {
 
@@ -152,6 +167,14 @@ void PacketNetwork::init()
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
     persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
     smartResponseEnableCheck = settings.value("smartResponseEnableCheck", false).toBool();
+
+    smartList.clear();
+    smartList.append(loadSmartConfig(1));
+    smartList.append(loadSmartConfig(2));
+    smartList.append(loadSmartConfig(3));
+    smartList.append(loadSmartConfig(4));
+    smartList.append(loadSmartConfig(5));
+
 
 
     if(settings.value("delayAfterConnectCheck", false).toBool()) {
