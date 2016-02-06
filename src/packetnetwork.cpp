@@ -150,7 +150,9 @@ void PacketNetwork::init()
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
-    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
+    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
+    smartResponseEnableCheck = settings.value("smartResponseEnableCheck", false).toBool();
+
 
     if(settings.value("delayAfterConnectCheck", false).toBool()) {
         delayAfterConnect = 500;
