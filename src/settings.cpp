@@ -35,6 +35,7 @@ Settings::Settings(QWidget *parent) :
 
 
     //smart responses...
+    ui->smartResponseEnableCheck->setChecked(settings.value("smartResponseEnableCheck", false).toBool());
 
 #define RESPONSEIF(NUM) ui->responseIfEdit##NUM->setText(settings.value("responseIfEdit" #NUM,"").toString())
 
@@ -68,6 +69,10 @@ Settings::Settings(QWidget *parent) :
     ENCODEMACRO(3);
     ENCODEMACRO(4);
     ENCODEMACRO(5);
+
+
+    on_smartResponseEnableCheck_clicked();
+
 
     ui->udpServerPortEdit->setText(settings.value("udpPort","55056").toString());
     ui->tcpServerPortEdit->setText(settings.value("tcpPort","55056").toString());
@@ -207,7 +212,7 @@ void Settings::on_buttonBox_accepted()
 
 
     //smart responses...
-
+    settings.setValue("smartResponseEnableCheck", ui->smartResponseEnableCheck->isChecked());
 
 #define RESPONSEIFSAVE(NUM) settings.setValue("responseIfEdit" #NUM, ui->responseIfEdit##NUM->text());
 
@@ -242,7 +247,6 @@ void Settings::on_buttonBox_accepted()
     ENCODEMACROSAVE(3);
     ENCODEMACROSAVE(4);
     ENCODEMACROSAVE(5);
-
 
 
 }
@@ -379,3 +383,9 @@ void Settings::on_defaultDisplayButton_clicked()
 
 }
 
+
+void Settings::on_smartResponseEnableCheck_clicked()
+{
+
+    ui->smartResponsesGroup->setEnabled(ui->smartResponseEnableCheck->isChecked());
+}
