@@ -601,6 +601,23 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
 
     encoding = encoding.trimmed().toLower();
 
+    QHash<QString, QString> macroMap;
+    QDateTime now = QDateTime::currentDateTime();
+
+    if(data.contains("{{TIME}}")) {
+        data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
+    }
+    if(data.contains("{{DATE}}")) {
+        data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
+    }
+    if(data.contains("{{RANDOM}}")) {
+        data = data.replace("{{RANDOM}}", QString::number(qrand()));
+    }
+    if(data.contains("{{UNIXTIME}}")) {
+        data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
+    }
+
+
     if(encoding == "ascii") {
         return data.toLatin1();
     }
