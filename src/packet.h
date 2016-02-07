@@ -99,12 +99,10 @@ public:
     static float oneDecimal(float value);
 private:
     static int hexToInt(QChar hex);
-    QHash<char, char> asciiEBCDICmap;
-    QHash<char, char> ebcdicASCIImap;
 
-
-    void loadEBCDICtoASCIImap();
-    QByteArray EBCDICtoASCII(QByteArray ebcdic);
+    static void loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap);
+    static QByteArray EBCDICtoASCII(QByteArray ebcdic);
+    static QByteArray ASCIItoEBCDIC(QByteArray ascii);
 };
 
 Q_DECLARE_METATYPE(Packet)

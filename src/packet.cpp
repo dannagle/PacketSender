@@ -102,7 +102,9 @@ void Packet::init()
 
 QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
 
-    loadEBCDICtoASCIImap();
+    QHash<char, char> asciiEBCDICmap;
+    QHash<char, char> ebcdicASCIImap;
+    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
 
     char hex;
     QByteArray asciiArray;
@@ -111,6 +113,21 @@ QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
     }
 
     return asciiArray;
+}
+
+QByteArray Packet::ASCIItoEBCDIC(QByteArray ascii)
+{
+    QHash<char, char> asciiEBCDICmap;
+    QHash<char, char> ebcdicASCIImap;
+    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
+
+    char hex;
+    QByteArray ebcdicArray;
+    foreach(hex, ascii) {
+        ebcdicArray.append(ebcdicASCIImap[hex]);
+    }
+
+    return ebcdicArray;
 }
 
 SendPacketButton * Packet::getSendButton(QTableWidget * parent)
@@ -589,7 +606,7 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
     }
 
     if(encoding == "ebcdic") {
-        return QByteArray("Not yet supported");
+        return ASCIItoEBCDIC(data.toLatin1());
     }
 
     if(encoding == "hex") {
@@ -607,10 +624,15 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
     SmartResponseConfig config;
 
     QDEBUG() <<"Checking smart "<< smartList.size() << "For" << Packet::byteArrayToHex(data);
+
+    //the incoming data has already been encoded.
+
     foreach(config, smartList) {
         if(config.enabled) {
             QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
-            QDEBUG() <<"Does"<< Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
+            if(config.encoding.toLower() == "ebcdic") {
+                QDEBUG() <<"Does"<< Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
+            }
             if(testData == (data)) {
                 QDEBUG() <<"Match! Sending:" << config.replyWith;
                 return Packet::encodingToByteArray(config.encoding, config.replyWith);
@@ -801,7 +823,8 @@ QString Packet::ASCIITohex(QString &ascii)
 }
 
 
-void Packet::loadEBCDICtoASCIImap() {
+void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap) {
+
 
 #include "ebcdic_ascii_map.h"
 
