@@ -97,6 +97,7 @@ public:
     static void sortByName(QList<Packet> &packetList);
     static void sortByTime(QList<Packet> &packetList);
     static float oneDecimal(float value);
+    static QString macroSwap(QString data);
 private:
     static int hexToInt(QChar hex);
 

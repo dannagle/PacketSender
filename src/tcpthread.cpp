@@ -97,6 +97,10 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
         tcpPacketreply.fromPort = sock->localPort();
         QByteArray data = Packet::HEXtoByteArray(responseData);
         tcpPacketreply.hexString = Packet::byteArrayToHex(data);
+
+        QString testMacro = Packet::macroSwap(tcpPacketreply.asciiString());
+        tcpPacketreply.hexString = Packet::ASCIITohex(testMacro);
+
         if(!smartData.isEmpty()) {
             tcpPacketreply.hexString = Packet::byteArrayToHex(smartData);
         }

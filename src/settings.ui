@@ -219,7 +219,7 @@
           <item>
            <widget class="QCheckBox" name="sendResponseSettingsCheck">
             <property name="text">
-             <string>Send a basic response</string>
+             <string>Send a basic response with macro support</string>
             </property>
            </widget>
           </item>
@@ -386,7 +386,7 @@
          <item>
           <widget class="QCheckBox" name="smartResponseEnableCheck">
            <property name="text">
-            <string>Send a Smart Response</string>
+            <string>Send a Smart Response with Macro Support</string>
            </property>
           </widget>
          </item>
@@ -411,6 +411,46 @@
           <string/>
          </property>
          <layout class="QGridLayout" name="gridLayout">
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Response 5</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QComboBox" name="responseEncodingBox4">
+            <item>
+             <property name="text">
+              <string>Mixed ASCII</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>HEX</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>EBCDIC</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QCheckBox" name="responseEnableCheck4">
+            <property name="text">
+             <string>Enable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Response 4</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="1">
            <widget class="QLabel" name="label">
             <property name="text">
@@ -464,6 +504,9 @@
             </item>
            </widget>
           </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="responseIfEdit2"/>
+          </item>
           <item row="1" column="4">
            <widget class="QCheckBox" name="responseEnableCheck1">
             <property name="text">
@@ -471,18 +514,15 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="responseReplyEdit2"/>
+          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>Response 2</string>
             </property>
            </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLineEdit" name="responseIfEdit2"/>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLineEdit" name="responseReplyEdit2"/>
           </item>
           <item row="2" column="3">
            <widget class="QComboBox" name="responseEncodingBox2">
@@ -503,13 +543,6 @@
             </item>
            </widget>
           </item>
-          <item row="2" column="4">
-           <widget class="QCheckBox" name="responseEnableCheck2">
-            <property name="text">
-             <string>Enable</string>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="0">
            <widget class="QLabel" name="label_11">
             <property name="text">
@@ -517,11 +550,25 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="responseIfEdit3"/>
+          <item row="2" column="4">
+           <widget class="QCheckBox" name="responseEnableCheck2">
+            <property name="text">
+             <string>Enable</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="2">
            <widget class="QLineEdit" name="responseReplyEdit3"/>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="responseIfEdit3"/>
+          </item>
+          <item row="3" column="4">
+           <widget class="QCheckBox" name="responseEnableCheck3">
+            <property name="text">
+             <string>Enable</string>
+            </property>
+           </widget>
           </item>
           <item row="3" column="3">
            <widget class="QComboBox" name="responseEncodingBox3">
@@ -542,64 +589,24 @@
             </item>
            </widget>
           </item>
-          <item row="3" column="4">
-           <widget class="QCheckBox" name="responseEnableCheck3">
-            <property name="text">
-             <string>Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_12">
-            <property name="text">
-             <string>Response 4</string>
-            </property>
-           </widget>
-          </item>
           <item row="4" column="1">
            <widget class="QLineEdit" name="responseIfEdit4"/>
           </item>
           <item row="4" column="2">
            <widget class="QLineEdit" name="responseReplyEdit4"/>
           </item>
-          <item row="4" column="3">
-           <widget class="QComboBox" name="responseEncodingBox4">
-            <item>
-             <property name="text">
-              <string>Mixed ASCII</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>HEX</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>EBCDIC</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="4" column="4">
-           <widget class="QCheckBox" name="responseEnableCheck4">
-            <property name="text">
-             <string>Enable</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="label_13">
-            <property name="text">
-             <string>Response 5</string>
-            </property>
-           </widget>
-          </item>
           <item row="5" column="1">
            <widget class="QLineEdit" name="responseIfEdit5"/>
           </item>
           <item row="5" column="2">
            <widget class="QLineEdit" name="responseReplyEdit5"/>
+          </item>
+          <item row="5" column="4">
+           <widget class="QCheckBox" name="responseEnableCheck5">
+            <property name="text">
+             <string>Enable</string>
+            </property>
+           </widget>
           </item>
           <item row="5" column="3">
            <widget class="QComboBox" name="responseEncodingBox5">
@@ -620,12 +627,35 @@
             </item>
            </widget>
           </item>
-          <item row="5" column="4">
-           <widget class="QCheckBox" name="responseEnableCheck5">
-            <property name="text">
-             <string>Enable</string>
-            </property>
-           </widget>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}}</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Packet Sender will swap macro with a real value before sending</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </widget>

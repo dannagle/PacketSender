@@ -597,11 +597,8 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
     return smart;
 }
 
-QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
+QString Packet::macroSwap(QString data) {
 
-    encoding = encoding.trimmed().toLower();
-
-    QHash<QString, QString> macroMap;
     QDateTime now = QDateTime::currentDateTime();
 
     if(data.contains("{{TIME}}")) {
@@ -617,6 +614,15 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
 
+    return data;
+
+}
+
+QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
+
+    encoding = encoding.trimmed().toLower();
+
+    data = Packet::macroSwap(data);
 
     if(encoding == "ascii") {
         return data.toLatin1();

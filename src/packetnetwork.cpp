@@ -273,6 +273,9 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.port = senderPort;
             udpPacket.fromPort = getUDPPort();
             udpPacket.hexString = responseData;
+            QString testMacro = Packet::macroSwap(udpPacket.asciiString());
+            udpPacket.hexString = Packet::ASCIITohex(testMacro);
+
             if(!smartData.isEmpty()) {
                 udpPacket.hexString = Packet::byteArrayToHex(smartData);
             }
