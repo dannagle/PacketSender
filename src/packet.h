@@ -17,6 +17,7 @@
 #include <QDateTime>
 #include <QTableWidgetItem>
 #include <QPushButton>
+#include <QHash>
 #include "globals.h"
 #include "sendpacketbutton.h"
 
@@ -98,8 +99,12 @@ public:
     static float oneDecimal(float value);
 private:
     static int hexToInt(QChar hex);
+    QHash<char, char> asciiEBCDICmap;
+    QHash<char, char> ebcdicASCIImap;
 
 
+    void loadEBCDICtoASCIImap();
+    QByteArray EBCDICtoASCII(QByteArray ebcdic);
 };
 
 Q_DECLARE_METATYPE(Packet)

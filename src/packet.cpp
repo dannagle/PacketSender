@@ -100,6 +100,18 @@ void Packet::init()
     persistent = false;
 }
 
+QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
+
+    loadEBCDICtoASCIImap();
+
+    char hex;
+    QByteArray asciiArray;
+    foreach(hex, ebcdic) {
+        asciiArray.append(asciiEBCDICmap[hex]);
+    }
+
+    return asciiArray;
+}
 
 SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 {
@@ -594,10 +606,12 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
 {
     SmartResponseConfig config;
 
-    QDEBUG() <<"Checking smart "<< smartList.size() << "For" << QString(data);
+    QDEBUG() <<"Checking smart "<< smartList.size() << "For" << Packet::byteArrayToHex(data);
     foreach(config, smartList) {
         if(config.enabled) {
-            if(config.ifEquals == QString(data)) {
+            QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
+            QDEBUG() <<"Does"<< Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
+            if(testData == (data)) {
                 QDEBUG() <<"Match! Sending:" << config.replyWith;
                 return Packet::encodingToByteArray(config.encoding, config.replyWith);
             }
@@ -785,3 +799,13 @@ QString Packet::ASCIITohex(QString &ascii)
     return hexText;
 
 }
+
+
+void Packet::loadEBCDICtoASCIImap() {
+
+#include "ebcdic_ascii_map.h"
+
+
+}
+
+

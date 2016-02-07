@@ -38,7 +38,8 @@ HEADERS  += mainwindow.h \
     persistentconnection.h \
     settings.h \
     about.h \
-    subnetcalc.h
+    subnetcalc.h \
+    ebcdic_ascii_map.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
