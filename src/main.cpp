@@ -14,7 +14,7 @@
 #include <QHostInfo>
 
 #include "mainwindow.h"
-#define DEBUGMODE 1
+#define DEBUGMODE 0
 
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     }
 
     QDEBUG() << "number of arguments:" << argc;
+    QDEBUGVAR(RAND_MAX);
     QApplication a(argc, argv);
     QStringList args = a.arguments();
     QDEBUGVAR(args);

@@ -69,6 +69,24 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
 * An optional response can be sent. The same response is used for TCP and UDP.
 
+### Smart Responses
+Packet Sender supports up to 5 smart responses. To use it, disable normal responses.
+![Packet Sender Direct TCP](screenshots/packetsender_smartreply.png)
+* Packet Sender will compare the packet within the encoding you choose.
+* Packet Sender translates the encoding before sending out the reply.
+* The available encodings are:
+  * Mixed ASCII -- The standard Packet Sender way of encoding ASCII along with non-printable characters
+  * HEX -- Packet Sender's normal HEX encoding
+  * [EBCDIC](https://en.wikipedia.org/wiki/EBCDIC) -- An encoding used mostly by IBM mainframes. The input field is normal Mixed ASCII and is translated when performing the comparison and sending.
+
+### Macros
+Packet Sender supports these macros when sending responses:
+* {{DATE}} -- Sends the current date in "yyy-mm-dd" format.
+* {{TIME}} -- Sends the current time in "hh:mm:ss ap" format.
+* {{UNIXTIME}} -- Sends the current epoch time stamp.
+* {{RANDOM}} -- Sends a random number ranging from either 0 to 32767 or 2147483647, depending on 32-bit or 64-bit (default installer for Windows is 32-bit. Mac is 64-bit).
+Packet Sender will swap the macro with real values before sending.
+
 ### Persistent TCP
 Packet Sender supports persistent connections via a separate UI dialog. It is enabled by  checkbox on the main window.
 ![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
