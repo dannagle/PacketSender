@@ -629,7 +629,9 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
     }
 
     if(encoding == "ebcdic") {
-        return ASCIItoEBCDIC(data.toLatin1());
+        //use same mixed ascii notation
+        QString hex = Packet::ASCIITohex(data);
+        return ASCIItoEBCDIC(Packet::HEXtoByteArray(hex));
     }
 
     if(encoding == "hex") {
