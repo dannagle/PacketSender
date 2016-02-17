@@ -170,6 +170,7 @@ private:
     int cancelResendNum;
     int resendCounter;
 
+    bool asciiEditTranslateEBCDIC;
 
     void setIPMode();
 };

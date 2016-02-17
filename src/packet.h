@@ -98,12 +98,12 @@ public:
     static void sortByTime(QList<Packet> &packetList);
     static float oneDecimal(float value);
     static QString macroSwap(QString data);
+    static QByteArray EBCDICtoASCII(QByteArray ebcdic);
+    static QByteArray ASCIItoEBCDIC(QByteArray ascii);
 private:
     static int hexToInt(QChar hex);
 
     static void loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap);
-    static QByteArray EBCDICtoASCII(QByteArray ebcdic);
-    static QByteArray ASCIItoEBCDIC(QByteArray ascii);
 };
 
 Q_DECLARE_METATYPE(Packet)

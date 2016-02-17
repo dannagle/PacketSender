@@ -87,11 +87,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     maxLogSize = 0;
 
-
     if(settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
     }
 
+    asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
     http = new QNetworkAccessManager(this); //the only http object (required by Qt)
 
@@ -579,6 +579,16 @@ void MainWindow::on_packetASCIIEdit_lostFocus()
     QString quicktestASCII2 =  ui->packetHexEdit->text();
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestASCII2));
+
+    QDEBUGVAR(asciiEditTranslateEBCDIC);
+    if(asciiEditTranslateEBCDIC) {
+        Packet ebcdicPkt;
+        ebcdicPkt.init();
+        ebcdicPkt.hexString = ui->packetHexEdit->text();
+        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
+        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
+        ui->packetASCIIEdit->setToolTip("EBCDIC: " + ebcdicPkt.asciiString());
+    }
 
 
 
@@ -1330,6 +1340,9 @@ void MainWindow::applyNetworkSettings()
     multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
     cancelResendNum = settings.value("cancelResendNum", 0).toInt();
     resendCounter = 0;
+
+
+    asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
 
     packetNetwork.kill();

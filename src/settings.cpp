@@ -74,6 +74,8 @@ Settings::Settings(QWidget *parent) :
     on_smartResponseEnableCheck_clicked();
 
 
+    ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
+
     ui->udpServerPortEdit->setText(settings.value("udpPort","55056").toString());
     ui->tcpServerPortEdit->setText(settings.value("tcpPort","55056").toString());
 
@@ -175,6 +177,10 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
 
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
+
+
+    settings.setValue("asciiEditTranslateEBCDICCheck", ui->asciiEditTranslateEBCDICCheck->isChecked());
+
 
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
