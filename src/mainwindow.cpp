@@ -225,6 +225,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D,Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G ), this);
     QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcut, SIGNAL(activated()), this, SLOT(poodlepic()));
 
+    QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
+    QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
+
 
     QDEBUG() << "Load time:" <<  timeSinceLaunch();
 
@@ -233,6 +236,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
+void MainWindow::ebcdicTranslate()
+{
+    QDEBUG() << "Translate ascii field";
+    on_packetASCIIEdit_lostFocus();
+
+    QDEBUGVAR(asciiEditTranslateEBCDIC);
+    if(asciiEditTranslateEBCDIC) {
+        Packet ebcdicPkt;
+        ebcdicPkt.init();
+        ebcdicPkt.hexString = ui->packetHexEdit->text();
+        QString oldascii = ui->packetASCIIEdit->text();
+        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
+        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
+        ui->packetASCIIEdit->setText(ebcdicPkt.asciiString());
+        ui->packetHexEdit->setText(ebcdicPkt.hexString);
+
+        ui->packetASCIIEdit->setToolTip("EBCDIC: " + oldascii);
+    }
+}
 
 void MainWindow::toggleUDPServer()
 {
@@ -566,6 +588,8 @@ void MainWindow::on_packetHexEdit_lostFocus()
     QString quicktestHex =  ui->packetHexEdit->text();
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestHex));
+    ui->packetASCIIEdit->setToolTip("");
+
 
 }
 
@@ -579,18 +603,7 @@ void MainWindow::on_packetASCIIEdit_lostFocus()
     QString quicktestASCII2 =  ui->packetHexEdit->text();
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestASCII2));
-
-    QDEBUGVAR(asciiEditTranslateEBCDIC);
-    if(asciiEditTranslateEBCDIC) {
-        Packet ebcdicPkt;
-        ebcdicPkt.init();
-        ebcdicPkt.hexString = ui->packetHexEdit->text();
-        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
-        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
-        ui->packetASCIIEdit->setToolTip("EBCDIC: " + ebcdicPkt.asciiString());
-    }
-
-
+    ui->packetASCIIEdit->setToolTip("");
 
     qDebug() << __FILE__ << "/" << __LINE__ <<"on_serialASCIIEdit_lostFocus";
 
@@ -1203,6 +1216,8 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
             ui->resendEdit->setText(QString::number(clickedPacket.repeat));
             ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText(clickedPacket.tcpOrUdp));
             ui->packetASCIIEdit->setText(Packet::hexToASCII(clickedPacket.hexString));
+            ui->packetASCIIEdit->setToolTip("");
+
         }
     }
 }

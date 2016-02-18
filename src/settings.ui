@@ -361,7 +361,7 @@
           <item>
            <widget class="QCheckBox" name="asciiEditTranslateEBCDICCheck">
             <property name="text">
-             <string>Translate ASCII edit field on-the-fly to EBCDIC</string>
+             <string>Enable Ctrl (or Cmd)+ E  to translate ASCII field to EBCDIC</string>
             </property>
            </widget>
           </item>
