@@ -119,6 +119,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
+* Enable keyboard shortcut for ASCII --> EBCDIC translation.
 
 
 ## Documentation (Command Line)
