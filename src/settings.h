@@ -35,6 +35,8 @@ private slots:
 
     void on_defaultDisplayButton_clicked();
 
+    void on_smartResponseEnableCheck_clicked();
+
 private:
     Ui::Settings *ui;
     QList<Packet> packetsSaved;

@@ -43,6 +43,7 @@ public:
     void kill();
     QString responseData;
     bool sendResponse;
+    bool sendSmartResponse;
     bool activateUDP;
     bool activateTCP;
     bool receiveBeforeSend;
@@ -50,6 +51,10 @@ public:
     bool persistentConnectCheck;
     void setIPmode(int mode);
     static int getIPmode();
+
+    QList<SmartResponseConfig> smartList;
+
+
 protected:
     void incomingConnection(qintptr socketDescriptor);
 
@@ -78,7 +83,6 @@ private:
     QUdpSocket *udpSocket;
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
-
 };
 
 #endif // PACKETNETWORK_H

@@ -71,6 +71,7 @@ public slots:
     void toggleUDPServer();
     void toggleTCPServer();
     void toggleIPv4_IPv6();
+    void ebcdicTranslate();
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
@@ -170,6 +171,7 @@ private:
     int cancelResendNum;
     int resendCounter;
 
+    bool asciiEditTranslateEBCDIC;
 
     void setIPMode();
 };

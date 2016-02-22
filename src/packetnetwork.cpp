@@ -150,7 +150,17 @@ void PacketNetwork::init()
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
-    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
+    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
+    sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
+
+    smartList.clear();
+    smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(2, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
+    smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
+
+
 
     if(settings.value("delayAfterConnectCheck", false).toBool()) {
         delayAfterConnect = 500;
@@ -240,7 +250,15 @@ void PacketNetwork::readPendingDatagrams()
         udpPacket.hexString = Packet::byteArrayToHex(datagram);
         emit packetSent(udpPacket);
 
-        if(sendResponse)
+        QByteArray smartData;
+        smartData.clear();
+
+        if(sendSmartResponse) {
+            smartData = Packet::smartResponseMatch(smartList, udpPacket.getByteArray());
+        }
+
+
+        if(sendResponse || !smartData.isEmpty())
         {
             udpPacket.timestamp = QDateTime::currentDateTime();
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
@@ -255,6 +273,12 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.port = senderPort;
             udpPacket.fromPort = getUDPPort();
             udpPacket.hexString = responseData;
+            QString testMacro = Packet::macroSwap(udpPacket.asciiString());
+            udpPacket.hexString = Packet::ASCIITohex(testMacro);
+
+            if(!smartData.isEmpty()) {
+                udpPacket.hexString = Packet::byteArrayToHex(smartData);
+            }
 
             udpSocket->writeDatagram(udpPacket.getByteArray(),sender,senderPort);
             emit packetSent(udpPacket);

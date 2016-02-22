@@ -25,11 +25,13 @@ const int Packet::FROM_IP = Qt::UserRole +     2;
 const int Packet::FROM_PORT = Qt::UserRole +       3;
 const int Packet::TO_PORT = Qt::UserRole +4;
 const int Packet::TO_IP = Qt::UserRole +     5;
-const int Packet::SEND_RESPONSE = Qt::UserRole +     6;
+
 const int Packet::TIMESTAMP = Qt::UserRole + 7;
 const int Packet::DATATYPE = Qt::UserRole + 8;
 const int Packet::TCP_UDP = Qt::UserRole + 9;
 const int Packet::REPEAT = Qt::UserRole + 10;
+
+
 
 //macro to get value from DB
 #define FROMDB_UINT(a) packet.a = settings.value(nameFound + "/"+ # a).toUInt()
@@ -98,6 +100,35 @@ void Packet::init()
     persistent = false;
 }
 
+QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
+
+    QHash<char, char> asciiEBCDICmap;
+    QHash<char, char> ebcdicASCIImap;
+    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
+
+    char hex;
+    QByteArray asciiArray;
+    foreach(hex, ebcdic) {
+        asciiArray.append(asciiEBCDICmap[hex]);
+    }
+
+    return asciiArray;
+}
+
+QByteArray Packet::ASCIItoEBCDIC(QByteArray ascii)
+{
+    QHash<char, char> asciiEBCDICmap;
+    QHash<char, char> ebcdicASCIImap;
+    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
+
+    char hex;
+    QByteArray ebcdicArray;
+    foreach(hex, ascii) {
+        ebcdicArray.append(ebcdicASCIImap[hex]);
+    }
+
+    return ebcdicArray;
+}
 
 SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 {
@@ -552,6 +583,93 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     return returnPacket;
 }
 
+SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
+{
+    QSettings settings(importFile, QSettings::IniFormat);
+
+    SmartResponseConfig smart;
+    smart.id = num;
+    smart.encoding = settings.value("responseEncodingBox" + QString::number(num), "").toString();
+    smart.ifEquals = settings.value("responseIfEdit" + QString::number(num), "").toString();
+    smart.replyWith = settings.value("responseReplyEdit" + QString::number(num), "").toString();
+    smart.enabled = settings.value("responseEnableCheck" + QString::number(num), false).toBool();
+
+    return smart;
+}
+
+QString Packet::macroSwap(QString data) {
+
+    QDateTime now = QDateTime::currentDateTime();
+
+    if(data.contains("{{TIME}}")) {
+        data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
+    }
+    if(data.contains("{{DATE}}")) {
+        data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
+    }
+    if(data.contains("{{RANDOM}}")) {
+        data = data.replace("{{RANDOM}}", QString::number(qrand()));
+    }
+    if(data.contains("{{UNIXTIME}}")) {
+        data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
+    }
+
+    return data;
+
+}
+
+QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
+
+    encoding = encoding.trimmed().toLower();
+
+    data = Packet::macroSwap(data);
+
+    if(encoding == "ascii") {
+        return data.toLatin1();
+    }
+
+    if(encoding == "ebcdic") {
+        //use same mixed ascii notation
+        QString hex = Packet::ASCIITohex(data);
+        return ASCIItoEBCDIC(Packet::HEXtoByteArray(hex));
+    }
+
+    if(encoding == "hex") {
+        return Packet::HEXtoByteArray(data);
+    }
+
+    //fallback mixed ascii
+    QString hex = Packet::ASCIITohex(data);
+    return (Packet::HEXtoByteArray(hex));
+
+}
+
+QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data)
+{
+    SmartResponseConfig config;
+
+    QDEBUG() <<"Checking smart "<< smartList.size() << "For" << Packet::byteArrayToHex(data);
+
+    //the incoming data has already been encoded.
+
+    foreach(config, smartList) {
+        if(config.enabled) {
+            QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
+            if(config.encoding.toLower() == "ebcdic") {
+                QDEBUG() <<"Does"<< Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
+            }
+            if(testData == (data)) {
+                QDEBUG() <<"Match! Sending:" << config.replyWith;
+                return Packet::encodingToByteArray(config.encoding, config.replyWith);
+            }
+        }
+    }
+
+    QByteArray noData;
+    noData.clear();
+    return noData;
+}
+
 bool Packet::operator()(const Packet *a, const Packet *b) const
 {
     return a->timestamp < b->timestamp;
@@ -728,3 +846,14 @@ QString Packet::ASCIITohex(QString &ascii)
     return hexText;
 
 }
+
+
+void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap) {
+
+
+#include "ebcdic_ascii_map.h"
+
+
+}
+
+

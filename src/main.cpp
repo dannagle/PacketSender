@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
     }
 
     QDEBUG() << "number of arguments:" << argc;
+    QDEBUGVAR(RAND_MAX);
     QApplication a(argc, argv);
     QStringList args = a.arguments();
     QDEBUGVAR(args);
