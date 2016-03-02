@@ -24,6 +24,7 @@ public:
 
     void init();
 
+    void initWithThread(TCPThread *thethread);
 signals:
     void persistentPacketSend(Packet sendpacket);
     void closeConnection();
@@ -67,6 +68,7 @@ private:
 
     void loadComboBox();
     void loadTrafficView();
+    void connectThreadSignals();
 };
 
 #endif // PERSISTENTCONNECTION_H

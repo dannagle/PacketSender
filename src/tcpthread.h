@@ -25,6 +25,7 @@ public:
 
     void run();
     bool sendFlag;
+    bool incomingPersistent;
 
 signals:
     void error(QTcpSocket::SocketError socketError);

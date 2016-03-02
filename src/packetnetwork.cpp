@@ -47,7 +47,27 @@ void PacketNetwork::incomingConnection(qintptr socketDescriptor)
              << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
              << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
 
-    thread->start();
+
+    PersistentConnection * pcWindow = new PersistentConnection();
+    thread->incomingPersistent = true;
+    pcWindow->initWithThread(thread);
+
+    QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+             << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+             << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+    QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),this, SLOT(disconnected()));
+
+
+    pcWindow->show();
+
+
+    //Prevent Qt from auto-destroying these windows.
+    //TODO: Use a real connection manager.
+    pcList.append(pcWindow);
+
+    //TODO: Use a real connection manager.
+    //prevent Qt from auto-destorying this thread while it tries to close.
+    tcpthreadList.append(pcWindow->thread);
 
 }
 

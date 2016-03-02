@@ -102,13 +102,8 @@ PersistentConnection::~PersistentConnection()
 
 
 
-void PersistentConnection::init() {
-
-    QDEBUG();
-    setWindowTitle("TCP://"+sendPacket.toIP + ":" + QString::number(sendPacket.port));
-    QDEBUG();
-
-    thread = new TCPThread(sendPacket, this);
+void PersistentConnection::connectThreadSignals()
+{
 
     QDEBUG() << ": thread Connection attempt " <<
                 connect ( this , SIGNAL ( persistentPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
@@ -116,7 +111,30 @@ void PersistentConnection::init() {
              << connect ( thread , SIGNAL ( connectStatus(QString) ) , this, SLOT ( statusReceiver(QString) ) )
              << connect ( thread , SIGNAL ( packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
 
+}
+
+void PersistentConnection::initWithThread(TCPThread * thethread)
+{
+    setWindowTitle("TCP://You");
+    thread = thethread;
     QApplication::processEvents();
+    connectThreadSignals();
+
+    thread->start();
+
+
+    QApplication::processEvents();
+}
+
+
+void PersistentConnection::init() {
+
+    setWindowTitle("TCP://"+sendPacket.toIP + ":" + QString::number(sendPacket.port));
+
+    thread = new TCPThread(sendPacket, this);
+
+    QApplication::processEvents();
+    connectThreadSignals();
 
     thread->start();
 
