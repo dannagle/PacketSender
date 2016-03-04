@@ -37,6 +37,8 @@ public slots:
     void statusReceiver(QString message);
 
     void packetSentSlot(Packet pkt);
+    void socketDisconnected();
+
 private slots:
     void on_buttonBox_rejected();
 

@@ -64,8 +64,16 @@ void PersistentConnection::loadComboBox() {
 void PersistentConnection::aboutToClose() {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
-    thread->closeRequest = true;
-    thread->wait();
+    QDEBUG() << "checking thread null";
+    if(thread == NULL) {
+        QDEBUG() << "pointer is null";
+    } else {
+        QDEBUG() << "requesting stop";
+        thread->closeRequest = true;
+    }
+
+    //cannot reliably call "wait" on a thread, so just exit.
+
 }
 
 void PersistentConnection::statusReceiver(QString message)
@@ -243,6 +251,11 @@ void PersistentConnection::packetSentSlot(Packet pkt) {
     trafficList.append(pkt);
     loadTrafficView();
 
+}
+
+void PersistentConnection::socketDisconnected()
+{
+    statusReceiver("not connected");
 }
 
 void PersistentConnection::on_asciiSendButton_clicked()

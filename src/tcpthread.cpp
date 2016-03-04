@@ -132,7 +132,7 @@ void TCPThread::persistentConnectionLoop()
         if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
             count++;
             if(count % 10 == 0) {
-                QDEBUG() << "Loop and wait." << count++;
+                QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
                 emit connectStatus("Connected and idle.");
             }
             clientConnection->waitForReadyRead(200);
