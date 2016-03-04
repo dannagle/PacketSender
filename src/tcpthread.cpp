@@ -126,7 +126,7 @@ void TCPThread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while(clientConnection->state() == QAbstractSocket::ConnectedState ) {
+    while(clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
 
 
         if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
@@ -259,6 +259,11 @@ void TCPThread::persistentConnectionLoop()
         }
     } // end while connected
 
+    if(closeRequest) {
+        clientConnection->close();
+        clientConnection->waitForDisconnected(300);
+    }
+
 }
 
 
@@ -271,6 +276,7 @@ void TCPThread::closeConnection()
 
 void TCPThread::run()
 {
+    closeRequest = false;
 
     //determine IP mode based on send address.
     int ipMode = 4;

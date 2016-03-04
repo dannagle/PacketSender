@@ -64,7 +64,8 @@ void PersistentConnection::loadComboBox() {
 void PersistentConnection::aboutToClose() {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
-    thread->terminate();
+    thread->closeRequest = true;
+    thread->wait();
 }
 
 void PersistentConnection::statusReceiver(QString message)
