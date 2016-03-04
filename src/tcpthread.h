@@ -51,6 +51,7 @@ private:
     void writeResponse(QTcpSocket *sock, Packet tcpPacket);
     QTcpSocket * clientConnection;
 
+    void persistentConnectionLoop();
 };
 
 #endif // TCPTHREAD_H

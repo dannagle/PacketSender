@@ -115,6 +115,153 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
 
 }
 
+
+void TCPThread::persistentConnectionLoop()
+{
+    QDEBUG() <<"Entering the forever loop";
+    int ipMode = 4;
+    QHostAddress theAddress(sendPacket.toIP);
+    if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
+        ipMode = 6;
+    }
+
+    int count = 0;
+    while(clientConnection->state() == QAbstractSocket::ConnectedState ) {
+
+
+        if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
+            count++;
+            if(count % 10 == 0) {
+                QDEBUG() << "Loop and wait." << count++;
+                emit connectStatus("Connected and idle.");
+            }
+            clientConnection->waitForReadyRead(200);
+            if(!sendPacketPersistent.hexString.isEmpty()) {
+                sendPacket.hexString = sendPacketPersistent.hexString;
+                sendPacket.fromIP = "You";
+                sendPacket.receiveBeforeSend = false;
+                QDEBUGVAR(sendPacket.asciiString());
+                QDEBUGVAR(sendPacket.hexString);
+                sendPacketPersistent.clear();
+            }
+            continue;
+        }
+
+        if(clientConnection->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
+            QDEBUG() << "Connection broken.";
+            emit connectStatus("Connection broken");
+
+            break;
+        }
+
+        if(sendPacket.receiveBeforeSend) {
+            QDEBUG() << "Wait for data before sending...";
+            emit connectStatus("Waiting for data");
+            clientConnection->waitForReadyRead(500);
+
+            Packet tcpRCVPacket;
+            tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
+            if(!tcpRCVPacket.hexString.trimmed().isEmpty()) {
+                QDEBUG() << "Received: " << tcpRCVPacket.hexString;
+                emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
+
+                tcpRCVPacket.timestamp = QDateTime::currentDateTime();
+                tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+                tcpRCVPacket.tcpOrUdp = "TCP";
+
+                if(ipMode < 6) {
+                    tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                } else {
+                    tcpRCVPacket.fromIP = (clientConnection->peerAddress()).toString();
+                }
+
+
+                QDEBUGVAR(tcpRCVPacket.fromIP);
+                tcpRCVPacket.toIP = "You";
+                tcpRCVPacket.port = sendPacket.fromPort;
+                tcpRCVPacket.fromPort =    clientConnection->peerPort();
+                emit packetSent(tcpRCVPacket);
+
+            } else {
+                QDEBUG() << "No pre-emptive receive data";
+            }
+
+        } // end receive before send
+
+
+        //sendPacket.fromPort = clientConnection->localPort();
+        emit connectStatus("Sending data:" + sendPacket.asciiString());
+        QDEBUG() << "Attempting write data";
+        clientConnection->write(sendPacket.getByteArray());
+        emit packetSent(sendPacket);
+
+        Packet tcpPacket;
+        tcpPacket.timestamp = QDateTime::currentDateTime();
+        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        tcpPacket.tcpOrUdp = "TCP";
+        if(ipMode < 6) {
+            tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+
+        } else {
+            tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
+
+        }
+        QDEBUGVAR(tcpPacket.fromIP);
+
+        tcpPacket.toIP = "You";
+        tcpPacket.port = sendPacket.fromPort;
+        tcpPacket.fromPort =    clientConnection->peerPort();
+
+        clientConnection->waitForReadyRead(500);
+        emit connectStatus("Waiting to receive");
+        tcpPacket.hexString.clear();
+
+        while(clientConnection->bytesAvailable()) {
+            tcpPacket.hexString.append(" ");
+            tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
+            tcpPacket.hexString = tcpPacket.hexString.simplified();
+            clientConnection->waitForReadyRead(100);
+        }
+
+
+        if(!sendPacket.persistent) {
+            emit connectStatus("Disconnecting");
+            clientConnection->disconnectFromHost();
+        }
+
+        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.asciiString();
+
+        if(sendPacket.receiveBeforeSend) {
+            if(!tcpPacket.hexString.isEmpty()) {
+                emit packetSent(tcpPacket);
+            }
+        } else {
+            emit packetSent(tcpPacket);
+        }
+
+
+
+        emit connectStatus("Reading response");
+        tcpPacket.hexString  = clientConnection->readAll();
+
+        tcpPacket.timestamp = QDateTime::currentDateTime();
+        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        emit packetSent(tcpPacket);
+
+
+        if(!sendPacket.persistent) {
+            break;
+        } else {
+            sendPacket.clear();
+            sendPacket.persistent = true;
+            QDEBUG() << "Persistent connection. Loop and wait.";
+            continue;
+        }
+    } // end while connected
+
+}
+
+
 void TCPThread::closeConnection()
 {
     QDEBUG() << "Closing connection";
@@ -170,138 +317,7 @@ void TCPThread::run()
             sendPacket.port = clientConnection->peerPort();
             sendPacket.fromPort = clientConnection->localPort();
 
-            int count = 0;
-            while(clientConnection->state() == QAbstractSocket::ConnectedState ) {
-
-                if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
-                    count++;
-                    if(count % 10 == 0) {
-                        QDEBUG() << "Loop and wait." << count++;
-                        emit connectStatus("Connected and idle.");
-                    }
-                    clientConnection->waitForReadyRead(200);
-                    if(!sendPacketPersistent.hexString.isEmpty()) {
-                        sendPacket.hexString = sendPacketPersistent.hexString;
-                        sendPacket.fromIP = "You";
-                        sendPacket.receiveBeforeSend = false;
-                        QDEBUGVAR(sendPacket.asciiString());
-                        QDEBUGVAR(sendPacket.hexString);
-                        sendPacketPersistent.clear();
-                    }
-                    continue;
-                }
-
-                if(clientConnection->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
-                    QDEBUG() << "Connection broken.";
-                    emit connectStatus("Connection broken");
-
-                    break;
-                }
-
-                if(sendPacket.receiveBeforeSend) {
-                    QDEBUG() << "Wait for data before sending...";
-                    emit connectStatus("Waiting for data");
-                    clientConnection->waitForReadyRead(500);
-
-                    Packet tcpRCVPacket;
-                    tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
-                    if(!tcpRCVPacket.hexString.trimmed().isEmpty()) {
-                        QDEBUG() << "Received: " << tcpRCVPacket.hexString;
-                        emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
-
-                        tcpRCVPacket.timestamp = QDateTime::currentDateTime();
-                        tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                        tcpRCVPacket.tcpOrUdp = "TCP";
-
-                        if(ipMode < 6) {
-                            tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
-                        } else {
-                            tcpRCVPacket.fromIP = (clientConnection->peerAddress()).toString();
-                        }
-
-
-                        QDEBUGVAR(tcpRCVPacket.fromIP);
-                        tcpRCVPacket.toIP = "You";
-                        tcpRCVPacket.port = sendPacket.fromPort;
-                        tcpRCVPacket.fromPort =    clientConnection->peerPort();
-                        emit packetSent(tcpRCVPacket);
-
-                    } else {
-                        QDEBUG() << "No pre-emptive receive data";
-                    }
-
-                } // end receive before send
-
-
-                //sendPacket.fromPort = clientConnection->localPort();
-                emit connectStatus("Sending data:" + sendPacket.asciiString());
-                QDEBUG() << "Attempting write data";
-                clientConnection->write(sendPacket.getByteArray());
-                emit packetSent(sendPacket);
-
-                Packet tcpPacket;
-                tcpPacket.timestamp = QDateTime::currentDateTime();
-                tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                tcpPacket.tcpOrUdp = "TCP";
-                if(ipMode < 6) {
-                    tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
-
-                } else {
-                    tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
-
-                }
-                QDEBUGVAR(tcpPacket.fromIP);
-
-                tcpPacket.toIP = "You";
-                tcpPacket.port = sendPacket.fromPort;
-                tcpPacket.fromPort =    clientConnection->peerPort();
-
-                clientConnection->waitForReadyRead(500);
-                emit connectStatus("Waiting to receive");
-                tcpPacket.hexString.clear();
-
-                while(clientConnection->bytesAvailable()) {
-                    tcpPacket.hexString.append(" ");
-                    tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
-                    tcpPacket.hexString = tcpPacket.hexString.simplified();
-                    clientConnection->waitForReadyRead(100);
-                }
-
-
-                if(!sendPacket.persistent) {
-                    emit connectStatus("Disconnecting");
-                    clientConnection->disconnectFromHost();
-                }
-
-                QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.asciiString();
-
-                if(sendPacket.receiveBeforeSend) {
-                    if(!tcpPacket.hexString.isEmpty()) {
-                        emit packetSent(tcpPacket);
-                    }
-                } else {
-                    emit packetSent(tcpPacket);
-                }
-
-
-
-                emit connectStatus("Reading response");
-                tcpPacket.hexString  = clientConnection->readAll();
-
-                tcpPacket.timestamp = QDateTime::currentDateTime();
-                tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                emit packetSent(tcpPacket);
-
-
-                if(!sendPacket.persistent) {
-                    break;
-                } else {
-                    sendPacket.clear();
-                    sendPacket.persistent = true;
-                    QDEBUG() << "Persistent connection. Loop and wait.";
-                    continue;
-                }
-            } // end while connected
+            persistentConnectionLoop();
 
             emit connectStatus("Not connected.");
             QDEBUG() << "Not connected.";
@@ -369,115 +385,11 @@ void TCPThread::run()
 
     if(incomingPersistent) {
         clientConnection = &sock;
-
         QDEBUG() << "We are persistent incoming";
-        if(clientConnection->state() == QAbstractSocket::ConnectedState)
-        {
-            QDEBUG() << "Emit connected!";
-            emit connectStatus("Connected");
-            sendPacket.init();
-            sendPacket.persistent = true;
-            int count = 0;
-            while(clientConnection->state() == QAbstractSocket::ConnectedState ) {
-
-                if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
-                    count++;
-                    if(count % 10 == 0) {
-                        QDEBUG() << "Loop and wait." << count++;
-                        emit connectStatus("Connected and idle.");
-                    }
-                    clientConnection->waitForReadyRead(200);
-                    if(!sendPacketPersistent.hexString.isEmpty()) {
-                        sendPacket.hexString = sendPacketPersistent.hexString;
-                        sendPacket.fromIP = "You";
-                        sendPacket.receiveBeforeSend = false;
-                        QDEBUGVAR(sendPacket.asciiString());
-                        QDEBUGVAR(sendPacket.hexString);
-                        sendPacketPersistent.clear();
-                    }
-                    continue;
-                }
-
-                if(clientConnection->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
-                    QDEBUG() << "Connection broken.";
-                    emit connectStatus("Connection broken");
-
-                    break;
-                }
-
-                //sendPacket.fromPort = clientConnection->localPort();
-                emit connectStatus("Sending data:" + sendPacket.asciiString());
-                QDEBUG() << "Attempting write data";
-                clientConnection->write(sendPacket.getByteArray());
-                emit packetSent(sendPacket);
-
-                Packet tcpPacket;
-                tcpPacket.timestamp = QDateTime::currentDateTime();
-                tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                tcpPacket.tcpOrUdp = "TCP";
-                if(ipMode < 6) {
-                    tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
-
-                } else {
-                    tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
-
-                }
-                QDEBUGVAR(tcpPacket.fromIP);
-
-                tcpPacket.toIP = "You";
-                tcpPacket.port = sendPacket.fromPort;
-                tcpPacket.fromPort =    clientConnection->peerPort();
-
-                clientConnection->waitForReadyRead(500);
-                emit connectStatus("Waiting to receive");
-                tcpPacket.hexString.clear();
-
-                while(clientConnection->bytesAvailable()) {
-                    tcpPacket.hexString.append(" ");
-                    tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
-                    tcpPacket.hexString = tcpPacket.hexString.simplified();
-                    clientConnection->waitForReadyRead(100);
-                }
-
-
-                if(!sendPacket.persistent) {
-                    emit connectStatus("Disconnecting");
-                    clientConnection->disconnectFromHost();
-                }
-
-                QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.asciiString();
-
-                if(sendPacket.receiveBeforeSend) {
-                    if(!tcpPacket.hexString.isEmpty()) {
-                        emit packetSent(tcpPacket);
-                    }
-                } else {
-                    emit packetSent(tcpPacket);
-                }
-
-
-
-                emit connectStatus("Reading response");
-                tcpPacket.hexString  = clientConnection->readAll();
-
-                tcpPacket.timestamp = QDateTime::currentDateTime();
-                tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                emit packetSent(tcpPacket);
-
-
-                if(!sendPacket.persistent) {
-                    break;
-                } else {
-                    sendPacket.clear();
-                    sendPacket.persistent = true;
-                    QDEBUG() << "Persistent connection. Loop and wait.";
-                    continue;
-                }
-            } // end while connected
-
-            emit connectStatus("Not connected.");
-            QDEBUG() << "Not connected.";
-        }
+        sendPacket =  tcpPacket;
+        sendPacket.persistent = true;
+        sendPacket.hexString.clear();
+        persistentConnectionLoop();
     }
 
 

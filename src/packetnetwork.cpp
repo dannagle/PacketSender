@@ -41,16 +41,11 @@ void PacketNetwork::incomingConnection(qintptr socketDescriptor)
     QDEBUG() << "new tcp connection";
 
     TCPThread *thread = new TCPThread(socketDescriptor, this);
-    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-    QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-             << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
-             << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
     PersistentConnection * pcWindow = new PersistentConnection();
     thread->incomingPersistent = true;
     pcWindow->initWithThread(thread);
+
+    connect(pcWindow->thread, SIGNAL(finished()), pcWindow->thread, SLOT(deleteLater()));
 
     QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
              << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
