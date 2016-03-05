@@ -74,6 +74,9 @@ Settings::Settings(QWidget *parent) :
     on_smartResponseEnableCheck_clicked();
 
 
+
+    ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
+
     ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
 
     ui->udpServerPortEdit->setText(settings.value("udpPort","55056").toString());
@@ -181,6 +184,7 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("asciiEditTranslateEBCDICCheck", ui->asciiEditTranslateEBCDICCheck->isChecked());
 
+    settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
 
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());

@@ -359,6 +359,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="persistentTCPCheck">
+            <property name="text">
+             <string>Persistent TCP Connections</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="asciiEditTranslateEBCDICCheck">
             <property name="text">
              <string>Enable Ctrl (or Cmd)+ E  to translate ASCII field to EBCDIC</string>
@@ -715,7 +722,6 @@
   <tabstop>multiSendDelayEdit</tabstop>
   <tabstop>cancelResendNumEdit</tabstop>
   <tabstop>attemptReceiveCheck</tabstop>
-  <tabstop>delayAfterConnectCheck</tabstop>
   <tabstop>responseIfEdit1</tabstop>
   <tabstop>responseReplyEdit1</tabstop>
   <tabstop>responseEncodingBox1</tabstop>

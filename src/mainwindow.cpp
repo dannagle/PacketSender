@@ -106,6 +106,12 @@ MainWindow::MainWindow(QWidget *parent) :
     packetNetwork.init();
 
     packetNetwork.responseData = settings.value("responseHex","").toString();
+
+    ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
+    packetNetwork.persistentConnectCheck = ui->persistentTCPCheck->isChecked();
+
+
+
     packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
 
 
@@ -814,7 +820,7 @@ void MainWindow::on_testPacketButton_clicked()
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Yes);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("You are resending a TCP packet with presistent connecitons. The UI could go nuts! \n\nUncheck persistent connection? (Recommended)");
+            msgBox.setText("You are resending a TCP packet with presistent connecitons. The UI could spawn numerous windows! \n\nUncheck persistent connection? (Recommended)");
             int yesno = msgBox.exec();
             if(yesno == QMessageBox::Yes) {
                 ui->persistentTCPCheck->setChecked(false);
@@ -1364,6 +1370,9 @@ void MainWindow::applyNetworkSettings()
     packetNetwork.init();
     packetNetwork.responseData = settings.value("responseHex","").toString().trimmed();
     packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
+    ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
+    on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
+
     UDPServerStatus();
     TCPServerStatus();
 
@@ -1584,8 +1593,6 @@ void MainWindow::on_actionSettings_triggered()
         applyNetworkSettings();
         loadPacketsTable();
         loadTrafficLogTable();
-        on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
-
     }
 }
 
@@ -1680,6 +1687,9 @@ void MainWindow::on_actionExport_Packets_triggered()
 
 void MainWindow::on_persistentTCPCheck_clicked(bool checked)
 {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
+
     packetNetwork.persistentConnectCheck = checked;
 }
 
