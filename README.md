@@ -88,22 +88,23 @@ Packet Sender supports these macros when sending responses:
 Packet Sender will swap the macro with real values before sending.
 
 ### Persistent TCP
-Packet Sender supports persistent connections via a separate UI dialog. It is enabled by  checkbox on the main window.
+Packet Sender supports persistent connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
 ![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
 * Any number of persistent connections can be created.
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
 * Traffic is also saved in the main window traffic log.
-* The timer in the bottom lefts starts as soon as a valid data packet is sent. It stops when the server closes the connection.
+* The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
+* Incoming persistent connections to the server will launch the UI dialog.
 
-Persistent connections is not supported via the command line. Persistent connections are not supported in the server.
+Persistent connections are not supported via the command line.
 
 
 ### IPv4 Subnet Calculator
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 ![Packet Sender Direct TCP](screenshots/packetsender_subnetcalc_ubuntu.png)
-* The log window will display non-loopback IPv4 addresses found on your computer.
+* The log window will display non-loopback IPv4 and IPv6 addresses found on your computer.
 * The top left field allow inputting an IPv4 address.
 * The field below is for a subnet, either X.X.X.X or /XX notation.
 * The results of the calculation are on the right.
