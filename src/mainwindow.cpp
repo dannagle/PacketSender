@@ -589,12 +589,11 @@ quint64 MainWindow::timeSinceLaunch()
 void MainWindow::on_packetHexEdit_lostFocus()
 {
 
-    qDebug() << __FILE__ << "/" << __LINE__ <<"on_serialHexEdit_lostFocus";
-
     QString quicktestHex =  ui->packetHexEdit->text();
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestHex));
     ui->packetASCIIEdit->setToolTip("");
+    ui->packetHexEdit->setText(quicktestHex);
 
 
 }
