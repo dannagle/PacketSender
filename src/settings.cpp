@@ -97,6 +97,10 @@ Settings::Settings(QWidget *parent) :
 
     ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
 
+    QString ascii = ui->hexResponseEdit->text();
+    ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
+
+
     int ipMode = settings.value("ipMode", 4).toInt();
     if (ipMode > 4) {
         ui->ipv6Radio->setChecked(true);
