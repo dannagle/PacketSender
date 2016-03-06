@@ -178,11 +178,34 @@ QString Packet::hexToASCII(QString &hex)
 
 
     QStringList hexSplit;
+
+    //remove invalid characters of popular deliminators...
+    hex = hex.replace(",", " ");
+    hex = hex.replace(".", " ");
+    hex = hex.replace(":", " ");
+    hex = hex.replace(";", " ");
+    hex = hex.replace("0x", " ");
+    hex = hex.replace("x", " ");
+    hex = hex.replace("\n", " ");
+    hex = hex.replace("\r", " ");
+    hex = hex.replace("\t", " ");
+
     QString hexText = hex.simplified();
     if(hexText.isEmpty())
     {
         return "";
     }
+
+    if((hexText.size() % 2 != 0)) {
+        //Not divisible by 2. What should I do?
+        if(!hexText.contains(" ") && hexText.size() > 2)
+        {
+            //Seems to be one big hex stream. Front-load it with a 0.
+            hexText.prepend("0");
+        }
+
+    }
+
 
     if(!hexText.contains(" ") && hexText.size() > 2 && hexText.size() % 2 == 0)
     {
