@@ -7,6 +7,8 @@
 #include <QDesktopServices>
 #include <QFile>
 #include <QDir>
+#include <QShortcut>
+
 
 PersistentConnection::PersistentConnection(QWidget *parent) :
     QDialog(parent),
@@ -42,7 +44,31 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     ui->asciiLineEdit->setFocus();
     suppressSlot = false;
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    bool asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
+
+    if(asciiEditTranslateEBCDIC) {
+        QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
+        QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
+
+    }
+
+
+}
+
+void PersistentConnection::ebcdicTranslate() {
+
+    QDEBUG() << "Translate ascii field";
+        Packet ebcdicPkt;
+        ebcdicPkt.init();
+        QString oldascii = ui->asciiLineEdit->text();
+        ebcdicPkt.hexString = Packet::ASCIITohex(oldascii);
+        oldascii = ebcdicPkt.asciiString();
+
+        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
+        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
+        ui->asciiLineEdit->setText(ebcdicPkt.asciiString());
 }
 
 void PersistentConnection::loadComboBox() {
@@ -122,9 +148,10 @@ void PersistentConnection::connectThreadSignals()
 
 }
 
-void PersistentConnection::initWithThread(TCPThread * thethread)
+void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
 {
-    setWindowTitle("TCP://You");
+
+    setWindowTitle("TCP://You:" + QString::number(portNum));
     thread = thethread;
     QApplication::processEvents();
     connectThreadSignals();

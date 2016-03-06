@@ -24,7 +24,7 @@ public:
 
     void init();
 
-    void initWithThread(TCPThread *thethread);
+    void initWithThread(TCPThread *thethread, quint16 portNum);
 signals:
     void persistentPacketSend(Packet sendpacket);
     void closeConnection();
@@ -58,6 +58,7 @@ private slots:
 
     void on_clearButton_clicked();
 
+    void ebcdicTranslate();
 private:
     Ui::PersistentConnection *ui;
     QTimer refreshTimer;

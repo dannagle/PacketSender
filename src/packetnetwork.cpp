@@ -44,7 +44,7 @@ void PacketNetwork::incomingConnection(qintptr socketDescriptor)
     if(persistentConnectCheck) {
         PersistentConnection * pcWindow = new PersistentConnection();
         thread->incomingPersistent = true;
-        pcWindow->initWithThread(thread);
+        pcWindow->initWithThread(thread, serverPort());
 
         connect(pcWindow->thread, SIGNAL(finished()), pcWindow->thread, SLOT(deleteLater()));
 
