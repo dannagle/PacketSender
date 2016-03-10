@@ -20,6 +20,7 @@ public:
     explicit PersistentConnection(QWidget *parent = 0);
     ~PersistentConnection();
     Packet sendPacket;
+    Packet reSendPacket;
     TCPThread *thread;
 
     void init();
@@ -31,7 +32,6 @@ signals:
 
 
 public slots:
-    void packetToSend(Packet sendpacket);
     void refreshTimerTimeout();
     void aboutToClose();
     void statusReceiver(QString message);
@@ -61,6 +61,7 @@ private slots:
     void ebcdicTranslate();
 private:
     Ui::PersistentConnection *ui;
+    QPushButton * stopResendingButton;
     QTimer refreshTimer;
     QList<Packet> trafficList;
     QDateTime startTime;
@@ -72,6 +73,7 @@ private:
     void loadComboBox();
     void loadTrafficView();
     void connectThreadSignals();
+    void cancelResends();
 };
 
 #endif // PERSISTENTCONNECTION_H

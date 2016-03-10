@@ -163,6 +163,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="stopResendingButton">
+       <property name="text">
+        <string>Resending(1)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

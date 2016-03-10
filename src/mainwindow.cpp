@@ -810,8 +810,9 @@ void MainWindow::on_testPacketButton_clicked()
     lastSendPacket = testPacket;
     lastSendPacket.name.clear();
 
-    if(testPacket.repeat > 0)
+    if(testPacket.repeat > 0 && !ui->persistentTCPCheck->isChecked())
     {
+        /*
         if(testPacket.tcpOrUdp == "TCP" && ui->persistentTCPCheck->isChecked()) {
 
             QMessageBox msgBox;
@@ -830,6 +831,7 @@ void MainWindow::on_testPacketButton_clicked()
             }
 
         }
+            */
 
         testPacket.timestamp = QDateTime::currentDateTime();
 

@@ -169,6 +169,15 @@ void PersistentConnection::init() {
 
     thread = new TCPThread(sendPacket, this);
 
+    reSendPacket.clear();
+    if(sendPacket.repeat > 0) {
+        QDEBUG() << "This packet is repeating";
+        reSendPacket = sendPacket;
+    } else {
+
+        ui->stopResendingButton->hide();
+    }
+
     QApplication::processEvents();
     connectThreadSignals();
 
@@ -177,14 +186,26 @@ void PersistentConnection::init() {
 
     QApplication::processEvents();
 
+
+
+
+    ui->stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    ui->stopResendingButton->setFlat(true);
+    ui->stopResendingButton->setCursor(Qt::PointingHandCursor);
+    ui->stopResendingButton->setIcon(QIcon(PSLOGO));
+
+    connect(ui->stopResendingButton, &QPushButton::clicked, this, &PersistentConnection::cancelResends);
+
 }
 
-void PersistentConnection::packetToSend(Packet sendpacket)
+
+void PersistentConnection::cancelResends()
 {
-
-    Q_UNUSED(sendpacket);
-
+    QDEBUG();
+    ui->stopResendingButton->hide();
+    reSendPacket.clear();
 }
+
 
 void PersistentConnection::refreshTimerTimeout() {
 //    QDEBUG();
@@ -203,7 +224,24 @@ void PersistentConnection::refreshTimerTimeout() {
             .arg(min, 2, 10, QChar('0'))
             .arg(sec, 2, 10, QChar('0'));
 
-    if(wasConnected && !stopTimer)  ui->timeLabel->setText(datestamp);
+    if(wasConnected && !stopTimer) {
+
+        ui->timeLabel->setText(datestamp);
+
+        QDateTime now = QDateTime::currentDateTime();
+        int repeatMS = (int) (reSendPacket.repeat * 1000 - 100);
+        if(reSendPacket.timestamp.addMSecs(repeatMS) < now)
+        {
+            reSendPacket.timestamp = now;
+            emit persistentPacketSend(reSendPacket);
+        }
+
+    }
+
+
+
+
+
 
 
 
