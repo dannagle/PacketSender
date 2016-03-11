@@ -123,6 +123,7 @@ void PersistentConnection::statusReceiver(QString message)
         ui->packetComboBox->setEnabled(false);
         ui->LoadButton->setEnabled(false);
 
+        ui->stopResendingButton->hide();
         stopTimer = true;
     }
 
