@@ -661,7 +661,7 @@ void MainWindow::sendClick(QString packetName)
                 }
             }
 
-            if(toSend.repeat > 0)
+            if(toSend.repeat > 0 && !ui->persistentTCPCheck->isChecked())
             {
                 toSend.timestamp = QDateTime::currentDateTime();
 
