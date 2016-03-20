@@ -1,6 +1,6 @@
 # Packet Sender
 
-![Packet Sender Banner](screenshots/packetsender_banner.png)
+![Packet Sender Logo](screenshots/packetsender_banner.png)
 
 Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
@@ -64,6 +64,8 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * \XX gets translated to XX in hex
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
+    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.  
+    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct. 
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
@@ -97,6 +99,7 @@ Packet Sender supports persistent connections via a separate UI dialog. It is en
 * The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
 * Incoming persistent connections to the server will launch the UI dialog.
+* During resend, the persistent connection packet is carried over to the new UI dialog. Clicking "Resending(1)" will cancel it.
 
 Persistent connections are not supported via the command line.
 
