@@ -44,23 +44,18 @@ int main(int argc, char *argv[])
     }
 
     QDEBUG() << "number of arguments:" << argc;
+    QStringList args;
     QDEBUGVAR(RAND_MAX);
-    QApplication a(argc, argv);
-    QStringList args = a.arguments();
-    QDEBUGVAR(args);
+    if(argc > 1) {
+        QCoreApplication a(argc, argv);
+        args = a.arguments();
 
-    qRegisterMetaType<Packet>();
+        QDEBUGVAR(args);
 
-
-    QFile file(":/packetsender.css");
-    if(file.open(QFile::ReadOnly)) {
-       QString StyleSheet = QLatin1String(file.readAll());
-     //  qDebug() << "stylesheet: " << StyleSheet;
-       a.setStyleSheet(StyleSheet);
-    }
+        qRegisterMetaType<Packet>();
 
 
-    if(args.size() > 1) {
+
         QDEBUG() << "Running command line mode.";
 
         Packet sendPacket;
@@ -453,14 +448,34 @@ int main(int argc, char *argv[])
 
 
         OUTPUT();
-        return 0;
+
+
+
+    } else {
+        QApplication a(argc, argv);
+
+        QDEBUGVAR(args);
+
+        qRegisterMetaType<Packet>();
+
+        QFile file(":/packetsender.css");
+        if(file.open(QFile::ReadOnly)) {
+           QString StyleSheet = QLatin1String(file.readAll());
+         //  qDebug() << "stylesheet: " << StyleSheet;
+           a.setStyleSheet(StyleSheet);
+        }
+
+        MainWindow w;
+
+
+        w.show();
+
+        return a.exec();
+
     }
 
 
-    MainWindow w;
 
+    return 0;
 
-    w.show();
-
-    return a.exec();
 }
