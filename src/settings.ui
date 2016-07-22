@@ -178,7 +178,7 @@
             <item>
              <widget class="QLabel" name="udpServerLabel">
               <property name="text">
-               <string>UDP Server Port</string>
+               <string>UDP Server Port (or 0 for random)</string>
               </property>
              </widget>
             </item>
@@ -203,7 +203,7 @@
             <item>
              <widget class="QLabel" name="tcpServerLabel">
               <property name="text">
-               <string>TCP Server Port</string>
+               <string>TCP Server Port (or 0 for random)</string>
               </property>
              </widget>
             </item>
