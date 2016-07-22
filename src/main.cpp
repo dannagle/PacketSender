@@ -27,7 +27,7 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 
 #define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
 #define OUTIF()  if(!quiet) o<< "\n"
-#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder
+#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear();
 
 
 int main(int argc, char *argv[])
@@ -341,6 +341,8 @@ int main(int argc, char *argv[])
         recvData.clear();
         int bytesWriten = 0;
 
+        QTime now = QTime::currentTime();
+        now.start();
 
         if(tcp) {
             QTcpSocket sock;
@@ -359,17 +361,26 @@ int main(int argc, char *argv[])
                 bytesWriten = sock.write(sendData);
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);
-                if(wait) {
-                    sock.waitForReadyRead(wait);
+                OUTPUT();
+                while(now.elapsed() <= wait && (sock.state() == QAbstractSocket::ConnectedState)) {
+                    sock.waitForReadyRead(wait - now.elapsed());
                     recvData = sock.readAll();
+                    if(recvData.isEmpty()) {
+                        continue;
+                    }
                     QString hexString = Packet::byteArrayToHex(recvData);
                     if(quiet) {
-                        o << "\n" << hexString;
+                        out << "\n" << hexString;
+
                     } else {
-                        o << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                        o << "\nResponse HEX:" << hexString;
-                        o << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
+                        out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+                        out << "\nResponse HEX:" << hexString;
+                        out << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
                     }
+
+                    out.flush();
+                    QCoreApplication::flush();
+
                 }
                 sock.disconnectFromHost();
                 sock.waitForDisconnected(1000);
@@ -412,8 +423,10 @@ int main(int argc, char *argv[])
             //OUTIF() << "Wrote " << bytesWriten << " bytes";
             sock.waitForBytesWritten(1000);
 
-            if(wait) {
-                sock.waitForReadyRead(wait);
+
+            OUTPUT();
+            while(now.elapsed() <= wait) {
+                sock.waitForReadyRead(wait - now.elapsed());
 
                 if(sock.hasPendingDatagrams()) {
                     QHostAddress sender;
@@ -425,12 +438,15 @@ int main(int argc, char *argv[])
 
                     QString hexString = Packet::byteArrayToHex(recvData);
                     if(quiet) {
-                        o << "\n" << hexString;
+                        out << "\n" << hexString;
                     } else {
-                        o << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                        o << "\nResponse HEX:" << hexString;
-                        o << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
+                        out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+                        out << "\nResponse HEX:" << hexString;
+                        out << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
                     }
+
+                    out.flush();
+                    QCoreApplication::flush();
                 }
             }
 
