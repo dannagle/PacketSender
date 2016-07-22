@@ -25,7 +25,6 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     sendFlag = false;
     incomingPersistent = false;
     sendPacket.clear();
-    sendPacketPersistent.clear();
 
 
 }
@@ -132,18 +131,10 @@ void TCPThread::persistentConnectionLoop()
         if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
             count++;
             if(count % 10 == 0) {
-                QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
+                //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
                 emit connectStatus("Connected and idle.");
             }
             clientConnection->waitForReadyRead(200);
-            if(!sendPacketPersistent.hexString.isEmpty()) {
-                sendPacket.hexString = sendPacketPersistent.hexString;
-                sendPacket.fromIP = "You";
-                sendPacket.receiveBeforeSend = false;
-                QDEBUGVAR(sendPacket.asciiString());
-                QDEBUGVAR(sendPacket.hexString);
-                sendPacketPersistent.clear();
-            }
             continue;
         }
 
@@ -261,7 +252,7 @@ void TCPThread::persistentConnectionLoop()
 
     if(closeRequest) {
         clientConnection->close();
-        clientConnection->waitForDisconnected(300);
+        clientConnection->waitForDisconnected(100);
     }
 
 }
@@ -421,5 +412,13 @@ void TCPThread::run()
 
 void TCPThread::sendPersistant(Packet sendpacket)
 {
-    sendPacketPersistent = sendpacket;
+    if((!sendpacket.hexString.isEmpty()) && (clientConnection->state() == QAbstractSocket::ConnectedState)) {
+        QDEBUGVAR(sendpacket.hexString);
+        clientConnection->write(sendpacket.getByteArray());
+        sendpacket.fromIP = "You";
+        sendpacket.toIP = clientConnection->peerAddress().toString();
+        sendpacket.port = clientConnection->peerPort();
+        sendpacket.fromPort = clientConnection->localPort();
+        emit packetSent(sendpacket);
+    }
 }

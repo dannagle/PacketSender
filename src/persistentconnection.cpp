@@ -104,7 +104,7 @@ void PersistentConnection::aboutToClose() {
 
 void PersistentConnection::statusReceiver(QString message)
 {
-    QDEBUGVAR(message);
+    //QDEBUGVAR(message);
     ui->topLabel->setText(message);
 
     if(message.startsWith("Connected")) {
@@ -159,6 +159,7 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 
     thread->start();
 
+    ui->stopResendingButton->hide();
 
     QApplication::processEvents();
 }
@@ -262,6 +263,8 @@ void PersistentConnection::on_buttonBox_rejected()
 void PersistentConnection::loadTrafficView() {
 
 
+    QDEBUGVAR(trafficList.size());
+
     Packet loopPkt;
 
     QString html;
@@ -272,10 +275,7 @@ void PersistentConnection::loadTrafficView() {
 
     if(useraw) {
         foreach(loopPkt, trafficList) {
-            if(loopPkt.fromIP.toLower() != "you") {
                 out << QString(loopPkt.getByteArray());
-            }
-
         }
 
         ui->trafficViewEdit->setPlainText(html);
@@ -314,6 +314,7 @@ void PersistentConnection::loadTrafficView() {
 
 void PersistentConnection::packetSentSlot(Packet pkt) {
 
+    QDEBUGVAR(pkt.hexString);
     trafficList.append(pkt);
     loadTrafficView();
 

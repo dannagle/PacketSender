@@ -340,7 +340,6 @@ int main(int argc, char *argv[])
         QByteArray recvData;
         recvData.clear();
         int bytesWriten = 0;
-        int bytesRead = 0;
 
 
         if(tcp) {
@@ -363,7 +362,6 @@ int main(int argc, char *argv[])
                 if(wait) {
                     sock.waitForReadyRead(wait);
                     recvData = sock.readAll();
-                    bytesRead = recvData.size();
                     QString hexString = Packet::byteArrayToHex(recvData);
                     if(quiet) {
                         o << "\n" << hexString;

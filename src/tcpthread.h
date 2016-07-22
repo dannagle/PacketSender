@@ -47,7 +47,6 @@ private:
     int socketDescriptor;
     QString text;
     Packet sendPacket;
-    Packet sendPacketPersistent;
     void init();
     void writeResponse(QTcpSocket *sock, Packet tcpPacket);
     QTcpSocket * clientConnection;
