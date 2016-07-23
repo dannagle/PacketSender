@@ -416,7 +416,17 @@ void TCPThread::sendPersistant(Packet sendpacket)
         QDEBUGVAR(sendpacket.hexString);
         clientConnection->write(sendpacket.getByteArray());
         sendpacket.fromIP = "You";
-        sendpacket.toIP = clientConnection->peerAddress().toString();
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        int ipMode = settings.value("ipMode", 4).toInt();
+
+
+        if(ipMode < 6) {
+            sendpacket.toIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+        } else {
+            sendpacket.toIP = (clientConnection->peerAddress()).toString();
+        }
+
         sendpacket.port = clientConnection->peerPort();
         sendpacket.fromPort = clientConnection->localPort();
         emit packetSent(sendpacket);
