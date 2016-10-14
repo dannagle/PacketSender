@@ -9,8 +9,6 @@ QT       += core gui network widgets
 TARGET = PacketSender
 TEMPLATE = app
 
-#Needed for Qt5.5 with El Capitan
-QMAKE_MAC_SDK = macosx10.11
 
 #enable only if compiling .com for windows
 #win32:CONFIG += console
