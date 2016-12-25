@@ -17,6 +17,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(this->windowFlags() | Qt::WindowMaximizeButtonHint);
 
     suppressSlot = true;
 
