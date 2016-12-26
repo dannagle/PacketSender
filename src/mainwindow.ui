@@ -20,20 +20,17 @@
       <property name="title">
        <string/>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="topMargin">
-        <number>5</number>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <layout class="QGridLayout" name="packetSetupLayout">
-         <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
           <widget class="QLabel" name="serialNameLabel">
            <property name="text">
             <string>Name</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
+         <item>
           <widget class="QLineEdit" name="packetNameEdit">
            <property name="maximumSize">
             <size>
@@ -46,14 +43,31 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
           <widget class="QLabel" name="serialHexLabel">
            <property name="text">
             <string>ASCII</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="2">
+         <item>
           <widget class="QLineEdit" name="packetASCIIEdit">
            <property name="placeholderText">
             <string>ASCII representation</string>
@@ -63,22 +77,37 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
           <widget class="QLabel" name="serialASCIILabel">
            <property name="text">
             <string>HEX</string>
            </property>
           </widget>
          </item>
-         <item row="4" column="2">
-          <widget class="QLineEdit" name="packetHexEdit">
-           <property name="placeholderText">
-            <string>HEX representation</string>
-           </property>
-           <property name="clearButtonEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLineEdit" name="packetHexEdit">
+             <property name="placeholderText">
+              <string>HEX representation</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="loadFileButton">
+             <property name="text">
+              <string>Load File</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>

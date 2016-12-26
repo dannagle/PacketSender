@@ -1707,3 +1707,59 @@ void MainWindow::on_resendEdit_editingFinished()
     float resendVal = Packet::oneDecimal(ui->resendEdit->text().toFloat());
     ui->resendEdit->setText(QString::number(resendVal));
 }
+
+void MainWindow::on_loadFileButton_clicked()
+{
+    static QString fileName;
+    static bool showWarning = true;
+
+    if(fileName.isEmpty()) {
+        fileName = QDir::homePath();
+    }
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                              fileName,
+                                              tr("*.*"));
+
+    QDEBUGVAR(fileName);
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+    QFile loadFile(fileName);
+
+    if(!loadFile.exists()) {
+        return;
+    }
+
+    QByteArray data;
+    if(loadFile.open(QFile::ReadOnly)) {
+        data = loadFile.readAll();
+        loadFile.close();
+        if(data.size() > (32767 / 3)) {
+            data.resize(32767 / 3);
+
+            if(showWarning) {
+                showWarning = false;
+                QMessageBox msgBox;
+                msgBox.setWindowTitle("Max size exceeded!");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+                msgBox.setIcon(QMessageBox::Warning);
+                msgBox.setText("The hex field supports up to 10,922 bytes. The data has been truncated.");
+                msgBox.exec();
+
+            }
+
+        }
+        statusBarMessage("Loading " + QString::number(data.size()) + " bytes");
+        ui->packetHexEdit->setText(Packet::byteArrayToHex(data));
+        on_packetHexEdit_lostFocus();
+        on_packetASCIIEdit_lostFocus();
+        ui->packetASCIIEdit->setFocus();
+        QDEBUGVAR(ui->packetHexEdit->text().size());
+    }
+
+
+}

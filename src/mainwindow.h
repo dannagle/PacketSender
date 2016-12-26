@@ -141,6 +141,8 @@ private slots:
 
     void on_resendEdit_editingFinished();
 
+    void on_loadFileButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
