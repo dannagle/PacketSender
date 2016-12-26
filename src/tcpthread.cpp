@@ -17,6 +17,10 @@
 #include <QDesktopServices>
 #include <QDir>
 
+#include <QSsl>
+#include <QSslSocket>
+
+
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     : QThread(parent), socketDescriptor(socketDescriptor)
 {
@@ -289,6 +293,28 @@ void TCPThread::run()
         if(portpass) {
             sendPacket.fromPort = clientConnection->localPort();
         }
+
+        /*
+         SSL Version...
+
+
+        if(ipMode > 4) {
+            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+
+        } else {
+            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+        }
+
+        QDEBUG() << "Telling SSL to ignore errors";
+        clientConnection->ignoreSslErrors();
+        QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
+        QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
+        QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
+
+        QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
+
+        */
 
 
         if(ipMode > 4) {

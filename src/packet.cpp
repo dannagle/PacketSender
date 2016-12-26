@@ -47,6 +47,12 @@ void Packet::clear()
     init();
 }
 
+bool Packet::isSSL()
+{
+   return (tcpOrUdp.trimmed().toLower() == "ssl");
+}
+
+
 bool Packet::isTCP()
 {
    return (tcpOrUdp.trimmed().toLower() == "tcp");

@@ -51,6 +51,8 @@ public:
     void init();
     void clear();
     bool isTCP();
+    bool isSSL();
+
     QDateTime timestamp;
 
     bool receiveBeforeSend;
