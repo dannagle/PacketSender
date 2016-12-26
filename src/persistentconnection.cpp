@@ -8,6 +8,8 @@
 #include <QFile>
 #include <QDir>
 #include <QShortcut>
+#include <QCompleter>
+#include <QStringList>
 
 
 PersistentConnection::PersistentConnection(QWidget *parent) :
@@ -20,6 +22,9 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     setWindowFlags(this->windowFlags() | Qt::WindowMaximizeButtonHint);
 
     suppressSlot = true;
+    previousCommands.clear();
+
+
 
     QDEBUG();
     sendPacket.clear();
@@ -340,6 +345,17 @@ void PersistentConnection::on_asciiSendButton_clicked()
     asciiPacket.toIP = sendPacket.toIP;
     asciiPacket.port = sendPacket.port;
     asciiPacket.hexString = Packet::ASCIITohex(ascii);
+
+    previousCommands.append(ascii);
+    previousCommands.removeDuplicates();
+
+    QCompleter* completer = new QCompleter(previousCommands);
+
+    completer->setCaseSensitivity(Qt::CaseInsensitive);
+    completer->setCompletionMode(QCompleter::PopupCompletion);
+    ui->asciiLineEdit->setCompleter(completer);
+
+
 
     QDEBUGVAR(asciiPacket.hexString);
     if(ui->appendCRcheck->isChecked()) {

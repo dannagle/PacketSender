@@ -58,6 +58,9 @@
            <property name="placeholderText">
             <string>ASCII representation</string>
            </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="4" column="0">
@@ -71,6 +74,9 @@
           <widget class="QLineEdit" name="packetHexEdit">
            <property name="placeholderText">
             <string>HEX representation</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -91,6 +97,9 @@
             <widget class="QLineEdit" name="packetIPEdit">
              <property name="placeholderText">
               <string>IPv4, IPv6, DNS Lookup</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -115,6 +124,9 @@
              <property name="placeholderText">
               <string>1 to 65535</string>
              </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
            <item>
@@ -134,6 +146,9 @@
              </property>
              <property name="placeholderText">
               <string>0.0/blank off</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
              </property>
             </widget>
            </item>

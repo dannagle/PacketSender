@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QTimer>
 #include <QList>
+#include <QStringList>
 
 #include "packet.h"
 #include "tcpthread.h"
@@ -69,6 +70,8 @@ private:
     bool stopTimer;
     bool useraw;
     bool suppressSlot;
+    QStringList previousCommands;
+
 
     void loadComboBox();
     void loadTrafficView();
