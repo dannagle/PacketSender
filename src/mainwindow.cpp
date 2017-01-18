@@ -902,7 +902,7 @@ void MainWindow::on_packetIPEdit_lostFocus()
             ui->packetIPEdit->setText("");
             ui->packetIPEdit->setPlaceholderText("Invalid Address / DNS failed");
         } else {
-            ui->packetIPEdit->setText(info.addresses().at(0).toString());
+            //ui->packetIPEdit->setText(info.addresses().at(0).toString());
         }
     }
 }
@@ -973,7 +973,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             if (info.error() == QHostInfo::NoError)
             {
 
-                updatePacket.toIP = (info.addresses().at(0).toString());
+                updatePacket.toIP = newText;
             }
 
         }
