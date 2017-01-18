@@ -302,7 +302,9 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
     if(ui->logTrafficCheck->isChecked())
     {
-        packetsLogged.append(logPacket);
+        if(!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty()) {
+            packetsLogged.append(logPacket);
+        }
     }
 
 }

@@ -92,6 +92,9 @@ void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket) {
         tcpPacketreply.timestamp = QDateTime::currentDateTime();
         tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
         tcpPacketreply.tcpOrUdp = "TCP";
+        if(clientConnection->isEncrypted()) {
+            tcpPacketreply.tcpOrUdp = "SSL";
+        }
         tcpPacketreply.fromIP = "You (Response)";
         if(ipMode < 6) {
             tcpPacketreply.toIP = Packet::removeIPv6Mapping(sock->peerAddress());
@@ -163,6 +166,9 @@ void TCPThread::persistentConnectionLoop()
                 tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                 tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                 tcpRCVPacket.tcpOrUdp = "TCP";
+                if(clientConnection->isEncrypted()) {
+                    tcpRCVPacket.tcpOrUdp = "SSL";
+                }
 
                 if(ipMode < 6) {
                     tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
@@ -194,6 +200,10 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
         tcpPacket.tcpOrUdp = "TCP";
+        if(clientConnection->isEncrypted()) {
+            tcpPacket.tcpOrUdp = "SSL";
+        }
+
         if(ipMode < 6) {
             tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
 
@@ -403,6 +413,9 @@ void TCPThread::run()
     sock.waitForReadyRead(5000); //initial packet
     data = sock.readAll();
     tcpPacket.hexString = Packet::byteArrayToHex(data);
+    if(sock.isEncrypted()) {
+        tcpPacket.tcpOrUdp = "SSL";
+    }
     emit packetSent(tcpPacket);
     writeResponse(&sock, tcpPacket);
 
@@ -457,6 +470,9 @@ void TCPThread::sendPersistant(Packet sendpacket)
 
         sendpacket.port = clientConnection->peerPort();
         sendpacket.fromPort = clientConnection->localPort();
+        if(clientConnection->isEncrypted()) {
+            sendpacket.tcpOrUdp = "SSL";
+        }
         emit packetSent(sendpacket);
     }
 }
