@@ -52,6 +52,7 @@ public:
     void clear();
     bool isTCP();
     bool isSSL();
+    bool isUDP();
 
     QDateTime timestamp;
 

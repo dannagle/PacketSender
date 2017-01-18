@@ -52,10 +52,15 @@ bool Packet::isSSL()
    return (tcpOrUdp.trimmed().toLower() == "ssl");
 }
 
+bool Packet::isUDP()
+{
+   return ((tcpOrUdp.trimmed().toLower() == "udp"));
+}
+
 
 bool Packet::isTCP()
 {
-   return (tcpOrUdp.trimmed().toLower() == "tcp");
+   return ((tcpOrUdp.trimmed().toLower() == "tcp") || isSSL());
 }
 
 float Packet::oneDecimal(float value) {

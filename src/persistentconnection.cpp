@@ -340,7 +340,7 @@ void PersistentConnection::on_asciiSendButton_clicked()
     Packet asciiPacket;
     asciiPacket.clear();
 
-    asciiPacket.tcpOrUdp = "TCP";
+    asciiPacket.tcpOrUdp = sendPacket.tcpOrUdp;
     asciiPacket.fromIP = "You";
     asciiPacket.toIP = sendPacket.toIP;
     asciiPacket.port = sendPacket.port;

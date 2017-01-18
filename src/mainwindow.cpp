@@ -993,7 +993,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
     }
     if(datatype == "tcpOrUdp")
     {
-        if(newText.trimmed().toUpper() == "TCP" || newText.trimmed().toUpper() == "UDP" )
+        if((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL" ))
         {
             updatePacket.tcpOrUdp = newText.trimmed().toUpper();
         }

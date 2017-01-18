@@ -381,7 +381,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     address.setAddress(sendpacket.toIP);
 
 
-    if(sendpacket.tcpOrUdp.toUpper() == "TCP")
+    if(sendpacket.isTCP())
     {
         QDEBUG() << "Send this packet:" << sendpacket.name;
 
@@ -407,7 +407,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.timestamp = QDateTime::currentDateTime();
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
-    if(sendpacket.tcpOrUdp.toUpper() == "UDP")
+    if(sendpacket.isUDP())
     {
         sendpacket.fromPort = getUDPPort();
         QDEBUG() << "Sending data to :" << sendpacket.toIP << ":" << sendpacket.port;

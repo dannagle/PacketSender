@@ -386,7 +386,7 @@ void TCPThread::run()
     data.clear();
     tcpPacket.timestamp = QDateTime::currentDateTime();
     tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
-    tcpPacket.tcpOrUdp = "TCP";
+    tcpPacket.tcpOrUdp = sendPacket.tcpOrUdp;
 
     if(ipMode < 6) {
         tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
