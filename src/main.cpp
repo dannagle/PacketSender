@@ -113,6 +113,9 @@ int main(int argc, char *argv[])
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
 
+        QCommandLineOption sslOption(QStringList() << "s" << "ssl", "Send SSL (secure).");
+        parser.addOption(sslOption);
+
         // A boolean option with multiple names (-f, --force)
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
@@ -142,6 +145,7 @@ int main(int argc, char *argv[])
         unsigned int bind = parser.value(bindPortOption).toUInt();
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
+        bool ssl = parser.isSet(sslOption);
         bool ipv6  = false;
 
         QString name = parser.value(nameOption);
@@ -191,6 +195,10 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
             udp = false;
         }
+        if(tcp && ssl) {
+            OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
+            tcp = false;
+        }
 
         if(!filePath.isEmpty() && !QFile::exists(filePath)) {
             OUTIF() << "Error: specified path "<< filePath <<" does not exist.";
@@ -215,7 +223,7 @@ int main(int argc, char *argv[])
             hex = true;
         }
 
-        if(!tcp && !udp) {
+        if(!tcp && !udp && !ssl) {
             tcp = true;
         }
 
@@ -239,14 +247,21 @@ int main(int argc, char *argv[])
                 if(address.isEmpty()) {
                     address  = sendPacket.toIP;
                 }
-                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption)) {
+                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption)) {
 
+                    tcp=false;
+                    udp = false;
+                    ssl = true;
                     if(sendPacket.tcpOrUdp.toUpper() == "TCP") {
                         tcp=true;
-                        udp = false;
-                    } else {
-                        tcp=false;
-                        udp = true;
+                    }
+
+                    if(sendPacket.tcpOrUdp.toUpper() == "UDP") {
+                        udp=true;
+                    }
+
+                    if(sendPacket.tcpOrUdp.toUpper() == "SSL") {
+                        ssl=true;
                     }
 
                 }
@@ -263,7 +278,7 @@ int main(int argc, char *argv[])
             QFile dataFile(filePath);
             if(dataFile.open(QFile::ReadOnly)) {
 
-                if(tcp) {
+                if(tcp || ssl) {
                     QByteArray dataArray = dataFile.read(1024*1024*10);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
@@ -293,11 +308,19 @@ int main(int argc, char *argv[])
         QDEBUGVAR(bind);
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
+        QDEBUGVAR(ssl);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
 
         //NOW LETS DO THIS!
+
+        if(ssl && !QSslSocket::supportsSsl()) {
+            OUTIF() << "Error: This computer does not have a native SSL library.";
+            OUTPUT();
+            return -1;
+        }
+
 
         if(ascii) { //pure ascii
             dataString = Packet::byteArrayToHex(data.toLatin1());
@@ -344,20 +367,46 @@ int main(int argc, char *argv[])
         QTime now = QTime::currentTime();
         now.start();
 
-        if(tcp) {
-            QTcpSocket sock;
 
+        if(tcp || ssl) {
+            QSslSocket sock;
 
             if(ipv6) {
                 sock.bind(QHostAddress::AnyIPv6, bind);
             } else {
                 sock.bind(QHostAddress::AnyIPv4, bind);
             }
-            sock.connectToHost(addy, port);
+
+            if(tcp) {
+                sock.connectToHost(addy, port);
+            }
+
+            if(ssl) {
+                sock.connectToHostEncrypted(address,  port);
+                sock.ignoreSslErrors();
+            }
             sock.waitForConnected(1000);
+
+            if(ssl) {
+                sock.waitForEncrypted(5000);
+            }
+
             if(sock.state() == QAbstractSocket::ConnectedState)
             {
-                OUTIF() << "TCP (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+                QString connectionType = "TCP";
+                if(sock.isEncrypted()) {
+                    connectionType = "Encrypted SSL";
+                } else {
+                    if(ssl) {
+                        OUTIF() << "Warning: This connection is not encrypted.";
+                    }
+                }
+
+                if(ssl) {
+                    QDEBUGVAR(sock.isEncrypted());
+                }
+
+                OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
                 bytesWriten = sock.write(sendData);
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);

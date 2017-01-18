@@ -201,6 +201,15 @@
                 <normaloff>:/icons/tx_udp.png</normaloff>:/icons/tx_udp.png</iconset>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>SSL</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_ssl.png</normaloff>:/icons/tx_ssl.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -396,7 +405,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
