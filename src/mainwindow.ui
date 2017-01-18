@@ -435,26 +435,46 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/power-off.png</normaloff>:/icons/power-off.png</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/cog.png</normaloff>:/icons/cog.png</iconset>
+   </property>
    <property name="text">
     <string>Settings</string>
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/question-circle.png</normaloff>:/icons/question-circle.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="actionImport_Packets">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
+   </property>
    <property name="text">
     <string>Import Packets</string>
    </property>
   </action>
   <action name="actionExport_Packets">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
+   </property>
    <property name="text">
     <string>Export Packets</string>
    </property>
@@ -465,6 +485,10 @@
    </property>
   </action>
   <action name="actionSubnet_Calculator">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/calculator.png</normaloff>:/icons/calculator.png</iconset>
+   </property>
    <property name="text">
     <string>Subnet Calculator</string>
    </property>
