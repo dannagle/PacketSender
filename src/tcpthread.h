@@ -11,7 +11,7 @@
 #define TCPTHREAD_H
 
 #include <QThread>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include "packet.h"
 
 class TCPThread : public QThread
@@ -48,8 +48,8 @@ private:
     QString text;
     Packet sendPacket;
     void init();
-    void writeResponse(QTcpSocket *sock, Packet tcpPacket);
-    QTcpSocket * clientConnection;
+    void writeResponse(QSslSocket *sock, Packet tcpPacket);
+    QSslSocket * clientConnection;
 
     void persistentConnectionLoop();
 };

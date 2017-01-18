@@ -60,7 +60,7 @@ void TCPThread::wasdisconnected() {
     QDEBUG();
 }
 
-void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
+void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket) {
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     bool sendResponse = settings.value("sendReponse", false).toBool();
@@ -282,7 +282,7 @@ void TCPThread::run()
 
     if(sendFlag) {
         QDEBUG() << "We are threaded sending!";
-        clientConnection = new QTcpSocket(this);
+        clientConnection = new QSslSocket(this);
 
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
@@ -294,37 +294,39 @@ void TCPThread::run()
             sendPacket.fromPort = clientConnection->localPort();
         }
 
-        /*
-         SSL Version...
+        // SSL Version...
 
+        if(sendPacket.isSSL()) {
+            if(ipMode > 4) {
+                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
 
-        if(ipMode > 4) {
-            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+            } else {
+                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
 
+            }
+
+            QDEBUG() << "Telling SSL to ignore errors";
+            clientConnection->ignoreSslErrors();
+            QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
+            QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
+            QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
+
+            QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
         } else {
-            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+
+            if(ipMode > 4) {
+                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+
+            } else {
+                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+            }
+
+            clientConnection->waitForConnected(5000);
+
 
         }
-
-        QDEBUG() << "Telling SSL to ignore errors";
-        clientConnection->ignoreSslErrors();
-        QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
-        QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
-        QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
-
-        QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
-
-        */
-
-
-        if(ipMode > 4) {
-            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
-
-        } else {
-            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
-
-        }
-        clientConnection->waitForConnected(5000);
 
 
         if(sendPacket.delayAfterConnect > 0) {
@@ -372,7 +374,7 @@ void TCPThread::run()
     }
 
 
-    QTcpSocket sock;
+    QSslSocket sock;
     sock.setSocketDescriptor(socketDescriptor);
 
     connect(&sock, SIGNAL(disconnected()),
