@@ -164,7 +164,10 @@ QIcon Packet::getIcon()
             return myIcon;
         }
 
-    } else {
+    }
+
+
+    if(tcpOrUdp.toUpper() == "TCP") {
 
         if(fromIP.toUpper().contains("YOU"))
         {
@@ -176,6 +179,24 @@ QIcon Packet::getIcon()
         }
 
     }
+
+
+    if(tcpOrUdp.toUpper() == "SSL") {
+
+        if(fromIP.toUpper().contains("YOU"))
+        {
+            QIcon myIcon(SSLSENDICON);
+            return myIcon;
+        } else {
+            QIcon myIcon(SSLRXICON);
+            return myIcon;
+        }
+
+    }
+
+    //I don't know what it is...
+    QIcon myIcon(TCPRXICON);
+    return myIcon;
 
 }
 

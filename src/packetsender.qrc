@@ -21,5 +21,7 @@
         <file>pslogo128.png</file>
         <file>pslogo256.png</file>
         <file>dannagle32.jpg</file>
+        <file>icons/rx_ssl.png</file>
+        <file>icons/tx_ssl.png</file>
     </qresource>
 </RCC>

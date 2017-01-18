@@ -29,6 +29,9 @@
 #define TCPSENDICON ":icons/tx_tcp.png"
 #define UDPRXICON ":icons/rx_udp.png"
 #define TCPRXICON ":icons/rx_tcp.png"
+#define SSLRXICON ":icons/rx_ssl.png"
+#define SSLSENDICON ":icons/tx_ssl.png"
+
 #define PSLOGO ":pslogo.png"
 #define UPDOWNICON ":icons/moveupdown.png"
 
