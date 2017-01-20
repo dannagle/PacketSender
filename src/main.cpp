@@ -34,9 +34,13 @@ int main(int argc, char *argv[])
 {
     int debugMode = DEBUGMODE;
 
+    if(QFile::exists("DEBUGMODE")) {
+        debugMode = 1;
+    }
 
     if(debugMode)
     {
+        QDEBUG() << "run-time debug mode";
 
     } else {
         qInstallMessageHandler(myMessageOutputDisable);
