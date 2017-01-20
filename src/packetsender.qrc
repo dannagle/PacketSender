@@ -30,5 +30,6 @@
         <file>icons/power-off.png</file>
         <file>icons/question-circle.png</file>
         <file>icons/upload.png</file>
+        <file>icons/heart.png</file>
     </qresource>
 </RCC>
