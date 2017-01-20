@@ -19,6 +19,7 @@
 
 #include <QSsl>
 #include <QSslSocket>
+#include <QSslCipher>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -341,6 +342,18 @@ void TCPThread::run()
                     errorPacket.errorString = sError.errorString();
                     emit packetSent(errorPacket);
                 }
+            }
+
+            if(clientConnection->isEncrypted()) {
+                QSslCipher cipher = clientConnection->sessionCipher();
+                Packet errorPacket = sendPacket;
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
+                emit packetSent(errorPacket);
+            } else {
+                Packet errorPacket = sendPacket;
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Not Encrypted!";
             }
 
 
