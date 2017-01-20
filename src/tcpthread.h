@@ -26,7 +26,8 @@ public:
     void run();
     bool sendFlag;
     bool incomingPersistent;
-    bool closeRequest;
+    bool closeRequest;   
+    bool isEncrypted();
 
 signals:
     void error(QTcpSocket::SocketError socketError);
@@ -50,6 +51,7 @@ private:
     void init();
     void writeResponse(QSslSocket *sock, Packet tcpPacket);
     QSslSocket * clientConnection;
+    bool insidePersistent;
 
     void persistentConnectionLoop();
 };

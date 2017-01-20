@@ -29,6 +29,7 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     sendFlag = false;
     incomingPersistent = false;
     sendPacket.clear();
+    insidePersistent = false;
 
 
 }
@@ -38,6 +39,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
 {
     sendFlag = true;
     incomingPersistent = false;
+    insidePersistent = false;
 
 
 }
@@ -133,6 +135,7 @@ void TCPThread::persistentConnectionLoop()
 
     int count = 0;
     while(clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+        insidePersistent = true;
 
 
         if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
@@ -315,13 +318,32 @@ void TCPThread::run()
 
             }
 
-            QDEBUG() << "Telling SSL to ignore errors";
-            clientConnection->ignoreSslErrors();
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+            if(settings.value("ignoreSSLCheck", true).toBool()) {
+                QDEBUG() << "Telling SSL to ignore errors";
+                clientConnection->ignoreSslErrors();
+            }
+
+
             QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
             QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
             QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
 
             QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
+
+            QList<QSslError> sslErrorsList  = clientConnection->sslErrors();
+            Packet errorPacket = sendPacket;
+            if(sslErrorsList.size() > 0) {
+                QSslError sError;
+                foreach (sError, sslErrorsList) {
+                    Packet errorPacket = sendPacket;
+                    errorPacket.hexString.clear();
+                    errorPacket.errorString = sError.errorString();
+                    emit packetSent(errorPacket);
+                }
+            }
+
+
         } else {
 
 
@@ -447,8 +469,18 @@ void TCPThread::run()
         writeResponse(&sock, tcpPacket);
     }
 */
+    insidePersistent = false;
     sock.disconnectFromHost();
     sock.close();
+}
+
+bool TCPThread::isEncrypted()
+{
+    if(insidePersistent && !closeRequest) {
+        return clientConnection->isEncrypted();
+    } else {
+        return false;
+    }
 }
 
 void TCPThread::sendPersistant(Packet sendpacket)

@@ -158,6 +158,7 @@ void PersistentConnection::connectThreadSignals()
 void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
 {
 
+
     setWindowTitle("TCP://You:" + QString::number(portNum));
     thread = thethread;
     QApplication::processEvents();
@@ -219,6 +220,14 @@ void PersistentConnection::refreshTimerTimeout() {
 //    QDEBUG();
 
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
+
+    if(thread->isEncrypted()) {
+        QString winTitle = windowTitle();
+        if(winTitle.startsWith("TCP://")) {
+            winTitle.replace("TCP://", "SSL://");
+            setWindowTitle(winTitle);
+        }
+    }
 
 
     qint64 hours = diff / (1000 * 60 * 60);

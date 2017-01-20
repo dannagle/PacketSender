@@ -422,6 +422,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionDonate_Thank_You"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -491,6 +492,11 @@
    </property>
    <property name="text">
     <string>Subnet Calculator</string>
+   </property>
+  </action>
+  <action name="actionDonate_Thank_You">
+   <property name="text">
+    <string>Donate (Thank You!)</string>
    </property>
   </action>
  </widget>

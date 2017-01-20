@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -121,6 +121,13 @@
            <widget class="QCheckBox" name="rolling500entryCheck">
             <property name="text">
              <string>Rolling 100-entry traffic log</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="restoreSessionCheck">
+            <property name="text">
+             <string>Restore previous session</string>
             </property>
            </widget>
           </item>
@@ -284,7 +291,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Additional TCP/UDP Settings</string>
+          <string>Additional UDP/TCP/SSL Settings</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -369,6 +376,20 @@
            <widget class="QCheckBox" name="asciiEditTranslateEBCDICCheck">
             <property name="text">
              <string>Enable Ctrl (or Cmd)+ E  to translate ASCII field to EBCDIC</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="resolveDNSOnInputCheck">
+            <property name="text">
+             <string>Resolve DNS during input (old method)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="ignoreSSLCheck">
+            <property name="text">
+             <string>Ignore SSL Errors (Wrong host, expired, self-signed, etc)</string>
             </property>
            </widget>
           </item>

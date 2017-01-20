@@ -77,6 +77,13 @@ Settings::Settings(QWidget *parent) :
 
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
 
+    ui->ignoreSSLCheck->setChecked(settings.value("ignoreSSLCheck", true).toBool());
+
+    ui->restoreSessionCheck->setChecked(settings.value("restoreSessionCheck", true).toBool());
+
+    ui->resolveDNSOnInputCheck->setChecked(settings.value("resolveDNSOnInputCheck", false).toBool());
+
+
     ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
 
     ui->udpServerPortEdit->setText(settings.value("udpPort","55056").toString());
@@ -179,6 +186,14 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());
+
+    settings.setValue("resolveDNSOnInputCheck", ui->resolveDNSOnInputCheck->isChecked());
+
+    settings.setValue("ignoreSSLCheck", ui->ignoreSSLCheck->isChecked());
+
+    settings.setValue("restoreSessionCheck", ui->restoreSessionCheck->isChecked());
+
+
 
     settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());

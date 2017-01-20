@@ -143,6 +143,8 @@ private slots:
 
     void on_loadFileButton_clicked();
 
+    void on_actionDonate_Thank_You_triggered();
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
@@ -176,6 +178,7 @@ private:
     bool asciiEditTranslateEBCDIC;
 
     void setIPMode();
+    void saveSession(Packet sessionPacket);
 };
 
 #endif // MAINWINDOW_H

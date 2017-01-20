@@ -111,6 +111,24 @@ MainWindow::MainWindow(QWidget *parent) :
     packetNetwork.persistentConnectCheck = ui->persistentTCPCheck->isChecked();
 
 
+    //load last session
+    if(settings.value("restoreSessionCheck", true).toBool()) {
+        QDEBUG() << "Restoring last session";
+        ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
+        ui->packetIPEdit->setText(settings.value("packetIPEditSession","").toString());
+        ui->packetHexEdit->setText(settings.value("packetHexEditSession","").toString());
+        ui->udptcpComboBox->findText(settings.value("udptcpComboBoxSession","TCP").toString());
+        ui->packetPortEdit->setText(settings.value("packetPortEditSession","").toString());
+        ui->resendEdit->setText(settings.value("resendEditSession","").toString());
+
+        if(!ui->packetHexEdit->text().isEmpty()) {
+            on_packetHexEdit_lostFocus();
+        }
+
+    }
+
+
+
 
     packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
 
@@ -716,6 +734,21 @@ void MainWindow::on_savePacketButton_clicked()
 
 }
 
+void MainWindow::saveSession(Packet sessionPacket)
+{
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    settings.setValue("packetNameEditSession", ui->packetNameEdit->text());
+    settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
+    settings.setValue("packetHexEditSession", ui->packetHexEdit->text());
+    settings.setValue("udptcpComboBoxSession", ui->udptcpComboBox->currentText());
+    settings.setValue("packetPortEditSession", ui->packetPortEdit->text());
+    settings.setValue("resendEditSession", ui->resendEdit->text());
+
+}
+
+
 void MainWindow::on_testPacketButton_clicked()
 {
     Packet testPacket;
@@ -759,6 +792,8 @@ void MainWindow::on_testPacketButton_clicked()
     testPacket.port = ui->packetPortEdit->text().toUInt();
     testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
 
+    //Save Session!
+    saveSession(testPacket);
 
     if(testPacket.toIP.isEmpty()) {
 
@@ -902,7 +937,12 @@ void MainWindow::on_packetIPEdit_lostFocus()
             ui->packetIPEdit->setText("");
             ui->packetIPEdit->setPlaceholderText("Invalid Address / DNS failed");
         } else {
-            //ui->packetIPEdit->setText(info.addresses().at(0).toString());
+
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+            if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
+                ui->packetIPEdit->setText(info.addresses().at(0).toString());
+            }
         }
     }
 }
@@ -974,6 +1014,12 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             {
 
                 updatePacket.toIP = newText;
+
+                QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+                if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
+                    updatePacket.toIP = (info.addresses().at(0).toString());
+                }
             }
 
         }
@@ -1764,4 +1810,11 @@ void MainWindow::on_loadFileButton_clicked()
     }
 
 
+}
+
+void MainWindow::on_actionDonate_Thank_You_triggered()
+{
+
+    //Open URL in browser
+    QDesktopServices::openUrl(QUrl("http://dannagle.com/paypal"));
 }
