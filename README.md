@@ -77,8 +77,8 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 ### SSL
 Packet Sender supports establishing encrypted connections over SSL. This is supported in the GUI and on the command line. Some notes on this:
 
-* The certificate negotiation is handled transparently.
-* By default, Packet Sender ignores all SSL errors (expired cert, wrong host name, weak encryption, etc).
+* The certificate negotiation is handled immediately during connection.
+* By default, Packet Sender ignores all SSL errors (expired cert, wrong host name, self-signed, etc).
 * Packet Sender outputs the cert negotiation progress in to the traffic log.
 * Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
 
@@ -139,13 +139,15 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 * IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch.
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
-* Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
+* Copy to the clipboard the raw packet data (default). If your data has a large amount of non-ASCII characters, you may prefer a translated version.
 * Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
 * Traffic log can be set to roll at 100 entries.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
 * Enable keyboard shortcut for ASCII --> EBCDIC translation.
+* Resolve DNS during input. The default is to resolve DNS just before sending.
+* Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection.
 
 
 ## Documentation (Command Line)
