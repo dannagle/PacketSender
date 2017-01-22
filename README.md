@@ -111,6 +111,7 @@ Packet Sender will swap the macro with real values before sending.
 
 ### Persistent TCP and SSL
 Packet Sender supports persistent TCP and SSL connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
+
 ![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.png)
 
 * Any number of persistent connections can be created.
