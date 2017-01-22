@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -192,7 +192,7 @@
             <item>
              <widget class="QLineEdit" name="udpServerPortEdit">
               <property name="text">
-               <string>55005</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
@@ -217,11 +217,25 @@
             <item>
              <widget class="QLineEdit" name="tcpServerPortEdit">
               <property name="text">
-               <string>55006</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Set the server ports to 0 if you want to run multiple Packet Sender instances.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>   </string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="sendResponseSettingsCheck">

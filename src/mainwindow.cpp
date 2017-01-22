@@ -1524,9 +1524,9 @@ void MainWindow::on_toClipboardButton_clicked()
 
     QMessageBox msgBox;
 
-    if(settings.value("copyUnformattedCheck", false).toBool()) {
+    if(settings.value("copyUnformattedCheck", true).toBool()) {
         clipboard->setText(QString(savePacket.getByteArray()));
-        msgBox.setText("Packet sent to your clipboard (raw data).");
+        msgBox.setText("Raw packet data sent to your clipboard. \nChange the settings if you prefer translated data.");
     } else {
         clipboard->setText(clipString);
         msgBox.setText("Packet sent to your clipboard (translated).");

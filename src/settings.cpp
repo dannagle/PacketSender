@@ -97,7 +97,7 @@ Settings::Settings(QWidget *parent) :
     ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
 
     ui->rolling500entryCheck->setChecked(settings.value("rolling500entryCheck", false).toBool());
-    ui->copyUnformattedCheck->setChecked(settings.value("copyUnformattedCheck", false).toBool());
+    ui->copyUnformattedCheck->setChecked(settings.value("copyUnformattedCheck", true).toBool());
 
 
     ui->sendResponseSettingsCheck->setChecked(settings.value("sendReponse", false).toBool());
