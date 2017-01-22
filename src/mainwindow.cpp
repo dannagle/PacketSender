@@ -946,6 +946,8 @@ void MainWindow::on_packetIPEdit_lostFocus()
 
             if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
                 ui->packetIPEdit->setText(info.addresses().at(0).toString());
+            } else {
+                statusBarMessage(ipPacket + " --> " + info.addresses().at(0).toString());
             }
         }
     }
@@ -1023,8 +1025,9 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
 
                 if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
                     updatePacket.toIP = (info.addresses().at(0).toString());
-                }
-            }
+                } else {
+                    statusBarMessage(newText + " --> " + info.addresses().at(0).toString());
+                }            }
 
         }
 
