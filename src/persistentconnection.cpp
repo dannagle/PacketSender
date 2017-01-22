@@ -329,7 +329,7 @@ void PersistentConnection::loadTrafficView() {
 
 void PersistentConnection::packetSentSlot(Packet pkt) {
 
-    QDEBUGVAR(pkt.hexString);
+    QDEBUGVAR(pkt.hexString.size());
     trafficList.append(pkt);
     loadTrafficView();
 

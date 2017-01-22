@@ -117,7 +117,11 @@ MainWindow::MainWindow(QWidget *parent) :
         //ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
         ui->packetIPEdit->setText(settings.value("packetIPEditSession","").toString());
         ui->packetHexEdit->setText(settings.value("packetHexEditSession","").toString());
-        ui->udptcpComboBox->findText(settings.value("udptcpComboBoxSession","TCP").toString());
+        QString methodchoice = settings.value("udptcpComboBoxSession","TCP").toString();
+        int findtext = ui->udptcpComboBox->findText(methodchoice);
+        if(findtext > -1) {
+            ui->udptcpComboBox->setCurrentIndex(findtext);
+        }
         ui->packetPortEdit->setText(settings.value("packetPortEditSession","").toString());
         ui->resendEdit->setText(settings.value("resendEditSession","").toString());
 
