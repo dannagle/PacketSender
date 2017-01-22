@@ -169,18 +169,20 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -x, --hex 	Parse data as hex (default).
     -a, --ascii 	Parse data as mixed-ascii (like the GUI).
     -A, --ASCII 	Parse data as pure ascii (no \xx translation).
-    -w, --wait <milliseconds> 	Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
+    -w, --wait <ms> Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
     -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.
     -b, --bind <port> 	Bind port. Default is dynamic.
     -t, --tcp 	Send TCP (default).
-    -s, --ssl 	Send SSL.
-    -u, --udp 	Send UDP.
+    -s, --ssl   Send SSL and ignore errors.
+    -S, --SSL   Send SSL and stop for errors.
+    -u, --udp   Send UDP.    
     -n, --name <name> 	Send previously saved packet named <name>. Other options overrides saved packet parameters.
 
     -Arguments:
     -address 	Destination address. Optional for saved packet.
     -port 	Destination port. Optional for saved packet.
     -data 	Data to send. Optional for saved packet.
+
 
 ### Example CLI
 
@@ -191,6 +193,18 @@ The command line system in Packet Sender follows the same pattern as other Linux
     Response HEX:53 53 48 2D 32 2E 30 2D 4F 70 65 6E 53 53 48 5F 35 2E 33 70 31 20 44 65 62 69 61 6E 2D 33 75 62 75 6E 74 75 33 2E 31 2E 49 53 2E 31 30 2E 30 34 0D 0A
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
+
+### Example CLI using SSL and ignoring errors
+The command line has the option to ignore or abandon on SSL errors. The default is to ignore.
+
+    packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
+    SSL Error: The certificate has expired
+    SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
+    Cipher: Encrypted with AES(128)
+
+    Response Time:3:24:55.695 pm
+    Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
+    Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
 
 ## Building Packet Sender
 The only dependency is Qt SDK. Here is how to build the app.
