@@ -70,7 +70,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
-  * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB. 
+  * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB.
 * An optional response can be sent. The same response is used for TCP and UDP.
 
 
@@ -110,8 +110,9 @@ Packet Sender supports these macros when sending responses:
 Packet Sender will swap the macro with real values before sending.
 
 ### Persistent TCP and SSL
-Packet Sender supports persistent connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
+Packet Sender supports persistent TCP and SSL connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
 ![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.png)
+
 * Any number of persistent connections can be created.
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
