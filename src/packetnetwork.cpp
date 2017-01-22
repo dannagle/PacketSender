@@ -133,7 +133,7 @@ void PacketNetwork::init()
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    int udpPort = settings.value("udpPort", 55056).toInt();
+    int udpPort = settings.value("udpPort", 0).toInt();
     int ipMode = settings.value("ipMode", 4).toInt();
 
     bool bindResult = udpSocket->bind(
@@ -155,7 +155,7 @@ void PacketNetwork::init()
 
     qDebug() << __FILE__ << "/" <<__LINE__ << "udpSocket bind: " << bindResult;
 
-    int tcpPort = settings.value("tcpPort", 55056).toInt();
+    int tcpPort = settings.value("tcpPort", 0).toInt();
 
     qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(
                     IPV4_OR_IPV6
