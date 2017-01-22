@@ -221,9 +221,9 @@ void PersistentConnection::refreshTimerTimeout() {
 
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
 
-    if(thread->isEncrypted()) {
+    if(thread->isRunning() && !thread->closeRequest) {
         QString winTitle = windowTitle();
-        if(winTitle.startsWith("TCP://")) {
+        if(winTitle.startsWith("TCP://") && thread->isEncrypted()) {
             winTitle.replace("TCP://", "SSL://");
             setWindowTitle(winTitle);
         }

@@ -238,7 +238,7 @@ void TCPThread::persistentConnectionLoop()
             clientConnection->disconnectFromHost();
         }
 
-        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.asciiString();
+        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
 
         if(sendPacket.receiveBeforeSend) {
             if(!tcpPacket.hexString.isEmpty()) {
