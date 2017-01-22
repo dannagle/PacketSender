@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //load last session
     if(settings.value("restoreSessionCheck", true).toBool()) {
         QDEBUG() << "Restoring last session";
-        ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
+        //ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
         ui->packetIPEdit->setText(settings.value("packetIPEditSession","").toString());
         ui->packetHexEdit->setText(settings.value("packetHexEditSession","").toString());
         ui->udptcpComboBox->findText(settings.value("udptcpComboBoxSession","TCP").toString());
@@ -739,7 +739,7 @@ void MainWindow::saveSession(Packet sessionPacket)
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    settings.setValue("packetNameEditSession", ui->packetNameEdit->text());
+    //settings.setValue("packetNameEditSession", ui->packetNameEdit->text());
     settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
     settings.setValue("packetHexEditSession", ui->packetHexEdit->text());
     settings.setValue("udptcpComboBoxSession", ui->udptcpComboBox->currentText());
