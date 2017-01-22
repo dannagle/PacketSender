@@ -174,7 +174,11 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 
 void PersistentConnection::init() {
 
-    setWindowTitle("TCP://"+sendPacket.toIP + ":" + QString::number(sendPacket.port));
+    QString tcpOrSSL= "TCP";
+    if(sendPacket.isSSL()) {
+        tcpOrSSL = "SSL";
+    }
+    setWindowTitle(tcpOrSSL +"://"+sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
     thread = new TCPThread(sendPacket, this);
 
@@ -228,6 +232,7 @@ void PersistentConnection::refreshTimerTimeout() {
             setWindowTitle(winTitle);
         }
     }
+
 
 
     qint64 hours = diff / (1000 * 60 * 60);

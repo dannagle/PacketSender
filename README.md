@@ -2,7 +2,7 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
-Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
+Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. Packet Sender can also send SSL packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
 ## Uses
 
@@ -10,6 +10,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP and U
 * Test automation (using its command line tool)
 * Testing network APIs (using the built-in TCP and UDP clients)
 * Malware analysis (using the built-in UDP and TCP servers)
+* Troubleshooting secure connections (using the SSL client). 
 * Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 
@@ -65,7 +66,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
     * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.  
-    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct. 
+    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
@@ -179,9 +180,9 @@ The only dependency is Qt SDK. Here is how to build the app.
 1. Build! Qt is the only dependency!
 
 ### Build for Linux
-Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instuctions. 
+Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instuctions.
 
-If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided. 
+If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
 
 ```
 sudo apt-get update
