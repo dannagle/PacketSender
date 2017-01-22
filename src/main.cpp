@@ -12,6 +12,9 @@
 #include <QDesktopServices>
 #include <QCommandLineParser>
 #include <QHostInfo>
+#include <QSslError>
+#include <QList>
+#include <QSslCipher>
 
 #include "mainwindow.h"
 #define DEBUGMODE 0
@@ -104,7 +107,7 @@ int main(int argc, char *argv[])
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
                 "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
-                "milliseconds");
+                "ms");
         parser.addOption(waitOption);
 
         // An option with a value
@@ -124,8 +127,11 @@ int main(int argc, char *argv[])
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
 
-        QCommandLineOption sslOption(QStringList() << "s" << "ssl", "Send SSL (secure).");
+        QCommandLineOption sslOption(QStringList() << "s" << "ssl", "Send SSL and ignore errors.");
         parser.addOption(sslOption);
+
+        QCommandLineOption sslNoErrorOption(QStringList() << "S" << "SSL", "Send SSL and stop for errors.");
+        parser.addOption(sslNoErrorOption);
 
         // A boolean option with multiple names (-f, --force)
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
@@ -157,7 +163,10 @@ int main(int argc, char *argv[])
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
         bool ssl = parser.isSet(sslOption);
+        bool sslNoError = parser.isSet(sslNoErrorOption);
         bool ipv6  = false;
+
+        if(sslNoError) ssl = true;
 
         QString name = parser.value(nameOption);
 
@@ -165,6 +174,7 @@ int main(int argc, char *argv[])
 
 
         QString address = "";
+        QString addressOriginal = "";
         unsigned int port = 0;
 
         int argssize = args.size();
@@ -258,7 +268,7 @@ int main(int argc, char *argv[])
                 if(address.isEmpty()) {
                     address  = sendPacket.toIP;
                 }
-                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption)) {
+                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption) && !parser.isSet(sslNoErrorOption)) {
 
                     tcp=false;
                     udp = false;
@@ -320,6 +330,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
         QDEBUGVAR(ssl);
+        QDEBUGVAR(sslNoError);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
@@ -358,7 +369,15 @@ int main(int argc, char *argv[])
                 return -1;
             } else {
                 addy = info.addresses().at(0);
-                address = addy.toString();
+
+                if (QAbstractSocket::IPv6Protocol == addy.protocol())
+                {
+                   QDEBUG() << "Valid IPv6 address.";
+                   ipv6 = true;
+                }
+
+                //domain names are now on-demand connections.
+                //address = addy.toString();
             }
         }
 
@@ -394,30 +413,53 @@ int main(int argc, char *argv[])
 
             if(ssl) {
                 sock.connectToHostEncrypted(address,  port);
-                sock.ignoreSslErrors();
+                if(!sslNoError) {
+                    sock.ignoreSslErrors();
+                }
             }
             sock.waitForConnected(1000);
 
+            QList<QSslError> sslErrorsList; sslErrorsList.clear();
+
             if(ssl) {
                 sock.waitForEncrypted(5000);
+
+                QList<QSslError> sslErrorsList  = sock.sslErrors();
+
+
+                if(sslErrorsList.size() > 0) {
+                    QSslError sError;
+                    foreach (sError, sslErrorsList) {
+                        OUTIF() << "SSL Error: " << sError.errorString();
+                    }
+                }
             }
+
 
             if(sock.state() == QAbstractSocket::ConnectedState)
             {
                 QString connectionType = "TCP";
                 if(sock.isEncrypted()) {
-                    connectionType = "Encrypted SSL";
+                    connectionType = "SSL";
                 } else {
                     if(ssl) {
                         OUTIF() << "Warning: This connection is not encrypted.";
                     }
                 }
 
-                if(ssl) {
-                    QDEBUGVAR(sock.isEncrypted());
+                if(sslNoError && (sslErrorsList.size() > 0)) {
+                    OUTIF() << "Warning: Abandoning sending data because of SSL no error option.";
+                    dataString.clear();
+                    sendData.clear();
                 }
 
                 OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+                if(sock.isEncrypted()) {
+                    QSslCipher cipher = sock.sessionCipher();
+                    OUTIF() << "Cipher: Encrypted with " << cipher.encryptionMethod();
+                }
+
+
                 bytesWriten = sock.write(sendData);
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);
