@@ -421,6 +421,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
     <addaction name="actionDonate_Thank_You"/>
    </widget>
@@ -456,7 +457,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/question-circle.png</normaloff>:/icons/question-circle.png</iconset>
+     <normaloff>:/pslogo_bw.png</normaloff>:/pslogo_bw.png</iconset>
    </property>
    <property name="text">
     <string>About</string>
@@ -501,6 +502,20 @@
    </property>
    <property name="text">
     <string>Donate (Thank You!)</string>
+   </property>
+  </action>
+  <action name="actionDocumentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/question-circle.png</normaloff>:/icons/question-circle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Documentation</string>
    </property>
   </action>
  </widget>

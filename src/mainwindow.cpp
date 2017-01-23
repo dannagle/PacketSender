@@ -1640,6 +1640,12 @@ void MainWindow::on_actionAbout_triggered()
     about->show();
 }
 
+void MainWindow::on_actionHelp_triggered()
+{
+    //Open URL in browser
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
+}
+
 void MainWindow::on_actionSettings_triggered()
 {
     Settings settings;
