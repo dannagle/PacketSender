@@ -264,7 +264,7 @@ The Packet Sender web site is also open source.
 
 
 ## License
-GPL v2 or Later. [Contact me](http://dannagle.com/contact) if you require a different license.
+GPL v2 or Later. [Contact me](http://packetsender.com/contact) if you require a different license.
 
 
 ## Copyright
