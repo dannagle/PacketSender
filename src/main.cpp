@@ -63,7 +63,41 @@ int main(int argc, char *argv[])
 
 
 
-    if(argc > 1) {
+    bool gatekeeper = false;
+
+
+    //Upon first launch, Apple will assign a psn number and
+    //pass it as a command line argument.
+
+    //This is most often during the gatekeeper stage.
+
+    //It only does this on first launch. I still need to catch it though.
+
+    if(argc == 2) {
+
+        gatekeeper = true;
+
+        QString arg2 = QString(argv[1]);
+
+        //only the help and version should trigger
+        if(arg2.contains("-h")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("help")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("-v")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("version")) {
+            gatekeeper = false;
+        }
+
+    }
+
+
+
+    if((argc > 1) && !gatekeeper) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
 
