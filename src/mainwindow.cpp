@@ -42,31 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timeSinceLaunch();
 
-
-#ifndef CONSOLE_BUILD
-#ifdef Q_OS_WINDOWS
-
-
-    QStringList args = QApplication::arguments();
-    if(args.size() > 0) {
-
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Oops! You launched the GUI!");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("The \".com\" should only be used for command line Packet Sender");
-        msgBox.exec();
-
-    }
-
-#endif
-#endif
-    //create temp folders if not exist
-    QDir mdir;
-    mdir.mkpath(TEMPPATH);
-    mdir.mkpath(SETTINGSPATH);
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
@@ -255,6 +230,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
     QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
+
+
+    //Now that the UI is loaded, create the settings folders if they do not exist
+    QDir mdir;
+    mdir.mkpath(TEMPPATH);
+    mdir.mkpath(SETTINGSPATH);
 
 
     QDEBUG() << "Load time:" <<  timeSinceLaunch();

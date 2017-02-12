@@ -60,6 +60,9 @@ int main(int argc, char *argv[])
     QDEBUG() << "number of arguments:" << argc;
     QStringList args;
     QDEBUGVAR(RAND_MAX);
+
+
+
     if(argc > 1) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
@@ -568,6 +571,8 @@ int main(int argc, char *argv[])
 
 
     } else {
+
+
         QApplication a(argc, argv);
 
         QDEBUGVAR(args);
@@ -580,6 +585,7 @@ int main(int argc, char *argv[])
          //  qDebug() << "stylesheet: " << StyleSheet;
            a.setStyleSheet(StyleSheet);
         }
+
 
         MainWindow w;
 
