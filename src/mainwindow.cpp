@@ -232,6 +232,48 @@ MainWindow::MainWindow(QWidget *parent) :
     QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
 
 
+    QShortcut *field1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this);
+    QShortcut *field2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this);
+    QShortcut *field3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this);
+    QShortcut *field4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this);
+    QShortcut *field5 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this);
+    QShortcut *field6 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this);
+    QShortcut *field7 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this);
+    QShortcut *field8 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this);
+
+
+    if(!connect(field1, &QShortcut::activated, this, &MainWindow::shortcutkey1)) {
+        QDEBUG() << "field1 connection false";
+    }
+
+    if(!connect(field2, &QShortcut::activated, this, &MainWindow::shortcutkey2)) {
+        QDEBUG() << "field2 connection false";
+    }
+
+    if(!connect(field3, &QShortcut::activated, this, &MainWindow::shortcutkey3)) {
+        QDEBUG() << "field3 connection false";
+    }
+
+    if(!connect(field4, &QShortcut::activated, this, &MainWindow::shortcutkey4)) {
+        QDEBUG() << "field4 connection false";
+    }
+
+    if(!connect(field5, &QShortcut::activated, this, &MainWindow::shortcutkey5)) {
+        QDEBUG() << "field5 connection false";
+    }
+    if(!connect(field6, &QShortcut::activated, this, &MainWindow::shortcutkey6)) {
+        QDEBUG() << "field6 connection false";
+    }
+
+    if(!connect(field7, &QShortcut::activated, this, &MainWindow::shortcutkey7)) {
+        QDEBUG() << "field7 connection false";
+    }
+
+    if(!connect(field8, &QShortcut::activated, this, &MainWindow::on_testPacketButton_clicked)) {
+        QDEBUG() << "field8 connection false";
+    }
+
+
     //Now that the UI is loaded, create the settings folders if they do not exist
     QDir mdir;
     mdir.mkpath(TEMPPATH);
@@ -1068,6 +1110,14 @@ void MainWindow::poodlepic()
     BruceThePoodle *bruce = new BruceThePoodle(this);
     bruce->show();
 }
+
+void MainWindow::shortcutkey1() { ui->packetNameEdit->setFocus(); }
+void MainWindow::shortcutkey2() { ui->packetASCIIEdit->setFocus(); }
+void MainWindow::shortcutkey3() { ui->packetHexEdit->setFocus(); }
+void MainWindow::shortcutkey4() { ui->packetIPEdit->setFocus(); }
+void MainWindow::shortcutkey5() { ui->packetPortEdit->setFocus(); }
+void MainWindow::shortcutkey6() { ui->resendEdit->setFocus(); }
+void MainWindow::shortcutkey7() { ui->udptcpComboBox->setFocus(); }
 
 
 //packetSavedTableHeaders <<"Send" <<"Resend (s)"<< "Name" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";

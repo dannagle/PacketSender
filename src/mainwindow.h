@@ -64,7 +64,6 @@ signals:
 public slots:
     void toTrafficLog(Packet logPacket);
     void cancelResends();
-    void poodlepic();
     void applyNetworkSettings();
 
 
@@ -72,6 +71,19 @@ public slots:
     void toggleTCPServer();
     void toggleIPv4_IPv6();
     void ebcdicTranslate();
+
+    //shortcut keys... would be better if used lambda
+    void poodlepic();
+    void shortcutkey1();
+    void shortcutkey2();
+    void shortcutkey3();
+    void shortcutkey4();
+    void shortcutkey5();
+    void shortcutkey6();
+    void shortcutkey7();
+
+
+
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
