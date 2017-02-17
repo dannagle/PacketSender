@@ -7,7 +7,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP and U
 ## Uses
 
 * Controlling network-based devices in ways beyond their original apps
-* Test automation (using its command line tool)
+* Test automation (using its command line tool and/or hotkeys)
 * Testing network APIs (using the built-in TCP and UDP clients)
 * Malware analysis (using the built-in UDP and TCP servers)
 * Troubleshooting secure connections (using the SSL client).
@@ -74,7 +74,15 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 * An optional response can be sent. The same response is used for TCP and UDP.
 
 
-### SSL
+### Hotkeys / Keyboard Shortcuts
+The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
+
+Some notes:
+- When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s characters.
+- If you are going to automate with hotkeys (using tools such at AutoHotKey), you may want to turn off "Restore previous session".
+
+
+### SSL Client
 Packet Sender supports establishing encrypted connections over SSL. This is supported in the GUI and on the command line. Some notes on this:
 
 * The certificate negotiation is handled immediately during connection.
