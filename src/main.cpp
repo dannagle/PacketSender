@@ -120,7 +120,12 @@ int main(int argc, char *argv[])
 
         QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
         QCoreApplication::setApplicationName("Packet Sender");
-        QCoreApplication::setApplicationVersion("version " + vDate.toString("yyyy-MM-dd"));
+        QString versionBuilder = "version " + vDate.toString("yyyy-MM-dd");
+        if(QSslSocket::supportsSsl()) {
+            versionBuilder.append(" / SSL version:");
+            versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+        }
+        QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
         parser.setApplicationDescription("Packet Sender is a Network TCP and UDP Test Utility by Dan Nagle\nSee http://PacketSender.com/ for more information.");
@@ -376,6 +381,7 @@ int main(int argc, char *argv[])
 
         if(ssl && !QSslSocket::supportsSsl()) {
             OUTIF() << "Error: This computer does not have a native SSL library.";
+            OUTIF() << "The expected SSL version is " << QSslSocket::sslLibraryBuildVersionString();
             OUTPUT();
             return -1;
         }

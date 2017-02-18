@@ -781,6 +781,23 @@ void MainWindow::on_testPacketButton_clicked()
     Packet testPacket;
     testPacket.init();
 
+    if(ui->udptcpComboBox->currentText() == "SSL") {
+
+        if(!QSslSocket::supportsSsl()) {
+
+            QMessageBox msgBox;
+            msgBox.setText("This computer does not support SSL.\n\nExpected SSL:" + QSslSocket::sslLibraryVersionString() );
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setWindowTitle("No SSL Library.");
+            msgBox.exec();
+            ui->udptcpComboBox->setFocus();
+            return;
+
+        }
+    }
+
     if(ui->testPacketButton->text().contains("Multi")) {
         QDEBUG() << "We are multi";
         int packetCount = 0;
