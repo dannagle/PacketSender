@@ -52,10 +52,15 @@ bool Packet::isSSL()
    return (tcpOrUdp.trimmed().toLower() == "ssl");
 }
 
+bool Packet::isUDP()
+{
+   return ((tcpOrUdp.trimmed().toLower() == "udp"));
+}
+
 
 bool Packet::isTCP()
 {
-   return (tcpOrUdp.trimmed().toLower() == "tcp");
+   return ((tcpOrUdp.trimmed().toLower() == "tcp") || isSSL());
 }
 
 float Packet::oneDecimal(float value) {
@@ -322,7 +327,7 @@ QString Packet::hexToASCII(QString &hex)
         // qDebug() << __FILE__ << "/" << __LINE__ << __FUNCTION__  <<"hex at"<< QString::number(i) << "is" << QString::number(convertInt);
         if(ok)
         {
-            if(convertInt >= 0x20 && convertInt < 0x7e && convertInt != '\\')
+            if(convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\')
             {
                 // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ << "Converted to " << QChar(convertInt);
                 asciiText.append((QChar(convertInt)));

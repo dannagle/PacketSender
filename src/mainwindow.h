@@ -64,7 +64,6 @@ signals:
 public slots:
     void toTrafficLog(Packet logPacket);
     void cancelResends();
-    void poodlepic();
     void applyNetworkSettings();
 
 
@@ -72,6 +71,19 @@ public slots:
     void toggleTCPServer();
     void toggleIPv4_IPv6();
     void ebcdicTranslate();
+
+    //shortcut keys... would be better if used lambda
+    void poodlepic();
+    void shortcutkey1();
+    void shortcutkey2();
+    void shortcutkey3();
+    void shortcutkey4();
+    void shortcutkey5();
+    void shortcutkey6();
+    void shortcutkey7();
+
+
+
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
@@ -125,6 +137,8 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_actionHelp_triggered();
+
     void on_actionSettings_triggered();
 
     void on_actionExit_triggered();
@@ -142,6 +156,8 @@ private slots:
     void on_resendEdit_editingFinished();
 
     void on_loadFileButton_clicked();
+
+    void on_actionDonate_Thank_You_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -176,6 +192,7 @@ private:
     bool asciiEditTranslateEBCDIC;
 
     void setIPMode();
+    void saveSession(Packet sessionPacket);
 };
 
 #endif // MAINWINDOW_H

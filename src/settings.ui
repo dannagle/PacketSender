@@ -125,6 +125,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="restoreSessionCheck">
+            <property name="text">
+             <string>Restore previous session</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="verticalSpacer_6">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -185,7 +192,7 @@
             <item>
              <widget class="QLineEdit" name="udpServerPortEdit">
               <property name="text">
-               <string>55005</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
@@ -210,11 +217,25 @@
             <item>
              <widget class="QLineEdit" name="tcpServerPortEdit">
               <property name="text">
-               <string>55006</string>
+               <string>0</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Set the server ports to 0 if you want to run multiple Packet Sender instances.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>   </string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="sendResponseSettingsCheck">
@@ -284,7 +305,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
-          <string>Additional TCP/UDP Settings</string>
+          <string>Additional UDP/TCP/SSL Settings</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
@@ -369,6 +390,20 @@
            <widget class="QCheckBox" name="asciiEditTranslateEBCDICCheck">
             <property name="text">
              <string>Enable Ctrl (or Cmd)+ E  to translate ASCII field to EBCDIC</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="resolveDNSOnInputCheck">
+            <property name="text">
+             <string>Resolve DNS during input (old method)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="ignoreSSLCheck">
+            <property name="text">
+             <string>Ignore SSL Errors (Wrong host, expired, self-signed, etc)</string>
             </property>
            </widget>
           </item>

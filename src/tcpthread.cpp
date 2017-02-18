@@ -19,6 +19,7 @@
 
 #include <QSsl>
 #include <QSslSocket>
+#include <QSslCipher>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -29,6 +30,7 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     sendFlag = false;
     incomingPersistent = false;
     sendPacket.clear();
+    insidePersistent = false;
 
 
 }
@@ -38,6 +40,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
 {
     sendFlag = true;
     incomingPersistent = false;
+    insidePersistent = false;
 
 
 }
@@ -60,7 +63,7 @@ void TCPThread::wasdisconnected() {
     QDEBUG();
 }
 
-void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
+void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket) {
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     bool sendResponse = settings.value("sendReponse", false).toBool();
@@ -92,6 +95,9 @@ void TCPThread::writeResponse(QTcpSocket *sock, Packet tcpPacket) {
         tcpPacketreply.timestamp = QDateTime::currentDateTime();
         tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
         tcpPacketreply.tcpOrUdp = "TCP";
+        if(clientConnection->isEncrypted()) {
+            tcpPacketreply.tcpOrUdp = "SSL";
+        }
         tcpPacketreply.fromIP = "You (Response)";
         if(ipMode < 6) {
             tcpPacketreply.toIP = Packet::removeIPv6Mapping(sock->peerAddress());
@@ -130,6 +136,7 @@ void TCPThread::persistentConnectionLoop()
 
     int count = 0;
     while(clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+        insidePersistent = true;
 
 
         if(sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
@@ -163,6 +170,9 @@ void TCPThread::persistentConnectionLoop()
                 tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                 tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                 tcpRCVPacket.tcpOrUdp = "TCP";
+                if(clientConnection->isEncrypted()) {
+                    tcpRCVPacket.tcpOrUdp = "SSL";
+                }
 
                 if(ipMode < 6) {
                     tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
@@ -194,6 +204,10 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
         tcpPacket.tcpOrUdp = "TCP";
+        if(clientConnection->isEncrypted()) {
+            tcpPacket.tcpOrUdp = "SSL";
+        }
+
         if(ipMode < 6) {
             tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
 
@@ -224,7 +238,7 @@ void TCPThread::persistentConnectionLoop()
             clientConnection->disconnectFromHost();
         }
 
-        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.asciiString();
+        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
 
         if(sendPacket.receiveBeforeSend) {
             if(!tcpPacket.hexString.isEmpty()) {
@@ -282,7 +296,7 @@ void TCPThread::run()
 
     if(sendFlag) {
         QDEBUG() << "We are threaded sending!";
-        clientConnection = new QTcpSocket(this);
+        clientConnection = new QSslSocket(this);
 
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
@@ -294,37 +308,70 @@ void TCPThread::run()
             sendPacket.fromPort = clientConnection->localPort();
         }
 
-        /*
-         SSL Version...
+        // SSL Version...
+
+        if(sendPacket.isSSL()) {
+            if(ipMode > 4) {
+                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+
+            } else {
+                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+            }
+
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+            if(settings.value("ignoreSSLCheck", true).toBool()) {
+                QDEBUG() << "Telling SSL to ignore errors";
+                clientConnection->ignoreSslErrors();
+            }
 
 
-        if(ipMode > 4) {
-            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+            QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
+            QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
+            QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
+
+            QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
+
+            QList<QSslError> sslErrorsList  = clientConnection->sslErrors();
+            Packet errorPacket = sendPacket;
+            if(sslErrorsList.size() > 0) {
+                QSslError sError;
+                foreach (sError, sslErrorsList) {
+                    Packet errorPacket = sendPacket;
+                    errorPacket.hexString.clear();
+                    errorPacket.errorString = sError.errorString();
+                    emit packetSent(errorPacket);
+                }
+            }
+
+            if(clientConnection->isEncrypted()) {
+                QSslCipher cipher = clientConnection->sessionCipher();
+                Packet errorPacket = sendPacket;
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
+                emit packetSent(errorPacket);
+            } else {
+                Packet errorPacket = sendPacket;
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Not Encrypted!";
+            }
+
 
         } else {
-            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+
+            if(ipMode > 4) {
+                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
+
+            } else {
+                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
+
+            }
+
+            clientConnection->waitForConnected(5000);
+
 
         }
-
-        QDEBUG() << "Telling SSL to ignore errors";
-        clientConnection->ignoreSslErrors();
-        QDEBUG() << "Connecting to" << sendPacket.toIP <<":" << sendPacket.port;
-        QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
-        QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
-
-        QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
-
-        */
-
-
-        if(ipMode > 4) {
-            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
-
-        } else {
-            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
-
-        }
-        clientConnection->waitForConnected(5000);
 
 
         if(sendPacket.delayAfterConnect > 0) {
@@ -372,7 +419,7 @@ void TCPThread::run()
     }
 
 
-    QTcpSocket sock;
+    QSslSocket sock;
     sock.setSocketDescriptor(socketDescriptor);
 
     connect(&sock, SIGNAL(disconnected()),
@@ -386,7 +433,7 @@ void TCPThread::run()
     data.clear();
     tcpPacket.timestamp = QDateTime::currentDateTime();
     tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
-    tcpPacket.tcpOrUdp = "TCP";
+    tcpPacket.tcpOrUdp = sendPacket.tcpOrUdp;
 
     if(ipMode < 6) {
         tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
@@ -401,6 +448,9 @@ void TCPThread::run()
     sock.waitForReadyRead(5000); //initial packet
     data = sock.readAll();
     tcpPacket.hexString = Packet::byteArrayToHex(data);
+    if(sock.isEncrypted()) {
+        tcpPacket.tcpOrUdp = "SSL";
+    }
     emit packetSent(tcpPacket);
     writeResponse(&sock, tcpPacket);
 
@@ -432,8 +482,18 @@ void TCPThread::run()
         writeResponse(&sock, tcpPacket);
     }
 */
+    insidePersistent = false;
     sock.disconnectFromHost();
     sock.close();
+}
+
+bool TCPThread::isEncrypted()
+{
+    if(insidePersistent && !closeRequest) {
+        return clientConnection->isEncrypted();
+    } else {
+        return false;
+    }
 }
 
 void TCPThread::sendPersistant(Packet sendpacket)
@@ -455,6 +515,9 @@ void TCPThread::sendPersistant(Packet sendpacket)
 
         sendpacket.port = clientConnection->peerPort();
         sendpacket.fromPort = clientConnection->localPort();
+        if(clientConnection->isEncrypted()) {
+            sendpacket.tcpOrUdp = "SSL";
+        }
         emit packetSent(sendpacket);
     }
 }

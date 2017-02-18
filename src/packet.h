@@ -42,6 +42,7 @@ public:
     QString hexString;
     QString fromIP;
     QString toIP;
+    QString resolvedIP;
     QString errorString;
     float repeat;
     unsigned int port;
@@ -52,6 +53,7 @@ public:
     void clear();
     bool isTCP();
     bool isSSL();
+    bool isUDP();
 
     QDateTime timestamp;
 

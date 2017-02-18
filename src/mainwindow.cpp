@@ -42,31 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     timeSinceLaunch();
 
-
-#ifndef CONSOLE_BUILD
-#ifdef Q_OS_WINDOWS
-
-
-    QStringList args = QApplication::arguments();
-    if(args.size() > 0) {
-
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Oops! You launched the GUI!");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("The \".com\" should only be used for command line Packet Sender");
-        msgBox.exec();
-
-    }
-
-#endif
-#endif
-    //create temp folders if not exist
-    QDir mdir;
-    mdir.mkpath(TEMPPATH);
-    mdir.mkpath(SETTINGSPATH);
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
@@ -109,6 +84,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
     packetNetwork.persistentConnectCheck = ui->persistentTCPCheck->isChecked();
+
+
+    //load last session
+    if(settings.value("restoreSessionCheck", true).toBool()) {
+        QDEBUG() << "Restoring last session";
+        //ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
+        ui->packetIPEdit->setText(settings.value("packetIPEditSession","").toString());
+        ui->packetHexEdit->setText(settings.value("packetHexEditSession","").toString());
+        QString methodchoice = settings.value("udptcpComboBoxSession","TCP").toString();
+        int findtext = ui->udptcpComboBox->findText(methodchoice);
+        if(findtext > -1) {
+            ui->udptcpComboBox->setCurrentIndex(findtext);
+        }
+        ui->packetPortEdit->setText(settings.value("packetPortEditSession","").toString());
+        ui->resendEdit->setText(settings.value("resendEditSession","").toString());
+
+        if(!ui->packetHexEdit->text().isEmpty()) {
+            on_packetHexEdit_lostFocus();
+        }
+
+    }
+
 
 
 
@@ -235,6 +232,54 @@ MainWindow::MainWindow(QWidget *parent) :
     QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
 
 
+    QShortcut *field1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this);
+    QShortcut *field2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this);
+    QShortcut *field3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this);
+    QShortcut *field4 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_4), this);
+    QShortcut *field5 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_5), this);
+    QShortcut *field6 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_6), this);
+    QShortcut *field7 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_7), this);
+    QShortcut *field8 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_8), this);
+
+
+    if(!connect(field1, &QShortcut::activated, this, &MainWindow::shortcutkey1)) {
+        QDEBUG() << "field1 connection false";
+    }
+
+    if(!connect(field2, &QShortcut::activated, this, &MainWindow::shortcutkey2)) {
+        QDEBUG() << "field2 connection false";
+    }
+
+    if(!connect(field3, &QShortcut::activated, this, &MainWindow::shortcutkey3)) {
+        QDEBUG() << "field3 connection false";
+    }
+
+    if(!connect(field4, &QShortcut::activated, this, &MainWindow::shortcutkey4)) {
+        QDEBUG() << "field4 connection false";
+    }
+
+    if(!connect(field5, &QShortcut::activated, this, &MainWindow::shortcutkey5)) {
+        QDEBUG() << "field5 connection false";
+    }
+    if(!connect(field6, &QShortcut::activated, this, &MainWindow::shortcutkey6)) {
+        QDEBUG() << "field6 connection false";
+    }
+
+    if(!connect(field7, &QShortcut::activated, this, &MainWindow::shortcutkey7)) {
+        QDEBUG() << "field7 connection false";
+    }
+
+    if(!connect(field8, &QShortcut::activated, this, &MainWindow::on_testPacketButton_clicked)) {
+        QDEBUG() << "field8 connection false";
+    }
+
+
+    //Now that the UI is loaded, create the settings folders if they do not exist
+    QDir mdir;
+    mdir.mkpath(TEMPPATH);
+    mdir.mkpath(SETTINGSPATH);
+
+
     QDEBUG() << "Load time:" <<  timeSinceLaunch();
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
@@ -302,7 +347,9 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
     if(ui->logTrafficCheck->isChecked())
     {
-        packetsLogged.append(logPacket);
+        if(!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty()) {
+            packetsLogged.append(logPacket);
+        }
     }
 
 }
@@ -714,10 +761,42 @@ void MainWindow::on_savePacketButton_clicked()
 
 }
 
+void MainWindow::saveSession(Packet sessionPacket)
+{
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    //settings.setValue("packetNameEditSession", ui->packetNameEdit->text());
+    settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
+    settings.setValue("packetHexEditSession", ui->packetHexEdit->text());
+    settings.setValue("udptcpComboBoxSession", ui->udptcpComboBox->currentText());
+    settings.setValue("packetPortEditSession", ui->packetPortEdit->text());
+    settings.setValue("resendEditSession", ui->resendEdit->text());
+
+}
+
+
 void MainWindow::on_testPacketButton_clicked()
 {
     Packet testPacket;
     testPacket.init();
+
+    if(ui->udptcpComboBox->currentText() == "SSL") {
+
+        if(!QSslSocket::supportsSsl()) {
+
+            QMessageBox msgBox;
+            msgBox.setText("This computer does not support SSL.\n\nExpected SSL:" + QSslSocket::sslLibraryVersionString() );
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setWindowTitle("No SSL Library.");
+            msgBox.exec();
+            ui->udptcpComboBox->setFocus();
+            return;
+
+        }
+    }
 
     if(ui->testPacketButton->text().contains("Multi")) {
         QDEBUG() << "We are multi";
@@ -757,6 +836,8 @@ void MainWindow::on_testPacketButton_clicked()
     testPacket.port = ui->packetPortEdit->text().toUInt();
     testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
 
+    //Save Session!
+    saveSession(testPacket);
 
     if(testPacket.toIP.isEmpty()) {
 
@@ -900,7 +981,14 @@ void MainWindow::on_packetIPEdit_lostFocus()
             ui->packetIPEdit->setText("");
             ui->packetIPEdit->setPlaceholderText("Invalid Address / DNS failed");
         } else {
-            ui->packetIPEdit->setText(info.addresses().at(0).toString());
+
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+            if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
+                ui->packetIPEdit->setText(info.addresses().at(0).toString());
+            } else {
+                statusBarMessage(ipPacket + " --> " + info.addresses().at(0).toString());
+            }
         }
     }
 }
@@ -971,8 +1059,15 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             if (info.error() == QHostInfo::NoError)
             {
 
-                updatePacket.toIP = (info.addresses().at(0).toString());
-            }
+                updatePacket.toIP = newText;
+
+                QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+                if(settings.value("resolveDNSOnInputCheck", false).toBool()) {
+                    updatePacket.toIP = (info.addresses().at(0).toString());
+                } else {
+                    statusBarMessage(newText + " --> " + info.addresses().at(0).toString());
+                }            }
 
         }
 
@@ -993,7 +1088,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
     }
     if(datatype == "tcpOrUdp")
     {
-        if(newText.trimmed().toUpper() == "TCP" || newText.trimmed().toUpper() == "UDP" )
+        if((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL" ))
         {
             updatePacket.tcpOrUdp = newText.trimmed().toUpper();
         }
@@ -1032,6 +1127,14 @@ void MainWindow::poodlepic()
     BruceThePoodle *bruce = new BruceThePoodle(this);
     bruce->show();
 }
+
+void MainWindow::shortcutkey1() { ui->packetNameEdit->setFocus(); }
+void MainWindow::shortcutkey2() { ui->packetASCIIEdit->setFocus(); }
+void MainWindow::shortcutkey3() { ui->packetHexEdit->setFocus(); }
+void MainWindow::shortcutkey4() { ui->packetIPEdit->setFocus(); }
+void MainWindow::shortcutkey5() { ui->packetPortEdit->setFocus(); }
+void MainWindow::shortcutkey6() { ui->resendEdit->setFocus(); }
+void MainWindow::shortcutkey7() { ui->udptcpComboBox->setFocus(); }
 
 
 //packetSavedTableHeaders <<"Send" <<"Resend (s)"<< "Name" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
@@ -1469,9 +1572,9 @@ void MainWindow::on_toClipboardButton_clicked()
 
     QMessageBox msgBox;
 
-    if(settings.value("copyUnformattedCheck", false).toBool()) {
+    if(settings.value("copyUnformattedCheck", true).toBool()) {
         clipboard->setText(QString(savePacket.getByteArray()));
-        msgBox.setText("Packet sent to your clipboard (raw data).");
+        msgBox.setText("Raw packet data sent to your clipboard. \nChange the settings if you prefer translated data.");
     } else {
         clipboard->setText(clipString);
         msgBox.setText("Packet sent to your clipboard (translated).");
@@ -1583,6 +1686,12 @@ void MainWindow::on_actionAbout_triggered()
 {
     About * about = new About(this);
     about->show();
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    //Open URL in browser
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
 void MainWindow::on_actionSettings_triggered()
@@ -1762,4 +1871,11 @@ void MainWindow::on_loadFileButton_clicked()
     }
 
 
+}
+
+void MainWindow::on_actionDonate_Thank_You_triggered()
+{
+
+    //Open URL in browser
+    QDesktopServices::openUrl(QUrl("http://dannagle.com/paypal"));
 }

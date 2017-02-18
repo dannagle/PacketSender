@@ -12,6 +12,9 @@
 #include <QDesktopServices>
 #include <QCommandLineParser>
 #include <QHostInfo>
+#include <QSslError>
+#include <QList>
+#include <QSslCipher>
 
 #include "mainwindow.h"
 #define DEBUGMODE 0
@@ -34,9 +37,20 @@ int main(int argc, char *argv[])
 {
     int debugMode = DEBUGMODE;
 
+    if(QFile::exists("DEBUGMODE")) {
+        debugMode = 1;
+    }
+
+#ifdef __APPLE__
+    if(QFile::exists(QDir::homePath() + "/DEBUGMODE")) {
+        debugMode = 1;
+    }
+
+#endif
 
     if(debugMode)
     {
+        QDEBUG() << "run-time debug mode";
 
     } else {
         qInstallMessageHandler(myMessageOutputDisable);
@@ -46,7 +60,44 @@ int main(int argc, char *argv[])
     QDEBUG() << "number of arguments:" << argc;
     QStringList args;
     QDEBUGVAR(RAND_MAX);
-    if(argc > 1) {
+
+
+
+    bool gatekeeper = false;
+
+
+    //Upon first launch, Apple will assign a psn number and
+    //pass it as a command line argument.
+
+    //This is most often during the gatekeeper stage.
+
+    //It only does this on first launch. I still need to catch it though.
+
+    if(argc == 2) {
+
+        gatekeeper = true;
+
+        QString arg2 = QString(argv[1]);
+
+        //only the help and version should trigger
+        if(arg2.contains("-h")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("help")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("-v")) {
+            gatekeeper = false;
+        }
+        if(arg2.contains("version")) {
+            gatekeeper = false;
+        }
+
+    }
+
+
+
+    if((argc > 1) && !gatekeeper) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
 
@@ -69,7 +120,12 @@ int main(int argc, char *argv[])
 
         QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
         QCoreApplication::setApplicationName("Packet Sender");
-        QCoreApplication::setApplicationVersion("version " + vDate.toString("yyyy-MM-dd"));
+        QString versionBuilder = "version " + vDate.toString("yyyy-MM-dd");
+        if(QSslSocket::supportsSsl()) {
+            versionBuilder.append(" / SSL version:");
+            versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+        }
+        QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
         parser.setApplicationDescription("Packet Sender is a Network TCP and UDP Test Utility by Dan Nagle\nSee http://PacketSender.com/ for more information.");
@@ -93,7 +149,7 @@ int main(int argc, char *argv[])
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
                 "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
-                "milliseconds");
+                "ms");
         parser.addOption(waitOption);
 
         // An option with a value
@@ -112,6 +168,12 @@ int main(int argc, char *argv[])
 
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
+
+        QCommandLineOption sslOption(QStringList() << "s" << "ssl", "Send SSL and ignore errors.");
+        parser.addOption(sslOption);
+
+        QCommandLineOption sslNoErrorOption(QStringList() << "S" << "SSL", "Send SSL and stop for errors.");
+        parser.addOption(sslNoErrorOption);
 
         // A boolean option with multiple names (-f, --force)
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
@@ -142,7 +204,11 @@ int main(int argc, char *argv[])
         unsigned int bind = parser.value(bindPortOption).toUInt();
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
+        bool ssl = parser.isSet(sslOption);
+        bool sslNoError = parser.isSet(sslNoErrorOption);
         bool ipv6  = false;
+
+        if(sslNoError) ssl = true;
 
         QString name = parser.value(nameOption);
 
@@ -150,6 +216,7 @@ int main(int argc, char *argv[])
 
 
         QString address = "";
+        QString addressOriginal = "";
         unsigned int port = 0;
 
         int argssize = args.size();
@@ -191,6 +258,10 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
             udp = false;
         }
+        if(tcp && ssl) {
+            OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
+            tcp = false;
+        }
 
         if(!filePath.isEmpty() && !QFile::exists(filePath)) {
             OUTIF() << "Error: specified path "<< filePath <<" does not exist.";
@@ -215,7 +286,7 @@ int main(int argc, char *argv[])
             hex = true;
         }
 
-        if(!tcp && !udp) {
+        if(!tcp && !udp && !ssl) {
             tcp = true;
         }
 
@@ -239,14 +310,21 @@ int main(int argc, char *argv[])
                 if(address.isEmpty()) {
                     address  = sendPacket.toIP;
                 }
-                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption)) {
+                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption) && !parser.isSet(sslNoErrorOption)) {
 
+                    tcp=false;
+                    udp = false;
+                    ssl = true;
                     if(sendPacket.tcpOrUdp.toUpper() == "TCP") {
                         tcp=true;
-                        udp = false;
-                    } else {
-                        tcp=false;
-                        udp = true;
+                    }
+
+                    if(sendPacket.tcpOrUdp.toUpper() == "UDP") {
+                        udp=true;
+                    }
+
+                    if(sendPacket.tcpOrUdp.toUpper() == "SSL") {
+                        ssl=true;
                     }
 
                 }
@@ -263,7 +341,7 @@ int main(int argc, char *argv[])
             QFile dataFile(filePath);
             if(dataFile.open(QFile::ReadOnly)) {
 
-                if(tcp) {
+                if(tcp || ssl) {
                     QByteArray dataArray = dataFile.read(1024*1024*10);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
@@ -293,11 +371,21 @@ int main(int argc, char *argv[])
         QDEBUGVAR(bind);
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
+        QDEBUGVAR(ssl);
+        QDEBUGVAR(sslNoError);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
 
         //NOW LETS DO THIS!
+
+        if(ssl && !QSslSocket::supportsSsl()) {
+            OUTIF() << "Error: This computer does not have a native SSL library.";
+            OUTIF() << "The expected SSL version is " << QSslSocket::sslLibraryBuildVersionString();
+            OUTPUT();
+            return -1;
+        }
+
 
         if(ascii) { //pure ascii
             dataString = Packet::byteArrayToHex(data.toLatin1());
@@ -324,7 +412,15 @@ int main(int argc, char *argv[])
                 return -1;
             } else {
                 addy = info.addresses().at(0);
-                address = addy.toString();
+
+                if (QAbstractSocket::IPv6Protocol == addy.protocol())
+                {
+                   QDEBUG() << "Valid IPv6 address.";
+                   ipv6 = true;
+                }
+
+                //domain names are now on-demand connections.
+                //address = addy.toString();
             }
         }
 
@@ -344,20 +440,69 @@ int main(int argc, char *argv[])
         QTime now = QTime::currentTime();
         now.start();
 
-        if(tcp) {
-            QTcpSocket sock;
 
+        if(tcp || ssl) {
+            QSslSocket sock;
 
             if(ipv6) {
                 sock.bind(QHostAddress::AnyIPv6, bind);
             } else {
                 sock.bind(QHostAddress::AnyIPv4, bind);
             }
-            sock.connectToHost(addy, port);
+
+            if(tcp) {
+                sock.connectToHost(addy, port);
+            }
+
+            if(ssl) {
+                sock.connectToHostEncrypted(address,  port);
+                if(!sslNoError) {
+                    sock.ignoreSslErrors();
+                }
+            }
             sock.waitForConnected(1000);
+
+            QList<QSslError> sslErrorsList; sslErrorsList.clear();
+
+            if(ssl) {
+                sock.waitForEncrypted(5000);
+
+                QList<QSslError> sslErrorsList  = sock.sslErrors();
+
+
+                if(sslErrorsList.size() > 0) {
+                    QSslError sError;
+                    foreach (sError, sslErrorsList) {
+                        OUTIF() << "SSL Error: " << sError.errorString();
+                    }
+                }
+            }
+
+
             if(sock.state() == QAbstractSocket::ConnectedState)
             {
-                OUTIF() << "TCP (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+                QString connectionType = "TCP";
+                if(sock.isEncrypted()) {
+                    connectionType = "SSL";
+                } else {
+                    if(ssl) {
+                        OUTIF() << "Warning: This connection is not encrypted.";
+                    }
+                }
+
+                if(sslNoError && (sslErrorsList.size() > 0)) {
+                    OUTIF() << "Warning: Abandoning sending data because of SSL no error option.";
+                    dataString.clear();
+                    sendData.clear();
+                }
+
+                OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+                if(sock.isEncrypted()) {
+                    QSslCipher cipher = sock.sessionCipher();
+                    OUTIF() << "Cipher: Encrypted with " << cipher.encryptionMethod();
+                }
+
+
                 bytesWriten = sock.write(sendData);
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);
@@ -466,6 +611,8 @@ int main(int argc, char *argv[])
 
 
     } else {
+
+
         QApplication a(argc, argv);
 
         QDEBUGVAR(args);
@@ -478,6 +625,7 @@ int main(int argc, char *argv[])
          //  qDebug() << "stylesheet: " << StyleSheet;
            a.setStyleSheet(StyleSheet);
         }
+
 
         MainWindow w;
 

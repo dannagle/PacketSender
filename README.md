@@ -2,14 +2,15 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
-Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
+Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. Packet Sender can also send SSL (encrypted TCP) packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
 ## Uses
 
 * Controlling network-based devices in ways beyond their original apps
-* Test automation (using its command line tool)
+* Test automation (using its command line tool and/or hotkeys)
 * Testing network APIs (using the built-in TCP and UDP clients)
 * Malware analysis (using the built-in UDP and TCP servers)
+* Troubleshooting secure connections (using the SSL client).
 * Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 
@@ -49,7 +50,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 ![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
 
 
-* In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these.
+* In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these. There is no built-in SSL server.
 * There is also IPv4 Mode and IPv6 Mode. Click to toggle between server modes.
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
@@ -57,7 +58,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 * Select multiple packets to enable "Multi-Send". Selected packets are shown in a quick-send area above the traffic log.
 * Fields can be rearranged by drag-and-drop in the settings menu.
 * A resend value of "0" means it is a single-shot packet.
-* A packet has a name, destination address (domains will trigger an IP lookup), port, and data associated with it.
+* A packet has a name, destination address (domain names are default resolved just before sending), port, and data associated with it.
 * Click "Send" to immediately send. Click "Save" to send later.
 * For IPv6 sending, you will also need the scope ID.
 * Packet Sender supports mixed ASCII and HEX notation:
@@ -65,11 +66,43 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
     * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.  
-    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct. 
+    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
   * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
+  * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB.
 * An optional response can be sent. The same response is used for TCP and UDP.
+
+
+### Hotkeys / Keyboard Shortcuts
+The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
+
+Some notes:
+- When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s characters.
+- If you are going to automate with hotkeys (using tools such at AutoHotKey), you may want to turn off "Restore previous session".
+
+
+### SSL Client
+Packet Sender supports establishing encrypted connections over SSL. This is supported in the GUI and on the command line. Some notes on this:
+
+* The certificate negotiation is handled immediately during connection.
+* By default, Packet Sender ignores all SSL errors (expired cert, wrong host name, self-signed, etc).
+* Packet Sender outputs the cert negotiation progress in to the traffic log.
+* Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
+
+If available, on Windows, Packet Sender will use OpenSSL. On Mac, Packet Sender will use the native SSL libraries.
+
+*This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)*
+
+
+
+![Packet Sender Direct TCP](screenshots/packetsender_ssl.png)
+
+* If there is an SSL error, Packet Sender will output it to the traffic log. If the setting is to continue anyway (default), it will continue to negotiate encryption. Otherwise, the connection ends with failure to connect.
+
+![Packet Sender Direct TCP](screenshots/packetsender_expired_ssl.png)
+
+
 
 ### Smart Responses
 Packet Sender supports up to 5 smart responses. To use it, disable normal responses.
@@ -89,15 +122,17 @@ Packet Sender supports these macros when sending responses:
 * {{RANDOM}} -- Sends a random number ranging from either 0 to 32767 or 2147483647, depending on 32-bit or 64-bit (default installer for Windows is 32-bit. Mac is 64-bit).
 Packet Sender will swap the macro with real values before sending.
 
-### Persistent TCP
-Packet Sender supports persistent connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
-![Packet Sender Direct TCP](screenshots/packetsender_direct_tcp.png)
+### Persistent TCP and SSL
+Packet Sender supports persistent TCP and SSL connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
+
+![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.png)
+
 * Any number of persistent connections can be created.
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
 * Traffic is also saved in the main window traffic log.
 * The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
-* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP connections.
+* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections.
 * Incoming persistent connections to the server will launch the UI dialog.
 * During resend, the persistent connection packet is carried over to the new UI dialog. Clicking "Resending(1)" will cancel it.
 
@@ -117,13 +152,15 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 * IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch.
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
-* Copy to the clipboard the raw packet data (instead of a translation -- my personal preference)
+* Copy to the clipboard the raw packet data (default). If your data has a large amount of non-ASCII characters, you may prefer a translated version.
 * Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
 * Traffic log can be set to roll at 100 entries.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
 * Enable keyboard shortcut for ASCII --> EBCDIC translation.
+* Resolve DNS during input. The default is to resolve DNS just before sending.
+* Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection.
 
 
 ## Documentation (Command Line)
@@ -147,17 +184,20 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -x, --hex 	Parse data as hex (default).
     -a, --ascii 	Parse data as mixed-ascii (like the GUI).
     -A, --ASCII 	Parse data as pure ascii (no \xx translation).
-    -w, --wait <milliseconds> 	Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
+    -w, --wait <ms> Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
     -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.
     -b, --bind <port> 	Bind port. Default is dynamic.
     -t, --tcp 	Send TCP (default).
-    -u, --udp 	Send UDP.
+    -s, --ssl   Send SSL and ignore errors.
+    -S, --SSL   Send SSL and stop for errors.
+    -u, --udp   Send UDP.    
     -n, --name <name> 	Send previously saved packet named <name>. Other options overrides saved packet parameters.
 
     -Arguments:
     -address 	Destination address. Optional for saved packet.
     -port 	Destination port. Optional for saved packet.
     -data 	Data to send. Optional for saved packet.
+
 
 ### Example CLI
 
@@ -169,6 +209,18 @@ The command line system in Packet Sender follows the same pattern as other Linux
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
 
+### Example CLI using SSL and ignoring errors
+The command line has the option to ignore or abandon on SSL errors. The default is to ignore.
+
+    packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
+    SSL Error: The certificate has expired
+    SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
+    Cipher: Encrypted with AES(128)
+
+    Response Time:3:24:55.695 pm
+    Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
+    Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
+
 ## Building Packet Sender
 The only dependency is Qt SDK. Here is how to build the app.
 
@@ -179,9 +231,9 @@ The only dependency is Qt SDK. Here is how to build the app.
 1. Build! Qt is the only dependency!
 
 ### Build for Linux
-Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instuctions. 
+Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
 
-If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided. 
+If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
 
 ```
 sudo apt-get update
@@ -225,7 +277,7 @@ The Packet Sender web site is also open source.
 
 
 ## License
-GPL v2 or Later. [Contact me](http://dannagle.com/contact) if you require a different license.
+GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
 
 
 ## Copyright

@@ -201,6 +201,15 @@
                 <normaloff>:/icons/tx_udp.png</normaloff>:/icons/tx_udp.png</iconset>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>SSL</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_ssl.png</normaloff>:/icons/tx_ssl.png</iconset>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -396,7 +405,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -412,7 +421,9 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionDonate_Thank_You"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -426,26 +437,46 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/power-off.png</normaloff>:/icons/power-off.png</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/cog.png</normaloff>:/icons/cog.png</iconset>
+   </property>
    <property name="text">
     <string>Settings</string>
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/pslogo_bw.png</normaloff>:/pslogo_bw.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="actionImport_Packets">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
+   </property>
    <property name="text">
     <string>Import Packets</string>
    </property>
   </action>
   <action name="actionExport_Packets">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
+   </property>
    <property name="text">
     <string>Export Packets</string>
    </property>
@@ -456,8 +487,35 @@
    </property>
   </action>
   <action name="actionSubnet_Calculator">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/calculator.png</normaloff>:/icons/calculator.png</iconset>
+   </property>
    <property name="text">
     <string>Subnet Calculator</string>
+   </property>
+  </action>
+  <action name="actionDonate_Thank_You">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/heart.png</normaloff>:/icons/heart.png</iconset>
+   </property>
+   <property name="text">
+    <string>Donate (Thank You!)</string>
+   </property>
+  </action>
+  <action name="actionDocumentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/question-circle.png</normaloff>:/icons/question-circle.png</iconset>
+   </property>
+   <property name="text">
+    <string>Documentation</string>
    </property>
   </action>
  </widget>

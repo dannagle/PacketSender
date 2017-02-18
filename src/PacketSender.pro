@@ -46,10 +46,6 @@ FORMS    += mainwindow.ui \
     about.ui \
     subnetcalc.ui
 
-
-macx:CONFIG += app_bundle
-
-
 OTHER_FILES += \
     packetsender.css \
    packetsender_mac.css
