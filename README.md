@@ -90,6 +90,11 @@ Packet Sender supports establishing encrypted connections over SSL. This is supp
 * Packet Sender outputs the cert negotiation progress in to the traffic log.
 * Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
 
+If available, on Windows, Packet Sender will use OpenSSL. On Mac, Packet Sender will use the native SSL libraries.
+
+*This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)*
+
+
 
 ![Packet Sender Direct TCP](screenshots/packetsender_ssl.png)
 
