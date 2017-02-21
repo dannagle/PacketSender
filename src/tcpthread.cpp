@@ -95,7 +95,7 @@ void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket) {
         tcpPacketreply.timestamp = QDateTime::currentDateTime();
         tcpPacketreply.name = "Reply to " + tcpPacket.timestamp.toString(DATETIMEFORMAT);
         tcpPacketreply.tcpOrUdp = "TCP";
-        if(clientConnection->isEncrypted()) {
+        if(sock->isEncrypted()) {
             tcpPacketreply.tcpOrUdp = "SSL";
         }
         tcpPacketreply.fromIP = "You (Response)";
