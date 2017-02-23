@@ -1,0 +1,29 @@
+#Taken from https://github.com/richelbilderbeek/travis_qmake_gcc_cpp11_qt5
+language: cpp
+compiler: gcc
+sudo: require
+dist: trusty # Qt5, from https://gist.github.com/jreese/6207161#gistcomment-1462109
+
+before_install:
+  # Qt5, from https://gist.github.com/jreese/6207161#gistcomment-1462109
+  - sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libqt5webkit5-dev qtdeclarative5-dev
+  - export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+  # C++11
+  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
+  - sudo apt-get update -qq
+
+install:
+  - sudo apt-get install -qq g++-5
+
+# Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+
+script:
+  - cd src && qmake -qt=qt5
+  - cd src && make
+  - src/PacketSender
