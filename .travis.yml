@@ -22,9 +22,9 @@ script:
     - ls
     - cd src
     - ls    
-    - qmake -qt=qt58 --version
+    - qmake --version
     - ls    
-    - qmake -qt=qt58
+    - qmake 
     - ls
     - make
     - ls
