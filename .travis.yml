@@ -4,12 +4,13 @@ sudo: require
 dist: trusty
 
 before_install:
-    - sudo add-apt-repository --yes ppa:beineri/opt-qt551-trusty
+    - sudo add-apt-repository --yes ppa:beineri/opt-qt58-trusty
     - sudo apt-get update -qq
     - export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 
 install: 
-    - sudo apt-get install -qq qt5-default build-essential
+    - sudo apt-get install build-essential
+    - sudo apt-get -y install qt58base qt58declarative binutils xpra
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
