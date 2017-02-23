@@ -26,6 +26,8 @@ script:
     - ls
     - cd src
     - ls    
+    - qmake -qt=qt5 --version
+    - ls    
     - qmake -qt=qt5
     - ls
     - make
