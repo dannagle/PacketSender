@@ -15,6 +15,9 @@ before_script:
 script:
   - ls
   - ls src/
-  - cd src && qmake
+  - cd src && qmake PacketSender.pro
+  - ls src/
+  - ls
   - cd src && make
+  - ls src/
   - src/PacketSender --version
