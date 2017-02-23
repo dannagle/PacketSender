@@ -3,21 +3,22 @@ compiler: gcc
 sudo: require
 dist: trusty
 
-install:
-  - sudo apt-get install qt5-default build-essential -qq
+before_install:
+    - sudo apt-get update
+    - sudo apt-get install qt5-default build-essential -qq
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 5 # give xvfb some time to start
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 5 # give xvfb some time to start
 
 script:
-  - ls
-  - cd src
-  - ls
-  - qmake PacketSender.pro
-  - ls
-  - make
-  - ls
-  - ./PacketSender --version
+    - ls
+    - cd src
+    - ls
+    - qmake PacketSender.pro
+    - ls
+    - make
+    - ls
+    - ./PacketSender --version
