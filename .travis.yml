@@ -28,10 +28,8 @@ script:
   - make -j4
   - ls
   - export VERSION=$(./PacketSender --version)
-  - sudo apt-get -y install checkinstall
-  - sudo checkinstall --pkgname=app --pkgversion="1" --backup=no --fstrans=no --default --deldoc 
-  - mkdir appdir ; cd appdir
-  - dpkg -x ../app_1-1_amd64.deb . ; find . 
+  - mkdir -p appdir/usr/bin ; cd appdir
+  - find ..
   - cp ./usr/share/applications/*.desktop . 
   - cp ./usr/share/icons/hicolor/256x256/apps/*.png . 
   - cd .. 
