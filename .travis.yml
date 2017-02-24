@@ -35,7 +35,8 @@ script:
   - cp ../psicons.iconset/icon_256x256.png packetsender.png 
   - cd .. 
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage" 
-  - chmod a+x linuxdeployqt*.AppImage 
+  - chmod a+x linuxdeployqt*.AppImage
+  - unset QTDIR
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage 
   - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-$VERSION-x86_64.AppImage 
