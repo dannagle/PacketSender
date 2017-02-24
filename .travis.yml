@@ -18,13 +18,27 @@ before_script:
     - sleep 5 # give xvfb some time to start
 
 script:
-    - ls
-    - cd src
-    - ls    
-    - qmake --version
-    - ls    
-    - qmake 
-    - ls
-    - make
-    - ls
-    - ./PacketSender --version
+  - ls
+  - cd src
+  - ls    
+  - qmake --version
+  - ls    
+  - qmake 
+  - ls
+  - make -j4
+  - ls
+  - export VERSION=$(./PacketSender --version)
+  - sudo apt-get -y install checkinstall
+  - sudo checkinstall --pkgname=app --pkgversion="1" --backup=no --fstrans=no --default --deldoc 
+  - mkdir appdir ; cd appdir
+  - dpkg -x ../app_1-1_amd64.deb . ; rm usr/local ; find . 
+  - cp ./usr/share/applications/*.desktop . 
+  - cp ./usr/share/icons/hicolor/256x256/apps/*.png . 
+  - cd .. 
+  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage" 
+  - chmod a+x linuxdeployqt*.AppImage 
+  - cp $(which avconv) ./appdir/usr/bin
+  - cp $(which convert) ./appdir/usr/bin
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/* -bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -appimage 
+  - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-$VERSION-x86_64.AppImage 
