@@ -27,7 +27,6 @@ script:
   - ls
   - make -j4
   - ls
-  - export VERSION=$(./PacketSender --version | cut -d "_" -f 4 | sed -e 's|-|.|g')
   - mkdir -p appdir/usr/bin ; cd appdir
   - find ..
   - cp ../PacketSender usr/bin/
@@ -39,4 +38,4 @@ script:
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage 
-  - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-$VERSION-x86_64.AppImage 
+  - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-git.$(git rev-parse --short HEAD)-x86_64.AppImage 
