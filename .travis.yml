@@ -23,7 +23,7 @@ script:
   - ls    
   - qmake --version
   - ls    
-  - qmake 
+  - qmake PREFIX=/usr
   - ls
   - make -j4
   - ls
