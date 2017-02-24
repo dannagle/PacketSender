@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=PackageSender
+Exec=PackageSender
+Icon=packagesender
+Categories=Network;
