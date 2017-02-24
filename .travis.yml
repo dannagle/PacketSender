@@ -1,0 +1,30 @@
+language: cpp
+compiler: gcc
+sudo: require
+dist: trusty
+
+before_install:
+    - sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y
+    - sudo apt-get update -qq
+    
+install: 
+    - sudo apt-get -y install qt58base qt58declarative binutils xpra
+    - source /opt/qt58/bin/qt58-env.sh
+
+# Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
+before_script:
+    - "export DISPLAY=:99.0"
+    - "sh -e /etc/init.d/xvfb start"
+    - sleep 5 # give xvfb some time to start
+
+script:
+    - ls
+    - cd src
+    - ls    
+    - qmake --version
+    - ls    
+    - qmake 
+    - ls
+    - make
+    - ls
+    - ./PacketSender --version
