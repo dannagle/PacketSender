@@ -30,11 +30,12 @@ script:
   - export VERSION=$(./PacketSender --version)
   - mkdir -p appdir/usr/bin ; cd appdir
   - find ..
-  - cp ./usr/share/applications/*.desktop . 
-  - cp ./usr/share/icons/hicolor/256x256/apps/*.png . 
+  - cp ../PacketSender usr/bin/
+  - cp ../packetsender.desktop .
+  - cp ../psicons.iconset/icon_256x256.png packetsender.png 
   - cd .. 
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage" 
   - chmod a+x linuxdeployqt*.AppImage 
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -bundle-non-qt-libs
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -appimage 
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage 
   - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-$VERSION-x86_64.AppImage 
