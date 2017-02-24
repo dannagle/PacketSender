@@ -1,0 +1,8 @@
+install:
+    - set QTDIR=C:\Qt\5.8\mingw53_32
+    - set PATH=%PATH%;%QTDIR%\bin;C:\Qt\5.8\mingw53_32
+build_script:
+    - cd src
+    - qmake PacketSender.pro
+    - mingw32-make
+
