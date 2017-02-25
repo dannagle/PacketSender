@@ -18,13 +18,24 @@ before_script:
     - sleep 5 # give xvfb some time to start
 
 script:
-    - ls
-    - cd src
-    - ls    
-    - qmake --version
-    - ls    
-    - qmake 
-    - ls
-    - make
-    - ls
-    - ./PacketSender --version
+  - ls
+  - cd src
+  - ls    
+  - qmake --version
+  - ls    
+  - qmake PREFIX=/usr
+  - ls
+  - make -j4
+  - ls
+  - mkdir -p appdir/usr/bin ; cd appdir
+  - find ..
+  - cp ../PacketSender usr/bin/
+  - cp ../packetsender.desktop .
+  - cp ../psicons.iconset/icon_256x256.png packetsender.png 
+  - cd .. 
+  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage" 
+  - chmod a+x linuxdeployqt*.AppImage
+  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage 
+  - curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-git$(git rev-parse --short HEAD)-x86_64.AppImage 
