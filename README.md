@@ -1,4 +1,4 @@
-# Packet Sender
+# Packet Sender [![Build Status](https://travis-ci.org/dannagle/PacketSender.svg?branch=master)](https://travis-ci.org/dannagle/PacketSender)
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
