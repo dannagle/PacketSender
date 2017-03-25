@@ -46,7 +46,7 @@ void PacketNetwork::incomingConnection(qintptr socketDescriptor)
         thread->incomingPersistent = true;
         pcWindow->initWithThread(thread, serverPort());
 
-        connect(pcWindow->thread, SIGNAL(finished()), pcWindow->thread, SLOT(deleteLater()));
+        connect(pcWindow->thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
 
         QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
                  << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
