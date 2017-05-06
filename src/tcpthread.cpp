@@ -311,6 +311,23 @@ void TCPThread::run()
         // SSL Version...
 
         if(sendPacket.isSSL()) {
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+            // set the ca certificates from the configured path
+            if (!settings.value("sslCaPath").toString().isEmpty()) {
+                clientConnection->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
+            }
+
+            // set the local certificates from the configured file path
+            if (!settings.value("sslLocalCertificatePath").toString().isEmpty()) {
+                clientConnection->setLocalCertificate(settings.value("sslLocalCertificatePath").toString());
+            }
+
+            // set the private key from the configured file path
+            if (!settings.value("sslPrivateKeyPath").toString().isEmpty()) {
+                clientConnection->setPrivateKey(settings.value("sslPrivateKeyPath").toString());
+            }
+
             if(ipMode > 4) {
                 clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
 
@@ -319,7 +336,7 @@ void TCPThread::run()
 
             }
 
-            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
             if(settings.value("ignoreSSLCheck", true).toBool()) {
                 QDEBUG() << "Telling SSL to ignore errors";
                 clientConnection->ignoreSslErrors();
