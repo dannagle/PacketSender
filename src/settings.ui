@@ -233,7 +233,7 @@
           <item>
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>   </string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -406,6 +406,60 @@
              <string>Ignore SSL Errors (Wrong host, expired, self-signed, etc)</string>
             </property>
            </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>SSL CA Certificates</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sslCaPath">
+              <property name="placeholderText">
+               <string>Path from where to load the CA certificats (leave empty for defaults)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>SSL Local Certificate</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sslLocalCertificatePath">
+              <property name="placeholderText">
+               <string>File path for the client side local certificate</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>SSL Private Key</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sslPrivateKeyPath">
+              <property name="placeholderText">
+               <string>File path for the client side private key</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <spacer name="verticalSpacer">

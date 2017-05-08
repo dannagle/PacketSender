@@ -78,6 +78,9 @@ Settings::Settings(QWidget *parent) :
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
 
     ui->ignoreSSLCheck->setChecked(settings.value("ignoreSSLCheck", true).toBool());
+    ui->sslCaPath->setText(settings.value("sslCaPath", "").toString());
+    ui->sslLocalCertificatePath->setText(settings.value("sslLocalCertificatePath", "").toString());
+    ui->sslPrivateKeyPath->setText(settings.value("sslPrivateKeyPath", "").toString());
 
     ui->restoreSessionCheck->setChecked(settings.value("restoreSessionCheck", true).toBool());
 
@@ -190,6 +193,9 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("resolveDNSOnInputCheck", ui->resolveDNSOnInputCheck->isChecked());
 
     settings.setValue("ignoreSSLCheck", ui->ignoreSSLCheck->isChecked());
+    settings.setValue("sslCaPath", ui->sslCaPath->text());
+    settings.setValue("sslLocalCertificatePath", ui->sslLocalCertificatePath->text());
+    settings.setValue("sslPrivateKeyPath", ui->sslPrivateKeyPath->text());
 
     settings.setValue("restoreSessionCheck", ui->restoreSessionCheck->isChecked());
 
