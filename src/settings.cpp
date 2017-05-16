@@ -424,3 +424,56 @@ void Settings::on_smartResponseEnableCheck_clicked()
 
     ui->smartResponsesGroup->setEnabled(ui->smartResponseEnableCheck->isChecked());
 }
+
+void Settings::on_sslCaPathBrowseButton_clicked()
+{
+
+    QString home = QDir::homePath();
+    if(QFile::exists(ui->sslCaPath->text())) {
+        home = ui->sslCaPath->text();
+    }
+
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                  home,
+                                                  QFileDialog::ShowDirsOnly
+                                                  | QFileDialog::DontResolveSymlinks);
+
+    if(QFile::exists(dir)) {
+        ui->sslCaPath->setText(dir);
+    }
+
+
+}
+
+void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
+{
+
+    QString home = QDir::homePath();
+    if(QFile::exists(ui->sslLocalCertificatePath->text())) {
+        home = ui->sslLocalCertificatePath->text();
+    }
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                tr("Choose Cert"), home, tr("*.*"));
+
+    if(QFile::exists(fileName)) {
+        ui->sslLocalCertificatePath->setText(fileName);
+    }
+
+}
+
+void Settings::on_sslPrivateKeyPathBrowseButton_clicked()
+{
+    QString home = QDir::homePath();
+    if(QFile::exists(ui->sslPrivateKeyPath->text())) {
+        home = ui->sslPrivateKeyPath->text();
+    }
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                tr("Choose Key"), home, tr("*.*"));
+
+    if(QFile::exists(fileName)) {
+        ui->sslPrivateKeyPath->setText(fileName);
+    }
+
+}

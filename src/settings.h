@@ -37,6 +37,12 @@ private slots:
 
     void on_smartResponseEnableCheck_clicked();
 
+    void on_sslCaPathBrowseButton_clicked();
+
+    void on_sslLocalCertificatePathBrowseButton_clicked();
+
+    void on_sslPrivateKeyPathBrowseButton_clicked();
+
 private:
     Ui::Settings *ui;
     QList<Packet> packetsSaved;

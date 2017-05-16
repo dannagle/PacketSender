@@ -423,6 +423,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="sslCaPathBrowseButton">
+              <property name="text">
+               <string>Browse</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -441,6 +448,13 @@
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QPushButton" name="sslLocalCertificatePathBrowseButton">
+              <property name="text">
+               <string>Browse</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -456,6 +470,13 @@
              <widget class="QLineEdit" name="sslPrivateKeyPath">
               <property name="placeholderText">
                <string>File path for the client side private key</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="sslPrivateKeyPathBrowseButton">
+              <property name="text">
+               <string>Browse</string>
               </property>
              </widget>
             </item>
