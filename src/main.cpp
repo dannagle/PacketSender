@@ -137,13 +137,13 @@ int main(int argc, char *argv[])
         parser.addOption(quietOption);
 
 
-        QCommandLineOption hexOption(QStringList() << "x" << "hex", "Parse data as hex (default).");
+        QCommandLineOption hexOption(QStringList() << "x" << "hex", "Parse data-to-send as hex (default).");
         parser.addOption(hexOption);
 
-        QCommandLineOption asciiOption(QStringList() << "a" << "ascii", "Parse data as mixed-ascii (like the GUI).");
+        QCommandLineOption asciiOption(QStringList() << "a" << "ascii", "Parse data-to-send as mixed-ascii (like the GUI).");
         parser.addOption(asciiOption);
 
-        QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data as pure ascii (no \\xx translation).");
+        QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data-to-send as pure ascii (no \\xx translation).");
         parser.addOption(pureAsciiOption);
 
         // An option with a value

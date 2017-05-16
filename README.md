@@ -181,9 +181,9 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -?, -h, --help 	Displays this help.
     -v, --version 	Displays version information.
     -q, --quiet 	Quiet mode. Only output received data.
-    -x, --hex 	Parse data as hex (default).
-    -a, --ascii 	Parse data as mixed-ascii (like the GUI).
-    -A, --ASCII 	Parse data as pure ascii (no \xx translation).
+    -x, --hex 	Parse data-to-send as hex (default).
+    -a, --ascii 	Parse data-to-send as mixed-ascii (like the GUI).
+    -A, --ASCII 	Parse data-to-send as pure ascii (no \xx translation).
     -w, --wait <ms> Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
     -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.
     -b, --bind <port> 	Bind port. Default is dynamic.
