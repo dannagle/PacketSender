@@ -13,7 +13,7 @@
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
 #define QDEBUGVAR(var)  QDEBUG() << # var <<  var;
 
-#define DATETIMEFORMAT "h:mm:ss.zzz ap"
+#define DATETIMEFORMAT "hh:mm:ss.zzz"
 
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
