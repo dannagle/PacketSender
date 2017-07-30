@@ -33,7 +33,7 @@ script:
   - cp ../packetsender.desktop .
   - cp ../psicons.iconset/icon_256x256.png packetsender.png 
   - cd .. 
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage" 
+  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage" 
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
