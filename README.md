@@ -28,7 +28,7 @@ Some knowledge of basic network protocols is a prerequisite to using Packet Send
 
 * Twitter: [@NagleCode](http://twitter.com/naglecode)
 * You may also track this project on [GitHub](http://github.com/dannagle/PacketSender).
-* Secure Anonymous Email: [packetsender.com/contact](https://packetsender.com/contact)
+* Email: hello AT packetsender DOT com
 
 ### Portable Mode
 
