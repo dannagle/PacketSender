@@ -49,6 +49,7 @@ public:
     bool receiveBeforeSend;
     int delayAfterConnect;
     bool persistentConnectCheck;
+    bool isSecure;
     void setIPmode(int mode);
     static int getIPmode();
 

@@ -41,6 +41,7 @@ void PacketNetwork::incomingConnection(qintptr socketDescriptor)
     QDEBUG() << "new tcp connection";
 
     TCPThread *thread = new TCPThread(socketDescriptor, this);
+    thread->isSecure = isSecure;
     if(persistentConnectCheck) {
         PersistentConnection * pcWindow = new PersistentConnection();
         thread->incomingPersistent = true;
@@ -132,6 +133,8 @@ void PacketNetwork::init()
     pcList.clear();
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    isSecure = settings.value("isSecure", false).toBool();
 
     int udpPort = settings.value("udpPort", 0).toInt();
     int ipMode = settings.value("ipMode", 4).toInt();

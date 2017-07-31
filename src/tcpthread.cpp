@@ -20,6 +20,7 @@
 #include <QSsl>
 #include <QSslSocket>
 #include <QSslCipher>
+#include <QSslConfiguration>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -31,6 +32,7 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     incomingPersistent = false;
     sendPacket.clear();
     insidePersistent = false;
+    isSecure = false;
 
 
 }
@@ -41,8 +43,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     sendFlag = true;
     incomingPersistent = false;
     insidePersistent = false;
-
-
+    isSecure = false;
 }
 
 void TCPThread::sendAnother(Packet sendPacket)
@@ -50,6 +51,13 @@ void TCPThread::sendAnother(Packet sendPacket)
 
     QDEBUG() << "Send another packet to " << sendPacket.port;
     this->sendPacket = sendPacket;
+
+}
+
+void TCPThread::loadSSLCerts()
+{
+
+    QSslConfiguration sslConfiguration;
 
 }
 
@@ -438,6 +446,19 @@ void TCPThread::run()
 
     QSslSocket sock;
     sock.setSocketDescriptor(socketDescriptor);
+
+    //isSecure = true;
+
+    if(isSecure) {
+
+        sock.startServerEncryption();
+        sock.waitForEncrypted(10000);
+        if(sock.isEncrypted()) {
+            QDEBUG() << "We are encrypted";
+        } else {
+            QDEBUG() << "We are NOT encypted. What should we do?";
+        }
+    }
 
     connect(&sock, SIGNAL(disconnected()),
             this, SLOT(wasdisconnected()));
