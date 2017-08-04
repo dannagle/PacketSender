@@ -18,6 +18,7 @@
 #include <QDir>
 
 #include <QSsl>
+#include <QSslKey>
 #include <QSslSocket>
 #include <QSslCipher>
 #include <QSslConfiguration>
@@ -54,10 +55,54 @@ void TCPThread::sendAnother(Packet sendPacket)
 
 }
 
-void TCPThread::loadSSLCerts()
+QSslConfiguration TCPThread::loadSSLCerts(bool allowSnakeOil)
 {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    QSslConfiguration sslConfiguration;
+
+
+    QSslConfiguration sslConfiguration = QSslConfiguration::defaultConfiguration();
+
+    // set the ca certificates from the configured path
+    if (!settings.value("sslCaPath").toString().isEmpty()) {
+        sslConfiguration.setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
+    }
+
+    // set the local certificates from the configured file path
+    if (!settings.value("sslLocalCertificatePath").toString().isEmpty()) {
+        QList<QSslCertificate> certs = QSslCertificate::fromPath(settings.value("sslLocalCertificatePath").toString());
+        if(!certs.isEmpty()) {
+            sslConfiguration.setLocalCertificate(certs.first());
+        }
+    }
+
+    // set the private key from the configured file path
+    if (!settings.value("sslPrivateKeyPath").toString().isEmpty()) {
+        QSslKey key;
+
+        QFile keyFile(settings.value("sslPrivateKeyPath").toString());
+        if(keyFile.open(QIODevice::ReadOnly)) {
+
+            //need to bring private key to the prompt.
+            QSslKey sslKey(keyFile.readAll(), QSsl::Rsa, QSsl::Der, QSsl::PrivateKey, "password");
+            sslConfiguration.setPrivateKey(sslKey);
+            keyFile.close();
+        }
+    }
+
+    if(allowSnakeOil) {
+        if(sslConfiguration.isNull()) {
+            //load the snake oil cert.
+
+            //this is stored as base64 so smart git repos
+            //do not complain about shipping a private key.
+            QFile snakeoil("://snakeoil_cert.pem.base64");
+
+
+        }
+    }
+
+    return sslConfiguration;
 
 }
 
@@ -321,20 +366,13 @@ void TCPThread::run()
         if(sendPacket.isSSL()) {
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-            // set the ca certificates from the configured path
-            if (!settings.value("sslCaPath").toString().isEmpty()) {
-                clientConnection->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
+            QSslConfiguration sslConfig = loadSSLCerts(false);
+            if(!sslConfig.isNull()) {
+                clientConnection->setSslConfiguration(sslConfig);
+            } else {
+                QDEBUG() << "Using default SSL configuration";
             }
 
-            // set the local certificates from the configured file path
-            if (!settings.value("sslLocalCertificatePath").toString().isEmpty()) {
-                clientConnection->setLocalCertificate(settings.value("sslLocalCertificatePath").toString());
-            }
-
-            // set the private key from the configured file path
-            if (!settings.value("sslPrivateKeyPath").toString().isEmpty()) {
-                clientConnection->setPrivateKey(settings.value("sslPrivateKeyPath").toString());
-            }
 
             if(ipMode > 4) {
                 clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);

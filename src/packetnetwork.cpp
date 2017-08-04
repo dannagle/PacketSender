@@ -121,10 +121,12 @@ void PacketNetwork::setIPmode(int mode) {
 
 }
 
+
 void PacketNetwork::init()
 {
 
     udpSocket = new QUdpSocket(this);
+    sslserver = new QTcpServer(this);
 
     receiveBeforeSend = false;
     delayAfterConnect = 0;

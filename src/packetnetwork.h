@@ -81,6 +81,7 @@ private slots:
 
 private:
 
+    QTcpServer * sslserver;
     QUdpSocket *udpSocket;
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;

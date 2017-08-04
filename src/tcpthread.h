@@ -22,7 +22,7 @@ public:
     TCPThread(int socketDescriptor, QObject *parent);
     TCPThread(Packet sendPacket, QObject *parent);
     void sendAnother(Packet sendPacket);
-    void loadSSLCerts();
+    QSslConfiguration loadSSLCerts(bool allowSnakeOil);
 
     void run();
     bool sendFlag;
