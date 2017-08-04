@@ -69,6 +69,7 @@ public slots:
     void packetReceivedECHO(Packet sendpacket);
     void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
     void packetSentECHO(Packet sendpacket);
+    void newSSLConnection();
 
 
 public slots:

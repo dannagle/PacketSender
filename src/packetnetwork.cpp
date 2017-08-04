@@ -122,6 +122,17 @@ void PacketNetwork::setIPmode(int mode) {
 }
 
 
+void PacketNetwork::newSSLConnection()
+{
+    QDEBUG() << "Handle the ssl connection";
+
+    QTcpSocket * sock = sslserver->nextPendingConnection();
+
+    isSecure = true;   //TODO:fix this race condition
+    incomingConnection(sock->socketDescriptor());
+    isSecure = false;
+}
+
 void PacketNetwork::init()
 {
 
@@ -134,12 +145,20 @@ void PacketNetwork::init()
     tcpthreadList.clear();
     pcList.clear();
 
+
+    if(!connect(sslserver, &QTcpServer::newConnection, this, &PacketNetwork::newSSLConnection)) {
+        QDEBUG() << "newSSLConnection connection false";
+    }
+
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     isSecure = settings.value("isSecure", false).toBool();
 
     int udpPort = settings.value("udpPort", 0).toInt();
     int ipMode = settings.value("ipMode", 4).toInt();
+
+
 
     bool bindResult = udpSocket->bind(
                 IPV4_OR_IPV6
@@ -158,13 +177,22 @@ void PacketNetwork::init()
 
     }
 
-    qDebug() << __FILE__ << "/" <<__LINE__ << "udpSocket bind: " << bindResult;
+    QDEBUG() <<  "udpSocket bind: " << bindResult;
 
     int tcpPort = settings.value("tcpPort", 0).toInt();
 
-    qDebug() << __FILE__ << "/" <<__LINE__ << "tcpServer bind: " << listen(
+    QDEBUG() << "tcpServer bind: " << listen(
                     IPV4_OR_IPV6
                     , tcpPort);
+
+/*
+    QDEBUG() << "sslserver bind: " << sslserver->listen(
+                    IPV4_OR_IPV6
+                    , tcpPort + 1);
+
+    QDEBUG() << "sslserver bound to " << sslserver->serverPort();
+*/
+
 
 
     if(tcpPort < 1024 && getTCPPort() == 0) {

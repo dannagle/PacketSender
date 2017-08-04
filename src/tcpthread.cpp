@@ -489,6 +489,13 @@ void TCPThread::run()
 
     if(isSecure) {
 
+        QSslConfiguration sslConfig = loadSSLCerts(false);
+        if(!sslConfig.isNull()) {
+            sock.setSslConfiguration(sslConfig);
+        } else {
+            QDEBUG() << "Using default SSL configuration";
+        }
+
         sock.startServerEncryption();
         sock.waitForEncrypted(10000);
         if(sock.isEncrypted()) {
