@@ -122,22 +122,14 @@ void PacketNetwork::setIPmode(int mode) {
 }
 
 
-void PacketNetwork::newSSLConnection()
-{
-    QDEBUG() << "Handle the ssl connection";
-
-    QTcpSocket * sock = sslserver->nextPendingConnection();
-
-    isSecure = true;   //TODO:fix this race condition
-    incomingConnection(sock->socketDescriptor());
-    isSecure = false;
-}
-
 void PacketNetwork::init()
 {
 
+    tcpServers.clear();
+    udpServers.clear();
+
     udpSocket = new QUdpSocket(this);
-    sslserver = new QTcpServer(this);
+
 
     receiveBeforeSend = false;
     delayAfterConnect = 0;
@@ -146,14 +138,7 @@ void PacketNetwork::init()
     pcList.clear();
 
 
-    if(!connect(sslserver, &QTcpServer::newConnection, this, &PacketNetwork::newSSLConnection)) {
-        QDEBUG() << "newSSLConnection connection false";
-    }
-
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-    isSecure = settings.value("isSecure", false).toBool();
 
     int udpPort = settings.value("udpPort", 0).toInt();
     int ipMode = settings.value("ipMode", 4).toInt();
@@ -274,13 +259,7 @@ int PacketNetwork::getTCPPort()
 
 int PacketNetwork::getSSLPort()
 {
-    if(sslserver->isListening()) {
-
-        return sslserver->serverPort();
-    } else {
-        return 0;
-    }
-
+    return 0;
 }
 
 

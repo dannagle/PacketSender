@@ -58,7 +58,6 @@ public:
     void packetTable_checkMultiSelected();
     void generateConnectionMenu();
 
-
 signals:
     void sendPacket(Packet sendpacket);
 

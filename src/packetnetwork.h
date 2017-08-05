@@ -27,6 +27,7 @@
 #include "tcpthread.h"
 #include "packet.h"
 #include "persistentconnection.h"
+#include <threadedtcpserver.h>
 
 
 class PacketNetwork : public QTcpServer
@@ -54,6 +55,7 @@ public:
     void setIPmode(int mode);
     static int getIPmode();
 
+
     QList<SmartResponseConfig> smartList;
 
 
@@ -70,7 +72,7 @@ public slots:
     void packetReceivedECHO(Packet sendpacket);
     void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
     void packetSentECHO(Packet sendpacket);
-    void newSSLConnection();
+
 
 
 public slots:
@@ -83,10 +85,12 @@ private slots:
 
 private:
 
-    QTcpServer * sslserver;
     QUdpSocket *udpSocket;
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
+    QList<ThreadedTCPServer *> tcpServers;
+    QList<QUdpSocket *> udpServers;
+
 };
 
 #endif // PACKETNETWORK_H
