@@ -23,6 +23,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QHash>
+#include <QHostAddress>
 #include "globals.h"
 #include "tcpthread.h"
 #include "packet.h"
@@ -62,6 +63,7 @@ public:
 
     void incomingConnection(qintptr socketDescriptor);
 
+    static QHostAddress resolveDNS(QString hostname);
 signals:
     void packetReceived(Packet sendpacket);
     void toStatusBar(const QString & message, int timeout = 0, bool override = false);

@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QSettings>
 #include <QMessageBox>
+#include <QHostInfo>
 
 #include "persistentconnection.h"
 
@@ -333,7 +334,9 @@ void PacketNetwork::readPendingDatagrams()
                 udpPacket.hexString = Packet::byteArrayToHex(smartData);
             }
 
-            udpSocket->writeDatagram(udpPacket.getByteArray(),sender,senderPort);
+            QHostAddress resolved = resolveDNS(udpPacket.toIP);
+
+            udpSocket->writeDatagram(udpPacket.getByteArray(),resolved,senderPort);
             emit packetSent(udpPacket);
 
         }
@@ -364,6 +367,21 @@ void PacketNetwork::disconnected()
 
     QDEBUG() << "Socket was disconnected.";
 }
+
+
+QHostAddress PacketNetwork::resolveDNS(QString hostname)
+{
+
+    QHostInfo info = QHostInfo::fromName(hostname);
+    if (info.error() != QHostInfo::NoError)
+    {
+        return QHostAddress();
+    } else {
+
+        return info.addresses().at(0);
+    }
+}
+
 
 void PacketNetwork::packetToSend(Packet sendpacket)
 {
@@ -433,7 +451,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     {
         sendpacket.fromPort = getUDPPort();
         QDEBUG() << "Sending data to :" << sendpacket.toIP << ":" << sendpacket.port;
-        QDEBUG() << "result:" << udpSocket->writeDatagram(sendpacket.getByteArray(), address, sendpacket.port);
+
+        QHostAddress resolved = resolveDNS(sendpacket.toIP);
+
+        QDEBUG() << "result:" << udpSocket->writeDatagram(sendpacket.getByteArray(), resolved, sendpacket.port);
         emit packetSent(sendpacket);
     }
 
