@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     persistentconnection.cpp \
     settings.cpp \
     about.cpp \
-    subnetcalc.cpp
+    subnetcalc.cpp \
+    threadedtcpserver.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     settings.h \
     about.h \
     subnetcalc.h \
-    ebcdic_ascii_map.h
+    ebcdic_ascii_map.h \
+    threadedtcpserver.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \

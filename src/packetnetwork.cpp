@@ -186,11 +186,6 @@ void PacketNetwork::init()
                     IPV4_OR_IPV6
                     , tcpPort);
 
-    QDEBUG() << "sslserver bind: " << sslserver->listen(
-                    IPV4_OR_IPV6
-                    , sslPort);
-
-    QDEBUG() << "sslserver bound to " << sslserver->serverPort();
 
 
 

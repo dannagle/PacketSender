@@ -25,6 +25,7 @@
 #include <QHostInfo>
 #include <QShortcut>
 #include <QClipboard>
+#include <QSslKey>
 #include "brucethepoodle.h"
 #include "settings.h"
 #include "about.h"
@@ -293,7 +294,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
 
+
+    sslServer = new ThreadedTCPServer(this);
+
+
+
 }
+
 
 void MainWindow::ebcdicTranslate()
 {

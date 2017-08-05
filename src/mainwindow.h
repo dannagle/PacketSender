@@ -24,6 +24,7 @@
 #include "globals.h"
 #include "packet.h"
 #include "packetnetwork.h"
+#include "threadedtcpserver.h"
 
 
 namespace Ui {
@@ -160,6 +161,7 @@ private slots:
 
     void on_actionDonate_Thank_You_triggered();
 
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
@@ -179,6 +181,8 @@ private:
     QString IPv4Stylesheet;
     QString IPv6Stylesheet;
 
+    ThreadedTCPServer * sslServer;
+
 
     QStringList packetTableHeaders;
     QStringList packetSavedTableHeaders;
@@ -195,6 +199,7 @@ private:
 
     void setIPMode();
     void saveSession(Packet sessionPacket);
+
 };
 
 #endif // MAINWINDOW_H
