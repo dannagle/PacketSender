@@ -180,18 +180,18 @@ void PacketNetwork::init()
     QDEBUG() <<  "udpSocket bind: " << bindResult;
 
     int tcpPort = settings.value("tcpPort", 0).toInt();
+    int sslPort = settings.value("sslPort", 0).toInt();
 
     QDEBUG() << "tcpServer bind: " << listen(
                     IPV4_OR_IPV6
                     , tcpPort);
 
-/*
     QDEBUG() << "sslserver bind: " << sslserver->listen(
                     IPV4_OR_IPV6
-                    , tcpPort + 1);
+                    , sslPort);
 
     QDEBUG() << "sslserver bound to " << sslserver->serverPort();
-*/
+
 
 
 
@@ -271,6 +271,17 @@ int PacketNetwork::getTCPPort()
     if(isListening())
     {
         return serverPort();
+    } else {
+        return 0;
+    }
+
+}
+
+int PacketNetwork::getSSLPort()
+{
+    if(sslserver->isListening()) {
+
+        return sslserver->serverPort();
     } else {
         return 0;
     }

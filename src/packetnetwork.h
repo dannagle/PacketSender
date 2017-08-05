@@ -39,6 +39,7 @@ public:
     QString debugQByteArray(QByteArray debugArray);
     int getUDPPort();
     int getTCPPort();
+    int getSSLPort();
 
     void kill();
     QString responseData;

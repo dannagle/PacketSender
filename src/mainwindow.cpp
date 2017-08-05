@@ -169,6 +169,13 @@ MainWindow::MainWindow(QWidget *parent) :
     tcpServerStatus->setCursor(Qt::PointingHandCursor);
     tcpServerStatus->setIcon(QIcon(TCPRXICON));
 
+    sslServerStatus = new QPushButton("SSL:"+QString::number(packetNetwork.getSSLPort()));
+    sslServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    sslServerStatus->setFlat(true);
+    sslServerStatus->setCursor(Qt::PointingHandCursor);
+    sslServerStatus->setIcon(QIcon(SSLRXICON));
+
+
 
     connect(tcpServerStatus, SIGNAL(clicked()),
             this, SLOT(toggleTCPServer()));
@@ -177,6 +184,7 @@ MainWindow::MainWindow(QWidget *parent) :
     statusBar()->insertPermanentWidget(3, tcpServerStatus);
 
 
+    statusBar()->insertPermanentWidget(4, sslServerStatus);
 
     IPv4Stylesheet = "QPushButton {width:50px; color: green; } QPushButton::hover { color: #BC810C; } ";
     IPv6Stylesheet = "QPushButton {width:50px; color: blue; } QPushButton::hover { color: #BC810C; } ";
@@ -185,7 +193,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IPmodeButton = new QPushButton("IPv4 Mode");
     IPmodeButton->setFlat(true);
     IPmodeButton->setCursor(Qt::PointingHandCursor);
-    statusBar()->insertPermanentWidget(4, IPmodeButton);
+    statusBar()->insertPermanentWidget(5, IPmodeButton);
 
     setIPMode();
 
@@ -370,6 +378,21 @@ void MainWindow::UDPServerStatus()
 
 
 }
+
+
+void MainWindow::SSLServerStatus()
+{
+    if(packetNetwork.getSSLPort() > 0)
+    {
+        tcpServerStatus->setText("SSL:"+QString::number(packetNetwork.getSSLPort()));
+    } else {
+        tcpServerStatus->setText("SSL Server Disabled");
+
+    }
+
+
+}
+
 
 void MainWindow::TCPServerStatus()
 {

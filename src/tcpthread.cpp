@@ -22,6 +22,7 @@
 #include <QSslSocket>
 #include <QSslCipher>
 #include <QSslConfiguration>
+#include <QTemporaryFile>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -83,7 +84,7 @@ QSslConfiguration TCPThread::loadSSLCerts(bool allowSnakeOil)
         QFile keyFile(settings.value("sslPrivateKeyPath").toString());
         if(keyFile.open(QIODevice::ReadOnly)) {
 
-            //need to bring private key to the prompt.
+            //TODO:need to bring private key password to the prompt?
             QSslKey sslKey(keyFile.readAll(), QSsl::Rsa, QSsl::Der, QSsl::PrivateKey, "password");
             sslConfiguration.setPrivateKey(sslKey);
             keyFile.close();
@@ -91,13 +92,57 @@ QSslConfiguration TCPThread::loadSSLCerts(bool allowSnakeOil)
     }
 
     if(allowSnakeOil) {
-        if(sslConfiguration.isNull()) {
-            //load the snake oil cert.
 
-            //this is stored as base64 so smart git repos
-            //do not complain about shipping a private key.
-            QFile snakeoil("://snakeoil_cert.pem.base64");
 
+        //this is stored as base64 so smart git repos
+        //do not complain about shipping a private key.
+        QFile snakeoil("://snakeoil_cert.pem.base64");
+
+
+        QFile certfile(CERTFILE);
+        QFile keyfile(KEYFILE);
+        QByteArray decoded; decoded.clear();
+
+        if(!certfile.exists() || !keyfile.exists()) {
+            if(snakeoil.open(QFile::ReadOnly)) {
+                decoded = QByteArray::fromBase64(snakeoil.readAll());
+            }
+        }
+
+        if(!certfile.exists()) {
+            if(certfile.open(QFile::WriteOnly)) {
+
+                //load the snake oil cert.
+                certfile.write(decoded);
+                certfile.close();
+            }
+        }
+
+        if(!keyfile.exists()) {
+            if(keyfile.open(QFile::WriteOnly)) {
+
+                //load the snake oil cert.
+                keyfile.write(decoded);
+                keyfile.close();
+            }
+        }
+
+        certfile.open (QIODevice::ReadOnly);
+        QSslCertificate certificate (&certfile, QSsl::Pem);
+        certfile.close ();
+
+        keyfile.open (QIODevice::ReadOnly);
+        QSslKey sslKey (&keyfile, QSsl::Rsa, QSsl::Pem);
+        keyfile.close ();
+
+        sslConfiguration.setPeerVerifyMode (QSslSocket::VerifyNone);
+        sslConfiguration.setLocalCertificate (certificate);
+
+        sslConfiguration.setPrivateKey (sslKey);
+
+        if(!sslConfiguration.isNull()) {
+            QDEBUG() << "Ciphers:" << sslConfiguration.ciphers().size();
+            QDEBUG() << "Cert:" << sslConfiguration.localCertificate().toText().size();
 
         }
     }
@@ -489,7 +534,7 @@ void TCPThread::run()
 
     if(isSecure) {
 
-        QSslConfiguration sslConfig = loadSSLCerts(false);
+        QSslConfiguration sslConfig = loadSSLCerts(true);
         if(!sslConfig.isNull()) {
             sock.setSslConfiguration(sslConfig);
         } else {
@@ -497,11 +542,12 @@ void TCPThread::run()
         }
 
         sock.startServerEncryption();
-        sock.waitForEncrypted(10000);
+        sock.waitForEncrypted(5000);
         if(sock.isEncrypted()) {
             QDEBUG() << "We are encrypted";
         } else {
             QDEBUG() << "We are NOT encypted. What should we do?";
+            QDEBUG() << sock.sslErrors().size() << sock.sslErrors();
         }
     }
 

@@ -69,6 +69,7 @@ public slots:
 
     void toggleUDPServer();
     void toggleTCPServer();
+    void SSLServerStatus();
     void toggleIPv4_IPv6();
     void ebcdicTranslate();
 
@@ -171,6 +172,7 @@ private:
     bool tableActive;
     QPushButton * udpServerStatus;
     QPushButton * tcpServerStatus;
+    QPushButton * sslServerStatus;
     QPushButton * stopResendingButton;
     QPushButton * IPmodeButton;
 
