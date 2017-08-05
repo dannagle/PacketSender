@@ -158,9 +158,14 @@ void PersistentConnection::connectThreadSignals()
 void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
 {
 
-
-    setWindowTitle("TCP://You:" + QString::number(portNum));
     thread = thethread;
+
+    if(thread->isSecure) {
+        setWindowTitle("SSL://You:" + QString::number(portNum));
+    } else {
+        setWindowTitle("TCP://You:" + QString::number(portNum));
+    }
+
     QApplication::processEvents();
     connectThreadSignals();
 

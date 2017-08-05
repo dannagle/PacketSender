@@ -51,7 +51,9 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     QDEBUG() << "new tcp connection";
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    bool persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
+    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool();
+
+    QDEBUGVAR(persistentConnectCheck);
 
     TCPThread *thread = new TCPThread(socketDescriptor, this);
     thread->isSecure = encrypted;
