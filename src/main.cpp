@@ -41,12 +41,10 @@ int main(int argc, char *argv[])
         debugMode = 1;
     }
 
-#ifdef __APPLE__
     if(QFile::exists(QDir::homePath() + "/DEBUGMODE")) {
         debugMode = 1;
     }
 
-#endif
 
     if(debugMode)
     {
