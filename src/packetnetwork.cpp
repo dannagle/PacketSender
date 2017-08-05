@@ -20,65 +20,41 @@
 #include "persistentconnection.h"
 
 PacketNetwork::PacketNetwork(QWidget *parent) :
-    QTcpServer(parent)
+    QObject(parent)
 {
 }
 
 
 void PacketNetwork::kill()
 {
-    udpSocket->close();
-    close();
+    QUdpSocket * udp;
+    foreach (udp, udpServers) {
+        udp->close();
+        udp->deleteLater();
+    }
+    udpServers.clear();
 
-    QApplication::processEvents();
-    udpSocket->deleteLater();
+    ThreadedTCPServer * tcpS;
+    foreach (tcpS, tcpServers) {
+        tcpS->close();
+        tcpS->deleteLater();
+    }
+    tcpServers.clear();
+
+
+    //legacy
+    tcp->close();
+    tcp->deleteLater();
+    ssl->close();
+    ssl->deleteLater();
+
+
     QApplication::processEvents();
 
 }
 
 void PacketNetwork::incomingConnection(qintptr socketDescriptor)
 {
-    QDEBUG() << "new tcp connection";
-
-    TCPThread *thread = new TCPThread(socketDescriptor, this);
-    thread->isSecure = isSecure;
-    if(persistentConnectCheck) {
-        PersistentConnection * pcWindow = new PersistentConnection();
-        thread->incomingPersistent = true;
-        pcWindow->initWithThread(thread, serverPort());
-
-        connect(pcWindow->thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
-
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
-                 << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),pcWindow, SLOT(socketDisconnected()));
-
-
-        pcWindow->show();
-
-        //Prevent Qt from auto-destroying these windows.
-        //TODO: Use a real connection manager.
-        pcList.append(pcWindow);
-
-        //TODO: Use a real connection manager.
-        //prevent Qt from auto-destorying this thread while it tries to close.
-        tcpthreadList.append(pcWindow->thread);
-
-    } else {
-
-        QDEBUG() << "new tcp connection";
-
-            TCPThread *thread = new TCPThread(socketDescriptor, this);
-            connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                     << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
-                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-            thread->start();
-
-    }
 
 
 }
@@ -125,6 +101,7 @@ void PacketNetwork::setIPmode(int mode) {
 void PacketNetwork::init()
 {
 
+    //TODO:migrating to a server list.
     tcpServers.clear();
     udpServers.clear();
 
@@ -167,26 +144,38 @@ void PacketNetwork::init()
     int tcpPort = settings.value("tcpPort", 0).toInt();
     int sslPort = settings.value("sslPort", 0).toInt();
 
-    QDEBUG() << "tcpServer bind: " << listen(
-                    IPV4_OR_IPV6
-                    , tcpPort);
+    tcp = new ThreadedTCPServer(this);
+    ssl = new ThreadedTCPServer(this);
+
+    tcp->init(tcpPort, false, ipMode);
+    ssl->init(sslPort, true, ipMode);
 
 
-
-
-
-    if(tcpPort < 1024 && getTCPPort() == 0) {
+    if((tcpPort < 1024 && getTCPPort() == 0)
+            || (sslPort < 1024 && getSSLPort() == 0)
+            ) {
 
         QMessageBox msgBox;
         msgBox.setWindowTitle("Binding to low port number.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Packet Sender attempted (and failed) to bind to a TCP port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
+        msgBox.setText("Packet Sender attempted (and failed) to bind to a port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
         msgBox.exec();
 
-
     }
+
+
+
+    QDEBUG() << connect(tcp, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+             << connect(tcp, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+             << connect(tcp, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+
+    QDEBUG() << connect(ssl, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+             << connect(ssl, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+             << connect(ssl, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
 
 
     sendResponse = settings.value("sendReponse", false).toBool();
@@ -228,7 +217,7 @@ void PacketNetwork::init()
 
     } else {
         QDEBUG() << "tcp server disable";
-        close();
+        tcp->close();
     }
 
 }
@@ -248,9 +237,9 @@ int PacketNetwork::getUDPPort()
 
 int PacketNetwork::getTCPPort()
 {
-    if(isListening())
+    if(tcp->isListening())
     {
-        return serverPort();
+        return tcp->serverPort();
     } else {
         return 0;
     }
@@ -259,7 +248,12 @@ int PacketNetwork::getTCPPort()
 
 int PacketNetwork::getSSLPort()
 {
-    return 0;
+    if(ssl->isListening())
+    {
+        return ssl->serverPort();
+    } else {
+        return 0;
+    }
 }
 
 
@@ -432,11 +426,5 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         QDEBUG() << "result:" << udpSocket->writeDatagram(sendpacket.getByteArray(), address, sendpacket.port);
         emit packetSent(sendpacket);
     }
-
-}
-
-void PacketNetwork::newSession()
-{
-
 
 }

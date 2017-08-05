@@ -30,7 +30,7 @@
 #include <threadedtcpserver.h>
 
 
-class PacketNetwork : public QTcpServer
+class PacketNetwork : public QObject
 {
     Q_OBJECT
 public:
@@ -59,7 +59,6 @@ public:
     QList<SmartResponseConfig> smartList;
 
 
-protected:
     void incomingConnection(qintptr socketDescriptor);
 
 signals:
@@ -80,14 +79,16 @@ public slots:
     void disconnected();
     void packetToSend(Packet sendpacket);
 
-private slots:
-     void newSession();
-
 private:
 
     QUdpSocket *udpSocket;
+    ThreadedTCPServer * tcp;
+    ThreadedTCPServer * ssl;
+
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
+
+    //TODO: eventually migrate to a list to support any number of servers.
     QList<ThreadedTCPServer *> tcpServers;
     QList<QUdpSocket *> udpServers;
 

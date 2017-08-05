@@ -56,6 +56,7 @@ void TCPThread::sendAnother(Packet sendPacket)
 
 }
 
+
 QSslConfiguration TCPThread::loadSSLCerts(bool allowSnakeOil)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -534,21 +535,45 @@ void TCPThread::run()
 
     if(isSecure) {
 
-        QSslConfiguration sslConfig = loadSSLCerts(true);
-        if(!sslConfig.isNull()) {
-            sock.setSslConfiguration(sslConfig);
-        } else {
-            QDEBUG() << "Using default SSL configuration";
+        //Do the SSL handshake
+        QDEBUG() << "supportsSsl" << sock.supportsSsl();
+
+#ifdef __APPLE__
+        QFile certfile("/Users/dannagle/github/PacketSender/src/ps.pem");
+        QFile keyfile("/Users/dannagle/github/PacketSender/src/ps.key");
+#else
+        QFile certfile("C:/Users/danie/github/PacketSender/src/ps.pem");
+        QFile keyfile("C:/Users/danie/github/PacketSender/src/ps.key");
+#endif
+        //suppress prompts
+        bool envOk = false;
+        const int env = qEnvironmentVariableIntValue("QT_SSL_USE_TEMPORARY_KEYCHAIN", &envOk);
+        if((env == 0)) {
+            QDEBUG() << "Possible prompting in Mac";
         }
 
+
+        certfile.open (QIODevice::ReadOnly);
+        QSslCertificate certificate (&certfile, QSsl::Pem);
+        certfile.close ();
+
+        keyfile.open (QIODevice::ReadOnly);
+        QSslKey sslKey (&keyfile, QSsl::Rsa, QSsl::Pem);
+        keyfile.close ();
+
+
+        sock.setLocalCertificate(certificate);
+        sock.setPrivateKey(sslKey);
+
+        //sock.setSslConfiguration(TCPThread::loadSSLCerts(true));
+
+        sock.setProtocol( QSsl::AnyProtocol );
+        sock.ignoreSslErrors();
         sock.startServerEncryption();
-        sock.waitForEncrypted(5000);
-        if(sock.isEncrypted()) {
-            QDEBUG() << "We are encrypted";
-        } else {
-            QDEBUG() << "We are NOT encypted. What should we do?";
-            QDEBUG() << sock.sslErrors().size() << sock.sslErrors();
-        }
+        sock.waitForEncrypted();
+        QDEBUGVAR(sock.isEncrypted());
+        QDEBUG() << "Errors" << sock.sslErrors();
+
     }
 
     connect(&sock, SIGNAL(disconnected()),

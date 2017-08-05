@@ -5,10 +5,12 @@
 #include <QHostAddress>
 #include <QSslConfiguration>
 
+#include <QDesktopServices>
 #include <QSslCertificate>
 #include <QSslKey>
 #include <QFile>
 #include <QtGlobal>
+#include <QSettings>
 
 #include "globals.h"
 #include "tcpthread.h"
@@ -31,61 +33,82 @@ bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, int ipMode)
     encrypted = isEncrypted;
 
 
+    tcpthreadList.clear();
+    pcList.clear();
+
+
     bool bindResult = listen(
                 IPV4_OR_IPV6
                 , port);
 
+    QDEBUG() << "Binding" << serverPort() << bindResult;
     return bindResult;
 
 }
 
 void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 {
-    QSslSocket * sslSock = new QSslSocket(this);
-    QDEBUG() << "supportsSsl" << sslSock->supportsSsl();
+    QDEBUG() << "new tcp connection";
 
-    sslSock->setSocketDescriptor(socketDescriptor);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    bool persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
 
-    if(encrypted) {
+    TCPThread *thread = new TCPThread(socketDescriptor, this);
+    thread->isSecure = encrypted;
+    QDEBUGVAR(thread->isSecure);
+    if(persistentConnectCheck) {
+        PersistentConnection * pcWindow = new PersistentConnection();
+        thread->incomingPersistent = true;
+        pcWindow->initWithThread(thread, serverPort());
 
-        QFile certfile("/Users/dannagle/github/PacketSender/src/ps.pem");
-        QFile keyfile("/Users/dannagle/github/PacketSender/src/ps.key");
+        connect(pcWindow->thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
 
-        //suppress prompts
-        bool envOk = false;
-        const int env = qEnvironmentVariableIntValue("QT_SSL_USE_TEMPORARY_KEYCHAIN", &envOk);
-        if((env == 0)) {
-            QDEBUG() << "Possible prompting in Mac";
-        }
-
-
-        certfile.open (QIODevice::ReadOnly);
-        QSslCertificate certificate (&certfile, QSsl::Pem);
-        certfile.close ();
-
-        keyfile.open (QIODevice::ReadOnly);
-        QSslKey sslKey (&keyfile, QSsl::Rsa, QSsl::Pem);
-        keyfile.close ();
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),pcWindow, SLOT(socketDisconnected()));
 
 
-        sslSock->setLocalCertificate(certificate);
-        sslSock->setPrivateKey(sslKey);
+        pcWindow->show();
 
-        //sslSock->setSslConfiguration(TCPThread::loadSSLCerts(true));
+        //Prevent Qt from auto-destroying these windows.
+        //TODO: Use a real connection manager.
+        pcList.append(pcWindow);
 
-        sslSock->setProtocol( QSsl::AnyProtocol );
-        sslSock->ignoreSslErrors();
-        sslSock->startServerEncryption();
-        sslSock->waitForEncrypted();
-        QDEBUGVAR(sslSock->isEncrypted());
-        QDEBUG() << "Errors" << sslSock->sslErrors();
+        //TODO: Use a real connection manager.
+        //prevent Qt from auto-destorying this thread while it tries to close.
+        tcpthreadList.append(pcWindow->thread);
+
+    } else {
+
+        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+        thread->start();
 
     }
 
 
-    sslSock->write(QByteArray("sslSock was sent."));
-    sslSock->waitForBytesWritten();
-    sslSock->close();
+}
+
+
+void ThreadedTCPServer::packetReceivedECHO(Packet sendpacket)
+{
+    emit packetReceived(sendpacket);
+}
+
+void ThreadedTCPServer::toStatusBarECHO(const QString &message, int timeout, bool override)
+{
+    emit toStatusBar(message, timeout, override);
+
+}
+
+void ThreadedTCPServer::packetSentECHO(Packet sendpacket)
+{
+    emit packetSent(sendpacket);
 
 }
 

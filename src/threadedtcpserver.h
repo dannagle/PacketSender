@@ -20,11 +20,24 @@ protected:
     void incomingConnection(qintptr socketDescriptor);
 
 signals:
+    void packetReceived(Packet sendpacket);
+    void toStatusBar(const QString & message, int timeout = 0, bool override = false);
+    void packetSent(Packet sendpacket);
+
 
 public slots:
+    void packetReceivedECHO(Packet sendpacket);
+    void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
+    void packetSentECHO(Packet sendpacket);
+
+
 
 private:
     QList<TCPThread *> threads;
+
+
+    QList<TCPThread *> tcpthreadList;
+    QList<PersistentConnection *> pcList;
 
 
 };
