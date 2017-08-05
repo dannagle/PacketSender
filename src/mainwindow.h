@@ -69,6 +69,7 @@ public slots:
 
     void toggleUDPServer();
     void toggleTCPServer();
+    void toggleSSLServer();
     void SSLServerStatus();
     void toggleIPv4_IPv6();
     void ebcdicTranslate();
@@ -179,8 +180,6 @@ private:
 
     QString IPv4Stylesheet;
     QString IPv6Stylesheet;
-
-    ThreadedTCPServer * sslServer;
 
 
     QStringList packetTableHeaders;

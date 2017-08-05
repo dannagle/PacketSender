@@ -91,10 +91,13 @@ Settings::Settings(QWidget *parent) :
 
     ui->udpServerPortEdit->setText(settings.value("udpPort","0").toString());
     ui->tcpServerPortEdit->setText(settings.value("tcpPort","0").toString());
+    ui->sslServerPortEdit->setText(settings.value("sslPort","0").toString());
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
+    ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
     ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
@@ -180,12 +183,16 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("udpPort", ui->udpServerPortEdit->text().toUInt());
     settings.setValue("tcpPort", ui->tcpServerPortEdit->text().toUInt());
+    settings.setValue("sslPort", ui->sslServerPortEdit->text().toUInt());
+
     settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
     settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
 
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
+    settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());
+
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());

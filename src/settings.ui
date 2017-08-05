@@ -224,6 +224,31 @@
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="sslServerEnableCheck">
+            <property name="text">
+             <string>Enable SSL/TLS Server</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>SSL Server Port (or 0 for random)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sslServerPortEdit">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QLabel" name="label_15">
             <property name="text">
              <string>Set the server ports to 0 if you want to run multiple Packet Sender instances.</string>

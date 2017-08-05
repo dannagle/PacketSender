@@ -48,6 +48,7 @@ public:
     bool sendSmartResponse;
     bool activateUDP;
     bool activateTCP;
+    bool activateSSL;
     bool receiveBeforeSend;
     int delayAfterConnect;
     bool persistentConnectCheck;

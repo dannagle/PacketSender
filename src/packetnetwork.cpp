@@ -47,7 +47,8 @@ void PacketNetwork::kill()
     tcp->deleteLater();
     ssl->close();
     ssl->deleteLater();
-
+    udpSocket->close();
+    udpSocket->deleteLater();
 
     QApplication::processEvents();
 
@@ -182,6 +183,7 @@ void PacketNetwork::init()
     responseData = (settings.value("responseHex","")).toString();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
+    activateSSL = settings.value("sslServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
     persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
     sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
@@ -210,6 +212,14 @@ void PacketNetwork::init()
         QDEBUG() << "udp server disable";
     }
 
+    if(activateSSL)
+    {
+
+
+    } else {
+        QDEBUG() << "ssl server disable";
+        ssl->close();
+    }
 
     if(activateTCP)
     {

@@ -177,9 +177,11 @@ MainWindow::MainWindow(QWidget *parent) :
     sslServerStatus->setIcon(QIcon(SSLRXICON));
 
 
-
     connect(tcpServerStatus, SIGNAL(clicked()),
             this, SLOT(toggleTCPServer()));
+
+    connect(sslServerStatus, SIGNAL(clicked()),
+            this, SLOT(toggleSSLServer()));
 
 
     statusBar()->insertPermanentWidget(3, tcpServerStatus);
@@ -202,10 +204,9 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleIPv4_IPv6()));
 
 
-
-
     UDPServerStatus();
     TCPServerStatus();
+    SSLServerStatus();
 
     multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
     cancelResendNum = settings.value("cancelResendNum", 0).toInt();
@@ -293,12 +294,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
-
-
-    sslServer = new ThreadedTCPServer(this);
-
-
-
 }
 
 
@@ -332,6 +327,13 @@ void MainWindow::toggleTCPServer()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     settings.setValue("tcpServerEnable", !settings.value("tcpServerEnable", true).toBool());
+    applyNetworkSettings();
+}
+void MainWindow::toggleSSLServer()
+{
+    QDEBUG();
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("sslServerEnable", !settings.value("sslServerEnable", true).toBool());
     applyNetworkSettings();
 }
 
@@ -391,9 +393,9 @@ void MainWindow::SSLServerStatus()
 {
     if(packetNetwork.getSSLPort() > 0)
     {
-        tcpServerStatus->setText("SSL:"+QString::number(packetNetwork.getSSLPort()));
+        sslServerStatus->setText("SSL:"+QString::number(packetNetwork.getSSLPort()));
     } else {
-        tcpServerStatus->setText("SSL Server Disabled");
+        sslServerStatus->setText("SSL Server Disabled");
 
     }
 
@@ -1509,6 +1511,7 @@ void MainWindow::applyNetworkSettings()
 
     UDPServerStatus();
     TCPServerStatus();
+    SSLServerStatus();
 
 }
 
