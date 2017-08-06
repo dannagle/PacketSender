@@ -135,10 +135,16 @@ void TCPThread::loadSSLCerts(QSslSocket * sock, bool allowSnakeOil)
         certfile.open (QIODevice::ReadOnly);
         QSslCertificate certificate (&certfile, QSsl::Pem);
         certfile.close ();
+        if(certificate.isNull()) {
+            QDEBUG() << "Bad cert. delete it?";
+        }
 
         keyfile.open (QIODevice::ReadOnly);
         QSslKey sslKey (&keyfile, QSsl::Rsa, QSsl::Pem);
         keyfile.close ();
+        if(sslKey.isNull()) {
+            QDEBUG() << "Bad key. delete it?";
+        }
 
 
         sock->setLocalCertificate(certificate);
