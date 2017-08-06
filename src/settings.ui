@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
+    <width>978</width>
     <height>545</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -793,7 +793,7 @@
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}}</string>
+               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</string>
               </property>
              </widget>
             </item>

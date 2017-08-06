@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QPair>
 #include <QDesktopServices>
+#include <QUuid>
 
 
 
@@ -667,6 +668,9 @@ QString Packet::macroSwap(QString data) {
     }
     if(data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
+    }
+    if(data.contains("{{UNIQUE}}")) {
+        data = data.replace("{{UNIQUE}}", QUuid::createUuid().toString());
     }
 
     return data;

@@ -181,6 +181,23 @@ void Settings::on_buttonBox_accepted()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
+    unsigned int tcpport = ui->tcpServerPortEdit->text().toUInt();
+    unsigned int sslport = ui->sslServerPortEdit->text().toUInt();
+
+    if(tcpport != 0) {
+        if(sslport == tcpport) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
+            msgBox.exec();
+            return;
+        }
+
+    }
+
     settings.setValue("udpPort", ui->udpServerPortEdit->text().toUInt());
     settings.setValue("tcpPort", ui->tcpServerPortEdit->text().toUInt());
     settings.setValue("sslPort", ui->sslServerPortEdit->text().toUInt());
