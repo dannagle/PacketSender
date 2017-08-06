@@ -108,6 +108,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QPushButton" name="sendFileButton">
+       <property name="text">
+        <string>Send File</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -149,6 +156,13 @@
       <widget class="QPushButton" name="clearButton">
        <property name="text">
         <string>Clear Log</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="clipboardButton">
+       <property name="text">
+        <string>To Clipboard</string>
        </property>
       </widget>
      </item>
