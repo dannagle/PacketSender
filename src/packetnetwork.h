@@ -23,13 +23,15 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QHash>
+#include <QHostAddress>
 #include "globals.h"
 #include "tcpthread.h"
 #include "packet.h"
 #include "persistentconnection.h"
+#include <threadedtcpserver.h>
 
 
-class PacketNetwork : public QTcpServer
+class PacketNetwork : public QObject
 {
     Q_OBJECT
 public:
@@ -39,6 +41,7 @@ public:
     QString debugQByteArray(QByteArray debugArray);
     int getUDPPort();
     int getTCPPort();
+    int getSSLPort();
 
     void kill();
     QString responseData;
@@ -46,18 +49,18 @@ public:
     bool sendSmartResponse;
     bool activateUDP;
     bool activateTCP;
+    bool activateSSL;
     bool receiveBeforeSend;
     int delayAfterConnect;
     bool persistentConnectCheck;
+    bool isSecure;
     void setIPmode(int mode);
     static int getIPmode();
 
+
     QList<SmartResponseConfig> smartList;
 
-
-protected:
-    void incomingConnection(qintptr socketDescriptor);
-
+    static QHostAddress resolveDNS(QString hostname);
 signals:
     void packetReceived(Packet sendpacket);
     void toStatusBar(const QString & message, int timeout = 0, bool override = false);
@@ -70,19 +73,25 @@ public slots:
     void packetSentECHO(Packet sendpacket);
 
 
+
 public slots:
     void readPendingDatagrams();
     void disconnected();
     void packetToSend(Packet sendpacket);
 
-private slots:
-     void newSession();
-
 private:
 
     QUdpSocket *udpSocket;
+    ThreadedTCPServer * tcp;
+    ThreadedTCPServer * ssl;
+
     QList<TCPThread *> tcpthreadList;
     QList<PersistentConnection *> pcList;
+
+    //TODO: eventually migrate to a list to support any number of servers.
+    QList<ThreadedTCPServer *> tcpServers;
+    QList<QUdpSocket *> udpServers;
+
 };
 
 #endif // PACKETNETWORK_H

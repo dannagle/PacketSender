@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>545</height>
+    <width>1013</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -224,6 +224,31 @@
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="sslServerEnableCheck">
+            <property name="text">
+             <string>Enable SSL/TLS Server</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>SSL Server Port (or 0 for random)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="sslServerPortEdit">
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QLabel" name="label_15">
             <property name="text">
              <string>Set the server ports to 0 if you want to run multiple Packet Sender instances.</string>
@@ -307,7 +332,7 @@
          <property name="title">
           <string>Additional UDP/TCP/SSL Settings</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
@@ -408,79 +433,95 @@
            </widget>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
-            <item>
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>SSL CA Certificates</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="sslCaPath">
-              <property name="placeholderText">
-               <string>Path from where to load the CA certificats (leave empty for defaults)</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="sslCaPathBrowseButton">
-              <property name="text">
-               <string>Browse</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
-            <item>
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>SSL Local Certificate</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="sslLocalCertificatePath">
-              <property name="placeholderText">
-               <string>File path for the client side local certificate</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="sslLocalCertificatePathBrowseButton">
-              <property name="text">
-               <string>Browse</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_13">
-            <item>
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>SSL Private Key</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="sslPrivateKeyPath">
-              <property name="placeholderText">
-               <string>File path for the client side private key</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="sslPrivateKeyPathBrowseButton">
-              <property name="text">
-               <string>Browse</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string/>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QCheckBox" name="serverSnakeOilCheck">
+               <property name="text">
+                <string>SSL Server may use an internal snake oil cert</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QLabel" name="label_17">
+                 <property name="text">
+                  <string>SSL CA Certificates</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="sslCaPath">
+                 <property name="placeholderText">
+                  <string>Path from where to load the CA certificats (leave empty for defaults)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="sslCaPathBrowseButton">
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QLabel" name="label_18">
+                 <property name="text">
+                  <string>SSL Local Certificate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="sslLocalCertificatePath">
+                 <property name="placeholderText">
+                  <string>File path for the client side local certificate</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="sslLocalCertificatePathBrowseButton">
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QLabel" name="label_19">
+                 <property name="text">
+                  <string>SSL Private Key</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="sslPrivateKeyPath">
+                 <property name="placeholderText">
+                  <string>File path for the client side private key</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="sslPrivateKeyPathBrowseButton">
+                 <property name="text">
+                  <string>Browse</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -768,7 +809,7 @@
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}}</string>
+               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</string>
               </property>
              </widget>
             </item>

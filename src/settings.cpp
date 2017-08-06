@@ -91,10 +91,17 @@ Settings::Settings(QWidget *parent) :
 
     ui->udpServerPortEdit->setText(settings.value("udpPort","0").toString());
     ui->tcpServerPortEdit->setText(settings.value("tcpPort","0").toString());
+    ui->sslServerPortEdit->setText(settings.value("sslPort","0").toString());
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
+    ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+
+    ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
+
+
+
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
     ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
@@ -178,14 +185,38 @@ void Settings::on_buttonBox_accepted()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
+    unsigned int tcpport = ui->tcpServerPortEdit->text().toUInt();
+    unsigned int sslport = ui->sslServerPortEdit->text().toUInt();
+
+    if(tcpport != 0) {
+        if(sslport == tcpport) {
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
+            msgBox.exec();
+            return;
+        }
+
+    }
+
     settings.setValue("udpPort", ui->udpServerPortEdit->text().toUInt());
     settings.setValue("tcpPort", ui->tcpServerPortEdit->text().toUInt());
+    settings.setValue("sslPort", ui->sslServerPortEdit->text().toUInt());
+
     settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
     settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
 
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
+    settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());
+
+    settings.setValue("serverSnakeOilCheck", ui->serverSnakeOilCheck->isChecked());
+
+
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
     settings.setValue("delayAfterConnectCheck", ui->delayAfterConnectCheck->isChecked());

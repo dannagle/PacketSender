@@ -24,6 +24,7 @@
 #include "globals.h"
 #include "packet.h"
 #include "packetnetwork.h"
+#include "threadedtcpserver.h"
 
 
 namespace Ui {
@@ -57,7 +58,6 @@ public:
     void packetTable_checkMultiSelected();
     void generateConnectionMenu();
 
-
 signals:
     void sendPacket(Packet sendpacket);
 
@@ -69,6 +69,8 @@ public slots:
 
     void toggleUDPServer();
     void toggleTCPServer();
+    void toggleSSLServer();
+    void SSLServerStatus();
     void toggleIPv4_IPv6();
     void ebcdicTranslate();
 
@@ -159,6 +161,7 @@ private slots:
 
     void on_actionDonate_Thank_You_triggered();
 
+
 private:
     Ui::MainWindow *ui;
     QList<Packet> packetsLogged;
@@ -171,6 +174,7 @@ private:
     bool tableActive;
     QPushButton * udpServerStatus;
     QPushButton * tcpServerStatus;
+    QPushButton * sslServerStatus;
     QPushButton * stopResendingButton;
     QPushButton * IPmodeButton;
 
@@ -193,6 +197,7 @@ private:
 
     void setIPMode();
     void saveSession(Packet sessionPacket);
+
 };
 
 #endif // MAINWINDOW_H

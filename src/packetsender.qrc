@@ -21,7 +21,6 @@
         <file>pslogo128.png</file>
         <file>pslogo256.png</file>
         <file>dannagle32.jpg</file>
-        <file>icons/rx_ssl.png</file>
         <file>icons/tx_ssl.png</file>
         <file>icons/calculator.png</file>
         <file>icons/cog.png</file>
@@ -32,5 +31,8 @@
         <file>icons/upload.png</file>
         <file>icons/heart.png</file>
         <file>pslogo_bw.png</file>
+        <file>icons/rx_ssl.png</file>
+        <file>ps.key.base64</file>
+        <file>ps.pem.base64</file>
     </qresource>
 </RCC>

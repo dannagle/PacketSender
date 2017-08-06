@@ -25,6 +25,7 @@
 #include <QHostInfo>
 #include <QShortcut>
 #include <QClipboard>
+#include <QSslKey>
 #include "brucethepoodle.h"
 #include "settings.h"
 #include "about.h"
@@ -169,14 +170,24 @@ MainWindow::MainWindow(QWidget *parent) :
     tcpServerStatus->setCursor(Qt::PointingHandCursor);
     tcpServerStatus->setIcon(QIcon(TCPRXICON));
 
+    sslServerStatus = new QPushButton("SSL:"+QString::number(packetNetwork.getSSLPort()));
+    sslServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    sslServerStatus->setFlat(true);
+    sslServerStatus->setCursor(Qt::PointingHandCursor);
+    sslServerStatus->setIcon(QIcon(SSLRXICON));
+
 
     connect(tcpServerStatus, SIGNAL(clicked()),
             this, SLOT(toggleTCPServer()));
+
+    connect(sslServerStatus, SIGNAL(clicked()),
+            this, SLOT(toggleSSLServer()));
 
 
     statusBar()->insertPermanentWidget(3, tcpServerStatus);
 
 
+    statusBar()->insertPermanentWidget(4, sslServerStatus);
 
     IPv4Stylesheet = "QPushButton {width:50px; color: green; } QPushButton::hover { color: #BC810C; } ";
     IPv6Stylesheet = "QPushButton {width:50px; color: blue; } QPushButton::hover { color: #BC810C; } ";
@@ -185,7 +196,7 @@ MainWindow::MainWindow(QWidget *parent) :
     IPmodeButton = new QPushButton("IPv4 Mode");
     IPmodeButton->setFlat(true);
     IPmodeButton->setCursor(Qt::PointingHandCursor);
-    statusBar()->insertPermanentWidget(4, IPmodeButton);
+    statusBar()->insertPermanentWidget(5, IPmodeButton);
 
     setIPMode();
 
@@ -193,10 +204,9 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleIPv4_IPv6()));
 
 
-
-
     UDPServerStatus();
     TCPServerStatus();
+    SSLServerStatus();
 
     multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
     cancelResendNum = settings.value("cancelResendNum", 0).toInt();
@@ -284,8 +294,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
-
 }
+
 
 void MainWindow::ebcdicTranslate()
 {
@@ -317,6 +327,13 @@ void MainWindow::toggleTCPServer()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     settings.setValue("tcpServerEnable", !settings.value("tcpServerEnable", true).toBool());
+    applyNetworkSettings();
+}
+void MainWindow::toggleSSLServer()
+{
+    QDEBUG();
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("sslServerEnable", !settings.value("sslServerEnable", true).toBool());
     applyNetworkSettings();
 }
 
@@ -370,6 +387,21 @@ void MainWindow::UDPServerStatus()
 
 
 }
+
+
+void MainWindow::SSLServerStatus()
+{
+    if(packetNetwork.getSSLPort() > 0)
+    {
+        sslServerStatus->setText("SSL:"+QString::number(packetNetwork.getSSLPort()));
+    } else {
+        sslServerStatus->setText("SSL Server Disabled");
+
+    }
+
+
+}
+
 
 void MainWindow::TCPServerStatus()
 {
@@ -1479,6 +1511,7 @@ void MainWindow::applyNetworkSettings()
 
     UDPServerStatus();
     TCPServerStatus();
+    SSLServerStatus();
 
 }
 

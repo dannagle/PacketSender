@@ -22,15 +22,17 @@ public:
     TCPThread(int socketDescriptor, QObject *parent);
     TCPThread(Packet sendPacket, QObject *parent);
     void sendAnother(Packet sendPacket);
+    static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
     void run();
     bool sendFlag;
     bool incomingPersistent;
     bool closeRequest;   
+    bool isSecure;
     bool isEncrypted();
 
 signals:
-    void error(QTcpSocket::SocketError socketError);
+    void error(QSslSocket::SocketError socketError);
 
     void packetReceived(Packet sendpacket);
     void toStatusBar(const QString & message, int timeout = 0, bool override = false);

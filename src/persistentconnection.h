@@ -60,6 +60,10 @@ private slots:
     void on_clearButton_clicked();
 
     void ebcdicTranslate();
+    void on_sendFileButton_clicked();
+
+    void on_clipboardButton_clicked();
+
 private:
     Ui::PersistentConnection *ui;
     QPushButton * stopResendingButton;

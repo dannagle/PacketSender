@@ -18,8 +18,11 @@
 #include <QDir>
 
 #include <QSsl>
+#include <QSslKey>
 #include <QSslSocket>
 #include <QSslCipher>
+#include <QSslConfiguration>
+#include <QTemporaryFile>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -31,6 +34,7 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     incomingPersistent = false;
     sendPacket.clear();
     insidePersistent = false;
+    isSecure = false;
 
 
 }
@@ -41,8 +45,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     sendFlag = true;
     incomingPersistent = false;
     insidePersistent = false;
-
-
+    isSecure = false;
 }
 
 void TCPThread::sendAnother(Packet sendPacket)
@@ -50,6 +53,104 @@ void TCPThread::sendAnother(Packet sendPacket)
 
     QDEBUG() << "Send another packet to " << sendPacket.port;
     this->sendPacket = sendPacket;
+
+}
+
+
+void TCPThread::loadSSLCerts(QSslSocket * sock, bool allowSnakeOil)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+
+    if(!allowSnakeOil) {
+
+        // set the ca certificates from the configured path
+        if (!settings.value("sslCaPath").toString().isEmpty()) {
+           sock->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
+        }
+
+        // set the local certificates from the configured file path
+        if (!settings.value("sslLocalCertificatePath").toString().isEmpty()) {
+           sock->setLocalCertificate(settings.value("sslLocalCertificatePath").toString());
+        }
+
+        // set the private key from the configured file path
+        if (!settings.value("sslPrivateKeyPath").toString().isEmpty()) {
+           sock->setPrivateKey(settings.value("sslPrivateKeyPath").toString());
+        }
+
+    } else  {
+
+
+        //this is stored as base64 so smart git repos
+        //do not complain about shipping a private key.
+        QFile snakeoilKey("://ps.key.base64");
+        QFile snakeoilCert("://ps.pem.base64");
+
+
+        QString defaultCertFile = CERTFILE;
+        QString defaultKeyFile = KEYFILE;
+
+/*
+#ifdef __APPLE__
+        QString certfileS("/Users/dannagle/github/PacketSender/src/ps.pem");
+        QString keyfileS("/Users/dannagle/github/PacketSender/src/ps.key");
+#else
+        QString certfileS("C:/Users/danie/github/PacketSender/src/ps.pem");
+        QString keyfileS("C:/Users/danie/github/PacketSender/src/ps.key");
+#endif
+
+        defaultCertFile = certfileS;
+        defaultKeyFile = keyfileS;
+*/
+
+        QFile certfile(defaultCertFile);
+        QFile keyfile(defaultKeyFile);
+        QByteArray decoded; decoded.clear();
+
+        if(!certfile.exists()) {
+            if(snakeoilCert.open(QFile::ReadOnly)) {
+                decoded = QByteArray::fromBase64(snakeoilCert.readAll());
+                snakeoilCert.close();
+            }
+            if(certfile.open(QFile::WriteOnly)) {
+                certfile.write(decoded);
+                certfile.close();
+            }
+        }
+
+        if(!keyfile.exists()) {
+            if(snakeoilKey.open(QFile::ReadOnly)) {
+                decoded = QByteArray::fromBase64(snakeoilKey.readAll());
+                snakeoilKey.close();
+            }
+            if(keyfile.open(QFile::WriteOnly)) {
+                keyfile.write(decoded);
+                keyfile.close();
+            }
+        }
+
+        QDEBUG() <<"Loading" << defaultCertFile << defaultKeyFile;
+
+        certfile.open (QIODevice::ReadOnly);
+        QSslCertificate certificate (&certfile, QSsl::Pem);
+        certfile.close ();
+        if(certificate.isNull()) {
+            QDEBUG() << "Bad cert. delete it?";
+        }
+
+        keyfile.open (QIODevice::ReadOnly);
+        QSslKey sslKey (&keyfile, QSsl::Rsa, QSsl::Pem);
+        keyfile.close ();
+        if(sslKey.isNull()) {
+            QDEBUG() << "Bad key. delete it?";
+        }
+
+
+        sock->setLocalCertificate(certificate);
+        sock->setPrivateKey(sslKey);
+
+    }
 
 }
 
@@ -313,20 +414,7 @@ void TCPThread::run()
         if(sendPacket.isSSL()) {
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-            // set the ca certificates from the configured path
-            if (!settings.value("sslCaPath").toString().isEmpty()) {
-                clientConnection->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
-            }
-
-            // set the local certificates from the configured file path
-            if (!settings.value("sslLocalCertificatePath").toString().isEmpty()) {
-                clientConnection->setLocalCertificate(settings.value("sslLocalCertificatePath").toString());
-            }
-
-            // set the private key from the configured file path
-            if (!settings.value("sslPrivateKeyPath").toString().isEmpty()) {
-                clientConnection->setPrivateKey(settings.value("sslPrivateKeyPath").toString());
-            }
+            loadSSLCerts(clientConnection, false);
 
             if(ipMode > 4) {
                 clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
@@ -438,6 +526,37 @@ void TCPThread::run()
 
     QSslSocket sock;
     sock.setSocketDescriptor(socketDescriptor);
+
+    //isSecure = true;
+
+    if(isSecure) {
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+
+        //Do the SSL handshake
+        QDEBUG() << "supportsSsl" << sock.supportsSsl();
+
+        loadSSLCerts(&sock, settings.value("serverSnakeOilCheck", true).toBool());
+
+        sock.setProtocol( QSsl::AnyProtocol );
+
+        //suppress prompts
+        bool envOk = false;
+        const int env = qEnvironmentVariableIntValue("QT_SSL_USE_TEMPORARY_KEYCHAIN", &envOk);
+        if((env == 0)) {
+            QDEBUG() << "Possible prompting in Mac";
+        }
+
+        if(settings.value("ignoreSSLCheck", true).toBool()) {
+            sock.ignoreSslErrors();
+        }
+        sock.startServerEncryption();
+        sock.waitForEncrypted();
+        QDEBUGVAR(sock.isEncrypted());
+        QDEBUG() << "Errors" << sock.sslErrors();
+
+    }
 
     connect(&sock, SIGNAL(disconnected()),
             this, SLOT(wasdisconnected()));

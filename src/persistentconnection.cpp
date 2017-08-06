@@ -10,6 +10,9 @@
 #include <QShortcut>
 #include <QCompleter>
 #include <QStringList>
+#include <QFileDialog>
+#include <QClipboard>
+#include <QMessageBox>
 
 
 PersistentConnection::PersistentConnection(QWidget *parent) :
@@ -158,9 +161,14 @@ void PersistentConnection::connectThreadSignals()
 void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
 {
 
-
-    setWindowTitle("TCP://You:" + QString::number(portNum));
     thread = thethread;
+
+    if(thread->isSecure) {
+        setWindowTitle("SSL://You:" + QString::number(portNum));
+    } else {
+        setWindowTitle("TCP://You:" + QString::number(portNum));
+    }
+
     QApplication::processEvents();
     connectThreadSignals();
 
@@ -232,7 +240,6 @@ void PersistentConnection::refreshTimerTimeout() {
             setWindowTitle(winTitle);
         }
     }
-
 
 
     qint64 hours = diff / (1000 * 60 * 60);
@@ -453,5 +460,64 @@ void PersistentConnection::on_clearButton_clicked()
 {
     trafficList.clear();
     loadTrafficView();
+
+}
+
+void PersistentConnection::on_sendFileButton_clicked()
+{
+
+    static QString fileName;
+    static bool showWarning = true;
+
+    if(fileName.isEmpty()) {
+        fileName = QDir::homePath();
+    }
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Send File"),
+                                              fileName,
+                                              tr("*.*"));
+
+    QDEBUGVAR(fileName);
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+    QFile loadFile(fileName);
+
+    if(!loadFile.exists()) {
+        return;
+    }
+
+    QByteArray data;
+    if(loadFile.open(QFile::ReadOnly)) {
+        data = loadFile.readAll();
+        loadFile.close();
+    }
+
+    Packet asciiPacket;
+    asciiPacket.clear();
+
+    asciiPacket.tcpOrUdp = sendPacket.tcpOrUdp;
+    asciiPacket.fromIP = "You";
+    asciiPacket.toIP = sendPacket.toIP;
+    asciiPacket.port = sendPacket.port;
+    asciiPacket.hexString = Packet::byteArrayToHex(data);
+
+    asciiPacket.receiveBeforeSend = false;
+
+    emit persistentPacketSend(asciiPacket);
+}
+
+void PersistentConnection::on_clipboardButton_clicked()
+{
+
+    QClipboard *clipboard = QApplication::clipboard();
+
+    clipboard->setText(ui->trafficViewEdit->toPlainText());
+    QMessageBox msgbox;
+    msgbox.setWindowTitle("Copied");
+    msgbox.setText("Output sent to your clipboard");
+    msgbox.exec();
 
 }
