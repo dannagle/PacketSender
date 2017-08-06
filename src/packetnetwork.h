@@ -60,9 +60,6 @@ public:
 
     QList<SmartResponseConfig> smartList;
 
-
-    void incomingConnection(qintptr socketDescriptor);
-
     static QHostAddress resolveDNS(QString hostname);
 signals:
     void packetReceived(Packet sendpacket);

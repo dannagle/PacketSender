@@ -28,6 +28,8 @@ PacketNetwork::PacketNetwork(QWidget *parent) :
 
 void PacketNetwork::kill()
 {
+
+    //Eventually, PS will support any number of clients.
     QUdpSocket * udp;
     foreach (udp, udpServers) {
         udp->close();
@@ -52,12 +54,6 @@ void PacketNetwork::kill()
     udpSocket->deleteLater();
 
     QApplication::processEvents();
-
-}
-
-void PacketNetwork::incomingConnection(qintptr socketDescriptor)
-{
-
 
 }
 

@@ -284,7 +284,7 @@
           <item>
            <widget class="QCheckBox" name="persistentTCPCheck">
             <property name="text">
-             <string>Persistent TCP/SSL</string>
+             <string>Persistent TCP</string>
             </property>
            </widget>
           </item>
@@ -405,7 +405,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

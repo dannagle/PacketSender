@@ -98,6 +98,10 @@ Settings::Settings(QWidget *parent) :
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
     ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
 
+    ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
+
+
+
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
     ui->delayAfterConnectCheck->setChecked(settings.value("delayAfterConnectCheck", false).toBool());
@@ -209,6 +213,9 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
     settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());
+
+    settings.setValue("serverSnakeOilCheck", ui->serverSnakeOilCheck->isChecked());
+
 
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 
