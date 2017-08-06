@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
-        parser.setApplicationDescription("Packet Sender is a Network TCP and UDP Test Utility by Dan Nagle\nSee http://PacketSender.com/ for more information.");
+        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by Dan Nagle\nSee http://PacketSender.com/ for more information.");
         parser.addHelpOption();
         parser.addVersionOption();
 
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
         // An option with a value
         QCommandLineOption fileOption(QStringList() << "f" << "file",
-                "Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.",
+                "Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP/SSL.",
                 "path");
         parser.addOption(fileOption);
 
