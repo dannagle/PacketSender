@@ -2,15 +2,18 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
-Packet Sender is an open source utility to allow sending and receiving TCP and UDP packets. Packet Sender can also send SSL (encrypted TCP) packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
+Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets. 
+The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may 
+recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. 
+It can be used for both commercial and personal use.
 
 ## Uses
 
 * Controlling network-based devices in ways beyond their original apps
 * Test automation (using its command line tool and/or hotkeys)
-* Testing network APIs (using the built-in TCP and UDP clients)
-* Malware analysis (using the built-in UDP and TCP servers)
-* Troubleshooting secure connections (using the SSL client).
+* Testing network APIs (using the built-in TCP, UDP, SSL clients)
+* Malware analysis (using the built-in UDP, TCP, SSL servers)
+* Troubleshooting secure connections (using SSL ).
 * Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 
@@ -32,11 +35,18 @@ Some knowledge of basic network protocols is a prerequisite to using Packet Send
 
 ### Portable Mode
 
-Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in its run-time directory. Windows users, this directory is the same place as the .exe. For Mac users, this run-time directory is at "PacketSender.app/Contents/MacOS". If INI files are found, it will use them instead of %APPDATA%" or "Library/Application Support".
+Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in 
+its run-time directory. For the SSL server, it will look for `ps.key` and `ps.pem`. 
+
+Windows users, this directory is the same place as the .exe. 
+For Mac users, this run-time directory is at `PacketSender.app/Contents/MacOS`. 
+If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
 
 
 ### IPv4 and IPv6 Support
-By default, Packet Sender's built-in servers are configured to support IPv4. If you wish to use IPv6, there is a toggle switch at the bottom right. Click to switch between IPv4 / IPv6.
+By default, Packet Sender's built-in servers are configured to support IPv4. 
+If you wish to use IPv6, there is a toggle switch at the bottom right. 
+Click to switch between IPv4 / IPv6.
 
 ![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
 
@@ -50,7 +60,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 ![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
 
 
-* In the bottom right, there are UDP server and TCP server status and port. You can click to activate or deactivate these. There is no built-in SSL server.
+* In the bottom right, there are UDP, TCP, and SSL server status and port. You can click to activate or deactivate these.
 * There is also IPv4 Mode and IPv6 Mode. Click to toggle between server modes.
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
@@ -82,15 +92,21 @@ Some notes:
 - If you are going to automate with hotkeys (using tools such at AutoHotKey), you may want to turn off "Restore previous session".
 
 
-### SSL Client
-Packet Sender supports establishing encrypted connections over SSL. This is supported in the GUI and on the command line. Some notes on this:
+### SSL Client and Server
+Packet Sender supports establishing encrypted connections over SSL. 
+This is supported in the GUI and on the command line. Some notes on this:
 
 * The certificate negotiation is handled immediately during connection.
 * By default, Packet Sender ignores all SSL errors (expired cert, wrong host name, self-signed, etc).
 * Packet Sender outputs the cert negotiation progress in to the traffic log.
 * Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
 
-If available, on Windows, Packet Sender will use OpenSSL. On Mac, Packet Sender will use the native SSL libraries.
+Packet Sender bundles an internal "Snake Oil" certificate for use as a server for all supported platforms. 
+The certificate and key is in the same place as packet and settings.
+
+* Overriding the cert locations in Settings also overrides these snake-oil certificate. 
+
+Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
 
 *This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)*
 
@@ -120,6 +136,7 @@ Packet Sender supports these macros when sending responses:
 * {{TIME}} -- Sends the current time in "hh:mm:ss ap" format.
 * {{UNIXTIME}} -- Sends the current epoch time stamp.
 * {{RANDOM}} -- Sends a random number ranging from either 0 to 32767 or 2147483647, depending on 32-bit or 64-bit (default installer for Windows is 32-bit. Mac is 64-bit).
+* {{UNIQUE}} -- Sends a random string. Uses an internal UUID to generate it.
 Packet Sender will swap the macro with real values before sending.
 
 ### Persistent TCP and SSL
@@ -131,6 +148,7 @@ Packet Sender supports persistent TCP and SSL connections via a separate UI dial
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
 * Traffic is also saved in the main window traffic log.
+* A file may be uploaded to the persistent connection. You may wish to turn off logging if you use this.  
 * The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections.
 * Incoming persistent connections to the server will launch the UI dialog.
@@ -141,7 +159,7 @@ Persistent connections are not supported via the command line.
 
 ### IPv4 Subnet Calculator
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
-![Packet Sender Direct TCP](screenshots/packetsender_subnetcalc_ubuntu.png)
+![Packet Sender Subnet Calc](screenshots/packetsender_subnetcalc_ubuntu.png)
 * The log window will display non-loopback IPv4 and IPv6 addresses found on your computer.
 * The top left field allow inputting an IPv4 address.
 * The field below is for a subnet, either X.X.X.X or /XX notation.
@@ -160,7 +178,7 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * 500 ms delay before sending data (some servers are slow).
 * Enable keyboard shortcut for ASCII --> EBCDIC translation.
 * Resolve DNS during input. The default is to resolve DNS just before sending.
-* Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection.
+* Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection. The SSL server always ignores errors.
 
 
 ## Documentation (Command Line)
@@ -229,6 +247,8 @@ The only dependency is Qt SDK. Here is how to build the app.
 1. Let it install MingGW if you don't have a compiler.
 1. Open the project PacketSender.pro
 1. Build! Qt is the only dependency!
+
+The Windows and Mac versions were built using Qt 5.9.1
 
 ### Build for Linux
 Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
