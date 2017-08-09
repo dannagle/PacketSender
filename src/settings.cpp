@@ -485,7 +485,7 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                                tr("Choose Cert"), home, tr("*.*"));
+                                tr("Choose Cert"), home, tr("Certs (*.pem)"));
 
     if(QFile::exists(fileName)) {
         ui->sslLocalCertificatePath->setText(fileName);
@@ -501,10 +501,17 @@ void Settings::on_sslPrivateKeyPathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                                tr("Choose Key"), home, tr("*.*"));
+                                tr("Choose Key"), home, tr("Keys (*.key, *.pem)"));
 
     if(QFile::exists(fileName)) {
         ui->sslPrivateKeyPath->setText(fileName);
     }
 
+}
+
+void Settings::on_documentationButton_clicked()
+{
+
+    //Open URL in browser
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }

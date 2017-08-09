@@ -362,10 +362,16 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
     QDEBUG() << logPacket.name;
 
+    QDEBUGVAR(logPacket.errorString);
+
     if(ui->logTrafficCheck->isChecked())
     {
-        if(!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty()) {
+        if((!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty())
+                || (!logPacket.errorString.isEmpty())
+                ) {
             packetsLogged.append(logPacket);
+        } else {
+            QDEBUG() << "Discarded packet";
         }
     }
 

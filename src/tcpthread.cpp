@@ -455,6 +455,24 @@ void TCPThread::run()
                 errorPacket.hexString.clear();
                 errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
                 emit packetSent(errorPacket);
+
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
+                QDEBUGVAR(cipher.encryptionMethod());
+                emit packetSent(errorPacket);
+
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Peer Cert issued by " +  clientConnection->peerCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+                QDEBUGVAR(cipher.encryptionMethod());
+                emit packetSent(errorPacket);
+
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Our Cert issued by " +  clientConnection->localCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+                QDEBUGVAR(cipher.encryptionMethod());
+                emit packetSent(errorPacket);
+
+
+
             } else {
                 Packet errorPacket = sendPacket;
                 errorPacket.hexString.clear();
@@ -553,7 +571,65 @@ void TCPThread::run()
         }
         sock.startServerEncryption();
         sock.waitForEncrypted();
+
+        QList<QSslError> sslErrorsList  = sock.sslErrors();
+
+        Packet errorPacket;
+        errorPacket.init();
+        errorPacket.timestamp = QDateTime::currentDateTime();
+        errorPacket.name = errorPacket.timestamp.toString(DATETIMEFORMAT);
+        errorPacket.toIP = "You";
+        errorPacket.port = sock.localPort();
+        errorPacket.fromPort = sock.peerPort();
+        errorPacket.fromIP = sock.peerAddress().toString();
+
+        if(sock.isEncrypted()) {
+            errorPacket.tcpOrUdp = "SSL";
+        }
+
+
         QDEBUGVAR(sock.isEncrypted());
+
+        QDEBUGVAR(sslErrorsList.size());
+
+        if(sslErrorsList.size() > 0) {
+
+             QSslError sError;
+             foreach (sError, sslErrorsList) {
+                 errorPacket.hexString.clear();
+                 errorPacket.errorString = sError.errorString();
+                 emit packetSent(errorPacket);
+             }
+
+        }
+
+
+        if(sock.isEncrypted()) {
+            QSslCipher cipher = sock.sessionCipher();
+            errorPacket.hexString.clear();
+            errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
+            QDEBUGVAR(cipher.encryptionMethod());
+            emit packetSent(errorPacket);
+
+            errorPacket.hexString.clear();
+            errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
+            QDEBUGVAR(cipher.encryptionMethod());
+            emit packetSent(errorPacket);
+
+            errorPacket.hexString.clear();
+            errorPacket.errorString = "Peer cert issued by " +  sock.peerCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+            QDEBUGVAR(cipher.encryptionMethod());
+            emit packetSent(errorPacket);
+
+            errorPacket.hexString.clear();
+            errorPacket.errorString = "Our Cert issued by " +  sock.localCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+            QDEBUGVAR(cipher.encryptionMethod());
+            emit packetSent(errorPacket);
+
+
+         }
+
+
         QDEBUG() << "Errors" << sock.sslErrors();
 
     }
