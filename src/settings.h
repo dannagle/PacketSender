@@ -43,6 +43,9 @@ private slots:
 
     void on_sslPrivateKeyPathBrowseButton_clicked();
 
+
+    void on_documentationButton_clicked();
+
 private:
     Ui::Settings *ui;
     QList<Packet> packetsSaved;
