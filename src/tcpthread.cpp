@@ -462,7 +462,12 @@ void TCPThread::run()
                 emit packetSent(errorPacket);
 
                 errorPacket.hexString.clear();
-                errorPacket.errorString = "Cert issued by " +  clientConnection->peerCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+                errorPacket.errorString = "Peer Cert issued by " +  clientConnection->peerCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
+                QDEBUGVAR(cipher.encryptionMethod());
+                emit packetSent(errorPacket);
+
+                errorPacket.hexString.clear();
+                errorPacket.errorString = "Our Cert issued by " +  clientConnection->localCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
                 QDEBUGVAR(cipher.encryptionMethod());
                 emit packetSent(errorPacket);
 
@@ -608,6 +613,11 @@ void TCPThread::run()
 
             errorPacket.hexString.clear();
             errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
+            QDEBUGVAR(cipher.encryptionMethod());
+            emit packetSent(errorPacket);
+
+            errorPacket.hexString.clear();
+            errorPacket.errorString = "Peer cert issued by " +  sock.peerCertificate().issuerInfo( QSslCertificate::CommonName ).join("\n");
             QDEBUGVAR(cipher.encryptionMethod());
             emit packetSent(errorPacket);
 
