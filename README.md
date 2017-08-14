@@ -32,6 +32,7 @@ Some knowledge of basic network protocols is a prerequisite to using Packet Send
 * Twitter: [@NagleCode](http://twitter.com/naglecode)
 * You may also track this project on [GitHub](http://github.com/dannagle/PacketSender).
 * Email: hello AT packetsender DOT com
+* Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
 
 ### Portable Mode
 
