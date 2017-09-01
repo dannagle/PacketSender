@@ -368,6 +368,17 @@ void PacketNetwork::disconnected()
 QHostAddress PacketNetwork::resolveDNS(QString hostname)
 {
 
+    QHostAddress address(hostname);
+    if (QAbstractSocket::IPv4Protocol == address.protocol())
+    {
+        return address;
+    }
+
+    if (QAbstractSocket::IPv6Protocol == address.protocol())
+    {
+        return address;
+    }
+
     QHostInfo info = QHostInfo::fromName(hostname);
     if (info.error() != QHostInfo::NoError)
     {
