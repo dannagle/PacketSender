@@ -82,14 +82,10 @@ void TCPThread::loadSSLCerts(QSslSocket * sock, bool allowSnakeOil)
     } else  {
 
 
-        //this is stored as base64 so smart git repos
-        //do not complain about shipping a private key.
-        QFile snakeoilKey("://ps.key.base64");
-        QFile snakeoilCert("://ps.pem.base64");
-
-
         QString defaultCertFile = CERTFILE;
         QString defaultKeyFile = KEYFILE;
+        QFile certfile(defaultCertFile);
+        QFile keyfile(defaultKeyFile);
 
 /*
 #ifdef __APPLE__
@@ -103,32 +99,6 @@ void TCPThread::loadSSLCerts(QSslSocket * sock, bool allowSnakeOil)
         defaultCertFile = certfileS;
         defaultKeyFile = keyfileS;
 */
-
-        QFile certfile(defaultCertFile);
-        QFile keyfile(defaultKeyFile);
-        QByteArray decoded; decoded.clear();
-
-        if(!certfile.exists()) {
-            if(snakeoilCert.open(QFile::ReadOnly)) {
-                decoded = QByteArray::fromBase64(snakeoilCert.readAll());
-                snakeoilCert.close();
-            }
-            if(certfile.open(QFile::WriteOnly)) {
-                certfile.write(decoded);
-                certfile.close();
-            }
-        }
-
-        if(!keyfile.exists()) {
-            if(snakeoilKey.open(QFile::ReadOnly)) {
-                decoded = QByteArray::fromBase64(snakeoilKey.readAll());
-                snakeoilKey.close();
-            }
-            if(keyfile.open(QFile::WriteOnly)) {
-                keyfile.write(decoded);
-                keyfile.close();
-            }
-        }
 
         QDEBUG() <<"Loading" << defaultCertFile << defaultKeyFile;
 
