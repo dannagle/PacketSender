@@ -132,10 +132,40 @@ QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
     return asciiArray;
 }
 
+#define JSONSTR(VAR) json[QString(# VAR).toLower()] = packetList[i].VAR
+#define JSONNUM(VAR) json[QString(# VAR).toLower()] = QString::number(packetList[i].VAR)
+
 QByteArray Packet::ExportJSON(QList<Packet> packetList)
 {
     QByteArray returnData;
-    QJsonDocument doc;
+
+    QJsonArray jsonArray;
+
+    for(int i=0; i < packetList.size(); i++) {
+
+
+        QJsonObject json;
+        if(packetList[i].name.isEmpty()) {
+            continue;
+        }
+        json["name"] = packetList[i].name;
+        JSONSTR(hexString);
+        JSONSTR(fromIP);
+        JSONSTR(toIP);
+        JSONSTR(errorString);
+        JSONNUM(port);
+        JSONNUM(fromPort);
+        JSONSTR(tcpOrUdp);
+        JSONNUM(sendResponse);
+        JSONSTR(repeat);
+        //JSONSTR(timestamp);
+
+        jsonArray.push_front(json);
+    }
+
+    QJsonDocument doc(jsonArray);
+
+    returnData = doc.toJson();
 
 
     return returnData;
@@ -144,6 +174,43 @@ QByteArray Packet::ExportJSON(QList<Packet> packetList)
 QList<Packet> Packet::ImportJSON(QByteArray data)
 {
     QList<Packet> returnList;
+
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+
+
+    if(!doc.isNull()) {
+        //valid json
+        if(doc.isArray()) {
+            //valid array
+            QJsonArray jsonArray = doc.array();
+            if(!jsonArray.isEmpty()) {
+                QDEBUG() << "Found" <<  jsonArray.size() << "packets";
+
+                for(int i=0; i < jsonArray.size(); i++) {
+                    Packet pkt; pkt.clear();
+                    QJsonObject json = jsonArray[i].toObject();
+
+                    pkt.name = json["name"].toString();
+                    pkt.errorString = json["errorstring"].toString();
+                    pkt.fromIP = json["fromip"].toString();
+                    pkt.fromPort = json["fromport"].toString().toUInt();
+                    pkt.hexString = json["hexstring"].toString();
+                    pkt.toIP = json["toip"].toString();
+                    pkt.port = json["port"].toString().toUInt();
+                    pkt.repeat = json["repeat"].toString().toFloat();
+                    pkt.sendResponse = json["sendresponse"].toString().toUInt();
+                    pkt.tcpOrUdp = json["tcporudp"].toString();
+
+                    returnList.append(pkt);
+
+                }
+
+
+            }
+
+        }
+    }
+
 
     return returnList;
 }

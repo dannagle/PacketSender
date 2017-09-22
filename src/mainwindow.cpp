@@ -1794,13 +1794,67 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionImport_Packets_JSON_triggered()
 {
-    QDEBUG();
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Coming Soon.");
-    msgBox.setText("Coming Soon.");
-    msgBox.setStandardButtons(QMessageBox::Ok );
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.exec();
+
+    static QString fileName = QDir::homePath() + QString("/packets.json");
+
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Import JSON"),
+                                              fileName,
+                                             tr("JSON db (*.json)"));
+
+    QDEBUGVAR(fileName);
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+    QByteArray packetsjson;
+    QFile jsonFile(fileName);
+    if(jsonFile.open(QFile::ReadOnly)) {
+        packetsjson = jsonFile.readAll();
+        jsonFile.close();
+    }
+
+    QList<Packet> importList = Packet::ImportJSON(packetsjson);
+    Packet importPacket;
+
+    foreach(importPacket, importList) {
+        QDEBUGVAR(importPacket.name);
+    }
+
+    if(!importList.isEmpty()) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
+        int yesno = msgBox.exec();
+        if(yesno == QMessageBox::No) {
+            statusBarMessage("Import Cancelled");
+            return;
+        } else {
+            foreach(importPacket, importList) {
+                importPacket.saveToDB();
+
+            }
+            packetsSaved = Packet::fetchAllfromDB("");
+            statusBarMessage("Import Finished");
+            loadPacketsTable();
+        }
+
+    } else {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Not a database");
+        msgBox.setStandardButtons(QMessageBox::Ok );
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
+        msgBox.exec();
+        return;
+        statusBarMessage("Import Cancelled");
+    }
+
     return;
 
 
@@ -1809,15 +1863,45 @@ void MainWindow::on_actionImport_Packets_JSON_triggered()
 
 void MainWindow::on_actionExport_Packets_JSON_triggered()
 {
-    QDEBUG();
 
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("Coming Soon.");
-    msgBox.setText("Coming Soon.");
-    msgBox.setStandardButtons(QMessageBox::Ok );
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.exec();
-    return;
+    static QString fileName = QDir::homePath() + "/packets.json";
+
+    fileName = QFileDialog::getSaveFileName(this, tr("Save JSON"),
+                               QDir::toNativeSeparators(fileName), tr("JSON db (*.json)"));
+
+    if(fileName.isEmpty()) {
+        return;
+    }
+
+    QStringList testExt = fileName.split(".");
+    QString ext = "";
+    if(testExt.size() > 0) {
+       ext = testExt.last();
+    }
+    if(ext != "json") {
+       fileName.append(".json");
+    }
+    QDEBUGVAR(fileName);
+
+    QFile jsonFile(fileName);
+
+    if(jsonFile.open(QFile::WriteOnly)) {
+        jsonFile.write(Packet::ExportJSON(Packet::fetchAllfromDB("")));
+        jsonFile.close();
+        statusBarMessage("Export: " + fileName);
+    } else {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Could not save");
+        msgBox.setStandardButtons(QMessageBox::Ok );
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Could not open "+fileName+" for saving.");
+        msgBox.exec();
+        return;
+
+    }
+
 
 }
 
