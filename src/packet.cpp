@@ -17,6 +17,10 @@
 #include <QPair>
 #include <QDesktopServices>
 #include <QUuid>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 
 
 
@@ -70,6 +74,7 @@ float Packet::oneDecimal(float value) {
     valueFloat = ((float) valueInt) / 10;
     return valueFloat;
 }
+
 
 Packet::~Packet()
 {
@@ -125,6 +130,22 @@ QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
     }
 
     return asciiArray;
+}
+
+QByteArray Packet::ExportJSON(QList<Packet> packetList)
+{
+    QByteArray returnData;
+    QJsonDocument doc;
+
+
+    return returnData;
+}
+
+QList<Packet> Packet::ImportJSON(QByteArray data)
+{
+    QList<Packet> returnList;
+
+    return returnList;
 }
 
 QByteArray Packet::ASCIItoEBCDIC(QByteArray ascii)

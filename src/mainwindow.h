@@ -85,7 +85,6 @@ public slots:
     void shortcutkey7();
 
 
-
 private slots:
     void on_packetHexEdit_lostFocus();
     void on_packetASCIIEdit_lostFocus();
@@ -146,8 +145,11 @@ private slots:
     void on_actionExit_triggered();
 
     void on_actionImport_Packets_triggered();
-
     void on_actionExport_Packets_triggered();
+
+    void on_actionImport_Packets_JSON_triggered();
+    void on_actionExport_Packets_JSON_triggered();
+
 
     void on_persistentTCPCheck_clicked(bool checked);
 

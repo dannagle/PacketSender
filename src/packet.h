@@ -104,6 +104,8 @@ public:
     static QString macroSwap(QString data);
     static QByteArray EBCDICtoASCII(QByteArray ebcdic);
     static QByteArray ASCIItoEBCDIC(QByteArray ascii);
+    static QByteArray ExportJSON(QList<Packet> packetList);
+    static QList<Packet> ImportJSON(QByteArray data);
 private:
     static int hexToInt(QChar hex);
 

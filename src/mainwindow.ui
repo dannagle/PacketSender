@@ -415,6 +415,8 @@
     <addaction name="actionSettings"/>
     <addaction name="actionImport_Packets"/>
     <addaction name="actionExport_Packets"/>
+    <addaction name="actionImport_Packets_JSON"/>
+    <addaction name="actionExport_Packets_JSON"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -469,7 +471,7 @@
      <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
    </property>
    <property name="text">
-    <string>Import Packets</string>
+    <string>Import Packets Native</string>
    </property>
   </action>
   <action name="actionExport_Packets">
@@ -478,7 +480,7 @@
      <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
    </property>
    <property name="text">
-    <string>Export Packets</string>
+    <string>Export Packets Native</string>
    </property>
   </action>
   <action name="actionPersistent_Connection">
@@ -516,6 +518,16 @@
    </property>
    <property name="text">
     <string>Documentation</string>
+   </property>
+  </action>
+  <action name="actionExport_Packets_JSON">
+   <property name="text">
+    <string>Export Packets JSON</string>
+   </property>
+  </action>
+  <action name="actionImport_Packets_JSON">
+   <property name="text">
+    <string>Import Packets JSON</string>
    </property>
   </action>
  </widget>

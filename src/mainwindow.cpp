@@ -26,6 +26,8 @@
 #include <QShortcut>
 #include <QClipboard>
 #include <QSslKey>
+
+
 #include "brucethepoodle.h"
 #include "settings.h"
 #include "about.h"
@@ -1788,6 +1790,35 @@ void MainWindow::on_actionExit_triggered()
 {
     QDEBUG();
     exit(0);
+}
+
+void MainWindow::on_actionImport_Packets_JSON_triggered()
+{
+    QDEBUG();
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Coming Soon.");
+    msgBox.setText("Coming Soon.");
+    msgBox.setStandardButtons(QMessageBox::Ok );
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
+    return;
+
+
+
+}
+
+void MainWindow::on_actionExport_Packets_JSON_triggered()
+{
+    QDEBUG();
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Coming Soon.");
+    msgBox.setText("Coming Soon.");
+    msgBox.setStandardButtons(QMessageBox::Ok );
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    msgBox.exec();
+    return;
+
 }
 
 void MainWindow::on_actionImport_Packets_triggered()
