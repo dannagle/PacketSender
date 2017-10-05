@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
-        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by Dan Nagle\nSee http://PacketSender.com/ for more information.");
+        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by Dan Nagle\nSee https://PacketSender.com/ for more information.");
         parser.addHelpOption();
         parser.addVersionOption();
 
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 
         // An option with a value
         QCommandLineOption fileOption(QStringList() << "f" << "file",
-                "Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP/SSL.",
+                "Send contents of specified path. Max 1024 for UDP, 100 MiB for TCP/SSL.",
                 "path");
         parser.addOption(fileOption);
 
@@ -340,13 +340,15 @@ int main(int argc, char *argv[])
             if(dataFile.open(QFile::ReadOnly)) {
 
                 if(tcp || ssl) {
-                    QByteArray dataArray = dataFile.read(1024*1024*10);;
+                    QByteArray dataArray = dataFile.read(1024*1024*100);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
 
                     QByteArray dataArray = dataFile.read(1024);
                     dataString = Packet::byteArrayToHex(dataArray);
                 }
+
+                dataFile.close();
 
                 //data format is raw.
                 ascii = 0;
@@ -392,6 +394,7 @@ int main(int argc, char *argv[])
         if(hex) { //hex
             dataString = Packet::byteArrayToHex(Packet::HEXtoByteArray(data));
         }
+
         if(mixedascii) { //mixed ascii
             dataString = Packet::ASCIITohex(data);
         }
@@ -494,7 +497,16 @@ int main(int argc, char *argv[])
                     sendData.clear();
                 }
 
-                OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+                QString dataStringTruncated = dataString;
+                dataStringTruncated.truncate(100*3);
+                int chopped = (dataString.size() / 3) - (dataStringTruncated.size() / 3);
+                if(chopped > 0) {
+                    dataStringTruncated.append("[... ");
+                    dataStringTruncated.append(QString::number(chopped));
+                    dataStringTruncated.append(" bytes not shown ...]");
+                }
+
+                OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataStringTruncated;
                 if(sock.isEncrypted()) {
                     QSslCipher cipher = sock.sessionCipher();
                     OUTIF() << "Cipher: Encrypted with " << cipher.encryptionMethod();

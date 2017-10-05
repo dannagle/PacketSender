@@ -463,28 +463,28 @@ QString Packet::hexToASCII(QString &hex)
 
 QString Packet::byteArrayToHex(QByteArray data)
 {
-    QString byte, returnString;
+    QString byte, returnString, returnStringTemp;
   //  QDEBUG() << "size is " <<data.size();
 
-    returnString.clear();
     if(data.isEmpty())
     {
         return "";
     }
 
-    for(int i = 0; i < data.size(); i++)
-    {
-        byte = QString::number((unsigned char)data.at(i) & 0xff, 16);
+    int datasize = data.size();
 
-        if(byte.size() % 2 == 1)
-        {
-            byte.prepend("0");
-        }
-        returnString.append(byte);
-        returnString.append(" ");
+    returnStringTemp = data.toHex().toUpper();
+    returnString.resize(datasize * 3, ' ');
+
+    int j = 0;
+    for(int i = 0; i < returnStringTemp.size(); i+=2)
+    {
+        returnString[j] = returnStringTemp[i];
+        returnString[j+1] = returnStringTemp[i+1];
+        j+=3;
     }
 
-    return returnString.trimmed().toUpper();
+    return returnString;
 
 }
 
@@ -839,26 +839,9 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
 
 QByteArray Packet::HEXtoByteArray(QString thehex)
 {
-     QString byte;
-     QByteArray returnArray;
-     QStringList hexSplit = thehex.simplified().split(" ");
-     returnArray.clear();
-     unsigned int foundByte = 0;
-     bool ok =  false;
 
-     foreach(byte, hexSplit)
-     {
-         foundByte = byte.toUInt(&ok, 16);
-         foundByte = foundByte & 0xff;
-         if(ok)
-         {
-             returnArray.append(foundByte);
-         }
-
-     }
-
-     return returnArray;
-
+     //function already ignores invalid chars...
+    return QByteArray::fromHex(thehex.toLatin1());;
 }
 
 QString Packet::removeIPv6Mapping(QHostAddress ipv6)
