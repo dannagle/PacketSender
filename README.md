@@ -194,7 +194,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
     packetsender --help
     Usage: packetsender [options] address port data
     Packet Sender is a Network TCP and UDP Test Utility by Dan Nagle
-    See http://PacketSender.com/ for more information.
+    See https://PacketSender.com/ for more information.
 
     Options:
     -?, -h, --help 	Displays this help.
@@ -204,7 +204,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -a, --ascii 	Parse data-to-send as mixed-ascii (like the GUI).
     -A, --ASCII 	Parse data-to-send as pure ascii (no \xx translation).
     -w, --wait <ms> Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).
-    -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 10 MiB for TCP.
+    -f, --file <path> 	Send contents of specified path. Max 1024 for UDP, 100 MiB for TCP.
     -b, --bind <port> 	Bind port. Default is dynamic.
     -t, --tcp 	Send TCP (default).
     -s, --ssl   Send SSL and ignore errors.
