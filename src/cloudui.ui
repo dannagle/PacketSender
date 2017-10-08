@@ -15,9 +15,9 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="QTabWidget" name="cloudTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="accountTab">
       <attribute name="title">
@@ -85,7 +85,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="passwordEdit"/>
+          <widget class="QLineEdit" name="passwordEdit">
+           <property name="echoMode">
+            <enum>QLineEdit::Password</enum>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -111,6 +115,55 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="importTab">
+      <attribute name="title">
+       <string>Import</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLineEdit" name="importURLEdit"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="importURLButton">
+           <property name="text">
+            <string>Import Cloud URL</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Description</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="packetSetTable">
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="importPacketsButton">
+         <property name="text">
+          <string>Import Packet Set</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="exportTab">
       <attribute name="title">
        <string>Export</string>
@@ -121,7 +174,7 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Description</string>
+            <string>Public Description (Markdown supported)</string>
            </property>
           </widget>
          </item>
@@ -152,48 +205,6 @@
         <widget class="QPushButton" name="viewPublicButton">
          <property name="text">
           <string>View URL</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="importTab">
-      <attribute name="title">
-       <string>Import</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLineEdit" name="importURLEdit"/>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="text">
-            <string>Import Public URL</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Description</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="textEdit_2"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="importPacketsButton">
-         <property name="text">
-          <string>Import Packets</string>
          </property>
         </widget>
        </item>

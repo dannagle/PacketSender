@@ -32,6 +32,7 @@
 #include "settings.h"
 #include "about.h"
 #include "subnetcalc.h"
+#include "cloudui.h"
 
 
 int hexToInt(QChar hex);
@@ -71,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
-    http = new QNetworkAccessManager(this); //the only http object (required by Qt)
+    http = new QNetworkAccessManager(this); //Main application http object
 
     QDEBUG() << " http connect attempt:" << connect(http, SIGNAL(finished(QNetworkReply*)),
          this, SLOT(httpFinished(QNetworkReply*)));
@@ -328,6 +329,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
 
+    //on_actionExport_Packets_JSON_triggered();
 
 
 
@@ -1908,8 +1910,22 @@ void MainWindow::on_actionExport_Packets_JSON_triggered()
 void MainWindow::on_actionCloud_triggered()
 {
     QDEBUG();
+    CloudUI cloudUI;
+    if(!connect(&cloudUI, &CloudUI::packetsImported, this, &MainWindow::packetsImported)) {
+        QDEBUG() << "cloudUI packetsImported connection false";
+    }
+    cloudUI.exec();
+    QDEBUG() << "Cloud finished";
 
 }
+
+
+void MainWindow::packetsImported(QList<Packet> packetSet)
+{
+    QDEBUGVAR(packetSet.size());
+
+}
+
 
 void MainWindow::on_actionImport_Packets_triggered()
 {

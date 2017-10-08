@@ -15,6 +15,10 @@
 
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
 
+//#define CLOUD_URL  "https://cloud.packetsender.com/"
+#define CLOUD_URL  "http://localhost/"
+
+
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
