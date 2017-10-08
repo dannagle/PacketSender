@@ -1910,19 +1910,30 @@ void MainWindow::on_actionExport_Packets_JSON_triggered()
 void MainWindow::on_actionCloud_triggered()
 {
     QDEBUG();
-    CloudUI cloudUI;
-    if(!connect(&cloudUI, &CloudUI::packetsImported, this, &MainWindow::packetsImported)) {
+    CloudUI * cloudUI = new CloudUI(this);
+    if(!connect(cloudUI, &CloudUI::packetsImported, this, &MainWindow::packetsImported)) {
         QDEBUG() << "cloudUI packetsImported connection false";
     }
-    cloudUI.exec();
-    QDEBUG() << "Cloud finished";
+    cloudUI->exec();
 
 }
 
 
 void MainWindow::packetsImported(QList<Packet> packetSet)
 {
-    QDEBUGVAR(packetSet.size());
+
+    if(packetSet.size() > 0) {
+
+        Packet importPacket;
+        QDEBUGVAR(packetSet.size());
+        foreach(importPacket, packetSet) {
+            importPacket.saveToDB();
+        }
+        packetsSaved = Packet::fetchAllfromDB("");
+        statusBarMessage("Import Finished");
+        loadPacketsTable();
+
+    }
 
 }
 

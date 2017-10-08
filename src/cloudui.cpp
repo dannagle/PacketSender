@@ -6,6 +6,10 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QMessageBox>
+#include <QModelIndexList>
+#include <QModelIndex>
+
+
 
 
 #include <QJsonArray>
@@ -197,13 +201,27 @@ void CloudUI::on_viewPublicButton_clicked()
 
 void CloudUI::on_importURLButton_clicked()
 {
+
+
     QDEBUG();
 
 }
 
 void CloudUI::on_importPacketsButton_clicked()
 {
-    QDEBUG();
+
+    QModelIndexList indexes = ui->packetSetTable->selectionModel()->selectedIndexes();
+    QDEBUGVAR(indexes.size());
+
+    if(indexes.size() > 0) {
+        QModelIndex index = indexes.first();
+        int packetsetindex = index.data(Qt::UserRole).toInt();
+        QDEBUGVAR(packetsetindex);
+        if(packetSets.size() > packetsetindex) {
+            emit packetsImported(packetSets[packetsetindex].packets);
+        }
+    }
+
 
 }
 
