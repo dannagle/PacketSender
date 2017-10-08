@@ -68,6 +68,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
     QJsonDocument doc = QJsonDocument::fromJson(data);
 
     ui->loginButton->setEnabled(true);
+    ui->importURLButton->setEnabled(true);
 
 
     bool success = false;
@@ -201,9 +202,22 @@ void CloudUI::on_viewPublicButton_clicked()
 
 void CloudUI::on_importURLButton_clicked()
 {
+    QString url = ui->importURLEdit->text().trimmed();
+    url.replace("=", "/");  //key is the last part of URL, whether clean or key
 
+    QStringList findkey = url.split("/");
+    if(findkey.size() > 0) {
 
-    QDEBUG();
+        ui->importURLButton->setEnabled(false);
+
+        QString url = findkey.last();
+        QString requestURL = CLOUD_URL + QString("?key=") + url;
+        QDEBUGVAR(requestURL);
+
+        http->get(QNetworkRequest(QUrl(requestURL)));
+
+    }
+
 
 }
 
