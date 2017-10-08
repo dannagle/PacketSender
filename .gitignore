@@ -1,3 +1,8 @@
+
+#Mac Stuff
+*.dmg
+*.app
+
 # C++ objects and libs
 .DS_Store
 build-*

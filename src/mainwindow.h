@@ -151,6 +151,9 @@ private slots:
     void on_actionExport_Packets_JSON_triggered();
 
 
+    void on_actionCloud_triggered();
+
+
     void on_persistentTCPCheck_clicked(bool checked);
 
 

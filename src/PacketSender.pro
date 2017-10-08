@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     settings.cpp \
     about.cpp \
     subnetcalc.cpp \
-    threadedtcpserver.cpp
+    threadedtcpserver.cpp \
+    cloudui.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -39,14 +40,16 @@ HEADERS  += mainwindow.h \
     about.h \
     subnetcalc.h \
     ebcdic_ascii_map.h \
-    threadedtcpserver.h
+    threadedtcpserver.h \
+    cloudui.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
     persistentconnection.ui \
     settings.ui \
     about.ui \
-    subnetcalc.ui
+    subnetcalc.ui \
+    cloudui.ui
 
 OTHER_FILES += \
     packetsender.css \

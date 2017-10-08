@@ -413,10 +413,9 @@
      <string>File</string>
     </property>
     <addaction name="actionSettings"/>
+    <addaction name="actionCloud"/>
     <addaction name="actionImport_Packets"/>
     <addaction name="actionExport_Packets"/>
-    <addaction name="actionImport_Packets_JSON"/>
-    <addaction name="actionExport_Packets_JSON"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -471,7 +470,7 @@
      <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
    </property>
    <property name="text">
-    <string>Import Packets Native</string>
+    <string>Import Database</string>
    </property>
   </action>
   <action name="actionExport_Packets">
@@ -480,7 +479,7 @@
      <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
    </property>
    <property name="text">
-    <string>Export Packets Native</string>
+    <string>Export Database</string>
    </property>
   </action>
   <action name="actionPersistent_Connection">
@@ -522,12 +521,12 @@
   </action>
   <action name="actionExport_Packets_JSON">
    <property name="text">
-    <string>Export Packets JSON</string>
+    <string>Export To Cloud</string>
    </property>
   </action>
-  <action name="actionImport_Packets_JSON">
+  <action name="actionCloud">
    <property name="text">
-    <string>Import Packets JSON</string>
+    <string>Launch Packet Sender Cloud</string>
    </property>
   </action>
  </widget>
