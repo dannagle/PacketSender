@@ -1,8 +1,10 @@
 #include "about.h"
+#include "globals.h"
 #include "ui_about.h"
 
 #include <QDesktopServices>
 #include <QDate>
+#include <QDebug>
 #include <QUrl>
 
 
@@ -22,7 +24,7 @@ About::About(QWidget *parent) :
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
-    ui->DNLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    ui->DNLinkButton->setStyleSheet(HYPERLINKSTYLE);
     ui->DNLinkButton->setIcon( QIcon(":dannagle32.jpg"));
     ui->DNLinkButton->setFlat(true);
     ui->DNLinkButton->setCursor(Qt::PointingHandCursor);
@@ -30,7 +32,7 @@ About::About(QWidget *parent) :
             this, SLOT(gotoDanNagleDotCom()));
 
 
-    ui->twitterButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    ui->twitterButton->setStyleSheet(HYPERLINKSTYLE);
     ui->twitterButton->setIcon( QIcon(":Twitter_logo_blue.png"));
     ui->twitterButton->setFlat(true);
     ui->twitterButton->setCursor(Qt::PointingHandCursor);
@@ -38,14 +40,14 @@ About::About(QWidget *parent) :
             this, SLOT(gotoNagleCode()));
 
 
-    ui->DNAmazonLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    ui->DNAmazonLinkButton->setStyleSheet(HYPERLINKSTYLE);
     ui->DNAmazonLinkButton->setFlat(true);
     ui->DNAmazonLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->DNAmazonLinkButton, SIGNAL(clicked()),
             this, SLOT(gotoDanNaglePayPal()));
 
 
-    ui->psLinkButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    ui->psLinkButton->setStyleSheet(HYPERLINKSTYLE);
     ui->psLinkButton->setIcon( QIcon(":pslogo.png"));
     ui->psLinkButton->setFlat(true);
     ui->psLinkButton->setCursor(Qt::PointingHandCursor);

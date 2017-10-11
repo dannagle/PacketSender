@@ -45,6 +45,10 @@ private slots:
 
     void replyFinished(QNetworkReply *request);
 
+    void on_makePublicCheck_clicked(bool checked);
+
+    void on_createAccountButton_clicked();
+
 private:
     void loadPacketSetTable();
 

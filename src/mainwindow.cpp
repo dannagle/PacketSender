@@ -48,9 +48,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-
-    hyperLinkStyle = "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ";
-
     QIcon mIcon(":pslogo.png");
 
 
@@ -389,7 +386,7 @@ void MainWindow::generateConnectionMenu() {
 QPushButton * MainWindow::generatePSLink()
 {
     QPushButton * returnButton = new QPushButton("PacketSender.com");
-    returnButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    returnButton->setStyleSheet(HYPERLINKSTYLE);
     returnButton->setIcon( QIcon(":pslogo.png"));
     returnButton->setFlat(true);
     returnButton->setCursor(Qt::PointingHandCursor);
@@ -469,7 +466,7 @@ QPushButton *MainWindow::generateDNLink()
 {
 
     QPushButton * returnButton = new QPushButton("DanNagle.com");
-    returnButton->setStyleSheet("QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } ");
+    returnButton->setStyleSheet(HYPERLINKSTYLE);
     returnButton->setIcon( QIcon(":dannagle_logo.png"));
     returnButton->setFlat(true);
     returnButton->setCursor(Qt::PointingHandCursor);

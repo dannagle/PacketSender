@@ -15,8 +15,10 @@
 
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
 
-#define CLOUD_URL  "https://cloud.packetsender.com/"
-//#define CLOUD_URL  "http://localhost/"
+//#define CLOUD_URL  "https://cloud.packetsender.com/"
+#define CLOUD_URL  "http://localhost/"
+
+#define HYPERLINKSTYLE "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } "
 
 
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"

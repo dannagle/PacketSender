@@ -405,7 +405,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -413,7 +413,6 @@
      <string>File</string>
     </property>
     <addaction name="actionSettings"/>
-    <addaction name="actionCloud"/>
     <addaction name="actionImport_Packets"/>
     <addaction name="actionExport_Packets"/>
     <addaction name="actionExit"/>
@@ -430,6 +429,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
    </widget>
    <addaction name="menuFile"/>
@@ -525,8 +525,12 @@
    </property>
   </action>
   <action name="actionCloud">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/ic_cloud_done_black_24dp_2x.png</normaloff>:/icons/ic_cloud_done_black_24dp_2x.png</iconset>
+   </property>
    <property name="text">
-    <string>Launch Packet Sender Cloud</string>
+    <string>Cloud Save and Share</string>
    </property>
   </action>
  </widget>

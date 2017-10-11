@@ -10,7 +10,9 @@
 #include <QModelIndex>
 
 
+bool isLetterNumUnder(QString str);
 
+void popMsg(QString title, QString msg, bool isError);
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -30,7 +32,19 @@ CloudUI::CloudUI(QWidget *parent) :
     packetsFound.clear();
     packetSets.clear();
 
+    ui->passwordConfirmEdit->hide();
+    ui->passwordConfirmLabel->hide();
+
+    ui->viewPublicButton->hide();
+
+
     ui->cloudTabWidget->setCurrentIndex(0);
+
+
+    ui->createAccountButton->setStyleSheet(HYPERLINKSTYLE);
+    ui->createAccountButton->setIcon( QIcon("://icons/ic_person_black_24dp_2x.png"));
+    ui->createAccountButton->setFlat(true);
+    ui->createAccountButton->setCursor(Qt::PointingHandCursor);
 
 
 
@@ -44,7 +58,7 @@ CloudUI::CloudUI(QWidget *parent) :
     }
 
 
-    QIcon mIcon(":pslogo.png");
+    QIcon mIcon("://icons/ic_cloud_done_black_24dp_2x.png");
     setWindowTitle("Packet Sender Cloud");
     setWindowIcon(mIcon);
 
@@ -58,6 +72,44 @@ CloudUI::~CloudUI()
     delete ui;
 }
 
+void popMsg(QString title, QString msg, bool isError)
+{
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(title);
+    msgBox.setStandardButtons(QMessageBox::Ok );
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    if(isError){
+        msgBox.setIcon(QMessageBox::Warning);
+    } else {
+        msgBox.setIcon(QMessageBox::Information);
+
+    }
+    msgBox.setText(msg);
+    msgBox.exec();
+
+}
+
+bool isLetterNumUnder(QString str)
+{
+
+    for (int i =0;i<str.size();i++)
+    {
+        if(str[i] == '_') {
+            continue;
+        }
+        if (str[i].isDigit()) {
+            continue;
+        }
+        if (str[i].isLetter())  {
+            continue;
+        }
+
+        return false;
+    }
+
+    return true;
+}
 
 
 void CloudUI::replyFinished(QNetworkReply* request)
@@ -106,26 +158,13 @@ void CloudUI::replyFinished(QNetworkReply* request)
     }
 
     if(success) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Success");
-        msgBox.setStandardButtons(QMessageBox::Ok );
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Found " + QString::number(packetSets.size()) + " sets of packets!");
-        msgBox.exec();
+        popMsg("Success", "Found " + QString::number(packetSets.size()) + " sets of packets!", false);
         loadPacketSetTable();
         ui->cloudTabWidget->setCurrentIndex(1);
 
 
     } else {
-
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Error");
-        msgBox.setStandardButtons(QMessageBox::Ok );
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Did not fetch any packets");
-        msgBox.exec();
+        popMsg("Error", "Did not fetch any packets", true);
 
     }
 
@@ -171,16 +210,48 @@ void CloudUI::loadPacketSetTable()
 }
 
 
-
 void CloudUI::on_loginButton_clicked()
 {
 
+
     QString un = ui->usernameEdit->text().trimmed();
+
+    if(!isLetterNumUnder(un)) {
+        popMsg("Invalid.", "Usernames may only be letters, numbers, underscores", true);
+        ui->usernameEdit->setFocus();
+        return;
+    }
+
+    if(un.size() < 3) {
+        popMsg("Too short.", "Username must be at least 3 characters.", true);
+        ui->usernameEdit->setFocus();
+        return;
+    }
+
     QString pw = ui->passwordEdit->text();
+
+    if(pw.size() < 3) {
+        popMsg("Too short.", "Passwords must be at least 3 characters.", true);
+        ui->usernameEdit->setFocus();
+        return;
+    }
+
+    QString pw64 = QString(pw.toLatin1().toBase64());
+
+    QString requestURL = CLOUD_URL + QString("?un=") + un + "&pw64=" + pw64;
+
+    if(ui->passwordConfirmEdit->isVisible()) {
+        if(ui->passwordConfirmEdit->text() != ui->passwordEdit->text()) {
+            popMsg("Mismatch.", "Passwords do not match.", true);
+            ui->passwordEdit->setFocus();
+            return;
+        }
+        requestURL.append("&newaccount=1");
+    }
+
 
     ui->loginButton->setEnabled(false);
 
-    QString requestURL = CLOUD_URL + QString("?un=") + un + "&pw=" + pw;
 
     QDEBUGVAR(requestURL);
 
@@ -240,3 +311,24 @@ void CloudUI::on_importPacketsButton_clicked()
 }
 
 
+
+void CloudUI::on_makePublicCheck_clicked(bool checked)
+{
+    ui->descriptionExportEdit->setEnabled(checked);
+}
+
+void CloudUI::on_createAccountButton_clicked()
+{
+    if(ui->passwordConfirmEdit->isVisible()) {
+        ui->passwordConfirmEdit->hide();
+        ui->passwordConfirmLabel->hide();
+        ui->createAccountButton->setText("Create a new account.");
+        ui->loginButton->setText("Login");
+    } else {
+        ui->passwordConfirmEdit->show();
+        ui->passwordConfirmLabel->show();
+        ui->createAccountButton->setText("Login instead.");
+        ui->loginButton->setText("Sign-up");
+    }
+
+}

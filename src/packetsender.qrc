@@ -34,5 +34,10 @@
         <file>icons/rx_ssl.png</file>
         <file>ps.key.base64</file>
         <file>ps.pem.base64</file>
+        <file>icons/ic_cloud_done_black_24dp_2x.png</file>
+        <file>icons/ic_cloud_download_black_24dp_2x.png</file>
+        <file>icons/ic_cloud_upload_black_24dp_2x.png</file>
+        <file>icons/ic_share_black_24dp_2x.png</file>
+        <file>icons/ic_person_black_24dp_2x.png</file>
     </qresource>
 </RCC>
