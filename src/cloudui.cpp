@@ -328,6 +328,8 @@ void CloudUI::on_saveToCloudButton_clicked()
     QString pw64 = getpw64(ui->passwordEdit->text());
     postData.addQueryItem("un", ui->usernameEdit->text());
     postData.addQueryItem("pw64", pw64);
+    QString packets64 = QString(Packet::ExportJSON(packets).toBase64());
+    postData.addQueryItem("packets64", packets64);
 
     QString pname = ui->packetSetNameEdit->text().trimmed();
 
