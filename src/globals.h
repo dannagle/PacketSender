@@ -15,8 +15,11 @@
 
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
 
-//#define CLOUD_URL  "https://cloud.packetsender.com/"
-#define CLOUD_URL  "http://localhost/"
+#define CLOUD_URL_REMOTE  "https://cloud.packetsender.com/"
+#define CLOUD_URL_LOCAL  "http://localhost/"
+
+#define CLOUD_URL ((QFile::exists(QDir::homePath() + "/DEBUGLOCAL")) ? (CLOUD_URL_LOCAL) : ((CLOUD_URL_REMOTE)))
+
 
 #define HYPERLINKSTYLE "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } "
 

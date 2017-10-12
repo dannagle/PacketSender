@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QDebug>
+#include <QDir>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QMessageBox>
