@@ -35,7 +35,7 @@ signals:
 private slots:
     void on_loginButton_clicked();
 
-    void on_exportButton_clicked();
+    void on_saveToCloudButton_clicked();
 
     void on_viewPublicButton_clicked();
 
@@ -51,6 +51,13 @@ private slots:
 
 private:
     void loadPacketSetTable();
+
+    void doPost(QUrlQuery postData);
+
+    QString un;
+    QString pw;
+
+    QList<Packet> packets;
 
     Ui::CloudUI *ui;
     QList<Packet> packetsToImport;

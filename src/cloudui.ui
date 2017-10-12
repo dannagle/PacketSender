@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="cloudTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="accountTab">
       <attribute name="icon">
@@ -124,6 +124,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="rememberLoginCheck">
+         <property name="text">
+          <string>Remember Login</string>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
@@ -234,6 +241,13 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="QLabel" name="shareBlurbLabel">
+         <property name="text">
+          <string>You are sharing.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <widget class="QLabel" name="label_6">
@@ -288,7 +302,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="exportButton">
+          <widget class="QPushButton" name="saveToCloudButton">
            <property name="text">
             <string>Save to Packet Sender Cloud</string>
            </property>

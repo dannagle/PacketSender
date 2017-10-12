@@ -4,12 +4,14 @@
 #include <QList>
 #include <QDebug>
 #include <QDir>
+#include <QStandardPaths>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QMessageBox>
 #include <QModelIndexList>
 #include <QModelIndex>
-
+#include <QSettings>
+#include <QUrlQuery>
 
 bool isLetterNumUnder(QString str);
 
@@ -66,11 +68,32 @@ CloudUI::CloudUI(QWidget *parent) :
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    ui->usernameEdit->setText(settings.value("cloudUsername", "").toString());
+    ui->passwordEdit->setText(settings.value("cloudPassword", "").toString());
+    ui->rememberLoginCheck->setChecked(settings.value("rememberLoginCheck", false).toBool());
+
+    ui->usernameEdit->setFocus();
+
+
+    packets = Packet::fetchAllfromDB("");
+
+    ui->shareBlurbLabel->setText("Saving " + QString::number(packets.size()) +" packet set to cloud");
+
+
+    settings.setValue("cloudPassword", ui->passwordEdit->text());
+
 }
 
 CloudUI::~CloudUI()
 {
     delete ui;
+}
+
+QString getpw64(QString pw)
+{
+    return QString(pw.toLatin1().toBase64());
 }
 
 void popMsg(QString title, QString msg, bool isError)
@@ -116,12 +139,28 @@ bool isLetterNumUnder(QString str)
 void CloudUI::replyFinished(QNetworkReply* request)
 {
     QByteArray data = request->readAll();
+    QString dataString = QString(data).trimmed();
     QDEBUG() <<"Request complete:" << data.size();
-
-    QJsonDocument doc = QJsonDocument::fromJson(data);
 
     ui->loginButton->setEnabled(true);
     ui->importURLButton->setEnabled(true);
+
+    if(dataString.toLower().startsWith("success")) {
+        popMsg("Success", dataString, false);
+        if(ui->passwordConfirmEdit->isVisible()) {
+            ui->cloudTabWidget->setCurrentIndex(2);
+            on_createAccountButton_clicked();
+        }
+        return;
+    }
+
+    if(dataString.toLower().startsWith("error")) {
+        popMsg("Error", dataString, true);
+        return;
+    }
+
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+
 
 
     bool success = false;
@@ -211,9 +250,11 @@ void CloudUI::loadPacketSetTable()
 }
 
 
+
 void CloudUI::on_loginButton_clicked()
 {
 
+    QUrlQuery postData;
 
     QString un = ui->usernameEdit->text().trimmed();
 
@@ -229,17 +270,17 @@ void CloudUI::on_loginButton_clicked()
         return;
     }
 
-    QString pw = ui->passwordEdit->text();
-
+    QString pw = ui->passwordEdit->text().trimmed();
     if(pw.size() < 3) {
         popMsg("Too short.", "Passwords must be at least 3 characters.", true);
         ui->usernameEdit->setFocus();
         return;
     }
 
-    QString pw64 = QString(pw.toLatin1().toBase64());
 
-    QString requestURL = CLOUD_URL + QString("?un=") + un + "&pw64=" + pw64;
+    QString pw64 = getpw64(ui->passwordEdit->text());
+    postData.addQueryItem("un", ui->usernameEdit->text());
+    postData.addQueryItem("pw64", pw64);
 
     if(ui->passwordConfirmEdit->isVisible()) {
         if(ui->passwordConfirmEdit->text() != ui->passwordEdit->text()) {
@@ -247,22 +288,72 @@ void CloudUI::on_loginButton_clicked()
             ui->passwordEdit->setFocus();
             return;
         }
-        requestURL.append("&newaccount=1");
+        postData.addQueryItem("newaccount", "1");
     }
 
 
     ui->loginButton->setEnabled(false);
 
 
-    QDEBUGVAR(requestURL);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("rememberLoginCheck", ui->rememberLoginCheck->isChecked());
 
-    http->get(QNetworkRequest(QUrl(requestURL)));
+
+    if(ui->rememberLoginCheck->isChecked()) {
+        settings.setValue("cloudUsername", ui->usernameEdit->text());
+        settings.setValue("cloudPassword", ui->passwordEdit->text());
+    }
+
+    doPost(postData);
 
 }
 
-void CloudUI::on_exportButton_clicked()
+
+void CloudUI::doPost(QUrlQuery postData)
+{
+
+    QNetworkRequest request(QUrl(CLOUD_URL));
+    request.setHeader(QNetworkRequest::ContentTypeHeader,
+        "application/x-www-form-urlencoded");
+    QByteArray pData = postData.toString(QUrl::FullyEncoded).toUtf8();
+    QDEBUG() << (CLOUD_URL) << QString(pData);
+    http->post(request, pData);
+
+}
+
+void CloudUI::on_saveToCloudButton_clicked()
 {
     QDEBUG();
+    QUrlQuery postData;
+    QString pw64 = getpw64(ui->passwordEdit->text());
+    postData.addQueryItem("un", ui->usernameEdit->text());
+    postData.addQueryItem("pw64", pw64);
+
+    QString pname = ui->packetSetNameEdit->text().trimmed();
+
+    if(pname.isEmpty()) {
+        popMsg("Empty", "Set name cannot be empty", true);
+        return;
+    }
+
+    postData.addQueryItem("setname", pname);
+
+    if(ui->makePublicCheck->isChecked()) {
+        postData.addQueryItem("makepublic", "1");
+
+        QString pubblurb = ui->descriptionExportEdit->toPlainText().trimmed();
+
+        if(pubblurb.isEmpty()) {
+            popMsg("Empty", "Public description cannot be empty", true);
+            return;
+        }
+
+        postData.addQueryItem("pubblurb", pubblurb);
+
+    }
+
+    doPost(postData);
+
 
 }
 
