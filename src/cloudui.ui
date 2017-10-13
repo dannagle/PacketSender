@@ -275,14 +275,14 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Public Description (Markdown supported)</string>
+          <string>Description</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QTextEdit" name="descriptionExportEdit">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
        </item>

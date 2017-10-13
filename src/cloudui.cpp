@@ -140,7 +140,10 @@ void CloudUI::replyFinished(QNetworkReply* request)
 {
     QByteArray data = request->readAll();
     QString dataString = QString(data).trimmed();
-    QDEBUG() <<"Request complete:" << data.size();
+
+    QString dataStringDebug = dataString;
+    dataStringDebug.truncate(200);
+    QDEBUG() <<"Request complete:" << dataStringDebug;
 
     ui->loginButton->setEnabled(true);
     ui->importURLButton->setEnabled(true);
@@ -177,11 +180,12 @@ void CloudUI::replyFinished(QNetworkReply* request)
                 for(int i=0; i < jsonArray.size(); i++) {
                     PacketSet pktSet;
                     QJsonObject json = jsonArray[i].toObject();
+                    pktSet.name  = json["name"].toString();
                     pktSet.description = json["description"].toString();
                     QByteArray jsonData = json["packetjson"].toString().toLatin1();
                     if(!jsonData.isEmpty()) {
                         pktSet.packets = Packet::ImportJSON(jsonData);
-                        QDEBUG() << "Set" << pktSet.description << "has" << pktSet.packets.size() << "packets";
+                        QDEBUG() << "Set" << pktSet.name << "has" << pktSet.packets.size() << "packets";
 
                         if(pktSet.packets.size() > 0) {
                             success = true;
@@ -217,10 +221,10 @@ void CloudUI::loadPacketSetTable()
     ui->packetSetTable->clear();
 
     QStringList tableHeaders;
-    tableHeaders << "Description" << "Packet Count";
+    tableHeaders << "Name"<< "Description" << "Packet Count";
 
 
-    ui->packetSetTable->setColumnCount(2);
+    ui->packetSetTable->setColumnCount(tableHeaders.size());
 
     ui->packetSetTable->verticalHeader()->show();
     ui->packetSetTable->horizontalHeader()->show();
@@ -229,14 +233,17 @@ void CloudUI::loadPacketSetTable()
 
     ui->packetSetTable->setRowCount(packetSets.size());
     for(int i=0; i < packetSets.size(); i++ ) {
+        QTableWidgetItem  * itemName = new QTableWidgetItem(packetSets[i].name);
         QTableWidgetItem  * itemDescription = new QTableWidgetItem(packetSets[i].description);
         QTableWidgetItem  * itemSize = new QTableWidgetItem(QString::number(packetSets[i].packets.size()));
 
+        itemName->setData(Qt::UserRole, i); //set index
         itemDescription->setData(Qt::UserRole, i); //set index
         itemSize->setData(Qt::UserRole, i); //set index
 
-        ui->packetSetTable->setItem(i, 0, itemDescription);
-        ui->packetSetTable->setItem(i, 1, itemSize);
+        ui->packetSetTable->setItem(i, 0, itemName);
+        ui->packetSetTable->setItem(i, 1, itemDescription);
+        ui->packetSetTable->setItem(i, 2, itemSize);
     }
 
 
@@ -339,19 +346,15 @@ void CloudUI::on_saveToCloudButton_clicked()
     }
 
     postData.addQueryItem("setname", pname);
+    QString pubblurb = ui->descriptionExportEdit->toPlainText().trimmed();
+    postData.addQueryItem("pubblurb", pubblurb);
 
     if(ui->makePublicCheck->isChecked()) {
         postData.addQueryItem("makepublic", "1");
-
-        QString pubblurb = ui->descriptionExportEdit->toPlainText().trimmed();
-
         if(pubblurb.isEmpty()) {
             popMsg("Empty", "Public description cannot be empty", true);
             return;
         }
-
-        postData.addQueryItem("pubblurb", pubblurb);
-
     }
 
     doPost(postData);
@@ -408,7 +411,7 @@ void CloudUI::on_importPacketsButton_clicked()
 
 void CloudUI::on_makePublicCheck_clicked(bool checked)
 {
-    ui->descriptionExportEdit->setEnabled(checked);
+    //ui->descriptionExportEdit->setEnabled(checked);
 }
 
 void CloudUI::on_createAccountButton_clicked()
