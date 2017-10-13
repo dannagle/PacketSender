@@ -16,6 +16,7 @@ class CloudUI;
 typedef struct PacketSet {
     QString name;
     QString description;
+    QString lastupdate;
     QList<Packet> packets;
 } PacketSet;
 

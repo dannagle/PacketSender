@@ -181,6 +181,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
                     PacketSet pktSet;
                     QJsonObject json = jsonArray[i].toObject();
                     pktSet.name  = json["name"].toString();
+                    pktSet.lastupdate  = json["lastupdate"].toString();
                     pktSet.description = json["description"].toString();
                     QByteArray jsonData = json["packetjson"].toString().toLatin1();
                     if(!jsonData.isEmpty()) {
@@ -221,7 +222,7 @@ void CloudUI::loadPacketSetTable()
     ui->packetSetTable->clear();
 
     QStringList tableHeaders;
-    tableHeaders << "Name"<< "Description" << "Packet Count";
+    tableHeaders << "Name" << "Packet Count" << "Uploaded";
 
 
     ui->packetSetTable->setColumnCount(tableHeaders.size());
@@ -234,16 +235,20 @@ void CloudUI::loadPacketSetTable()
     ui->packetSetTable->setRowCount(packetSets.size());
     for(int i=0; i < packetSets.size(); i++ ) {
         QTableWidgetItem  * itemName = new QTableWidgetItem(packetSets[i].name);
-        QTableWidgetItem  * itemDescription = new QTableWidgetItem(packetSets[i].description);
         QTableWidgetItem  * itemSize = new QTableWidgetItem(QString::number(packetSets[i].packets.size()));
+        QTableWidgetItem  * lastupdate = new QTableWidgetItem(packetSets[i].lastupdate);
 
         itemName->setData(Qt::UserRole, i); //set index
-        itemDescription->setData(Qt::UserRole, i); //set index
         itemSize->setData(Qt::UserRole, i); //set index
+        lastupdate->setData(Qt::UserRole, i); //set index
+
+        itemName->setToolTip(packetSets[i].description);
+        itemSize->setToolTip(packetSets[i].description);
+        lastupdate->setToolTip(packetSets[i].description);
 
         ui->packetSetTable->setItem(i, 0, itemName);
-        ui->packetSetTable->setItem(i, 1, itemDescription);
-        ui->packetSetTable->setItem(i, 2, itemSize);
+        ui->packetSetTable->setItem(i, 1, itemSize);
+        ui->packetSetTable->setItem(i, 2, lastupdate);
     }
 
 
