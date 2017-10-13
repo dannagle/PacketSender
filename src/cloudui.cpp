@@ -12,6 +12,7 @@
 #include <QModelIndex>
 #include <QSettings>
 #include <QUrlQuery>
+#include <QDesktopServices>
 
 bool isLetterNumUnder(QString str);
 
@@ -22,6 +23,15 @@ void popMsg(QString title, QString msg, bool isError);
 #include <QJsonObject>
 
 #include "globals.h"
+
+
+void linkifyButton(QPushButton * btn)
+{
+
+    btn->setStyleSheet(HYPERLINKSTYLE);
+    btn->setFlat(true);
+    btn->setCursor(Qt::PointingHandCursor);
+}
 
 CloudUI::CloudUI(QWidget *parent) :
     QDialog(parent),
@@ -43,12 +53,11 @@ CloudUI::CloudUI(QWidget *parent) :
 
     ui->cloudTabWidget->setCurrentIndex(0);
 
-
-    ui->createAccountButton->setStyleSheet(HYPERLINKSTYLE);
     ui->createAccountButton->setIcon( QIcon("://icons/ic_person_black_24dp_2x.png"));
-    ui->createAccountButton->setFlat(true);
-    ui->createAccountButton->setCursor(Qt::PointingHandCursor);
+    linkifyButton(ui->createAccountButton);
 
+    linkifyButton(ui->termsButton);
+    linkifyButton(ui->privacyButton);
 
 
     http = new QNetworkAccessManager(this); //Cloud UI http object
@@ -101,6 +110,7 @@ void popMsg(QString title, QString msg, bool isError)
 
     QMessageBox msgBox;
     msgBox.setWindowTitle(title);
+    msgBox.setWindowIcon( QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
     msgBox.setStandardButtons(QMessageBox::Ok );
     msgBox.setDefaultButton(QMessageBox::Ok);
     if(isError){
@@ -154,6 +164,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
             ui->cloudTabWidget->setCurrentIndex(2);
             on_createAccountButton_clicked();
         }
+
         return;
     }
 
@@ -431,6 +442,67 @@ void CloudUI::on_createAccountButton_clicked()
         ui->passwordConfirmLabel->show();
         ui->createAccountButton->setText("Login instead.");
         ui->loginButton->setText("Sign-up");
+    }
+
+}
+
+void CloudUI::on_privacyButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/privacy"));
+}
+
+void CloudUI::on_termsButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/termsofuse"));
+
+}
+
+void CloudUI::on_deletePacketButton_clicked()
+{
+
+    QUrlQuery postData;
+    QString un = ui->usernameEdit->text().trimmed();
+    QString pw64 = getpw64(ui->passwordEdit->text());
+    postData.addQueryItem("un", ui->usernameEdit->text());
+    postData.addQueryItem("pw64", pw64);
+
+    QModelIndexList indexes = ui->packetSetTable->selectionModel()->selectedIndexes();
+    QDEBUGVAR(indexes.size());
+
+    QString name = "";
+    int packetsetindex = -1;
+
+    if(indexes.size() > 0) {
+        QModelIndex index = indexes.first();
+        packetsetindex = index.data(Qt::UserRole).toInt();
+        if(packetSets.size() > packetsetindex) {
+            name = packetSets[packetsetindex].name;
+        }
+    } else {
+        popMsg("Empty", "Please select a set.", true);
+        return;
+    }
+
+    if(name.isEmpty() || packetsetindex < 0) {
+        popMsg("Not found", "Set was not found.", true);
+        return;
+    }
+
+    postData.addQueryItem("deleteset", name);
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("Delete Set");
+    msgBox.setWindowIcon( QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Delete the set " + name + " from cloud?");
+    int yesno = msgBox.exec();
+    if(yesno == QMessageBox::Yes) {
+        packetSets.removeAt(packetsetindex);
+        loadPacketSetTable();
+
+        doPost(postData);
     }
 
 }

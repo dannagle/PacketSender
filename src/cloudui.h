@@ -51,6 +51,13 @@ private slots:
 
     void on_createAccountButton_clicked();
 
+    void on_privacyButton_clicked();
+
+    void on_termsButton_clicked();
+
+
+    void on_deletePacketButton_clicked();
+
 private:
     void loadPacketSetTable();
 
