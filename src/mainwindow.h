@@ -57,6 +57,8 @@ public:
     void packetTable_checkMultiSelected();
     void generateConnectionMenu();
 
+    void updateManager(QByteArray response);
+
 signals:
     void sendPacket(Packet sendpacket);
 

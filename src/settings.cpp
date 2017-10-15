@@ -83,6 +83,7 @@ Settings::Settings(QWidget *parent) :
     ui->sslPrivateKeyPath->setText(settings.value("sslPrivateKeyPath", "").toString());
 
     ui->restoreSessionCheck->setChecked(settings.value("restoreSessionCheck", true).toBool());
+    ui->checkforUpdates->setChecked(settings.value("checkforUpdates", true).toBool());
 
     ui->resolveDNSOnInputCheck->setChecked(settings.value("resolveDNSOnInputCheck", false).toBool());
 
@@ -230,6 +231,7 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("restoreSessionCheck", ui->restoreSessionCheck->isChecked());
 
+    settings.setValue("checkforUpdates", ui->checkforUpdates->isChecked());
 
 
     settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());

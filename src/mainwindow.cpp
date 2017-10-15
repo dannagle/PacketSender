@@ -28,6 +28,13 @@
 #include <QSslKey>
 
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
+#include <QStringList>
+
+
 #include "brucethepoodle.h"
 #include "settings.h"
 #include "about.h"
@@ -36,7 +43,7 @@
 
 
 int hexToInt(QChar hex);
-
+void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -326,9 +333,10 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
 
+
+    updateManager(QByteArray());
+
     //on_actionExport_Packets_JSON_triggered();
-
-
 
     QDEBUG() << "Load time:" <<  timeSinceLaunch();
 
@@ -380,6 +388,158 @@ void MainWindow::toggleSSLServer()
 void MainWindow::generateConnectionMenu() {
 
 
+}
+/*
+
+{"githubpath":"https:\/\/api.github.com\/repos\/dannagle\/PacketSender\/releases\/7612134",
+"windowsversion":"v5.4.2","macversion":"v5.4.2","linuxversion":"v5.4.2","windowsdownload":
+"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_5_4_2_2017-09-01.exe",
+"windowsportable":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderPortable_5_4_2_2017-09-01.zip",
+"macdownload":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_v5_4_2_2017-09-01.dmg","linuxdownload":
+"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderLinux_5_4_2_2017-09-01.AppImage"}
+
+
+*/
+
+
+void parserMajorMinorBuild(QString sw, unsigned int & major, unsigned int & minor, unsigned int & build)
+{
+
+    major = 0; minor = 0; build = 0;
+    sw.replace("v", "");
+    QStringList versionSplit = sw.split(".");
+
+    if(versionSplit.size() >= 0 ) {
+        major = versionSplit[0].toUInt();
+    }
+
+    if(versionSplit.size() >= 1 ) {
+        minor = versionSplit[1].toUInt();
+    }
+
+    if(versionSplit.size() >= 2 ) {
+        build = versionSplit[2].toUInt();
+    }
+
+
+
+}
+
+
+void MainWindow::updateManager(QByteArray response)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    if(!response.isEmpty()) {
+        QJsonDocument doc = QJsonDocument::fromJson(response);
+        if(!doc.isNull()) {
+            //valid JSON
+            QJsonObject json = doc.object();
+            QString githubpath = json["githubpath"].toString();
+            QString version = json["windowsversion"].toString();
+
+#ifdef __APPLE__
+            version = json["macversion"].toString();
+#endif
+
+#ifdef __linux__
+            version = json["linuxversion"].toString();
+
+
+#endif
+
+            QString currentVersion = SW_VERSION;
+            unsigned int majorCurrent, minorCurrent, buildCurrent;
+            parserMajorMinorBuild(currentVersion, majorCurrent, minorCurrent, buildCurrent);
+
+            //majorCurrent--;
+
+            unsigned int majorNew, minorNew, buildNew;
+            parserMajorMinorBuild(version, majorNew, minorNew, buildNew);
+
+            bool needUpdate = false;
+            if(majorNew > majorCurrent) {
+                needUpdate = true;
+            }
+
+            if(majorNew == majorCurrent ) {
+                if (minorNew > minorCurrent) {
+                    needUpdate = true;
+                }
+
+                if (minorNew == minorCurrent) {
+                    if (buildNew > buildCurrent) {
+                        needUpdate = true;
+                    }
+                }
+            }
+
+            QDEBUG() << "Current SW" << majorCurrent << minorCurrent << buildCurrent;
+            QDEBUG() << "NEW SW"  << majorNew << minorNew << buildNew;
+
+            if(needUpdate) {
+                QDEBUG() << "Update is needed";
+                QMessageBox msgBox;
+                msgBox.setWindowIcon(QIcon(":pslogo.png"));
+                msgBox.setWindowTitle("Updates.");
+                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                msgBox.setDefaultButton(QMessageBox::Yes);
+                msgBox.setIcon(QMessageBox::Information);
+                msgBox.setText("There is a new Packet Sender available.\n\nDownload?");
+                int yesno = msgBox.exec();
+                if(yesno == QMessageBox::Yes) {
+                    QDesktopServices::openUrl(QUrl("https://packetsender.com/download"));
+                } else {
+                    QDEBUG() << "Skip a few checks";
+                    QDateTime next = QDateTime::currentDateTime().addDays(14);
+                    settings.setValue("updateLastChecked", next.toString(FULLDATETIMEFORMAT));
+                }
+            } else {
+                QDEBUG() << "SW is up to date";
+            }
+
+
+        }
+
+        return;
+    }
+
+    if(!settings.value("checkforUpdatesAsked", false).toBool()) {
+        settings.setValue("checkforUpdatesAsked", true);
+        QMessageBox msgBox;
+        msgBox.setWindowIcon(QIcon(":pslogo.png"));
+        msgBox.setWindowTitle("Updates.");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Let Packet Sender check for updates weekly?");
+        int yesno = msgBox.exec();
+        if(yesno == QMessageBox::Yes) {
+            QDEBUG() << "Will check for updates";
+            settings.setValue("checkforUpdates", true);
+        } else {
+            QDEBUG() << "Will NOT check for updates";
+            settings.setValue("checkforUpdates", false);
+        }
+
+        settings.sync();
+    }
+
+
+    if(settings.value("checkforUpdates", true).toBool()) {
+        QString updateLastCheckedString = settings.value("updateLastChecked").toString();
+        QDateTime updateLastChecked = QDateTime::fromString(updateLastCheckedString, FULLDATETIMEFORMAT);
+        QDateTime now = QDateTime::currentDateTime();
+        QDateTime next = updateLastChecked.addDays(DAYS_BETWEEN_UPDATES);
+
+        if(next < now) {
+            QDEBUG() << "Time to check for updates" << UPDATE_URL;
+            http->get(QNetworkRequest(QUrl(UPDATE_URL)));
+            settings.setValue("updateLastChecked", now.toString(FULLDATETIMEFORMAT));
+        } else {
+            QDEBUG() << "Next update check will be" << next.toString(FULLDATETIMEFORMAT);
+        }
+    }
 }
 
 
@@ -686,9 +846,17 @@ void MainWindow::httpFinished(QNetworkReply* pReply)
 
     QByteArray data=pReply->readAll();
     QString str = QString(data);
-    str.truncate(100);
-    QDEBUG() <<"finished http. size="<<data.size() << str;
-
+    str.truncate(1000);
+    QDEBUG() <<"finished http." << str;
+    if(str.contains("windowsversion")
+       && str.contains("macversion")
+            ) {
+       //Received valid update data.
+        QDEBUG() <<"Valid update string";
+        updateManager(data);
+    } else {
+        QDEBUG() <<"Did not receive a valid update string";
+    }
 }
 
 

@@ -116,9 +116,8 @@ int main(int argc, char *argv[])
 
         QTextStream out(stdout);
 
-        QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
         QCoreApplication::setApplicationName("Packet Sender");
-        QString versionBuilder = "version " + vDate.toString("yyyy-MM-dd");
+        QString versionBuilder = QString("version " ) + SW_VERSION;
         if(QSslSocket::supportsSsl()) {
             versionBuilder.append(" / SSL version:");
             versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());

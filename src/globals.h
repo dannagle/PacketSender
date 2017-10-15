@@ -10,15 +10,27 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+//BEGIN SW VERSION
+#define SW_VERSION "v5.5.2"
+//END SW VERSION
+
+
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
 #define QDEBUGVAR(var)  QDEBUG() << # var <<  var;
 
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
+#define FULLDATETIMEFORMAT "yyyy-MM-dd hh:mm:ss"
 
 #define CLOUD_URL_REMOTE  "https://cloud.packetsender.com/"
 #define CLOUD_URL_LOCAL  "http://localhost/"
+#define UPDATE_URL_REMOTE  "https://packetsender.com/update"
+#define UPDATE_URL_LOCAL  "http://localhost/update"
 
 #define CLOUD_URL ((QFile::exists(QDir::homePath() + "/DEBUGLOCAL")) ? (CLOUD_URL_LOCAL) : ((CLOUD_URL_REMOTE)))
+
+#define UPDATE_URL ((QFile::exists(QDir::homePath() + "/UPDATELOCAL")) ? (UPDATE_URL_LOCAL) : ((UPDATE_URL_REMOTE)))
+
+#define DAYS_BETWEEN_UPDATES 7
 
 
 #define HYPERLINKSTYLE "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } "

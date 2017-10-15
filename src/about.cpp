@@ -14,8 +14,8 @@ About::About(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QDate vDate = QDate::fromString(QString(__DATE__).simplified(), "MMM d yyyy");
-    ui->buidDateLabel->setText("Build date: " + vDate.toString("yyyy-MM-dd"));
+    QString versionBuilder = QString("version " ) + SW_VERSION;
+    ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("About Packet Sender");
