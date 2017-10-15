@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="cloudTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="accountTab">
       <attribute name="icon">
@@ -251,6 +251,9 @@
        </item>
        <item>
         <widget class="QTableWidget" name="packetSetTable">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
@@ -326,15 +329,42 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="makePublicCheck">
-         <property name="text">
-          <string>Create Public Share URL</string>
-         </property>
-         <property name="icon">
-          <iconset resource="packetsender.qrc">
-           <normaloff>:/icons/ic_share_black_24dp_2x.png</normaloff>:/icons/ic_share_black_24dp_2x.png</iconset>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Public Path</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="publicPathEdit"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="makePublicCheck">
+           <property name="text">
+            <string>Make Public</string>
+           </property>
+           <property name="icon">
+            <iconset resource="packetsender.qrc">
+             <normaloff>:/icons/ic_share_black_24dp_2x.png</normaloff>:/icons/ic_share_black_24dp_2x.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QLabel" name="label_4">

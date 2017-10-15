@@ -383,6 +383,7 @@ void CloudUI::on_saveToCloudButton_clicked()
     QString packets64 = QString(Packet::ExportJSON(packets).toBase64());
     postData.addQueryItem("packets64", packets64);
     postData.addQueryItem("count", QString::number(packets.size()));
+    postData.addQueryItem("path", ui->publicPathEdit->text());
 
     QString pname = ui->packetSetNameEdit->text().trimmed();
 
