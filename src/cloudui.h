@@ -58,6 +58,8 @@ private slots:
 
     void on_deletePacketButton_clicked();
 
+    void on_cloudLinkButton_clicked();
+
 private:
     void loadPacketSetTable();
 

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="cloudTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="accountTab">
       <attribute name="icon">
@@ -207,6 +207,13 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="cloudLinkButton">
+           <property name="text">
+            <string>cloud.packetsender.com</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

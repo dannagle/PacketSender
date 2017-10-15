@@ -58,6 +58,7 @@ CloudUI::CloudUI(QWidget *parent) :
 
     linkifyButton(ui->termsButton);
     linkifyButton(ui->privacyButton);
+    linkifyButton(ui->cloudLinkButton);
 
 
     http = new QNetworkAccessManager(this); //Cloud UI http object
@@ -456,6 +457,13 @@ void CloudUI::on_termsButton_clicked()
     QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/termsofuse"));
 
 }
+
+void CloudUI::on_cloudLinkButton_clicked()
+{
+    QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/login"));
+
+}
+
 
 void CloudUI::on_deletePacketButton_clicked()
 {
