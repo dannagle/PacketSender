@@ -340,7 +340,7 @@ void CloudUI::doPost(QUrlQuery postData)
     request.setHeader(QNetworkRequest::ContentTypeHeader,
         "application/x-www-form-urlencoded");
     QByteArray pData = postData.toString(QUrl::FullyEncoded).toUtf8();
-    QDEBUG() << (CLOUD_URL) << QString(pData);
+    QDEBUG() << (CLOUD_URL); // << QString(pData);
     http->post(request, pData);
 
 }
@@ -354,6 +354,7 @@ void CloudUI::on_saveToCloudButton_clicked()
     postData.addQueryItem("pw64", pw64);
     QString packets64 = QString(Packet::ExportJSON(packets).toBase64());
     postData.addQueryItem("packets64", packets64);
+    postData.addQueryItem("count", QString::number(packets.size()));
 
     QString pname = ui->packetSetNameEdit->text().trimmed();
 

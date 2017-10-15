@@ -158,6 +158,7 @@ QByteArray Packet::ExportJSON(QList<Packet> packetList)
         JSONSTR(tcpOrUdp);
         JSONNUM(sendResponse);
         JSONSTR(repeat);
+        json["asciistring"] = QString(packetList[i].asciiString().toLatin1().toBase64());
         //JSONSTR(timestamp);
 
         jsonArray.push_front(json);
