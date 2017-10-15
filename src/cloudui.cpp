@@ -60,6 +60,8 @@ CloudUI::CloudUI(QWidget *parent) :
     linkifyButton(ui->privacyButton);
     linkifyButton(ui->cloudLinkButton);
 
+    suppressAlert = false;
+
 
     http = new QNetworkAccessManager(this); //Cloud UI http object
 
@@ -106,7 +108,7 @@ QString getpw64(QString pw)
     return QString(pw.toLatin1().toBase64());
 }
 
-void popMsg(QString title, QString msg, bool isError)
+void CloudUI::popMsg(QString title, QString msg, bool isError)
 {
 
     QMessageBox msgBox;
@@ -121,7 +123,14 @@ void popMsg(QString title, QString msg, bool isError)
 
     }
     msgBox.setText(msg);
-    msgBox.exec();
+
+    if(!suppressAlert) {
+        msgBox.exec();
+    }
+
+    suppressAlert = false;
+
+
 
 }
 
@@ -165,6 +174,9 @@ void CloudUI::replyFinished(QNetworkReply* request)
             ui->cloudTabWidget->setCurrentIndex(2);
             on_createAccountButton_clicked();
         }
+
+        suppressAlert = true;
+        on_loginButton_clicked();
 
         return;
     }
@@ -217,7 +229,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
     }
 
     if(success) {
-        popMsg("Success", "Found " + QString::number(packetSets.size()) + " sets of packets!", false);
+        //popMsg("Success", "Found " + QString::number(packetSets.size()) + " sets of packets!", false);
         loadPacketSetTable();
         ui->cloudTabWidget->setCurrentIndex(1);
 
@@ -231,9 +243,18 @@ void CloudUI::replyFinished(QNetworkReply* request)
 }
 
 
+void setuptWidget(QTableWidgetItem  * item, QList<PacketSet> packetSets, int i)
+{
+    item->setData(Qt::UserRole, i); //set index
+    item->setData(Qt::UserRole + 1, packetSets[i].path); //set path
+    item->setData(Qt::UserRole + 2, packetSets[i].ispublic); //set public
+    item->setToolTip(packetSets[i].description);
+
+}
 void CloudUI::loadPacketSetTable()
 {
     ui->packetSetTable->clear();
+    ui->viewPublicButton->hide();
 
     QStringList tableHeaders;
     tableHeaders << "Name" << "Packet Count" << "Uploaded" << "Path" << "Public";
@@ -256,18 +277,12 @@ void CloudUI::loadPacketSetTable()
         QTableWidgetItem  * itemPublic = new QTableWidgetItem(QString::number(packetSets[i].ispublic));
 
 
+        setuptWidget(itemName, packetSets, i);
+        setuptWidget(itemSize, packetSets, i);
+        setuptWidget(lastupdate, packetSets, i);
+        setuptWidget(itemPath, packetSets, i);
+        setuptWidget(itemPublic, packetSets, i);
 
-        itemName->setData(Qt::UserRole, i); //set index
-        itemSize->setData(Qt::UserRole, i); //set index
-        lastupdate->setData(Qt::UserRole, i); //set index
-        itemPath->setData(Qt::UserRole, i); //set index
-        itemPublic->setData(Qt::UserRole, i); //set index
-
-        itemName->setToolTip(packetSets[i].description);
-        itemSize->setToolTip(packetSets[i].description);
-        lastupdate->setToolTip(packetSets[i].description);
-        itemPath->setToolTip(packetSets[i].description);
-        itemPublic->setToolTip(packetSets[i].description);
 
         ui->packetSetTable->setItem(i, 0, itemName);
         ui->packetSetTable->setItem(i, 1, itemSize);
@@ -395,7 +410,8 @@ void CloudUI::on_saveToCloudButton_clicked()
 
 void CloudUI::on_viewPublicButton_clicked()
 {
-    QDEBUG();
+    QDesktopServices::openUrl(QUrl(ui->viewPublicButton->text()));
+
 
 }
 
@@ -519,4 +535,16 @@ void CloudUI::on_deletePacketButton_clicked()
         doPost(postData);
     }
 
+}
+
+void CloudUI::on_packetSetTable_clicked(const QModelIndex &index)
+{
+    QString path = index.data(Qt::UserRole + 1).toString();
+    int ispublic  = index.data(Qt::UserRole + 2).toInt();
+    ui->viewPublicButton->setText(path);
+    if(ispublic) {
+        ui->viewPublicButton->show();
+    } else {
+        ui->viewPublicButton->hide();
+    }
 }

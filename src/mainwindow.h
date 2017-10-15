@@ -188,6 +188,7 @@ private:
     QString IPv6Stylesheet;
 
 
+
     QStringList packetTableHeaders;
     QStringList packetSavedTableHeaders;
 

@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="cloudTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="accountTab">
       <attribute name="icon">
@@ -260,6 +260,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="viewPublicButton">
+         <property name="text">
+          <string>View URL</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
           <widget class="QPushButton" name="deletePacketButton">
@@ -370,13 +377,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QPushButton" name="viewPublicButton">
-         <property name="text">
-          <string>View URL</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>

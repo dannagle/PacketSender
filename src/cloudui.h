@@ -62,10 +62,17 @@ private slots:
 
     void on_cloudLinkButton_clicked();
 
+    void on_packetSetTable_clicked(const QModelIndex &index);
+
 private:
     void loadPacketSetTable();
 
+    void popMsg(QString title, QString msg, bool isError);
+
     void doPost(QUrlQuery postData);
+
+    bool suppressAlert;
+
 
     QString un;
     QString pw;
