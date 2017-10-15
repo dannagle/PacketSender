@@ -17,6 +17,8 @@ typedef struct PacketSet {
     QString name;
     QString description;
     QString lastupdate;
+    QString path;
+    int ispublic;
     QList<Packet> packets;
 } PacketSet;
 

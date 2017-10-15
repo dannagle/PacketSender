@@ -195,6 +195,8 @@ void CloudUI::replyFinished(QNetworkReply* request)
                     pktSet.name  = json["name"].toString();
                     pktSet.lastupdate  = json["lastupdate"].toString();
                     pktSet.description = json["description"].toString();
+                    pktSet.path = json["path"].toString();
+                    pktSet.ispublic = json["public"].toString().toInt();
                     QByteArray jsonData = json["packetjson"].toString().toLatin1();
                     if(!jsonData.isEmpty()) {
                         pktSet.packets = Packet::ImportJSON(jsonData);
@@ -234,7 +236,7 @@ void CloudUI::loadPacketSetTable()
     ui->packetSetTable->clear();
 
     QStringList tableHeaders;
-    tableHeaders << "Name" << "Packet Count" << "Uploaded";
+    tableHeaders << "Name" << "Packet Count" << "Uploaded" << "Path" << "Public";
 
 
     ui->packetSetTable->setColumnCount(tableHeaders.size());
@@ -250,17 +252,28 @@ void CloudUI::loadPacketSetTable()
         QTableWidgetItem  * itemSize = new QTableWidgetItem(QString::number(packetSets[i].packets.size()));
         QTableWidgetItem  * lastupdate = new QTableWidgetItem(packetSets[i].lastupdate);
 
+        QTableWidgetItem  * itemPath = new QTableWidgetItem(packetSets[i].path);
+        QTableWidgetItem  * itemPublic = new QTableWidgetItem(QString::number(packetSets[i].ispublic));
+
+
+
         itemName->setData(Qt::UserRole, i); //set index
         itemSize->setData(Qt::UserRole, i); //set index
         lastupdate->setData(Qt::UserRole, i); //set index
+        itemPath->setData(Qt::UserRole, i); //set index
+        itemPublic->setData(Qt::UserRole, i); //set index
 
         itemName->setToolTip(packetSets[i].description);
         itemSize->setToolTip(packetSets[i].description);
         lastupdate->setToolTip(packetSets[i].description);
+        itemPath->setToolTip(packetSets[i].description);
+        itemPublic->setToolTip(packetSets[i].description);
 
         ui->packetSetTable->setItem(i, 0, itemName);
         ui->packetSetTable->setItem(i, 1, itemSize);
         ui->packetSetTable->setItem(i, 2, lastupdate);
+        ui->packetSetTable->setItem(i, 3, itemPath);
+        ui->packetSetTable->setItem(i, 4, itemPublic);
     }
 
 
