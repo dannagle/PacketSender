@@ -1192,11 +1192,18 @@ void MainWindow::on_deletePacketButton_clicked()
         return;
     }
 
+    QStringList nameList; nameList.clear();
+
     foreach(index, indexes)
     {
         selected = index.data(Packet::PACKET_NAME).toString();
-        QDEBUG() << "Deleting"<<selected;
-        Packet::removeFromDB(selected);
+        if(!nameList.contains(selected)) {
+            nameList.append(selected);
+        }
+    }
+
+    if(!nameList.isEmpty()) {
+        Packet::removeFromDBList(nameList);
     }
 
     packetsSaved = Packet::fetchAllfromDB("");

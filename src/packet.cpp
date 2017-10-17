@@ -683,6 +683,41 @@ QList<Packet> Packet::fetchAllfromDB(QString importFile)
 
 }
 
+
+void Packet::removeFromDBList(QStringList nameList)
+{
+    QSettings settings(PACKETSFILE, QSettings::IniFormat);
+    QList<Packet> packets = Packet::fetchAllfromDB("");
+
+
+     QDEBUGVAR(nameList.size());
+
+     QList<Packet> packetSaved; packetSaved.clear();
+
+
+     for(int i = 0; i < packets.size(); i++)
+     {
+         QString thename = packets[i].name.trimmed();
+         if(nameList.contains(thename))
+         {
+             settings.beginGroup(thename);
+             settings.remove("");
+             settings.endGroup();
+         } else {
+             packetSaved.append(packets[i]);
+         }
+     }
+
+     settings.beginWriteArray(NAMEINIKEY);
+     for (int i = 0; i < packetSaved.size(); ++i) {
+         settings.setArrayIndex(i);
+         settings.setValue("name", packetSaved[i].name);
+     }
+     settings.endArray();
+
+}
+
+
 bool Packet::removeFromDB(QString thename)
 {
     QSettings settings(PACKETSFILE, QSettings::IniFormat);

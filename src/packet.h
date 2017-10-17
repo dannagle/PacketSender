@@ -106,6 +106,7 @@ public:
     static QByteArray ASCIItoEBCDIC(QByteArray ascii);
     static QByteArray ExportJSON(QList<Packet> packetList);
     static QList<Packet> ImportJSON(QByteArray data);
+    void static removeFromDBList(QStringList nameList);
 private:
     static int hexToInt(QChar hex);
 
