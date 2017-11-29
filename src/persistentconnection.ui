@@ -200,6 +200,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>packetComboBox</tabstop>
+  <tabstop>LoadButton</tabstop>
+  <tabstop>searchEdit</tabstop>
+  <tabstop>rawCheck</tabstop>
+  <tabstop>asciiCheck</tabstop>
+  <tabstop>asciiLineEdit</tabstop>
+  <tabstop>asciiSendButton</tabstop>
+  <tabstop>appendCRcheck</tabstop>
+  <tabstop>sendFileButton</tabstop>
+  <tabstop>clearButton</tabstop>
+  <tabstop>clipboardButton</tabstop>
+  <tabstop>stopResendingButton</tabstop>
+  <tabstop>trafficViewEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

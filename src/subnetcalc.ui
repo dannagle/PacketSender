@@ -205,6 +205,17 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>ipEdit</tabstop>
+  <tabstop>subnetEdit</tabstop>
+  <tabstop>ipsubnetCheckEdit</tabstop>
+  <tabstop>startEdit</tabstop>
+  <tabstop>endEdit</tabstop>
+  <tabstop>broadcastEdit</tabstop>
+  <tabstop>checkSubnetResultEdit</tabstop>
+  <tabstop>resultEdit</tabstop>
+  <tabstop>clearButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

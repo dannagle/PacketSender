@@ -414,6 +414,29 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cloudTabWidget</tabstop>
+  <tabstop>usernameEdit</tabstop>
+  <tabstop>passwordEdit</tabstop>
+  <tabstop>passwordConfirmEdit</tabstop>
+  <tabstop>rememberLoginCheck</tabstop>
+  <tabstop>loginButton</tabstop>
+  <tabstop>createAccountButton</tabstop>
+  <tabstop>privacyButton</tabstop>
+  <tabstop>termsButton</tabstop>
+  <tabstop>cloudLinkButton</tabstop>
+  <tabstop>importURLEdit</tabstop>
+  <tabstop>importURLButton</tabstop>
+  <tabstop>packetSetTable</tabstop>
+  <tabstop>viewPublicButton</tabstop>
+  <tabstop>deletePacketButton</tabstop>
+  <tabstop>importPacketsButton</tabstop>
+  <tabstop>packetSetNameEdit</tabstop>
+  <tabstop>publicPathEdit</tabstop>
+  <tabstop>makePublicCheck</tabstop>
+  <tabstop>descriptionExportEdit</tabstop>
+  <tabstop>saveToCloudButton</tabstop>
+ </tabstops>
  <resources>
   <include location="packetsender.qrc"/>
  </resources>

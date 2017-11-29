@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -886,15 +886,12 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>displayOrderList</tabstop>
-  <tabstop>displayOrderListTraffic</tabstop>
-  <tabstop>defaultDisplayButton</tabstop>
-  <tabstop>copyUnformattedCheck</tabstop>
-  <tabstop>rolling500entryCheck</tabstop>
   <tabstop>udpServerEnableCheck</tabstop>
   <tabstop>udpServerPortEdit</tabstop>
   <tabstop>tcpServerEnableCheck</tabstop>
   <tabstop>tcpServerPortEdit</tabstop>
+  <tabstop>sslServerEnableCheck</tabstop>
+  <tabstop>sslServerPortEdit</tabstop>
   <tabstop>sendResponseSettingsCheck</tabstop>
   <tabstop>responsePacketBox</tabstop>
   <tabstop>asciiResponseEdit</tabstop>
@@ -904,6 +901,25 @@
   <tabstop>multiSendDelayEdit</tabstop>
   <tabstop>cancelResendNumEdit</tabstop>
   <tabstop>attemptReceiveCheck</tabstop>
+  <tabstop>delayAfterConnectCheck</tabstop>
+  <tabstop>persistentTCPCheck</tabstop>
+  <tabstop>asciiEditTranslateEBCDICCheck</tabstop>
+  <tabstop>resolveDNSOnInputCheck</tabstop>
+  <tabstop>ignoreSSLCheck</tabstop>
+  <tabstop>serverSnakeOilCheck</tabstop>
+  <tabstop>sslCaPath</tabstop>
+  <tabstop>sslCaPathBrowseButton</tabstop>
+  <tabstop>sslLocalCertificatePath</tabstop>
+  <tabstop>sslLocalCertificatePathBrowseButton</tabstop>
+  <tabstop>sslPrivateKeyPath</tabstop>
+  <tabstop>sslPrivateKeyPathBrowseButton</tabstop>
+  <tabstop>displayOrderList</tabstop>
+  <tabstop>displayOrderListTraffic</tabstop>
+  <tabstop>defaultDisplayButton</tabstop>
+  <tabstop>copyUnformattedCheck</tabstop>
+  <tabstop>rolling500entryCheck</tabstop>
+  <tabstop>restoreSessionCheck</tabstop>
+  <tabstop>checkforUpdates</tabstop>
   <tabstop>responseIfEdit1</tabstop>
   <tabstop>responseReplyEdit1</tabstop>
   <tabstop>responseEncodingBox1</tabstop>
@@ -924,6 +940,9 @@
   <tabstop>responseReplyEdit5</tabstop>
   <tabstop>responseEncodingBox5</tabstop>
   <tabstop>responseEnableCheck5</tabstop>
+  <tabstop>settingsTabWidget</tabstop>
+  <tabstop>smartResponseEnableCheck</tabstop>
+  <tabstop>documentationButton</tabstop>
  </tabstops>
  <resources/>
  <connections>
