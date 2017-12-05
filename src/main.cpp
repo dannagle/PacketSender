@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
-        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by Dan Nagle\nSee https://PacketSender.com/ for more information.");
+        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode\nSee https://PacketSender.com/ for more information.");
         parser.addHelpOption();
         parser.addVersionOption();
 

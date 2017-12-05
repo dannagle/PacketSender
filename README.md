@@ -2,9 +2,9 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
-Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets. 
-The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may 
-recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. 
+Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets.
+The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may
+recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later.
 It can be used for both commercial and personal use.
 
 ## Uses
@@ -36,17 +36,17 @@ Some knowledge of basic network protocols is a prerequisite to using Packet Send
 
 ### Portable Mode
 
-Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in 
-its run-time directory. For the SSL server, it will look for `ps.key` and `ps.pem`. 
+Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in
+its run-time directory. For the SSL server, it will look for `ps.key` and `ps.pem`.
 
-Windows users, this directory is the same place as the .exe. 
-For Mac users, this run-time directory is at `PacketSender.app/Contents/MacOS`. 
+Windows users, this directory is the same place as the .exe.
+For Mac users, this run-time directory is at `PacketSender.app/Contents/MacOS`.
 If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
 
 
 ### IPv4 and IPv6 Support
-By default, Packet Sender's built-in servers are configured to support IPv4. 
-If you wish to use IPv6, there is a toggle switch at the bottom right. 
+By default, Packet Sender's built-in servers are configured to support IPv4.
+If you wish to use IPv6, there is a toggle switch at the bottom right.
 Click to switch between IPv4 / IPv6.
 
 ![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
@@ -94,7 +94,7 @@ Some notes:
 
 
 ### SSL Client and Server
-Packet Sender supports establishing encrypted connections over SSL. 
+Packet Sender supports establishing encrypted connections over SSL.
 This is supported in the GUI and on the command line. Some notes on this:
 
 * The certificate negotiation is handled immediately during connection.
@@ -102,10 +102,10 @@ This is supported in the GUI and on the command line. Some notes on this:
 * Packet Sender outputs the cert negotiation progress in to the traffic log.
 * Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
 
-Packet Sender bundles an internal "Snake Oil" certificate for use as a server for all supported platforms. 
+Packet Sender bundles an internal "Snake Oil" certificate for use as a server for all supported platforms.
 The certificate and key is in the same place as packet and settings.
 
-* Overriding the cert locations in Settings also overrides these snake-oil certificate. 
+* Overriding the cert locations in Settings also overrides these snake-oil certificate.
 
 Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
 
@@ -193,7 +193,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
 
     packetsender --help
     Usage: packetsender [options] address port data
-    Packet Sender is a Network TCP and UDP Test Utility by Dan Nagle
+    Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode
     See https://PacketSender.com/ for more information.
 
     Options:
@@ -282,15 +282,6 @@ The Linux release has an Ubuntu build script that will make Packet Sender global
 
 Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
 
-## Mobile Versions
-
-The abandoned mobile versions are written in Java and Swift and are MIT Licensed.  
-* [Source for Packet Sender for Android](https://github.com/dannagle/PacketSender-Android).
-* [Source for Packet Sender for for iOS](https://github.com/dannagle/PacketSender-iOS).
-
-The desktop version is by far more capable and more popular and is now the sole focus of the project.
-
-
 ## Web site
 
 The Packet Sender web site is also open source.
@@ -303,4 +294,4 @@ GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a
 
 ## Copyright
 
-Packet Sender is wholly owned and copyright &copy;  -  [@NagleCode](http://twitter.com/NagleCode) - [DanNagle.com](http://DanNagle.com)  -  [PacketSender.com](http://PacketSender.com)
+Packet Sender is wholly owned and copyright &copy;  -  [@NagleCode](http://twitter.com/NagleCode) - [PacketSender.com](http://PacketSender.com)
