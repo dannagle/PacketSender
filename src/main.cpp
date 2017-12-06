@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 
         // An option with a value
         QCommandLineOption fileOption(QStringList() << "f" << "file",
-                "Send contents of specified path. Max 1024 for UDP, 100 MiB for TCP/SSL.",
+                "Send contents of specified path. Max 10 MiB for UDP, 100 MiB for TCP/SSL.",
                 "path");
         parser.addOption(fileOption);
 
@@ -343,7 +343,7 @@ int main(int argc, char *argv[])
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
 
-                    QByteArray dataArray = dataFile.read(1024);
+                    QByteArray dataArray = dataFile.read(1024*1024*10);
                     dataString = Packet::byteArrayToHex(dataArray);
                 }
 
