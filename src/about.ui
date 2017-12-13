@@ -133,7 +133,7 @@ font: 75 24pt &quot;Helvetica&quot;; </string>
           <item>
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>This software was brought to you by Dan Nagle</string>
+             <string>Written by Dan Nagle and published by NagleCode, LLC</string>
             </property>
            </widget>
           </item>

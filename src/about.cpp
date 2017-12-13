@@ -67,7 +67,7 @@ About::~About()
 void About::gotoPacketSenderDotCom()
 {
     //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://packetsender.com/"));
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/"));
 
 }
 
@@ -75,7 +75,7 @@ void About::gotoDanNagleDotCom()
 {
 
     //Open URL in browser
-    QDesktopServices::openUrl(QUrl("http://dannagle.com/"));
+    QDesktopServices::openUrl(QUrl("https://dannagle.com/"));
 
 }
 
