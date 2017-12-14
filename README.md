@@ -249,7 +249,7 @@ The only dependency is Qt SDK. Here is how to build the app.
 1. Open the project PacketSender.pro
 1. Build! Qt is the only dependency!
 
-The Windows and Mac versions were built using Qt 5.9.1
+The Windows and Mac versions were built using Qt 5.10
 
 ### Build for Linux
 Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
@@ -289,4 +289,4 @@ GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a
 
 ## Copyright
 
-Packet Sender is wholly owned and copyright &copy;  -  [@NagleCode](http://twitter.com/NagleCode) - [PacketSender.com](http://PacketSender.com)
+Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://PacketSender.com)
