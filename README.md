@@ -282,11 +282,6 @@ The Linux release has an Ubuntu build script that will make Packet Sender global
 
 Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
 
-## Web site
-
-The Packet Sender web site is also open source.
-* [Repo for Packet Sender web site](https://github.com/dannagle/PacketSender-Website).
-
 
 ## License
 GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
