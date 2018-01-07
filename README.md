@@ -16,15 +16,25 @@ It can be used for both commercial and personal use.
 * Troubleshooting secure connections (using SSL ).
 * Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
+* Collaboration or sharing using the Packet Sender Cloud service.
+
 
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
 ![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)
 
-## Packet Sender Documentation
+## Packet Sender Cloud
+Packet Sender can import/export private or public packet sets to the cloud server.
 
-Some knowledge of basic network protocols is a prerequisite to using Packet Sender. Beyond that, Packet Sender was designed to be very easy to use. Simply start using it.
+[Packet Sender Cloud](https://cloud.packetsender.com/) is a free service to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
+
+Example project: https://cloud.packetsender.com/dannagle/piplayer
+
+Creating an account allows you to create private packet sets that you may then use to save/retrieve across multiple Packet Sender installations.
+
+Packet Sender Cloud is a free service with no warranty. More information about it can be found at
+https://cloud.packetsender.com/help
 
 
 ### Support
