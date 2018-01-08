@@ -28,10 +28,10 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 Packets sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
 
 There are various reasons to do this:
-    * Keeping all your packets ready so you can quickly retrieve them when installing a fresh Packet Sender
-    * Quickly swapping between packet sets when working on different projects.
-    * Sharing a login (it is allowed) for collaborative packet set generation
-    * Having a public page of your packet sets so others can quickly find and import
+* Keeping all your packets ready so you can quickly retrieve them when installing a fresh Packet Sender
+* Quickly swapping between packet sets when working on different projects.
+* Sharing a login (it is allowed) for collaborative packet set generation
+* Having a public page of your packet sets so others can quickly find and import
 
 ![Packet Sender Cloud Import](screenshots/cloud-import.png)
 
