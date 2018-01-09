@@ -57,7 +57,20 @@
 #define PSLOGO ":pslogo.png"
 #define UPDOWNICON ":icons/moveupdown.png"
 
-//used when binding
-#define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
+
+
+//Qt 5.10 changed the way sockets bind
+//It seems dual ipv4/ipv6 mode works better.
+
+//I'm not convinced it works perfect when in server mode.
+
+#include <QtGlobal>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    #define IPV4_OR_IPV6 (QHostAddress::Any)
+#else
+    //used when binding
+    #define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
+#endif
+
 
 #endif // GLOBALS_H

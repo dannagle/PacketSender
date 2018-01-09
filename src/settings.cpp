@@ -119,6 +119,12 @@ Settings::Settings(QWidget *parent) :
     ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
 
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    ui->ipv4Radio->hide();
+    ui->ipv6Radio->hide();
+#endif
+
+
     int ipMode = settings.value("ipMode", 4).toInt();
     if (ipMode > 4) {
         ui->ipv6Radio->setChecked(true);

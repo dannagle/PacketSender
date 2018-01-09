@@ -444,11 +444,17 @@ int main(int argc, char *argv[])
         if(tcp || ssl) {
             QSslSocket sock;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            sock.bind(QHostAddress::Any, bind);
+#else
             if(ipv6) {
                 sock.bind(QHostAddress::AnyIPv6, bind);
             } else {
                 sock.bind(QHostAddress::AnyIPv4, bind);
             }
+#endif
+
+
 
             if(tcp) {
                 sock.connectToHost(addy, port);
@@ -554,6 +560,16 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+
+            if(!sock.bind(QHostAddress::Any, bind)) {
+                OUTIF() << "Error: Could not bind to " << bind;
+
+                OUTPUT();
+                return -1;
+            }
+#else
+
             if(ipv6) {
                 if(!sock.bind(QHostAddress::AnyIPv6, bind)) {
                     OUTIF() << "Error: Could not bind to " << bind;
@@ -571,6 +587,9 @@ int main(int argc, char *argv[])
                 }
 
             }
+
+#endif
+
             OUTIF() << "UDP (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
 
             bytesWriten = sock.writeDatagram(sendData, addy, port);
