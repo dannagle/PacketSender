@@ -203,7 +203,10 @@ MainWindow::MainWindow(QWidget *parent) :
     IPmodeButton = new QPushButton("IPv4 Mode");
     IPmodeButton->setFlat(true);
     IPmodeButton->setCursor(Qt::PointingHandCursor);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     statusBar()->insertPermanentWidget(5, IPmodeButton);
+#endif
 
     setIPMode();
 
