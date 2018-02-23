@@ -33,64 +33,64 @@
 
 class PacketNetwork : public QObject
 {
-    Q_OBJECT
-public:
-    explicit PacketNetwork( QWidget *parent = 0);
-    void init();
+        Q_OBJECT
+    public:
+        explicit PacketNetwork(QWidget *parent = 0);
+        void init();
 
-    QString debugQByteArray(QByteArray debugArray);
-    int getUDPPort();
-    int getTCPPort();
-    int getSSLPort();
+        QString debugQByteArray(QByteArray debugArray);
+        int getUDPPort();
+        int getTCPPort();
+        int getSSLPort();
 
-    void kill();
-    QString responseData;
-    bool sendResponse;
-    bool sendSmartResponse;
-    bool activateUDP;
-    bool activateTCP;
-    bool activateSSL;
-    bool receiveBeforeSend;
-    int delayAfterConnect;
-    bool persistentConnectCheck;
-    bool isSecure;
-    void setIPmode(int mode);
-    static int getIPmode();
-
-
-    QList<SmartResponseConfig> smartList;
-
-    static QHostAddress resolveDNS(QString hostname);
-signals:
-    void packetReceived(Packet sendpacket);
-    void toStatusBar(const QString & message, int timeout = 0, bool override = false);
-    void packetSent(Packet sendpacket);
+        void kill();
+        QString responseData;
+        bool sendResponse;
+        bool sendSmartResponse;
+        bool activateUDP;
+        bool activateTCP;
+        bool activateSSL;
+        bool receiveBeforeSend;
+        int delayAfterConnect;
+        bool persistentConnectCheck;
+        bool isSecure;
+        void setIPmode(int mode);
+        static int getIPmode();
 
 
-public slots:
-    void packetReceivedECHO(Packet sendpacket);
-    void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
-    void packetSentECHO(Packet sendpacket);
+        QList<SmartResponseConfig> smartList;
+
+        static QHostAddress resolveDNS(QString hostname);
+    signals:
+        void packetReceived(Packet sendpacket);
+        void toStatusBar(const QString & message, int timeout = 0, bool override = false);
+        void packetSent(Packet sendpacket);
+
+
+    public slots:
+        void packetReceivedECHO(Packet sendpacket);
+        void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
+        void packetSentECHO(Packet sendpacket);
 
 
 
-public slots:
-    void readPendingDatagrams();
-    void disconnected();
-    void packetToSend(Packet sendpacket);
+    public slots:
+        void readPendingDatagrams();
+        void disconnected();
+        void packetToSend(Packet sendpacket);
 
-private:
+    private:
 
-    QUdpSocket *udpSocket;
-    ThreadedTCPServer * tcp;
-    ThreadedTCPServer * ssl;
+        QUdpSocket *udpSocket;
+        ThreadedTCPServer * tcp;
+        ThreadedTCPServer * ssl;
 
-    QList<TCPThread *> tcpthreadList;
-    QList<PersistentConnection *> pcList;
+        QList<TCPThread *> tcpthreadList;
+        QList<PersistentConnection *> pcList;
 
-    //TODO: eventually migrate to a list to support any number of servers.
-    QList<ThreadedTCPServer *> tcpServers;
-    QList<QUdpSocket *> udpServers;
+        //TODO: eventually migrate to a list to support any number of servers.
+        QList<ThreadedTCPServer *> tcpServers;
+        QList<QUdpSocket *> udpServers;
 
 };
 

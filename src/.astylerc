@@ -1,0 +1,26 @@
+# AStyle: http://astyle.sourceforge.net/
+#
+# kr, 4 space indent, indent classes,
+# space padding around operators, space padding,
+# remove extra space padding around parentheses,
+# convert all tabs to spaces, indent switches,
+# indent cases
+
+--style=kr
+
+--indent=spaces=4
+
+--indent-classes
+
+--unpad-paren
+
+--pad-oper
+
+--pad-header
+
+--convert-tabs
+
+--indent-switches
+
+--indent-cases
+

@@ -14,7 +14,7 @@ About::About(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QString versionBuilder = QString("version " ) + SW_VERSION;
+    QString versionBuilder = QString("version ") + SW_VERSION;
     ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");
@@ -25,7 +25,7 @@ About::About(QWidget *parent) :
 
 
     ui->DNLinkButton->setStyleSheet(HYPERLINKSTYLE);
-    ui->DNLinkButton->setIcon( QIcon(":dannagle32.jpg"));
+    ui->DNLinkButton->setIcon(QIcon(":dannagle32.jpg"));
     ui->DNLinkButton->setFlat(true);
     ui->DNLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->DNLinkButton, SIGNAL(clicked()),
@@ -33,7 +33,7 @@ About::About(QWidget *parent) :
 
 
     ui->twitterButton->setStyleSheet(HYPERLINKSTYLE);
-    ui->twitterButton->setIcon( QIcon(":Twitter_logo_blue.png"));
+    ui->twitterButton->setIcon(QIcon(":Twitter_logo_blue.png"));
     ui->twitterButton->setFlat(true);
     ui->twitterButton->setCursor(Qt::PointingHandCursor);
     connect(ui->twitterButton, SIGNAL(clicked()),
@@ -48,7 +48,7 @@ About::About(QWidget *parent) :
 
 
     ui->psLinkButton->setStyleSheet(HYPERLINKSTYLE);
-    ui->psLinkButton->setIcon( QIcon(":pslogo.png"));
+    ui->psLinkButton->setIcon(QIcon(":pslogo.png"));
     ui->psLinkButton->setFlat(true);
     ui->psLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->psLinkButton, SIGNAL(clicked()),

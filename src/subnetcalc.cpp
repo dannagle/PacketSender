@@ -24,26 +24,26 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
     setWindowTitle("IPv4 Subnet Calculator");
 
     QString startLog = "Your non-loopback addresses: \n";
-    QTextStream out (&startLog);
+    QTextStream out(&startLog);
 
-    foreach(eth, allInterfaces) {
+    foreach (eth, allInterfaces) {
         QList<QNetworkAddressEntry> allEntries = eth.addressEntries();
-        if(allEntries.size() == 0 || !eth.flags().testFlag(QNetworkInterface::IsUp)) {
+        if (allEntries.size() == 0 || !eth.flags().testFlag(QNetworkInterface::IsUp)) {
             continue;
         }
 
         QString ethString;
-        QTextStream ethOut (&ethString);
+        QTextStream ethOut(&ethString);
 
 
-        ethOut << "\nFor " << eth.humanReadableName() << " (" << eth.hardwareAddress() <<")" << ":\n";
+        ethOut << "\nFor " << eth.humanReadableName() << " (" << eth.hardwareAddress() << ")" << ":\n";
         QNetworkAddressEntry entry;
 
         int nonLoopBack = 0;
 
         foreach (entry, allEntries) {
-            if(!entry.ip().isLoopback()) {
-                if(entry.ip().toString().contains(":")) {
+            if (!entry.ip().isLoopback()) {
+                if (entry.ip().toString().contains(":")) {
 
                     //ignore ipv6 for now
                     //continue;
@@ -53,7 +53,7 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
             }
         }
 
-        if(nonLoopBack) {
+        if (nonLoopBack) {
             out << ethString;
         }
     }
@@ -66,7 +66,8 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
 }
 
 
-void SubnetCalc::populate() {
+void SubnetCalc::populate()
+{
 
     QString ip = ui->ipEdit->text().trimmed();
     QString subnet = ui->subnetEdit->text().trimmed();
@@ -74,18 +75,18 @@ void SubnetCalc::populate() {
     //remove forward slash if added
     subnet = subnet.replace("/", "");
 
-    if(subnet.contains(":")) { //ipv6 subnet
+    if (subnet.contains(":")) { //ipv6 subnet
         QStringList colons = subnet.split(":");
         QString colon;
         int counter = 0;
         bool valid = true;
-        foreach(colon, colons) {
+        foreach (colon, colons) {
             bool ok;
             unsigned int hex = colon.toUInt(&ok, 16);
-            if(ok) {
-                QString bits( QString::number( hex, 2 ) );
+            if (ok) {
+                QString bits(QString::number(hex, 2));
                 int ones = bits.count("1");
-                if(bits.contains("01")) {
+                if (bits.contains("01")) {
                     QDEBUG() << "Invalid netmask:" << bits;
                     valid = false;
                     break;
@@ -95,7 +96,7 @@ void SubnetCalc::populate() {
             }
         }
 
-        if(valid) {
+        if (valid) {
             subnet = QString::number(counter);
         }
 
@@ -110,7 +111,7 @@ void SubnetCalc::populate() {
     //192.168.0.0/16
 
 
-    if(!testAddress.first.isNull()) {
+    if (!testAddress.first.isNull()) {
         QDEBUG() << "Valid address:" << testAddress.first.toString() << "/" << testAddress.second;
 
         //do the calculations...
@@ -118,20 +119,20 @@ void SubnetCalc::populate() {
         bool isIPv6 = testAddress.first.toString().contains(":");
         bool isIPv4 = !isIPv6;
 
-        if(isIPv4) {
+        if (isIPv4) {
             QHostAddress ipv4Address;
             QDEBUG() << "IPv4 detected";
             quint32 ipv4 = testAddress.first.toIPv4Address();
             int subnetBits = testAddress.second;
-            int numAddresses = 1<<(32 - subnetBits);
+            int numAddresses = 1 << (32 - subnetBits);
             QDEBUGVAR(numAddresses);
             quint32 subnet = 0;
 
-            for (int i =0; i < subnetBits; i++) {
+            for (int i = 0; i < subnetBits; i++) {
                 subnet = (subnet << 1) + 1;
             }
 
-            for (int i =subnetBits; i < 32; i++) {
+            for (int i = subnetBits; i < 32; i++) {
                 subnet = (subnet << 1);
             }
 
@@ -147,7 +148,7 @@ void SubnetCalc::populate() {
             ui->broadcastEdit->setText(ipv4Address.toString());
 
         }
-        if(isIPv6) {
+        if (isIPv6) {
             QDEBUG() << "IPv6 detected";
         }
         //QDEBUGVAR();
@@ -206,7 +207,7 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
 
     //is this address valid?
     QPair<QHostAddress, int> testAddress = QHostAddress::parseSubnet(testIP + "/24");
-    if(testAddress.first.toString().isEmpty()) {
+    if (testAddress.first.toString().isEmpty()) {
         ui->checkSubnetResultEdit->clear();
         return;
     }
@@ -216,21 +217,21 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
     //It is good enough to start testing...
 
     bool found = false;
-    foreach(eth, allInterfaces) {
+    foreach (eth, allInterfaces) {
         QList<QNetworkAddressEntry> allEntries = eth.addressEntries();
         QNetworkAddressEntry entry;
-        if(allEntries.size() == 0) {
+        if (allEntries.size() == 0) {
             continue;
         }
 
         foreach (entry, allEntries) {
             QHostAddress entryAddress = entry.ip();
-            if(entryAddress.toString().isEmpty()) {
+            if (entryAddress.toString().isEmpty()) {
                 continue;
             }
 
             testAddress = QHostAddress::parseSubnet(testIP + "/" + entry.netmask().toString());
-            if(testAddress.first.toString().isEmpty()) {
+            if (testAddress.first.toString().isEmpty()) {
                 continue;
             }
 
@@ -238,10 +239,10 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
             found = entryAddress.isInSubnet(testAddress);
 
 
-            QDEBUG() << found << entryAddress.toString() << "->"<<testAddress.first.toString() << "/" << testAddress.second;
+            QDEBUG() << found << entryAddress.toString() << "->" << testAddress.first.toString() << "/" << testAddress.second;
 
 
-            if(found) {
+            if (found) {
                 QString resultText = "Within ";
                 resultText.append(entry.ip().toString());
                 resultText.append(" / ");
@@ -251,7 +252,7 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
             }
         }
 
-        if(!found) {
+        if (!found) {
             ui->checkSubnetResultEdit->setText("No entries in subnet.");
         }
     }

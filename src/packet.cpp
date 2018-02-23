@@ -28,7 +28,7 @@ const int Packet::PACKET_NAME = Qt::UserRole +  0;
 const int Packet::PACKET_HEX = Qt::UserRole + 1;
 const int Packet::FROM_IP = Qt::UserRole +     2;
 const int Packet::FROM_PORT = Qt::UserRole +       3;
-const int Packet::TO_PORT = Qt::UserRole +4;
+const int Packet::TO_PORT = Qt::UserRole + 4;
 const int Packet::TO_IP = Qt::UserRole +     5;
 
 const int Packet::TIMESTAMP = Qt::UserRole + 7;
@@ -54,21 +54,22 @@ void Packet::clear()
 
 bool Packet::isSSL()
 {
-   return (tcpOrUdp.trimmed().toLower() == "ssl");
+    return (tcpOrUdp.trimmed().toLower() == "ssl");
 }
 
 bool Packet::isUDP()
 {
-   return ((tcpOrUdp.trimmed().toLower() == "udp"));
+    return ((tcpOrUdp.trimmed().toLower() == "udp"));
 }
 
 
 bool Packet::isTCP()
 {
-   return ((tcpOrUdp.trimmed().toLower() == "tcp") || isSSL());
+    return ((tcpOrUdp.trimmed().toLower() == "tcp") || isSSL());
 }
 
-float Packet::oneDecimal(float value) {
+float Packet::oneDecimal(float value)
+{
     float valueFloat = value * 10;
     int valueInt = (int) valueFloat;
     valueFloat = ((float) valueInt) / 10;
@@ -117,7 +118,8 @@ void Packet::init()
     persistent = false;
 }
 
-QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
+QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic)
+{
 
     QHash<char, char> asciiEBCDICmap;
     QHash<char, char> ebcdicASCIImap;
@@ -125,7 +127,7 @@ QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic) {
 
     char hex;
     QByteArray asciiArray;
-    foreach(hex, ebcdic) {
+    foreach (hex, ebcdic) {
         asciiArray.append(asciiEBCDICmap[hex]);
     }
 
@@ -141,11 +143,11 @@ QByteArray Packet::ExportJSON(QList<Packet> packetList)
 
     QJsonArray jsonArray;
 
-    for(int i=0; i < packetList.size(); i++) {
+    for (int i = 0; i < packetList.size(); i++) {
 
 
         QJsonObject json;
-        if(packetList[i].name.isEmpty()) {
+        if (packetList[i].name.isEmpty()) {
             continue;
         }
         json["name"] = packetList[i].name;
@@ -179,16 +181,17 @@ QList<Packet> Packet::ImportJSON(QByteArray data)
     QJsonDocument doc = QJsonDocument::fromJson(data);
 
 
-    if(!doc.isNull()) {
+    if (!doc.isNull()) {
         //valid json
-        if(doc.isArray()) {
+        if (doc.isArray()) {
             //valid array
             QJsonArray jsonArray = doc.array();
-            if(!jsonArray.isEmpty()) {
+            if (!jsonArray.isEmpty()) {
                 QDEBUG() << "Found" <<  jsonArray.size() << "packets";
 
-                for(int i=0; i < jsonArray.size(); i++) {
-                    Packet pkt; pkt.clear();
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    Packet pkt;
+                    pkt.clear();
                     QJsonObject json = jsonArray[i].toObject();
 
                     pkt.name = json["name"].toString();
@@ -224,7 +227,7 @@ QByteArray Packet::ASCIItoEBCDIC(QByteArray ascii)
 
     char hex;
     QByteArray ebcdicArray;
-    foreach(hex, ascii) {
+    foreach (hex, ascii) {
         ebcdicArray.append(ebcdicASCIImap[hex]);
     }
 
@@ -248,10 +251,8 @@ SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 
 QIcon Packet::getIcon()
 {
-    if(tcpOrUdp.toUpper() == "UDP")
-    {
-        if(fromIP.toUpper().contains("YOU"))
-        {
+    if (tcpOrUdp.toUpper() == "UDP") {
+        if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(UDPSENDICON);
             return myIcon;
         } else {
@@ -262,10 +263,9 @@ QIcon Packet::getIcon()
     }
 
 
-    if(tcpOrUdp.toUpper() == "TCP") {
+    if (tcpOrUdp.toUpper() == "TCP") {
 
-        if(fromIP.toUpper().contains("YOU"))
-        {
+        if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(TCPSENDICON);
             return myIcon;
         } else {
@@ -276,10 +276,9 @@ QIcon Packet::getIcon()
     }
 
 
-    if(tcpOrUdp.toUpper() == "SSL") {
+    if (tcpOrUdp.toUpper() == "SSL") {
 
-        if(fromIP.toUpper().contains("YOU"))
-        {
+        if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(SSLSENDICON);
             return myIcon;
         } else {
@@ -313,15 +312,13 @@ QString Packet::hexToASCII(QString &hex)
     hex = hex.replace("\t", " ");
 
     QString hexText = hex.simplified();
-    if(hexText.isEmpty())
-    {
+    if (hexText.isEmpty()) {
         return "";
     }
 
-    if((hexText.size() % 2 != 0)) {
+    if ((hexText.size() % 2 != 0)) {
         //Not divisible by 2. What should I do?
-        if(!hexText.contains(" ") && hexText.size() > 2)
-        {
+        if (!hexText.contains(" ") && hexText.size() > 2) {
             //Seems to be one big hex stream. Front-load it with a 0.
             hexText.prepend("0");
         }
@@ -329,16 +326,14 @@ QString Packet::hexToASCII(QString &hex)
     }
 
 
-    if(!hexText.contains(" ") && hexText.size() > 2 && hexText.size() % 2 == 0)
-    {
+    if (!hexText.contains(" ") && hexText.size() > 2 && hexText.size() % 2 == 0) {
         //does not contain any spaces.  Maybe one big hex stream?
         QDEBUG() << "no spaces" << "even digits";
         QStringList hexList;
         hexList.clear();
         QString append;
         append.clear();
-        for(int i =0; i < hexText.size(); i+=2)
-        {
+        for (int i = 0; i < hexText.size(); i += 2) {
             append.clear();
             append.append(hexText[i]);
             append.append(hexText[i + 1]);
@@ -358,8 +353,7 @@ QString Packet::hexToASCII(QString &hex)
 
 
     QString checkSpace = hex.at(hex.size() - 1);
-    if(checkSpace == " ")
-    {
+    if (checkSpace == " ") {
         hexText.append(" ");
     }
 
@@ -367,10 +361,8 @@ QString Packet::hexToASCII(QString &hex)
 
     // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ <<"analyze hex split" << hexSplit;
 
-    for(int i=0; i< hexSplit.size(); i++)
-    {
-        if(hexSplit.at(i).size() > 2)
-        {
+    for (int i = 0; i < hexSplit.size(); i++) {
+        if (hexSplit.at(i).size() > 2) {
             malformedBool = true;
             malformed = i;
             malformedChar = hexSplit.at(i).at(2);
@@ -380,13 +372,11 @@ QString Packet::hexToASCII(QString &hex)
 
     }
 
-    if(malformedBool)
-    {
+    if (malformedBool) {
         QString fixText = "";
         QString testChar;
 
-        for(int i = 0; i < malformed; i++)
-        {
+        for (int i = 0; i < malformed; i++) {
             fixText.append(hexSplit.at(i));
             fixText.append(" ");
         }
@@ -397,8 +387,7 @@ QString Packet::hexToASCII(QString &hex)
 
         // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ << "malformed digitvalue" << malformedChar.digitValue();
 
-        if(ok)
-        {
+        if (ok) {
             fixText.append(hexSplit.at(malformed).at(0));
             fixText.append(hexSplit.at(malformed).at(1));
             fixText.append(" ");
@@ -411,39 +400,34 @@ QString Packet::hexToASCII(QString &hex)
 
 
 
-    for(int i=0; i< hexSplit.size(); i++)
-    {
+    for (int i = 0; i < hexSplit.size(); i++) {
         convertInt = hexSplit.at(i).toUInt(&ok, 16);
         // qDebug() << __FILE__ << "/" << __LINE__ << __FUNCTION__  <<"hex at"<< QString::number(i) << "is" << QString::number(convertInt);
-        if(ok)
-        {
-            if(convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\')
-            {
+        if (ok) {
+            if (convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\') {
                 // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ << "Converted to " << QChar(convertInt);
                 asciiText.append((QChar(convertInt)));
             } else {
                 asciiText.append("\\");
-                switch((char)convertInt)
-                {
-                case '\n':
-                    asciiText.append("n");
-                    break;
-                case '\r':
-                    asciiText.append("r");
-                    break;
-                case '\t':
-                    asciiText.append("t");
-                    break;
-                case '\\':
-                    asciiText.append("\\");
-                    break;
-                default:
-                    if(convertInt < 16)
-                    {
-                        asciiText.append("0");
-                    }
-                    asciiText.append(QString::number(convertInt, 16));
-                    break;
+                switch ((char)convertInt) {
+                    case '\n':
+                        asciiText.append("n");
+                        break;
+                    case '\r':
+                        asciiText.append("r");
+                        break;
+                    case '\t':
+                        asciiText.append("t");
+                        break;
+                    case '\\':
+                        asciiText.append("\\");
+                        break;
+                    default:
+                        if (convertInt < 16) {
+                            asciiText.append("0");
+                        }
+                        asciiText.append(QString::number(convertInt, 16));
+                        break;
 
                 }
 
@@ -465,10 +449,9 @@ QString Packet::hexToASCII(QString &hex)
 QString Packet::byteArrayToHex(QByteArray data)
 {
     QString byte, returnString, returnStringTemp;
-  //  QDEBUG() << "size is " <<data.size();
+    //  QDEBUG() << "size is " <<data.size();
 
-    if(data.isEmpty())
-    {
+    if (data.isEmpty()) {
         return "";
     }
 
@@ -478,11 +461,10 @@ QString Packet::byteArrayToHex(QByteArray data)
     returnString.resize(datasize * 3, ' ');
 
     int j = 0;
-    for(int i = 0; i < returnStringTemp.size(); i+=2)
-    {
+    for (int i = 0; i < returnStringTemp.size(); i += 2) {
         returnString[j] = returnStringTemp[i];
-        returnString[j+1] = returnStringTemp[i+1];
-        j+=3;
+        returnString[j + 1] = returnStringTemp[i + 1];
+        j += 3;
     }
 
     return returnString;
@@ -493,28 +475,22 @@ int Packet::hexToInt(QChar hex)
 {
     hex = hex.toLower();
 
-    if(hex == 'f')
-    {
+    if (hex == 'f') {
         return 15;
     }
-    if(hex == 'e')
-    {
+    if (hex == 'e') {
         return 14;
     }
-    if(hex == 'd')
-    {
+    if (hex == 'd') {
         return 13;
     }
-    if(hex == 'c')
-    {
+    if (hex == 'c') {
         return 12;
     }
-    if(hex == 'b')
-    {
+    if (hex == 'b') {
         return 11;
     }
-    if(hex == 'a')
-    {
+    if (hex == 'a') {
         return 10;
     }
 
@@ -548,16 +524,14 @@ void Packet::saveToDB()
     for (int i = 0; i < size; ++i) {
         settings.setArrayIndex(i);
         QString namekey = settings.value("name").toString();
-        if(namekey == name)
-        {
+        if (namekey == name) {
             foundName = true;
         }
         packets.append(namekey);
     }
     settings.endArray();
 
-    if(!foundName)
-    {
+    if (!foundName) {
         packets.append(name);
         settings.beginWriteArray(NAMEINIKEY);
         for (int i = 0; i < packets.size(); ++i) {
@@ -590,11 +564,9 @@ Packet Packet::fetchFromDB(QString thename)
     Packet returnPacket, packet;
     returnPacket.init();
 
-    foreach(packet, packets)
-    {
+    foreach (packet, packets) {
 
-        if(packet.name == thename)
-        {
+        if (packet.name == thename) {
             return packet;
         }
     }
@@ -605,14 +577,14 @@ Packet Packet::fetchFromDB(QString thename)
 }
 
 
-bool comparePacketsByName(const Packet &packetA,const Packet &packetB)
+bool comparePacketsByName(const Packet &packetA, const Packet &packetB)
 {
     return  packetA.name.toLower() < packetB.name.toLower();
 }
 
-bool comparePacketsByTime(const Packet &packetA,const Packet &packetB)
+bool comparePacketsByTime(const Packet &packetA, const Packet &packetB)
 {
-    if(packetA.timestamp == packetB.timestamp) {
+    if (packetA.timestamp == packetB.timestamp) {
         return packetA.toIP < packetB.toIP;
     } else {
         return  packetA.timestamp > packetB.timestamp;
@@ -659,8 +631,7 @@ QList<Packet> Packet::fetchAllfromDB(QString importFile)
     settings.endArray();
 
 
-    foreach (nameFound, nameList)
-    {
+    foreach (nameFound, nameList) {
 
         //qDebug() << "found mac" << nameFound;
 
@@ -690,30 +661,29 @@ void Packet::removeFromDBList(QStringList nameList)
     QList<Packet> packets = Packet::fetchAllfromDB("");
 
 
-     QDEBUGVAR(nameList.size());
+    QDEBUGVAR(nameList.size());
 
-     QList<Packet> packetSaved; packetSaved.clear();
+    QList<Packet> packetSaved;
+    packetSaved.clear();
 
 
-     for(int i = 0; i < packets.size(); i++)
-     {
-         QString thename = packets[i].name.trimmed();
-         if(nameList.contains(thename))
-         {
-             settings.beginGroup(thename);
-             settings.remove("");
-             settings.endGroup();
-         } else {
-             packetSaved.append(packets[i]);
-         }
-     }
+    for (int i = 0; i < packets.size(); i++) {
+        QString thename = packets[i].name.trimmed();
+        if (nameList.contains(thename)) {
+            settings.beginGroup(thename);
+            settings.remove("");
+            settings.endGroup();
+        } else {
+            packetSaved.append(packets[i]);
+        }
+    }
 
-     settings.beginWriteArray(NAMEINIKEY);
-     for (int i = 0; i < packetSaved.size(); ++i) {
-         settings.setArrayIndex(i);
-         settings.setValue("name", packetSaved[i].name);
-     }
-     settings.endArray();
+    settings.beginWriteArray(NAMEINIKEY);
+    for (int i = 0; i < packetSaved.size(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("name", packetSaved[i].name);
+    }
+    settings.endArray();
 
 }
 
@@ -725,26 +695,24 @@ bool Packet::removeFromDB(QString thename)
 
 
 
-     for(int i = 0; i < packets.size(); i++)
-     {
-         if(packets[i].name.trimmed() == thename.trimmed())
-         {
-             packets.removeAt(i);
-             settings.beginGroup(thename);
-             settings.remove("");
-             settings.endGroup();
-         }
-     }
+    for (int i = 0; i < packets.size(); i++) {
+        if (packets[i].name.trimmed() == thename.trimmed()) {
+            packets.removeAt(i);
+            settings.beginGroup(thename);
+            settings.remove("");
+            settings.endGroup();
+        }
+    }
 
-     settings.beginWriteArray(NAMEINIKEY);
-     for (int i = 0; i < packets.size(); ++i) {
-         settings.setArrayIndex(i);
-         settings.setValue("name", packets[i].name);
-     }
-     settings.endArray();
+    settings.beginWriteArray(NAMEINIKEY);
+    for (int i = 0; i < packets.size(); ++i) {
+        settings.setArrayIndex(i);
+        settings.setValue("name", packets[i].name);
+    }
+    settings.endArray();
 
 
-     return true;
+    return true;
 }
 
 
@@ -757,7 +725,7 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.toIP = tItem->data(Packet::TO_IP).toString();
     returnPacket.port = tItem->data(Packet::TO_PORT).toUInt();
     returnPacket.tcpOrUdp = tItem->data(Packet::TCP_UDP).toString();
-    returnPacket.fromPort= tItem->data(Packet::FROM_PORT).toUInt();
+    returnPacket.fromPort = tItem->data(Packet::FROM_PORT).toUInt();
     returnPacket.fromIP = tItem->data(Packet::FROM_IP).toString();
     returnPacket.repeat = tItem->data(Packet::REPEAT).toFloat();
     return returnPacket;
@@ -777,23 +745,24 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
     return smart;
 }
 
-QString Packet::macroSwap(QString data) {
+QString Packet::macroSwap(QString data)
+{
 
     QDateTime now = QDateTime::currentDateTime();
 
-    if(data.contains("{{TIME}}")) {
+    if (data.contains("{{TIME}}")) {
         data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
     }
-    if(data.contains("{{DATE}}")) {
+    if (data.contains("{{DATE}}")) {
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
     }
-    if(data.contains("{{RANDOM}}")) {
+    if (data.contains("{{RANDOM}}")) {
         data = data.replace("{{RANDOM}}", QString::number(qrand()));
     }
-    if(data.contains("{{UNIXTIME}}")) {
+    if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
-    if(data.contains("{{UNIQUE}}")) {
+    if (data.contains("{{UNIQUE}}")) {
         data = data.replace("{{UNIQUE}}", QUuid::createUuid().toString());
     }
 
@@ -801,23 +770,24 @@ QString Packet::macroSwap(QString data) {
 
 }
 
-QByteArray Packet::encodingToByteArray(QString encoding, QString data) {
+QByteArray Packet::encodingToByteArray(QString encoding, QString data)
+{
 
     encoding = encoding.trimmed().toLower();
 
     data = Packet::macroSwap(data);
 
-    if(encoding == "ascii") {
+    if (encoding == "ascii") {
         return data.toLatin1();
     }
 
-    if(encoding == "ebcdic") {
+    if (encoding == "ebcdic") {
         //use same mixed ascii notation
         QString hex = Packet::ASCIITohex(data);
         return ASCIItoEBCDIC(Packet::HEXtoByteArray(hex));
     }
 
-    if(encoding == "hex") {
+    if (encoding == "hex") {
         return Packet::HEXtoByteArray(data);
     }
 
@@ -831,18 +801,18 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
 {
     SmartResponseConfig config;
 
-    QDEBUG() <<"Checking smart "<< smartList.size() << "For" << Packet::byteArrayToHex(data);
+    QDEBUG() << "Checking smart " << smartList.size() << "For" << Packet::byteArrayToHex(data);
 
     //the incoming data has already been encoded.
 
-    foreach(config, smartList) {
-        if(config.enabled) {
+    foreach (config, smartList) {
+        if (config.enabled) {
             QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
-            if(config.encoding.toLower() == "ebcdic") {
-                QDEBUG() <<"Does"<< Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
+            if (config.encoding.toLower() == "ebcdic") {
+                QDEBUG() << "Does" << Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
             }
-            if(testData == (data)) {
-                QDEBUG() <<"Match! Sending:" << config.replyWith;
+            if (testData == (data)) {
+                QDEBUG() << "Match! Sending:" << config.replyWith;
                 return Packet::encodingToByteArray(config.encoding, config.replyWith);
             }
         }
@@ -876,7 +846,7 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
 QByteArray Packet::HEXtoByteArray(QString thehex)
 {
 
-     //function already ignores invalid chars...
+    //function already ignores invalid chars...
     return QByteArray::fromHex(thehex.toLatin1());;
 }
 
@@ -885,7 +855,7 @@ QString Packet::removeIPv6Mapping(QHostAddress ipv6)
     quint32 ipv4 = ipv6.toIPv4Address();
 
     //valid address will have a result greater than 0
-    if(ipv4 > 0) {
+    if (ipv4 > 0) {
         QHostAddress new_ipv4(ipv4);
         return new_ipv4.toString();
     } else {
@@ -896,8 +866,7 @@ QString Packet::removeIPv6Mapping(QHostAddress ipv6)
 
 QString Packet::ASCIITohex(QString &ascii)
 {
-    if(ascii.isEmpty())
-    {
+    if (ascii.isEmpty()) {
         return "";
     }
 
@@ -920,33 +889,28 @@ QString Packet::ASCIITohex(QString &ascii)
     asciiText.replace("\\t", "\\0" + QString::number('\t', 16));
 
     // qDebug() << __FILE__ << "/" << __LINE__;
-    if(asciiText.size() > 0)
-    {
-        if(asciiText.at(asciiText.size()-1) == '\\') //last char is a slash
-        {
+    if (asciiText.size() > 0) {
+        if (asciiText.at(asciiText.size() - 1) == '\\') { //last char is a slash
             asciiText.append("00");
         }
     }
 
     // qDebug() << __FILE__ << "/" << __LINE__;
-    if(asciiText.size() > 2)
-    {
-        if(asciiText.at(asciiText.size()-2) == '\\') //second last char is a slash
-        {
+    if (asciiText.size() > 2) {
+        if (asciiText.at(asciiText.size() - 2) == '\\') { //second last char is a slash
             //slide 0 in between
 
             // qDebug() << __FILE__ << "/" << __LINE__ <<"second last is slash";
 
-            charTest = asciiText.at(asciiText.size()-1);
-            asciiText[asciiText.size()-1] = '0';
+            charTest = asciiText.at(asciiText.size() - 1);
+            asciiText[asciiText.size() - 1] = '0';
             asciiText.append(charTest);
         }
     }
     // qDebug() << __FILE__ << "/" << __LINE__ <<"analyze" << asciiText;
 
 
-    for (int i = 0 ; i < asciiText.size(); i++)
-    {
+    for (int i = 0 ; i < asciiText.size(); i++) {
         msb = false;
         lsb = false;
         lsbInt = 0;
@@ -956,38 +920,31 @@ QString Packet::ASCIITohex(QString &ascii)
 
         // qDebug() << __FILE__ << "/" << __LINE__ <<"checking" << charTest;
 
-        if(charTest == '\\')
-        {
+        if (charTest == '\\') {
             // qDebug() << __FILE__ << "/" << __LINE__ <<"found slash";
-            if(i + 1 < asciiText.size())
-            {
+            if (i + 1 < asciiText.size()) {
                 msbInt = hexToInt(asciiText.at(i + 1));
-                if(msbInt > -1)
-                {
+                if (msbInt > -1) {
                     msb = true;
                 }
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"msb convert test is" << msb;
 
             }
-            if(i + 2 < asciiText.size())
-            {
+            if (i + 2 < asciiText.size()) {
                 lsbInt = hexToInt(asciiText.at(i + 2));
-                if(lsbInt > -1)
-                {
+                if (lsbInt > -1) {
                     lsb = true;
                 }
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"lsb convert test is" << lsb;
             }
 
-            if(msb)
-            {
+            if (msb) {
                 hexText.append(QString::number(msbInt, 16));
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"hexText append result" << hexText;
                 i++;
             }
 
-            if(lsb)
-            {
+            if (lsb) {
                 hexText.append(QString::number(lsbInt, 16));
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"hexText append" << hexText;
                 i++;
@@ -996,8 +953,7 @@ QString Packet::ASCIITohex(QString &ascii)
         } else {
             // qDebug() << __FILE__ << "/" << __LINE__ <<"no slash";
             lsbInt = ((int) charTest.toLatin1()) & 0xff;
-            if(lsbInt > 0 && lsbInt < 16)
-            {
+            if (lsbInt > 0 && lsbInt < 16) {
                 hexText.append("0");
             }
             hexText.append(QString::number(lsbInt, 16));
@@ -1014,7 +970,8 @@ QString Packet::ASCIITohex(QString &ascii)
 }
 
 
-void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap) {
+void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap)
+{
 
 
 #include "ebcdic_ascii_map.h"

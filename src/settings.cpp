@@ -90,9 +90,9 @@ Settings::Settings(QWidget *parent) :
 
     ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
 
-    ui->udpServerPortEdit->setText(settings.value("udpPort","0").toString());
-    ui->tcpServerPortEdit->setText(settings.value("tcpPort","0").toString());
-    ui->sslServerPortEdit->setText(settings.value("sslPort","0").toString());
+    ui->udpServerPortEdit->setText(settings.value("udpPort", "0").toString());
+    ui->tcpServerPortEdit->setText(settings.value("tcpPort", "0").toString());
+    ui->sslServerPortEdit->setText(settings.value("sslPort", "0").toString());
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
@@ -113,7 +113,7 @@ Settings::Settings(QWidget *parent) :
 
     ui->sendResponseSettingsCheck->setChecked(settings.value("sendReponse", false).toBool());
 
-    ui->hexResponseEdit->setText(settings.value("responseHex","").toString());
+    ui->hexResponseEdit->setText(settings.value("responseHex", "").toString());
 
     QString ascii = ui->hexResponseEdit->text();
     ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
@@ -137,14 +137,14 @@ Settings::Settings(QWidget *parent) :
 
 
     unsigned int resendNum = settings.value("cancelResendNum", 0).toInt();
-    if(resendNum == 0) {
+    if (resendNum == 0) {
         ui->cancelResendNumEdit->setText("");
     } else {
         ui->cancelResendNumEdit->setText(QString::number(resendNum));
     }
 
     float multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
-    if(multiSendDelay == 0) {
+    if (multiSendDelay == 0) {
         ui->multiSendDelayEdit->setText("");
     } else {
         ui->multiSendDelayEdit->setText(QString::number(multiSendDelay));
@@ -158,8 +158,7 @@ Settings::Settings(QWidget *parent) :
     ui->responsePacketBox->clear();
     ui->responsePacketBox->addItem("<Load..>");
     Packet tempPacket;
-    foreach(tempPacket, packetsSaved)
-    {
+    foreach (tempPacket, packetsSaved) {
         ui->responsePacketBox->addItem(tempPacket.name);
 
     }
@@ -195,8 +194,8 @@ void Settings::on_buttonBox_accepted()
     unsigned int tcpport = ui->tcpServerPortEdit->text().toUInt();
     unsigned int sslport = ui->sslServerPortEdit->text().toUInt();
 
-    if(tcpport != 0) {
-        if(sslport == tcpport) {
+    if (tcpport != 0) {
+        if (sslport == tcpport) {
             QMessageBox msgBox;
             msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
             msgBox.setStandardButtons(QMessageBox::Ok);
@@ -256,11 +255,11 @@ void Settings::on_buttonBox_accepted()
     float multiSend = Packet::oneDecimal(ui->multiSendDelayEdit->text().toFloat());
     settings.setValue("multiSendDelay", multiSend);
 
-    if(ui->ipv6Radio->isChecked()) {
+    if (ui->ipv6Radio->isChecked()) {
         settings.setValue("ipMode", 6);
     }
 
-    if(ui->ipv4Radio->isChecked()) {
+    if (ui->ipv4Radio->isChecked()) {
         settings.setValue("ipMode", 4);
     }
 
@@ -270,16 +269,14 @@ void Settings::on_buttonBox_accepted()
     QListWidget * lwTraffic = ui->displayOrderListTraffic;
     QStringList packetSavedHeaderNow;
     packetSavedHeaderNow.clear();
-    for(int i = 0; i < lw->count(); i++)
-    {
+    for (int i = 0; i < lw->count(); i++) {
         packetSavedHeaderNow.append(lw->item(i)->text());
     }
     settings.setValue("packetSavedTableHeaders", packetSavedHeaderNow);
 
 
     packetSavedHeaderNow.clear();
-    for(int i = 0; i < lwTraffic->count(); i++)
-    {
+    for (int i = 0; i < lwTraffic->count(); i++) {
         packetSavedHeaderNow.append(lwTraffic->item(i)->text());
     }
     settings.setValue("packetTableHeaders", packetSavedHeaderNow);
@@ -330,7 +327,7 @@ void Settings::on_asciiResponseEdit_textEdited(const QString &arg1)
     Q_UNUSED(arg1);
 
     QString quicktestASCII =  ui->asciiResponseEdit->text();
-    ui->hexResponseEdit->setText( Packet::ASCIITohex(quicktestASCII));
+    ui->hexResponseEdit->setText(Packet::ASCIITohex(quicktestASCII));
 
 }
 
@@ -345,19 +342,21 @@ void Settings::on_hexResponseEdit_textEdited(const QString &arg1)
 }
 
 
-QStringList Settings::defaultPacketTableHeader() {
+QStringList Settings::defaultPacketTableHeader()
+{
     QStringList list;
     list.clear();
-    list <<"Send" << "Name"<<"Resend (sec)" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
+    list << "Send" << "Name" << "Resend (sec)" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
 
     return list;
 
 }
 
-QStringList Settings::defaultTrafficTableHeader() {
+QStringList Settings::defaultTrafficTableHeader()
+{
     QStringList list;
     list.clear();
-    list <<"Time" << "From IP" <<"From Port" << "To IP" << "To Port" << "Method"<<"Error" << "ASCII" << "Hex";
+    list << "Time" << "From IP" << "From Port" << "To IP" << "To Port" << "Method" << "Error" << "ASCII" << "Hex";
 
     return list;
 
@@ -381,11 +380,11 @@ void Settings::setStoredTableHeaders()
     QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
 
 
-    if(packetSavedTable.size() == packetSavedTableHeaders.size()) {
+    if (packetSavedTable.size() == packetSavedTableHeaders.size()) {
         packetSavedTableHeaders = packetSavedTable;
     }
 
-    if(packetTable.size() == packetTableHeaders.size()) {
+    if (packetTable.size() == packetTableHeaders.size()) {
         packetTableHeaders = packetTable;
     }
 
@@ -402,8 +401,7 @@ void Settings::loadTableHeaders()
     ui->displayOrderList->clear();
     ui->displayOrderListTraffic->clear();
 
-    foreach(tempString, packetSavedTableHeaders)
-    {
+    foreach (tempString, packetSavedTableHeaders) {
         tItem = new QListWidgetItem(tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderList->addItem(tItem);
@@ -411,8 +409,7 @@ void Settings::loadTableHeaders()
 
     ui->displayOrderList->setCursor(Qt::CrossCursor);
 
-    foreach(tempString, packetTableHeaders)
-    {
+    foreach (tempString, packetTableHeaders) {
         tItem = new QListWidgetItem(tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderListTraffic->addItem(tItem);
@@ -436,10 +433,8 @@ void Settings::on_responsePacketBox_currentIndexChanged(const QString &arg1)
     QString selectedName = ui->responsePacketBox->currentText();
 
     //QDEBUGVAR(selectedName);
-    foreach(tempPacket, packetsSaved)
-    {
-        if(tempPacket.name == selectedName)
-        {
+    foreach (tempPacket, packetsSaved) {
+        if (tempPacket.name == selectedName) {
             ui->hexResponseEdit->setText(tempPacket.hexString);
             on_hexResponseEdit_textEdited(tempPacket.hexString);
             break;
@@ -468,16 +463,16 @@ void Settings::on_sslCaPathBrowseButton_clicked()
 {
 
     QString home = QDir::homePath();
-    if(QFile::exists(ui->sslCaPath->text())) {
+    if (QFile::exists(ui->sslCaPath->text())) {
         home = ui->sslCaPath->text();
     }
 
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                  home,
-                                                  QFileDialog::ShowDirsOnly
-                                                  | QFileDialog::DontResolveSymlinks);
+                  home,
+                  QFileDialog::ShowDirsOnly
+                  | QFileDialog::DontResolveSymlinks);
 
-    if(QFile::exists(dir)) {
+    if (QFile::exists(dir)) {
         ui->sslCaPath->setText(dir);
     }
 
@@ -488,14 +483,14 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
 {
 
     QString home = QDir::homePath();
-    if(QFile::exists(ui->sslLocalCertificatePath->text())) {
+    if (QFile::exists(ui->sslLocalCertificatePath->text())) {
         home = ui->sslLocalCertificatePath->text();
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                                tr("Choose Cert"), home, tr("Certs (*.pem)"));
+                       tr("Choose Cert"), home, tr("Certs (*.pem)"));
 
-    if(QFile::exists(fileName)) {
+    if (QFile::exists(fileName)) {
         ui->sslLocalCertificatePath->setText(fileName);
     }
 
@@ -504,14 +499,14 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
 void Settings::on_sslPrivateKeyPathBrowseButton_clicked()
 {
     QString home = QDir::homePath();
-    if(QFile::exists(ui->sslPrivateKeyPath->text())) {
+    if (QFile::exists(ui->sslPrivateKeyPath->text())) {
         home = ui->sslPrivateKeyPath->text();
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                                tr("Choose Key"), home, tr("Keys (*.key, *.pem)"));
+                       tr("Choose Key"), home, tr("Keys (*.key, *.pem)"));
 
-    if(QFile::exists(fileName)) {
+    if (QFile::exists(fileName)) {
         ui->sslPrivateKeyPath->setText(fileName);
     }
 

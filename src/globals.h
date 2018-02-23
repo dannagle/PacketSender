@@ -66,10 +66,10 @@
 
 #include <QtGlobal>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    #define IPV4_OR_IPV6 (QHostAddress::Any)
+#define IPV4_OR_IPV6 (QHostAddress::Any)
 #else
-    //used when binding
-    #define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
+//used when binding
+#define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
 #endif
 
 

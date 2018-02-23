@@ -37,17 +37,16 @@ int main(int argc, char *argv[])
 {
     int debugMode = DEBUGMODE;
 
-    if(QFile::exists("DEBUGMODE")) {
+    if (QFile::exists("DEBUGMODE")) {
         debugMode = 1;
     }
 
-    if(QFile::exists(QDir::homePath() + "/DEBUGMODE")) {
+    if (QFile::exists(QDir::homePath() + "/DEBUGMODE")) {
         debugMode = 1;
     }
 
 
-    if(debugMode)
-    {
+    if (debugMode) {
         QDEBUG() << "run-time debug mode";
 
     } else {
@@ -71,23 +70,23 @@ int main(int argc, char *argv[])
 
     //It only does this on first launch. I still need to catch it though.
 
-    if(argc == 2) {
+    if (argc == 2) {
 
         gatekeeper = true;
 
         QString arg2 = QString(argv[1]);
 
         //only the help and version should trigger
-        if(arg2.contains("-h")) {
+        if (arg2.contains("-h")) {
             gatekeeper = false;
         }
-        if(arg2.contains("help")) {
+        if (arg2.contains("help")) {
             gatekeeper = false;
         }
-        if(arg2.contains("-v")) {
+        if (arg2.contains("-v")) {
             gatekeeper = false;
         }
-        if(arg2.contains("version")) {
+        if (arg2.contains("version")) {
             gatekeeper = false;
         }
 
@@ -95,7 +94,7 @@ int main(int argc, char *argv[])
 
 
 
-    if((argc > 1) && !gatekeeper) {
+    if ((argc > 1) && !gatekeeper) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
 
@@ -117,8 +116,8 @@ int main(int argc, char *argv[])
         QTextStream out(stdout);
 
         QCoreApplication::setApplicationName("Packet Sender");
-        QString versionBuilder = QString("version " ) + SW_VERSION;
-        if(QSslSocket::supportsSsl()) {
+        QString versionBuilder = QString("version ") + SW_VERSION;
+        if (QSslSocket::supportsSsl()) {
             versionBuilder.append(" / SSL version:");
             versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
         }
@@ -145,21 +144,21 @@ int main(int argc, char *argv[])
 
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
-                "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
-                "ms");
+                                      "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
+                                      "ms");
         parser.addOption(waitOption);
 
         // An option with a value
         QCommandLineOption fileOption(QStringList() << "f" << "file",
-                "Send contents of specified path. Max 10 MiB for UDP, 100 MiB for TCP/SSL.",
-                "path");
+                                      "Send contents of specified path. Max 10 MiB for UDP, 100 MiB for TCP/SSL.",
+                                      "path");
         parser.addOption(fileOption);
 
 
         // An option with a value
         QCommandLineOption bindPortOption(QStringList() << "b" << "bind",
-                "Bind port. Default is 0 (dynamic).",
-                "port");
+                                          "Bind port. Default is 0 (dynamic).",
+                                          "port");
         parser.addOption(bindPortOption);
 
 
@@ -205,7 +204,7 @@ int main(int argc, char *argv[])
         bool sslNoError = parser.isSet(sslNoErrorOption);
         bool ipv6  = false;
 
-        if(sslNoError) ssl = true;
+        if (sslNoError) ssl = true;
 
         QString name = parser.value(nameOption);
 
@@ -220,48 +219,48 @@ int main(int argc, char *argv[])
         QString data, dataString;
         data.clear();
         dataString.clear();
-        if(argssize >= 1) {
+        if (argssize >= 1) {
             address = args[0];
         }
-        if(argssize >= 2) {
+        if (argssize >= 2) {
             port = args[1].toUInt();
         }
-        if(argssize >= 3) {
+        if (argssize >= 3) {
             data = (args[2]);
         }
 
         //check for invalid options..
 
-        if(argssize > 3) {
+        if (argssize > 3) {
             OUTIF() << "Warning: Extra parameters detected. Try surrounding your data with quotes.";
         }
 
-        if(hex && mixedascii) {
+        if (hex && mixedascii) {
             OUTIF() << "Warning: both hex and pure ascii set. Defaulting to hex.";
             mixedascii = false;
         }
 
-        if(hex && ascii) {
+        if (hex && ascii) {
             OUTIF() << "Warning: both hex and pure ascii set. Defaulting to hex.";
             ascii = false;
         }
 
-        if(mixedascii && ascii) {
+        if (mixedascii && ascii) {
             OUTIF() << "Warning: both mixed ascii and pure ascii set. Defaulting to pure ascii.";
             mixedascii = false;
         }
 
-        if(tcp && udp) {
+        if (tcp && udp) {
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
             udp = false;
         }
-        if(tcp && ssl) {
+        if (tcp && ssl) {
             OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
             tcp = false;
         }
 
-        if(!filePath.isEmpty() && !QFile::exists(filePath)) {
-            OUTIF() << "Error: specified path "<< filePath <<" does not exist.";
+        if (!filePath.isEmpty() && !QFile::exists(filePath)) {
+            OUTIF() << "Error: specified path " << filePath << " does not exist.";
             filePath.clear();
             OUTPUT();
             return -1;
@@ -269,59 +268,59 @@ int main(int argc, char *argv[])
 
         //bind is now default 0
 
-        if(!bind && parser.isSet(bindPortOption)) {
+        if (!bind && parser.isSet(bindPortOption)) {
             OUTIF() << "Warning: Binding to port zero is dynamic.";
         }
 
 
-        if(!port && name.isEmpty()) {
+        if (!port && name.isEmpty()) {
             OUTIF() << "Warning: Sending to port zero.";
         }
 
         //set default choices
-        if(!hex && !ascii && !mixedascii) {
+        if (!hex && !ascii && !mixedascii) {
             hex = true;
         }
 
-        if(!tcp && !udp && !ssl) {
+        if (!tcp && !udp && !ssl) {
             tcp = true;
         }
 
         //Create the packet to send.
-        if(!name.isEmpty()) {
+        if (!name.isEmpty()) {
             sendPacket = Packet::fetchFromDB(name);
-            if(sendPacket.name.isEmpty()) {
-                OUTIF() << "Error: Saved packet \""<< name <<"\" not found.";
+            if (sendPacket.name.isEmpty()) {
+                OUTIF() << "Error: Saved packet \"" << name << "\" not found.";
                 OUTPUT();
                 return -1;
             } else {
-                if(data.isEmpty()) {
+                if (data.isEmpty()) {
                     data  = sendPacket.hexString;
                     hex = true;
                     ascii = false;
                     mixedascii = false;
                 }
-                if(!port) {
+                if (!port) {
                     port  = sendPacket.port;
                 }
-                if(address.isEmpty()) {
+                if (address.isEmpty()) {
                     address  = sendPacket.toIP;
                 }
-                if(!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption) && !parser.isSet(sslNoErrorOption)) {
+                if (!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption) && !parser.isSet(sslNoErrorOption)) {
 
-                    tcp=false;
+                    tcp = false;
                     udp = false;
                     ssl = true;
-                    if(sendPacket.tcpOrUdp.toUpper() == "TCP") {
-                        tcp=true;
+                    if (sendPacket.tcpOrUdp.toUpper() == "TCP") {
+                        tcp = true;
                     }
 
-                    if(sendPacket.tcpOrUdp.toUpper() == "UDP") {
-                        udp=true;
+                    if (sendPacket.tcpOrUdp.toUpper() == "UDP") {
+                        udp = true;
                     }
 
-                    if(sendPacket.tcpOrUdp.toUpper() == "SSL") {
-                        ssl=true;
+                    if (sendPacket.tcpOrUdp.toUpper() == "SSL") {
+                        ssl = true;
                     }
 
                 }
@@ -330,20 +329,20 @@ int main(int argc, char *argv[])
 
         }
 
-        if(!parser.isSet(bindPortOption)) {
+        if (!parser.isSet(bindPortOption)) {
             bind = 0;
         }
 
-        if(!filePath.isEmpty() && QFile::exists(filePath)) {
+        if (!filePath.isEmpty() && QFile::exists(filePath)) {
             QFile dataFile(filePath);
-            if(dataFile.open(QFile::ReadOnly)) {
+            if (dataFile.open(QFile::ReadOnly)) {
 
-                if(tcp || ssl) {
-                    QByteArray dataArray = dataFile.read(1024*1024*100);;
+                if (tcp || ssl) {
+                    QByteArray dataArray = dataFile.read(1024 * 1024 * 100);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
 
-                    QByteArray dataArray = dataFile.read(1024*1024*10);
+                    QByteArray dataArray = dataFile.read(1024 * 1024 * 10);
                     dataString = Packet::byteArrayToHex(dataArray);
                 }
 
@@ -378,7 +377,7 @@ int main(int argc, char *argv[])
 
         //NOW LETS DO THIS!
 
-        if(ssl && !QSslSocket::supportsSsl()) {
+        if (ssl && !QSslSocket::supportsSsl()) {
             OUTIF() << "Error: This computer does not have a native SSL library.";
             OUTIF() << "The expected SSL version is " << QSslSocket::sslLibraryBuildVersionString();
             OUTPUT();
@@ -386,37 +385,35 @@ int main(int argc, char *argv[])
         }
 
 
-        if(ascii) { //pure ascii
+        if (ascii) { //pure ascii
             dataString = Packet::byteArrayToHex(data.toLatin1());
         }
 
-        if(hex) { //hex
+        if (hex) { //hex
             dataString = Packet::byteArrayToHex(Packet::HEXtoByteArray(data));
         }
 
-        if(mixedascii) { //mixed ascii
+        if (mixedascii) { //mixed ascii
             dataString = Packet::ASCIITohex(data);
         }
 
-        if(dataString.isEmpty()) {
+        if (dataString.isEmpty()) {
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
 
         QHostAddress addy;
-        if(!addy.setAddress(address)) {
+        if (!addy.setAddress(address)) {
             QHostInfo info = QHostInfo::fromName(address);
-            if (info.error() != QHostInfo::NoError)
-            {
+            if (info.error() != QHostInfo::NoError) {
                 OUTIF() << "Error: Could not resolve address:" + address;
                 OUTPUT();
                 return -1;
             } else {
                 addy = info.addresses().at(0);
 
-                if (QAbstractSocket::IPv6Protocol == addy.protocol())
-                {
-                   QDEBUG() << "Valid IPv6 address.";
-                   ipv6 = true;
+                if (QAbstractSocket::IPv6Protocol == addy.protocol()) {
+                    QDEBUG() << "Valid IPv6 address.";
+                    ipv6 = true;
                 }
 
                 //domain names are now on-demand connections.
@@ -425,10 +422,9 @@ int main(int argc, char *argv[])
         }
 
         QHostAddress theAddress(address);
-        if (QAbstractSocket::IPv6Protocol == theAddress.protocol())
-        {
-           QDEBUG() << "Valid IPv6 address.";
-           ipv6 = true;
+        if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
+            QDEBUG() << "Valid IPv6 address.";
+            ipv6 = true;
         }
 
 
@@ -441,13 +437,13 @@ int main(int argc, char *argv[])
         now.start();
 
 
-        if(tcp || ssl) {
+        if (tcp || ssl) {
             QSslSocket sock;
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             sock.bind(QHostAddress::Any, bind);
 #else
-            if(ipv6) {
+            if (ipv6) {
                 sock.bind(QHostAddress::AnyIPv6, bind);
             } else {
                 sock.bind(QHostAddress::AnyIPv4, bind);
@@ -456,27 +452,28 @@ int main(int argc, char *argv[])
 
 
 
-            if(tcp) {
+            if (tcp) {
                 sock.connectToHost(addy, port);
             }
 
-            if(ssl) {
+            if (ssl) {
                 sock.connectToHostEncrypted(address,  port);
-                if(!sslNoError) {
+                if (!sslNoError) {
                     sock.ignoreSslErrors();
                 }
             }
             sock.waitForConnected(1000);
 
-            QList<QSslError> sslErrorsList; sslErrorsList.clear();
+            QList<QSslError> sslErrorsList;
+            sslErrorsList.clear();
 
-            if(ssl) {
+            if (ssl) {
                 sock.waitForEncrypted(5000);
 
                 QList<QSslError> sslErrorsList  = sock.sslErrors();
 
 
-                if(sslErrorsList.size() > 0) {
+                if (sslErrorsList.size() > 0) {
                     QSslError sError;
                     foreach (sError, sslErrorsList) {
                         OUTIF() << "SSL Error: " << sError.errorString();
@@ -485,34 +482,33 @@ int main(int argc, char *argv[])
             }
 
 
-            if(sock.state() == QAbstractSocket::ConnectedState)
-            {
+            if (sock.state() == QAbstractSocket::ConnectedState) {
                 QString connectionType = "TCP";
-                if(sock.isEncrypted()) {
+                if (sock.isEncrypted()) {
                     connectionType = "SSL";
                 } else {
-                    if(ssl) {
+                    if (ssl) {
                         OUTIF() << "Warning: This connection is not encrypted.";
                     }
                 }
 
-                if(sslNoError && (sslErrorsList.size() > 0)) {
+                if (sslNoError && (sslErrorsList.size() > 0)) {
                     OUTIF() << "Warning: Abandoning sending data because of SSL no error option.";
                     dataString.clear();
                     sendData.clear();
                 }
 
                 QString dataStringTruncated = dataString;
-                dataStringTruncated.truncate(100*3);
+                dataStringTruncated.truncate(100 * 3);
                 int chopped = (dataString.size() / 3) - (dataStringTruncated.size() / 3);
-                if(chopped > 0) {
+                if (chopped > 0) {
                     dataStringTruncated.append("[... ");
                     dataStringTruncated.append(QString::number(chopped));
                     dataStringTruncated.append(" bytes not shown ...]");
                 }
 
-                OUTIF() <<  connectionType << " (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataStringTruncated;
-                if(sock.isEncrypted()) {
+                OUTIF() <<  connectionType << " (" << sock.localPort() << ")://" << address << ":" << port << " " << dataStringTruncated;
+                if (sock.isEncrypted()) {
                     QSslCipher cipher = sock.sessionCipher();
                     OUTIF() << "Cipher: Encrypted with " << cipher.encryptionMethod();
                 }
@@ -522,14 +518,14 @@ int main(int argc, char *argv[])
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);
                 OUTPUT();
-                while(now.elapsed() <= wait && (sock.state() == QAbstractSocket::ConnectedState)) {
+                while (now.elapsed() <= wait && (sock.state() == QAbstractSocket::ConnectedState)) {
                     sock.waitForReadyRead(wait - now.elapsed());
                     recvData = sock.readAll();
-                    if(recvData.isEmpty()) {
+                    if (recvData.isEmpty()) {
                         continue;
                     }
                     QString hexString = Packet::byteArrayToHex(recvData);
-                    if(quiet) {
+                    if (quiet) {
                         out << "\n" << hexString;
 
                     } else {
@@ -562,7 +558,7 @@ int main(int argc, char *argv[])
             QUdpSocket sock;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
-            if(!sock.bind(QHostAddress::Any, bind)) {
+            if (!sock.bind(QHostAddress::Any, bind)) {
                 OUTIF() << "Error: Could not bind to " << bind;
 
                 OUTPUT();
@@ -570,8 +566,8 @@ int main(int argc, char *argv[])
             }
 #else
 
-            if(ipv6) {
-                if(!sock.bind(QHostAddress::AnyIPv6, bind)) {
+            if (ipv6) {
+                if (!sock.bind(QHostAddress::AnyIPv6, bind)) {
                     OUTIF() << "Error: Could not bind to " << bind;
 
                     OUTPUT();
@@ -579,7 +575,7 @@ int main(int argc, char *argv[])
                 }
 
             } else {
-                if(!sock.bind(QHostAddress::AnyIPv4, bind)) {
+                if (!sock.bind(QHostAddress::AnyIPv4, bind)) {
                     OUTIF() << "Error: Could not bind to " << bind;
 
                     OUTPUT();
@@ -590,7 +586,7 @@ int main(int argc, char *argv[])
 
 #endif
 
-            OUTIF() << "UDP (" <<sock.localPort() <<")://" << address << ":" << port << " " << dataString;
+            OUTIF() << "UDP (" << sock.localPort() << ")://" << address << ":" << port << " " << dataString;
 
             bytesWriten = sock.writeDatagram(sendData, addy, port);
             //OUTIF() << "Wrote " << bytesWriten << " bytes";
@@ -598,19 +594,19 @@ int main(int argc, char *argv[])
 
 
             OUTPUT();
-            while(now.elapsed() <= wait) {
+            while (now.elapsed() <= wait) {
                 sock.waitForReadyRead(wait - now.elapsed());
 
-                if(sock.hasPendingDatagrams()) {
+                if (sock.hasPendingDatagrams()) {
                     QHostAddress sender;
                     quint16 senderPort;
                     recvData.resize(sock.pendingDatagramSize());
 
                     sock.readDatagram(recvData.data(), recvData.size(),
-                                            &sender, &senderPort);
+                                      &sender, &senderPort);
 
                     QString hexString = Packet::byteArrayToHex(recvData);
-                    if(quiet) {
+                    if (quiet) {
                         out << "\n" << hexString;
                     } else {
                         out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
@@ -648,10 +644,10 @@ int main(int argc, char *argv[])
         qRegisterMetaType<Packet>();
 
         QFile file(":/packetsender.css");
-        if(file.open(QFile::ReadOnly)) {
-           QString StyleSheet = QLatin1String(file.readAll());
-         //  qDebug() << "stylesheet: " << StyleSheet;
-           a.setStyleSheet(StyleSheet);
+        if (file.open(QFile::ReadOnly)) {
+            QString StyleSheet = QLatin1String(file.readAll());
+            //  qDebug() << "stylesheet: " << StyleSheet;
+            a.setStyleSheet(StyleSheet);
         }
 
 

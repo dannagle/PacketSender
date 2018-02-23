@@ -32,10 +32,10 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     QDEBUG();
     sendPacket.clear();
     QDEBUG() << ": refreshTimer Connection attempt " <<
-                connect ( &refreshTimer , SIGNAL ( timeout() ) , this, SLOT ( refreshTimerTimeout (  ) ) )
-             << connect ( this , SIGNAL ( rejected() ) , this, SLOT ( aboutToClose (  ) ) )
-             << connect ( this , SIGNAL ( accepted() ) , this, SLOT ( aboutToClose (  ) ) )
-             << connect ( this , SIGNAL ( dialogIsClosing() ) , this, SLOT ( aboutToClose (  ) ) );
+             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))
+             << connect(this, SIGNAL(rejected()), this, SLOT(aboutToClose()))
+             << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()))
+             << connect(this, SIGNAL(dialogIsClosing()), this, SLOT(aboutToClose()));
     QDEBUG() << "Setup timer";
     refreshTimer.setInterval(200);
     refreshTimer.start();
@@ -57,7 +57,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     bool asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
 
-    if(asciiEditTranslateEBCDIC) {
+    if (asciiEditTranslateEBCDIC) {
         QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
         QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
 
@@ -66,29 +66,30 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
 }
 
-void PersistentConnection::ebcdicTranslate() {
+void PersistentConnection::ebcdicTranslate()
+{
 
     QDEBUG() << "Translate ascii field";
-        Packet ebcdicPkt;
-        ebcdicPkt.init();
-        QString oldascii = ui->asciiLineEdit->text();
-        ebcdicPkt.hexString = Packet::ASCIITohex(oldascii);
-        oldascii = ebcdicPkt.asciiString();
+    Packet ebcdicPkt;
+    ebcdicPkt.init();
+    QString oldascii = ui->asciiLineEdit->text();
+    ebcdicPkt.hexString = Packet::ASCIITohex(oldascii);
+    oldascii = ebcdicPkt.asciiString();
 
-        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
-        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
-        ui->asciiLineEdit->setText(ebcdicPkt.asciiString());
+    QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
+    ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
+    ui->asciiLineEdit->setText(ebcdicPkt.asciiString());
 }
 
-void PersistentConnection::loadComboBox() {
+void PersistentConnection::loadComboBox()
+{
 
     QList<Packet> packetsSaved = Packet::fetchAllfromDB("");
     ui->packetComboBox->clear();
     Packet tempPacket;
     QString search = ui->searchEdit->text().trimmed().toLower();
-    foreach(tempPacket, packetsSaved)
-    {
-        if(tempPacket.name.trimmed().toLower().contains(search)) {
+    foreach (tempPacket, packetsSaved) {
+        if (tempPacket.name.trimmed().toLower().contains(search)) {
             ui->packetComboBox->addItem(tempPacket.name);
         }
 
@@ -96,11 +97,12 @@ void PersistentConnection::loadComboBox() {
 
 }
 
-void PersistentConnection::aboutToClose() {
+void PersistentConnection::aboutToClose()
+{
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
     QDEBUG() << "checking thread null";
-    if(thread == NULL) {
+    if (thread == NULL) {
         QDEBUG() << "pointer is null";
     } else {
         QDEBUG() << "requesting stop";
@@ -116,11 +118,11 @@ void PersistentConnection::statusReceiver(QString message)
     //QDEBUGVAR(message);
     ui->topLabel->setText(message);
 
-    if(message.startsWith("Connected")) {
+    if (message.startsWith("Connected")) {
         wasConnected = true;
     }
 
-    if(message.toLower().startsWith("not connected")) {
+    if (message.toLower().startsWith("not connected")) {
 
         QDEBUG() << "Setting style sheet";
         ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #EEEEEE }");
@@ -151,10 +153,10 @@ void PersistentConnection::connectThreadSignals()
 {
 
     QDEBUG() << ": thread Connection attempt " <<
-                connect ( this , SIGNAL ( persistentPacketSend(Packet) ) , thread, SLOT ( sendPersistant(Packet) ) )
-             << connect ( this , SIGNAL ( closeConnection() ) , thread, SLOT ( closeConnection() ) )
-             << connect ( thread , SIGNAL ( connectStatus(QString) ) , this, SLOT ( statusReceiver(QString) ) )
-             << connect ( thread , SIGNAL ( packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
+             connect(this, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+             << connect(this, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+             << connect(thread, SIGNAL(connectStatus(QString)), this, SLOT(statusReceiver(QString)))
+             << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
 
 }
 
@@ -163,7 +165,7 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 
     thread = thethread;
 
-    if(thread->isSecure) {
+    if (thread->isSecure) {
         setWindowTitle("SSL://You:" + QString::number(portNum));
     } else {
         setWindowTitle("TCP://You:" + QString::number(portNum));
@@ -180,18 +182,19 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 }
 
 
-void PersistentConnection::init() {
+void PersistentConnection::init()
+{
 
-    QString tcpOrSSL= "TCP";
-    if(sendPacket.isSSL()) {
+    QString tcpOrSSL = "TCP";
+    if (sendPacket.isSSL()) {
         tcpOrSSL = "SSL";
     }
-    setWindowTitle(tcpOrSSL +"://"+sendPacket.toIP + ":" + QString::number(sendPacket.port));
+    setWindowTitle(tcpOrSSL + "://" + sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
     thread = new TCPThread(sendPacket, this);
 
     reSendPacket.clear();
-    if(sendPacket.repeat > 0) {
+    if (sendPacket.repeat > 0) {
         QDEBUG() << "This packet is repeating";
         reSendPacket = sendPacket;
     } else {
@@ -228,14 +231,15 @@ void PersistentConnection::cancelResends()
 }
 
 
-void PersistentConnection::refreshTimerTimeout() {
+void PersistentConnection::refreshTimerTimeout()
+{
 //    QDEBUG();
 
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
 
-    if(thread->isRunning() && !thread->closeRequest) {
+    if (thread->isRunning() && !thread->closeRequest) {
         QString winTitle = windowTitle();
-        if(winTitle.startsWith("TCP://") && thread->isEncrypted()) {
+        if (winTitle.startsWith("TCP://") && thread->isEncrypted()) {
             winTitle.replace("TCP://", "SSL://");
             setWindowTitle(winTitle);
         }
@@ -249,18 +253,17 @@ void PersistentConnection::refreshTimerTimeout() {
     qint64 sec = diffRem / (1000);
 
     QString datestamp = QString("%1:%2:%3")
-            .arg(hours, 2, 10, QChar('0'))
-            .arg(min, 2, 10, QChar('0'))
-            .arg(sec, 2, 10, QChar('0'));
+                        .arg(hours, 2, 10, QChar('0'))
+                        .arg(min, 2, 10, QChar('0'))
+                        .arg(sec, 2, 10, QChar('0'));
 
-    if(wasConnected && !stopTimer) {
+    if (wasConnected && !stopTimer) {
 
         ui->timeLabel->setText(datestamp);
 
         QDateTime now = QDateTime::currentDateTime();
-        int repeatMS = (int) (reSendPacket.repeat * 1000 - 100);
-        if(reSendPacket.timestamp.addMSecs(repeatMS) < now)
-        {
+        int repeatMS = (int)(reSendPacket.repeat * 1000 - 100);
+        if (reSendPacket.timestamp.addMSecs(repeatMS) < now) {
             reSendPacket.timestamp = now;
             emit persistentPacketSend(reSendPacket);
         }
@@ -287,7 +290,8 @@ void PersistentConnection::on_buttonBox_rejected()
 
 }
 
-void PersistentConnection::loadTrafficView() {
+void PersistentConnection::loadTrafficView()
+{
 
 
     QDEBUGVAR(trafficList.size());
@@ -300,9 +304,9 @@ void PersistentConnection::loadTrafficView() {
 
     //        clipboard->setText(QString(savePacket.getByteArray()));
 
-    if(useraw) {
-        foreach(loopPkt, trafficList) {
-                out << QString(loopPkt.getByteArray());
+    if (useraw) {
+        foreach (loopPkt, trafficList) {
+            out << QString(loopPkt.getByteArray());
         }
 
         ui->trafficViewEdit->setPlainText(html);
@@ -314,9 +318,9 @@ void PersistentConnection::loadTrafficView() {
         out << "<html>" << "<b>" << trafficList.size() << " packets." << "</b><br>";
 
         int count = 0;
-        foreach(loopPkt, trafficList) {
+        foreach (loopPkt, trafficList) {
             QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
-            if(loopPkt.fromIP.toLower() == "you") {
+            if (loopPkt.fromIP.toLower() == "you") {
                 out << "<p style='color:blue'>";
             } else {
                 out << "<p>";
@@ -339,7 +343,8 @@ void PersistentConnection::loadTrafficView() {
 
 }
 
-void PersistentConnection::packetSentSlot(Packet pkt) {
+void PersistentConnection::packetSentSlot(Packet pkt)
+{
 
     QDEBUGVAR(pkt.hexString.size());
     trafficList.append(pkt);
@@ -355,7 +360,7 @@ void PersistentConnection::socketDisconnected()
 void PersistentConnection::on_asciiSendButton_clicked()
 {
     QString ascii = ui->asciiLineEdit->text();
-    if(ascii.isEmpty()) {
+    if (ascii.isEmpty()) {
         return;
     }
     Packet asciiPacket;
@@ -379,7 +384,7 @@ void PersistentConnection::on_asciiSendButton_clicked()
 
 
     QDEBUGVAR(asciiPacket.hexString);
-    if(ui->appendCRcheck->isChecked()) {
+    if (ui->appendCRcheck->isChecked()) {
         asciiPacket.hexString.append(" 0d");
     }
 
@@ -410,7 +415,7 @@ void PersistentConnection::on_searchEdit_textEdited(const QString &arg1)
 
 void PersistentConnection::on_asciiCheck_clicked(bool checked)
 {
-    if(checked) {
+    if (checked) {
         useraw = false;
     }
     loadTrafficView();
@@ -420,7 +425,7 @@ void PersistentConnection::on_asciiCheck_clicked(bool checked)
 
 void PersistentConnection::on_rawCheck_clicked(bool checked)
 {
-    if(checked) {
+    if (checked) {
         useraw = true;
     }
     loadTrafficView();
@@ -436,10 +441,8 @@ void PersistentConnection::on_LoadButton_clicked()
 
 
     //QDEBUGVAR(selectedName);
-    foreach(tempPacket, packetsSaved)
-    {
-        if(tempPacket.name == selectedName)
-        {
+    foreach (tempPacket, packetsSaved) {
+        if (tempPacket.name == selectedName) {
             ui->asciiLineEdit->setText(tempPacket.asciiString());
             break;
         }
@@ -450,7 +453,7 @@ void PersistentConnection::on_LoadButton_clicked()
 void PersistentConnection::on_packetComboBox_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
-    if(!suppressSlot) {
+    if (!suppressSlot) {
         on_LoadButton_clicked();
     }
 
@@ -469,28 +472,28 @@ void PersistentConnection::on_sendFileButton_clicked()
     static QString fileName;
     static bool showWarning = true;
 
-    if(fileName.isEmpty()) {
+    if (fileName.isEmpty()) {
         fileName = QDir::homePath();
     }
 
     fileName = QFileDialog::getOpenFileName(this, tr("Send File"),
-                                              fileName,
-                                              tr("*.*"));
+                                            fileName,
+                                            tr("*.*"));
 
     QDEBUGVAR(fileName);
 
-    if(fileName.isEmpty()) {
+    if (fileName.isEmpty()) {
         return;
     }
 
     QFile loadFile(fileName);
 
-    if(!loadFile.exists()) {
+    if (!loadFile.exists()) {
         return;
     }
 
     QByteArray data;
-    if(loadFile.open(QFile::ReadOnly)) {
+    if (loadFile.open(QFile::ReadOnly)) {
         data = loadFile.readAll();
         loadFile.close();
     }

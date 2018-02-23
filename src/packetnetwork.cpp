@@ -74,18 +74,20 @@ void PacketNetwork::packetSentECHO(Packet sendpacket)
 
 }
 
-int PacketNetwork::getIPmode() {
+int PacketNetwork::getIPmode()
+{
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     int ipMode = settings.value("ipMode", 4).toInt();
     QDEBUGVAR(ipMode);
     return ipMode;
 }
 
-void PacketNetwork::setIPmode(int mode) {
+void PacketNetwork::setIPmode(int mode)
+{
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
-    if(mode > 4) {
+    if (mode > 4) {
         QDEBUG() << "Saving IPv6";
         settings.setValue("ipMode", 6);
     } else {
@@ -121,10 +123,10 @@ void PacketNetwork::init()
 
 
     bool bindResult = udpSocket->bind(
-                IPV4_OR_IPV6
-                , udpPort);
+                          IPV4_OR_IPV6
+                          , udpPort);
 
-    if(udpPort < 1024 && !bindResult) {
+    if (udpPort < 1024 && !bindResult) {
 
         QMessageBox msgBox;
         msgBox.setWindowTitle("Binding to low port number.");
@@ -149,9 +151,9 @@ void PacketNetwork::init()
     ssl->init(sslPort, true, ipMode);
 
 
-    if((tcpPort < 1024 && getTCPPort() == 0)
+    if ((tcpPort < 1024 && getTCPPort() == 0)
             || (sslPort < 1024 && getSSLPort() == 0)
-            ) {
+       ) {
 
         QMessageBox msgBox;
         msgBox.setWindowTitle("Binding to low port number.");
@@ -166,23 +168,23 @@ void PacketNetwork::init()
 
 
     QDEBUG() << connect(tcp, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-             << connect(tcp, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+             << connect(tcp, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
              << connect(tcp, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
 
 
     QDEBUG() << connect(ssl, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-             << connect(ssl, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+             << connect(ssl, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
              << connect(ssl, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
 
 
 
     sendResponse = settings.value("sendReponse", false).toBool();
-    responseData = (settings.value("responseHex","")).toString();
+    responseData = (settings.value("responseHex", "")).toString();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     activateSSL = settings.value("sslServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
-    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();    
+    persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
     sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
 
     smartList.clear();
@@ -194,23 +196,21 @@ void PacketNetwork::init()
 
 
 
-    if(settings.value("delayAfterConnectCheck", false).toBool()) {
+    if (settings.value("delayAfterConnectCheck", false).toBool()) {
         delayAfterConnect = 500;
     }
 
 
 
-    if(activateUDP)
-    {
-        QDEBUG()<< "signal/slot datagram connect: " << connect(udpSocket, SIGNAL(readyRead()),
-            this, SLOT(readPendingDatagrams()));
+    if (activateUDP) {
+        QDEBUG() << "signal/slot datagram connect: " << connect(udpSocket, SIGNAL(readyRead()),
+                 this, SLOT(readPendingDatagrams()));
 
     } else {
         QDEBUG() << "udp server disable";
     }
 
-    if(activateSSL)
-    {
+    if (activateSSL) {
 
 
     } else {
@@ -218,8 +218,7 @@ void PacketNetwork::init()
         ssl->close();
     }
 
-    if(activateTCP)
-    {
+    if (activateTCP) {
 
 
     } else {
@@ -234,18 +233,16 @@ void PacketNetwork::init()
 
 int PacketNetwork::getUDPPort()
 {
-    if(activateUDP)
-    {
+    if (activateUDP) {
         return udpSocket->localPort();
     } else {
         return 0;
     }
- }
+}
 
 int PacketNetwork::getTCPPort()
 {
-    if(tcp->isListening())
-    {
+    if (tcp->isListening()) {
         return tcp->serverPort();
     } else {
         return 0;
@@ -255,8 +252,7 @@ int PacketNetwork::getTCPPort()
 
 int PacketNetwork::getSSLPort()
 {
-    if(ssl->isListening())
-    {
+    if (ssl->isListening()) {
         return ssl->serverPort();
     } else {
         return 0;
@@ -278,14 +274,14 @@ void PacketNetwork::readPendingDatagrams()
         udpSocket->readDatagram(datagram.data(), datagram.size(),
                                 &sender, &senderPort);
 
-        QDEBUG() << "data size is"<<datagram.size();
+        QDEBUG() << "data size is" << datagram.size();
 //        QDEBUG() << debugQByteArray(datagram);
 
         Packet udpPacket;
         udpPacket.timestamp = QDateTime::currentDateTime();
         udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
         udpPacket.tcpOrUdp = "UDP";
-        if(ipMode < 6) {
+        if (ipMode < 6) {
             udpPacket.fromIP = Packet::removeIPv6Mapping(sender);
         } else {
             udpPacket.fromIP = (sender).toString();
@@ -303,18 +299,17 @@ void PacketNetwork::readPendingDatagrams()
         QByteArray smartData;
         smartData.clear();
 
-        if(sendSmartResponse) {
+        if (sendSmartResponse) {
             smartData = Packet::smartResponseMatch(smartList, udpPacket.getByteArray());
         }
 
 
-        if(sendResponse || !smartData.isEmpty())
-        {
+        if (sendResponse || !smartData.isEmpty()) {
             udpPacket.timestamp = QDateTime::currentDateTime();
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
             udpPacket.tcpOrUdp = "UDP";
             udpPacket.fromIP = "You (Response)";
-            if(ipMode < 6) {
+            if (ipMode < 6) {
                 udpPacket.toIP = Packet::removeIPv6Mapping(sender);
 
             } else {
@@ -326,13 +321,13 @@ void PacketNetwork::readPendingDatagrams()
             QString testMacro = Packet::macroSwap(udpPacket.asciiString());
             udpPacket.hexString = Packet::ASCIITohex(testMacro);
 
-            if(!smartData.isEmpty()) {
+            if (!smartData.isEmpty()) {
                 udpPacket.hexString = Packet::byteArrayToHex(smartData);
             }
 
             QHostAddress resolved = resolveDNS(udpPacket.toIP);
 
-            udpSocket->writeDatagram(udpPacket.getByteArray(),resolved,senderPort);
+            udpSocket->writeDatagram(udpPacket.getByteArray(), resolved, senderPort);
             emit packetSent(udpPacket);
 
         }
@@ -347,10 +342,8 @@ void PacketNetwork::readPendingDatagrams()
 QString PacketNetwork::debugQByteArray(QByteArray debugArray)
 {
     QString outString = "";
-    for(int i = 0; i < debugArray.size(); i++)
-    {
-        if(debugArray.at(i) != 0)
-        {
+    for (int i = 0; i < debugArray.size(); i++) {
+        if (debugArray.at(i) != 0) {
             outString = outString + "\n" + QString::number(i) + ", 0x" + QString::number((unsigned char)debugArray.at(i), 16);
         }
     }
@@ -369,19 +362,16 @@ QHostAddress PacketNetwork::resolveDNS(QString hostname)
 {
 
     QHostAddress address(hostname);
-    if (QAbstractSocket::IPv4Protocol == address.protocol())
-    {
+    if (QAbstractSocket::IPv4Protocol == address.protocol()) {
         return address;
     }
 
-    if (QAbstractSocket::IPv6Protocol == address.protocol())
-    {
+    if (QAbstractSocket::IPv6Protocol == address.protocol()) {
         return address;
     }
 
     QHostInfo info = QHostInfo::fromName(hostname);
-    if (info.error() != QHostInfo::NoError)
-    {
+    if (info.error() != QHostInfo::NoError) {
         return QHostAddress();
     } else {
 
@@ -397,7 +387,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
 
-    if(sendpacket.persistent && (sendpacket.isTCP())) {
+    if (sendpacket.persistent && (sendpacket.isTCP())) {
         //spawn a window.
         PersistentConnection * pcWindow = new PersistentConnection();
         pcWindow->sendPacket = sendpacket;
@@ -405,9 +395,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
         QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
                  << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),this, SLOT(disconnected()));
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
 
         pcWindow->show();
@@ -428,17 +418,16 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     address.setAddress(sendpacket.toIP);
 
 
-    if(sendpacket.isTCP())
-    {
+    if (sendpacket.isTCP()) {
         QDEBUG() << "Send this packet:" << sendpacket.name;
 
 
         TCPThread *thread = new TCPThread(sendpacket, this);
 
         QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
                  << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(thread, SIGNAL(destroyed()),this, SLOT(disconnected()));
+        QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
         //Prevent Qt from auto-destroying these threads.
         //TODO: Develop a real thread manager.
@@ -454,8 +443,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.timestamp = QDateTime::currentDateTime();
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
-    if(sendpacket.isUDP())
-    {
+    if (sendpacket.isUDP()) {
         sendpacket.fromPort = getUDPPort();
         QDEBUG() << "Sending data to :" << sendpacket.toIP << ":" << sendpacket.port;
 

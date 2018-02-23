@@ -25,7 +25,7 @@ BruceThePoodle::BruceThePoodle(QWidget *parent) :
     flags = flags & (~helpFlag);
     setWindowFlags(flags);
 
-    this->setFixedSize(this->width(),this->height());
+    this->setFixedSize(this->width(), this->height());
     setWindowTitle("Bruce The Poodle!");
 }
 
