@@ -27,185 +27,186 @@
 #include "threadedtcpserver.h"
 
 
-namespace Ui {
+namespace Ui
+{
 class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
-    
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-    
-    quint64 timeSinceLaunch();
-    QString ASCIITohex(QString &ascii);
-    QString hexToASCII(QString &hex);
+        Q_OBJECT
 
-    void loadPacketsTable();
+    public:
+        explicit MainWindow(QWidget *parent = 0);
+        ~MainWindow();
 
+        quint64 timeSinceLaunch();
+        QString ASCIITohex(QString &ascii);
+        QString hexToASCII(QString &hex);
 
-    QPushButton *generatePSLink();
-    QPushButton *generateDNLink();
-    void loadTrafficLogTable();
-    void populateTableRow(int rowCounter, Packet tempPacket);
-    void removePacketfromMemory(Packet thepacket);
-    void UDPServerStatus();
-    void TCPServerStatus();
-    int findColumnIndex(QListWidget *lw, QString search);
-    void packetTable_checkMultiSelected();
-    void generateConnectionMenu();
-
-    void updateManager(QByteArray response);
-
-signals:
-    void sendPacket(Packet sendpacket);
-
-public slots:
-    void toTrafficLog(Packet logPacket);
-    void cancelResends();
-    void applyNetworkSettings();
+        void loadPacketsTable();
 
 
-    void toggleUDPServer();
-    void toggleTCPServer();
-    void toggleSSLServer();
-    void SSLServerStatus();
-    void toggleIPv4_IPv6();
-    void ebcdicTranslate();
+        QPushButton *generatePSLink();
+        QPushButton *generateDNLink();
+        void loadTrafficLogTable();
+        void populateTableRow(int rowCounter, Packet tempPacket);
+        void removePacketfromMemory(Packet thepacket);
+        void UDPServerStatus();
+        void TCPServerStatus();
+        int findColumnIndex(QListWidget *lw, QString search);
+        void packetTable_checkMultiSelected();
+        void generateConnectionMenu();
 
-    //shortcut keys... would be better if used lambda
-    void poodlepic();
-    void shortcutkey1();
-    void shortcutkey2();
-    void shortcutkey3();
-    void shortcutkey4();
-    void shortcutkey5();
-    void shortcutkey6();
-    void shortcutkey7();
+        void updateManager(QByteArray response);
 
+    signals:
+        void sendPacket(Packet sendpacket);
 
-private slots:
-    void on_packetHexEdit_lostFocus();
-    void on_packetASCIIEdit_lostFocus();
-
-    void sendClick(QString packetName);
-
-    void statusBarMessage(const QString & msg, int timeout, bool override);
-
-    void on_savePacketButton_clicked();
-
-    void on_testPacketButton_clicked();
-
-    void on_deletePacketButton_clicked();
-
-    void on_packetIPEdit_lostFocus();
-
-    void on_packetPortEdit_lostFocus();
-
-    void httpFinished(QNetworkReply* pReply);
-
-    void on_packetsTable_itemChanged(QTableWidgetItem *item);
-
-    void on_packetsTable_itemClicked(QTableWidgetItem *item);
-    void refreshTimerTimeout();
-
-    void on_trafficLogClearButton_clicked();
-
-    void on_saveTrafficPacket_clicked();
+    public slots:
+        void toTrafficLog(Packet logPacket);
+        void cancelResends();
+        void applyNetworkSettings();
 
 
-    void on_packetASCIIEdit_editingFinished();
+        void toggleUDPServer();
+        void toggleTCPServer();
+        void toggleSSLServer();
+        void SSLServerStatus();
+        void toggleIPv4_IPv6();
+        void ebcdicTranslate();
 
-    void on_packetHexEdit_editingFinished();
-
-    void on_packetASCIIEdit_textEdited(const QString &arg1);
-
-    void on_packetIPEdit_editingFinished();
-
-    void on_searchLineEdit_textEdited(const QString &arg1);
-
-
-    void on_toClipboardButton_clicked();
-
-    void on_packetsTable_itemSelectionChanged();
-
-    void on_bugsLinkButton_clicked();
-
-    void on_forumsPacketSenderButton_clicked();
-
-    void on_saveLogButton_clicked();
-
-    void on_actionAbout_triggered();
-
-    void on_actionHelp_triggered();
-
-    void on_actionSettings_triggered();
-
-    void on_actionExit_triggered();
-
-    void on_actionImport_Packets_triggered();
-    void on_actionExport_Packets_triggered();
-
-    void on_actionImport_Packets_JSON_triggered();
-    void on_actionExport_Packets_JSON_triggered();
+        //shortcut keys... would be better if used lambda
+        void poodlepic();
+        void shortcutkey1();
+        void shortcutkey2();
+        void shortcutkey3();
+        void shortcutkey4();
+        void shortcutkey5();
+        void shortcutkey6();
+        void shortcutkey7();
 
 
-    void on_actionCloud_triggered();
+    private slots:
+        void on_packetHexEdit_lostFocus();
+        void on_packetASCIIEdit_lostFocus();
+
+        void sendClick(QString packetName);
+
+        void statusBarMessage(const QString & msg, int timeout, bool override);
+
+        void on_savePacketButton_clicked();
+
+        void on_testPacketButton_clicked();
+
+        void on_deletePacketButton_clicked();
+
+        void on_packetIPEdit_lostFocus();
+
+        void on_packetPortEdit_lostFocus();
+
+        void httpFinished(QNetworkReply* pReply);
+
+        void on_packetsTable_itemChanged(QTableWidgetItem *item);
+
+        void on_packetsTable_itemClicked(QTableWidgetItem *item);
+        void refreshTimerTimeout();
+
+        void on_trafficLogClearButton_clicked();
+
+        void on_saveTrafficPacket_clicked();
 
 
-    void on_persistentTCPCheck_clicked(bool checked);
+        void on_packetASCIIEdit_editingFinished();
+
+        void on_packetHexEdit_editingFinished();
+
+        void on_packetASCIIEdit_textEdited(const QString &arg1);
+
+        void on_packetIPEdit_editingFinished();
+
+        void on_searchLineEdit_textEdited(const QString &arg1);
 
 
-    void on_actionSubnet_Calculator_triggered();
+        void on_toClipboardButton_clicked();
+
+        void on_packetsTable_itemSelectionChanged();
+
+        void on_bugsLinkButton_clicked();
+
+        void on_forumsPacketSenderButton_clicked();
+
+        void on_saveLogButton_clicked();
+
+        void on_actionAbout_triggered();
+
+        void on_actionHelp_triggered();
+
+        void on_actionSettings_triggered();
+
+        void on_actionExit_triggered();
+
+        void on_actionImport_Packets_triggered();
+        void on_actionExport_Packets_triggered();
+
+        void on_actionImport_Packets_JSON_triggered();
+        void on_actionExport_Packets_JSON_triggered();
 
 
-    void on_resendEdit_editingFinished();
-
-    void on_loadFileButton_clicked();
-
-    void on_actionDonate_Thank_You_triggered();
+        void on_actionCloud_triggered();
 
 
-private:
-    Ui::MainWindow *ui;
-    QList<Packet> packetsLogged;
-    QList<Packet> packetsSaved;
-    QList<Packet> packetsRepeat;
-    int stopResending;
-    PacketNetwork packetNetwork;
-    QNetworkAccessManager  * http;
-    QTimer refreshTimer;
-    bool tableActive;
-    QPushButton * udpServerStatus;
-    QPushButton * tcpServerStatus;
-    QPushButton * sslServerStatus;
-    QPushButton * stopResendingButton;
-    QPushButton * IPmodeButton;
-
-    QString IPv4Stylesheet;
-    QString IPv6Stylesheet;
+        void on_persistentTCPCheck_clicked(bool checked);
 
 
+        void on_actionSubnet_Calculator_triggered();
 
-    QStringList packetTableHeaders;
-    QStringList packetSavedTableHeaders;
 
-    Packet lastSendPacket;
+        void on_resendEdit_editingFinished();
 
-    int maxLogSize;
+        void on_loadFileButton_clicked();
 
-    float multiSendDelay;
-    int cancelResendNum;
-    int resendCounter;
+        void on_actionDonate_Thank_You_triggered();
 
-    bool asciiEditTranslateEBCDIC;
 
-    void setIPMode();
-    void saveSession(Packet sessionPacket);
+    private:
+        Ui::MainWindow *ui;
+        QList<Packet> packetsLogged;
+        QList<Packet> packetsSaved;
+        QList<Packet> packetsRepeat;
+        int stopResending;
+        PacketNetwork packetNetwork;
+        QNetworkAccessManager  * http;
+        QTimer refreshTimer;
+        bool tableActive;
+        QPushButton * udpServerStatus;
+        QPushButton * tcpServerStatus;
+        QPushButton * sslServerStatus;
+        QPushButton * stopResendingButton;
+        QPushButton * IPmodeButton;
 
-    void packetsImported(QList<Packet> packetSet);
+        QString IPv4Stylesheet;
+        QString IPv6Stylesheet;
+
+
+
+        QStringList packetTableHeaders;
+        QStringList packetSavedTableHeaders;
+
+        Packet lastSendPacket;
+
+        int maxLogSize;
+
+        float multiSendDelay;
+        int cancelResendNum;
+        int resendCounter;
+
+        bool asciiEditTranslateEBCDIC;
+
+        void setIPMode();
+        void saveSession(Packet sessionPacket);
+
+        void packetsImported(QList<Packet> packetSet);
 };
 
 #endif // MAINWINDOW_H

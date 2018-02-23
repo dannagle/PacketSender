@@ -38,8 +38,8 @@ bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, int ipMode)
 
 
     bool bindResult = listen(
-                IPV4_OR_IPV6
-                , port);
+                          IPV4_OR_IPV6
+                          , port);
 
     QDEBUG() << "Binding" << serverPort() << bindResult;
     return bindResult;
@@ -58,7 +58,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     TCPThread *thread = new TCPThread(socketDescriptor, this);
     thread->isSecure = encrypted;
     QDEBUGVAR(thread->isSecure);
-    if(persistentConnectCheck) {
+    if (persistentConnectCheck) {
         PersistentConnection * pcWindow = new PersistentConnection();
         thread->incomingPersistent = true;
         pcWindow->initWithThread(thread, serverPort());
@@ -66,9 +66,9 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
         connect(pcWindow->thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
 
         QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
                  << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()),pcWindow, SLOT(socketDisconnected()));
+        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()), pcWindow, SLOT(socketDisconnected()));
 
 
         pcWindow->show();
@@ -86,7 +86,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
         QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString,int,bool)), this, SLOT(toStatusBarECHO(QString,int,bool)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
                  << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
 
         thread->start();

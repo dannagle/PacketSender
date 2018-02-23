@@ -9,7 +9,8 @@
 #include "packet.h"
 
 
-namespace Ui {
+namespace Ui
+{
 class CloudUI;
 }
 
@@ -26,67 +27,67 @@ typedef struct PacketSet {
 
 class CloudUI : public QDialog
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit CloudUI(QWidget *parent = 0);
-    ~CloudUI();
+    public:
+        explicit CloudUI(QWidget *parent = 0);
+        ~CloudUI();
 
-signals:
-    void packetsImported(QList<Packet> packetSet);
-
-
-private slots:
-    void on_loginButton_clicked();
-
-    void on_saveToCloudButton_clicked();
-
-    void on_viewPublicButton_clicked();
-
-    void on_importURLButton_clicked();
-
-    void on_importPacketsButton_clicked();
-
-    void replyFinished(QNetworkReply *request);
-
-    void on_makePublicCheck_clicked(bool checked);
-
-    void on_createAccountButton_clicked();
-
-    void on_privacyButton_clicked();
-
-    void on_termsButton_clicked();
+    signals:
+        void packetsImported(QList<Packet> packetSet);
 
 
-    void on_deletePacketButton_clicked();
+    private slots:
+        void on_loginButton_clicked();
 
-    void on_cloudLinkButton_clicked();
+        void on_saveToCloudButton_clicked();
 
-    void on_packetSetTable_clicked(const QModelIndex &index);
+        void on_viewPublicButton_clicked();
 
-private:
-    void loadPacketSetTable();
+        void on_importURLButton_clicked();
 
-    void popMsg(QString title, QString msg, bool isError);
+        void on_importPacketsButton_clicked();
 
-    void doPost(QUrlQuery postData);
+        void replyFinished(QNetworkReply *request);
 
-    bool suppressAlert;
+        void on_makePublicCheck_clicked(bool checked);
 
+        void on_createAccountButton_clicked();
 
-    QString un;
-    QString pw;
+        void on_privacyButton_clicked();
 
-    QList<Packet> packets;
-
-    Ui::CloudUI *ui;
-    QList<Packet> packetsToImport;
-    QList<Packet> packetsToExport;
-    QList<Packet> packetsFound;
-    QList<PacketSet> packetSets;
+        void on_termsButton_clicked();
 
 
-    QNetworkAccessManager  * http;
+        void on_deletePacketButton_clicked();
+
+        void on_cloudLinkButton_clicked();
+
+        void on_packetSetTable_clicked(const QModelIndex &index);
+
+    private:
+        void loadPacketSetTable();
+
+        void popMsg(QString title, QString msg, bool isError);
+
+        void doPost(QUrlQuery postData);
+
+        bool suppressAlert;
+
+
+        QString un;
+        QString pw;
+
+        QList<Packet> packets;
+
+        Ui::CloudUI *ui;
+        QList<Packet> packetsToImport;
+        QList<Packet> packetsToExport;
+        QList<Packet> packetsFound;
+        QList<PacketSet> packetSets;
+
+
+        QNetworkAccessManager  * http;
 
 
 };

@@ -53,7 +53,7 @@ CloudUI::CloudUI(QWidget *parent) :
 
     ui->cloudTabWidget->setCurrentIndex(0);
 
-    ui->createAccountButton->setIcon( QIcon("://icons/ic_person_black_24dp_2x.png"));
+    ui->createAccountButton->setIcon(QIcon("://icons/ic_person_black_24dp_2x.png"));
     linkifyButton(ui->createAccountButton);
 
     linkifyButton(ui->termsButton);
@@ -65,8 +65,8 @@ CloudUI::CloudUI(QWidget *parent) :
 
     http = new QNetworkAccessManager(this); //Cloud UI http object
 
-    if(! connect(http, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(replyFinished(QNetworkReply*))) ) {
+    if (! connect(http, SIGNAL(finished(QNetworkReply*)),
+                  this, SLOT(replyFinished(QNetworkReply*)))) {
 
         QDEBUG() << "http request finished connection false";
 
@@ -91,7 +91,7 @@ CloudUI::CloudUI(QWidget *parent) :
 
     packets = Packet::fetchAllfromDB("");
 
-    ui->shareBlurbLabel->setText("Saving " + QString::number(packets.size()) +" packet set to cloud");
+    ui->shareBlurbLabel->setText("Saving " + QString::number(packets.size()) + " packet set to cloud");
 
 
     settings.setValue("cloudPassword", ui->passwordEdit->text());
@@ -113,10 +113,10 @@ void CloudUI::popMsg(QString title, QString msg, bool isError)
 
     QMessageBox msgBox;
     msgBox.setWindowTitle(title);
-    msgBox.setWindowIcon( QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
-    msgBox.setStandardButtons(QMessageBox::Ok );
+    msgBox.setWindowIcon(QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
+    msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
-    if(isError){
+    if (isError) {
         msgBox.setIcon(QMessageBox::Warning);
     } else {
         msgBox.setIcon(QMessageBox::Information);
@@ -124,7 +124,7 @@ void CloudUI::popMsg(QString title, QString msg, bool isError)
     }
     msgBox.setText(msg);
 
-    if(!suppressAlert) {
+    if (!suppressAlert) {
         msgBox.exec();
     }
 
@@ -137,9 +137,8 @@ void CloudUI::popMsg(QString title, QString msg, bool isError)
 bool isLetterNumUnder(QString str)
 {
 
-    for (int i =0;i<str.size();i++)
-    {
-        if(str[i] == '_') {
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] == '_') {
             continue;
         }
         if (str[i].isDigit()) {
@@ -163,14 +162,14 @@ void CloudUI::replyFinished(QNetworkReply* request)
 
     QString dataStringDebug = dataString;
     dataStringDebug.truncate(200);
-    QDEBUG() <<"Request complete:" << dataStringDebug;
+    QDEBUG() << "Request complete:" << dataStringDebug;
 
     ui->loginButton->setEnabled(true);
     ui->importURLButton->setEnabled(true);
 
-    if(dataString.toLower().startsWith("success")) {
+    if (dataString.toLower().startsWith("success")) {
         popMsg("Success", dataString, false);
-        if(ui->passwordConfirmEdit->isVisible()) {
+        if (ui->passwordConfirmEdit->isVisible()) {
             ui->cloudTabWidget->setCurrentIndex(2);
             on_createAccountButton_clicked();
         }
@@ -181,7 +180,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
         return;
     }
 
-    if(dataString.toLower().startsWith("error")) {
+    if (dataString.toLower().startsWith("error")) {
         popMsg("Error", dataString, true);
         return;
     }
@@ -192,16 +191,16 @@ void CloudUI::replyFinished(QNetworkReply* request)
 
     bool success = false;
 
-    if(!doc.isNull()) {
+    if (!doc.isNull()) {
         //valid json
-        if(doc.isArray()) {
+        if (doc.isArray()) {
             //valid array
             QJsonArray jsonArray = doc.array();
-            if(!jsonArray.isEmpty()) {
+            if (!jsonArray.isEmpty()) {
                 QDEBUG() << "Found" <<  jsonArray.size() << "sets";
                 packetSets.clear();
 
-                for(int i=0; i < jsonArray.size(); i++) {
+                for (int i = 0; i < jsonArray.size(); i++) {
                     PacketSet pktSet;
                     QJsonObject json = jsonArray[i].toObject();
                     pktSet.name  = json["name"].toString();
@@ -210,11 +209,11 @@ void CloudUI::replyFinished(QNetworkReply* request)
                     pktSet.path = json["path"].toString();
                     pktSet.ispublic = json["public"].toString().toInt();
                     QByteArray jsonData = json["packetjson"].toString().toLatin1();
-                    if(!jsonData.isEmpty()) {
+                    if (!jsonData.isEmpty()) {
                         pktSet.packets = Packet::ImportJSON(jsonData);
                         QDEBUG() << "Set" << pktSet.name << "has" << pktSet.packets.size() << "packets";
 
-                        if(pktSet.packets.size() > 0) {
+                        if (pktSet.packets.size() > 0) {
                             success = true;
                             packetSets.append(pktSet);
                         }
@@ -228,7 +227,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
         }
     }
 
-    if(success) {
+    if (success) {
         //popMsg("Success", "Found " + QString::number(packetSets.size()) + " sets of packets!", false);
         loadPacketSetTable();
         ui->cloudTabWidget->setCurrentIndex(1);
@@ -268,7 +267,7 @@ void CloudUI::loadPacketSetTable()
 
 
     ui->packetSetTable->setRowCount(packetSets.size());
-    for(int i=0; i < packetSets.size(); i++ ) {
+    for (int i = 0; i < packetSets.size(); i++) {
         QTableWidgetItem  * itemName = new QTableWidgetItem(packetSets[i].name);
         QTableWidgetItem  * itemSize = new QTableWidgetItem(QString::number(packetSets[i].packets.size()));
         QTableWidgetItem  * lastupdate = new QTableWidgetItem(packetSets[i].lastupdate);
@@ -296,7 +295,7 @@ void CloudUI::loadPacketSetTable()
 
     ui->packetSetTable->resizeColumnsToContents();
     ui->packetSetTable->resizeRowsToContents();
-    ui->packetSetTable->horizontalHeader()->setStretchLastSection( true );
+    ui->packetSetTable->horizontalHeader()->setStretchLastSection(true);
 
 
 }
@@ -310,20 +309,20 @@ void CloudUI::on_loginButton_clicked()
 
     QString un = ui->usernameEdit->text().trimmed();
 
-    if(!isLetterNumUnder(un)) {
+    if (!isLetterNumUnder(un)) {
         popMsg("Invalid.", "Usernames may only be letters, numbers, underscores", true);
         ui->usernameEdit->setFocus();
         return;
     }
 
-    if(un.size() < 3) {
+    if (un.size() < 3) {
         popMsg("Too short.", "Username must be at least 3 characters.", true);
         ui->usernameEdit->setFocus();
         return;
     }
 
     QString pw = ui->passwordEdit->text().trimmed();
-    if(pw.size() < 3) {
+    if (pw.size() < 3) {
         popMsg("Too short.", "Passwords must be at least 3 characters.", true);
         ui->usernameEdit->setFocus();
         return;
@@ -334,8 +333,8 @@ void CloudUI::on_loginButton_clicked()
     postData.addQueryItem("un", ui->usernameEdit->text());
     postData.addQueryItem("pw64", pw64);
 
-    if(ui->passwordConfirmEdit->isVisible()) {
-        if(ui->passwordConfirmEdit->text() != ui->passwordEdit->text()) {
+    if (ui->passwordConfirmEdit->isVisible()) {
+        if (ui->passwordConfirmEdit->text() != ui->passwordEdit->text()) {
             popMsg("Mismatch.", "Passwords do not match.", true);
             ui->passwordEdit->setFocus();
             return;
@@ -351,7 +350,7 @@ void CloudUI::on_loginButton_clicked()
     settings.setValue("rememberLoginCheck", ui->rememberLoginCheck->isChecked());
 
 
-    if(ui->rememberLoginCheck->isChecked()) {
+    if (ui->rememberLoginCheck->isChecked()) {
         settings.setValue("cloudUsername", ui->usernameEdit->text());
         settings.setValue("cloudPassword", ui->passwordEdit->text());
     }
@@ -366,7 +365,7 @@ void CloudUI::doPost(QUrlQuery postData)
 
     QNetworkRequest request(QUrl(CLOUD_URL));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
-        "application/x-www-form-urlencoded");
+                      "application/x-www-form-urlencoded");
     QByteArray pData = postData.toString(QUrl::FullyEncoded).toUtf8();
     QDEBUG() << (CLOUD_URL); // << QString(pData);
     http->post(request, pData);
@@ -387,7 +386,7 @@ void CloudUI::on_saveToCloudButton_clicked()
 
     QString pname = ui->packetSetNameEdit->text().trimmed();
 
-    if(pname.isEmpty()) {
+    if (pname.isEmpty()) {
         popMsg("Empty", "Set name cannot be empty", true);
         return;
     }
@@ -396,9 +395,9 @@ void CloudUI::on_saveToCloudButton_clicked()
     QString pubblurb = ui->descriptionExportEdit->toPlainText().trimmed();
     postData.addQueryItem("pubblurb", pubblurb);
 
-    if(ui->makePublicCheck->isChecked()) {
+    if (ui->makePublicCheck->isChecked()) {
         postData.addQueryItem("makepublic", "1");
-        if(pubblurb.isEmpty()) {
+        if (pubblurb.isEmpty()) {
             popMsg("Empty", "Public description cannot be empty", true);
             return;
         }
@@ -420,7 +419,7 @@ void CloudUI::on_importURLButton_clicked()
 {
     QString url = ui->importURLEdit->text().trimmed();
 
-    if(!url.endsWith("/json")) {
+    if (!url.endsWith("/json")) {
         url.append("/json");
     }
 
@@ -435,11 +434,11 @@ void CloudUI::on_importPacketsButton_clicked()
     QModelIndexList indexes = ui->packetSetTable->selectionModel()->selectedIndexes();
     QDEBUGVAR(indexes.size());
 
-    if(indexes.size() > 0) {
+    if (indexes.size() > 0) {
         QModelIndex index = indexes.first();
         int packetsetindex = index.data(Qt::UserRole).toInt();
         QDEBUGVAR(packetsetindex);
-        if(packetSets.size() > packetsetindex) {
+        if (packetSets.size() > packetsetindex) {
             emit packetsImported(packetSets[packetsetindex].packets);
         }
     }
@@ -456,7 +455,7 @@ void CloudUI::on_makePublicCheck_clicked(bool checked)
 
 void CloudUI::on_createAccountButton_clicked()
 {
-    if(ui->passwordConfirmEdit->isVisible()) {
+    if (ui->passwordConfirmEdit->isVisible()) {
         ui->passwordConfirmEdit->hide();
         ui->passwordConfirmLabel->hide();
         ui->createAccountButton->setText("Create a new account.");
@@ -503,10 +502,10 @@ void CloudUI::on_deletePacketButton_clicked()
     QString name = "";
     int packetsetindex = -1;
 
-    if(indexes.size() > 0) {
+    if (indexes.size() > 0) {
         QModelIndex index = indexes.first();
         packetsetindex = index.data(Qt::UserRole).toInt();
-        if(packetSets.size() > packetsetindex) {
+        if (packetSets.size() > packetsetindex) {
             name = packetSets[packetsetindex].name;
         }
     } else {
@@ -514,7 +513,7 @@ void CloudUI::on_deletePacketButton_clicked()
         return;
     }
 
-    if(name.isEmpty() || packetsetindex < 0) {
+    if (name.isEmpty() || packetsetindex < 0) {
         popMsg("Not found", "Set was not found.", true);
         return;
     }
@@ -523,13 +522,13 @@ void CloudUI::on_deletePacketButton_clicked()
 
     QMessageBox msgBox;
     msgBox.setWindowTitle("Delete Set");
-    msgBox.setWindowIcon( QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
+    msgBox.setWindowIcon(QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     msgBox.setIcon(QMessageBox::Warning);
     msgBox.setText("Delete the set " + name + " from cloud?");
     int yesno = msgBox.exec();
-    if(yesno == QMessageBox::Yes) {
+    if (yesno == QMessageBox::Yes) {
         packetSets.removeAt(packetsetindex);
         loadPacketSetTable();
 
@@ -543,7 +542,7 @@ void CloudUI::on_packetSetTable_clicked(const QModelIndex &index)
     QString path = index.data(Qt::UserRole + 1).toString();
     int ispublic  = index.data(Qt::UserRole + 2).toInt();
     ui->viewPublicButton->setText(path);
-    if(ispublic) {
+    if (ispublic) {
         ui->viewPublicButton->show();
     } else {
         ui->viewPublicButton->hide();

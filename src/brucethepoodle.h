@@ -14,20 +14,21 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class BruceThePoodle;
 }
 
 class BruceThePoodle : public QDialog
 {
-    Q_OBJECT
-    
-public:
-    explicit BruceThePoodle(QWidget *parent = 0);
-    ~BruceThePoodle();
-    
-private:
-    Ui::BruceThePoodle *ui;
+        Q_OBJECT
+
+    public:
+        explicit BruceThePoodle(QWidget *parent = 0);
+        ~BruceThePoodle();
+
+    private:
+        Ui::BruceThePoodle *ui;
 };
 
 #endif // BRUCETHEPOODLE_H

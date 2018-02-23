@@ -1,4 +1,7 @@
 
+#Astyle temp
+*.orig
+
 #Mac Stuff
 *.dmg
 *.app

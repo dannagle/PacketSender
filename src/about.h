@@ -3,28 +3,29 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class About;
 }
 
 class About : public QDialog
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit About(QWidget *parent = 0);
-    ~About();
-
-
-public slots:
-    void gotoPacketSenderDotCom();
-    void gotoDanNagleDotCom();
-    void gotoDanNaglePayPal();
-    void gotoNagleCode();
+    public:
+        explicit About(QWidget *parent = 0);
+        ~About();
 
 
-private:
-    Ui::About *ui;
+    public slots:
+        void gotoPacketSenderDotCom();
+        void gotoDanNagleDotCom();
+        void gotoDanNaglePayPal();
+        void gotoNagleCode();
+
+
+    private:
+        Ui::About *ui;
 };
 
 #endif // ABOUT_H

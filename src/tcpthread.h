@@ -16,46 +16,46 @@
 
 class TCPThread : public QThread
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    TCPThread(int socketDescriptor, QObject *parent);
-    TCPThread(Packet sendPacket, QObject *parent);
-    void sendAnother(Packet sendPacket);
-    static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
+    public:
+        TCPThread(int socketDescriptor, QObject *parent);
+        TCPThread(Packet sendPacket, QObject *parent);
+        void sendAnother(Packet sendPacket);
+        static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
-    void run();
-    bool sendFlag;
-    bool incomingPersistent;
-    bool closeRequest;   
-    bool isSecure;
-    bool isEncrypted();
+        void run();
+        bool sendFlag;
+        bool incomingPersistent;
+        bool closeRequest;
+        bool isSecure;
+        bool isEncrypted();
 
-signals:
-    void error(QSslSocket::SocketError socketError);
+    signals:
+        void error(QSslSocket::SocketError socketError);
 
-    void packetReceived(Packet sendpacket);
-    void toStatusBar(const QString & message, int timeout = 0, bool override = false);
-    void packetSent(Packet sendpacket);
-    void connectStatus(QString message);
+        void packetReceived(Packet sendpacket);
+        void toStatusBar(const QString & message, int timeout = 0, bool override = false);
+        void packetSent(Packet sendpacket);
+        void connectStatus(QString message);
 
-public slots:
-    void sendPersistant(Packet sendpacket);
+    public slots:
+        void sendPersistant(Packet sendpacket);
 
-    void closeConnection();
-private slots:
-    void wasdisconnected();
+        void closeConnection();
+    private slots:
+        void wasdisconnected();
 
-private:
-    int socketDescriptor;
-    QString text;
-    Packet sendPacket;
-    void init();
-    void writeResponse(QSslSocket *sock, Packet tcpPacket);
-    QSslSocket * clientConnection;
-    bool insidePersistent;
+    private:
+        int socketDescriptor;
+        QString text;
+        Packet sendPacket;
+        void init();
+        void writeResponse(QSslSocket *sock, Packet tcpPacket);
+        QSslSocket * clientConnection;
+        bool insidePersistent;
 
-    void persistentConnectionLoop();
+        void persistentConnectionLoop();
 };
 
 #endif // TCPTHREAD_H
