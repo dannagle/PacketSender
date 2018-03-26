@@ -645,6 +645,8 @@ void TCPThread::run()
         sendPacket =  tcpPacket;
         sendPacket.persistent = true;
         sendPacket.hexString.clear();
+        sendPacket.port = clientConnection->peerPort();
+        sendPacket.fromPort = clientConnection->localPort();
         persistentConnectionLoop();
     }
 

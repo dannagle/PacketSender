@@ -33,7 +33,7 @@
           <item>
            <widget class="QCheckBox" name="udpServerEnableCheck">
             <property name="text">
-             <string>Enable UDP Server</string>
+             <string>Enable UDP Servers</string>
             </property>
            </widget>
           </item>
@@ -42,7 +42,7 @@
             <item>
              <widget class="QLabel" name="udpServerLabel">
               <property name="text">
-               <string>UDP Server Port (or 0 for random)</string>
+               <string>UDP Server Ports (comma-separated, 0 for random)</string>
               </property>
              </widget>
             </item>
@@ -58,7 +58,7 @@
           <item>
            <widget class="QCheckBox" name="tcpServerEnableCheck">
             <property name="text">
-             <string>Enable TCP Server</string>
+             <string>Enable TCP Servers</string>
             </property>
            </widget>
           </item>
@@ -67,7 +67,7 @@
             <item>
              <widget class="QLabel" name="tcpServerLabel">
               <property name="text">
-               <string>TCP Server Port (or 0 for random)</string>
+               <string>TCP Server Port (comma-separated, 0 for random)</string>
               </property>
              </widget>
             </item>
@@ -83,7 +83,7 @@
           <item>
            <widget class="QCheckBox" name="sslServerEnableCheck">
             <property name="text">
-             <string>Enable SSL/TLS Server</string>
+             <string>Enable SSL/TLS Servers</string>
             </property>
            </widget>
           </item>
@@ -92,7 +92,7 @@
             <item>
              <widget class="QLabel" name="label_20">
               <property name="text">
-               <string>SSL Server Port (or 0 for random)</string>
+               <string>SSL Server Port (comma-separated, 0 for random)</string>
               </property>
              </widget>
             </item>

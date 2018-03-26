@@ -24,8 +24,12 @@ class Settings : public QDialog
 
         static QStringList defaultPacketTableHeader();
         static QStringList defaultTrafficTableHeader();
+
+        static QList<int> portsToIntList(QString ports);
+        static QString intListToPorts(QList<int> portList);
         void statusBarMessage(QString msg);
-    private slots:
+
+private slots:
         void on_buttonBox_accepted();
 
         void on_asciiResponseEdit_textEdited(const QString &arg1);

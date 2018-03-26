@@ -12,7 +12,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
@@ -90,9 +89,13 @@ Settings::Settings(QWidget *parent) :
 
     ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
 
-    ui->udpServerPortEdit->setText(settings.value("udpPort", "0").toString());
-    ui->tcpServerPortEdit->setText(settings.value("tcpPort", "0").toString());
-    ui->sslServerPortEdit->setText(settings.value("sslPort", "0").toString());
+    QList<int> udpList = portsToIntList(settings.value("udpPort", "0").toString());
+    QList<int> tcpList = portsToIntList(settings.value("tcpPort", "0").toString());
+    QList<int> sslList = portsToIntList(settings.value("sslPort", "0").toString());
+
+    ui->udpServerPortEdit->setText(intListToPorts(udpList));
+    ui->tcpServerPortEdit->setText(intListToPorts(tcpList));
+    ui->sslServerPortEdit->setText(intListToPorts(sslList));
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
@@ -191,26 +194,36 @@ void Settings::on_buttonBox_accepted()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    unsigned int tcpport = ui->tcpServerPortEdit->text().toUInt();
-    unsigned int sslport = ui->sslServerPortEdit->text().toUInt();
+    QList<int> tcpList = Settings::portsToIntList(ui->tcpServerPortEdit->text());
+    QList<int> sslList = Settings::portsToIntList(ui->sslServerPortEdit->text());
 
-    if (tcpport != 0) {
-        if (sslport == tcpport) {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
-            msgBox.exec();
-            return;
+    int t, s;
+    foreach (t, tcpList) {
+        if(t == 0) continue;
+        foreach (s, sslList) {
+            if(s == 0) continue;
+
+            if(t == s) {
+                QMessageBox msgBox;
+                msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
+                msgBox.setStandardButtons(QMessageBox::Ok);
+                msgBox.setDefaultButton(QMessageBox::Ok);
+                msgBox.setIcon(QMessageBox::Warning);
+                msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
+                msgBox.exec();
+                return;
+            }
+
         }
+
 
     }
 
-    settings.setValue("udpPort", ui->udpServerPortEdit->text().toUInt());
-    settings.setValue("tcpPort", ui->tcpServerPortEdit->text().toUInt());
-    settings.setValue("sslPort", ui->sslServerPortEdit->text().toUInt());
+
+
+    settings.setValue("udpPort", ui->udpServerPortEdit->text());
+    settings.setValue("tcpPort", ui->tcpServerPortEdit->text());
+    settings.setValue("sslPort", ui->sslServerPortEdit->text());
 
     settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
@@ -359,6 +372,57 @@ QStringList Settings::defaultTrafficTableHeader()
     list << "Time" << "From IP" << "From Port" << "To IP" << "To Port" << "Method" << "Error" << "ASCII" << "Hex";
 
     return list;
+
+}
+
+QString Settings::intListToPorts(QList<int> portList)
+{
+    if(portList.isEmpty()) {
+        return "0";
+    }
+
+    int p;
+    QStringList joinedU;
+
+    foreach (p, portList) {
+        joinedU.append(QString::number(p));
+    }
+
+    return joinedU.join(", ");
+
+}
+
+QList<int> Settings::portsToIntList(QString ports)
+{
+
+    QList<int> returnList;
+    returnList.clear();
+    QString udpPortString = ports;
+    udpPortString.replace(", ", " ");
+    udpPortString.replace("; ", " ");
+    udpPortString.replace("& ", " ");
+    udpPortString.replace("| ", " ");
+    udpPortString.replace(". ", " ");
+    udpPortString.replace("\r", " ");
+    udpPortString.replace("\n", " ");
+    udpPortString = udpPortString.simplified();
+
+    QStringList portList = udpPortString.split(" ");
+    QString portS;
+    bool ok = false;
+    foreach (portS, portList) {
+        int theport = portS.toInt(&ok);
+        if(ok && (!returnList.contains(theport)) && (theport >= 0)) {
+            returnList.append(theport);
+        }
+    }
+
+    if(returnList.isEmpty()) {
+        returnList.append(0);
+    }
+
+    return returnList;
+
 
 }
 

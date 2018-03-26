@@ -157,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stopResendingButton->hide();
 
-    udpServerStatus = new QPushButton("UDP:" + QString::number(packetNetwork.getUDPPort()));
+    udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
     udpServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
     udpServerStatus->setFlat(true);
     udpServerStatus->setCursor(Qt::PointingHandCursor);
@@ -171,13 +171,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //updatewidget
-    tcpServerStatus = new QPushButton("TCP:" + QString::number(packetNetwork.getTCPPort()));
+    tcpServerStatus = new QPushButton("TCP:" + (packetNetwork.getTCPPortString()));
     tcpServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
     tcpServerStatus->setFlat(true);
     tcpServerStatus->setCursor(Qt::PointingHandCursor);
     tcpServerStatus->setIcon(QIcon(TCPRXICON));
 
-    sslServerStatus = new QPushButton("SSL:" + QString::number(packetNetwork.getSSLPort()));
+    sslServerStatus = new QPushButton("SSL:" + (packetNetwork.getSSLPortString()));
     sslServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
     sslServerStatus->setFlat(true);
     sslServerStatus->setCursor(Qt::PointingHandCursor);
@@ -586,8 +586,9 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
 void MainWindow::UDPServerStatus()
 {
-    if (packetNetwork.getUDPPort() > 0) {
-        udpServerStatus->setText("UDP:" + QString::number(packetNetwork.getUDPPort()));
+
+    if (packetNetwork.UDPListening()) {
+        udpServerStatus->setText("UDP:" + (packetNetwork.getUDPPortString()));
 
     } else {
         udpServerStatus->setText("UDP Server Disabled");
@@ -599,11 +600,10 @@ void MainWindow::UDPServerStatus()
 
 }
 
-
 void MainWindow::SSLServerStatus()
 {
-    if (packetNetwork.getSSLPort() > 0) {
-        sslServerStatus->setText("SSL:" + QString::number(packetNetwork.getSSLPort()));
+    if (packetNetwork.SSLListening()) {
+        sslServerStatus->setText("SSL:" + (packetNetwork.getSSLPortString()));
     } else {
         sslServerStatus->setText("SSL Server Disabled");
 
@@ -615,8 +615,8 @@ void MainWindow::SSLServerStatus()
 
 void MainWindow::TCPServerStatus()
 {
-    if (packetNetwork.getTCPPort() > 0) {
-        tcpServerStatus->setText("TCP:" + QString::number(packetNetwork.getTCPPort()));
+    if (packetNetwork.TCPListening()) {
+        tcpServerStatus->setText("TCP:" + (packetNetwork.getTCPPortString()));
     } else {
         tcpServerStatus->setText("TCP Server Disabled");
 
@@ -1630,6 +1630,9 @@ void MainWindow::refreshTimerTimeout()
         //ui->mainTabWidget->setTabText(1,"Traffic Log (" + QString::number(packetsLogged.size()) +")");
 
     }
+
+    //got nothing else to do. check datagrams.
+    packetNetwork.readPendingDatagrams();
 
 
 }

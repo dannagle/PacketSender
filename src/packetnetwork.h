@@ -39,9 +39,10 @@ class PacketNetwork : public QObject
         void init();
 
         QString debugQByteArray(QByteArray debugArray);
-        int getUDPPort();
-        int getTCPPort();
-        int getSSLPort();
+
+        QString getUDPPortString();
+        QString getTCPPortString();
+        QString getSSLPortString();
 
         void kill();
         QString responseData;
@@ -57,11 +58,15 @@ class PacketNetwork : public QObject
         void setIPmode(int mode);
         static int getIPmode();
 
+        bool UDPListening();
+        bool TCPListening();
+        bool SSLListening();
+
 
         QList<SmartResponseConfig> smartList;
 
         static QHostAddress resolveDNS(QString hostname);
-    signals:
+signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
         void packetSent(Packet sendpacket);
@@ -81,15 +86,14 @@ class PacketNetwork : public QObject
 
     private:
 
-        QUdpSocket *udpSocket;
-        ThreadedTCPServer * tcp;
-        ThreadedTCPServer * ssl;
+        QList<ThreadedTCPServer *> allTCPServers();
 
         QList<TCPThread *> tcpthreadList;
         QList<PersistentConnection *> pcList;
 
-        //TODO: eventually migrate to a list to support any number of servers.
+        //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;
+        QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
 
 };
