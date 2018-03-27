@@ -588,7 +588,14 @@ void MainWindow::UDPServerStatus()
 {
 
     if (packetNetwork.UDPListening()) {
-        udpServerStatus->setText("UDP:" + (packetNetwork.getUDPPortString()));
+        QString ports = packetNetwork.getUDPPortString();
+        int portcount = packetNetwork.getUDPPortsBound().size();
+        udpServerStatus->setToolTip(ports);
+        if(portcount > 3) {
+            udpServerStatus->setText("UDP: " + QString::number(portcount) + " Ports");
+        } else {
+            udpServerStatus->setText("UDP:" + ports);
+        }
 
     } else {
         udpServerStatus->setText("UDP Server Disabled");
@@ -603,7 +610,15 @@ void MainWindow::UDPServerStatus()
 void MainWindow::SSLServerStatus()
 {
     if (packetNetwork.SSLListening()) {
-        sslServerStatus->setText("SSL:" + (packetNetwork.getSSLPortString()));
+        QString ports = packetNetwork.getSSLPortString();
+        int portcount = packetNetwork.getSSLPortsBound().size();
+        sslServerStatus->setToolTip(ports);
+        if(portcount > 3) {
+            sslServerStatus->setText("SSL: " + QString::number(portcount) + " Ports");
+        } else {
+            sslServerStatus->setText("SSL:" + ports);
+        }
+
     } else {
         sslServerStatus->setText("SSL Server Disabled");
 
@@ -616,7 +631,16 @@ void MainWindow::SSLServerStatus()
 void MainWindow::TCPServerStatus()
 {
     if (packetNetwork.TCPListening()) {
-        tcpServerStatus->setText("TCP:" + (packetNetwork.getTCPPortString()));
+        QString ports = packetNetwork.getTCPPortString();
+        int portcount = packetNetwork.getTCPPortsBound().size();
+        tcpServerStatus->setToolTip(ports);
+        if(portcount > 3) {
+            tcpServerStatus->setText("TCP: " + QString::number(portcount) + " Ports");
+        } else {
+            tcpServerStatus->setText("TCP:" + ports);
+        }
+
+
     } else {
         tcpServerStatus->setText("TCP Server Disabled");
 

@@ -306,7 +306,7 @@ void PacketNetwork::init()
 //TODO add timed event feature?
 
 
-QString PacketNetwork::getUDPPortString()
+QList<int> PacketNetwork::getUDPPortsBound()
 {
     QList<int> pList;
     pList.clear();
@@ -316,9 +316,20 @@ QString PacketNetwork::getUDPPortString()
             pList.append(udp->localPort());
         }
     }
-    return Settings::intListToPorts(pList);
+    return pList;
+
 }
-QString PacketNetwork::getTCPPortString()
+
+QString PacketNetwork::getUDPPortString()
+{
+
+    return Settings::intListToPorts(getUDPPortsBound());
+}
+
+
+
+
+QList<int> PacketNetwork::getTCPPortsBound()
 {
     QList<int> pList;
     pList.clear();
@@ -328,10 +339,21 @@ QString PacketNetwork::getTCPPortString()
             pList.append(tcp->serverPort());
         }
     }
-    return Settings::intListToPorts(pList);
+    return pList;
+
 }
-QString PacketNetwork::getSSLPortString()
+QString PacketNetwork::getTCPPortString()
 {
+    return Settings::intListToPorts(getTCPPortsBound());
+}
+
+
+
+
+
+QList<int> PacketNetwork::getSSLPortsBound()
+{
+
     QList<int> pList;
     pList.clear();
     ThreadedTCPServer * tcp;
@@ -340,7 +362,12 @@ QString PacketNetwork::getSSLPortString()
             pList.append(tcp->serverPort());
         }
     }
-    return Settings::intListToPorts(pList);
+    return pList;
+}
+
+QString PacketNetwork::getSSLPortString()
+{
+    return Settings::intListToPorts(getSSLPortsBound());
 }
 
 

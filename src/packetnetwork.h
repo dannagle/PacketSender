@@ -44,6 +44,10 @@ class PacketNetwork : public QObject
         QString getTCPPortString();
         QString getSSLPortString();
 
+        QList<int> getUDPPortsBound();
+        QList<int> getTCPPortsBound();
+        QList<int> getSSLPortsBound();
+
         void kill();
         QString responseData;
         bool sendResponse;
@@ -66,6 +70,7 @@ class PacketNetwork : public QObject
         QList<SmartResponseConfig> smartList;
 
         static QHostAddress resolveDNS(QString hostname);
+
 signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
