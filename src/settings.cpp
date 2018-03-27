@@ -194,6 +194,7 @@ void Settings::on_buttonBox_accepted()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
+    QList<int> udpList = Settings::portsToIntList(ui->udpServerPortEdit->text());
     QList<int> tcpList = Settings::portsToIntList(ui->tcpServerPortEdit->text());
     QList<int> sslList = Settings::portsToIntList(ui->sslServerPortEdit->text());
 
@@ -221,9 +222,9 @@ void Settings::on_buttonBox_accepted()
 
 
 
-    settings.setValue("udpPort", ui->udpServerPortEdit->text());
-    settings.setValue("tcpPort", ui->tcpServerPortEdit->text());
-    settings.setValue("sslPort", ui->sslServerPortEdit->text());
+    settings.setValue("udpPort", intListToPorts(udpList));
+    settings.setValue("tcpPort", intListToPorts(tcpList));
+    settings.setValue("sslPort", intListToPorts(sslList));
 
     settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
@@ -398,11 +399,11 @@ QList<int> Settings::portsToIntList(QString ports)
     QList<int> returnList;
     returnList.clear();
     QString udpPortString = ports;
-    udpPortString.replace(", ", " ");
-    udpPortString.replace("; ", " ");
-    udpPortString.replace("& ", " ");
-    udpPortString.replace("| ", " ");
-    udpPortString.replace(". ", " ");
+    udpPortString.replace(",", " ");
+    udpPortString.replace(";", " ");
+    udpPortString.replace("&", " ");
+    udpPortString.replace("|", " ");
+    udpPortString.replace(".", " ");
     udpPortString.replace("\r", " ");
     udpPortString.replace("\n", " ");
     udpPortString = udpPortString.simplified();
@@ -413,7 +414,9 @@ QList<int> Settings::portsToIntList(QString ports)
     foreach (portS, portList) {
         int theport = portS.toInt(&ok);
         if(ok && (!returnList.contains(theport)) && (theport >= 0)) {
-            returnList.append(theport);
+            if(theport < 65536) {
+                returnList.append(theport);
+            }
         }
     }
 
