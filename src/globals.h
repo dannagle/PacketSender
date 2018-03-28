@@ -11,7 +11,7 @@
 #define GLOBALS_H
 
 //BEGIN SW VERSION
-#define SW_VERSION "v5.7.1"
+#define SW_VERSION "v5.7.2"
 //END SW VERSION
 
 
