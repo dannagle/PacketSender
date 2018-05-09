@@ -15,6 +15,7 @@
 #include <QSslError>
 #include <QList>
 #include <QSslCipher>
+#include <QDeadlineTimer>
 
 #include "mainwindow.h"
 #define DEBUGMODE 0
@@ -433,10 +434,6 @@ int main(int argc, char *argv[])
         recvData.clear();
         int bytesWriten = 0;
 
-        QTime now = QTime::currentTime();
-        now.start();
-
-
         if (tcp || ssl) {
             QSslSocket sock;
 
@@ -518,8 +515,12 @@ int main(int argc, char *argv[])
                 sock.waitForBytesWritten(1000);
                 //OUTIF() << "Sent:" << Packet::byteArrayToHex(sendData);
                 OUTPUT();
-                while (now.elapsed() <= wait && (sock.state() == QAbstractSocket::ConnectedState)) {
-                    sock.waitForReadyRead(wait - now.elapsed());
+                QDeadlineTimer deadlineTimer(wait);
+                if(wait <= 0) {
+                    deadlineTimer.setDeadline(100);
+                }
+                while ((!deadlineTimer.hasExpired()) && (sock.state() == QAbstractSocket::ConnectedState)) {
+                    sock.waitForReadyRead(100);
                     recvData = sock.readAll();
                     if (recvData.isEmpty()) {
                         continue;
@@ -539,7 +540,9 @@ int main(int argc, char *argv[])
 
                 }
                 sock.disconnectFromHost();
-                sock.waitForDisconnected(1000);
+                if (sock.state() != QAbstractSocket::UnconnectedState) {
+                    sock.waitForDisconnected(1000);
+                }
                 sock.close();
 
                 OUTPUT();
@@ -594,8 +597,12 @@ int main(int argc, char *argv[])
 
 
             OUTPUT();
-            while (now.elapsed() <= wait) {
-                sock.waitForReadyRead(wait - now.elapsed());
+            QDeadlineTimer deadlineTimer(wait);
+            if(wait <= 0) {
+                deadlineTimer.setDeadline(100);
+            }
+            while (!deadlineTimer.hasExpired()) {
+                sock.waitForReadyRead(100);
 
                 if (sock.hasPendingDatagrams()) {
                     QHostAddress sender;
