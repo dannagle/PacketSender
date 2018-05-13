@@ -1,4 +1,12 @@
 
+
+#ci/cd
+*.dmgCanvas
+*.key
+*.pem
+*.backup
+*.bz2
+
 #Astyle temp
 *.orig
 
