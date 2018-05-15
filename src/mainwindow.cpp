@@ -667,6 +667,7 @@ QPushButton *MainWindow::generateDNLink()
 void MainWindow::loadTrafficLogTable()
 {
 
+    static bool initialpackets = false;
     QTableWidgetItem * tItem;
     Packet tempPacket;
 
@@ -769,9 +770,6 @@ void MainWindow::loadTrafficLogTable()
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Error"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
-        QSize tSize = tItem->sizeHint();
-        tSize.setWidth(200);
-        tItem->setSizeHint(tSize);
         Packet::populateTableWidgetItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("ASCII"), tItem);
 
@@ -781,14 +779,16 @@ void MainWindow::loadTrafficLogTable()
 
         rowCounter++;
 
-
-
     }
-    ui->trafficLogTable->setSortingEnabled(true);
 
-    ui->trafficLogTable->resizeColumnsToContents();
-    ui->trafficLogTable->resizeRowsToContents();
-    ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
+    if(ui->trafficLogTable->rowCount() > 0 && (!initialpackets)) {
+        initialpackets = true;
+        ui->trafficLogTable->setSortingEnabled(true);
+
+        ui->trafficLogTable->resizeColumnsToContents();
+        ui->trafficLogTable->resizeRowsToContents();
+        ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
+    }
 
 }
 
