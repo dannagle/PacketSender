@@ -1,14 +1,14 @@
 language: cpp
 compiler: gcc
 sudo: require
-dist: xenial
+dist: trusty
 
 before_install:
-    - sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty -y
-    - sudo apt-get update -qq
+    - sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty
+    - sudo apt-get update
 
 install:
-    - sudo apt-get -y install qt510base qt510declarative binutils xpra
+    - sudo apt-get -y install qt510-meta-full binutils xpra
     - source /opt/qt510/bin/qt510-env.sh
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
