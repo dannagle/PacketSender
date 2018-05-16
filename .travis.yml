@@ -21,6 +21,7 @@ script:
   - cd src
   - sed -i '/include(packetsender_main.pri)/d' PacketSender.pro
   - cat packetsender_main.pri >> PacketSender.pro
+  - tail PacketSender.pro
   - qmake --version
   - qmake PREFIX=/usr
   - make -j4
