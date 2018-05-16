@@ -1,15 +1,15 @@
 language: cpp
 compiler: gcc
 sudo: require
-dist: trusty
+dist: xenial
 
 before_install:
-    - sudo add-apt-repository ppa:beineri/opt-qt58-trusty -y
+    - sudo add-apt-repository ppa:beineri/opt-qt-5.10.1-trusty -y
     - sudo apt-get update -qq
 
 install:
-    - sudo apt-get -y install qt58base qt58declarative binutils xpra
-    - source /opt/qt58/bin/qt58-env.sh
+    - sudo apt-get -y install qt510base qt510declarative binutils xpra
+    - source /opt/qt510/bin/qt510-env.sh
 
 # Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
 before_script:
@@ -19,6 +19,8 @@ before_script:
 
 script:
   - cd src
+  - sed -i '/include(packetsender_main.pri)/d' PacketSender.pro
+  - cat packetsender_main.pri >> PacketSender.pro
   - qmake --version
   - qmake PREFIX=/usr
   - make -j4
