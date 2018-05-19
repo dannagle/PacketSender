@@ -1,9 +1,7 @@
 
 value=`cat buildversion.txt`
 BUILD_VERSION="$(echo -e "${value}" | tr -d '[:space:]')"
-
-git clone --depth=50 --branch=development https://github.com/dannagle/PacketSender
-cd PacketSender/src
+cd src
 qmake --version
 qmake PacketSender.pro
 make -j4
