@@ -1,6 +1,5 @@
 
-value=`cat buildversion.txt`
-BUILD_VERSION="$(echo -e "${value}" | tr -d '[:space:]')"
+BUILD_VERSION=`cat buildversion.txt`
 cd src
 qmake --version
 qmake PacketSender.pro
