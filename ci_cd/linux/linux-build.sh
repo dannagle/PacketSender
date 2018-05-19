@@ -1,4 +1,4 @@
-#!/bin/bash
+
 value=`cat buildversion.txt`
 BUILD_VERSION="$(echo -e "${value}" | tr -d '[:space:]')"
 
