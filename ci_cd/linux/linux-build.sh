@@ -1,4 +1,6 @@
 #!/bin/bash
+value=`cat buildversion.txt`
+BUILD_VERSION="$(echo -e "${value}" | tr -d '[:space:]')"
 
 git clone --depth=50 --branch=development https://github.com/dannagle/PacketSender
 cd PacketSender/src
@@ -17,4 +19,7 @@ chmod a+x linuxdeployqt*.AppImage
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
 ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
 ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage
+rm -rf /home/dan/installers/PacketSender_Linux_x64_v$BUILD_VERSION.AppImage || true
+mv PacketSender-x86_64.AppImage /home/dan/installers/PacketSender_Linux_x64_v$BUILD_VERSION.AppImage
+
 #curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-git$(git rev-parse --short HEAD)-x86_64.AppImage
