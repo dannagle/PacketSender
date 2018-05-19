@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd /tmp
-rm -rf PacketSender || true
 git clone --depth=50 --branch=development https://github.com/dannagle/PacketSender
 cd PacketSender/src
 qmake --version
@@ -20,5 +18,3 @@ unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
 ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -bundle-non-qt-libs
 ./linuxdeployqt*.AppImage ./appdir/usr/bin/PacketSender -appimage
 #curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-git$(git rev-parse --short HEAD)-x86_64.AppImage
-rm -f ~/PacketSender*AppImage || true
-mv PacketSender*AppImage ~
