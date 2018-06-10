@@ -22,3 +22,10 @@ border-radius: 2px;
  border: 1px solid #cccccc
 }
 
+
+QPushButton:pressed	
+{
+background-color: #cccccc;
+}
+
+
