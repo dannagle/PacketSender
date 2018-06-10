@@ -651,8 +651,8 @@ int main(int argc, char *argv[])
         qRegisterMetaType<Packet>();
 
 
-        //Just use default OS styling for Linux. Too many theme variants.
-#ifndef __linux__
+        //Use default OS styling for non-Windows. Too many theme variants.
+#ifdef Q_OS_WIN
         QFile file(":/packetsender.css");
         if (file.open(QFile::ReadOnly)) {
             QString StyleSheet = QLatin1String(file.readAll());
