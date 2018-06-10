@@ -1,10 +1,24 @@
 
 
-QLineEdit, QTableWidget, QTextEdit
-
+QLineEdit, QTableWidget, QTextEdit, QComboBox
 {
 background-color: #ffffff;
 color: #000000;
 }
 
+
+
+
+QPushButton	
+{
+background-color: #ffffff;
+color: #000000;	
+border-radius: 2px;
+ margin: 2px ;
+ padding-left: 8px;
+ padding-right: 8px;
+ padding-top: 2px;
+ padding-bottom: 2px;
+ border: 1px solid #cccccc
+}
 
