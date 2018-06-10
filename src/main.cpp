@@ -661,6 +661,17 @@ int main(int argc, char *argv[])
         }
 #endif
 
+
+#ifdef Q_OS_MAC
+        QFile file(":/packetsender_mac.css");
+        if (file.open(QFile::ReadOnly)) {
+            QString StyleSheet = QLatin1String(file.readAll());
+            //  qDebug() << "stylesheet: " << StyleSheet;
+            a.setStyleSheet(StyleSheet);
+        }
+#endif
+
+
         MainWindow w;
 
 
