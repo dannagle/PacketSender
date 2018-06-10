@@ -1,6 +1,6 @@
 
 
-QLineEdit, QTableWidget, QTextEdit, QComboBox
+QLineEdit, QTableWidget, QTextEdit, QComboBox, QListWidget
 {
 background-color: #ffffff;
 color: #000000;
@@ -27,5 +27,29 @@ QPushButton:pressed
 {
 background-color: #cccccc;
 }
+
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+    background: white;
+    min-width: 8ex;
+ padding-left: 8px;
+ padding-right: 8px;
+ padding-top: 2px;
+    color:black;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: #3366ff;
+    color:white;
+}
+
+QTabBar::tab:selected {
+    border-color: #3366ff;
+    color:white;
+}
+
+
 
 
