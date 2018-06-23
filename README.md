@@ -25,7 +25,10 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 ![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)
 
 ## Packet Sender Mobile
-Packet Sender Mobile supporting iOS and Android is available for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Mobile apps support Packet Sender Cloud for easy syncing of saved packets to your phone. Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
+The mobile apps are open source at this repo:
+https://github.com/dannagle/Packet_Sender_Mobile
+
+Packet Sender Mobile binaries for iOS and Android may be purchased for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
 
 The GitHub project for Packet Sender Mobile is located at https://github.com/dannagle/Packet_Sender_Mobile
 
