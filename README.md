@@ -1,4 +1,4 @@
-# Packet Sender [![Build Status](https://travis-ci.org/dannagle/PacketSender.svg?branch=master)](https://travis-ci.org/dannagle/PacketSender)
+# Packet Sender
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
@@ -26,6 +26,8 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 
 ## Packet Sender Mobile
 Packet Sender Mobile supporting iOS and Android is available for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Mobile apps support Packet Sender Cloud for easy syncing of saved packets to your phone. Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
+
+The GitHub project for Packet Sender Mobile is located at https://github.com/dannagle/Packet_Sender_Mobile
 
 ## Packet Sender Cloud
 Packets sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
@@ -65,9 +67,7 @@ If INI files are found, it will use them instead of `%APPDATA%` or `Library/Appl
 
 
 ### IPv4 and IPv6 Support
-By default, Packet Sender's built-in servers are configured to support IPv4.
-If you wish to use IPv6, there is a toggle switch at the bottom right.
-Click to switch between IPv4 / IPv6.
+Packet Sender's built-in servers are configured to support IPv4 and IPv6. The most recent version of Packet Sender is smart enough to switch between the two modes. Older versions Packet Sender, mostly often found on Linux's older Qt SDK libraries, may render a toggle switch between IPv4 and IPv6. Click to switch between the two.
 
 ![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
 
@@ -81,8 +81,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 ![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
 
 
-* In the bottom right, there are UDP, TCP, and SSL server status and port. You can click to activate or deactivate these.
-* There is also IPv4 Mode and IPv6 Mode. Click to toggle between server modes.
+* In the bottom right, there are UDP, TCP, and SSL server status and port(s). You can click to activate or deactivate these. Packet Sender supports binding to any number of ports.
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
 * In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
