@@ -67,9 +67,7 @@ If INI files are found, it will use them instead of `%APPDATA%` or `Library/Appl
 
 
 ### IPv4 and IPv6 Support
-Packet Sender's built-in servers are configured to support IPv4 and IPv6. The most recent version of Packet Sender is smart enough to switch between the two modes. Older versions Packet Sender, mostly often found on Linux's older Qt SDK libraries, may render a toggle switch between IPv4 and IPv6. Click to switch between the two.
-
-![Packet Sender IP Mode Toggle](screenshots/ipv4_ipv6_toggle.png)
+Packet Sender's built-in servers are configured to support IPv4 and IPv6. The most recent version of Packet Sender is smart enough to switch between the two modes. Older versions Packet Sender, mostly found on Linux's older Qt SDK libraries, may render a toggle switch between IPv4 and IPv6. Click to switch between the two.
 
 Packet Sender's GUI client sender and CLI will detect the type of IP address being used and bind appropriately to send the packet. Note that you must include a scope ID to send.
 
