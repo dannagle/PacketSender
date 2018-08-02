@@ -482,7 +482,7 @@ void CloudUI::on_termsButton_clicked()
 
 void CloudUI::on_cloudLinkButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/login"));
+    QDesktopServices::openUrl(QUrl("https://cloud.packetsender.com/help"));
 
 }
 
