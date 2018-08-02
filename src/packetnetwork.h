@@ -71,6 +71,8 @@ class PacketNetwork : public QObject
 
         static QHostAddress resolveDNS(QString hostname);
 
+        static bool isMulticast(QString ip);
+
 signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);

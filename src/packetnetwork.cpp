@@ -512,6 +512,24 @@ QHostAddress PacketNetwork::resolveDNS(QString hostname)
     }
 }
 
+//Multicast addresses ranges from 224.0.0.0 to 239.255.255.255
+//Multicast addresses in IPv6 use the prefix ff00::/8
+bool PacketNetwork::isMulticast(QString ip)
+{
+    QHostAddress address(ip);
+    if (QAbstractSocket::IPv4Protocol == address.protocol()) {
+        //valid address
+        return address.isMulticast();
+    } else if (QAbstractSocket::IPv6Protocol == address.protocol()) {
+        //valid address
+
+        //am I supporting IPv6?
+        return address.isMulticast();
+    }
+
+    return false;
+}
+
 
 void PacketNetwork::packetToSend(Packet sendpacket)
 {
