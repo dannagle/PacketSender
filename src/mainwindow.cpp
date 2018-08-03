@@ -60,8 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     lastSendPacket.clear();
 
-
-
     setWindowTitle("Packet Sender");
     setWindowIcon(mIcon);
 
@@ -223,15 +221,22 @@ MainWindow::MainWindow(QWidget *parent) :
     resendCounter = 0;
 
 
+    //every 15 seconds
+    slowRefreshTimer.setInterval(15000);
+    connect(&slowRefreshTimer, SIGNAL(timeout()), this, SLOT(slowRefreshTimerTimeout())) ;
+    slowRefreshTimer.start();
+    slowRefreshTimerTimeout();
 
-    refreshTimer.setInterval(100);
-    qDebug() << __FILE__ << "/" << __LINE__  << ": refreshTimer Connection attempt " <<
-             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout())) ;
+
+    //sending and logging
+    refreshTimer.setInterval(90);
+    connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout())) ;
+    refreshTimer.start();
+
 
     packetsLogged.clear();
     loadTrafficLogTable();
 
-    refreshTimer.start();
 
     generateConnectionMenu();
 
@@ -719,7 +724,7 @@ void MainWindow::loadTrafficLogTable()
     } else {
         ui->trafficLogTable->setRowCount(displayPackets.count());
     }
-    unsigned int rowCounter = 0;
+    int rowCounter = 0;
 
     QDEBUGVAR(packetTableHeaders);
 
@@ -737,19 +742,23 @@ void MainWindow::loadTrafficLogTable()
         tItem = new QTableWidgetItem(tempPacket.timestamp.toString(DATETIMEFORMAT));
         tItem->setIcon(tempPacket.getIcon());
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
 
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Time"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.fromIP);
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From IP"), tItem);
 
         tItem = new QTableWidgetItem(QString::number(tempPacket.fromPort));
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From Port"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.toIP);
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To IP"), tItem);
         /*
             packetTableHeaders <<"Time" << "From IP" <<"From Port" << "To IP" <<
@@ -759,22 +768,27 @@ void MainWindow::loadTrafficLogTable()
 
         tItem = new QTableWidgetItem(QString::number(tempPacket.port));
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To Port"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.tcpOrUdp);
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Method"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.errorString);
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Error"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("ASCII"), tItem);
 
         tItem = new QTableWidgetItem(tempPacket.hexString);
         Packet::populateTableWidgetItem(tItem, tempPacket);
+        Packet::setBoldItem(tItem, tempPacket);
         ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Hex"), tItem);
 
         rowCounter++;
@@ -1603,6 +1617,31 @@ void MainWindow::toggleIPv4_IPv6()
     setIPMode();
 
     applyNetworkSettings();
+
+
+}
+
+
+void MainWindow::slowRefreshTimerTimeout()
+{
+    QString oldtitle = this->windowTitle();
+    QString titleString = "Packet Sender - IPs: ";
+    QTextStream out(&titleString);
+
+    QNetworkAddressEntry entry;
+    QList<QNetworkAddressEntry> allEntries = SubnetCalc::nonLoopBackAddresses();
+
+    for (int i=0; i < allEntries.size(); i++) {
+        entry = allEntries[i];
+        out << entry.ip().toString();
+        if(i < allEntries.size() - 1) {
+            out <<", ";
+        }
+    }
+
+    if(titleString != oldtitle) {
+        setWindowTitle(titleString);
+    }
 
 
 }

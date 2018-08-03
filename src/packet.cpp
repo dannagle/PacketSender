@@ -843,6 +843,20 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
     tItem->setToolTip("Data portion is " + QString::number(thedata.size()) + " bytes");
 }
 
+
+
+void Packet::setBoldItem(QTableWidgetItem * tItem, Packet thepacket)
+{
+    QFont originalFont = (tItem)->font();
+    if (!thepacket.fromIP.toUpper().contains("YOU")) {
+        originalFont.setBold(true);
+        tItem->setFont(originalFont);
+    } else {
+        originalFont.setBold(false);
+    }
+}
+
+
 QByteArray Packet::HEXtoByteArray(QString thehex)
 {
 

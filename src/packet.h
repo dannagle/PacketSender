@@ -110,7 +110,8 @@ class Packet
         static QByteArray ExportJSON(QList<Packet> packetList);
         static QList<Packet> ImportJSON(QByteArray data);
         void static removeFromDBList(QStringList nameList);
-    private:
+        static void setBoldItem(QTableWidgetItem *tItem, Packet thepacket);
+private:
         static int hexToInt(QChar hex);
 
         static void loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap);

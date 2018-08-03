@@ -2,6 +2,7 @@
 #define SUBNETCALC_H
 
 #include <QDialog>
+#include <QNetworkInterface>
 
 namespace Ui
 {
@@ -16,8 +17,9 @@ class SubnetCalc : public QDialog
         explicit SubnetCalc(QWidget *parent = 0);
         ~SubnetCalc();
 
-        void populate();
-    private slots:
+    void populate();
+    static QList<QNetworkAddressEntry> nonLoopBackAddresses();
+private slots:
         void on_ipEdit_textChanged(const QString &arg1);
 
         void on_subnetEdit_textChanged(const QString &arg1);

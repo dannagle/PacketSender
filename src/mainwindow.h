@@ -111,6 +111,7 @@ class MainWindow : public QMainWindow
 
         void on_packetsTable_itemClicked(QTableWidgetItem *item);
         void refreshTimerTimeout();
+        void slowRefreshTimerTimeout();
 
         void on_trafficLogClearButton_clicked();
 
@@ -178,6 +179,7 @@ class MainWindow : public QMainWindow
         PacketNetwork packetNetwork;
         QNetworkAccessManager  * http;
         QTimer refreshTimer;
+        QTimer slowRefreshTimer;
         bool tableActive;
         QPushButton * udpServerStatus;
         QPushButton * tcpServerStatus;

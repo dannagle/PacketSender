@@ -23,8 +23,31 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
 
     setWindowTitle("IPv4 Subnet Calculator");
 
-    QString startLog = "Your non-loopback addresses: \n";
+    QString startLog = "Your non-loopback addresses: \n\n";
     QTextStream out(&startLog);
+
+
+    QNetworkAddressEntry entry;
+
+    QList<QNetworkAddressEntry> allEntries = SubnetCalc::nonLoopBackAddresses();
+    foreach (entry, allEntries) {
+        out << entry.ip().toString() << "  /  " << entry.netmask().toString() << "\n";
+    }
+
+
+    ui->resultEdit->setText(startLog);
+
+}
+
+
+QList<QNetworkAddressEntry> SubnetCalc::nonLoopBackAddresses()
+{
+
+    QList<QNetworkInterface> allInterfaces = QNetworkInterface::allInterfaces();
+    QNetworkInterface eth;
+
+    QList<QNetworkAddressEntry> allEntriesNonLoopback;
+    allEntriesNonLoopback.clear();
 
     foreach (eth, allInterfaces) {
         QList<QNetworkAddressEntry> allEntries = eth.addressEntries();
@@ -44,26 +67,21 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
         foreach (entry, allEntries) {
             if (!entry.ip().isLoopback()) {
                 if (entry.ip().toString().contains(":")) {
-
-                    //ignore ipv6 for now
-                    //continue;
+                    //IPv6 to the end
+                    allEntriesNonLoopback.append(entry);
+                } else {
+                    //IPv4 to the front
+                    allEntriesNonLoopback.prepend(entry);
                 }
-                nonLoopBack = 1;
-                ethOut << entry.ip().toString() << "  /  " << entry.netmask().toString() << "\n";
             }
-        }
-
-        if (nonLoopBack) {
-            out << ethString;
         }
     }
 
-    ui->resultEdit->setText(startLog);
-
-
+    return allEntriesNonLoopback;
 
 
 }
+
 
 
 void SubnetCalc::populate()
