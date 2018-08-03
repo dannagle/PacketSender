@@ -962,6 +962,20 @@ void MainWindow::sendClick(QString packetName)
     foreach (toSend, packetsSaved) {
         if (toSend.name == packetName) {
 
+            if (PacketNetwork::isMulticast(toSend.toIP)) {
+                QMessageBox msgBox;
+                msgBox.setWindowTitle("Multicast detected.");
+                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                msgBox.setDefaultButton(QMessageBox::No);
+                msgBox.setIcon(QMessageBox::Warning);
+                msgBox.setText("Do you wish to join the mulitcast group?");
+                int yesno = msgBox.exec();
+                if (yesno == QMessageBox::No) {
+                    return;
+                }
+
+            }
+
             if (toSend.toIP.trimmed() == "255.255.255.255") {
 
                 QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1138,6 +1152,28 @@ void MainWindow::on_testPacketButton_clicked()
         ui->packetPortEdit->setFocus();
         return;
 
+    }
+
+
+    if (PacketNetwork::isMulticast(testPacket.toIP)) {
+
+        //are we joined?
+        if(!packetNetwork.hasJoinedMulticast(testPacket.toIP)) {
+
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Multicast detected.");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::No);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Join the mulitcast group? UDP sockets will become IPv4-only");
+
+            int yesno = msgBox.exec();
+            if (yesno == QMessageBox::Yes) {
+                packetNetwork.joinMulticast(testPacket.toIP);
+                packetNetwork.kill();
+                packetNetwork.init();
+            }
+        }
     }
 
     if (testPacket.toIP.trimmed() == "255.255.255.255") {

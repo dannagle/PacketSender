@@ -24,6 +24,8 @@
 PacketNetwork::PacketNetwork(QWidget *parent) :
     QObject(parent)
 {
+
+    joinedMulticast.clear();
 }
 
 
@@ -144,6 +146,7 @@ void PacketNetwork::setIPmode(int mode)
 void PacketNetwork::init()
 {
 
+
     tcpServers.clear();
     udpServers.clear();
     sslServers.clear();
@@ -172,9 +175,17 @@ void PacketNetwork::init()
 
         udpSocket = new QUdpSocket(this);
 
-        bool bindResult = udpSocket->bind(
-                              IPV4_OR_IPV6
-                              , udpPort);
+        bool bindResult = true;
+        if(hasJoinedMulticast()) {
+            bindResult = udpSocket->bind(
+                                  QHostAddress::AnyIPv4
+                                  , udpPort);
+        } else {
+            bindResult = udpSocket->bind(
+                                  IPV4_OR_IPV6
+                                  , udpPort);
+        }
+
 
         if (udpPort < 1024 && !bindResult) {
 
@@ -192,6 +203,8 @@ void PacketNetwork::init()
         QDEBUG() <<  "udpSocket bind: " << bindResult;
         udpServers.append(udpSocket);
     }
+
+    reJoinMulticast();
 
     foreach (tcpPort, tcpPortList) {
 
@@ -365,6 +378,34 @@ QList<int> PacketNetwork::getSSLPortsBound()
     return pList;
 }
 
+bool PacketNetwork::hasJoinedMulticast(QString address)
+{
+    address = address.trimmed();
+    if(address.isEmpty()) {
+        return joinedMulticast.size() > 0;
+    }
+    return joinedMulticast.contains(address);
+}
+
+void PacketNetwork::reJoinMulticast()
+{
+    QString multicast;
+    foreach (multicast, joinedMulticast) {
+        joinMulticast(multicast);
+    }
+}
+
+void PacketNetwork::joinMulticast(QString address)
+{
+    if(UDPListening()) {
+        QUdpSocket *udp = udpServers.first();
+        QDEBUG() << "Join group" << address <<  udp->joinMulticastGroup(QHostAddress(address));
+        joinedMulticast.append(address.trimmed());
+    }
+}
+
+
+
 QString PacketNetwork::getSSLPortString()
 {
     return Settings::intListToPorts(getSSLPortsBound());
@@ -516,14 +557,16 @@ QHostAddress PacketNetwork::resolveDNS(QString hostname)
 //Multicast addresses in IPv6 use the prefix ff00::/8
 bool PacketNetwork::isMulticast(QString ip)
 {
-    QHostAddress address(ip);
+    QHostAddress address(ip.trimmed());
     if (QAbstractSocket::IPv4Protocol == address.protocol()) {
         //valid address
+        QDEBUG() <<"Valid IPv4 multicast?";
         return address.isMulticast();
     } else if (QAbstractSocket::IPv6Protocol == address.protocol()) {
         //valid address
 
         //am I supporting IPv6?
+        QDEBUG() <<"Valid IPv6 multicast?";
         return address.isMulticast();
     }
 

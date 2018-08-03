@@ -30,7 +30,6 @@
 #include "persistentconnection.h"
 #include <threadedtcpserver.h>
 
-
 class PacketNetwork : public QObject
 {
         Q_OBJECT
@@ -47,6 +46,9 @@ class PacketNetwork : public QObject
         QList<int> getUDPPortsBound();
         QList<int> getTCPPortsBound();
         QList<int> getSSLPortsBound();
+
+        bool hasJoinedMulticast(QString address = "");
+
 
         void kill();
         QString responseData;
@@ -73,6 +75,8 @@ class PacketNetwork : public QObject
 
         static bool isMulticast(QString ip);
 
+        void joinMulticast(QString address);
+        void reJoinMulticast();
 signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
@@ -92,6 +96,7 @@ signals:
         void packetToSend(Packet sendpacket);
 
     private:
+        QStringList joinedMulticast;
 
         QList<ThreadedTCPServer *> allTCPServers();
 
