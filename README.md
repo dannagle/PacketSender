@@ -282,7 +282,7 @@ sudo apt-get install qt5-default build-essential
 wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
 tar -xzvf (Version).tar.gz
 cd PacketSender-(Version)/src
-qmake
+qmake PacketSender.pro
 make
 ```
 
