@@ -25,6 +25,7 @@
 #include "packet.h"
 #include "packetnetwork.h"
 #include "threadedtcpserver.h"
+#include "multicastsetup.h"
 
 
 namespace Ui
@@ -140,6 +141,8 @@ class MainWindow : public QMainWindow
         void on_saveLogButton_clicked();
 
         void on_actionAbout_triggered();
+
+        void on_actionJoin_IPv4_triggered();
 
         void on_actionHelp_triggered();
 

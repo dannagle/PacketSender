@@ -47,7 +47,7 @@ class PacketNetwork : public QObject
         QList<int> getTCPPortsBound();
         QList<int> getSSLPortsBound();
 
-        bool hasJoinedMulticast(QString address = "");
+        bool hasJoinedMulticast(QUdpSocket * udp);
 
 
         void kill();
@@ -75,7 +75,8 @@ class PacketNetwork : public QObject
 
         static bool isMulticast(QString ip);
 
-        void joinMulticast(QString address);
+        void joinMulticast(QUdpSocket * udp, QString address);
+        bool canSendMulticast(QString address);
         void reJoinMulticast();
 signals:
         void packetReceived(Packet sendpacket);
@@ -96,7 +97,8 @@ signals:
         void packetToSend(Packet sendpacket);
 
     private:
-        QStringList joinedMulticast;
+        //mapping of joined multicast groups
+        QHash<QUdpSocket *, QString> joinedMulticast;
 
         QList<ThreadedTCPServer *> allTCPServers();
 

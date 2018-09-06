@@ -432,8 +432,15 @@
     <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
    </widget>
+   <widget class="QMenu" name="menuMulitcast">
+    <property name="title">
+     <string>Mulitcast</string>
+    </property>
+    <addaction name="actionJoin_IPv4"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
+   <addaction name="menuMulitcast"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -531,6 +538,11 @@
    </property>
    <property name="text">
     <string>Cloud Save and Share</string>
+   </property>
+  </action>
+  <action name="actionJoin_IPv4">
+   <property name="text">
+    <string>Join IPv4</string>
    </property>
   </action>
  </widget>

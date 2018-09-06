@@ -1,4 +1,4 @@
-
+	
 SOURCES += main.cpp\
         mainwindow.cpp \
     packetnetwork.cpp \
@@ -11,7 +11,8 @@ SOURCES += main.cpp\
     about.cpp \
     subnetcalc.cpp \
     threadedtcpserver.cpp \
-    cloudui.cpp
+    cloudui.cpp \
+	multicastsetup.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     subnetcalc.h \
     ebcdic_ascii_map.h \
     threadedtcpserver.h \
-    cloudui.h
+    cloudui.h \
+	multicastsetup.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
@@ -34,7 +36,8 @@ FORMS    += mainwindow.ui \
     settings.ui \
     about.ui \
     subnetcalc.ui \
-    cloudui.ui
+    cloudui.ui \
+	multicastsetup.ui
 
 OTHER_FILES += \
     packetsender.css \

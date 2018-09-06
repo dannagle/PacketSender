@@ -1158,18 +1158,22 @@ void MainWindow::on_testPacketButton_clicked()
     if (PacketNetwork::isMulticast(testPacket.toIP)) {
 
         //are we joined?
-        if(!packetNetwork.hasJoinedMulticast(testPacket.toIP)) {
+
+
+
+        if(!packetNetwork.canSendMulticast(testPacket.toIP)) {
 
             QMessageBox msgBox;
             msgBox.setWindowTitle("Multicast detected.");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Join the mulitcast group? UDP sockets will become IPv4-only");
+            msgBox.setText("Create new UDP mulitcast socket?");
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
-                packetNetwork.joinMulticast(testPacket.toIP);
+                MulticastSetup mcast;
+                mcast.exec();
                 packetNetwork.kill();
                 packetNetwork.init();
             }
@@ -2023,6 +2027,13 @@ void MainWindow::on_actionAbout_triggered()
 {
     About * about = new About(this);
     about->show();
+}
+
+void MainWindow::on_actionJoin_IPv4_triggered()
+{
+    MulticastSetup mcast;
+    mcast.exec();
+    QDEBUG();
 }
 
 void MainWindow::on_actionHelp_triggered()
