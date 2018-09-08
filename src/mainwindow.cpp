@@ -1172,7 +1172,7 @@ void MainWindow::on_testPacketButton_clicked()
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
-                MulticastSetup mcast;
+                MulticastSetup mcast(&packetNetwork, this);
                 mcast.exec();
                 packetNetwork.kill();
                 packetNetwork.init();
@@ -2031,7 +2031,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionJoin_IPv4_triggered()
 {
-    MulticastSetup mcast;
+    MulticastSetup mcast(&packetNetwork, this);
     mcast.exec();
     QDEBUG();
 }

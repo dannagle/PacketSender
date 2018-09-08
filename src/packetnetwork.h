@@ -49,6 +49,8 @@ class PacketNetwork : public QObject
 
         bool hasJoinedMulticast(QUdpSocket * udp);
 
+        QStringList multicastStringList();
+
 
         void kill();
         QString responseData;
@@ -76,6 +78,7 @@ class PacketNetwork : public QObject
         static bool isMulticast(QString ip);
 
         void joinMulticast(QUdpSocket * udp, QString address);
+        void joinMulticast(QString address, int port);
         bool canSendMulticast(QString address);
         void reJoinMulticast();
 signals:
@@ -84,19 +87,15 @@ signals:
         void packetSent(Packet sendpacket);
 
 
-    public slots:
+public slots:
         void packetReceivedECHO(Packet sendpacket);
         void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
         void packetSentECHO(Packet sendpacket);
-
-
-
-    public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
 
-    private:
+private:
         //mapping of joined multicast groups
         QHash<QUdpSocket *, QString> joinedMulticast;
 
