@@ -23,6 +23,8 @@ public:
 private slots:
     void on_joinButton_clicked();
 
+    void on_leaveButton_clicked();
+
 private:
     Ui::MulticastSetup *ui;
     PacketNetwork * packetNetwork;

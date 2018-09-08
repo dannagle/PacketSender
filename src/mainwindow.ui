@@ -410,7 +410,7 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionSettings"/>
     <addaction name="actionImport_Packets"/>
@@ -419,7 +419,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
@@ -427,14 +427,14 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
    </widget>
    <widget class="QMenu" name="menuMulitcast">
     <property name="title">
-     <string>Mulitcast</string>
+     <string>&amp;Mulitcast</string>
     </property>
     <addaction name="actionJoin_IPv4"/>
    </widget>
@@ -450,7 +450,7 @@
      <normaloff>:/icons/power-off.png</normaloff>:/icons/power-off.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -459,7 +459,7 @@
      <normaloff>:/icons/cog.png</normaloff>:/icons/cog.png</iconset>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -468,7 +468,7 @@
      <normaloff>:/pslogo_bw.png</normaloff>:/pslogo_bw.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionImport_Packets">
@@ -477,7 +477,7 @@
      <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
    </property>
    <property name="text">
-    <string>Import Database</string>
+    <string>&amp;Import Database</string>
    </property>
   </action>
   <action name="actionExport_Packets">
@@ -486,7 +486,7 @@
      <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
    </property>
    <property name="text">
-    <string>Export Database</string>
+    <string>&amp;Export Database</string>
    </property>
   </action>
   <action name="actionPersistent_Connection">
@@ -500,7 +500,7 @@
      <normaloff>:/icons/calculator.png</normaloff>:/icons/calculator.png</iconset>
    </property>
    <property name="text">
-    <string>Subnet Calculator</string>
+    <string>&amp;Subnet Calculator</string>
    </property>
   </action>
   <action name="actionDonate_Thank_You">
@@ -509,7 +509,7 @@
      <normaloff>:/icons/heart.png</normaloff>:/icons/heart.png</iconset>
    </property>
    <property name="text">
-    <string>Donate (Thank You!)</string>
+    <string>D&amp;onate (Thank You!)</string>
    </property>
   </action>
   <action name="actionDocumentation">
@@ -523,7 +523,7 @@
      <normaloff>:/icons/question-circle.png</normaloff>:/icons/question-circle.png</iconset>
    </property>
    <property name="text">
-    <string>Documentation</string>
+    <string>&amp;Documentation</string>
    </property>
   </action>
   <action name="actionExport_Packets_JSON">
@@ -537,12 +537,12 @@
      <normaloff>:/icons/ic_cloud_done_black_24dp_2x.png</normaloff>:/icons/ic_cloud_done_black_24dp_2x.png</iconset>
    </property>
    <property name="text">
-    <string>Cloud Save and Share</string>
+    <string>&amp;Cloud Save and Share</string>
    </property>
   </action>
   <action name="actionJoin_IPv4">
    <property name="text">
-    <string>Join IPv4</string>
+    <string>&amp;Join/Leave IPv4</string>
    </property>
   </action>
  </widget>

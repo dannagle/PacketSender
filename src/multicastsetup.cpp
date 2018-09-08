@@ -76,20 +76,20 @@ void MulticastSetup::on_joinButton_clicked()
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("IP must be a multicast address.");
+        msgBox.setText("IP must be an IPv4 multicast address.\n(224.0.0.0 to 239.255.255.255)");
         msgBox.exec();
         ui->ipaddressEdit->setFocus();
         ui->ipaddressEdit->selectAll();
         return;
     }
 
-    if(port < 1) {
+    if((port < 1) || port > 65535) {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Bad Port.");
+        msgBox.setWindowTitle("Invalid Port.");
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Bind port must be a number greater than 0.");
+        msgBox.setText("Bind port must be a number 1-65535.");
         msgBox.exec();
         ui->portEdit->setFocus();
         ui->portEdit->selectAll();
@@ -100,5 +100,13 @@ void MulticastSetup::on_joinButton_clicked()
     QDEBUG();
     packetNetwork->joinMulticast(ip, port);
     QDEBUG();
+    init();
+}
+
+void MulticastSetup::on_leaveButton_clicked()
+{
+
+    QDEBUG();
+    packetNetwork->leaveMulticast();
     init();
 }

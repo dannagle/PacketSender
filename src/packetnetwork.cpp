@@ -402,6 +402,17 @@ void PacketNetwork::reJoinMulticast()
 }
 
 
+
+void PacketNetwork::leaveMulticast()
+{
+    QList<QUdpSocket *> keys = joinedMulticast.keys();
+    QUdpSocket *udp;
+    foreach (udp, keys) {
+        udp->leaveMulticastGroup(QHostAddress(joinedMulticast[udp]));
+    }
+    joinedMulticast.clear();
+}
+
 void PacketNetwork::joinMulticast(QString address, int port)
 {
     QUdpSocket * udp;
@@ -626,7 +637,9 @@ bool PacketNetwork::isMulticast(QString ip)
 
         //am I supporting IPv6?
         QDEBUG() <<"Valid IPv6 multicast?";
-        return address.isMulticast();
+        QDEBUG() <<"I am not supporting this yet";
+        return false;
+        //return address.isMulticast();
     }
 
     return false;
