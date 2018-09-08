@@ -1,6 +1,8 @@
 #include "multicastsetup.h"
 #include "ui_multicastsetup.h"
 
+#include <QMessageBox>
+
 MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MulticastSetup)
@@ -65,12 +67,38 @@ MulticastSetup::~MulticastSetup()
 void MulticastSetup::on_joinButton_clicked()
 {
 
-    QString ip = ui->ipaddressEdit->text();
+    QString ip = ui->ipaddressEdit->text().trimmed();
     int port = ui->portEdit->text().toInt();
 
-    if(port > 0) {
-        packetNetwork->joinMulticast(ip, port);
+    if (!PacketNetwork::isMulticast(ip)) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Not Multicast.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("IP must be a multicast address.");
+        msgBox.exec();
+        ui->ipaddressEdit->setFocus();
+        ui->ipaddressEdit->selectAll();
+        return;
     }
+
+    if(port < 1) {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("Bad Port.");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Bind port must be a number greater than 0.");
+        msgBox.exec();
+        ui->portEdit->setFocus();
+        ui->portEdit->selectAll();
+        return;
+
+    }
+
+    QDEBUG();
+    packetNetwork->joinMulticast(ip, port);
     QDEBUG();
     init();
 }
