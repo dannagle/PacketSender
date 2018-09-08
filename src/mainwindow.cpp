@@ -1173,6 +1173,7 @@ void MainWindow::on_testPacketButton_clicked()
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
                 MulticastSetup mcast(&packetNetwork, this);
+                mcast.setIPandPort(testPacket.toIP, testPacket.port);
                 mcast.exec();
                 packetNetwork.kill();
                 packetNetwork.init();

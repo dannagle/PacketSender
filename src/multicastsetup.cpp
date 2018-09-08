@@ -17,6 +17,13 @@ MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     init();
 }
 
+void MulticastSetup::setIPandPort(QString ip, unsigned int port)
+{
+    ui->ipaddressEdit->setText(ip);
+    ui->portEdit->setText(QString::number(port));
+    ui->joinButton->setFocus();
+}
+
 void MulticastSetup::init()
 {
 

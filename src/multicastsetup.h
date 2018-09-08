@@ -17,6 +17,7 @@ class MulticastSetup : public QDialog
 
 public:
     explicit MulticastSetup(PacketNetwork * pNetwork, QWidget *parent = nullptr);
+    void setIPandPort(QString ip, unsigned int port);
     ~MulticastSetup();
 
     void init();
