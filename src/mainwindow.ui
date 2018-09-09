@@ -421,8 +421,9 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionHelp"/>
+    <addaction name="actionForums"/>
     <addaction name="actionDonate_Thank_You"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -431,6 +432,8 @@
     </property>
     <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
+    <addaction name="actionAndroid_App"/>
+    <addaction name="actioniOS_App"/>
    </widget>
    <widget class="QMenu" name="menuMulitcast">
     <property name="title">
@@ -541,8 +544,39 @@
    </property>
   </action>
   <action name="actionJoin_IPv4">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/multicast-icon.png</normaloff>:/icons/multicast-icon.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Join/Leave IPv4</string>
+   </property>
+  </action>
+  <action name="actionAndroid_App">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/android-icon.png</normaloff>:/icons/android-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Android App</string>
+   </property>
+  </action>
+  <action name="actioniOS_App">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/apple-icon.png</normaloff>:/icons/apple-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>iOS App</string>
+   </property>
+  </action>
+  <action name="actionForums">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/forum-icon.png</normaloff>:/icons/forum-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>NagleCode Forums</string>
    </property>
   </action>
  </widget>

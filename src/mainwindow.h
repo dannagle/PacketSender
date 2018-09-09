@@ -141,6 +141,12 @@ class MainWindow : public QMainWindow
 
         void on_actionAbout_triggered();
 
+        void on_actionAndroid_App_triggered();
+        void on_actioniOS_App_triggered();
+        void on_actionForums_triggered();
+
+
+
         void on_actionJoin_IPv4_triggered(QString address = "", unsigned int port = 0);
 
         void on_actionHelp_triggered();

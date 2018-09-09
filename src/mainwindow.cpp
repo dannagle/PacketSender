@@ -1798,6 +1798,10 @@ void MainWindow::applyNetworkSettings()
 
     asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
+    int joinedSize = packetNetwork.multicastStringList().size();
+    if(joinedSize > 0) {
+        statusBarMessage("Left " + QString::number(joinedSize) + " multicast group(s)");
+    }
 
     packetNetwork.kill();
     packetNetwork.init();
@@ -2018,6 +2022,25 @@ void MainWindow::setIPMode()
 
 
 }
+
+void MainWindow::on_actionAndroid_App_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://play.google.com/store/apps/details?id=com.packetsender.mobile"));
+}
+
+
+void MainWindow::on_actioniOS_App_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8"));
+}
+
+
+void MainWindow::on_actionForums_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://forums.naglecode.com/"));
+}
+
+
 
 void MainWindow::on_actionAbout_triggered()
 {

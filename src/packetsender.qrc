@@ -39,5 +39,9 @@
         <file>icons/ic_cloud_upload_black_24dp_2x.png</file>
         <file>icons/ic_share_black_24dp_2x.png</file>
         <file>icons/ic_person_black_24dp_2x.png</file>
+        <file>icons/android-icon.png</file>
+        <file>icons/apple-icon.png</file>
+        <file>icons/forum-icon.png</file>
+        <file>icons/multicast-icon.png</file>
     </qresource>
 </RCC>
