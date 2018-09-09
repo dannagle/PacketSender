@@ -65,12 +65,9 @@
 //I'm not convinced it works perfect when in server mode.
 
 #include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-#define IPV4_OR_IPV6 (QHostAddress::Any)
-#else
+
 //used when binding
-#define IPV4_OR_IPV6 (ipMode > 4) ? (QHostAddress::AnyIPv6) : (QHostAddress::AnyIPv4)
-#endif
+#define IPV4_OR_IPV6 Packet::IPV4_IPV6_ANY(ipMode)
 
 
 #endif // GLOBALS_H

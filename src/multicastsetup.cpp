@@ -28,7 +28,8 @@ void MulticastSetup::init()
 {
 
     QStringList mcastStringList = packetNetwork->multicastStringList();
-    QString mcast, ip, port;
+    QString mcast, ip;
+    unsigned int port;
 
     QStringList tHeaders, split;
 
@@ -46,14 +47,10 @@ void MulticastSetup::init()
     for(int i=0; i < mcastStringList.size(); i++) {
         mcast = mcastStringList.at(i);
 
-        split = mcast.split(":");
-        if(split.size() < 2) continue;
+        PacketNetwork::multiCastToIPandPort(mcast, ip, port);
 
-        QTableWidgetItem * tItem0 = new QTableWidgetItem(split[0]);
-        QTableWidgetItem * tItem1 = new QTableWidgetItem(split[1]);
-
-        ui->mcastTable->setItem(i, 0, tItem0);
-        ui->mcastTable->setItem(i, 1, tItem1);
+        ui->mcastTable->setItem(i, 0, new QTableWidgetItem(ip));
+        ui->mcastTable->setItem(i, 1, new QTableWidgetItem(QString::number(port)));
     }
 
 
@@ -103,6 +100,27 @@ void MulticastSetup::on_joinButton_clicked()
         return;
 
     }
+
+    int ipMode = packetNetwork->getIPmode();
+
+    if(ipMode != 4) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("IPv4-only.");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Packet Sender supports multicast when binded to IPv4 only. \nTurn off IPv6 support and switch to IPv4-only?");
+        int yesno = msgBox.exec();
+        if (yesno == QMessageBox::No) {
+            return;
+        }
+        packetNetwork->setIPmode(4);
+        packetNetwork->kill();
+        packetNetwork->init();
+
+    }
+
 
     QDEBUG();
     packetNetwork->joinMulticast(ip, port);

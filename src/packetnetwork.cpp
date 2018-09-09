@@ -126,6 +126,16 @@ bool PacketNetwork::SSLListening()
 
 }
 
+bool PacketNetwork::IPv6Enabled()
+{
+    return (getIPmode() != 4);
+}
+
+bool PacketNetwork::IPv4Enabled()
+{
+    return (getIPmode() != 6);
+}
+
 
 void PacketNetwork::setIPmode(int mode)
 {
@@ -373,27 +383,39 @@ QList<int> PacketNetwork::getSSLPortsBound()
     return pList;
 }
 
-bool PacketNetwork::hasJoinedMulticast(QUdpSocket *udp)
+void PacketNetwork::multiCastToIPandPort(QString multicast, QString &ip, unsigned int port)
 {
-    return !joinedMulticast[udp].isEmpty();
+    ip = "";
+    port = 0;
+
+    QStringList split = multicast.split(":");
+    if(split.size() < 2) return;
+
+    ip = split[0];
+    port = split[1].toUInt();
+
+}
+
+QUdpSocket * PacketNetwork::findMulticast(QString multicast)
+{
+    QUdpSocket *udp = nullptr;
+    QString ip;
+    unsigned int port;
+
+    multiCastToIPandPort(multicast, ip, port);
+
+    foreach (udp, this->udpServers) {
+        if(udp->localPort() == port) {
+            return udp;
+        }
+    }
+
+    return nullptr;
 }
 
 QStringList PacketNetwork::multicastStringList()
 {
-    QStringList retList;
-    QList<QUdpSocket *> keys = joinedMulticast.keys();
-    QUdpSocket *udp;
-    foreach (udp, keys) {
-        if(hasJoinedMulticast(udp)) {
-            QString mcast = joinedMulticast[udp];
-            mcast.append(":");
-            mcast.append(QString::number(udp->localPort()));
-
-            retList << mcast;
-        }
-    }
-
-    return retList;
+    return joinedMulticast;
 }
 
 void PacketNetwork::reJoinMulticast()
@@ -405,10 +427,18 @@ void PacketNetwork::reJoinMulticast()
 
 void PacketNetwork::leaveMulticast()
 {
-    QList<QUdpSocket *> keys = joinedMulticast.keys();
     QUdpSocket *udp;
-    foreach (udp, keys) {
-        udp->leaveMulticastGroup(QHostAddress(joinedMulticast[udp]));
+    QString multicast;
+    QString ip;
+    unsigned int port;
+
+    foreach (multicast, joinedMulticast) {
+        multiCastToIPandPort(multicast, ip, port);
+        foreach (udp, udpServers) {
+            if(udp->localPort() == port) {
+                udp->leaveMulticastGroup(QHostAddress(ip));
+            }
+        }
     }
     joinedMulticast.clear();
 }
@@ -416,61 +446,57 @@ void PacketNetwork::leaveMulticast()
 void PacketNetwork::joinMulticast(QString address, int port)
 {
     QUdpSocket * udp;
-    foreach(udp, udpServers) {
 
-        if(udp->localPort() != port) {
-            continue;
-        }
 
-        if(hasJoinedMulticast(udp)) {
-            udp->leaveMulticastGroup(QHostAddress(joinedMulticast[udp]));
-        }
-        joinMulticast(udp,address);
-        return;
-
-    }
-
-    QDEBUG() << "Did not find existing socket. Make a new one";
-
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QList<int> udpPortList;
-    udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
-    udpPortList.append(port);
-
-    settings.setValue("udpPort", Settings::intListToPorts(udpPortList));
-    kill();
-    init();
 
     foreach(udp, udpServers) {
+        udpPortList << udp->localPort();
+    }
 
+    if(!udpPortList.contains(port)) {
+        QDEBUG() << "Did not find existing socket. Make a new one";
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
+        udpPortList.append(port);
+
+        settings.setValue("udpPort", Settings::intListToPorts(udpPortList));
+        kill();
+        init();
+    }
+
+
+    foreach(udp, udpServers) {
         if(udp->localPort() == port) {
-            joinMulticast(udp,address);
+            udp->joinMulticastGroup(QHostAddress(address));
+
+            joinedMulticast << QString(address + ":" + QString::number(port));
+            joinedMulticast.removeDuplicates();
             return;
         }
 
     }
+
+
+
 }
 
-void PacketNetwork::joinMulticast(QUdpSocket * udp, QString address)
-{
-    if(hasJoinedMulticast(udp)) {
-        udp->leaveMulticastGroup(QHostAddress(joinedMulticast[udp]));
-    }
-    QDEBUG() << "Join group" << address <<  udp->joinMulticastGroup(QHostAddress(address));
-    joinedMulticast[udp] = address;
-}
 
 bool PacketNetwork::canSendMulticast(QString address)
 {
     QString multicast;
-    QList<QUdpSocket *> keys = joinedMulticast.keys();
-    QUdpSocket *udp;
-    foreach (udp, keys) {
-        if(joinedMulticast[udp] == address) {
+    QString ip = "";
+    unsigned int port = 0;
+
+    foreach (multicast, joinedMulticast) {
+        multiCastToIPandPort(multicast, ip, port);
+        if(ip == address) {
             return true;
         }
     }
+
     return false;
 }
 

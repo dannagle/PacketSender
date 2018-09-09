@@ -101,6 +101,22 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(persistent);
 }
 
+QHostAddress::SpecialAddress Packet::IPV4_IPV6_ANY(int ipMode)
+{
+    if(ipMode == 4) {
+        return QHostAddress::AnyIPv4;
+    }
+
+    if(ipMode == 6) {
+        return QHostAddress::AnyIPv6;
+    }
+
+
+    return QHostAddress::Any;
+
+
+}
+
 void Packet::init()
 {
     name = "";

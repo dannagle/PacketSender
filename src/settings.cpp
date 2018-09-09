@@ -122,19 +122,21 @@ Settings::Settings(QWidget *parent) :
     ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
 
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    ui->ipv4Radio->hide();
-    ui->ipv6Radio->hide();
-#endif
+    int ipMode = settings.value("ipMode", 8).toInt(); //default both
 
+    ui->ipv4and6Radio->setChecked(true);
+    ui->ipv4Radio->setChecked(false);
+    ui->ipv6Radio->setChecked(false);
 
-    int ipMode = settings.value("ipMode", 4).toInt();
-    if (ipMode > 4) {
-        ui->ipv6Radio->setChecked(true);
-        ui->ipv4Radio->setChecked(false);
-    } else {
-        ui->ipv6Radio->setChecked(false);
+    if(ipMode == 4) {
         ui->ipv4Radio->setChecked(true);
+        ui->ipv4and6Radio->setChecked(false);
+
+    }
+
+    if (ipMode > 6) {
+        ui->ipv6Radio->setChecked(true);
+        ui->ipv4and6Radio->setChecked(false);
     }
 
 
@@ -277,6 +279,9 @@ void Settings::on_buttonBox_accepted()
         settings.setValue("ipMode", 4);
     }
 
+    if (ui->ipv4and6Radio->isChecked()) {
+        settings.setValue("ipMode", 8);
+    }
 
     //save traffic order
     QListWidget * lw = ui->displayOrderList;

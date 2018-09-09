@@ -1155,6 +1155,26 @@ void MainWindow::on_testPacketButton_clicked()
     }
 
 
+
+    bool isIPv6 = testPacket.toIP.contains(":");
+
+    if(isIPv6 && (!packetNetwork.IPv6Enabled())) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowTitle("IPv6?");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("Enable IPv6 support?");
+        int yesno = msgBox.exec();
+        if (yesno == QMessageBox::Yes) {
+            packetNetwork.setIPmode(8); //both 4 and 6
+            packetNetwork.kill();
+            packetNetwork.init();
+        }
+    }
+
+
     if (PacketNetwork::isMulticast(testPacket.toIP)) {
 
         //are we joined?

@@ -193,9 +193,16 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <item>
+             <widget class="QRadioButton" name="ipv4and6Radio">
+              <property name="text">
+               <string>Both IPv4 and IPv6</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QRadioButton" name="ipv4Radio">
               <property name="text">
-               <string>Server IPv4 Mode</string>
+               <string>IPv4 Only</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -205,7 +212,7 @@
             <item>
              <widget class="QRadioButton" name="ipv6Radio">
               <property name="text">
-               <string>Server IPv6 Mode</string>
+               <string>IPv6 Only</string>
               </property>
              </widget>
             </item>
