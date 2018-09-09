@@ -208,10 +208,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setIPMode();
 
-    connect(IPmodeButton, SIGNAL(clicked()),
-            this, SLOT(toggleIPv4_IPv6()));
-
-
     UDPServerStatus();
     TCPServerStatus();
     SSLServerStatus();
@@ -1192,11 +1188,7 @@ void MainWindow::on_testPacketButton_clicked()
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
-                MulticastSetup mcast(&packetNetwork, this);
-                mcast.setIPandPort(testPacket.toIP, testPacket.port);
-                mcast.exec();
-                packetNetwork.kill();
-                packetNetwork.init();
+                on_actionJoin_IPv4_triggered(testPacket.toIP, testPacket.port);
             }
         }
     }
@@ -1666,23 +1658,6 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
 }
 
 
-void MainWindow::toggleIPv4_IPv6()
-{
-    QString currentMode = IPmodeButton->text();
-    if (currentMode.contains("4")) {
-        packetNetwork.setIPmode(6);
-    } else {
-        packetNetwork.setIPmode(4);
-    }
-
-    setIPMode();
-
-    applyNetworkSettings();
-
-
-}
-
-
 void MainWindow::slowRefreshTimerTimeout()
 {
     QString oldtitle = this->windowTitle();
@@ -2050,10 +2025,14 @@ void MainWindow::on_actionAbout_triggered()
     about->show();
 }
 
-void MainWindow::on_actionJoin_IPv4_triggered()
+void MainWindow::on_actionJoin_IPv4_triggered(QString address, unsigned int port)
 {
     MulticastSetup mcast(&packetNetwork, this);
+    if((!address.isEmpty()) && port > 0) {
+        mcast.setIPandPort(address, port);
+    }
     mcast.exec();
+    UDPServerStatus();
     QDEBUG();
 }
 

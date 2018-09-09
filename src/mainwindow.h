@@ -74,7 +74,6 @@ class MainWindow : public QMainWindow
         void toggleTCPServer();
         void toggleSSLServer();
         void SSLServerStatus();
-        void toggleIPv4_IPv6();
         void ebcdicTranslate();
 
         //shortcut keys... would be better if used lambda
@@ -142,7 +141,7 @@ class MainWindow : public QMainWindow
 
         void on_actionAbout_triggered();
 
-        void on_actionJoin_IPv4_triggered();
+        void on_actionJoin_IPv4_triggered(QString address = "", unsigned int port = 0);
 
         void on_actionHelp_triggered();
 

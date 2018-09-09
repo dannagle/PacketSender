@@ -34,6 +34,8 @@ void PacketNetwork::kill()
 
     QDEBUG();
 
+    joinedMulticast.clear();
+
     //Packet Sender now supports any number of clients.
     QUdpSocket * udp;
     foreach (udp, udpServers) {
@@ -57,7 +59,6 @@ void PacketNetwork::kill()
     sslServers.clear();
 
     QDEBUG();
-
 
     QApplication::processEvents();
 
@@ -383,7 +384,7 @@ QList<int> PacketNetwork::getSSLPortsBound()
     return pList;
 }
 
-void PacketNetwork::multiCastToIPandPort(QString multicast, QString &ip, unsigned int port)
+void PacketNetwork::multiCastToIPandPort(QString multicast, QString &ip, unsigned int &port)
 {
     ip = "";
     port = 0;
@@ -456,7 +457,7 @@ void PacketNetwork::joinMulticast(QString address, int port)
     }
 
     if(!udpPortList.contains(port)) {
-        QDEBUG() << "Did not find existing socket. Make a new one";
+        QDEBUG() << "Did not find existing socket on port" << port << ". Make a new one";
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
@@ -470,6 +471,8 @@ void PacketNetwork::joinMulticast(QString address, int port)
 
     foreach(udp, udpServers) {
         if(udp->localPort() == port) {
+
+            QDEBUG() << "Joining " << address << ":" << port <<
             udp->joinMulticastGroup(QHostAddress(address));
 
             joinedMulticast << QString(address + ":" + QString::number(port));
@@ -478,6 +481,8 @@ void PacketNetwork::joinMulticast(QString address, int port)
         }
 
     }
+
+    QDEBUGVAR(joinedMulticast);
 
 
 

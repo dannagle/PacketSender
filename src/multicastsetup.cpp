@@ -29,7 +29,7 @@ void MulticastSetup::init()
 
     QStringList mcastStringList = packetNetwork->multicastStringList();
     QString mcast, ip;
-    unsigned int port;
+    unsigned int port = 0;
 
     QStringList tHeaders, split;
 
@@ -45,9 +45,13 @@ void MulticastSetup::init()
 
     QDEBUGVAR(mcastStringList.size());
     for(int i=0; i < mcastStringList.size(); i++) {
-        mcast = mcastStringList.at(i);
+        mcast = mcastStringList[i];
+        QDEBUGVAR(mcast);
 
         PacketNetwork::multiCastToIPandPort(mcast, ip, port);
+
+        QDEBUGVAR(ip);
+        QDEBUGVAR(port);
 
         ui->mcastTable->setItem(i, 0, new QTableWidgetItem(ip));
         ui->mcastTable->setItem(i, 1, new QTableWidgetItem(QString::number(port)));
@@ -122,7 +126,8 @@ void MulticastSetup::on_joinButton_clicked()
     }
 
 
-    QDEBUG();
+    QDEBUGVAR(ip);
+    QDEBUGVAR(port);
     packetNetwork->joinMulticast(ip, port);
     QDEBUG();
     init();

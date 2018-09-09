@@ -84,7 +84,7 @@ class PacketNetwork : public QObject
         void reJoinMulticast();
         void leaveMulticast();
         QUdpSocket * findMulticast(QString multicast);
-        static void multiCastToIPandPort(QString multicast, QString &ip, unsigned int port);
+        static void multiCastToIPandPort(QString multicast, QString &ip, unsigned int &port);
 signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
