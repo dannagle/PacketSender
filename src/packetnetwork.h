@@ -113,6 +113,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
+        bool multiCastBound(unsigned int port);
 };
 
 #endif // PACKETNETWORK_H

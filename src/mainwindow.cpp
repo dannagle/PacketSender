@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tableActive = false;
 
 
-    maxLogSize = 0;
+    maxLogSize = 1000;
 
     if (settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
@@ -568,10 +568,6 @@ QPushButton * MainWindow::generatePSLink()
 void MainWindow::toTrafficLog(Packet logPacket)
 {
 
-    QDEBUG() << logPacket.name;
-
-    QDEBUGVAR(logPacket.errorString);
-
     if (ui->logTrafficCheck->isChecked()) {
         if ((!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty())
                 || (!logPacket.errorString.isEmpty())
@@ -710,6 +706,8 @@ void MainWindow::loadTrafficLogTable()
 
     }
 
+    int trafficlogsize = packetsLogged.size();
+    ui->trafficLogClearButton->setText("Clear Log ("+QString::number(trafficlogsize)+")");
 
 
 

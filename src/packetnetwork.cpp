@@ -397,6 +397,8 @@ void PacketNetwork::multiCastToIPandPort(QString multicast, QString &ip, unsigne
 
 }
 
+
+
 QUdpSocket * PacketNetwork::findMulticast(QString multicast)
 {
     QUdpSocket *udp = nullptr;
@@ -557,6 +559,14 @@ void PacketNetwork::readPendingDatagrams()
             } else {
                 udpPacket.fromIP = (sender).toString();
             }
+
+            if(sender.toString().isEmpty()) {
+                //is socket multicast bound?
+                if(multiCastBound(udpSocket->localPort())) {
+                     udpPacket.fromIP = "Multicast";
+                }
+            }
+
             udpPacket.toIP = "You";
             udpPacket.port = udpSocket->localPort();
             udpPacket.fromPort = senderPort;
@@ -653,6 +663,24 @@ QHostAddress PacketNetwork::resolveDNS(QString hostname)
         return info.addresses().at(0);
     }
 }
+
+bool PacketNetwork::multiCastBound(unsigned int portCheck)
+{
+    QString multicast;
+    QString ip;
+    unsigned int port;
+
+    foreach (multicast, joinedMulticast) {
+        multiCastToIPandPort(multicast, ip, port);
+        if(port == portCheck) {
+            return true;
+        }
+    }
+
+    return false;
+
+}
+
 
 //Multicast addresses ranges from 224.0.0.0 to 239.255.255.255
 //Multicast addresses in IPv6 use the prefix ff00::/8
