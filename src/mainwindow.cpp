@@ -2023,13 +2023,13 @@ void MainWindow::setIPMode()
 
 void MainWindow::on_actionAndroid_App_triggered()
 {
-    QDesktopServices::openUrl(QUrl("https://play.google.com/store/apps/details?id=com.packetsender.mobile"));
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/android"));
 }
 
 
 void MainWindow::on_actioniOS_App_triggered()
 {
-    QDesktopServices::openUrl(QUrl("https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8"));
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/ios"));
 }
 
 
