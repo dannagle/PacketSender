@@ -564,20 +564,13 @@ void PacketNetwork::readPendingDatagrams()
             }
 
 
-            QByteArray datagram;
-            datagram.resize(udpSocket->pendingDatagramSize());
             QHostAddress sender;
-            quint16 senderPort;
+            int senderPort;
 
-            qint64 maxSize = -1;
-            QNetworkDatagram theDatagram = udpSocket->receiveDatagram();
-
-            datagram = theDatagram.data();
+            QNetworkDatagram theDatagram = udpSocket->receiveDatagram(10000000);
+            QByteArray datagram = theDatagram.data();
             sender =  theDatagram.senderAddress();
             senderPort = theDatagram.senderPort();
-
-            QDEBUGVAR(theDatagram.destinationAddress().toString());
-            QDEBUGVAR(theDatagram.destinationAddress().isMulticast());
 
             QDEBUG() << "data size is" << datagram.size();
     //        QDEBUG() << debugQByteArray(datagram);
@@ -592,17 +585,10 @@ void PacketNetwork::readPendingDatagrams()
                 udpPacket.fromIP = (sender).toString();
             }
 
-            if(sender.toString().isEmpty()) {
-                //is socket multicast bound?
-                if(multiCastBound(udpSocket->localPort())) {
-                     udpPacket.fromIP = "Multicast";
-                }
-            }
-
             udpPacket.toIP = "You";
 
-            if(udpSocket->peerAddress().isMulticast()) {
-                udpPacket.toIP = "Multicast";
+            if(theDatagram.destinationAddress().isMulticast()) {
+                udpPacket.toIP = "(MC) " + theDatagram.destinationAddress().toString();
             }
 
 
