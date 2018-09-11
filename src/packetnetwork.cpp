@@ -569,8 +569,15 @@ void PacketNetwork::readPendingDatagrams()
             QHostAddress sender;
             quint16 senderPort;
 
-            udpSocket->readDatagram(datagram.data(), datagram.size(),
-                                    &sender, &senderPort);
+            qint64 maxSize = -1;
+            QNetworkDatagram theDatagram = udpSocket->receiveDatagram();
+
+            datagram = theDatagram.data();
+            sender =  theDatagram.senderAddress();
+            senderPort = theDatagram.senderPort();
+
+            QDEBUGVAR(theDatagram.destinationAddress().toString());
+            QDEBUGVAR(theDatagram.destinationAddress().isMulticast());
 
             QDEBUG() << "data size is" << datagram.size();
     //        QDEBUG() << debugQByteArray(datagram);
@@ -593,6 +600,12 @@ void PacketNetwork::readPendingDatagrams()
             }
 
             udpPacket.toIP = "You";
+
+            if(udpSocket->peerAddress().isMulticast()) {
+                udpPacket.toIP = "Multicast";
+            }
+
+
             udpPacket.port = udpSocket->localPort();
             udpPacket.fromPort = senderPort;
 

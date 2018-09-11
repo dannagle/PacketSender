@@ -17,6 +17,7 @@
 #include <QDateTime>
 #include <QTableWidgetItem>
 #include <QPushButton>
+#include <QNetworkDatagram>
 #include <QHash>
 #include "globals.h"
 #include "sendpacketbutton.h"
