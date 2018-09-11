@@ -157,6 +157,8 @@ void PacketNetwork::setIPmode(int mode)
 void PacketNetwork::init()
 {
 
+    static bool erroronce = false;
+
 
     tcpServers.clear();
     udpServers.clear();
@@ -177,6 +179,15 @@ void PacketNetwork::init()
 
     int ipMode = settings.value("ipMode", 4).toInt();
 
+    QMessageBox msgBoxBindError;
+    msgBoxBindError.setWindowTitle("Port bind error.");
+    msgBoxBindError.setStandardButtons(QMessageBox::Ok);
+    msgBoxBindError.setDefaultButton(QMessageBox::Ok);
+    msgBoxBindError.setIcon(QMessageBox::Warning);
+    const QString lowPortText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
+    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT].\n\nPerhaps you are running multiple instances?";
+
+
 
     QUdpSocket *udpSocket;
     ThreadedTCPServer *ssl, *tcp;
@@ -190,21 +201,31 @@ void PacketNetwork::init()
                               IPV4_OR_IPV6
                               , udpPort);
 
-        if (udpPort < 1024 && !bindResult) {
+        if ((!bindResult) && (!erroronce)) {
+            QDEBUGVAR(udpPort);
+            erroronce = true;
+            if (udpPort < 1024 && udpPort > 0) {
+                QString msgText = lowPortText;
+                msgText.replace("[PORT]", QString::number(udpPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
 
-            QMessageBox msgBox;
-            msgBox.setWindowTitle("Binding to low port number.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setDefaultButton(QMessageBox::Ok);
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Packet Sender attempted (and failed) to bind to a UDP port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
-            msgBox.exec();
+            } else {
+                QString msgText = portConsumedText;
+                msgText.replace("[PORT]", QString::number(udpPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
 
+            }
+            udpSocket->close();
+            udpSocket->deleteLater();
 
         }
 
-        QDEBUG() <<  "udpSocket bind: " << bindResult;
-        udpServers.append(udpSocket);
+        if(bindResult) {
+            udpServers.append(udpSocket);
+        }
+
     }
 
     reJoinMulticast();
@@ -226,16 +247,20 @@ void PacketNetwork::init()
     }
 
     foreach (tcp, allTCPServers()) {
-        if(!tcp->isListening()) {
-            if(tcp->serverPort() < 1024) {
+        if(!tcp->isListening() && (!erroronce)) {
+            erroronce = true;
+            if(tcp->serverPort() < 1024 && tcp->serverPort() > 0) {
 
-                QMessageBox msgBox;
-                msgBox.setWindowTitle("Binding to low port number.");
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.setDefaultButton(QMessageBox::Ok);
-                msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("Packet Sender attempted (and failed) to bind to a port less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
-                msgBox.exec();
+                QString msgText = lowPortText;
+                msgText.replace("[PORT]", QString::number(udpPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+            } else {
+                QString msgText = portConsumedText;
+                msgText.replace("[PORT]", QString::number(udpPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+
             }
 
         }

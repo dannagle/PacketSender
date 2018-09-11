@@ -183,6 +183,18 @@
            </item>
            <item>
             <widget class="QComboBox" name="udptcpComboBox">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>20</height>
+              </size>
+             </property>
              <item>
               <property name="text">
                <string>TCP</string>
@@ -405,7 +417,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
