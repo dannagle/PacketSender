@@ -35,6 +35,7 @@ const int Packet::TIMESTAMP = Qt::UserRole + 7;
 const int Packet::DATATYPE = Qt::UserRole + 8;
 const int Packet::TCP_UDP = Qt::UserRole + 9;
 const int Packet::REPEAT = Qt::UserRole + 10;
+const int Packet::INCOMING = Qt::UserRole + 11;
 
 
 
@@ -99,6 +100,7 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(receiveBeforeSend);
     OTHEREQUALS(delayAfterConnect);
     OTHEREQUALS(persistent);
+    OTHEREQUALS(incoming);
 }
 
 QHostAddress::SpecialAddress Packet::IPV4_IPV6_ANY(int ipMode)
@@ -128,6 +130,7 @@ void Packet::init()
     tcpOrUdp = "TCP";
     sendResponse = 0;
     repeat = 0;
+    incoming = false;
     timestamp = QDateTime::currentDateTime();
     receiveBeforeSend = false;
     delayAfterConnect = 0;
@@ -744,6 +747,7 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.fromPort = tItem->data(Packet::FROM_PORT).toUInt();
     returnPacket.fromIP = tItem->data(Packet::FROM_IP).toString();
     returnPacket.repeat = tItem->data(Packet::REPEAT).toFloat();
+    returnPacket.incoming = tItem->data(Packet::INCOMING).toBool();
     return returnPacket;
 }
 
@@ -855,6 +859,7 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
     tItem->setData(Packet::FROM_PORT,  thepacket.fromPort);
     tItem->setData(Packet::TCP_UDP,  thepacket.tcpOrUdp);
     tItem->setData(Packet::REPEAT,  thepacket.repeat);
+    tItem->setData(Packet::INCOMING,  thepacket.repeat);
     QByteArray thedata = thepacket.getByteArray();
     tItem->setToolTip("Data portion is " + QString::number(thedata.size()) + " bytes");
 }

@@ -55,6 +55,7 @@ class Packet
         unsigned int fromPort;
         QString tcpOrUdp;
         unsigned int sendResponse;
+        bool incoming;
         void init();
         void clear();
         bool isTCP();
@@ -98,6 +99,7 @@ class Packet
         static const int TIMESTAMP;
         static const int DATATYPE;
         static const int REPEAT;
+        static const int INCOMING;
 
 
         bool operator()(const Packet* a, const Packet* b) const;
