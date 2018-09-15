@@ -548,7 +548,7 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.toIP = "You";
 
             if(theDatagram.destinationAddress().isMulticast()) {
-                udpPacket.toIP = "(MC) " + theDatagram.destinationAddress().toString();
+                udpPacket.toIP = theDatagram.destinationAddress().toString();
             }
 
 
