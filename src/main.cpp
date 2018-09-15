@@ -230,6 +230,8 @@ int main(int argc, char *argv[])
             data = (args[2]);
         }
 
+        bool multicast = PacketNetwork::isMulticast(address);
+
         //check for invalid options..
 
         if (argssize > 3) {
@@ -250,6 +252,15 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: both mixed ascii and pure ascii set. Defaulting to pure ascii.";
             mixedascii = false;
         }
+
+        if(multicast) {
+            OUTIF() << "Info: Joining multicast address forces UDP and IPv4.";
+            udp = true;
+            tcp = false;
+            ssl = false;
+            ipv6 = false;
+        }
+
 
         if (tcp && udp) {
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
@@ -286,6 +297,8 @@ int main(int argc, char *argv[])
         if (!tcp && !udp && !ssl) {
             tcp = true;
         }
+
+
 
         //Create the packet to send.
         if (!name.isEmpty()) {
@@ -561,11 +574,28 @@ int main(int argc, char *argv[])
             QUdpSocket sock;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
-            if (!sock.bind(QHostAddress::Any, bind)) {
-                OUTIF() << "Error: Could not bind to " << bind;
+            if(multicast) {
+                if (!sock.bind(QHostAddress::AnyIPv4, bind)) {
+                    OUTIF() << "Error: Could not bind to " << bind;
 
-                OUTPUT();
-                return -1;
+                    OUTPUT();
+                    return -1;
+                }
+
+                bool didjoin = sock.joinMulticastGroup(QHostAddress(address));
+                if(!didjoin) {
+                    OUTIF() << "Error: Could not join muliticast group " << address;
+                    OUTIF() << "Attempting to send anyway...";
+                }
+
+            } else {
+                if (!sock.bind(QHostAddress::Any, bind)) {
+                    OUTIF() << "Error: Could not bind to " << bind;
+
+                    OUTPUT();
+                    return -1;
+                }
+
             }
 #else
 
