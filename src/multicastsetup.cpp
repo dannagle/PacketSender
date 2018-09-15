@@ -17,54 +17,31 @@ MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     init();
 }
 
-void MulticastSetup::setIPandPort(QString ip, unsigned int port)
+void MulticastSetup::setIP(QString ip)
 {
     ui->ipaddressEdit->setText(ip);
-    ui->portEdit->setText(QString::number(port));
     ui->joinButton->setFocus();
 }
 
 void MulticastSetup::init()
 {
+    QList<int> udpPorts = this->packetNetwork->getUDPPortsBound();
 
-    QStringList mcastStringList = packetNetwork->multicastStringList();
-    QString mcast, ip;
-    unsigned int port = 0;
-
-    QStringList tHeaders, split;
-
-    tHeaders << "Address" << "Port";
-
-    ui->mcastTable->setColumnCount(tHeaders.size());
-    ui->mcastTable->verticalHeader()->show();
-    ui->mcastTable->horizontalHeader()->show();
-    ui->mcastTable->setHorizontalHeaderLabels(tHeaders);
-
-
-    ui->mcastTable->setRowCount(mcastStringList.size());
-
-    QDEBUGVAR(mcastStringList.size());
-    for(int i=0; i < mcastStringList.size(); i++) {
-        mcast = mcastStringList[i];
-        QDEBUGVAR(mcast);
-
-        PacketNetwork::multiCastToIPandPort(mcast, ip, port);
-
-        QDEBUGVAR(ip);
-        QDEBUGVAR(port);
-
-        ui->mcastTable->setItem(i, 0, new QTableWidgetItem(ip));
-        ui->mcastTable->setItem(i, 1, new QTableWidgetItem(QString::number(port)));
+    if(udpPorts.isEmpty()) {
+        ui->infoLabel->setText("There are no bound UDP ports");
+    } else {
+        int joinedPort = udpPorts.first();
+        QString infoText = "UDP socket bound to ";
+        infoText.append(QString::number(joinedPort));
+        infoText.append(" will join the multicast group");
+        ui->infoLabel->setText(infoText);
     }
 
 
 
-    ui->mcastTable->setSortingEnabled(true);
-    ui->mcastTable->resizeColumnsToContents();
-    ui->mcastTable->resizeRowsToContents();
-    ui->mcastTable->horizontalHeader()->setStretchLastSection(true);
-
-
+    QStringList mcastStringList = packetNetwork->multicastStringList();
+    ui->mcastLW->clear();
+    ui->mcastLW->addItems(mcastStringList);
 }
 
 MulticastSetup::~MulticastSetup()
@@ -76,7 +53,6 @@ void MulticastSetup::on_joinButton_clicked()
 {
 
     QString ip = ui->ipaddressEdit->text().trimmed();
-    int port = ui->portEdit->text().toInt();
 
     if (!PacketNetwork::isMulticast(ip)) {
         QMessageBox msgBox;
@@ -91,19 +67,6 @@ void MulticastSetup::on_joinButton_clicked()
         return;
     }
 
-    if((port < 1) || port > 65535) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle("Invalid Port.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Bind port must be a number 1-65535.");
-        msgBox.exec();
-        ui->portEdit->setFocus();
-        ui->portEdit->selectAll();
-        return;
-
-    }
 
     int ipMode = packetNetwork->getIPmode();
 
@@ -124,12 +87,8 @@ void MulticastSetup::on_joinButton_clicked()
         packetNetwork->init();
 
     }
-
-
-    QDEBUGVAR(ip);
-    QDEBUGVAR(port);
-    packetNetwork->joinMulticast(ip, port);
-    QDEBUG();
+    packetNetwork->joinMulticast(ip);
+    QDEBUGVAR(packetNetwork->multicastStringList());
     init();
 }
 

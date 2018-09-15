@@ -1182,7 +1182,7 @@ void MainWindow::on_testPacketButton_clicked()
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Create new UDP mulitcast socket?");
+            msgBox.setText("Join UDP mulitcast group?");
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
@@ -1678,6 +1678,9 @@ void MainWindow::slowRefreshTimerTimeout()
     }
 
 
+    //In case the multicast switch had a problem, rejoin all groups.
+    packetNetwork.reJoinMulticast();
+
 }
 
 void MainWindow::refreshTimerTimeout()
@@ -2049,8 +2052,8 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::on_actionJoin_IPv4_triggered(QString address, unsigned int port)
 {
     MulticastSetup mcast(&packetNetwork, this);
-    if((!address.isEmpty()) && port > 0) {
-        mcast.setIPandPort(address, port);
+    if((!address.isEmpty())) {
+        mcast.setIP(address);
     }
     mcast.exec();
     UDPServerStatus();

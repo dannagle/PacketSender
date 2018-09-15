@@ -79,12 +79,11 @@ class PacketNetwork : public QObject
 
         static bool isMulticast(QString ip);
 
-        void joinMulticast(QString address, int port);
+        void joinMulticast(QString address);
         bool canSendMulticast(QString address);
         void reJoinMulticast();
         void leaveMulticast();
         QUdpSocket * findMulticast(QString multicast);
-        static void multiCastToIPandPort(QString multicast, QString &ip, unsigned int &port);
 signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
@@ -113,7 +112,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
-        bool multiCastBound(unsigned int port);
+
 };
 
 #endif // PACKETNETWORK_H
