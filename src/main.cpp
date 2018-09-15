@@ -660,6 +660,10 @@ int main(int argc, char *argv[])
                 }
             }
 
+            if(multicast) {
+                sock.leaveMulticastGroup(QHostAddress(address));
+            }
+
             sock.close();
 
             OUTPUT();
