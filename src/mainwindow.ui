@@ -417,7 +417,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -436,6 +436,8 @@
     <addaction name="actionAbout"/>
     <addaction name="actionHelp"/>
     <addaction name="actionForums"/>
+    <addaction name="actionFollow_NagleCode"/>
+    <addaction name="actionConnect_on_LinkedIn"/>
     <addaction name="actionDonate_Thank_You"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -589,6 +591,24 @@
    </property>
    <property name="text">
     <string>NagleCode Forums</string>
+   </property>
+  </action>
+  <action name="actionFollow_NagleCode">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/twitter-icon.png</normaloff>:/icons/twitter-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Follow on Twitter</string>
+   </property>
+  </action>
+  <action name="actionConnect_on_LinkedIn">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/linkedin-icon.png</normaloff>:/icons/linkedin-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Connect on LinkedIn</string>
    </property>
   </action>
  </widget>

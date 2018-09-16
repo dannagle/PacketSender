@@ -144,10 +144,12 @@ class MainWindow : public QMainWindow
         void on_actionAndroid_App_triggered();
         void on_actioniOS_App_triggered();
         void on_actionForums_triggered();
+        void on_actionFollow_NagleCode_triggered();
+        void on_actionConnect_on_LinkedIn_triggered();
 
 
 
-        void on_actionJoin_IPv4_triggered(QString address = "", unsigned int port = 0);
+        void on_actionJoin_IPv4_triggered(QString address = "");
 
         void on_actionHelp_triggered();
 

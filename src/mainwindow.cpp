@@ -1186,7 +1186,7 @@ void MainWindow::on_testPacketButton_clicked()
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
-                on_actionJoin_IPv4_triggered(testPacket.toIP, testPacket.port);
+                on_actionJoin_IPv4_triggered(testPacket.toIP);
             }
         }
     }
@@ -2041,6 +2041,16 @@ void MainWindow::on_actionForums_triggered()
     QDesktopServices::openUrl(QUrl("https://forums.naglecode.com/"));
 }
 
+void MainWindow::on_actionFollow_NagleCode_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/twitter"));
+}
+
+void MainWindow::on_actionConnect_on_LinkedIn_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://packetsender.com/linkedin"));
+}
+
 
 
 void MainWindow::on_actionAbout_triggered()
@@ -2049,7 +2059,7 @@ void MainWindow::on_actionAbout_triggered()
     about->show();
 }
 
-void MainWindow::on_actionJoin_IPv4_triggered(QString address, unsigned int port)
+void MainWindow::on_actionJoin_IPv4_triggered(QString address)
 {
     MulticastSetup mcast(&packetNetwork, this);
     if((!address.isEmpty())) {
