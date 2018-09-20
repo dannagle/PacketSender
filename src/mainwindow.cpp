@@ -2317,7 +2317,12 @@ void MainWindow::on_actionExport_Packets_triggered()
         fileName.append(".ini");
     }
     QDEBUGVAR(fileName);
-    QFile::copy(PACKETSFILE, fileName);
+
+    if (QFile::exists(fileName)) {
+        QFile::remove(fileName);
+    }
+
+    QDEBUG() << QFile::copy(PACKETSFILE, fileName);
     statusBarMessage("Export: " + fileName);
 }
 
