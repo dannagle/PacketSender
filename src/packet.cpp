@@ -868,6 +868,11 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
 
 void Packet::setBoldItem(QTableWidgetItem * tItem, Packet thepacket)
 {
+    Q_UNUSED(tItem);
+    Q_UNUSED(thepacket);
+    //TODO:This does not work well.
+    //The packet itself should know if it is was received or sent.
+    /*
     QFont originalFont = (tItem)->font();
     if (!thepacket.fromIP.toUpper().contains("YOU")) {
         originalFont.setBold(true);
@@ -875,6 +880,7 @@ void Packet::setBoldItem(QTableWidgetItem * tItem, Packet thepacket)
     } else {
         originalFont.setBold(false);
     }
+    */
 }
 
 
