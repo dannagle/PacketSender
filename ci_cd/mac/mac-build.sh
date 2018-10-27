@@ -2,11 +2,26 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 5.8.2)"
+    echo "Please supply build version (e.g. 5.8.5)"
     exit
 fi
 
+if [ -z "$2" ]
+  then
+    echo "Please supply notary id username (e.g. apple@example.com)"
+    exit
+fi
+
+if [ -z "$3" ]
+  then
+    echo "Please supply notary id password (e.g. hunter2)"
+    exit
+fi
+
+
 BUILD_VERSION="$1";
+APPLE_UNAME="$2";
+APPLE_PWORD="$3";
 
 
 pushd /tmp/
@@ -37,5 +52,9 @@ rm -rf /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg || t
 mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg
 
 echo "Finished creating PacketSender_v$BUILD_VERSION.dmg"
+
+echo "Sending to Apple for notary"
+xcrun altool --notarize-app -f PacketSender_v$BUILD_VERSION.dmg --primary-bundle-id 'com.packetsender.desktop'  -u ''$APPLE_UNAME'' -p ''$APPLE_PWORD''
+
 
 popd
