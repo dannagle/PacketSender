@@ -281,7 +281,7 @@ The only dependency is Qt SDK. Here is how to build the app.
 The Windows and Mac versions were built using Qt 5.10
 
 ### Build for Linux
-Here is the sequence of commands for Ubuntu 15.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
+Here is the sequence of commands for Ubuntu 16.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
 
 If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
 
@@ -305,7 +305,6 @@ If it doesn't run, you may need to set it executable
 chmod a+x PacketSender
 ```
 
-The Linux release has an Ubuntu build script that will make Packet Sender globally launchable with just `packetsender`.
 
 ## Enhancements
 
