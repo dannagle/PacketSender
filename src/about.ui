@@ -72,8 +72,8 @@ font: 75 24pt &quot;Helvetica&quot;; </string>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>13</width>
+              <height>253</height>
              </size>
             </property>
            </spacer>
@@ -107,8 +107,8 @@ font: 75 24pt &quot;Helvetica&quot;; </string>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>13</width>
+              <height>253</height>
              </size>
             </property>
            </spacer>
@@ -152,57 +152,6 @@ font: 75 24pt &quot;Helvetica&quot;; </string>
           </item>
          </layout>
         </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <item>
-           <spacer name="horizontalSpacer_7">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="DNLinkButton">
-            <property name="text">
-             <string>DanNagle.com</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="twitterButton">
-            <property name="text">
-             <string>@NagleCode</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="psLinkButton">
-            <property name="text">
-             <string>PacketSender.com</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
        </layout>
       </widget>
      </item>
@@ -231,9 +180,9 @@ font: 75 24pt &quot;Helvetica&quot;; </string>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="DNAmazonLinkButton">
+      <widget class="QPushButton" name="psLinkButton">
        <property name="text">
-        <string>Want to donate?</string>
+        <string>PacketSender.com</string>
        </property>
       </widget>
      </item>

@@ -22,15 +22,14 @@ It can be used for both commercial and personal use.
 ## Download
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
-![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)
+![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)  ![Packet Sender logo](screenshots/ios_logo.png)  ![Packet Sender logo](screenshots/android_logo.png)
 
 ## Packet Sender Mobile
-The mobile apps are open source at this repo:
+The mobile apps are open source and available at :
 https://github.com/dannagle/Packet_Sender_Mobile
 
 Packet Sender Mobile binaries for iOS and Android may be purchased for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
 
-The GitHub project for Packet Sender Mobile is located at https://github.com/dannagle/Packet_Sender_Mobile
 
 ## Packet Sender Cloud
 Packets sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
@@ -73,6 +72,16 @@ If INI files are found, it will use them instead of `%APPDATA%` or `Library/Appl
 Packet Sender's built-in servers are configured to support IPv4 and IPv6. The most recent version of Packet Sender is smart enough to switch between the two modes. Older versions Packet Sender, mostly found on Linux's older Qt SDK libraries, may render a toggle switch between IPv4 and IPv6. Click to switch between the two.
 
 Packet Sender's GUI client sender and CLI will detect the type of IP address being used and bind appropriately to send the packet. Note that you must include a scope ID to send.
+
+
+## Multicast (Experimental)
+Packet Sender's multicast support is triggered by attempting to send to a IPv4 multicast address or via the mulitcast submenu). The feature is currently experimental and has these known problems.
+* Packet Sender abandons IPv6 support when joining multicast.
+* And stays abandoned until you revisit settings or attempt to send to IPv6
+* On wifi, it sometimes takes 20 seconds for multicast join to actually take effect.
+* Packet Sender has no logic to rejoin a mulitcast group if the switch reboots or some other common error.
+
+There is no IPv6 multicast support, though it is on the roadmap. Sponsors IPv6 multicast support are welcome to contact me.
 
 
 ### Documentation (GUI)
