@@ -25,7 +25,7 @@ sed -i '' '/BEGIN/,/END/c\
 "/Users/dannagle/Qt/5.11.1/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
 /Users/dannagle/Qt/5.11.1/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
-codesign --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" PacketSender.app
+codesign --option runtime --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" PacketSender.app
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
