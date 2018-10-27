@@ -54,7 +54,7 @@ mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION
 echo "Finished creating PacketSender_v$BUILD_VERSION.dmg"
 
 echo "Sending to Apple for notary"
-xcrun altool --notarize-app -f PacketSender_v$BUILD_VERSION.dmg --primary-bundle-id 'com.packetsender.desktop'  -u ''$APPLE_UNAME'' -p ''$APPLE_PWORD''
+xcrun altool --notarize-app -f /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg --primary-bundle-id 'com.packetsender.desktop'  -u ''$APPLE_UNAME'' -p ''$APPLE_PWORD''
 
 
 popd
