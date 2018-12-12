@@ -950,13 +950,14 @@ void MainWindow::statusBarMessage(const QString &msg, int timeout = 3000, bool o
 void MainWindow::sendClick(QString packetName)
 {
     QDEBUG() << "send click: " << packetName;
+    static QStringList noMCastList;
     Packet toSend;
 
 
     foreach (toSend, packetsSaved) {
         if (toSend.name == packetName) {
 
-            if (PacketNetwork::isMulticast(toSend.toIP)) {
+            if (PacketNetwork::isMulticast(toSend.toIP) && (!noMCastList.contains(toSend.toIP))) {
                 QMessageBox msgBox;
                 msgBox.setWindowTitle("Multicast detected.");
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
@@ -965,7 +966,9 @@ void MainWindow::sendClick(QString packetName)
                 msgBox.setText("Do you wish to join the mulitcast group?");
                 int yesno = msgBox.exec();
                 if (yesno == QMessageBox::No) {
-                    return;
+                    noMCastList.append(toSend.toIP);
+                } else {
+                    on_actionJoin_IPv4_triggered(toSend.toIP);
                 }
 
             }
@@ -1059,6 +1062,7 @@ void MainWindow::saveSession(Packet sessionPacket)
 void MainWindow::on_testPacketButton_clicked()
 {
     Packet testPacket;
+    static QStringList noMCastList;
     testPacket.init();
 
     if (ui->udptcpComboBox->currentText() == "SSL") {
@@ -1169,7 +1173,7 @@ void MainWindow::on_testPacketButton_clicked()
     }
 
 
-    if (PacketNetwork::isMulticast(testPacket.toIP)) {
+    if (PacketNetwork::isMulticast(testPacket.toIP) && (!noMCastList.contains(testPacket.toIP))) {
 
         //are we joined?
 
@@ -1187,6 +1191,8 @@ void MainWindow::on_testPacketButton_clicked()
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
                 on_actionJoin_IPv4_triggered(testPacket.toIP);
+            } else {
+                noMCastList.append(testPacket.toIP);
             }
         }
     }
