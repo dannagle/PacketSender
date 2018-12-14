@@ -44,6 +44,7 @@
 
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
+void themeTheButton(QPushButton * button);
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -143,8 +144,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
-    stopResendingButton->setFlat(true);
-    stopResendingButton->setCursor(Qt::PointingHandCursor);
+    themeTheButton(stopResendingButton);
     stopResendingButton->setIcon(QIcon(PSLOGO));
 
     connect(stopResendingButton, SIGNAL(clicked()),
@@ -156,9 +156,7 @@ MainWindow::MainWindow(QWidget *parent) :
     stopResendingButton->hide();
 
     udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
-    udpServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
-    udpServerStatus->setFlat(true);
-    udpServerStatus->setCursor(Qt::PointingHandCursor);
+    themeTheButton(udpServerStatus);
     udpServerStatus->setIcon(QIcon(UDPRXICON));
 
     connect(udpServerStatus, SIGNAL(clicked()),
@@ -170,15 +168,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //updatewidget
     tcpServerStatus = new QPushButton("TCP:" + (packetNetwork.getTCPPortString()));
-    tcpServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
-    tcpServerStatus->setFlat(true);
-    tcpServerStatus->setCursor(Qt::PointingHandCursor);
+    themeTheButton(tcpServerStatus);
     tcpServerStatus->setIcon(QIcon(TCPRXICON));
 
     sslServerStatus = new QPushButton("SSL:" + (packetNetwork.getSSLPortString()));
-    sslServerStatus->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
-    sslServerStatus->setFlat(true);
-    sslServerStatus->setCursor(Qt::PointingHandCursor);
+    themeTheButton(sslServerStatus);
     sslServerStatus->setIcon(QIcon(SSLRXICON));
 
 
@@ -350,6 +344,19 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
+void themeTheButton(QPushButton * button)
+{
+    QPalette pal = button->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::white));
+    button->setAutoFillBackground(true);
+    button->setPalette(pal);
+    button->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    button->setFlat(true);
+    button->setCursor(Qt::PointingHandCursor);
+    button->update();
+
+
+}
 void MainWindow::ebcdicTranslate()
 {
     QDEBUG() << "Translate ascii field";

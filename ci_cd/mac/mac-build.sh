@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 5.8.5)"
+    echo "Please supply build version (e.g. 5.9.0)"
     exit
 fi
 
@@ -37,9 +37,9 @@ sed -i '' '/BEGIN/,/END/c\
 #define SW_VERSION "v'$BUILD_VERSION'"
 ' globals.h
 
-"/Users/dannagle/Qt/5.11.1/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
+"/Users/dannagle/Qt/5.12.0/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
-/Users/dannagle/Qt/5.11.1/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
+/Users/dannagle/Qt/5.12.0/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
 codesign --option runtime --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" PacketSender.app
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true

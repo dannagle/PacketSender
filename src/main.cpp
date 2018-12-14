@@ -701,12 +701,16 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_OS_MAC
+
+        //Now using native styling for latest Mojave dark theme
+        /*
         QFile file(":/packetsender_mac.css");
         if (file.open(QFile::ReadOnly)) {
             QString StyleSheet = QLatin1String(file.readAll());
             //  qDebug() << "stylesheet: " << StyleSheet;
             a.setStyleSheet(StyleSheet);
         }
+        */
 #endif
 
 
