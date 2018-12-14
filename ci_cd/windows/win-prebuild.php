@@ -1,8 +1,8 @@
 <?php
 $buildversion = trim(file_get_contents("buildversion.txt"));
 echo "Replacing version with $buildversion\n";
-$wininstallertemplate = "/cygdrive/c/Users/Dan/github/packetsenderinstaller/packetsender32bit.iss.template";
-$wininstallerfile = "/cygdrive/c/Users/Dan/github/packetsenderinstaller/packetsender32bit.iss";
+$wininstallertemplate = "/cygdrive/c/Users/Dan/github/packetsenderinstaller/packetsender64bit.iss.template";
+$wininstallerfile = "/cygdrive/c/Users/Dan/github/packetsenderinstaller/packetsender64bit.iss";
 $versionflag = "VERSION_GOES_HERE";
 
 echo "Replacing installer script with $buildversion\n";

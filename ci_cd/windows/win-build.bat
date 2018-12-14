@@ -6,7 +6,7 @@ cd release
 copy /Y C:\Users\Dan\Desktop\code_sign_exe_com.bat .
 call code_sign_exe_com.bat
 echo Copying signed exe
-copy /Y PacketSender.exe C:\Users\Dan\github\packetsenderinstaller\q5mingw5.10\PacketSender.exe
+copy /Y PacketSender.exe C:\Users\Dan\github\packetsenderinstaller\q5_12_mingw64\PacketSender.exe
 copy /Y PacketSender.exe C:\Users\Dan\github\packetsenderinstaller\PacketSenderPortable\PacketSender.exe
 cd ..
 
@@ -22,6 +22,6 @@ cd release
 copy /Y C:\Users\Dan\Desktop\code_sign_exe_com.bat .
 call code_sign_exe_com.bat
 echo Copying command line exe
-copy /Y packetsendercli.exe C:\Users\Dan\github\packetsenderinstaller\q5mingw5.10\packetsender.com
+copy /Y packetsendercli.exe C:\Users\Dan\github\packetsenderinstaller\q5_12_mingw64\packetsender.com
 copy /Y packetsendercli.exe C:\Users\Dan\github\packetsenderinstaller\PacketSenderPortable\packetsender.com
 cd ..
