@@ -24,6 +24,13 @@ About::About(QWidget *parent) :
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
+
+    QPalette pal = ui->psLinkButton->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::white));
+    ui->psLinkButton->setAutoFillBackground(true);
+    ui->psLinkButton->setPalette(pal);
+
+
     ui->psLinkButton->setStyleSheet(HYPERLINKSTYLE);
     ui->psLinkButton->setIcon(QIcon(":pslogo.png"));
     ui->psLinkButton->setFlat(true);
