@@ -28,6 +28,12 @@ void popMsg(QString title, QString msg, bool isError);
 void linkifyButton(QPushButton * btn)
 {
 
+    QPalette pal = btn->palette();
+    pal.setColor(QPalette::Button, QColor(Qt::white));
+    btn->setAutoFillBackground(true);
+    btn->setPalette(pal);
+
+
     btn->setStyleSheet(HYPERLINKSTYLE);
     btn->setFlat(true);
     btn->setCursor(Qt::PointingHandCursor);
