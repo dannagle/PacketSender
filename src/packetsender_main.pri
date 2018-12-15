@@ -49,6 +49,7 @@ win32:RC_FILE = psicon.rc
 
 macx:ICON = psicons.icns
 
+macx:QMAKE_INFO_PLIST = Info.plist
 
 
 RESOURCES += packetsender.qrc
