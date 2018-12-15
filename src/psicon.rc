@@ -4,8 +4,8 @@ IDI_ICON1            ICON                    "pslogo.ico"
 #include "globals.h"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     6,0,0,0
-PRODUCTVERSION  6,0,0,0
+FILEVERSION     VER_FILEVERSION
+PRODUCTVERSION  VER_FILEVERSION
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN

@@ -14,6 +14,9 @@
 #define SW_VERSION "v6.0.1"
 //END SW VERSION
 
+//BEGIN FILE VERSION
+#define VER_FILEVERSION 6,0,0,0
+//END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
 #define QDEBUGVAR(var)  QDEBUG() << # var <<  var;
