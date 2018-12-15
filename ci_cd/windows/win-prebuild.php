@@ -19,7 +19,7 @@ $cppfile = "src/globals.h";
 echo "Replacing $cppfile script with $buildversion\n";
 $str=file_get_contents($cppfile);
 
-$buildversioncommas = str_replace(".", "," $buildversion).",0";
+$buildversioncommas = str_replace(".", "," , $buildversion).",0";
 
 $str=replace_between($str, "//BEGIN SW VERSION", "//END SW VERSION", "\n#define SW_VERSION \"$buildversion\"\n");
 $str=replace_between($str, "//BEGIN FILE VERSION", "//END FILE VERSION", "\n#define VER_FILEVERSION $buildversioncommas\n");
