@@ -37,6 +37,9 @@ sed -i '' '/BEGIN/,/END/c\
 #define SW_VERSION "v'$BUILD_VERSION'"
 ' globals.h
 
+echo "Replacing Info.plist with $BUILD_VERSION"
+sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
+
 "/Users/dannagle/Qt/5.12.0/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
 /Users/dannagle/Qt/5.12.0/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
