@@ -5,7 +5,7 @@
     <key>CFBundleExecutable</key>
     <string>PacketSender</string>
     <key>CFBundleGetInfoString</key>
-    <string>Network Utility to send/receive packets</string>
+    <string>Network Utility To Send/Receive Packets</string>
     <key>CFBundleIconFile</key>
     <string>psicons.icns</string>
     <key>CFBundleIdentifier</key>
