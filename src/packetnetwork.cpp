@@ -17,6 +17,7 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QHostInfo>
+#include <QtGlobal>
 #include "settings.h"
 
 #include "persistentconnection.h"

@@ -64,8 +64,6 @@
 
 //I'm not convinced it works perfect when in server mode.
 
-#include <QtGlobal>
-
 //used when binding
 #define IPV4_OR_IPV6 Packet::IPV4_IPV6_ANY(ipMode)
 
