@@ -999,7 +999,7 @@ void MainWindow::sendClick(QString packetName)
                 }
             }
 
-            if (toSend.repeat > 0 && !ui->persistentTCPCheck->isChecked()) {
+            if (toSend.repeat > 0) {
                 toSend.timestamp = QDateTime::currentDateTime();
 
                 stopResendingButton->setStyleSheet("QPushButton { color: green; } QPushButton::hover { color: #BC810C; } ");
@@ -1227,9 +1227,8 @@ void MainWindow::on_testPacketButton_clicked()
     lastSendPacket = testPacket;
     lastSendPacket.name.clear();
 
-    if (testPacket.repeat > 0 && !ui->persistentTCPCheck->isChecked()) {
-        /*
-        if(testPacket.tcpOrUdp == "TCP" && ui->persistentTCPCheck->isChecked()) {
+    if (testPacket.repeat > 0) {
+        if((testPacket.isTCP() || (testPacket.isSSL()))  && ui->persistentTCPCheck->isChecked()) {
 
             QMessageBox msgBox;
             msgBox.setWindowTitle("Resend TCP with persistent connections!");
@@ -1247,7 +1246,6 @@ void MainWindow::on_testPacketButton_clicked()
             }
 
         }
-            */
 
         testPacket.timestamp = QDateTime::currentDateTime();
 
