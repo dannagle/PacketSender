@@ -122,7 +122,7 @@ Settings::Settings(QWidget *parent) :
     ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
 
 
-    int ipMode = settings.value("ipMode", 8).toInt(); //default both
+    int ipMode = settings.value("ipMode", 4).toInt(); //default to 4
 
     ui->ipv4and6Radio->setChecked(true);
     ui->ipv4Radio->setChecked(false);
@@ -134,7 +134,7 @@ Settings::Settings(QWidget *parent) :
 
     }
 
-    if (ipMode > 6) {
+    if (ipMode == 6) {
         ui->ipv6Radio->setChecked(true);
         ui->ipv4and6Radio->setChecked(false);
     }
