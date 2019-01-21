@@ -135,6 +135,16 @@ MainWindow::MainWindow(QWidget *parent) :
     packetsSaved = Packet::fetchAllfromDB("");
     QDEBUGVAR(packetsSaved.size());
 
+    packetTableHeaders  = Settings::defaultTrafficTableHeader();
+    packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
+    packetsLogged.setTableHeaders(packetTableHeaders);
+
+    ui->trafficLogTable->setModel(&packetsLogged);
+
+
+    ui->trafficLogTable->verticalHeader()->show();
+    ui->trafficLogTable->horizontalHeader()->show();
+
     loadPacketsTable();
 
 //   statusBar()->insertPermanentWidget(0, generatePSLink());
@@ -212,7 +222,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     //every 15 seconds
-    slowRefreshTimer.setInterval(15000);
+    slowRefreshTimer.setInterval(5000);
     connect(&slowRefreshTimer, SIGNAL(timeout()), this, SLOT(slowRefreshTimerTimeout())) ;
     slowRefreshTimer.start();
     slowRefreshTimerTimeout();
@@ -579,7 +589,7 @@ void MainWindow::toTrafficLog(Packet logPacket)
         if ((!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty())
                 || (!logPacket.errorString.isEmpty())
            ) {
-            packetsLogged.append(logPacket);
+            packetsLogged.prepend(logPacket);
         } else {
             QDEBUG() << "Discarded packet";
         }
@@ -675,135 +685,14 @@ void MainWindow::loadTrafficLogTable()
     QTableWidgetItem * tItem;
     Packet tempPacket;
 
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-
-    packetTableHeaders  = Settings::defaultTrafficTableHeader();
-    packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
-    ui->trafficLogTable->setColumnCount(packetTableHeaders.size());
-
-    ui->trafficLogTable->verticalHeader()->show();
-    ui->trafficLogTable->horizontalHeader()->show();
-    ui->trafficLogTable->setHorizontalHeaderLabels(packetTableHeaders);
-
-
-    QList<Packet> displayPackets;
-    displayPackets.clear();
-
-
-    QString filterString = ui->searchLineEdit->text().toLower().trimmed();
-
-
-    filterString.clear(); // don't search log
-
-    if (filterString.isEmpty()) {
-        displayPackets = packetsLogged;
-    } else {
-        foreach (tempPacket, packetsLogged) {
-
-            if (tempPacket.name.toLower().contains(filterString) ||
-                    tempPacket.toIP.contains(filterString) ||
-                    tempPacket.hexToASCII(tempPacket.hexString).toLower().contains(filterString) ||
-                    tempPacket.hexString.toLower().contains(filterString)
-               ) {
-                displayPackets.append(tempPacket);
-                continue;
-            }
-        }
-
-    }
-
     int trafficlogsize = packetsLogged.size();
     ui->trafficLogClearButton->setText("Clear Log ("+QString::number(trafficlogsize)+")");
 
-
-
-    Packet::sortByTime(displayPackets);
-
-    if (displayPackets.isEmpty()) {
-        ui->trafficLogTable->setRowCount(0);
-    } else {
-        ui->trafficLogTable->setRowCount(displayPackets.count());
-    }
-    int rowCounter = 0;
-
     QDEBUGVAR(packetTableHeaders);
+    ui->trafficLogTable->resizeColumnsToContents();
+    ui->trafficLogTable->resizeRowsToContents();
+    ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
 
-    ui->trafficLogTable->setSortingEnabled(false);
-
-    foreach (tempPacket, displayPackets) {
-
-        /*
-
-        lwStringList ("Time", "From IP", "From Port", "To IP", "To Port", "Method", "Error", "ASCII", "Hex")
-
-        */
-
-        //
-        tItem = new QTableWidgetItem(tempPacket.timestamp.toString(DATETIMEFORMAT));
-        tItem->setIcon(tempPacket.getIcon());
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Time"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.fromIP);
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From IP"), tItem);
-
-        tItem = new QTableWidgetItem(QString::number(tempPacket.fromPort));
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("From Port"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.toIP);
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To IP"), tItem);
-        /*
-            packetTableHeaders <<"Time" << "From IP" <<"From Port" << "To IP" <<
-        "To Port" <<
-        "Method"<<"Error" << "ASCII" << "Hex";
-        */
-
-        tItem = new QTableWidgetItem(QString::number(tempPacket.port));
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("To Port"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.tcpOrUdp);
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Method"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.errorString);
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Error"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("ASCII"), tItem);
-
-        tItem = new QTableWidgetItem(tempPacket.hexString);
-        Packet::populateTableWidgetItem(tItem, tempPacket);
-        Packet::setBoldItem(tItem, tempPacket);
-        ui->trafficLogTable->setItem(rowCounter, packetTableHeaders.indexOf("Hex"), tItem);
-
-        rowCounter++;
-
-    }
-
-    if(ui->trafficLogTable->rowCount() > 0 && (!initialpackets)) {
-        initialpackets = true;
-        ui->trafficLogTable->setSortingEnabled(true);
-
-        ui->trafficLogTable->resizeColumnsToContents();
-        ui->trafficLogTable->resizeRowsToContents();
-        ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
-    }
 
 }
 
@@ -1673,6 +1562,10 @@ void MainWindow::slowRefreshTimerTimeout()
     QString titleString = "Packet Sender - IPs: ";
     QTextStream out(&titleString);
 
+    QDEBUGVAR(packetsLogged.size());
+    QDEBUGVAR(packetsLogged.rowCount());
+
+
     QNetworkAddressEntry entry;
     QList<QNetworkAddressEntry> allEntries = SubnetCalc::nonLoopBackAddresses();
 
@@ -1731,16 +1624,12 @@ void MainWindow::refreshTimerTimeout()
     }
 
 
-    if (ui->trafficLogTable->rowCount() != packetsLogged.size()) {
-        while (maxLogSize > 0 && packetsLogged.size() > maxLogSize) {
-            packetsLogged.removeFirst();
-        }
+    while (maxLogSize > 0 && packetsLogged.size() > maxLogSize) {
+        packetsLogged.removeFirst();
+    }
 
-        loadTrafficLogTable();
 
         //ui->mainTabWidget->setTabText(1,"Traffic Log (" + QString::number(packetsLogged.size()) +")");
-
-    }
 
     //got nothing else to do. check datagrams.
     packetNetwork.readPendingDatagrams();
@@ -1750,8 +1639,6 @@ void MainWindow::refreshTimerTimeout()
 
 void MainWindow::on_trafficLogClearButton_clicked()
 {
-    ui->trafficLogTable->clear();
-    ui->trafficLogTable->setRowCount(0);
     packetsLogged.clear();
     loadTrafficLogTable();
 
@@ -1760,17 +1647,18 @@ void MainWindow::on_trafficLogClearButton_clicked()
 
 void MainWindow::on_saveTrafficPacket_clicked()
 {
-    QList<QTableWidgetItem *> items = ui->trafficLogTable->selectedItems();
+    QModelIndexList indexes = ui->trafficLogTable->selectionModel()->selectedIndexes();
+    QModelIndex index;
     QDEBUG() << "Save traffic packets";
     QTableWidgetItem *item;
     QString selected;
 
 
-    Packet savePacket;
+    ;
     QString namePrompt;
     bool ok;
-    foreach (item, items) {
-        savePacket = Packet::fetchTableWidgetItemData(item);
+    foreach (index, indexes) {
+        Packet savePacket = packetsLogged.getPacket(index);
         QDEBUG() << "Saving" << savePacket.name;
         namePrompt = QInputDialog::getText(this, tr("Save Packet"),
                                            tr("Packet name:"), QLineEdit::Normal,
@@ -1875,19 +1763,19 @@ void MainWindow::on_toClipboardButton_clicked()
 
 
     QClipboard *clipboard = QApplication::clipboard();
-    QList<QTableWidgetItem *> items = ui->trafficLogTable->selectedItems();
+    QModelIndexList indexes = ui->trafficLogTable->selectionModel()->selectedIndexes();
+    QModelIndex index;
     QDEBUG() << "Save traffic packets";
-    QTableWidgetItem *item;
     QString selected;
 
 
-    Packet savePacket;
+    ;
     QString clipString;
     clipString.clear();
     QTextStream out;
     out.setString(&clipString);
 
-    if (items.size() == 0) {
+    if (indexes.size() == 0) {
 
         QMessageBox msgBox;
         msgBox.setText("No packets selected.");
@@ -1898,8 +1786,8 @@ void MainWindow::on_toClipboardButton_clicked()
         msgBox.exec();
         return;
     }
-    foreach (item, items) {
-        savePacket = Packet::fetchTableWidgetItemData(item);
+    foreach (index, indexes) {
+        Packet savePacket = packetsLogged.getPacket(index);
         out << "Time: " << savePacket.timestamp.toString(DATETIMEFORMAT) << "\n";
         out << "TO: " << savePacket.toIP << ":" << savePacket.port << "\n";
         out << "From: " << savePacket.fromIP << ":" << savePacket.fromPort << "\n";
@@ -1917,6 +1805,7 @@ void MainWindow::on_toClipboardButton_clicked()
     QMessageBox msgBox;
 
     if (settings.value("copyUnformattedCheck", true).toBool()) {
+        Packet savePacket = packetsLogged.getPacket(indexes.first());
         clipboard->setText(QString(savePacket.getByteArray()));
         msgBox.setText("Raw packet data sent to your clipboard. \nChange the settings if you prefer translated data.");
     } else {
@@ -1985,7 +1874,7 @@ void MainWindow::on_saveLogButton_clicked()
 
 
     Packet tempPacket;
-    foreach (tempPacket, packetsLogged) {
+    foreach (tempPacket, packetsLogged.list()) {
 
         exportString.append(tempPacket.timestamp.toString(DATETIMEFORMAT));
         exportString.append(delim);

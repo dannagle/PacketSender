@@ -12,7 +12,8 @@ SOURCES += main.cpp\
     subnetcalc.cpp \
     threadedtcpserver.cpp \
     cloudui.cpp \
-	multicastsetup.cpp
+	multicastsetup.cpp \
+    $$PWD/packetlogmodel.cpp
 
 HEADERS  += mainwindow.h \
     packetnetwork.h \
@@ -28,7 +29,8 @@ HEADERS  += mainwindow.h \
     ebcdic_ascii_map.h \
     threadedtcpserver.h \
     cloudui.h \
-	multicastsetup.h
+	multicastsetup.h \
+    $$PWD/packetlogmodel.h
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \

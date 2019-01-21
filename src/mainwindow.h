@@ -26,6 +26,7 @@
 #include "packetnetwork.h"
 #include "threadedtcpserver.h"
 #include "multicastsetup.h"
+#include "packetlogmodel.h"
 
 
 namespace Ui
@@ -182,7 +183,7 @@ class MainWindow : public QMainWindow
 
     private:
         Ui::MainWindow *ui;
-        QList<Packet> packetsLogged;
+        PacketLogModel packetsLogged;
         QList<Packet> packetsSaved;
         QList<Packet> packetsRepeat;
         int stopResending;
