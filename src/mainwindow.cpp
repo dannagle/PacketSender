@@ -92,6 +92,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
     packetNetwork.persistentConnectCheck = ui->persistentTCPCheck->isChecked();
 
+    ui->packetsTable->setWordWrap(false);
+    ui->trafficLogTable->setWordWrap(false);
 
     //load last session
     if (settings.value("restoreSessionCheck", true).toBool()) {

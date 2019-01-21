@@ -17,3 +17,8 @@ QStatusBar
     color: white;
     background-color: #4C4C4C; /*#D7DEF0;*/
 }
+
+QTableView::item
+{
+    qproperty-wordWrap: false;
+}
