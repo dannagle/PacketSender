@@ -454,7 +454,7 @@
    </widget>
    <widget class="QMenu" name="menuMulitcast">
     <property name="title">
-     <string>&amp;Mulitcast</string>
+     <string>&amp;Multicast</string>
     </property>
     <addaction name="actionJoin_IPv4"/>
    </widget>

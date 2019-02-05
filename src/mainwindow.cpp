@@ -861,7 +861,7 @@ void MainWindow::sendClick(QString packetName)
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("Do you wish to join the mulitcast group?");
+                msgBox.setText("Do you wish to join the multicast group?");
                 int yesno = msgBox.exec();
                 if (yesno == QMessageBox::No) {
                     noMCastList.append(toSend.toIP);
@@ -1084,7 +1084,7 @@ void MainWindow::on_testPacketButton_clicked()
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Join UDP mulitcast group?");
+            msgBox.setText("Join UDP multicast group?");
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {

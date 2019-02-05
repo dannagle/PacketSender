@@ -584,7 +584,7 @@ int main(int argc, char *argv[])
 
                 bool didjoin = sock.joinMulticastGroup(QHostAddress(address));
                 if(!didjoin) {
-                    OUTIF() << "Error: Could not join muliticast group " << address;
+                    OUTIF() << "Error: Could not join multicast group " << address;
                     OUTIF() << "Attempting to send anyway...";
                 }
 
