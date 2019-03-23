@@ -237,7 +237,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     packetsLogged.clear();
-    loadTrafficLogTable();
 
 
     generateConnectionMenu();
@@ -587,6 +586,8 @@ QPushButton * MainWindow::generatePSLink()
 void MainWindow::toTrafficLog(Packet logPacket)
 {
 
+    static bool initialpackets = false;
+
     if (ui->logTrafficCheck->isChecked()) {
         if ((!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty())
                 || (!logPacket.errorString.isEmpty())
@@ -596,6 +597,21 @@ void MainWindow::toTrafficLog(Packet logPacket)
             QDEBUG() << "Discarded packet";
         }
     }
+
+    int trafficlogsize = packetsLogged.size();
+    ui->trafficLogClearButton->setText("Clear Log ("+QString::number(trafficlogsize)+")");
+
+
+    if(!initialpackets) {
+
+        ui->trafficLogTable->resizeColumnsToContents();
+        ui->trafficLogTable->resizeRowsToContents();
+        ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
+
+        initialpackets = true;
+
+    }
+
 
 }
 
@@ -679,25 +695,6 @@ QPushButton *MainWindow::generateDNLink()
     return returnButton;
 
 }
-
-void MainWindow::loadTrafficLogTable()
-{
-
-    static bool initialpackets = false;
-    QTableWidgetItem * tItem;
-    Packet tempPacket;
-
-    int trafficlogsize = packetsLogged.size();
-    ui->trafficLogClearButton->setText("Clear Log ("+QString::number(trafficlogsize)+")");
-
-    QDEBUGVAR(packetTableHeaders);
-    ui->trafficLogTable->resizeColumnsToContents();
-    ui->trafficLogTable->resizeRowsToContents();
-    ui->trafficLogTable->horizontalHeader()->setStretchLastSection(true);
-
-
-}
-
 
 
 void MainWindow::loadPacketsTable()
@@ -1642,8 +1639,8 @@ void MainWindow::refreshTimerTimeout()
 void MainWindow::on_trafficLogClearButton_clicked()
 {
     packetsLogged.clear();
-    loadTrafficLogTable();
-
+    Packet tempPacket;
+    ui->trafficLogClearButton->setText("Clear Log (0)");
 }
 
 
@@ -1652,7 +1649,6 @@ void MainWindow::on_saveTrafficPacket_clicked()
     QModelIndexList indexes = ui->trafficLogTable->selectionModel()->selectedIndexes();
     QModelIndex index;
     QDEBUG() << "Save traffic packets";
-    QTableWidgetItem *item;
     QString selected;
 
 
@@ -1754,7 +1750,6 @@ void MainWindow::on_searchLineEdit_textEdited(const QString &arg1)
     Q_UNUSED(arg1);
 
     loadPacketsTable();
-    loadTrafficLogTable();
 
 }
 
@@ -1986,7 +1981,6 @@ void MainWindow::on_actionSettings_triggered()
         setIPMode();
         applyNetworkSettings();
         loadPacketsTable();
-        loadTrafficLogTable();
     }
 }
 

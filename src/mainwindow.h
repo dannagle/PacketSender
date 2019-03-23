@@ -51,7 +51,6 @@ class MainWindow : public QMainWindow
 
         QPushButton *generatePSLink();
         QPushButton *generateDNLink();
-        void loadTrafficLogTable();
         void populateTableRow(int rowCounter, Packet tempPacket);
         void removePacketfromMemory(Packet thepacket);
         void UDPServerStatus();
