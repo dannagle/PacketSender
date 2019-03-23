@@ -205,9 +205,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
-    IPmodeButton->setFlat(true);
-    IPmodeButton->setCursor(Qt::PointingHandCursor);
-
+    themeTheButton(IPmodeButton);
     statusBar()->insertPermanentWidget(5, IPmodeButton);
 
     setIPMode();
@@ -361,7 +359,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void themeTheButton(QPushButton * button)
 {
     QPalette pal = button->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::white));
+    pal.setColor(QPalette::Button, QColor("#F5F5F5"));
     button->setAutoFillBackground(true);
     button->setPalette(pal);
     button->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
