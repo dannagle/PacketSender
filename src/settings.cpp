@@ -125,6 +125,14 @@ Settings::Settings(QWidget *parent) :
     int ipMode = settings.value("ipMode", 4).toInt(); //default to 4
 
     ui->ipv4and6Radio->setChecked(true);
+    ui->ipv4and6Radio->setDisabled(true);
+    ui->ipv4and6Radio->hide();
+
+
+    if(ipMode > 6) {
+        ipMode = 4;
+    }
+
     ui->ipv4Radio->setChecked(false);
     ui->ipv6Radio->setChecked(false);
 

@@ -208,11 +208,14 @@ MainWindow::MainWindow(QWidget *parent) :
     IPmodeButton->setFlat(true);
     IPmodeButton->setCursor(Qt::PointingHandCursor);
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     statusBar()->insertPermanentWidget(5, IPmodeButton);
-#endif
 
     setIPMode();
+
+
+    connect(IPmodeButton, SIGNAL(clicked()),
+            this, SLOT(toggleIPv4_IPv6()));
+
 
     UDPServerStatus();
     TCPServerStatus();
@@ -1920,6 +1923,25 @@ void MainWindow::setIPMode()
 
 
 }
+
+
+
+void MainWindow::toggleIPv4_IPv6()
+{
+    QString currentMode = IPmodeButton->text();
+    if(currentMode.contains("4")) {
+        packetNetwork.setIPmode(6);
+    } else {
+        packetNetwork.setIPmode(4);
+    }
+
+    setIPMode();
+
+    applyNetworkSettings();
+
+
+}
+
 
 void MainWindow::on_actionAndroid_App_triggered()
 {

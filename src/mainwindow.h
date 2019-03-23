@@ -147,6 +147,8 @@ class MainWindow : public QMainWindow
         void on_actionFollow_NagleCode_triggered();
         void on_actionConnect_on_LinkedIn_triggered();
 
+        void toggleIPv4_IPv6();
+
 
 
         void on_actionJoin_IPv4_triggered(QString address = "");

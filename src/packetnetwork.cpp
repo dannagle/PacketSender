@@ -86,6 +86,11 @@ int PacketNetwork::getIPmode()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     int ipMode = settings.value("ipMode", 4).toInt();
+
+    if(ipMode > 6) {
+        ipMode = 4;
+    }
+
     //QDEBUGVAR(ipMode);
     return ipMode;
 }

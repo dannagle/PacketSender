@@ -113,8 +113,7 @@ QHostAddress::SpecialAddress Packet::IPV4_IPV6_ANY(int ipMode)
         return QHostAddress::AnyIPv6;
     }
 
-
-    return QHostAddress::Any;
+    return QHostAddress::AnyIPv4;
 
 
 }

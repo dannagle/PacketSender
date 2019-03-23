@@ -61,11 +61,11 @@
 #define UPDOWNICON ":icons/moveupdown.png"
 
 
-
 //Qt 5.10 changed the way sockets bind
 //It seems dual ipv4/ipv6 mode works better.
 
-//I'm not convinced it works perfect when in server mode.
+//Qt 5.12 -- It seems ipv4/ipv6 is broken again.
+//Lets put that toggle button back and force IPv4/6 only again. Sad_Panda.jpg
 
 //used when binding
 #define IPV4_OR_IPV6 Packet::IPV4_IPV6_ANY(ipMode)
