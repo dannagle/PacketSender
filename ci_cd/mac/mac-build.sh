@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 6.0.0)"
+    echo "Please supply build version (e.g. 6.1.0)"
     exit
 fi
 
@@ -14,7 +14,7 @@ fi
 
 if [ -z "$3" ]
   then
-    echo "Please supply notary id password (e.g. hunter2)"
+    echo "Please supply appleid application password (e.g. hunter2)"
     exit
 fi
 
