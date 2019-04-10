@@ -21,7 +21,9 @@ set(
   PACKETSENDER_UIS
   about.ui
   brucethepoodle.ui
+  cloudui.ui
   mainwindow.ui
+  multicastsetup.ui
   persistentconnection.ui
   settings.ui
   subnetcalc.ui
@@ -31,15 +33,19 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  cloudui.cpp
   main.cpp
   mainwindow.cpp
+  multicastsetup.cpp
   packet.cpp
+  packetlogmodel.cpp
   packetnetwork.cpp
   persistentconnection.cpp
   sendpacketbutton.cpp
   settings.cpp
   subnetcalc.cpp
   tcpthread.cpp
+  threadedtcpserver.cpp
 )
 
 set(
@@ -55,7 +61,7 @@ add_executable(
   ${PROJECT_NAME}
   ${srcs_qrc}
   ${moc_uis}
-  ${moc_uis}
+  ${moc_srcs}
   ${PACKETSENDER_SRCS}
 )
 
