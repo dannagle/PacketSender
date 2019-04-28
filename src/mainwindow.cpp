@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tableActive = false;
 
 
-    maxLogSize = 1000;
+    maxLogSize = 10000;
 
     if (settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
