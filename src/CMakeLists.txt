@@ -15,6 +15,7 @@ set(
   mainwindow.h
   persistentconnection.h
   settings.h
+  udpflooding.h
 )
 
 set(
@@ -27,6 +28,7 @@ set(
   persistentconnection.ui
   settings.ui
   subnetcalc.ui
+  udpflooding.ui
 )
 
 set(
@@ -46,6 +48,7 @@ set(
   subnetcalc.cpp
   tcpthread.cpp
   threadedtcpserver.cpp
+  udpflooding.cpp
 )
 
 set(

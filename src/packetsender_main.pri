@@ -13,6 +13,7 @@ SOURCES += main.cpp\
     threadedtcpserver.cpp \
     cloudui.cpp \
 	multicastsetup.cpp \
+	udpflooding.cpp \
     $$PWD/packetlogmodel.cpp
 
 HEADERS  += mainwindow.h \
@@ -30,6 +31,7 @@ HEADERS  += mainwindow.h \
     threadedtcpserver.h \
     cloudui.h \
 	multicastsetup.h \
+	udpflooding.h \
     $$PWD/packetlogmodel.h
 
 FORMS    += mainwindow.ui \
@@ -39,7 +41,8 @@ FORMS    += mainwindow.ui \
     about.ui \
     subnetcalc.ui \
     cloudui.ui \
-	multicastsetup.ui
+	multicastsetup.ui \	
+    udpflooding.ui
 
 OTHER_FILES += \
     packetsender.css \

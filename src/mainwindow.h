@@ -174,6 +174,7 @@ class MainWindow : public QMainWindow
 
         void on_actionSubnet_Calculator_triggered();
 
+        void on_actionIntense_Traffic_Generator_triggered();
 
         void on_resendEdit_editingFinished();
 

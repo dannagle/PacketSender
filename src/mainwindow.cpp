@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "about.h"
 #include "subnetcalc.h"
+#include "udpflooding.h"
 #include "cloudui.h"
 
 
@@ -2249,6 +2250,17 @@ void MainWindow::on_persistentTCPCheck_clicked(bool checked)
 
     packetNetwork.persistentConnectCheck = checked;
 }
+
+
+void MainWindow::on_actionIntense_Traffic_Generator_triggered()
+{
+    QDEBUG();
+    UDPFlooding * f = new UDPFlooding(this);
+    f->show();
+
+}
+
+
 
 void MainWindow::on_actionSubnet_Calculator_triggered()
 {

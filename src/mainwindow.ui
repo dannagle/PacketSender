@@ -449,6 +449,7 @@
     </property>
     <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
+    <addaction name="actionIntense_Traffic_Generator"/>
     <addaction name="actionAndroid_App"/>
     <addaction name="actioniOS_App"/>
    </widget>
@@ -612,6 +613,11 @@
    </property>
    <property name="text">
     <string>Connect on LinkedIn</string>
+   </property>
+  </action>
+  <action name="actionIntense_Traffic_Generator">
+   <property name="text">
+    <string>Intense &amp;Traffic Generator</string>
    </property>
   </action>
  </widget>
