@@ -31,10 +31,19 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
     ui->rateEdit->setText(QString::number(thread->rate));
     ui->asciiEdit->setText(thread->ascii);
 
-    thread->startsending = false;
+    thread->issending = false;
     thread->stopsending = false;
 
+
+    ui->startButton->setDisabled(true);
     ui->stopButton->setDisabled(true);
+
+    //logging
+    refreshTimer.setInterval(500);
+    connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout())) ;
+    refreshTimer.start();
+
+
 
 }
 
@@ -64,31 +73,32 @@ void UDPFlooding::on_startButton_clicked()
         return;
     }
 
-    ui->stopButton->setDisabled(false);
-    ui->startButton->setDisabled(true);
-
-    thread->startsending = true;
-    thread->stopsending = false;
-
     // Do it.
     thread->start();
 
 
 }
 
-void UDPFlooding::sendThread()
-{
-    QDEBUG();
-
-
-}
 
 
 void UDPFlooding::on_stopButton_clicked()
 {
-    QDEBUG();
+    QDEBUG() << "Flagging stop send";
 
     thread->stopsending = true;
+}
+
+void UDPFlooding::refreshTimerTimeout()
+{
+    QDEBUGVAR(thread->issending);
+
+    if(!thread->issending) {
+        ui->startButton->setDisabled(false);
+        ui->stopButton->setDisabled(true);
+    } else {
+        ui->startButton->setDisabled(true);
+        ui->stopButton->setDisabled(false);
+    }
 
 }
 
@@ -101,15 +111,23 @@ ThreadSender::ThreadSender(QObject *parent) : QThread(parent)
 
 void ThreadSender::run()
 {
-    QDEBUG();
+    QDEBUG() << "Begin send";
 
-    startsending = false;
+    issending = true;
+    stopsending = false;
+    starttime = QDateTime::currentDateTime();
+    packetssent = 0;
+
+
     while(!stopsending) {
         //intense send
+        msleep(1); //momentarily break thread
+        //QDEBUG() << "Sending...";
     }
 
     stopsending = false;
-    startsending = false;
+    issending = false;
 
+    QDEBUG() << "End send";
 
 }

@@ -3,11 +3,8 @@
 
 #include <QDialog>
 #include <QThread>
-
-namespace Ui {
-class UDPFlooding;
-}
-
+#include <QDateTime>
+#include <QTimer>
 
 class ThreadSender : public QThread
 {
@@ -19,10 +16,19 @@ public:
     unsigned int port;
     unsigned long rate;
     QString ascii;
-    bool startsending;
+    bool issending;
     bool stopsending;
+    quint64 packetssent;
+    QDateTime starttime;
+
 
 };
+
+
+namespace Ui {
+class UDPFlooding;
+}
+
 
 
 class UDPFlooding : public QDialog
@@ -38,14 +44,15 @@ private slots:
 
     void on_stopButton_clicked();
 
+    void refreshTimerTimeout();
+
 signals:
     void operate(const QString &);
 
 private:
     Ui::UDPFlooding *ui;
-
-    void sendThread();
     ThreadSender *thread;
+    QTimer refreshTimer;
 };
 
 #endif // UDPFLOODING_H
