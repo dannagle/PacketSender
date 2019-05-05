@@ -6,7 +6,9 @@
 #include <QList>
 #include <QDebug>
 #include <QNetworkAddressEntry>
+#include "packetnetwork.h"
 #include "globals.h"
+#include "packet.h"
 
 
 UDPFlooding::UDPFlooding(QWidget *parent) :
@@ -113,17 +115,36 @@ void ThreadSender::run()
 {
     QDEBUG() << "Begin send";
 
-    issending = true;
-    stopsending = false;
+    QHostAddress addy(ip);
+
+    QUdpSocket * socket = new QUdpSocket();
+    socket->bind(0);
+
+
     starttime = QDateTime::currentDateTime();
     packetssent = 0;
 
+    QHostAddress resolved = PacketNetwork::resolveDNS(ip);
+    QString data = Packet::ASCIITohex(ascii);
+    QByteArray hex = Packet::HEXtoByteArray(data);
+
+
+    issending = true;
+    stopsending = false;
 
     while(!stopsending) {
         //intense send
+        socket->writeDatagram(hex, resolved, port);
         msleep(1); //momentarily break thread
         //QDEBUG() << "Sending...";
     }
+
+    msleep(1);
+    socket->close();
+    msleep(1);
+    socket->deleteLater();
+    msleep(1);
+
 
     stopsending = false;
     issending = false;
