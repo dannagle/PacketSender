@@ -616,6 +616,10 @@
    </property>
   </action>
   <action name="actionIntense_Traffic_Generator">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/bolt-icon.png</normaloff>:/icons/bolt-icon.png</iconset>
+   </property>
    <property name="text">
     <string>Intense &amp;Traffic Generator</string>
    </property>

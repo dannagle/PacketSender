@@ -18,7 +18,7 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
     ui->setupUi(this);
 
 
-    setWindowTitle("UDP Traffic Flooding");
+    setWindowTitle("UDP Traffic Generator");
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -35,6 +35,10 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
 
     thread->issending = false;
     thread->stopsending = false;
+
+
+    QIcon mIcon(":/icons/bolt-icon.png");
+    setWindowIcon(mIcon);
 
 
     ui->startButton->setDisabled(true);

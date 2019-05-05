@@ -45,5 +45,6 @@
         <file>icons/multicast-icon.png</file>
         <file>icons/linkedin-icon.png</file>
         <file>icons/twitter-icon.png</file>
+        <file>icons/bolt-icon.png</file>
     </qresource>
 </RCC>
