@@ -5,22 +5,27 @@
 #include <QThread>
 #include <QDateTime>
 #include <QTimer>
+#include <QElapsedTimer>
 
 class ThreadSender : public QThread
 {
 
 public:
     ThreadSender(QObject *parent);
+    ~ThreadSender();
     void run();
+    double getRatekHz(QElapsedTimer eTimer, quint64 pkts);
+    qint64  getElapsedMS();
     QString ip;
-    unsigned int port;
-    unsigned long rate;
+    quint16 port;
+    unsigned int delay;
     QString ascii;
+    QByteArray hex;
     bool issending;
     bool stopsending;
-    quint64 packetssent;
-    QDateTime starttime;
-
+    quint64 packetssent;    
+    unsigned int sourcePort;
+    QElapsedTimer elapsedTimer;
 
 };
 

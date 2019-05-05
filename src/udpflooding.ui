@@ -67,12 +67,16 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Rate (Hz)</string>
+          <string>Resend Delay (ms)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="rateEdit"/>
+        <widget class="QLineEdit" name="delayEdit">
+         <property name="placeholderText">
+          <string>0 or blank is no delay</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -106,7 +110,7 @@
     </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="statsLabel">
      <property name="text">
       <string>Waiting to send...</string>
      </property>

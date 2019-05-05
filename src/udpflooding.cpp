@@ -25,12 +25,12 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
     thread = new ThreadSender(this);
     thread->ip = "192.168.1.1";
     thread->port = 5000;
-    thread->rate = 1000;
+    thread->delay = 0;
     thread->ascii = "Hello World";
 
     ui->ipEdit->setText(thread->ip);
     ui->portEdit->setText(QString::number(thread->port));
-    ui->rateEdit->setText(QString::number(thread->rate));
+    ui->delayEdit->setText(QString::number(thread->delay));
     ui->asciiEdit->setText(thread->ascii);
 
     thread->issending = false;
@@ -51,6 +51,9 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
 
 UDPFlooding::~UDPFlooding()
 {
+    if(thread->issending) {
+        thread->terminate();
+    }
     delete ui;
 }
 
@@ -60,10 +63,9 @@ void UDPFlooding::on_startButton_clicked()
 
     bool ok1, ok2;
 
-    thread->port = ui->portEdit->text().toUInt(&ok1);
-    thread->rate = ui->rateEdit->text().toULong(&ok2);
-    thread->ascii = ui->asciiEdit->text();
-    thread->ip = ui->ipEdit->text();
+    ui->portEdit->text().toUInt(&ok1);
+    ui->delayEdit->text().toUInt(&ok2);
+
 
     if(!ok1) {
         ui->portEdit->setText("Invalid");
@@ -71,9 +73,14 @@ void UDPFlooding::on_startButton_clicked()
     }
 
     if(!ok2) {
-        ui->rateEdit->setText("Invalid");
+        ui->delayEdit->setText("Invalid");
         return;
     }
+
+    thread->ascii = ui->asciiEdit->text();
+    thread->ip = ui->ipEdit->text();
+    thread->port = static_cast<quint16>(ui->portEdit->text().toUInt(&ok1));
+    thread->delay = ui->delayEdit->text().toUInt(&ok2);
 
     // Do it.
     thread->start();
@@ -92,14 +99,31 @@ void UDPFlooding::on_stopButton_clicked()
 
 void UDPFlooding::refreshTimerTimeout()
 {
-    QDEBUGVAR(thread->issending);
+
 
     if(!thread->issending) {
         ui->startButton->setDisabled(false);
         ui->stopButton->setDisabled(true);
+
     } else {
         ui->startButton->setDisabled(true);
         ui->stopButton->setDisabled(false);
+
+        QString str = "";
+        QTextStream out(&str);
+
+        out << "UDP " << "(" << thread->sourcePort << ") ://" << thread->ip <<":"<< thread->port << "\r\n";
+        out << "Total Sent: " << thread->packetssent << " packets \r\n";
+        out << "Run time: " << thread->getElapsedMS() << " ms \r\n";
+
+        double actualRate = thread->getRatekHz(thread->elapsedTimer, thread->packetssent);
+        QString rateStr = QString::number(actualRate, 'f', 4);
+
+        out << "Send Rate: " << rateStr << " kHz \r\n";
+        out << "Send kbps: " << (actualRate * thread->hex.size()*8) << " kbps \r\n";
+
+        ui->statsLabel->setText(str);
+
     }
 
 }
@@ -109,6 +133,27 @@ ThreadSender::ThreadSender(QObject *parent) : QThread(parent)
 {
     QDEBUG();
 }
+
+ThreadSender::~ThreadSender()
+{
+    stopsending = true;
+}
+
+qint64 ThreadSender::getElapsedMS()
+{
+    return elapsedTimer.elapsed();
+}
+
+
+
+double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts)
+{
+
+    auto ms = static_cast<double>(eTimer.elapsed());
+    auto packetsentDouble = static_cast<double>(pkts);
+    return packetsentDouble / ms;
+}
+
 
 
 void ThreadSender::run()
@@ -120,23 +165,35 @@ void ThreadSender::run()
     QUdpSocket * socket = new QUdpSocket();
     socket->bind(0);
 
+    sourcePort = socket->localPort();
 
-    starttime = QDateTime::currentDateTime();
     packetssent = 0;
 
     QHostAddress resolved = PacketNetwork::resolveDNS(ip);
     QString data = Packet::ASCIITohex(ascii);
-    QByteArray hex = Packet::HEXtoByteArray(data);
+    hex = Packet::HEXtoByteArray(data);
 
 
     issending = true;
     stopsending = false;
 
+    msleep(10); //momentarily break thread
+
+    //return;
+
+    elapsedTimer.start();
     while(!stopsending) {
         //intense send
         socket->writeDatagram(hex, resolved, port);
-        msleep(1); //momentarily break thread
-        //QDEBUG() << "Sending...";
+        packetssent++;
+
+        if(delay > 0) {
+          msleep(delay);
+        } else {
+            if((packetssent % 1000) == 0) {
+                usleep(1);
+            }
+        }
     }
 
     msleep(1);
