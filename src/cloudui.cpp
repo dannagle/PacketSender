@@ -214,7 +214,7 @@ void CloudUI::replyFinished(QNetworkReply* request)
                     pktSet.description = json["description"].toString();
                     pktSet.path = json["path"].toString();
                     pktSet.ispublic = json["public"].toString().toInt();
-                    QByteArray jsonData = json["packetjson"].toString().toLatin1();
+                    QByteArray jsonData = json["packetjson"].toString().toUtf8();
                     if (!jsonData.isEmpty()) {
                         pktSet.packets = Packet::ImportJSON(jsonData);
                         QDEBUG() << "Set" << pktSet.name << "has" << pktSet.packets.size() << "packets";

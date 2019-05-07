@@ -1563,8 +1563,8 @@ void MainWindow::slowRefreshTimerTimeout()
     QString titleString = "Packet Sender - IPs: ";
     QTextStream out(&titleString);
 
-    QDEBUGVAR(packetsLogged.size());
-    QDEBUGVAR(packetsLogged.rowCount());
+    //QDEBUGVAR(packetsLogged.size());
+    //QDEBUGVAR(packetsLogged.rowCount());
 
 
     QNetworkAddressEntry entry;
