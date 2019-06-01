@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 6.1.0)"
+    echo "Please supply build version (e.g. 6.2.0)"
     exit
 fi
 
