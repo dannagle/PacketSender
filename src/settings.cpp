@@ -127,6 +127,8 @@ Settings::Settings(QWidget *parent) :
     ui->ipv4and6Radio->setChecked(true);
     ui->ipv4and6Radio->setDisabled(true);
     ui->ipv4and6Radio->hide();
+    ui->ipSpecificRadio->hide();
+    ui->bindIPAddress->hide();
 
 
     if(ipMode > 6) {
