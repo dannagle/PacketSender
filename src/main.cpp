@@ -308,6 +308,11 @@ int main(int argc, char *argv[])
                 OUTPUT();
                 return -1;
             } else {
+
+                ssl = sendPacket.isSSL();
+                tcp = sendPacket.isTCP();
+                udp = sendPacket.isUDP();
+
                 if (data.isEmpty()) {
                     data  = sendPacket.hexString;
                     hex = true;
@@ -320,25 +325,19 @@ int main(int argc, char *argv[])
                 if (address.isEmpty()) {
                     address  = sendPacket.toIP;
                 }
-                if (!parser.isSet(tcpOption) && !parser.isSet(udpOption) && !parser.isSet(sslOption) && !parser.isSet(sslNoErrorOption)) {
 
+                if (parser.isSet(udpOption)) {
+                    udp = true;
+                    ssl = false;
                     tcp = false;
-                    udp = false;
-                    ssl = true;
-                    if (sendPacket.tcpOrUdp.toUpper() == "TCP") {
-                        tcp = true;
-                    }
-
-                    if (sendPacket.tcpOrUdp.toUpper() == "UDP") {
-                        udp = true;
-                    }
-
-                    if (sendPacket.tcpOrUdp.toUpper() == "SSL") {
-                        ssl = true;
-                    }
-
                 }
-
+                if (parser.isSet(tcpOption)) {
+                    tcp = true;
+                }
+                if (parser.isSet(sslOption)) {
+                    ssl = true;
+                    tcp = true;
+                }
             }
 
         }
@@ -461,17 +460,17 @@ int main(int argc, char *argv[])
 #endif
 
 
-
-            if (tcp) {
-                sock.connectToHost(addy, port);
-            }
-
             if (ssl) {
                 sock.connectToHostEncrypted(address,  port);
                 if (!sslNoError) {
                     sock.ignoreSslErrors();
                 }
             }
+
+            if (tcp && (!ssl)) {
+                sock.connectToHost(addy, port);
+            }
+
             sock.waitForConnected(1000);
 
             QList<QSslError> sslErrorsList;
