@@ -65,7 +65,9 @@ class PersistentConnection : public QDialog
 
         void on_clipboardButton_clicked();
 
-    private:
+        void on_appendCRcheck_clicked();
+
+private:
         Ui::PersistentConnection *ui;
         QPushButton * stopResendingButton;
         QTimer refreshTimer;

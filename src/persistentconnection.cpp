@@ -212,6 +212,10 @@ void PersistentConnection::init()
 
 
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    bool appendCR = settings.value("appendCRcheck", true).toBool();
+    ui->appendCRcheck->setChecked(appendCR);
+
 
     ui->stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
     ui->stopResendingButton->setFlat(true);
@@ -523,4 +527,12 @@ void PersistentConnection::on_clipboardButton_clicked()
     msgbox.setText("Output sent to your clipboard");
     msgbox.exec();
 
+}
+
+void PersistentConnection::on_appendCRcheck_clicked()
+{
+    bool appendCR = ui->appendCRcheck->isChecked();
+    QDEBUGVAR(appendCR);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("appendCRcheck", appendCR);
 }
