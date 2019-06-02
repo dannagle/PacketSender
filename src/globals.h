@@ -67,6 +67,8 @@
 //Qt 5.12 -- It seems ipv4/ipv6 is broken again.
 //Lets put that toggle button back and force IPv4/6 only again. Sad_Panda.jpg
 
+//Final attempt: an IP string bind option.
+
 //used when binding
 #define IPV4_OR_IPV6 Packet::IPV4_IPV6_ANY(ipMode)
 

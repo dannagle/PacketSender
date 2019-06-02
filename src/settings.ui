@@ -193,16 +193,6 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_16">
             <item>
-             <widget class="QRadioButton" name="ipv4and6Radio">
-              <property name="text">
-               <string>Both IPv4 and IPv6</string>
-              </property>
-              <attribute name="buttonGroup">
-               <string notr="true">buttonGroup</string>
-              </attribute>
-             </widget>
-            </item>
-            <item>
              <widget class="QRadioButton" name="ipv4Radio">
               <property name="text">
                <string>IPv4 Only</string>

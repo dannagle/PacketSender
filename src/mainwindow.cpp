@@ -1910,13 +1910,14 @@ void MainWindow::on_saveLogButton_clicked()
 void MainWindow::setIPMode()
 {
 
-    int ipMode = packetNetwork.getIPmode();
+    bool isIPv6 = packetNetwork.IPv6Enabled();
 
-    if (ipMode > 4) {
-        IPmodeButton->setText("IPv6 Mode");
+    IPmodeButton->setText(packetNetwork.getIPmode());
+
+    if (isIPv6) {
+        QDEBUG() << "Set IPv6 stylesheet";
         IPmodeButton->setStyleSheet(IPv6Stylesheet);
     } else {
-        IPmodeButton->setText("IPv4 Mode");
         IPmodeButton->setStyleSheet(IPv4Stylesheet);
     }
 
@@ -1924,11 +1925,10 @@ void MainWindow::setIPMode()
 }
 
 
-
 void MainWindow::toggleIPv4_IPv6()
 {
     QString currentMode = IPmodeButton->text();
-    if(currentMode.contains("4")) {
+    if(currentMode.contains("v4") || currentMode.contains(".")) {
         packetNetwork.setIPmode(6);
     } else {
         packetNetwork.setIPmode(4);

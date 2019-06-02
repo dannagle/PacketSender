@@ -19,7 +19,7 @@ class PersistentConnection : public QDialog
         Q_OBJECT
 
     public:
-        explicit PersistentConnection(QWidget *parent = 0);
+        explicit PersistentConnection(QWidget *parent = nullptr);
         ~PersistentConnection();
         Packet sendPacket;
         Packet reSendPacket;

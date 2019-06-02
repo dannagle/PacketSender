@@ -15,7 +15,7 @@ class ThreadedTCPServer : public QTcpServer
         explicit ThreadedTCPServer(QObject *parent = nullptr);
         bool encrypted;
 
-        bool init(quint16 port, bool isEncrypted, int ipMode);
+        bool init(quint16 port, bool isEncrypted, QString ipMode);
     protected:
         void incomingConnection(qintptr socketDescriptor);
 

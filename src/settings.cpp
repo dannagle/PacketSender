@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QHostAddress>
 
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
@@ -122,32 +123,27 @@ Settings::Settings(QWidget *parent) :
     ui->asciiResponseEdit->setText(Packet::hexToASCII(ascii));
 
 
-    int ipMode = settings.value("ipMode", 4).toInt(); //default to 4
-
-    ui->ipv4and6Radio->setChecked(true);
-    ui->ipv4and6Radio->setDisabled(true);
-    ui->ipv4and6Radio->hide();
-    ui->ipSpecificRadio->hide();
-    ui->bindIPAddress->hide();
-
-
-    if(ipMode > 6) {
-        ipMode = 4;
-    }
+    QString ipMode = settings.value("ipMode", "4").toString(); //default to 4
+    QDEBUGVAR(ipMode);
 
     ui->ipv4Radio->setChecked(false);
     ui->ipv6Radio->setChecked(false);
+    ui->ipSpecificRadio->setChecked(false);
 
-    if(ipMode == 4) {
-        ui->ipv4Radio->setChecked(true);
-        ui->ipv4and6Radio->setChecked(false);
+    QHostAddress h4 = QHostAddress::AnyIPv4;
+    QHostAddress h6 = QHostAddress::AnyIPv6;
 
+    bool ip4check = (ipMode == "4") || (ipMode == h4.toString());
+    bool ip6check = (ipMode == "6") || (ipMode == h6.toString());
+
+    ui->ipv4Radio->setChecked(ip4check);
+    ui->ipv6Radio->setChecked(ip6check);
+
+    if(!ip4check && !ip6check) {
+        ui->ipSpecificRadio->setChecked(true);
+        ui->bindIPAddress->setText(ipMode);
     }
 
-    if (ipMode == 6) {
-        ui->ipv6Radio->setChecked(true);
-        ui->ipv4and6Radio->setChecked(false);
-    }
 
 
 
@@ -209,6 +205,24 @@ void Settings::on_buttonBox_accepted()
     QList<int> udpList = Settings::portsToIntList(ui->udpServerPortEdit->text());
     QList<int> tcpList = Settings::portsToIntList(ui->tcpServerPortEdit->text());
     QList<int> sslList = Settings::portsToIntList(ui->sslServerPortEdit->text());
+
+    if(ui->ipSpecificRadio->isChecked()) {
+        QHostAddress address(ui->bindIPAddress->text());
+        if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
+                ) {
+            QDEBUG() << "Binding to custom IP" << address.toString();
+        } else {
+
+            QMessageBox msgBox;
+            msgBox.setWindowTitle("Bad IP.");
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Packet Sender cannot bind invalid IP "+ ui->bindIPAddress->text());
+            msgBox.exec();
+            return;
+        }
+    }
 
     int t, s;
     foreach (t, tcpList) {
@@ -281,17 +295,17 @@ void Settings::on_buttonBox_accepted()
     float multiSend = Packet::oneDecimal(ui->multiSendDelayEdit->text().toFloat());
     settings.setValue("multiSendDelay", multiSend);
 
+    QString ipMode = "4";
+
     if (ui->ipv6Radio->isChecked()) {
-        settings.setValue("ipMode", 6);
+        ipMode = "6";
     }
 
-    if (ui->ipv4Radio->isChecked()) {
-        settings.setValue("ipMode", 4);
+    if (ui->ipSpecificRadio->isChecked()) {
+        ipMode = ui->bindIPAddress->text();
     }
 
-    if (ui->ipv4and6Radio->isChecked()) {
-        settings.setValue("ipMode", 8);
-    }
+    settings.setValue("ipMode", ipMode);
 
     //save traffic order
     QListWidget * lw = ui->displayOrderList;

@@ -62,7 +62,7 @@ class PacketNetwork : public QObject
         bool persistentConnectCheck;
         bool isSecure;
         void setIPmode(int mode);
-        static int getIPmode();
+        static QString getIPmode();
 
         bool UDPListening();
         bool TCPListening();

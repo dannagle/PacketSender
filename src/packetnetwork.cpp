@@ -82,16 +82,20 @@ void PacketNetwork::packetSentECHO(Packet sendpacket)
 
 }
 
-int PacketNetwork::getIPmode()
+QString PacketNetwork::getIPmode()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    int ipMode = settings.value("ipMode", 4).toInt();
+    QString ipMode = settings.value("ipMode", "4").toString();
 
-    if(ipMode > 6) {
-        ipMode = 4;
+    QHostAddress iph = Packet::IPV4_IPV6_ANY(ipMode);
+
+    if(iph == QHostAddress::AnyIPv4) {
+        return "IPv4 Mode";
+    }
+    if(iph == QHostAddress::AnyIPv6) {
+        return "IPv6 Mode";
     }
 
-    //QDEBUGVAR(ipMode);
     return ipMode;
 }
 
@@ -135,12 +139,16 @@ bool PacketNetwork::SSLListening()
 
 bool PacketNetwork::IPv6Enabled()
 {
-    return (getIPmode() != 4);
+    return !IPv4Enabled();
 }
 
 bool PacketNetwork::IPv4Enabled()
 {
-    return (getIPmode() != 6);
+    QString ipMode = getIPmode();
+    if(ipMode == "4") {
+        return true;
+    }
+    return (ipMode.contains("v4") || ipMode.contains("."));
 }
 
 
@@ -151,10 +159,10 @@ void PacketNetwork::setIPmode(int mode)
 
     if (mode > 4) {
         QDEBUG() << "Saving IPv6";
-        settings.setValue("ipMode", 6);
+        settings.setValue("ipMode", "6");
     } else {
         QDEBUG() << "Saving IPv4";
-        settings.setValue("ipMode", 4);
+        settings.setValue("ipMode", "4");
     }
 
 }
@@ -183,7 +191,8 @@ void PacketNetwork::init()
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
 
-    int ipMode = settings.value("ipMode", 4).toInt();
+    QString ipMode = settings.value("ipMode", QHostAddress::AnyIPv4).toString();
+    QDEBUGVAR(ipMode);
 
     QMessageBox msgBoxBindError;
     msgBoxBindError.setWindowTitle("Port bind error.");
@@ -191,7 +200,7 @@ void PacketNetwork::init()
     msgBoxBindError.setDefaultButton(QMessageBox::Ok);
     msgBoxBindError.setIcon(QMessageBox::Warning);
     const QString lowPortText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
-    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT].\n\nPerhaps you are running multiple instances?";
+    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?";
 
 
 
@@ -514,7 +523,7 @@ void PacketNetwork::readPendingDatagrams()
 
     //QDEBUG() << " got a datagram";
     bool once = false;
-    int ipMode = 4;
+    bool isIPv6  = IPv6Enabled();
 
     foreach (udpSocket, udpServers) {
 
@@ -525,7 +534,7 @@ void PacketNetwork::readPendingDatagrams()
         while (udpSocket->hasPendingDatagrams()) {
 
             if(!once) {
-                ipMode = getIPmode();
+                isIPv6  = IPv6Enabled();
                 once = true;
             }
 
@@ -545,7 +554,7 @@ void PacketNetwork::readPendingDatagrams()
             udpPacket.timestamp = QDateTime::currentDateTime();
             udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
             udpPacket.tcpOrUdp = "UDP";
-            if (ipMode < 6) {
+            if (isIPv6) {
                 udpPacket.fromIP = Packet::removeIPv6Mapping(sender);
             } else {
                 udpPacket.fromIP = (sender).toString();
@@ -580,7 +589,7 @@ void PacketNetwork::readPendingDatagrams()
                 udpPacket.name = udpPacket.timestamp.toString(DATETIMEFORMAT);
                 udpPacket.tcpOrUdp = "UDP";
                 udpPacket.fromIP = "You (Response)";
-                if (ipMode < 6) {
+                if (isIPv6) {
                     udpPacket.toIP = Packet::removeIPv6Mapping(sender);
 
                 } else {

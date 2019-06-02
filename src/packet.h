@@ -42,7 +42,7 @@ class Packet
 
         Packet(const Packet &other);
 
-        static QHostAddress::SpecialAddress IPV4_IPV6_ANY(int ipMode);
+        static QHostAddress IPV4_IPV6_ANY(QString ipMode);
 
         QString name;
         QString hexString;

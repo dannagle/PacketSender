@@ -68,16 +68,14 @@ void MulticastSetup::on_joinButton_clicked()
     }
 
 
-    int ipMode = packetNetwork->getIPmode();
-
-    if(ipMode != 4) {
+    if(!packetNetwork->IPv4Enabled()) {
 
         QMessageBox msgBox;
         msgBox.setWindowTitle("IPv4-only.");
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Packet Sender supports multicast when binded to IPv4 only. \nTurn off IPv6 support and switch to IPv4-only?");
+        msgBox.setText("Packet Sender supports multicast when binded to IPv4. \nTurn off IPv6 and switch to IPv4 mode?");
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::No) {
             return;

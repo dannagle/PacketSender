@@ -25,7 +25,7 @@ ThreadedTCPServer::ThreadedTCPServer(QObject *parent) :
 
 }
 
-bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, int ipMode)
+bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, QString ipMode)
 {
 
     Q_UNUSED(ipMode); //actually is used via macro.

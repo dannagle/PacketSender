@@ -103,19 +103,28 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(incoming);
 }
 
-QHostAddress::SpecialAddress Packet::IPV4_IPV6_ANY(int ipMode)
+QHostAddress Packet::IPV4_IPV6_ANY(QString ipMode)
 {
-    if(ipMode == 4) {
-        return QHostAddress::AnyIPv4;
+    QHostAddress h4 = QHostAddress::AnyIPv4;
+    QHostAddress h6 = QHostAddress::AnyIPv6;
+
+    if(ipMode == "4") {
+        return h4;
     }
 
-    if(ipMode == 6) {
-        return QHostAddress::AnyIPv6;
+    if(ipMode == "6") {
+        return h6;
     }
 
-    return QHostAddress::AnyIPv4;
 
+    QHostAddress address(ipMode);
 
+    if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
+            ) {
+        return address;
+    }
+
+    return h4;
 }
 
 void Packet::init()
