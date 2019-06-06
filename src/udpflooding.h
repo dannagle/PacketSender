@@ -41,7 +41,7 @@ class UDPFlooding : public QDialog
     Q_OBJECT
 
 public:
-    explicit UDPFlooding(QWidget *parent = nullptr);
+    explicit UDPFlooding(QWidget *parent = nullptr, QString target = "192.168.1.1", quint16 port = 5000, QString ascii = "data");
     ~UDPFlooding();
 
 private slots:

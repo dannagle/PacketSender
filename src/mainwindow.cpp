@@ -2255,7 +2255,8 @@ void MainWindow::on_persistentTCPCheck_clicked(bool checked)
 void MainWindow::on_actionIntense_Traffic_Generator_triggered()
 {
     QDEBUG();
-    UDPFlooding * f = new UDPFlooding(this);
+    quint16 port = ui->packetPortEdit->text().toUShort();
+    UDPFlooding * f = new UDPFlooding(this, ui->packetIPEdit->text(), port, ui->packetASCIIEdit->text());
     f->show();
 
 }

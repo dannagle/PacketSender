@@ -11,7 +11,7 @@
 #include "packet.h"
 
 
-UDPFlooding::UDPFlooding(QWidget *parent) :
+UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString ascii) :
     QDialog(parent),
     ui(new Ui::UDPFlooding)
 {
@@ -23,10 +23,10 @@ UDPFlooding::UDPFlooding(QWidget *parent) :
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     thread = new ThreadSender(this);
-    thread->ip = "192.168.1.1";
-    thread->port = 5000;
+    thread->ip = target;
+    thread->port = port;
     thread->delay = 0;
-    thread->ascii = "Hello World";
+    thread->ascii = ascii;
 
     ui->ipEdit->setText(thread->ip);
     ui->portEdit->setText(QString::number(thread->port));
