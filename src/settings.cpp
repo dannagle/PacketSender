@@ -33,6 +33,10 @@ Settings::Settings(QWidget *parent) :
     setWindowTitle("Packet Sender Settings");
     setWindowIcon(mIcon);
 
+    //this is no longer working thanks to faster traffic log
+    ui->displayOrderListTraffic->hide();
+    ui->displayGroupBoxTraffic->setTitle("");
+
 
     //smart responses...
     ui->smartResponseEnableCheck->setChecked(settings.value("smartResponseEnableCheck", false).toBool());
