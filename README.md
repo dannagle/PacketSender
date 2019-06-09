@@ -67,31 +67,33 @@ Windows users, this directory is the same place as the .exe.
 For Mac users, this run-time directory is at `PacketSender.app/Contents/MacOS`.
 If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
 
+### IPv4, IPv6, and Custom IP
 
-### IPv4 and IPv6 Support
-Packet Sender's built-in servers are configured to support IPv4 and IPv6. The most recent version of Packet Sender is smart enough to switch between the two modes. Older versions Packet Sender, mostly found on Linux's older Qt SDK libraries, may render a toggle switch between IPv4 and IPv6. Click to switch between the two.
+Packet Sender's built-in servers are configured to support either IPv4 or IPv6 but not both at the same time. For clients, Packet Sender GUI and CLI will seemlessly switch between the two modes upon sending (you may need to include the scope ID). Older versions of Packet Sender tried use both simultaneously, but testing found this unreliable. Click the IPv4 / IPv6 toggle on the bottom right to switch between the two.
 
-Packet Sender's GUI client sender and CLI will detect the type of IP address being used and bind appropriately to send the packet. Note that you must include a scope ID to send.
+Inside the settings, you may also force Packet Sender's servers to bind to a custom IP address. This can be very useful for systems with multiple NICs or complicated IP setups. Packet Sender will trigger an error if told to bind to an address that does not exist.
 
+![IP Specific binding](screenshots/ip-specific-binding.png)
 
 ## Multicast (Experimental)
+
 Packet Sender's multicast support is triggered by attempting to send to a IPv4 multicast address or via the mulitcast submenu). The feature is currently experimental and has these known problems.
+
 * Packet Sender abandons IPv6 support when joining multicast.
 * And stays abandoned until you revisit settings or attempt to send to IPv6
 * On wifi, it sometimes takes 20 seconds for multicast join to actually take effect.
 * Packet Sender has no logic to rejoin a mulitcast group if the switch reboots or some other common error.
 
-There is no IPv6 multicast support, though it is on the roadmap. Sponsors IPv6 multicast support are welcome to contact me.
-
+There is no IPv6 multicast support, though it is on the roadmap. Sponsors wanting IPv6 multicast support are welcome to contact me.
 
 ### Documentation (GUI)
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/packetsender_mac_screenshot.png)
-
+![Packet Sender screenshot](screenshots/packetsender_ubuntu_screenshot.png)
 
 * In the bottom right, there are UDP, TCP, and SSL server status and port(s). You can click to activate or deactivate these. Packet Sender supports binding to any number of ports.
+* There is also IPv4 (default), IPv6, custom IP, toggle button
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
 * In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
@@ -113,16 +115,17 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB.
 * An optional response can be sent. The same response is used for TCP and UDP.
 
-
 ### Hotkeys / Keyboard Shortcuts
+
 The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
 
 Some notes:
-- When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s characters.
-- If you are going to automate with hotkeys (using tools such at AutoHotKey), you may want to turn off "Restore previous session".
 
+* When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s characters.
+* If you are going to automate with hotkeys (using tools such at [AutoHotKey](https://www.autohotkey.com/)), you may want to turn off "Restore previous session".
 
 ### SSL Client and Server
+
 Packet Sender supports establishing encrypted connections over SSL.
 This is supported in the GUI and on the command line. Some notes on this:
 
@@ -131,16 +134,13 @@ This is supported in the GUI and on the command line. Some notes on this:
 * Packet Sender outputs the cert negotiation progress in to the traffic log.
 * Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
 
-Packet Sender bundles an internal "Snake Oil" certificate for use as a server for all supported platforms.
-The certificate and key is in the same place as packet and settings.
+Packet Sender bundles an internal "Snake Oil" certificate for use as a server for Windows. The certificate and key is in the same place as packet and settings.
 
 * Overriding the cert locations in Settings also overrides these snake-oil certificate.
 
 Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
 
-*This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)*
-
-
+_This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)_
 
 ![Packet Sender Direct TCP](screenshots/packetsender_ssl.png)
 
@@ -158,7 +158,7 @@ Packet Sender supports up to 5 smart responses. To use it, disable normal respon
 * The available encodings are:
   * Mixed ASCII -- The standard Packet Sender way of encoding ASCII along with non-printable characters
   * HEX -- Packet Sender's normal HEX encoding
-  * [EBCDIC](https://en.wikipedia.org/wiki/EBCDIC) -- An encoding used mostly by IBM mainframes. The input field is normal Mixed ASCII and is translated when performing the comparison and sending.
+  * [EBCDIC](https://en.wikipedia.org/wiki/EBCDIC) (deprecated) -- An encoding used mostly by IBM mainframes. The input field is normal Mixed ASCII and is translated when performing the comparison and sending.
 
 ### Macros
 Packet Sender supports these macros when sending responses:
@@ -180,7 +180,7 @@ Packet Sender supports persistent TCP and SSL connections via a separate UI dial
 * Traffic is also saved in the main window traffic log.
 * A file may be uploaded to the persistent connection. You may wish to turn off logging if you use this.  
 * The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
-* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections.
+* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections. Packet Sender remembers previous state of \r checkbox.
 * Incoming persistent connections to the server will launch the UI dialog.
 * During resend, the persistent connection packet is carried over to the new UI dialog. Clicking "Resending(1)" will cancel it.
 
@@ -198,18 +198,17 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 
 ### Additional Configuration Options
 
-* IPv4 Mode or IPv6 Mode in the servers. This is identical to the toggle switch.
+* IPv4 Mode, IPv6 Mode, Custom IP in the servers. This is identical to the toggle switch except toggle switch does not remember custom IP.
 * The traffic log and packet table is divided by a draggable splitter. This splitter can also be collapsed on either side.
 * Copy to the clipboard the raw packet data (default). If your data has a large amount of non-ASCII characters, you may prefer a translated version.
 * Resending can be auto-cancelled after X number of packets. Set to 0 to resend forever.
-* Traffic log can be set to roll at 100 entries.
+* Traffic log can be set to roll at 100 entries. Otherwise, the log rolls at 10k.
 * Import/Export of packets is available via menus.
 * Attempt receive before send (some servers expect this behavior).
 * 500 ms delay before sending data (some servers are slow).
-* Enable keyboard shortcut for ASCII --> EBCDIC translation.
+* Enable keyboard shortcut for ASCII --> EBCDIC translation (deprecated).
 * Resolve DNS during input. The default is to resolve DNS just before sending.
 * Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection. The SSL server always ignores errors.
-
 
 ## Documentation (Command Line)
 
@@ -218,7 +217,6 @@ The command line extension used in Windows installations is .com. Using .exe wil
 ![Packet Sender CLI screenshot](screenshots/packetsender_command_line.png)
 
 The command line system in Packet Sender follows the same pattern as other Linux utilities. It has a long name (such as --version) and a short name (such as -v). These options can be arranged in any order and Packet Sender will parse them correctly. The last 3 options are positional and must appear last. They are IP, port, and data. These last options are optional if using a stored packet.
-
 
     packetsender --help
     Usage: packetsender [options] address port data
@@ -246,9 +244,7 @@ The command line system in Packet Sender follows the same pattern as other Linux
     -port 	Destination port. Optional for saved packet.
     -data 	Data to send. Optional for saved packet.
 
-
 ### Example CLI
-
 
     packetsender -taw 500 packetsender.com 22 "Hello\nWorld"
     TCP (56620)://192.185.38.130 48 65 6c 6c 6f 0a 57 6f 72 6c 64
@@ -256,8 +252,8 @@ The command line system in Packet Sender follows the same pattern as other Linux
     Response HEX:53 53 48 2D 32 2E 30 2D 4F 70 65 6E 53 53 48 5F 35 2E 33 70 31 20 44 65 62 69 61 6E 2D 33 75 62 75 6E 74 75 33 2E 31 2E 49 53 2E 31 30 2E 30 34 0D 0A
     Response ASCII:SSH-2.0-OpenSSH_5.3p1 Debian-3ubuntu3.1.IS.10.04\r\n
 
-
 ### Example CLI using SSL and ignoring errors
+
 The command line has the option to ignore or abandon on SSL errors. The default is to ignore.
 
     packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
@@ -270,17 +266,20 @@ The command line has the option to ignore or abandon on SSL errors. The default 
     Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
 
 ## Building Packet Sender
+
 The only dependency is Qt SDK. Here is how to build the app.
 
 ### Build for Windows and Mac
+
 1. Download the Qt installer from http://www.qt.io/download-open-source/
 1. Let it install MingGW if you don't have a compiler.
 1. Open the project PacketSender.pro
 1. Build! Qt is the only dependency!
 
-The Windows and Mac versions were built using Qt 5.10
+The Windows and Mac versions were built using Qt 5.12
 
 ### Build for Linux
+
 Here is the sequence of commands for Ubuntu 16.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard can get it to properly compile, please let me know, and I'll add your instructions.
 
 If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
@@ -305,15 +304,13 @@ If it doesn't run, you may need to set it executable
 chmod a+x PacketSender
 ```
 
-
 ## Enhancements
 
 Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
 
-
 ## License
-GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
 
+GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
 
 ## Copyright
 
