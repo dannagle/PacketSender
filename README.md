@@ -2,10 +2,7 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
-Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets.
-The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may
-recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later.
-It can be used for both commercial and personal use.
+Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
 ## Uses
 
@@ -18,23 +15,25 @@ It can be used for both commercial and personal use.
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 * Sharing/Saving/Collaboration using the [Packet Sender Cloud](https://cloud.packetsender.com/) service.
 
-
 ## Download
+
 Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
 
 ![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)  ![Packet Sender logo](screenshots/ios_logo.png)  ![Packet Sender logo](screenshots/android_logo.png)
 
 ## Packet Sender Mobile
+
 The mobile apps are open source and available at :
 https://github.com/dannagle/Packet_Sender_Mobile
 
 Packet Sender Mobile binaries for iOS and Android may be purchased for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
 
-
 ## Packet Sender Cloud
+
 Packets sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
 
 There are various reasons to do this:
+
 * Keeping all your packets ready so you can quickly retrieve them when installing a fresh Packet Sender
 * Quickly swapping between packet sets when working on different projects.
 * Sharing a login (it is allowed) for collaborative packet set generation
@@ -42,14 +41,10 @@ There are various reasons to do this:
 
 ![Packet Sender Cloud Import](screenshots/cloud-import.png)
 
-If you are publishing a network API, maintaining a public cloud page is significantly easier than painfully detailing (IP, port, type, etc)
-    the packets to your users. Plus, updating that page is easy.</p>
-
+If you are publishing a network API, maintaining a public cloud page is significantly easier than painfully detailing (IP, port, type, etc) the packets to your users. Plus, updating that page is easy.
 
 More information about it can be found at
 https://cloud.packetsender.com/help
-
-
 
 ### Support
 
@@ -148,11 +143,11 @@ _This product includes software developed by the OpenSSL Project for use in the 
 
 ![Packet Sender Direct TCP](screenshots/packetsender_expired_ssl.png)
 
-
-
 ### Smart Responses
+
 Packet Sender supports up to 5 smart responses. To use it, disable normal responses.
 ![Packet Sender Direct TCP](screenshots/packetsender_smartreply.png)
+
 * Packet Sender will compare the packet within the encoding you choose.
 * Packet Sender translates the encoding before sending out the reply.
 * The available encodings are:
@@ -161,7 +156,9 @@ Packet Sender supports up to 5 smart responses. To use it, disable normal respon
   * [EBCDIC](https://en.wikipedia.org/wiki/EBCDIC) (deprecated) -- An encoding used mostly by IBM mainframes. The input field is normal Mixed ASCII and is translated when performing the comparison and sending.
 
 ### Macros
+
 Packet Sender supports these macros when sending responses:
+
 * {{DATE}} -- Sends the current date in "yyy-mm-dd" format.
 * {{TIME}} -- Sends the current time in "hh:mm:ss ap" format.
 * {{UNIXTIME}} -- Sends the current epoch time stamp.
@@ -170,6 +167,7 @@ Packet Sender supports these macros when sending responses:
 Packet Sender will swap the macro with real values before sending.
 
 ### Persistent TCP and SSL
+
 Packet Sender supports persistent TCP and SSL connections via a separate UI dialog. It is enabled by checkbox on the main window or in the settings dialog.
 
 ![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.png)
@@ -186,10 +184,11 @@ Packet Sender supports persistent TCP and SSL connections via a separate UI dial
 
 Persistent connections are not supported via the command line.
 
-
 ### IPv4 Subnet Calculator
+
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 ![Packet Sender Subnet Calc](screenshots/packetsender_subnetcalc_ubuntu.png)
+
 * The log window will display non-loopback IPv4 and IPv6 addresses found on your computer.
 * The top left field allow inputting an IPv4 address.
 * The field below is for a subnet, either X.X.X.X or /XX notation.
