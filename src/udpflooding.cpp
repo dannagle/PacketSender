@@ -18,7 +18,7 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
     ui->setupUi(this);
 
 
-    setWindowTitle("UDP Traffic Generator");
+    setWindowTitle("UDP Traffic Generator (Experimental)");
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 

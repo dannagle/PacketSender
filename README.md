@@ -12,6 +12,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * Malware analysis (using the built-in UDP, TCP, SSL servers)
 * Troubleshooting secure connections (using SSL ).
 * Testing network connectivity/firewalls (by having 2 Packet Senders talk to each other)
+* Stress-testing a device (using intense network generator tool)
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 * Sharing/Saving/Collaboration using the [Packet Sender Cloud](https://cloud.packetsender.com/) service.
 
@@ -81,7 +82,13 @@ Packet Sender's multicast support is triggered by attempting to send to a IPv4 m
 
 There is no IPv6 multicast support, though it is on the roadmap. Sponsors wanting IPv6 multicast support are welcome to contact me.
 
-### Documentation (GUI)
+### UDP Traffic Generator (Experimental)
+
+For when the normal send system is not enough, you can now hammer a target IP with packets to see if your device can handle it. Please note that this feature is experimental and the metrics displayed have not been fully tested.
+
+![IP Specific binding](screenshots/udp-traffic-sending.png)
+
+### Additional Documentation (GUI)
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
