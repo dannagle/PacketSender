@@ -188,8 +188,10 @@ void ThreadSender::run()
     elapsedTimer.start();
     while(!stopsending) {
         //intense send
-        socket->writeDatagram(hex, resolved, port);
-        packetssent++;
+        qint64 byteSent = socket->writeDatagram(hex, resolved, port);
+        if(byteSent > 0) {
+            packetssent++;
+        }
 
         if(delay > 0) {
           msleep(delay);
