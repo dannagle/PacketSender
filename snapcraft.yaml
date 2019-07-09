@@ -1,0 +1,22 @@
+name: packetsender
+version: 6.2.3
+summary: Packet Sender Applicaiton
+description: Packet Sender - Free utility to for sending / receiving of network packets. TCP, UDP, SSL.
+grade: stable
+confinement: strict
+
+apps:
+  qt5-application:
+    command: desktop-launch application
+    plugs: [unity7, home]
+
+parts:
+  application:
+    plugin: qmake
+    qt-version: qt5
+    project-files: ["src/PacketSender.pro"]
+    source: git@github.com:dannagle/PacketSender.git
+    stage-packages: [libqt5gui5]
+    build-packages:
+      - qtbase5-dev
+      
