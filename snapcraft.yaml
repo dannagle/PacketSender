@@ -1,5 +1,5 @@
 name: packetsender
-version: 6.2.3.1
+version: 6.2.4
 summary: Packet Sender Applicaiton
 icon: src/packetsender.svg
 description: |
@@ -11,19 +11,21 @@ description: |
 grade: devel
 base: core18
 confinement: strict
+architectures: [amd64]
 
 apps:
   packetsender:
-    command: packetsender
+    command: usr/local/bin/packetsender
     plugs: [desktop, home, network]
-
+    environment:
+        LD_LIBRARY_PATH: $SNAP/usr/lib/x86_64-linux-gnu
 parts:
   packetsender:
     plugin: qmake
     qt-version: qt5
     project-files: ["src/PacketSender.pro"]
     source: https://github.com/dannagle/PacketSender.git
-    stage-packages: [libqt5gui5]
+    stage-packages: [libqt5gui5, libqt5network5]
     build-packages:
       - qtbase5-dev
       - g++
