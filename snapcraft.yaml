@@ -1,18 +1,24 @@
 name: packetsender
-version: 6.2.3
+version: 6.2.3.1
 summary: Packet Sender Applicaiton
-description: Packet Sender - Free utility to for sending / receiving of network packets. TCP, UDP, SSL.
-grade: stable
+icon: src/packetsender.svg
+description: |
+  Packet Sender - Free utility to for sending / receiving of network
+  packets. TCP, UDP, SSL.
+
+# sudo snap install packetsender*.snap --dangerous
+
+grade: devel
 base: core18
 confinement: strict
 
 apps:
-  qt5-application:
-    command: ../project/parts/application/build/PacketSender
+  packetsender:
+    command: PacketSender
     plugs: [desktop, home]
 
 parts:
-  application:
+  packetsender:
     plugin: qmake
     qt-version: qt5
     project-files: ["src/PacketSender.pro"]
@@ -23,5 +29,3 @@ parts:
       - g++
       - gcc
 
-
-      

@@ -48,6 +48,9 @@ OTHER_FILES += \
     packetsender.css \
    packetsender_mac.css
 
+linux:target.path = /usr/local/bin/
+linux:INSTALLS += target
+
 
 win32:RC_FILE = psicon.rc
 
