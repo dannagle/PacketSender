@@ -8,7 +8,7 @@ description: |
 
 # sudo snap install packetsender*.snap --dangerous
 
-grade: devel
+grade: stable
 base: core18
 confinement: strict
 architectures: [amd64]
@@ -58,7 +58,7 @@ parts:
     qt-version: qt5
     project-files: ["src/PacketSender.pro"]
     source: https://github.com/dannagle/PacketSender.git
-    source-branch: development
+    source-branch: master
     stage-packages:
       - libxkbcommon0
       - ttf-ubuntu-font-family
