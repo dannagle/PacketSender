@@ -15,16 +15,50 @@ architectures: [amd64]
 
 apps:
   packetsender:
-    command: usr/local/bin/packetsender
-    plugs: [desktop, home, network]
-    environment:
-        LD_LIBRARY_PATH: $SNAP/usr/lib/x86_64-linux-gnu
+    command: desktop-launch $SNAP/usr/local/bin/packetsender
+    plugs:
+      - unity7
+      - home
+      - network
+      - network-bind
+      - network-manager
+
 parts:
+  desktop-qt5:
+    build-packages:
+    - build-essential
+    - qtbase5-dev
+    - dpkg-dev
+    make-parameters:
+    - FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    stage-packages:
+    - libxkbcommon0
+    - ttf-ubuntu-font-family
+    - dmz-cursor-theme
+    - light-themes
+    - adwaita-icon-theme
+    - gnome-themes-standard
+    - shared-mime-info
+    - libqt5gui5
+    - libgdk-pixbuf2.0-0
+    - libqt5svg5
+    - try:
+      - appmenu-qt5
+    - locales-all
+    - xdg-user-dirs
+    - fcitx-frontend-qt5
+
+
+
   packetsender:
     plugin: qmake
     qt-version: qt5
     project-files: ["src/PacketSender.pro"]
     source: https://github.com/dannagle/PacketSender.git
+    source-branch: development
     stage-packages:
       - libxkbcommon0
       - ttf-ubuntu-font-family
@@ -42,4 +76,9 @@ parts:
       - qtbase5-dev
       - g++
       - gcc
+
+
+    after:
+      - desktop-qt5
+
 
