@@ -6,7 +6,7 @@
 
 QT       += core gui network widgets
 
-TARGET = PacketSender
+TARGET = packetsender
 TEMPLATE = app
 
 include(packetsender_main.pri)
