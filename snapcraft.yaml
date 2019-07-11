@@ -15,7 +15,7 @@ confinement: strict
 apps:
   packetsender:
     command: packetsender
-    plugs: [desktop, home]
+    plugs: [desktop, home, network]
 
 parts:
   packetsender:
