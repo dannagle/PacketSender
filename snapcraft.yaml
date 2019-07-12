@@ -1,5 +1,5 @@
 name: packetsender
-version: 6.2.5
+version: 6.2.6
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -16,6 +16,7 @@ architectures: [amd64]
 apps:
   packetsender:
     command: desktop-launch $SNAP/usr/local/bin/packetsender
+    desktop: usr/share/applications/packetsender.desktop
     plugs:
       - unity7
       - home
