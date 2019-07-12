@@ -1,7 +1,7 @@
 name: packetsender
-version: 6.2.4
-summary: Packet Sender Applicaiton
-icon: src/packetsender.svg
+version: 6.2.5
+summary: Packet Sender - Free TCP/UDP/SSL Utility
+icon: src/pslogo128.png
 description: |
   Packet Sender - Free utility to for sending / receiving of network
   packets. TCP, UDP, SSL.
