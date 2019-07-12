@@ -51,6 +51,12 @@ OTHER_FILES += \
 linux:target.path = /usr/local/bin/
 linux:INSTALLS += target
 
+linux:install_desktop.path = /usr/share/applications/
+linux:install_desktop.files = packetsender.desktop
+
+INSTALLS += \
+    install_desktop
+
 
 win32:RC_FILE = psicon.rc
 

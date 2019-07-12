@@ -1,6 +1,9 @@
 [Desktop Entry]
+Name=Packet Sender
+Comment=Packet Sender can send and receive UDP, TCP, and SSL on the ports of your choosing. 
+Exec=/usr/local/bin/packetsender
+Path=/usr/local/bin/packetsender
+Icon=/usr/share/applications/packetsender.svg
+Terminal=false
 Type=Application
-Name=PacketSender
-Exec=PacketSender
-Icon=packetsender
-Categories=Network;
+Categories=Utility;Development;
