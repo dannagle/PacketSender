@@ -47,6 +47,19 @@ int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
 void themeTheButton(QPushButton * button);
 
+
+//Only AppImage linux needs to check for updates.
+
+#ifdef __linux__
+
+#define SNAPBUILD true
+
+#else
+
+#define SNAPBUILD false
+
+#endif
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -532,26 +545,31 @@ void MainWindow::updateManager(QByteArray response)
         return;
     }
 
-    if (!settings.value("checkforUpdatesAsked", false).toBool()) {
-        settings.setValue("checkforUpdatesAsked", true);
-        QMessageBox msgBox;
-        msgBox.setWindowIcon(QIcon(":pslogo.png"));
-        msgBox.setWindowTitle("Updates.");
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::Yes);
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Let Packet Sender check for updates weekly?");
-        int yesno = msgBox.exec();
-        if (yesno == QMessageBox::Yes) {
-            QDEBUG() << "Will check for updates";
-            settings.setValue("checkforUpdates", true);
-        } else {
-            QDEBUG() << "Will NOT check for updates";
-            settings.setValue("checkforUpdates", false);
-        }
+    if(! (SNAPBUILD)) {
+        //snaps do not need to check for updates.
 
-        settings.sync();
+        if (!settings.value("checkforUpdatesAsked", false).toBool()) {
+            settings.setValue("checkforUpdatesAsked", true);
+            QMessageBox msgBox;
+            msgBox.setWindowIcon(QIcon(":pslogo.png"));
+            msgBox.setWindowTitle("Updates.");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Let Packet Sender check for updates weekly?");
+            int yesno = msgBox.exec();
+            if (yesno == QMessageBox::Yes) {
+                QDEBUG() << "Will check for updates";
+                settings.setValue("checkforUpdates", true);
+            } else {
+                QDEBUG() << "Will NOT check for updates";
+                settings.setValue("checkforUpdates", false);
+            }
+
+            settings.sync();
+        }
     }
+
 
 
     if (settings.value("checkforUpdates", true).toBool()) {
