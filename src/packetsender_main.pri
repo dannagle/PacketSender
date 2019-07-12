@@ -54,8 +54,12 @@ linux:INSTALLS += target
 linux:install_desktop.path = /usr/share/applications/
 linux:install_desktop.files = packetsender.desktop
 
+linux:install_icon.path = /usr/share/icons/
+linux:install_icon.files = packetsender.svg
+
 INSTALLS += \
-    install_desktop
+    install_desktop \
+    install_icon
 
 
 win32:RC_FILE = psicon.rc
