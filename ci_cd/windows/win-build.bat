@@ -6,8 +6,8 @@ cd release
 copy /Y C:\Users\danie\Desktop\code_sign_exe_com.bat .
 call code_sign_exe_com.bat
 echo Copying signed exe
-copy /Y PacketSender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\q5_12_mingw64\PacketSender.exe
-copy /Y PacketSender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\PacketSender.exe
+copy /Y packetsender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\q5_12_mingw64\packetsender.exe
+copy /Y packetsender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\packetsender.exe
 cd ..
 
 echo Cleaning build
