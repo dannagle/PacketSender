@@ -18,7 +18,7 @@ BEGIN
             VALUE "LegalCopyright",     "Copyright (c) NagleCode, LLC"
             VALUE "LegalTrademarks1",   "All Rights Reserved."
             VALUE "LegalTrademarks2",   "All Rights Reserved."
-            VALUE "OriginalFilename",   "PacketSender.exe"
+            VALUE "OriginalFilename",   "packetsender.exe"
             VALUE "ProductName",        "Packet Sender"
             VALUE "ProductVersion",     SW_VERSION
         END
