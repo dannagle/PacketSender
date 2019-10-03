@@ -29,9 +29,9 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
     Q_UNUSED(msg);
 }
 
-#define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
+#define OUTVAR(var)  o<< "\n" << # var << ":" << var
 #define OUTIF()  if(!quiet) o<< "\n"
-#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear();
+#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear()
 
 
 int main(int argc, char *argv[])
@@ -163,6 +163,18 @@ int main(int argc, char *argv[])
         parser.addOption(bindPortOption);
 
 
+        QCommandLineOption bindIPv6Option(QStringList() << "6" << "ipv6", "Force IPv6. Same as -B \"::\". Default is IP:Any.");
+        parser.addOption(bindIPv6Option);
+        QCommandLineOption bindIPv4Option(QStringList() << "4" << "ipv4", "Force IPv4.  Same as -B \"0.0.0.0\". Default is IP:Any.");
+        parser.addOption(bindIPv4Option);
+
+
+        // An option with a value
+        QCommandLineOption bindIPOption(QStringList() << "B" << "bindip",
+                                          "Bind custom IP. Default is IP:Any.",
+                                          "IP");
+        parser.addOption(bindIPOption);
+
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
 
@@ -199,11 +211,18 @@ int main(int argc, char *argv[])
         bool ascii = parser.isSet(pureAsciiOption);
         unsigned int wait = parser.value(waitOption).toUInt();
         unsigned int bind = parser.value(bindPortOption).toUInt();
+        QHostAddress bindIP = QHostAddress::Any;
+        QDEBUGVAR(parser.isSet(bindIPOption));
+        QString bindIPstr = "";
+        if(parser.isSet(bindIPOption)) {
+            bindIPstr = parser.value(bindIPOption).trimmed();
+        }
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
         bool ssl = parser.isSet(sslOption);
         bool sslNoError = parser.isSet(sslNoErrorOption);
-        bool ipv6  = false;
+        bool ipv6  = parser.isSet(bindIPv6Option);
+        bool ipv4  = parser.isSet(bindIPv4Option);
 
         if (sslNoError) ssl = true;
 
@@ -259,6 +278,7 @@ int main(int argc, char *argv[])
             tcp = false;
             ssl = false;
             ipv6 = false;
+            ipv4 = true;
         }
 
 
@@ -277,6 +297,53 @@ int main(int argc, char *argv[])
             OUTPUT();
             return -1;
         }
+
+        //check IP bind
+
+        if (!bindIPstr.isEmpty()) {
+            QHostAddress address(bindIPstr);
+            if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
+                    ) {
+                OUTIF() << "Binding to custom IP " << bindIPstr;
+                bindIP = address;
+            } else {
+                OUTIF() << "Error: " << bindIPstr << " is an invalid address.";
+                OUTPUT();
+                return -1;
+            }
+        }
+
+        if(ipv4 && ipv6) {
+            OUTIF() << "Warning: both ipv4 and ipv6 are set. Defaulting to ipv4.";
+            ipv4 = false;
+        }
+
+        if(!bindIPstr.isEmpty() && ipv4) {
+            OUTIF() << "Warning: both ipv4 and custom IP bind are set. Defaulting to custom IP.";
+            ipv4 = false;
+        }
+        if(!bindIPstr.isEmpty() && ipv6) {
+            OUTIF() << "Warning: both ipv6 and custom IP bind are set. Defaulting to custom IP.";
+            ipv6 = false;
+        }
+
+        if(ipv4) {
+            bindIP = QHostAddress::AnyIPv4;
+        }
+        if(ipv6) {
+            bindIP = QHostAddress::AnyIPv6;
+        }
+
+        if(bindIPstr.isEmpty()) {
+            bindIP = QHostAddress::Any;
+        }
+        QHostAddress bindAddress(bindIP);
+        if(bindAddress.isNull()) {
+            OUTIF() << "Warning: Could no bind to " << bindIP.toString();
+            bindAddress.setAddress(QHostAddress::Any);
+        }
+
+
 
         //bind is now default 0
 
@@ -369,8 +436,6 @@ int main(int argc, char *argv[])
             }
         }
 
-
-
         QDEBUGVAR(argssize);
         QDEBUGVAR(quiet);
         QDEBUGVAR(hex);
@@ -380,6 +445,9 @@ int main(int argc, char *argv[])
         QDEBUGVAR(port);
         QDEBUGVAR(wait);
         QDEBUGVAR(bind);
+        QDEBUGVAR(bindIP);
+        QDEBUGVAR(ipv4);
+        QDEBUGVAR(ipv6);
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
         QDEBUGVAR(ssl);
@@ -387,6 +455,11 @@ int main(int argc, char *argv[])
         QDEBUGVAR(name);
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
+
+        if (ipv6) {
+
+        }
+
 
         //NOW LETS DO THIS!
 
@@ -448,18 +521,12 @@ int main(int argc, char *argv[])
 
         if (tcp || ssl) {
             QSslSocket sock;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-            sock.bind(QHostAddress::Any, bind);
-#else
-            if (ipv6) {
-                sock.bind(QHostAddress::AnyIPv6, bind);
-            } else {
-                sock.bind(QHostAddress::AnyIPv4, bind);
+            bool bindsuccess = sock.bind(bindAddress, bind);
+            if(!bindsuccess) {
+                OUTIF() << "Error: Could not bind to " << bindAddress.toString() << ":" << bind;
+                OUTPUT();
+                return -1;
             }
-#endif
-
-
             if (ssl) {
                 sock.connectToHostEncrypted(address,  port);
                 if (!sslNoError) {
@@ -571,52 +638,24 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            bool bindsuccess = sock.bind(bindAddress, bind);
+            if(!bindsuccess) {
+                OUTIF() << "Error: Could not bind to " << bindAddress.toString() << ":" << bind;
+                OUTPUT();
+                return -1;
+            }
+
 
             if(multicast) {
-                if (!sock.bind(QHostAddress::AnyIPv4, bind)) {
-                    OUTIF() << "Error: Could not bind to " << bind;
-
-                    OUTPUT();
-                    return -1;
-                }
-
                 bool didjoin = sock.joinMulticastGroup(QHostAddress(address));
                 if(!didjoin) {
                     OUTIF() << "Error: Could not join multicast group " << address;
                     OUTIF() << "Attempting to send anyway...";
                 }
 
-            } else {
-                if (!sock.bind(QHostAddress::Any, bind)) {
-                    OUTIF() << "Error: Could not bind to " << bind;
-
-                    OUTPUT();
-                    return -1;
-                }
-
-            }
-#else
-
-            if (ipv6) {
-                if (!sock.bind(QHostAddress::AnyIPv6, bind)) {
-                    OUTIF() << "Error: Could not bind to " << bind;
-
-                    OUTPUT();
-                    return -1;
-                }
-
-            } else {
-                if (!sock.bind(QHostAddress::AnyIPv4, bind)) {
-                    OUTIF() << "Error: Could not bind to " << bind;
-
-                    OUTPUT();
-                    return -1;
-                }
-
             }
 
-#endif
+
 
             OUTIF() << "UDP (" << sock.localPort() << ")://" << address << ":" << port << " " << dataString;
 
