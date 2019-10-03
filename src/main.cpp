@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
         bool ascii = parser.isSet(pureAsciiOption);
         unsigned int wait = parser.value(waitOption).toUInt();
         unsigned int bind = parser.value(bindPortOption).toUInt();
-        QHostAddress bindIP = QHostAddress::Any;
+        QHostAddress bindIP = QHostAddress(QHostAddress::Any);
         QDEBUGVAR(parser.isSet(bindIPOption));
         QString bindIPstr = "";
         if(parser.isSet(bindIPOption)) {
@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 
         if(ipv4 && ipv6) {
             OUTIF() << "Warning: both ipv4 and ipv6 are set. Defaulting to ipv4.";
-            ipv4 = false;
+            ipv6 = false;
         }
 
         if(!bindIPstr.isEmpty() && ipv4) {
@@ -328,22 +328,13 @@ int main(int argc, char *argv[])
         }
 
         if(ipv4) {
-            bindIP = QHostAddress::AnyIPv4;
+            QDEBUG() << "bindIP set to IPv4";
+            bindIP = QHostAddress(QHostAddress::AnyIPv4);
         }
         if(ipv6) {
-            bindIP = QHostAddress::AnyIPv6;
+            QDEBUG() << "bindIP set to IPv6";
+            bindIP = QHostAddress(QHostAddress::AnyIPv6);
         }
-
-        if(bindIPstr.isEmpty()) {
-            bindIP = QHostAddress::Any;
-        }
-        QHostAddress bindAddress(bindIP);
-        if(bindAddress.isNull()) {
-            OUTIF() << "Warning: Could no bind to " << bindIP.toString();
-            bindAddress.setAddress(QHostAddress::Any);
-        }
-
-
 
         //bind is now default 0
 
@@ -456,11 +447,6 @@ int main(int argc, char *argv[])
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
 
-        if (ipv6) {
-
-        }
-
-
         //NOW LETS DO THIS!
 
         if (ssl && !QSslSocket::supportsSsl()) {
@@ -521,9 +507,9 @@ int main(int argc, char *argv[])
 
         if (tcp || ssl) {
             QSslSocket sock;
-            bool bindsuccess = sock.bind(bindAddress, bind);
+            bool bindsuccess = sock.bind(bindIP, bind);
             if(!bindsuccess) {
-                OUTIF() << "Error: Could not bind to " << bindAddress.toString() << ":" << bind;
+                OUTIF() << "Error: Could not bind to " << bindIP.toString() << ":" << bind;
                 OUTPUT();
                 return -1;
             }
@@ -638,9 +624,9 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
-            bool bindsuccess = sock.bind(bindAddress, bind);
+            bool bindsuccess = sock.bind(bindIP, bind);
             if(!bindsuccess) {
-                OUTIF() << "Error: Could not bind to " << bindAddress.toString() << ":" << bind;
+                OUTIF() << "Error: Could not bind to " << bindIP.toString() << ":" << bind;
                 OUTPUT();
                 return -1;
             }
