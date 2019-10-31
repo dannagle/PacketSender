@@ -4,6 +4,15 @@
 
 Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
 
+## Sponsors
+
+Packet Sender would like to thank the following sponsors.
+
+[![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/)
+[![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
+
+[Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
+
 ## Uses
 
 * Controlling network-based devices in ways beyond their original apps
