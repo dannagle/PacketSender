@@ -1023,7 +1023,7 @@ void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char
 {
 
 
-#include "ebcdic_ascii_map.h"
+//#include "ebcdic_ascii_map.h"
 
 
 }

@@ -87,7 +87,6 @@ MainWindow::MainWindow(QWidget *parent) :
         maxLogSize = 100;
     }
 
-    asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
     http = new QNetworkAccessManager(this); //Main application http object
 
@@ -269,10 +268,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D, Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G), this);
     QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcut, SIGNAL(activated()), this, SLOT(poodlepic()));
 
-    QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
-    QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
-
-
     QShortcut *field1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this);
     QShortcut *field2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this);
     QShortcut *field3 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_3), this);
@@ -382,25 +377,6 @@ void themeTheButton(QPushButton * button)
     button->update();
 
 
-}
-void MainWindow::ebcdicTranslate()
-{
-    QDEBUG() << "Translate ascii field";
-    on_packetASCIIEdit_lostFocus();
-
-    QDEBUGVAR(asciiEditTranslateEBCDIC);
-    if (asciiEditTranslateEBCDIC) {
-        Packet ebcdicPkt;
-        ebcdicPkt.init();
-        ebcdicPkt.hexString = ui->packetHexEdit->text();
-        QString oldascii = ui->packetASCIIEdit->text();
-        QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
-        ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
-        ui->packetASCIIEdit->setText(ebcdicPkt.asciiString());
-        ui->packetHexEdit->setText(ebcdicPkt.hexString);
-
-        ui->packetASCIIEdit->setToolTip("EBCDIC: " + oldascii);
-    }
 }
 
 void MainWindow::toggleUDPServer()
@@ -1703,6 +1679,7 @@ void MainWindow::on_saveTrafficPacket_clicked()
 
 
 }
+
 void MainWindow::applyNetworkSettings()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1712,9 +1689,6 @@ void MainWindow::applyNetworkSettings()
     multiSendDelay = settings.value("multiSendDelay", 0).toFloat();
     cancelResendNum = settings.value("cancelResendNum", 0).toInt();
     resendCounter = 0;
-
-
-    asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
     int joinedSize = packetNetwork.multicastStringList().size();
     if(joinedSize > 0) {

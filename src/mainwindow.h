@@ -74,7 +74,6 @@ class MainWindow : public QMainWindow
         void toggleTCPServer();
         void toggleSSLServer();
         void SSLServerStatus();
-        void ebcdicTranslate();
 
         //shortcut keys... would be better if used lambda
         void poodlepic();
@@ -215,8 +214,6 @@ class MainWindow : public QMainWindow
         float multiSendDelay;
         int cancelResendNum;
         int resendCounter;
-
-        bool asciiEditTranslateEBCDIC;
 
         void setIPMode();
         void saveSession(Packet sessionPacket);
