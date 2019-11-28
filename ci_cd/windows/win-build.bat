@@ -1,5 +1,5 @@
 echo Making exe
-C:\Qt\5.12.0\mingw73_64\bin\qmake.exe -o Makefile src/PacketSender.pro -spec win32-g++
+C:\Qt\5.13.1\mingw73_64\bin\qmake.exe -o Makefile src/PacketSender.pro -spec win32-g++
 C:\Qt\Tools\mingw730_64\bin\mingw32-make.exe -f Makefile.Release
 echo Signing exe
 cd release
@@ -14,7 +14,7 @@ echo Cleaning build
 rd /s /q release
 
 echo Making command line exe
-C:\Qt\5.12.0\mingw73_64\bin\qmake.exe -o Makefile src/PacketSenderCLI.pro -spec win32-g++
+C:\Qt\5.13.1\mingw73_64\bin\qmake.exe -o Makefile src/PacketSenderCLI.pro -spec win32-g++
 C:\Qt\Tools\mingw730_64\bin\mingw32-make.exe -f Makefile.Release
 
 echo Signing command line exe
