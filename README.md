@@ -234,7 +234,7 @@ The command line extension used in Windows installations is .com. Using .exe wil
 The command line system in Packet Sender follows the same pattern as other Linux utilities. It has a long name (such as --version) and a short name (such as -v). These options can be arranged in any order and Packet Sender will parse them correctly. The last 3 options are positional and must appear last. They are IP, port, and data. These last options are optional if using a stored packet.
 
     packetsender --help
-    Usage: packetsender.com [options] address port data
+    Usage: packetsender [options] address port data
     Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode
     See https://PacketSender.com/ for more information.
 
