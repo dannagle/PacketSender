@@ -6,15 +6,17 @@
 #include <QList>
 #include <QDebug>
 #include <QNetworkAddressEntry>
+#include <cmath>
 #include "packetnetwork.h"
 #include "globals.h"
 #include "packet.h"
+#include <chrono>
+#include<iostream>
 
 
 UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString ascii) :
-    QDialog(parent),
-    ui(new Ui::UDPFlooding)
-{
+        QDialog(parent),
+        ui(new Ui::UDPFlooding) {
     ui->setupUi(this);
 
 
@@ -25,12 +27,12 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
     thread = new ThreadSender(this);
     thread->ip = target;
     thread->port = port;
-    thread->delay = 0;
+    thread->speed = 0.0;
     thread->ascii = ascii;
 
     ui->ipEdit->setText(thread->ip);
     ui->portEdit->setText(QString::number(thread->port));
-    ui->delayEdit->setText(QString::number(thread->delay));
+    ui->delayEdit->setText(QString::number(thread->speed));
     ui->asciiEdit->setText(thread->ascii);
 
     thread->issending = false;
@@ -46,37 +48,32 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
 
     //logging
     refreshTimer.setInterval(500);
-    connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout())) ;
+    connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()));
     refreshTimer.start();
-
-
-
 }
 
-UDPFlooding::~UDPFlooding()
-{
-    if(thread->issending) {
+UDPFlooding::~UDPFlooding() {
+    if (thread->issending) {
         thread->terminate();
     }
     delete ui;
 }
 
-void UDPFlooding::on_startButton_clicked()
-{
+void UDPFlooding::on_startButton_clicked() {
     QDEBUG();
 
     bool ok1, ok2;
 
     ui->portEdit->text().toUInt(&ok1);
-    ui->delayEdit->text().toUInt(&ok2);
+    ui->delayEdit->text().toFloat(&ok2);
 
 
-    if(!ok1) {
+    if (!ok1) {
         ui->portEdit->setText("Invalid");
         return;
     }
 
-    if(!ok2) {
+    if (!ok2) {
         ui->delayEdit->setText("Invalid");
         return;
     }
@@ -84,28 +81,21 @@ void UDPFlooding::on_startButton_clicked()
     thread->ascii = ui->asciiEdit->text();
     thread->ip = ui->ipEdit->text();
     thread->port = static_cast<quint16>(ui->portEdit->text().toUInt(&ok1));
-    thread->delay = ui->delayEdit->text().toUInt(&ok2);
+    thread->speed = ui->delayEdit->text().toFloat(&ok2);
 
     // Do it.
     thread->start();
-
-
 }
 
 
-
-void UDPFlooding::on_stopButton_clicked()
-{
+void UDPFlooding::on_stopButton_clicked() {
     QDEBUG() << "Flagging stop send";
 
     thread->stopsending = true;
 }
 
-void UDPFlooding::refreshTimerTimeout()
-{
-
-
-    if(!thread->issending) {
+void UDPFlooding::refreshTimerTimeout() {
+    if (!thread->issending) {
         ui->startButton->setDisabled(false);
         ui->stopButton->setDisabled(true);
 
@@ -116,7 +106,7 @@ void UDPFlooding::refreshTimerTimeout()
         QString str = "";
         QTextStream out(&str);
 
-        out << "UDP " << "(" << thread->sourcePort << ") ://" << thread->ip <<":"<< thread->port << "\r\n";
+        out << "UDP " << "(" << thread->sourcePort << ") ://" << thread->ip << ":" << thread->port << "\r\n";
         out << "Total Sent: " << thread->packetssent << " packets \r\n";
         out << "Run time: " << thread->getElapsedMS() << " ms \r\n";
 
@@ -124,49 +114,50 @@ void UDPFlooding::refreshTimerTimeout()
         QString rateStr = QString::number(actualRate, 'f', 4);
 
         out << "Send Rate: " << rateStr << " kHz \r\n";
-        out << "Send kbps: " << (actualRate * thread->hex.size()*8) << " kbps \r\n";
+        out << "Send MBps: " << (actualRate * thread->hex.size()) / 1024 << " MBps \r\n";
 
         ui->statsLabel->setText(str);
-
     }
-
 }
 
 
-ThreadSender::ThreadSender(QObject *parent) : QThread(parent)
-{
+ThreadSender::ThreadSender(QObject *parent) : QThread(parent) {
     QDEBUG();
 }
 
-ThreadSender::~ThreadSender()
-{
+ThreadSender::~ThreadSender() {
     stopsending = true;
 }
 
-qint64 ThreadSender::getElapsedMS()
-{
+qint64 ThreadSender::getElapsedMS() {
     return elapsedTimer.elapsed();
 }
 
 
-
-double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts)
-{
+double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts) {
 
     auto ms = static_cast<double>(eTimer.elapsed());
     auto packetsentDouble = static_cast<double>(pkts);
     return packetsentDouble / ms;
 }
 
+int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *resolved) {
+    for (int i = 0; i < number; i++) {
+        qint64 byteSent = socket->writeDatagram(hex, *resolved, port);
+        if (byteSent > 0) {
+            packetssent++;
+        }
+    }
+    return number;
+}
 
 
-void ThreadSender::run()
-{
+void ThreadSender::run() {
     QDEBUG() << "Begin send";
 
     QHostAddress addy(ip);
 
-    QUdpSocket * socket = new QUdpSocket();
+    QUdpSocket *socket = new QUdpSocket();
     socket->bind(0);
 
     sourcePort = socket->localPort();
@@ -182,22 +173,35 @@ void ThreadSender::run()
     stopsending = false;
 
     msleep(10); //momentarily break thread
-
-    //return;
+    
+    bool full_speed = speed == 0.0;
 
     elapsedTimer.start();
-    while(!stopsending) {
-        //intense send
-        qint64 byteSent = socket->writeDatagram(hex, resolved, port);
-        if(byteSent > 0) {
-            packetssent++;
-        }
-
-        if(delay > 0) {
-          msleep(delay);
-        } else {
-            if((packetssent % 1000) == 0) {
+    if (full_speed) {
+        while (!stopsending) {
+            qint64 byteSent = socket->writeDatagram(hex, resolved, port);
+            if (byteSent > 0) {
+                packetssent++;
+            }
+            if ((packetssent % 1000) == 0) {
                 usleep(1);
+            }
+        }
+    } else if (speed > 0.0) {
+        const int packets_to_send_per_sec = ceil((double) speed * 1024 * 1024 / hex.size());
+
+        while (!stopsending) {
+            auto start_of_sec = std::chrono::high_resolution_clock::now();
+            //send packets in 4 bursts
+            for (int i = 0; i < 4 && !stopsending; ++i) {
+                short_burst_of(packets_to_send_per_sec / 4, socket, &resolved);
+                auto time_q1 = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double, std::milli> time_spent = time_q1 - start_of_sec;
+
+                if (time_spent.count() < 250 * (i + 1)) {
+                    msleep(250 * (i + 1) - time_spent.count());
+                }
+
             }
         }
     }

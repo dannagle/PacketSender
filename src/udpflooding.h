@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QElapsedTimer>
+#include <QtNetwork/QUdpSocket>
 
 class ThreadSender : public QThread
 {
@@ -18,15 +19,16 @@ public:
     qint64  getElapsedMS();
     QString ip;
     quint16 port;
-    unsigned int delay;
+    float speed;
     QString ascii;
     QByteArray hex;
     bool issending;
     bool stopsending;
-    quint64 packetssent;    
+    quint64 packetssent;
     unsigned int sourcePort;
     QElapsedTimer elapsedTimer;
 
+    int short_burst_of(int, QUdpSocket*, QHostAddress*);
 };
 
 

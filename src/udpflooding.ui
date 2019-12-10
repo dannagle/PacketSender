@@ -67,7 +67,7 @@
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>Resend Delay (ms)</string>
+          <string>Speed (MB/s)</string>
          </property>
         </widget>
        </item>
