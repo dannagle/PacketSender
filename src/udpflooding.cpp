@@ -11,7 +11,6 @@
 #include "globals.h"
 #include "packet.h"
 #include <chrono>
-#include<iostream>
 
 
 UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString ascii) :
@@ -173,7 +172,7 @@ void ThreadSender::run() {
     stopsending = false;
 
     msleep(10); //momentarily break thread
-    
+
     bool full_speed = speed == 0.0;
 
     elapsedTimer.start();
