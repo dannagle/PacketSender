@@ -14,8 +14,9 @@
 
 
 UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString ascii) :
-        QDialog(parent),
-        ui(new Ui::UDPFlooding) {
+    QDialog(parent),
+    ui(new Ui::UDPFlooding)
+{
     ui->setupUi(this);
 
 
@@ -51,14 +52,16 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
     refreshTimer.start();
 }
 
-UDPFlooding::~UDPFlooding() {
+UDPFlooding::~UDPFlooding()
+{
     if (thread->issending) {
         thread->terminate();
     }
     delete ui;
 }
 
-void UDPFlooding::on_startButton_clicked() {
+void UDPFlooding::on_startButton_clicked()
+{
     QDEBUG();
 
     bool ok1, ok2;
@@ -89,13 +92,15 @@ void UDPFlooding::on_startButton_clicked() {
 }
 
 
-void UDPFlooding::on_stopButton_clicked() {
+void UDPFlooding::on_stopButton_clicked()
+{
     QDEBUG() << "Flagging stop send";
 
     thread->stopsending = true;
 }
 
-void UDPFlooding::refreshTimerTimeout() {
+void UDPFlooding::refreshTimerTimeout()
+{
     if (!thread->issending) {
         ui->startButton->setDisabled(false);
         ui->stopButton->setDisabled(true);
@@ -122,28 +127,33 @@ void UDPFlooding::refreshTimerTimeout() {
 }
 
 
-ThreadSender::ThreadSender(QObject *parent) : QThread(parent) {
+ThreadSender::ThreadSender(QObject *parent) : QThread(parent)
+{
     QDEBUG();
     speedSendEnabled = false;
 }
 
-ThreadSender::~ThreadSender() {
+ThreadSender::~ThreadSender()
+{
     stopsending = true;
 }
 
-qint64 ThreadSender::getElapsedMS() {
+qint64 ThreadSender::getElapsedMS()
+{
     return elapsedTimer.elapsed();
 }
 
 
-double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts) {
+double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts)
+{
 
     auto ms = static_cast<double>(eTimer.elapsed());
     auto packetsentDouble = static_cast<double>(pkts);
     return packetsentDouble / ms;
 }
 
-int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *resolved) {
+int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *resolved)
+{
     for (int i = 0; i < number; i++) {
         qint64 byteSent = socket->writeDatagram(hex, *resolved, port);
         if (byteSent > 0) {
@@ -154,7 +164,8 @@ int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *r
 }
 
 
-void ThreadSender::run() {
+void ThreadSender::run()
+{
     QDEBUG() << "Begin send";
 
     QHostAddress addy(ip);
