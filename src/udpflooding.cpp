@@ -189,16 +189,20 @@ void ThreadSender::run() {
     } else if (speed > 0.0) {
         const int packets_to_send_per_sec = ceil((double) speed * 1024 * 1024 / hex.size());
 
+        int steps_in_one_second = 4; //send packets in 4 bursts
+        int part_of_second = 1000 / steps_in_one_second; // 250ms
+        int number_of_packets_in_one_burst = packets_to_send_per_sec / steps_in_one_second;
+
         while (!stopsending) {
             auto start_of_sec = std::chrono::high_resolution_clock::now();
-            //send packets in 4 bursts
-            for (int i = 0; i < 4 && !stopsending; ++i) {
-                short_burst_of(packets_to_send_per_sec / 4, socket, &resolved);
+
+            for (int i = 0; i < steps_in_one_second && !stopsending; ++i) {
+                short_burst_of(number_of_packets_in_one_burst, socket, &resolved);
                 auto time_q1 = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<double, std::milli> time_spent = time_q1 - start_of_sec;
 
-                if (time_spent.count() < 250 * (i + 1)) {
-                    msleep(250 * (i + 1) - time_spent.count());
+                if (time_spent.count() < part_of_second * (i + 1)) {
+                    msleep(part_of_second * (i + 1) - time_spent.count());
                 }
 
             }
