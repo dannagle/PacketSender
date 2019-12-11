@@ -19,7 +19,8 @@ public:
     qint64  getElapsedMS();
     QString ip;
     quint16 port;
-    float speed;
+    int delay;
+    bool speedSendEnabled;
     QString ascii;
     QByteArray hex;
     bool issending;

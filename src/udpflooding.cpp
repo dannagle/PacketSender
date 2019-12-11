@@ -26,12 +26,12 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
     thread = new ThreadSender(this);
     thread->ip = target;
     thread->port = port;
-    thread->speed = 0.0;
+    thread->delay = 0;
     thread->ascii = ascii;
 
     ui->ipEdit->setText(thread->ip);
     ui->portEdit->setText(QString::number(thread->port));
-    ui->delayEdit->setText(QString::number(thread->speed));
+    ui->delayEdit->setText(QString::number(thread->delay));
     ui->asciiEdit->setText(thread->ascii);
 
     thread->issending = false;
@@ -64,7 +64,7 @@ void UDPFlooding::on_startButton_clicked() {
     bool ok1, ok2;
 
     ui->portEdit->text().toUInt(&ok1);
-    ui->delayEdit->text().toFloat(&ok2);
+    ui->delayEdit->text().toInt(&ok2);
 
 
     if (!ok1) {
@@ -77,10 +77,12 @@ void UDPFlooding::on_startButton_clicked() {
         return;
     }
 
+    thread->speedSendEnabled = ui->radioButtonSpeed->isChecked();
+
     thread->ascii = ui->asciiEdit->text();
     thread->ip = ui->ipEdit->text();
     thread->port = static_cast<quint16>(ui->portEdit->text().toUInt(&ok1));
-    thread->speed = ui->delayEdit->text().toFloat(&ok2);
+    thread->delay = ui->delayEdit->text().toInt(&ok2);
 
     // Do it.
     thread->start();
@@ -122,6 +124,7 @@ void UDPFlooding::refreshTimerTimeout() {
 
 ThreadSender::ThreadSender(QObject *parent) : QThread(parent) {
     QDEBUG();
+    speedSendEnabled = false;
 }
 
 ThreadSender::~ThreadSender() {
@@ -173,9 +176,10 @@ void ThreadSender::run() {
 
     msleep(10); //momentarily break thread
 
-    bool full_speed = speed == 0.0;
+    bool full_speed = delay == 0;
 
     elapsedTimer.start();
+
     if (full_speed) {
         while (!stopsending) {
             qint64 byteSent = socket->writeDatagram(hex, resolved, port);
@@ -186,7 +190,8 @@ void ThreadSender::run() {
                 usleep(1);
             }
         }
-    } else if (speed > 0.0) {
+    } else if (speedSendEnabled && delay > 0) {
+        int speed = delay;
         const int packets_to_send_per_sec = ceil((double) speed * 1024 * 1024 / hex.size());
 
         int steps_in_one_second = 4; //send packets in 4 bursts
@@ -206,6 +211,14 @@ void ThreadSender::run() {
                 }
 
             }
+        }
+    } else if (delay > 0) {
+        while (!stopsending) {
+            qint64 byteSent = socket->writeDatagram(hex, resolved, port);
+            if (byteSent > 0) {
+                packetssent++;
+            }
+            msleep(delay);
         }
     }
 
