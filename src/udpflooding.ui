@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>249</height>
+    <width>460</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,20 +61,44 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <property name="topMargin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QRadioButton" name="radioButtonDelay">
          <property name="text">
-          <string>Resend Delay (ms)</string>
+          <string>Delay (ms)</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
+        <widget class="QRadioButton" name="radioButtonSpeed">
+         <property name="text">
+          <string>Speed (MB/s)</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
         <widget class="QLineEdit" name="delayEdit">
          <property name="placeholderText">
-          <string>0 or blank is no delay</string>
+          <string>0 or blank is no delay or max speed</string>
          </property>
         </widget>
        </item>
