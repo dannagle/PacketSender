@@ -10,6 +10,7 @@ Packet Sender would like to thank the following sponsors.
 
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/)
 [![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
+[![NagleCode](screenshots/naglecode-logo200.png)](https://dannagle.com)
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
@@ -118,7 +119,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * \XX gets translated to XX in hex
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
-    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.  
+    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.
     * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
@@ -192,7 +193,7 @@ Packet Sender supports persistent TCP and SSL connections via a separate UI dial
 * Previously saved packets can be loaded in the drop-down.
 * There is a "raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
 * Traffic is also saved in the main window traffic log.
-* A file may be uploaded to the persistent connection. You may wish to turn off logging if you use this.  
+* A file may be uploaded to the persistent connection. You may wish to turn off logging if you use this.
 * The timer in the bottom lefts starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
 * You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections. Packet Sender remembers previous state of \r checkbox.
 * Incoming persistent connections to the server will launch the UI dialog.
