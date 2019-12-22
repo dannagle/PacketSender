@@ -10,7 +10,7 @@ Packet Sender would like to thank the following sponsors.
 
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/)
 [![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
-[![NagleCode](screenshots/naglecode-logo200.png)](https://dannagle.com)
+[![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
