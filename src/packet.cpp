@@ -20,6 +20,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QRandomGenerator>
 
 
 
@@ -785,7 +786,8 @@ QString Packet::macroSwap(QString data)
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
     }
     if (data.contains("{{RANDOM}}")) {
-        data = data.replace("{{RANDOM}}", QString::number(qrand()));
+        QRandomGenerator *gen = QRandomGenerator::global();
+        data = data.replace("{{RANDOM}}", QString::number(gen->generate()));
     }
     if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
