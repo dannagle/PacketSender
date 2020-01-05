@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QUrl>
+#include <QSslSocket>
 
 
 About::About(QWidget *parent) :
@@ -14,7 +15,13 @@ About::About(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QString versionBuilder = QString("Version ") + SW_VERSION;
+
+    QString versionBuilder = QString("Version: ") + SW_VERSION;
+    if (QSslSocket::supportsSsl()) {
+        versionBuilder.append(" / SSL: ");
+        versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+    }
+
     ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");

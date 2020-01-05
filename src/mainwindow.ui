@@ -420,7 +420,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -438,7 +438,6 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionHelp"/>
-    <addaction name="actionForums"/>
     <addaction name="actionFollow_NagleCode"/>
     <addaction name="actionConnect_on_LinkedIn"/>
     <addaction name="actionDonate_Thank_You"/>
