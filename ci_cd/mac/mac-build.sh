@@ -40,9 +40,9 @@ sed -i '' '/BEGIN/,/END/c\
 echo "Replacing Info.plist with $BUILD_VERSION"
 sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
 
-"/Users/dannagle/Qt/5.12.0/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
+"/Users/dannagle/Qt/5.13.0/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
-/Users/dannagle/Qt/5.12.0/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
+/Users/dannagle/Qt/5.13.0/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
 codesign --option runtime --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" PacketSender.app
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
