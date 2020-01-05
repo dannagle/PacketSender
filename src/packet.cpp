@@ -146,21 +146,6 @@ void Packet::init()
     persistent = false;
 }
 
-QByteArray Packet::EBCDICtoASCII(QByteArray ebcdic)
-{
-
-    QHash<char, char> asciiEBCDICmap;
-    QHash<char, char> ebcdicASCIImap;
-    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
-
-    char hex;
-    QByteArray asciiArray;
-    foreach (hex, ebcdic) {
-        asciiArray.append(asciiEBCDICmap[hex]);
-    }
-
-    return asciiArray;
-}
 
 #define JSONSTR(VAR) json[QString(# VAR).toLower()] = packetList[i].VAR
 #define JSONNUM(VAR) json[QString(# VAR).toLower()] = QString::number(packetList[i].VAR)
@@ -247,20 +232,6 @@ QList<Packet> Packet::ImportJSON(QByteArray data)
     return returnList;
 }
 
-QByteArray Packet::ASCIItoEBCDIC(QByteArray ascii)
-{
-    QHash<char, char> asciiEBCDICmap;
-    QHash<char, char> ebcdicASCIImap;
-    loadEBCDICtoASCIImap(asciiEBCDICmap, ebcdicASCIImap);
-
-    char hex;
-    QByteArray ebcdicArray;
-    foreach (hex, ascii) {
-        ebcdicArray.append(ebcdicASCIImap[hex]);
-    }
-
-    return ebcdicArray;
-}
 
 SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 {
@@ -811,11 +782,6 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data)
         return data.toLatin1();
     }
 
-    if (encoding == "ebcdic") {
-        //use same mixed ascii notation
-        QString hex = Packet::ASCIITohex(data);
-        return ASCIItoEBCDIC(Packet::HEXtoByteArray(hex));
-    }
 
     if (encoding == "hex") {
         return Packet::HEXtoByteArray(data);
@@ -838,9 +804,6 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
     foreach (config, smartList) {
         if (config.enabled) {
             QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
-            if (config.encoding.toLower() == "ebcdic") {
-                QDEBUG() << "Does" << Packet::byteArrayToHex(testData) << "==" << Packet::byteArrayToHex(data);
-            }
             if (testData == (data)) {
                 QDEBUG() << "Match! Sending:" << config.replyWith;
                 return Packet::encodingToByteArray(config.encoding, config.replyWith);
@@ -1019,15 +982,4 @@ QString Packet::ASCIITohex(QString &ascii)
     return hexText;
 
 }
-
-
-void Packet::loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap)
-{
-
-
-//#include "ebcdic_ascii_map.h"
-
-
-}
-
 

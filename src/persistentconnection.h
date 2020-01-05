@@ -60,7 +60,6 @@ class PersistentConnection : public QDialog
 
         void on_clearButton_clicked();
 
-        void ebcdicTranslate();
         void on_sendFileButton_clicked();
 
         void on_clipboardButton_clicked();
@@ -77,6 +76,7 @@ private:
         bool stopTimer;
         bool useraw;
         bool suppressSlot;
+        bool translateMacroSend;
         QStringList previousCommands;
 
 

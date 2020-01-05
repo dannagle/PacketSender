@@ -27,7 +27,6 @@ HEADERS  += mainwindow.h \
     settings.h \
     about.h \
     subnetcalc.h \
-    ebcdic_ascii_map.h \
     threadedtcpserver.h \
     cloudui.h \
 	multicastsetup.h \

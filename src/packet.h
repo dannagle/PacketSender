@@ -110,16 +110,12 @@ class Packet
         static void sortByTime(QList<Packet> &packetList);
         static float oneDecimal(float value);
         static QString macroSwap(QString data);
-        static QByteArray EBCDICtoASCII(QByteArray ebcdic);
-        static QByteArray ASCIItoEBCDIC(QByteArray ascii);
         static QByteArray ExportJSON(QList<Packet> packetList);
         static QList<Packet> ImportJSON(QByteArray data);
         void static removeFromDBList(QStringList nameList);
         static void setBoldItem(QTableWidgetItem *tItem, Packet thepacket);
 private:
         static int hexToInt(QChar hex);
-
-        static void loadEBCDICtoASCIImap(QHash<char, char> & asciiEBCDICmap, QHash<char, char> & ebcdicASCIImap);
 };
 
 Q_DECLARE_METATYPE(Packet)

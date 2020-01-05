@@ -120,6 +120,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QCheckBox" name="translateMacroSendCheck">
+            <property name="text">
+             <string>Translate macros when sending</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="sendResponseSettingsCheck">
             <property name="text">
              <string>Send a basic response with macro support</string>
@@ -292,13 +299,6 @@
            <widget class="QCheckBox" name="persistentTCPCheck">
             <property name="text">
              <string>Persistent TCP Connections</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="asciiEditTranslateEBCDICCheck">
-            <property name="text">
-             <string>Enable Ctrl (or Cmd)+ E  to translate ASCII field to EBCDIC</string>
             </property>
            </widget>
           </item>
@@ -905,7 +905,6 @@
   <tabstop>attemptReceiveCheck</tabstop>
   <tabstop>delayAfterConnectCheck</tabstop>
   <tabstop>persistentTCPCheck</tabstop>
-  <tabstop>asciiEditTranslateEBCDICCheck</tabstop>
   <tabstop>resolveDNSOnInputCheck</tabstop>
   <tabstop>ignoreSSLCheck</tabstop>
   <tabstop>serverSnakeOilCheck</tabstop>

@@ -306,6 +306,7 @@ void PacketNetwork::init()
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
     persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
     sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
+    translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
 
     smartList.clear();
     smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
@@ -693,6 +694,11 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.receiveBeforeSend = receiveBeforeSend;
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
+
+    if(translateMacroSend) {
+        QString data = Packet::macroSwap(sendpacket.asciiString());
+        sendpacket.hexString = Packet::ASCIITohex(data);
+    }
 
     if (sendpacket.persistent && (sendpacket.isTCP())) {
         //spawn a window.

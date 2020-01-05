@@ -58,6 +58,7 @@ class PacketNetwork : public QObject
         bool activateTCP;
         bool activateSSL;
         bool receiveBeforeSend;
+        bool translateMacroSend;
         int delayAfterConnect;
         bool persistentConnectCheck;
         bool isSecure;

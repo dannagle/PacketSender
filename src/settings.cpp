@@ -78,6 +78,7 @@ Settings::Settings(QWidget *parent) :
     on_smartResponseEnableCheck_clicked();
 
 
+    ui->translateMacroSendCheck->setChecked(settings.value("translateMacroSendCheck", true).toBool());
 
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
 
@@ -90,9 +91,6 @@ Settings::Settings(QWidget *parent) :
     ui->checkforUpdates->setChecked(settings.value("checkforUpdates", true).toBool());
 
     ui->resolveDNSOnInputCheck->setChecked(settings.value("resolveDNSOnInputCheck", false).toBool());
-
-
-    ui->asciiEditTranslateEBCDICCheck->setChecked(settings.value("asciiEditTranslateEBCDICCheck", false).toBool());
 
     QList<int> udpList = portsToIntList(settings.value("udpPort", "0").toString());
     QList<int> tcpList = portsToIntList(settings.value("tcpPort", "0").toString());
@@ -288,10 +286,9 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
 
-
-    settings.setValue("asciiEditTranslateEBCDICCheck", ui->asciiEditTranslateEBCDICCheck->isChecked());
-
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
+
+    settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());

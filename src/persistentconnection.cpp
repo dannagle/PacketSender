@@ -54,32 +54,11 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     suppressSlot = false;
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    bool asciiEditTranslateEBCDIC = settings.value("asciiEditTranslateEBCDICCheck", false).toBool();
 
-
-    if (asciiEditTranslateEBCDIC) {
-        QShortcut *shortcutEBCDIC = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E), this);
-        QDEBUG() << ": EBC connection attempt" << connect(shortcutEBCDIC, SIGNAL(activated()), this, SLOT(ebcdicTranslate()));
-
-    }
-
+    translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
 
 }
 
-void PersistentConnection::ebcdicTranslate()
-{
-
-    QDEBUG() << "Translate ascii field";
-    Packet ebcdicPkt;
-    ebcdicPkt.init();
-    QString oldascii = ui->asciiLineEdit->text();
-    ebcdicPkt.hexString = Packet::ASCIITohex(oldascii);
-    oldascii = ebcdicPkt.asciiString();
-
-    QByteArray ebcdic = Packet::ASCIItoEBCDIC(ebcdicPkt.getByteArray());
-    ebcdicPkt.hexString = Packet::byteArrayToHex(ebcdic);
-    ui->asciiLineEdit->setText(ebcdicPkt.asciiString());
-}
 
 void PersistentConnection::loadComboBox()
 {
@@ -375,6 +354,11 @@ void PersistentConnection::on_asciiSendButton_clicked()
     asciiPacket.toIP = sendPacket.toIP;
     asciiPacket.port = sendPacket.port;
     asciiPacket.hexString = Packet::ASCIITohex(ascii);
+
+    if(translateMacroSend) {
+        QString data = Packet::macroSwap(asciiPacket.asciiString());
+        asciiPacket.hexString = Packet::ASCIITohex(data);
+    }
 
     previousCommands.append(ascii);
     previousCommands.removeDuplicates();
