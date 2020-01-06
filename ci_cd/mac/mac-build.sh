@@ -49,15 +49,15 @@ rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
 
 rm -rf newbuild.dmg  || true
-"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg
+"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" -notarizationAppleID "$2" -notarizationPassword "$3"
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg || true
 mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg
 
 echo "Finished creating PacketSender_v$BUILD_VERSION.dmg"
 
-echo "Sending to Apple for notary"
-xcrun altool --notarize-app -f /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg --primary-bundle-id 'com.packetsender.desktop'  -u ''$APPLE_UNAME'' -p ''$APPLE_PWORD''
+#echo "Sending to Apple for notary"
+#xcrun altool --notarize-app -f /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg --primary-bundle-id 'com.packetsender.desktop'  -u ''$APPLE_UNAME'' -p ''$APPLE_PWORD''
 
 
 popd
