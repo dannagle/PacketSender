@@ -494,7 +494,7 @@
   <action name="actionImport_Packets">
    <property name="icon">
     <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
+     <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Import Database</string>
@@ -503,7 +503,7 @@
   <action name="actionExport_Packets">
    <property name="icon">
     <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/download.png</normaloff>:/icons/download.png</iconset>
+     <normaloff>:/icons/upload.png</normaloff>:/icons/upload.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Export Database</string>
