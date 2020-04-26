@@ -10,7 +10,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 
 Packet Sender would like to thank the following sponsors.
 
-[![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/)
+[![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
 [![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
 
