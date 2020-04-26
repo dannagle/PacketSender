@@ -1119,7 +1119,7 @@ void MainWindow::on_testPacketButton_clicked()
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Yes);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("You are resending a TCP packet with presistent connecitons. The UI could spawn numerous windows! \n\nUncheck persistent connection? (Recommended)");
+            msgBox.setText("You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! \n\nUncheck persistent connection? (Recommended)");
             int yesno = msgBox.exec();
             if(yesno == QMessageBox::Yes) {
                 ui->persistentTCPCheck->setChecked(false);
