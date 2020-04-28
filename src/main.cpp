@@ -16,10 +16,36 @@
 #include <QList>
 #include <QSslCipher>
 #include <QDeadlineTimer>
+#include <QProcess>
 
 #include "mainwindow.h"
 #define DEBUGMODE 0
 
+
+bool isGuiApp()
+{
+
+    QProcess *process = new QProcess();
+    QString program = "xrandr";
+    process->start(program, QStringList());
+    process->waitForFinished(500);
+    int exitcode = process->exitCode();
+    QDEBUGVAR(exitcode);
+    free(process);
+    if (exitcode > 0) {
+        // This means xrandr exists, but it couldn't connect.
+        return false;
+    }
+
+    if (exitcode < 0) {
+        //command not found. Maybe xrandr isn't present.
+        // TODO some other test?
+        return true;
+    }
+
+    // returned zero. All is good.
+    return true;
+}
 
 void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -705,6 +731,15 @@ int main(int argc, char *argv[])
 
     } else {
 
+
+#ifdef __linux__
+        //Workaround linux check for those that support xrandr
+        //Note that this bug is actually within Qt.
+        if (!isGuiApp()) {
+            printf("\nCannot open display. Try --help to access console app.\n");
+            return -1;
+        }
+#endif
 
         QApplication a(argc, argv);
 
