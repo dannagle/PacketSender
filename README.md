@@ -11,22 +11,20 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 Packet Sender would like to thank the following sponsors.
 
 [![JetBrains](screenshots/iwl_logo.png)](https://iwl.com/)
-IWL is a California company creating computer networking products.
-<br>
-
-
+<br>IWL is a California company creating computer networking products.
+<br><br><br>
 
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
-JetBrains provides world-class programming tools to help speed development.
-<br>
+<br>JetBrains provides world-class programming tools to help speed development.
+<br><br><br>
 
 [![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
-GitHub provides repositories, downloads, and issue tracking for any code project.
-<br>
+<br>GitHub provides repositories, downloads, and issue tracking for any code project.
+<br><br><br>
 
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
-NagleCode is a software publisher and development studio.
-<br>
+<br>NagleCode is a software publisher and development studio.
+<br><br><br>
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
