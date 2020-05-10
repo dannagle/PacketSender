@@ -6,4 +6,3 @@
 
 #### Description of issue
 
-{{replace this}}
