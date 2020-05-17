@@ -34,7 +34,7 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
-        explicit PacketNetwork(QWidget *parent = 0);
+        explicit PacketNetwork(QWidget *parent = nullptr);
         void init();
 
         QString debugQByteArray(QByteArray debugArray);

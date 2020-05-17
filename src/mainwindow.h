@@ -89,6 +89,7 @@ class MainWindow : public QMainWindow
     private slots:
         void on_packetHexEdit_lostFocus();
         void on_packetASCIIEdit_lostFocus();
+        void on_requestPathEdit_lostFocus();
 
         void sendClick(QString packetName);
 
@@ -182,7 +183,17 @@ class MainWindow : public QMainWindow
         void on_actionDonate_Thank_You_triggered();
 
 
-    private:
+        void on_udptcpComboBox_currentIndexChanged(const QString &arg1);
+
+        void on_requestPathEdit_editingFinished();
+
+        void on_genPostDataButton_clicked();
+
+        void on_generatePanelButton_clicked();
+
+        void on_actionPanel_Generator_triggered();
+
+private:
         Ui::MainWindow *ui;
         PacketLogModel packetsLogged;
         QList<Packet> packetsSaved;

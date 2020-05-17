@@ -103,7 +103,7 @@ void PersistentConnection::statusReceiver(QString message)
     if (message.toLower().startsWith("not connected")) {
 
         QDEBUG() << "Setting style sheet";
-        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #EEEEEE }");
+        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #000 }");
         ui->asciiSendButton->setEnabled(false);
         ui->asciiLineEdit->setEnabled(false);
         ui->packetComboBox->setEnabled(false);

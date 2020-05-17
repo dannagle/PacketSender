@@ -37,6 +37,7 @@ const int Packet::DATATYPE = Qt::UserRole + 8;
 const int Packet::TCP_UDP = Qt::UserRole + 9;
 const int Packet::REPEAT = Qt::UserRole + 10;
 const int Packet::INCOMING = Qt::UserRole + 11;
+const int Packet::REQUEST_URL = Qt::UserRole + 12;
 
 
 
@@ -64,6 +65,18 @@ bool Packet::isUDP()
     return ((tcpOrUdp.trimmed().toLower() == "udp"));
 }
 
+bool Packet::isHTTP()
+{
+    return ((tcpOrUdp.trimmed().toLower().contains("http")));
+}
+bool Packet::isHTTPS()
+{
+    return ((tcpOrUdp.trimmed().toLower().contains("https")));
+}
+bool Packet::isPOST()
+{
+    return  isHTTP() && ((tcpOrUdp.trimmed().toLower().contains("post")));
+}
 
 bool Packet::isTCP()
 {
@@ -102,6 +115,7 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(delayAfterConnect);
     OTHEREQUALS(persistent);
     OTHEREQUALS(incoming);
+    OTHEREQUALS(requestPath);
 }
 
 QHostAddress Packet::IPV4_IPV6_ANY(QString ipMode)
@@ -172,6 +186,7 @@ QByteArray Packet::ExportJSON(QList<Packet> packetList)
         JSONNUM(fromPort);
         JSONSTR(tcpOrUdp);
         JSONNUM(sendResponse);
+        JSONSTR(requestPath);
         JSONSTR(repeat);
         json["asciistring"] = QString(packetList[i].asciiString().toLatin1().toBase64());
         //JSONSTR(timestamp);
@@ -212,6 +227,9 @@ QList<Packet> Packet::ImportJSON(QByteArray data)
                     pkt.fromIP = json["fromip"].toString();
                     pkt.fromPort = json["fromport"].toString().toUInt();
                     pkt.hexString = json["hexstring"].toString();
+                    if(json.contains("requestpath")) {
+                        pkt.requestPath = json["requestpath"].toString();
+                    }
                     pkt.toIP = json["toip"].toString();
                     pkt.port = json["port"].toString().toUInt();
                     pkt.repeat = json["repeat"].toString().toFloat();
@@ -250,6 +268,15 @@ SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 
 QIcon Packet::getIcon()
 {
+    if (isHTTP()) {
+        if (fromIP.toUpper().contains("YOU")) {
+            QIcon myIcon(HTTPSENDICON);
+            return myIcon;
+        } else {
+            QIcon myIcon(HTTPRXICON);
+            return myIcon;
+        }
+    }
     if (isUDP()) {
         if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(UDPSENDICON);
@@ -551,15 +578,15 @@ void Packet::saveToDB()
     TODB(tcpOrUdp);
     TODB(sendResponse);
     TODB(hexString);
+    TODB(requestPath);
     settings.setValue(name + "/timestamp", timestamp.toString("ddd, d MMM yyyy hh:mm:ss"));
 
 
 }
 
 
-Packet Packet::fetchFromDB(QString thename)
+Packet Packet::fetchFromList(QString thename, QList<Packet> packets)
 {
-    QList<Packet> packets =  Packet::fetchAllfromDB("");
     Packet returnPacket, packet;
     returnPacket.init();
 
@@ -572,8 +599,14 @@ Packet Packet::fetchFromDB(QString thename)
 
     //return empty packet if not found
     return returnPacket;
-
 }
+
+
+Packet Packet::fetchFromDB(QString thename)
+{
+    QList<Packet> packets =  Packet::fetchAllfromDB("");
+    return Packet::fetchFromList(thename, packets);
+ }
 
 
 bool comparePacketsByName(const Packet &packetA, const Packet &packetB)
@@ -643,6 +676,7 @@ QList<Packet> Packet::fetchAllfromDB(QString importFile)
         FROMDB_UINT(fromPort);
         FROMDB_STRING(tcpOrUdp);
         FROMDB_STRING(hexString);
+        FROMDB_STRING(requestPath);
         packets.append(packet);
     }
 
@@ -728,6 +762,7 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.fromIP = tItem->data(Packet::FROM_IP).toString();
     returnPacket.repeat = tItem->data(Packet::REPEAT).toFloat();
     returnPacket.incoming = tItem->data(Packet::INCOMING).toBool();
+    returnPacket.requestPath = tItem->data(Packet::REQUEST_URL).toString();
     return returnPacket;
 }
 
@@ -832,6 +867,7 @@ void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
     tItem->setData(Packet::TCP_UDP,  thepacket.tcpOrUdp);
     tItem->setData(Packet::REPEAT,  thepacket.repeat);
     tItem->setData(Packet::INCOMING,  thepacket.repeat);
+    tItem->setData(Packet::REQUEST_URL,  thepacket.requestPath);
     QByteArray thedata = thepacket.getByteArray();
     tItem->setToolTip("Data portion is " + QString::number(thedata.size()) + " bytes");
 }

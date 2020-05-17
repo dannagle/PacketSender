@@ -91,6 +91,9 @@ MainWindow::MainWindow(QWidget *parent) :
         maxLogSize = 100;
     }
 
+#if IS_STUDIO
+    ui->generatePanelButton->hide();
+#endif
 
     http = new QNetworkAccessManager(this); //Main application http object
 
@@ -118,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //ui->packetNameEdit->setText(settings.value("packetNameEditSession","").toString());
         ui->packetIPEdit->setText(settings.value("packetIPEditSession", "").toString());
         ui->packetHexEdit->setText(settings.value("packetHexEditSession", "").toString());
+        ui->requestPathEdit->setText(settings.value("requestPathEditSession", "").toString());
         QString methodchoice = settings.value("udptcpComboBoxSession", "TCP").toString();
         int findtext = ui->udptcpComboBox->findText(methodchoice);
         if (findtext > -1) {
@@ -133,6 +137,8 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
+    //update UI
+    on_udptcpComboBox_currentIndexChanged(ui->udptcpComboBox->currentText());
 
 
     packetNetwork.sendResponse = settings.value("sendReponse", false).toBool();
@@ -366,6 +372,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
+
+
 }
 
 
@@ -724,8 +732,18 @@ void MainWindow::loadPacketsTable()
 
 
 
-    packetSavedTableHeaders  = Settings::defaultPacketTableHeader();
-    packetSavedTableHeaders = settings.value("packetSavedTableHeaders", packetSavedTableHeaders).toStringList();
+    QStringList originalpacketSavedTableHeaders  = Settings::defaultPacketTableHeader();
+    packetSavedTableHeaders = settings.value("packetSavedTableHeaders", originalpacketSavedTableHeaders ).toStringList();
+    QString saveTest;
+    foreach(saveTest, packetSavedTableHeaders) {
+        if(!originalpacketSavedTableHeaders.contains(saveTest)) {
+            packetSavedTableHeaders = originalpacketSavedTableHeaders;
+            break;
+        }
+    }
+    if(packetSavedTableHeaders.size() != originalpacketSavedTableHeaders.size()) {
+        packetSavedTableHeaders = originalpacketSavedTableHeaders;
+    }
 
     ui->packetsTable->setColumnCount(packetSavedTableHeaders.size());
 
@@ -803,6 +821,13 @@ void MainWindow::on_packetHexEdit_lostFocus()
     ui->packetASCIIEdit->setToolTip("");
     ui->packetHexEdit->setText(quicktestHex);
 
+
+}
+
+
+
+void MainWindow::on_requestPathEdit_lostFocus()
+{
 
 }
 
@@ -922,6 +947,7 @@ void MainWindow::on_savePacketButton_clicked()
     testPacket.toIP = ui->packetIPEdit->text().trimmed();
     testPacket.hexString =  ui->packetHexEdit->text().simplified();
     testPacket.tcpOrUdp = ui->udptcpComboBox->currentText();
+    testPacket.requestPath = ui->requestPathEdit->text().trimmed();
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
     testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
@@ -942,6 +968,7 @@ void MainWindow::saveSession(Packet sessionPacket)
     //settings.setValue("packetNameEditSession", ui->packetNameEdit->text());
     settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
     settings.setValue("packetHexEditSession", ui->packetHexEdit->text());
+    settings.setValue("requestPathEditSession", ui->requestPathEdit->text());
     settings.setValue("udptcpComboBoxSession", ui->udptcpComboBox->currentText());
     settings.setValue("packetPortEditSession", ui->packetPortEdit->text());
     settings.setValue("resendEditSession", ui->resendEdit->text());
@@ -955,7 +982,7 @@ void MainWindow::on_testPacketButton_clicked()
     static QStringList noMCastList;
     testPacket.init();
 
-    if (ui->udptcpComboBox->currentText() == "SSL") {
+    if ((ui->udptcpComboBox->currentText() == "SSL") || ui->udptcpComboBox->currentText().startsWith("HTTPS")) {
 
         if (!QSslSocket::supportsSsl()) {
 
@@ -1009,6 +1036,7 @@ void MainWindow::on_testPacketButton_clicked()
     testPacket.sendResponse =  0;
     testPacket.port = ui->packetPortEdit->text().toUInt();
     testPacket.repeat = Packet::oneDecimal(ui->resendEdit->text().toFloat());
+    testPacket.requestPath =  ui->requestPathEdit->text();
 
     //Save Session!
     saveSession(testPacket);
@@ -1302,6 +1330,9 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
         updatePacket.hexString = hex;
     }
 
+    if (datatype == Settings::REQUEST_STR) {
+        updatePacket.requestPath = newText;
+    }
 
     if (datatype == Settings::HEX_STR) {
         QString hex = newText;
@@ -1483,21 +1514,10 @@ void MainWindow::packetTable_checkMultiSelected()
         }
     }
 
-
-    if (packetList.size() >= 2) {
-        //We have multi!
-        ui->testPacketButton->setText("Multi-Send");
-        ui->testPacketButton->setStyleSheet("color:green;");
-        ui->packetASCIIEdit->setEnabled(false);
-        ui->packetNameEdit->setEnabled(false);
-        ui->packetHexEdit->setEnabled(false);
-        ui->packetIPEdit->setEnabled(false);
-        ui->packetPortEdit->setEnabled(false);
-        ui->udptcpComboBox->setEnabled(false);
-        ui->savePacketButton->setEnabled(false);
-        ui->resendEdit->setEnabled(false);
-        return;
-
+    while (packetList.size() > 1) {
+        //Multi not supported in this way anymore.
+        //Drop all but one.
+        packetList.removeLast();
     }
 
 
@@ -1529,6 +1549,7 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
         if (item->column() != 0) {
             ui->packetNameEdit->setText(clickedPacket.name);
             ui->packetHexEdit->setText(clickedPacket.hexString);
+            ui->requestPathEdit->setText(clickedPacket.requestPath);
             ui->packetIPEdit->setText(clickedPacket.toIP);
             ui->packetPortEdit->setText(QString::number(clickedPacket.port));
             ui->resendEdit->setText(QString::number(clickedPacket.repeat));
@@ -1713,6 +1734,11 @@ void MainWindow::on_packetASCIIEdit_editingFinished()
 void MainWindow::on_packetHexEdit_editingFinished()
 {
     on_packetHexEdit_lostFocus();
+}
+
+void MainWindow::on_requestPathEdit_editingFinished()
+{
+    on_requestPathEdit_lostFocus();
 }
 
 void MainWindow::on_packetASCIIEdit_textEdited(const QString &arg1)
@@ -2311,4 +2337,34 @@ void MainWindow::on_actionDonate_Thank_You_triggered()
 
     //Open URL in browser
     QDesktopServices::openUrl(QUrl("http://dannagle.com/paypal"));
+}
+
+void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
+{
+
+
+    for (int i = 0; i < ui->requestLayout->count(); ++i) {
+        QWidget *w = ui->requestLayout->itemAt(i)->widget();
+        if(w != nullptr) {
+            w->setVisible(false);
+        }
+    }
+}
+
+void MainWindow::on_genPostDataButton_clicked()
+{
+
+
+
+}
+
+void MainWindow::on_generatePanelButton_clicked()
+{
+
+
+}
+
+void MainWindow::on_actionPanel_Generator_triggered()
+{
+
 }

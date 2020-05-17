@@ -46,6 +46,7 @@ class Packet
 
         QString name;
         QString hexString;
+        QString requestPath;
         QString fromIP;
         QString toIP;
         QString resolvedIP;
@@ -61,6 +62,9 @@ class Packet
         bool isTCP();
         bool isSSL();
         bool isUDP();
+        bool isHTTP();
+        bool isHTTPS();
+        bool isPOST();
 
         QDateTime timestamp;
 
@@ -100,6 +104,7 @@ class Packet
         static const int DATATYPE;
         static const int REPEAT;
         static const int INCOMING;
+        static const int REQUEST_URL;
 
 
         bool operator()(const Packet* a, const Packet* b) const;
@@ -114,6 +119,7 @@ class Packet
         static QList<Packet> ImportJSON(QByteArray data);
         void static removeFromDBList(QStringList nameList);
         static void setBoldItem(QTableWidgetItem *tItem, Packet thepacket);
+        static Packet fetchFromList(QString thename, QList<Packet> packets);
 private:
         static int hexToInt(QChar hex);
 };

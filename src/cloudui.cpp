@@ -371,7 +371,7 @@ void CloudUI::doPost(QUrlQuery postData)
 
     postData.addQueryItem("swver", SW_VERSION);
     postData.addQueryItem("desktop", "1");
-#ifdef IS_STUDIO
+#if IS_STUDIO
     postData.addQueryItem("studio", "1");
 #endif
     QNetworkRequest request(QUrl(CLOUD_URL));
