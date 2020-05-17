@@ -26,7 +26,8 @@
 #include <QShortcut>
 #include <QClipboard>
 #include <QSslKey>
-
+#include <QUrl>
+#include <QUrlQuery>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -45,7 +46,7 @@
 
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
-void themeTheButton(QPushButton * button);
+extern void themeTheButton(QPushButton * button);
 
 
 //Only AppImage linux needs to check for updates.
@@ -80,6 +81,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     tableActive = false;
 
+    //seed qrand
+    QTime time = QTime::currentTime();
+    qsrand( static_cast<unsigned int>(time.msec()));
 
     maxLogSize = 10000;
 
@@ -137,12 +141,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //http->get(QNetworkRequest(QUrl("http://packetsender.com/")));
 
     //Connect statusbar to packetNetwork
-    QDEBUG() << ": packetNetwork -> Statusbar connection attempt" <<
+    //QDEBUG() << ": packetNetwork -> Statusbar connection attempt" <<
              connect(&packetNetwork, SIGNAL(toStatusBar(const QString &, int, bool)),
                      this, SLOT(statusBarMessage(const QString &, int, bool)));
 
     //Connect packetNetwork to trafficlog
-    QDEBUG() << ": packetSent -> toTrafficLog connection attempt" <<
+    //QDEBUG() << ": packetSent -> toTrafficLog connection attempt" <<
              connect(&packetNetwork, SIGNAL(packetSent(Packet)),
                      this, SLOT(toTrafficLog(Packet)));
 
@@ -213,8 +217,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     statusBar()->insertPermanentWidget(4, sslServerStatus);
 
-    IPv4Stylesheet = "QPushButton {width:50px; color: green; } QPushButton::hover { color: #BC810C; } ";
-    IPv6Stylesheet = "QPushButton {width:50px; color: blue; } QPushButton::hover { color: #BC810C; } ";
+    IPv4Stylesheet = "QPushButton {width:75px; color: lightgreen; } QPushButton::hover { color: #BC810C; } ";
+    IPv6Stylesheet = "QPushButton {width:75px; color: lightblue; } QPushButton::hover { color: #BC810C; } ";
 
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
@@ -365,19 +369,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-void themeTheButton(QPushButton * button)
-{
-    QPalette pal = button->palette();
-    pal.setColor(QPalette::Button, QColor("#F5F5F5"));
-    button->setAutoFillBackground(true);
-    button->setPalette(pal);
-    button->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
-    button->setFlat(true);
-    button->setCursor(Qt::PointingHandCursor);
-    button->update();
 
 
-}
 
 void MainWindow::toggleUDPServer()
 {
@@ -551,6 +544,10 @@ void MainWindow::updateManager(QByteArray response)
     if (settings.value("checkforUpdates", true).toBool()) {
         QString updateLastCheckedString = settings.value("updateLastChecked").toString();
         QDateTime updateLastChecked = QDateTime::fromString(updateLastCheckedString, FULLDATETIMEFORMAT);
+        if(QFile::exists(QDir::homePath() + "/ALWAYSUPDATE")) {
+            QDEBUG() << "Always check updates enabled.";
+            updateLastChecked  = QDateTime::fromString("2019-07-04 11:46:52", FULLDATETIMEFORMAT);
+        }
         QDateTime now = QDateTime::currentDateTime();
         QDateTime next = updateLastChecked.addDays(DAYS_BETWEEN_UPDATES);
 
@@ -774,6 +771,8 @@ void MainWindow::httpFinished(QNetworkReply* pReply)
     } else {
         QDEBUG() << "Did not receive a valid update string";
     }
+
+    pReply->deleteLater();
 }
 
 
@@ -809,6 +808,7 @@ void MainWindow::on_packetHexEdit_lostFocus()
 
 void MainWindow::on_packetASCIIEdit_lostFocus()
 {
+    QDEBUG();
 
     QString quicktestASCII =  ui->packetASCIIEdit->text();
     ui->packetHexEdit->setText(Packet::ASCIITohex(quicktestASCII));
@@ -819,7 +819,6 @@ void MainWindow::on_packetASCIIEdit_lostFocus()
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestASCII2));
     ui->packetASCIIEdit->setToolTip("");
 
-    qDebug() << __FILE__ << "/" << __LINE__ << "on_serialASCIIEdit_lostFocus";
 
 }
 
@@ -1252,13 +1251,13 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
     int fullrefresh = 0;
 
     Packet updatePacket = Packet::fetchTableWidgetItemData(item);
-    if (datatype == "name") {
+    if (datatype == Settings::NAME_STR) {
         Packet::removeFromDB(updatePacket.name); //remove old before inserting new.
         removePacketfromMemory(updatePacket);
         updatePacket.name = newText;
         fullrefresh = 1;
     }
-    if (datatype == "toIP") {
+    if (datatype == Settings::TOADDRESS_STR) {
         QHostAddress address(newText);
         if (QAbstractSocket::IPv4Protocol == address.protocol()) {
             updatePacket.toIP = newText;
@@ -1283,26 +1282,28 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
 
 
     }
-    if (datatype == "port") {
+    if (datatype == Settings::TOPORT_STR) {
         int portNum = newText.toUInt();
         if (portNum > 0) {
             updatePacket.port = portNum;
         }
     }
-    if (datatype == "repeat") {
+    if (datatype == Settings::RESEND_STR) {
         float repeat = Packet::oneDecimal(newText.toFloat());
         updatePacket.repeat = repeat;
     }
-    if (datatype == "tcpOrUdp") {
+    if (datatype == Settings::METHOD_STR) {
         if ((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL")) {
             updatePacket.tcpOrUdp = newText.trimmed().toUpper();
         }
     }
-    if (datatype == "ascii") {
+    if (datatype == Settings::ASCII_STR) {
         QString hex = Packet::ASCIITohex(newText);
         updatePacket.hexString = hex;
     }
-    if (datatype == "hexString") {
+
+
+    if (datatype == Settings::HEX_STR) {
         QString hex = newText;
         QString ascii = Packet::hexToASCII(newText);
         updatePacket.hexString = newText;
@@ -1360,7 +1361,6 @@ void MainWindow::shortcutkey7()
 }
 
 
-//packetSavedTableHeaders <<"Send" <<"Resend (s)"<< "Name" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
 
 
 int MainWindow::findColumnIndex(QListWidget * lw, QString search)
@@ -1394,66 +1394,56 @@ void MainWindow::populateTableRow(int rowCounter, Packet tempPacket)
 
     //http->get(QNetworkRequest(QUrl("http://packetsender.com/")));
 
-    /*
-     *
-     *
-    packetSavedTableHeaders <<"Send" <<"Resend (sec)"<< "Name" << "To Address" <<
-                "To Port" << "Method" << "ASCII" << "Hex";
-    packetTableHeaders.clear();
-    packetTableHeaders <<"Time" << "From IP" <<"From Port" << "To IP" << "To Port" << "Method"
-                <<"Error" << "ASCII" << "Hex";
-
-     */
 
 
     ui->packetsTable->setCellWidget(rowCounter, packetSavedTableHeaders.indexOf("Send"), sendButton);
 
     tItem = new QTableWidgetItem(QString::number(tempPacket.repeat));
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "repeat");
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Resend (sec)"), tItem);
+    tItem->setData(Packet::DATATYPE, Settings::RESEND_STR);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::RESEND_STR), tItem);
     //QDEBUGVAR(tempPacket.name);
 
     tItem = new QTableWidgetItem(tempPacket.name);
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "name");
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Name"), tItem);
+    tItem->setData(Packet::DATATYPE, Settings::NAME_STR);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::NAME_STR), tItem);
     //QDEBUGVAR(tempPacket.name);
 
     tItem = new QTableWidgetItem(tempPacket.toIP);
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "toIP");
+    tItem->setData(Packet::DATATYPE, Settings::TOADDRESS_STR);
 
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("To Address"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::TOADDRESS_STR), tItem);
     //QDEBUGVAR(tempPacket.toIP);
 
     tItem = new QTableWidgetItem(QString::number(tempPacket.port));
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "port");
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("To Port"), tItem);
+    tItem->setData(Packet::DATATYPE, Settings::TOPORT_STR);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::TOPORT_STR), tItem);
     // QDEBUGVAR(tempPacket.port);
 
     tItem = new QTableWidgetItem(tempPacket.tcpOrUdp);
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "tcpOrUdp");
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Method"), tItem);
+    tItem->setData(Packet::DATATYPE, Settings::METHOD_STR);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::METHOD_STR), tItem);
     // QDEBUGVAR(tempPacket.tcpOrUdp);
 
     tItem = new QTableWidgetItem(tempPacket.hexToASCII(tempPacket.hexString));
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "ascii");
+    tItem->setData(Packet::DATATYPE, Settings::ASCII_STR);
 
     QSize tSize = tItem->sizeHint();
     tSize.setWidth(200);
     tItem->setSizeHint(tSize);
 
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("ASCII"), tItem);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::ASCII_STR), tItem);
     //QDEBUGVAR(tempPacket.hexString);
 
     tItem = new QTableWidgetItem(tempPacket.hexString);
     Packet::populateTableWidgetItem(tItem, tempPacket);
-    tItem->setData(Packet::DATATYPE, "hexString");
-    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf("Hex"), tItem);
+    tItem->setData(Packet::DATATYPE, Settings::HEX_STR);
+    ui->packetsTable->setItem(rowCounter, packetSavedTableHeaders.indexOf(Settings::HEX_STR), tItem);
     //QDEBUGVAR(tempPacket.hexString);
 }
 
@@ -1679,7 +1669,6 @@ void MainWindow::on_saveTrafficPacket_clicked()
 
 
 }
-
 void MainWindow::applyNetworkSettings()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1798,19 +1787,11 @@ void MainWindow::on_toClipboardButton_clicked()
     if (settings.value("copyUnformattedCheck", true).toBool()) {
         Packet savePacket = packetsLogged.getPacket(indexes.first());
         clipboard->setText(QString(savePacket.getByteArray()));
-        msgBox.setText("Raw packet data sent to your clipboard. \nChange the settings if you prefer translated data.");
+        statusBarMessage("Copied raw packet data.");
     } else {
         clipboard->setText(clipString);
-        msgBox.setText("Packet sent to your clipboard (translated).");
+        statusBarMessage("Copied translated packet data.");
     }
-
-
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setWindowTitle("To Clipboard.");
-    msgBox.exec();
-
 
 }
 

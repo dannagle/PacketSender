@@ -36,7 +36,7 @@
 #define DAYS_BETWEEN_UPDATES 7
 
 
-#define HYPERLINKSTYLE "QPushButton { color: blue; } QPushButton::hover { color: #BC810C; } "
+#define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
 
 
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
@@ -56,6 +56,8 @@
 #define TCPRXICON ":icons/rx_tcp.png"
 #define SSLRXICON ":icons/rx_ssl.png"
 #define SSLSENDICON ":icons/tx_ssl.png"
+#define HTTPRXICON ":icons/rx_http.png"
+#define HTTPSENDICON ":icons/tx_http.png"
 
 #define PSLOGO ":pslogo.png"
 #define UPDOWNICON ":icons/moveupdown.png"

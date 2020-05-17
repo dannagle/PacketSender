@@ -56,7 +56,7 @@ void Packet::clear()
 
 bool Packet::isSSL()
 {
-    return (tcpOrUdp.trimmed().toLower() == "ssl");
+    return (tcpOrUdp.trimmed().toLower().contains("ssl"));
 }
 
 bool Packet::isUDP()
@@ -67,7 +67,7 @@ bool Packet::isUDP()
 
 bool Packet::isTCP()
 {
-    return ((tcpOrUdp.trimmed().toLower() == "tcp") || isSSL());
+    return ((tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL()));
 }
 
 float Packet::oneDecimal(float value)
@@ -250,7 +250,7 @@ SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 
 QIcon Packet::getIcon()
 {
-    if (tcpOrUdp.toUpper() == "UDP") {
+    if (isUDP()) {
         if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(UDPSENDICON);
             return myIcon;
@@ -262,7 +262,7 @@ QIcon Packet::getIcon()
     }
 
 
-    if (tcpOrUdp.toUpper() == "TCP") {
+    if (isTCP()) {
 
         if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(TCPSENDICON);
@@ -275,7 +275,7 @@ QIcon Packet::getIcon()
     }
 
 
-    if (tcpOrUdp.toUpper() == "SSL") {
+    if (isSSL()) {
 
         if (fromIP.toUpper().contains("YOU")) {
             QIcon myIcon(SSLSENDICON);
@@ -781,7 +781,6 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data)
     if (encoding == "ascii") {
         return data.toLatin1();
     }
-
 
     if (encoding == "hex") {
         return Packet::HEXtoByteArray(data);

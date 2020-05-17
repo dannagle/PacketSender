@@ -56,7 +56,6 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
-
 }
 
 
@@ -359,7 +358,6 @@ void PersistentConnection::on_asciiSendButton_clicked()
         QString data = Packet::macroSwap(asciiPacket.asciiString());
         asciiPacket.hexString = Packet::ASCIITohex(data);
     }
-
     previousCommands.append(ascii);
     previousCommands.removeDuplicates();
 
