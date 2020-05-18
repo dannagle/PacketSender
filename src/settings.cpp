@@ -492,6 +492,14 @@ void Settings::setStoredTableHeaders()
     QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
 
 
+    QStringList originalpacketSavedTableHeaders  = Settings::defaultPacketTableHeader();
+    QString saveTest;
+    foreach(saveTest, packetSavedTable) {
+        if(!originalpacketSavedTableHeaders.contains(saveTest)) {
+            packetSavedTable = originalpacketSavedTableHeaders;
+            break;
+        }
+    }
     if (packetSavedTable.size() == packetSavedTableHeaders.size()) {
         packetSavedTableHeaders = packetSavedTable;
     }
