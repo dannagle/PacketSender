@@ -53,6 +53,10 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     ui->asciiLineEdit->setFocus();
     suppressSlot = false;
 
+    QFont font("monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    ui->trafficViewEdit->setFont(font);
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
@@ -103,6 +107,7 @@ void PersistentConnection::statusReceiver(QString message)
     if (message.toLower().startsWith("not connected")) {
 
         QDEBUG() << "Setting style sheet";
+
         ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #000 }");
         ui->asciiSendButton->setEnabled(false);
         ui->asciiLineEdit->setEnabled(false);
