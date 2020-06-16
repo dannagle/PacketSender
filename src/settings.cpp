@@ -21,8 +21,8 @@ const QString Settings::RESEND_STR = "Resend";
 const QString Settings::TOADDRESS_STR = "To Address";
 const QString Settings::TOPORT_STR = "To Port";
 const QString Settings::METHOD_STR = "Method";
-const QString Settings::ASCII_STR = "ASCII/Request";
-const QString Settings::HEX_STR = "Hex/Data";
+const QString Settings::ASCII_STR = "ASCII";
+const QString Settings::HEX_STR = "Hex";
 const QString Settings::REQUEST_STR = "Request Path";
 
 const QString Settings::TIME_STR = "Time";
