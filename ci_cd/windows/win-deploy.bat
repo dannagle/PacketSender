@@ -2,6 +2,7 @@ echo Building Installers
 set /p BUILD_VERSION=<buildversion.txt
 set "BUILD_VERSION=%BUILD_VERSION: =%"
 cd D:\github\naglecode-installers\packetsenderinstaller\installer
+D:
 move *.* ../archive
 cd ..
 
