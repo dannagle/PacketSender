@@ -73,7 +73,6 @@ class PacketNetwork : public QObject
         bool IPv4Enabled();
 
 
-
         QList<SmartResponseConfig> smartList;
 
         static QHostAddress resolveDNS(QString hostname);

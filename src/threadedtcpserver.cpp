@@ -63,13 +63,23 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
         thread->incomingPersistent = true;
         pcWindow->initWithThread(thread, serverPort());
 
-        connect(pcWindow->thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
 
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()), pcWindow, SLOT(socketDisconnected()));
+        connect(thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
 
+
+        QDEBUG() << ": thread Connection attempt " <<
+                 connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+
+        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+
+
+        thread->start();
 
         pcWindow->show();
 
@@ -79,7 +89,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
         //TODO: Use a real connection manager.
         //prevent Qt from auto-destorying this thread while it tries to close.
-        tcpthreadList.append(pcWindow->thread);
+        tcpthreadList.append(thread);
 
     } else {
 

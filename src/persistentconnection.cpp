@@ -132,17 +132,6 @@ PersistentConnection::~PersistentConnection()
 
 
 
-void PersistentConnection::connectThreadSignals()
-{
-
-    QDEBUG() << ": thread Connection attempt " <<
-             connect(this, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
-             << connect(this, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
-             << connect(thread, SIGNAL(connectStatus(QString)), this, SLOT(statusReceiver(QString)))
-             << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentSlot(Packet)));
-
-}
-
 void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
 {
 
@@ -155,9 +144,6 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
     }
 
     QApplication::processEvents();
-    connectThreadSignals();
-
-    thread->start();
 
     ui->stopResendingButton->hide();
 
@@ -168,13 +154,13 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 void PersistentConnection::init()
 {
 
+    this->thread = nullptr;
     QString tcpOrSSL = "TCP";
     if (sendPacket.isSSL()) {
         tcpOrSSL = "SSL";
     }
     setWindowTitle(tcpOrSSL + "://" + sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
-    thread = new TCPThread(sendPacket, this);
 
     reSendPacket.clear();
     if (sendPacket.repeat > 0) {
@@ -185,14 +171,8 @@ void PersistentConnection::init()
         ui->stopResendingButton->hide();
     }
 
-    QApplication::processEvents();
-    connectThreadSignals();
-
-    thread->start();
-
 
     QApplication::processEvents();
-
 
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -339,6 +319,13 @@ void PersistentConnection::packetSentSlot(Packet pkt)
 
 }
 
+void PersistentConnection::packetReceivedSlot(Packet pkt)
+{
+    QDEBUGVAR(pkt.hexString.size());
+    trafficList.append(pkt);
+    loadTrafficView();
+}
+
 void PersistentConnection::socketDisconnected()
 {
     statusReceiver("not connected");
@@ -461,7 +448,6 @@ void PersistentConnection::on_sendFileButton_clicked()
 {
 
     static QString fileName;
-    static bool showWarning = true;
 
     if (fileName.isEmpty()) {
         fileName = QDir::homePath();

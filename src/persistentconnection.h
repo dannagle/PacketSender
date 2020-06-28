@@ -39,6 +39,7 @@ class PersistentConnection : public QDialog
         void statusReceiver(QString message);
 
         void packetSentSlot(Packet pkt);
+        void packetReceivedSlot(Packet pkt);
         void socketDisconnected();
 
     private slots:
@@ -82,7 +83,6 @@ private:
 
         void loadComboBox();
         void loadTrafficView();
-        void connectThreadSignals();
         void cancelResends();
 };
 
