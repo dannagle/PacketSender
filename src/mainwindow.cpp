@@ -67,7 +67,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    timeSinceLaunch();
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
@@ -367,8 +366,6 @@ MainWindow::MainWindow(QWidget *parent) :
     updateManager(QByteArray());
 
     //on_actionExport_Packets_JSON_triggered();
-
-    QDEBUG() << "Load time:" <<  timeSinceLaunch();
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
@@ -799,19 +796,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-quint64 MainWindow::timeSinceLaunch()
-{
-    static QTime launchTimer = QTime::currentTime();
-    if (launchTimer.isValid()) {
-        return launchTimer.elapsed();
-
-    } else {
-        launchTimer.start();
-        return 0;
-    }
-
-}
-
 void MainWindow::on_packetHexEdit_lostFocus()
 {
 
@@ -962,6 +946,7 @@ void MainWindow::on_savePacketButton_clicked()
 
 void MainWindow::saveSession(Packet sessionPacket)
 {
+    Q_UNUSED(sessionPacket)
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
@@ -2342,6 +2327,8 @@ void MainWindow::on_actionDonate_Thank_You_triggered()
 void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 {
 
+
+    Q_UNUSED(arg1)
 
     for (int i = 0; i < ui->requestLayout->count(); ++i) {
         QWidget *w = ui->requestLayout->itemAt(i)->widget();

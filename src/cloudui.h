@@ -50,8 +50,6 @@ class CloudUI : public QDialog
 
         void replyFinished(QNetworkReply *request);
 
-        void on_makePublicCheck_clicked(bool checked);
-
         void on_createAccountButton_clicked();
 
         void on_privacyButton_clicked();

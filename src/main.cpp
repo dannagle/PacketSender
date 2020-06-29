@@ -622,7 +622,6 @@ int main(int argc, char *argv[])
                     }
 
                     out.flush();
-                    QCoreApplication::flush();
 
                 }
                 sock.disconnectFromHost();
@@ -701,7 +700,6 @@ int main(int argc, char *argv[])
                     }
 
                     out.flush();
-                    QCoreApplication::flush();
                 }
             }
 

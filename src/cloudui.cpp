@@ -459,10 +459,6 @@ void CloudUI::on_importPacketsButton_clicked()
 
 
 
-void CloudUI::on_makePublicCheck_clicked(bool checked)
-{
-    //ui->descriptionExportEdit->setEnabled(checked);
-}
 
 void CloudUI::on_createAccountButton_clicked()
 {

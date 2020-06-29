@@ -627,12 +627,12 @@ bool comparePacketsByTime(const Packet &packetA, const Packet &packetB)
 void Packet::sortByName(QList<Packet> &packetList)
 {
 
-    qSort(packetList.begin(), packetList.end(), comparePacketsByName);
+    std::sort(packetList.begin(), packetList.end(), comparePacketsByName);
 
 }
 void Packet::sortByTime(QList<Packet> &packetList)
 {
-    qSort(packetList.begin(), packetList.end(), comparePacketsByTime);
+    std::sort(packetList.begin(), packetList.end(), comparePacketsByTime);
 
 
 }
@@ -921,7 +921,6 @@ QString Packet::ASCIITohex(QString &ascii)
 
     QString asciiText = ascii;
     QString hexText = "";
-    QChar tempChar1, tempChar2;
     QChar charTest;
     QString convertTest;
     bool msb = false;

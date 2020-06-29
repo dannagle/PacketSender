@@ -133,6 +133,10 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
 
 bool PacketLogModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+
+    Q_UNUSED(index)
+    Q_UNUSED(value)
+
     if (role == Qt::EditRole)
     {
         //do nothing.

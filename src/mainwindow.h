@@ -42,7 +42,6 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
-        quint64 timeSinceLaunch();
         QString ASCIITohex(QString &ascii);
         QString hexToASCII(QString &hex);
 

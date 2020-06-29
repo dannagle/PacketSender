@@ -355,7 +355,7 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <layout class="QHBoxLayout" name="horizontalLayout_121">
                <item>
                 <widget class="QLabel" name="label_18">
                  <property name="text">
