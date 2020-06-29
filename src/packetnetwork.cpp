@@ -186,7 +186,9 @@ void PacketNetwork::init()
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QList<int> udpPortList, tcpPortList, sslPortList;
-    int udpPort, tcpPort, sslPort;
+    int udpPort = 0;
+    int tcpPort = 0;
+    int sslPort = 0;
 
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
