@@ -288,7 +288,7 @@ void PersistentConnection::loadTrafficView()
         foreach (loopPkt, trafficList) {
             QDEBUG() << "Packet Loop:" << count++ << loopPkt.asciiString();
             if (loopPkt.fromIP.toLower() == "you") {
-                out << "<p style='color:blue'>";
+                out << "<p style='color:lightgreen'>";
             } else {
                 out << "<p>";
             }
