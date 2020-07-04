@@ -53,8 +53,14 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     ui->asciiLineEdit->setFocus();
     suppressSlot = false;
 
+
     QFont font("monospace");
+
+#ifdef __APPLE__
+    font.setStyleHint(QFont::Monospace);
+#else
     font.setStyleHint(QFont::TypeWriter);
+#endif
     ui->trafficViewEdit->setFont(font);
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
