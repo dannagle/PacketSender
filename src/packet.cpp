@@ -120,8 +120,8 @@ Packet::Packet(const Packet &other)
 
 QHostAddress Packet::IPV4_IPV6_ANY(QString ipMode)
 {
-    QHostAddress h4 = QHostAddress::AnyIPv4;
-    QHostAddress h6 = QHostAddress::AnyIPv6;
+    QHostAddress h4 = QHostAddress("0.0.0.0");
+    QHostAddress h6 = QHostAddress("::");
 
     if(ipMode == "4") {
         return h4;
