@@ -1902,6 +1902,6 @@ QAbstractView:selected {
 }
 
 
-QTextEdit#trafficViewEdit,QTextEdit#trafficViewEdit:active {
+QTextEdit:active {
     color: #ffffff;
 }
