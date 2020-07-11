@@ -194,7 +194,7 @@ void PacketNetwork::init()
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
 
-    QString ipMode = settings.value("ipMode", QHostAddress::AnyIPv4).toString();
+    QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
 
     QMessageBox msgBoxBindError;

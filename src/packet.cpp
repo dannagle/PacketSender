@@ -131,9 +131,11 @@ QHostAddress Packet::IPV4_IPV6_ANY(QString ipMode)
         return h6;
     }
 
+    if(ipMode.trimmed().isEmpty()) {
+        return h4;
+    }
 
     QHostAddress address(ipMode);
-
     if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
             ) {
         return address;
