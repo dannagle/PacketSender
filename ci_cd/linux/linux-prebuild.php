@@ -1,13 +1,24 @@
 <?php
-$buildversion = trim(file_get_contents("buildversion.txt"));
-echo "Replacing version with $buildversion\n";
+
+
+$buildversion = $argv[1];
+echo "Build version is $buildversion\n";
+$versionflag = "VERSION_GOES_HERE";
+
+if(empty($buildversion)) {
+    echo "Could not find build version!";
+    exit(-1);
+}
 
 $cppfile = "src/globals.h";
 
 echo "Replacing $cppfile script with $buildversion\n";
 $str=file_get_contents($cppfile);
 
+$buildversioncommas = str_replace(".", "," , $buildversion).",0";
+
 $str=replace_between($str, "//BEGIN SW VERSION", "//END SW VERSION", "\n#define SW_VERSION \"$buildversion\"\n");
+$str=replace_between($str, "//BEGIN FILE VERSION", "//END FILE VERSION", "\n#define VER_FILEVERSION $buildversioncommas\n");
 
 file_put_contents($cppfile, $str);
 

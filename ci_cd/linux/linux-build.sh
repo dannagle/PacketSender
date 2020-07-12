@@ -1,8 +1,17 @@
+#!/usr/bin/env bash
 
-BUILD_VERSION=`cat buildversion.txt`
+if [ -z "$1" ]
+  then
+    echo "Please supply build version (e.g. 7.0.4)"
+    exit
+fi
+BUILD_VERSION="$1";
+php ci_cd/linux/linux-prebuild.php $BUILD_VERSION
+# exit 99
 cd src
 qmake --version
 qmake PacketSender.pro
+make clean
 make -j4
 ls
 mkdir -p appdir/usr/bin ; 
