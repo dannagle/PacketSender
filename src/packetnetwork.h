@@ -34,7 +34,7 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
-        explicit PacketNetwork(QWidget *parent = 0);
+        explicit PacketNetwork(QWidget *parent = nullptr);
         void init();
 
         QString debugQByteArray(QByteArray debugArray);
@@ -71,7 +71,6 @@ class PacketNetwork : public QObject
 
         bool IPv6Enabled();
         bool IPv4Enabled();
-
 
 
         QList<SmartResponseConfig> smartList;

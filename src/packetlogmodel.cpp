@@ -3,6 +3,7 @@
 #include <QClipboard>
 #include <QApplication>
 
+#include "settings.h"
 PacketLogModel::PacketLogModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -65,35 +66,63 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
         return row;
     }
 
+    if (role == Qt::ToolTipRole)
+    {
+        return ("Data portion is " + QString::number(packet.getByteArray().size()) + " bytes");
+    }
 
     if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
     {
-        if(index.column() == tableHeaders.indexOf("Time")) {
+        if(index.column() == tableHeaders.indexOf(Settings::TIME_STR)) {
             return packet.timestamp.toString(DATETIMEFORMAT);
         }
-        if(index.column() == tableHeaders.indexOf("From IP")) {
+        if(index.column() == tableHeaders.indexOf(Settings::FROMIP_STR)) {
             return packet.fromIP;
         }
-        if(index.column() == tableHeaders.indexOf("From Port")) {
+        if(index.column() == tableHeaders.indexOf(Settings::FROMPORT_STR)) {
+            if(packet.fromPort == 0) {
+                return QVariant();
+            } else {
             return packet.fromPort;
+            }
         }
-        if(index.column() == tableHeaders.indexOf("To IP")) {
+        if(index.column() == tableHeaders.indexOf(Settings::TOADDRESS_STR)) {
             return packet.toIP;
         }
-        if(index.column() == tableHeaders.indexOf("To Port")) {
+        if(index.column() == tableHeaders.indexOf(Settings::TOPORT_STR)) {
+            if(packet.port == 0) {
+                return QVariant();
+            } else {
             return packet.port;
+            }
         }
-        if(index.column() == tableHeaders.indexOf("Method")) {
+        if(index.column() == tableHeaders.indexOf(Settings::METHOD_STR)) {
             return packet.tcpOrUdp;
         }
-        if(index.column() == tableHeaders.indexOf("Error")) {
+        if(index.column() == tableHeaders.indexOf(Settings::ERROR_STR)) {
             return packet.errorString;
         }
-        if(index.column() == tableHeaders.indexOf("ASCII")) {
-            return packet.asciiString();
+        if(index.column() == tableHeaders.indexOf(Settings::ASCII_STR)) {
+            QString ascii = packet.asciiString();
+            if(packet.isHTTP()) {
+                ascii = packet.requestPath;
+            }
+            if(ascii.size() > 1024) {
+                ascii.truncate(1000);
+                ascii.append("[...]");
+            }
+            return ascii;
         }
-        if(index.column() == tableHeaders.indexOf("Hex")) {
-            return packet.hexString;
+        if(index.column() == tableHeaders.indexOf(Settings::HEX_STR)) {
+            QString hex = packet.hexString;
+            if(packet.isHTTP()) {
+                hex = packet.asciiString();
+            }
+            if(hex.size() > 1024) {
+                hex.truncate(1000);
+                hex.append("[...]");
+            }
+            return hex;
         }
 
     }
@@ -104,6 +133,10 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
 
 bool PacketLogModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+
+    Q_UNUSED(index)
+    Q_UNUSED(value)
+
     if (role == Qt::EditRole)
     {
         //do nothing.

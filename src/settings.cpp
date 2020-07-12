@@ -13,6 +13,23 @@
 #include <QMessageBox>
 #include <QHostAddress>
 
+
+
+const QString Settings::SEND_STR = "Send";
+const QString Settings::NAME_STR = "Name";
+const QString Settings::RESEND_STR = "Resend";
+const QString Settings::TOADDRESS_STR = "To Address";
+const QString Settings::TOPORT_STR = "To Port";
+const QString Settings::METHOD_STR = "Method";
+const QString Settings::ASCII_STR = "ASCII";
+const QString Settings::HEX_STR = "Hex";
+const QString Settings::REQUEST_STR = "Request Path";
+
+const QString Settings::TIME_STR = "Time";
+const QString Settings::FROMIP_STR = "From IP";
+const QString Settings::FROMPORT_STR = "From Port";
+const QString Settings::ERROR_STR = "Error";
+
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
@@ -288,8 +305,6 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
 
-    settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
-
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 
@@ -390,7 +405,7 @@ QStringList Settings::defaultPacketTableHeader()
 {
     QStringList list;
     list.clear();
-    list << "Send" << "Name" << "Resend (sec)" << "To Address" << "To Port" << "Method" << "ASCII" << "Hex";
+    list << Settings::SEND_STR << Settings::NAME_STR << Settings::RESEND_STR << Settings::TOADDRESS_STR << Settings::TOPORT_STR << Settings::METHOD_STR << Settings::ASCII_STR << Settings::HEX_STR;
 
     return list;
 
@@ -400,7 +415,7 @@ QStringList Settings::defaultTrafficTableHeader()
 {
     QStringList list;
     list.clear();
-    list << "Time" << "From IP" << "From Port" << "To IP" << "To Port" << "Method" << "Error" << "ASCII" << "Hex";
+    list << Settings::TIME_STR << Settings::FROMIP_STR << Settings::FROMPORT_STR << Settings::TOADDRESS_STR << Settings::TOPORT_STR << Settings::METHOD_STR << Settings::ERROR_STR << Settings::ASCII_STR << Settings::HEX_STR;
 
     return list;
 
@@ -477,6 +492,14 @@ void Settings::setStoredTableHeaders()
     QStringList packetTable = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
 
 
+    QStringList originalpacketSavedTableHeaders  = Settings::defaultPacketTableHeader();
+    QString saveTest;
+    foreach(saveTest, packetSavedTable) {
+        if(!originalpacketSavedTableHeaders.contains(saveTest)) {
+            packetSavedTable = originalpacketSavedTableHeaders;
+            break;
+        }
+    }
     if (packetSavedTable.size() == packetSavedTableHeaders.size()) {
         packetSavedTableHeaders = packetSavedTable;
     }

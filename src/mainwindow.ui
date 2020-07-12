@@ -7,20 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>909</width>
-    <height>690</height>
+    <height>746</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
      <widget class="QGroupBox" name="packetSetupGroup">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>150</height>
+       </size>
+      </property>
       <property name="title">
        <string/>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
@@ -59,9 +65,30 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="requestLayout">
          <item>
-          <widget class="QLabel" name="serialHexLabel">
+          <widget class="QLabel" name="requestLabel">
+           <property name="text">
+            <string>Request</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="requestPathEdit">
+           <property name="placeholderText">
+            <string>URL path</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="asciiLayout">
+         <item>
+          <widget class="QLabel" name="asciiLabel">
            <property name="text">
             <string>ASCII</string>
            </property>
@@ -80,34 +107,30 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="hexHorizLayout">
          <item>
-          <widget class="QLabel" name="serialASCIILabel">
+          <widget class="QLabel" name="hexLabel">
            <property name="text">
             <string>HEX</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLineEdit" name="packetHexEdit">
-             <property name="placeholderText">
-              <string>HEX representation</string>
-             </property>
-             <property name="clearButtonEnabled">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="loadFileButton">
-             <property name="text">
-              <string>Load File</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <widget class="QLineEdit" name="packetHexEdit">
+           <property name="placeholderText">
+            <string>HEX representation</string>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loadFileButton">
+           <property name="text">
+            <string>Load File</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -326,7 +349,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget1">
        <layout class="QVBoxLayout" name="verticalLayout_10">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_16">
@@ -420,7 +443,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

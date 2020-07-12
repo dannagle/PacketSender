@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>packetsender.css</file>
         <file>dannagle_logo.png</file>
-        <file>packetsender_mac.css</file>
         <file>icons/rx.png</file>
         <file>icons/rx_tcp.png</file>
         <file>icons/rx_udp.png</file>
@@ -46,5 +44,9 @@
         <file>icons/linkedin-icon.png</file>
         <file>icons/twitter-icon.png</file>
         <file>icons/bolt-icon.png</file>
+        <file>icons/rx_http.png</file>
+        <file>icons/tx_http.png</file>
+        <file>icons/panel-generator-icon.png</file>
+        <file>OpenSans-Regular.ttf</file>
     </qresource>
 </RCC>

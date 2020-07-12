@@ -33,8 +33,7 @@ class ThreadSender : public QThread
 };
 
 
-namespace Ui
-{
+namespace Ui {
 class UDPFlooding;
 }
 

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>PacketSender</string>
+    <string>packetsender</string>
     <key>CFBundleGetInfoString</key>
     <string>Network Utility To Send/Receive Packets</string>
     <key>CFBundleIconFile</key>

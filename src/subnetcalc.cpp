@@ -62,7 +62,6 @@ QList<QNetworkAddressEntry> SubnetCalc::nonLoopBackAddresses()
         ethOut << "\nFor " << eth.humanReadableName() << " (" << eth.hardwareAddress() << ")" << ":\n";
         QNetworkAddressEntry entry;
 
-        int nonLoopBack = 0;
 
         foreach (entry, allEntries) {
             if (!entry.ip().isLoopback()) {

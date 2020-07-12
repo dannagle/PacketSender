@@ -3,8 +3,8 @@
 
 $buildversion = trim(file_get_contents("buildversion.txt"));
 echo "Replacing version with $buildversion\n";
-$wininstallertemplate = "/mnt/c/Users/danie/github/naglecode-installers/packetsenderinstaller/packetsender64bit.iss.template";
-$wininstallerfile = "/mnt/c/Users/danie/github/naglecode-installers/packetsenderinstaller/packetsender64bit.iss";
+$wininstallertemplate = "/mnt/d/github/naglecode-installers/packetsenderinstaller/packetsender64bit.iss.template";
+$wininstallerfile = "/mnt/d/github/naglecode-installers/packetsenderinstaller/packetsender64bit.iss";
 $versionflag = "VERSION_GOES_HERE";
 
 echo "Replacing installer script with $buildversion\n";

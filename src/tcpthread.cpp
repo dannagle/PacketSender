@@ -258,7 +258,9 @@ void TCPThread::persistentConnectionLoop()
                 tcpRCVPacket.toIP = "You";
                 tcpRCVPacket.port = sendPacket.fromPort;
                 tcpRCVPacket.fromPort =    clientConnection->peerPort();
-                emit packetSent(tcpRCVPacket);
+                if (tcpRCVPacket.hexString.size() > 0) {
+                    emit packetSent(tcpRCVPacket);
+                }
 
             } else {
                 QDEBUG() << "No pre-emptive receive data";
@@ -328,7 +330,12 @@ void TCPThread::persistentConnectionLoop()
 
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-        emit packetSent(tcpPacket);
+
+
+        if (tcpPacket.hexString.size() > 0) {
+            emit packetSent(tcpPacket);
+        }
+
 
 
         if (!sendPacket.persistent) {

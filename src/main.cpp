@@ -55,9 +55,9 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
     Q_UNUSED(msg);
 }
 
-#define OUTVAR(var)  o<< "\n" << # var << ":" << var
+#define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
 #define OUTIF()  if(!quiet) o<< "\n"
-#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear()
+#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear();
 
 
 int main(int argc, char *argv[])
@@ -193,14 +193,10 @@ int main(int argc, char *argv[])
         parser.addOption(bindIPv6Option);
         QCommandLineOption bindIPv4Option(QStringList() << "4" << "ipv4", "Force IPv4.  Same as -B \"0.0.0.0\". Default is IP:Any.");
         parser.addOption(bindIPv4Option);
-
-
-        // An option with a value
         QCommandLineOption bindIPOption(QStringList() << "B" << "bindip",
                                           "Bind custom IP. Default is IP:Any.",
                                           "IP");
         parser.addOption(bindIPOption);
-
         QCommandLineOption tcpOption(QStringList() << "t" << "tcp", "Send TCP (default).");
         parser.addOption(tcpOption);
 
@@ -323,9 +319,6 @@ int main(int argc, char *argv[])
             OUTPUT();
             return -1;
         }
-
-        //check IP bind
-
         if (!bindIPstr.isEmpty()) {
             QHostAddress address(bindIPstr);
             if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
@@ -338,12 +331,10 @@ int main(int argc, char *argv[])
                 return -1;
             }
         }
-
         if(ipv4 && ipv6) {
             OUTIF() << "Warning: both ipv4 and ipv6 are set. Defaulting to ipv4.";
             ipv6 = false;
         }
-
         if(!bindIPstr.isEmpty() && ipv4) {
             OUTIF() << "Warning: both ipv4 and custom IP bind are set. Defaulting to custom IP.";
             ipv4 = false;
@@ -352,7 +343,6 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: both ipv6 and custom IP bind are set. Defaulting to custom IP.";
             ipv6 = false;
         }
-
         if(ipv4) {
             QDEBUG() << "bindIP set to IPv4";
             bindIP = QHostAddress(QHostAddress::AnyIPv4);
@@ -453,6 +443,8 @@ int main(int argc, char *argv[])
             }
         }
 
+
+
         QDEBUGVAR(argssize);
         QDEBUGVAR(quiet);
         QDEBUGVAR(hex);
@@ -533,12 +525,15 @@ int main(int argc, char *argv[])
 
         if (tcp || ssl) {
             QSslSocket sock;
+
             bool bindsuccess = sock.bind(bindIP, bind);
             if(!bindsuccess) {
                 OUTIF() << "Error: Could not bind to " << bindIP.toString() << ":" << bind;
                 OUTPUT();
                 return -1;
             }
+
+
             if (ssl) {
                 sock.connectToHostEncrypted(address,  port);
                 if (!sslNoError) {
@@ -627,7 +622,6 @@ int main(int argc, char *argv[])
                     }
 
                     out.flush();
-                    QCoreApplication::flush();
 
                 }
                 sock.disconnectFromHost();
@@ -706,7 +700,6 @@ int main(int argc, char *argv[])
                     }
 
                     out.flush();
-                    QCoreApplication::flush();
                 }
             }
 
@@ -749,28 +742,13 @@ int main(int argc, char *argv[])
 
 
         //Use default OS styling for non-Windows. Too many theme variants.
-#ifdef Q_OS_WIN
-        QFile file(":/packetsender.css");
+
+        QFile file(":/qdarkstyle/style.qss");
         if (file.open(QFile::ReadOnly)) {
             QString StyleSheet = QLatin1String(file.readAll());
             //  qDebug() << "stylesheet: " << StyleSheet;
             a.setStyleSheet(StyleSheet);
         }
-#endif
-
-
-#ifdef Q_OS_MAC
-
-        //Now using native styling for latest Mojave dark theme
-        /*
-        QFile file(":/packetsender_mac.css");
-        if (file.open(QFile::ReadOnly)) {
-            QString StyleSheet = QLatin1String(file.readAll());
-            //  qDebug() << "stylesheet: " << StyleSheet;
-            a.setStyleSheet(StyleSheet);
-        }
-        */
-#endif
 
 
         MainWindow w;

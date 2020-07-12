@@ -19,11 +19,26 @@ class Settings : public QDialog
         Q_OBJECT
 
     public:
-        explicit Settings(QWidget *parent = 0);
+        explicit Settings(QWidget *parent = nullptr);
         ~Settings();
 
         static QStringList defaultPacketTableHeader();
         static QStringList defaultTrafficTableHeader();
+
+        static const QString SEND_STR;
+        static const QString NAME_STR;
+        static const QString RESEND_STR;
+        static const QString TOADDRESS_STR;
+        static const QString TOPORT_STR;
+        static const QString METHOD_STR;
+        static const QString ASCII_STR;
+        static const QString HEX_STR;
+        static const QString REQUEST_STR;
+
+        static const QString TIME_STR;
+        static const QString FROMIP_STR;
+        static const QString FROMPORT_STR;
+        static const QString ERROR_STR;
 
         static QList<int> portsToIntList(QString ports);
         static QString intListToPorts(QList<int> portList);

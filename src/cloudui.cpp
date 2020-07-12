@@ -369,6 +369,11 @@ void CloudUI::on_loginButton_clicked()
 void CloudUI::doPost(QUrlQuery postData)
 {
 
+    postData.addQueryItem("swver", SW_VERSION);
+    postData.addQueryItem("desktop", "1");
+#if IS_STUDIO
+    postData.addQueryItem("studio", "1");
+#endif
     QNetworkRequest request(QUrl(CLOUD_URL));
     request.setHeader(QNetworkRequest::ContentTypeHeader,
                       "application/x-www-form-urlencoded");
@@ -454,10 +459,6 @@ void CloudUI::on_importPacketsButton_clicked()
 
 
 
-void CloudUI::on_makePublicCheck_clicked(bool checked)
-{
-    //ui->descriptionExportEdit->setEnabled(checked);
-}
 
 void CloudUI::on_createAccountButton_clicked()
 {

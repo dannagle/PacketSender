@@ -182,16 +182,19 @@ void PacketNetwork::init()
     tcpthreadList.clear();
     pcList.clear();
 
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QList<int> udpPortList, tcpPortList, sslPortList;
-    int udpPort, tcpPort, sslPort;
+    int udpPort = 0;
+    int tcpPort = 0;
+    int sslPort = 0;
 
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
 
-    QString ipMode = settings.value("ipMode", QHostAddress::AnyIPv4).toString();
+    QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
 
     QMessageBox msgBoxBindError;
@@ -703,25 +706,33 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     if (sendpacket.persistent && (sendpacket.isTCP())) {
         //spawn a window.
         PersistentConnection * pcWindow = new PersistentConnection();
+        TCPThread * thread = new TCPThread(sendpacket, this);
         pcWindow->sendPacket = sendpacket;
         pcWindow->init();
+        pcWindow->thread = thread;
 
 
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(pcWindow->thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(pcWindow->thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(pcWindow->thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
+        QDEBUG() << ": thread Connection attempt " <<
+                 connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
 
+
+        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+
+        //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
+        //        this, SLOT(toTrafficLog(Packet)));
 
         pcWindow->show();
+        thread->start();
 
-        //Prevent Qt from auto-destroying these windows.
-        //TODO: Use a real connection manager.
-        pcList.append(pcWindow);
 
-        //TODO: Use a real connection manager.
-        //prevent Qt from auto-destorying this thread while it tries to close.
-        tcpthreadList.append(pcWindow->thread);
+        //Network manager will manage this thread so the UI window doesn't need to.
+        tcpthreadList.append(thread);
 
         return;
 
