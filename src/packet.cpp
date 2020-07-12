@@ -20,8 +20,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QRandomGenerator>
-
+#include <time.h>
 
 
 
@@ -131,11 +130,9 @@ QHostAddress Packet::IPV4_IPV6_ANY(QString ipMode)
         return h6;
     }
 
-    if(ipMode.trimmed().isEmpty()) {
-        return h4;
-    }
 
     QHostAddress address(ipMode);
+
     if ((QAbstractSocket::IPv4Protocol == address.protocol() ) || (QAbstractSocket::IPv6Protocol == address.protocol())
             ) {
         return address;
@@ -794,8 +791,8 @@ QString Packet::macroSwap(QString data)
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
     }
     if (data.contains("{{RANDOM}}")) {
-        QRandomGenerator *gen = QRandomGenerator::global();
-        data = data.replace("{{RANDOM}}", QString::number(gen->generate()));
+	srand(time(NULL));
+        data = data.replace("{{RANDOM}}", QString::number(rand()));
     }
     if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
