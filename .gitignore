@@ -48,4 +48,5 @@ Makefile*
 *.qmlproject.user
 *.qmlproject.user.*
 
-.idea/*
+.idea
+.vscode
