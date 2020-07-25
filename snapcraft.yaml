@@ -1,5 +1,5 @@
 name: packetsender
-version: 6.2.6
+version: 7.0.4
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -8,7 +8,7 @@ description: |
 
 # sudo snap install packetsender*.snap --dangerous
 
-grade: stable
+grade: devel
 base: core18
 confinement: strict
 architectures: [amd64]
