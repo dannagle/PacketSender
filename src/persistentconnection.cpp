@@ -122,6 +122,7 @@ void PersistentConnection::statusReceiver(QString message)
         ui->searchEdit->setEnabled(false);
         ui->packetComboBox->setEnabled(false);
         ui->LoadButton->setEnabled(false);
+        ui->sendFileButton->setEnabled(false);
 
         ui->stopResendingButton->hide();
         stopTimer = true;
