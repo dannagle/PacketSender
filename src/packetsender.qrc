@@ -48,5 +48,6 @@
         <file>icons/tx_http.png</file>
         <file>icons/panel-generator-icon.png</file>
         <file>OpenSans-Regular.ttf</file>
+        <file>starter_set.json</file>
     </qresource>
 </RCC>

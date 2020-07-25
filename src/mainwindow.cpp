@@ -155,8 +155,18 @@ MainWindow::MainWindow(QWidget *parent) :
              connect(&packetNetwork, SIGNAL(packetSent(Packet)),
                      this, SLOT(toTrafficLog(Packet)));
 
+    if( !QFile::exists(PACKETSFILE)) {
+        // Packets file does not exist. Load starter set.
+        QFile starterfile(":/starter_set.json");
+        if (starterfile.open(QFile::ReadOnly)) {
+            QList<Packet> packets = Packet::ImportJSON(starterfile.readAll());
+            packetsImported(packets);
+        }
 
-    packetsSaved = Packet::fetchAllfromDB("");
+    } else {
+        packetsSaved = Packet::fetchAllfromDB("");
+    }
+
     QDEBUGVAR(packetsSaved.size());
 
     packetTableHeaders  = Settings::defaultTrafficTableHeader();
@@ -369,6 +379,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
+
+    // Generate starter_set.json
+    /*
+    QByteArray j = Packet::ExportJSON(packetsSaved);
+#ifdef _WIN32
+    QFile starter("../src/starter_set.json");
+#else
+    QFile starter("starter_set.json");
+#endif
+    starter.open(QFile::WriteOnly);
+    starter.write(j);
+    starter.close();
+    */
+
+
 
 
 }
