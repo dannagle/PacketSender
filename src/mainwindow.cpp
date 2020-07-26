@@ -114,6 +114,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->packetsTable->setWordWrap(false);
     ui->trafficLogTable->setWordWrap(false);
 
+    // default is TCP
+    ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("TCP"));
+
     //load last session
     if (settings.value("restoreSessionCheck", true).toBool()) {
         QDEBUG() << "Restoring last session";

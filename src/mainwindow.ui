@@ -220,20 +220,20 @@
              </property>
              <item>
               <property name="text">
-               <string>TCP</string>
-              </property>
-              <property name="icon">
-               <iconset resource="packetsender.qrc">
-                <normaloff>:/icons/tx_tcp.png</normaloff>:/icons/tx_tcp.png</iconset>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>UDP</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">
                 <normaloff>:/icons/tx_udp.png</normaloff>:/icons/tx_udp.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>TCP</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_tcp.png</normaloff>:/icons/tx_tcp.png</iconset>
               </property>
              </item>
              <item>
