@@ -304,7 +304,7 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("rolling500entryCheck", ui->rolling500entryCheck->isChecked());
 
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
-
+    settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 
