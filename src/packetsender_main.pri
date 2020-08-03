@@ -60,6 +60,7 @@ INSTALLS += \
     install_desktop \
     install_icon
 
+# android: include(../../qt_android_openssl/openssl.pri)
 
 win32:RC_FILE = psicon.rc
 
