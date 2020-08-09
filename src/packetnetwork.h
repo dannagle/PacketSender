@@ -4,7 +4,7 @@
  * Licensed GPL v2
  * http://PacketSender.com/
  *
- * Copyright Dan Nagle
+ * Copyright NagleCode, LLC
  *
  */
 #ifndef PACKETNETWORK_H
@@ -98,6 +98,11 @@ public slots:
         void disconnected();
         void packetToSend(Packet sendpacket);
 
+private slots:
+        void httpFinished(QNetworkReply* pReply);
+        void httpError(QNetworkRequest* pReply);
+        void sslErrorsSlot(QNetworkReply *reply, const QList<QSslError> &errors);
+
 private:
         //mapping of joined multicast groups
         //format is 239.255.120.19:5009, 239.255.120.23:5009
@@ -105,8 +110,11 @@ private:
 
         QList<ThreadedTCPServer *> allTCPServers();
 
+        QList<QNetworkAccessManager *> httpList;
+
         QList<TCPThread *> tcpthreadList;
         QList<PersistentConnection *> pcList;
+        QNetworkAccessManager * http;
 
         //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;

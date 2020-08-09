@@ -24,14 +24,8 @@
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
 #define FULLDATETIMEFORMAT "yyyy-MM-dd hh:mm:ss"
 
-#define IS_STUDIO 0
-#if IS_STUDIO
-#define UPDATE_URL_REMOTE  "https://packetsender.com/updatestudio"
-#define UPDATE_URL_LOCAL  "http://packetsender.com.local/updatestudio"
-#else
 #define UPDATE_URL_REMOTE  "https://packetsender.com/update"
 #define UPDATE_URL_LOCAL  "http://packetsender.com.local/update"
-#endif
 
 #define CLOUD_URL_REMOTE  "https://cloud.packetsender.com/"
 #define CLOUD_URL_LOCAL  "http://cloud.packetsender.com.local/"
@@ -45,11 +39,7 @@
 
 #define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
 
-#if IS_STUDIO
-#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSenderStudio/"
-#else
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
-#endif
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
 //Load local file if it exists

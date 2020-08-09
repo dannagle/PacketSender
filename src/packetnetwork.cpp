@@ -4,7 +4,7 @@
  * Licensed GPL v2
  * http://PacketSender.com/
  *
- * Copyright Dan Nagle
+ * Copyright NagleCode, LLC
  *
  */
 
@@ -18,15 +18,25 @@
 #include <QMessageBox>
 #include <QHostInfo>
 #include <QtGlobal>
+#include <QUrlQuery>
 #include "settings.h"
 
 #include "persistentconnection.h"
+
+#ifdef CHROMIUM
+#ifndef RENDER_ONLY
+#include "persistenthttp.h"
+#endif
+#endif
 
 PacketNetwork::PacketNetwork(QWidget *parent) :
     QObject(parent)
 {
 
     joinedMulticast.clear();
+    http = new QNetworkAccessManager(this);
+    QDEBUG() << " http connect attempt:" << connect(http, SIGNAL(finished(QNetworkReply*)),
+             this, SLOT(httpFinished(QNetworkReply*)));
 }
 
 
@@ -205,6 +215,10 @@ void PacketNetwork::init()
     const QString lowPortText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
     const QString portConsumedText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?";
 
+#ifdef RENDER_ONLY
+    tcpPortList.clear();
+    sslPortList.clear();
+#endif
 
 
     QUdpSocket *udpSocket;
@@ -319,6 +333,11 @@ void PacketNetwork::init()
     smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
 
 
+#ifdef RENDER_ONLY
+    activateTCP = false;
+    activateSSL = false;
+    smartList.clear();
+#endif
     if (settings.value("delayAfterConnectCheck", false).toBool()) {
         delayAfterConnect = 500;
     }
@@ -799,8 +818,152 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
     }
+    if (sendpacket.isHTTP()) {
+        QDEBUG() << "http request" << sendpacket.requestPath;
+
+
+        // TODO: catch ssl errors!
+        // connect(http, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )), this, SLOT(sslErrorsSlot(QNetworkReply*, const QList<QSslError> & )));
+
+
+        QString url = "";
+        QString portUrl = "";
+        QString portUrlS = ":" + QString::number(sendpacket.port);
+
+        if(sendpacket.isHTTPS()) {
+            url = "https://";
+            if(sendpacket.port != 443) {
+                portUrl = portUrlS;
+            }
+        } else {
+            url = "http://";
+            if(sendpacket.port != 80) {
+                portUrl = portUrlS;
+            }
+        }
+        url += sendpacket.toIP + portUrl + sendpacket.requestPath;
+
+
+        //QDEBUGVAR(sendpacket.toIP);
+        //QDEBUGVAR(sendpacket.requestPath);
+        QDEBUGVAR(url);
+        //return;
+        QNetworkRequest request = QNetworkRequest(QUrl(url));
+
+        sendpacket.fromIP = "You";
+        sendpacket.fromPort = 0;
+
+        http->setProperty("persistent", sendpacket.persistent);
+
+        if(sendpacket.isPOST()) {
+
+            request.setHeader(QNetworkRequest::ContentTypeHeader,
+                "application/x-www-form-urlencoded");
+
+            http->post(request, sendpacket.getByteArray());
+
+        } else {
+            http->get(request);
+        }
+
+        emit packetSent(sendpacket);
+
+    }
+
+
 
 }
+
+void PacketNetwork::httpError(QNetworkRequest* pReply)
+{
+
+}
+
+void PacketNetwork::sslErrorsSlot(QNetworkReply *reply, const QList<QSslError> &errors)
+{
+    Packet errorPacket;
+    errorPacket.init();
+
+    QUrl url = reply->url();
+
+    int defaultPort = 80;
+    if(url.scheme().toLower().contains("https")) {
+        defaultPort = 443;
+    }
+
+    errorPacket.fromIP = url.host();
+    errorPacket.port = 0;
+    errorPacket.fromPort = static_cast<unsigned int>(url.port(defaultPort));
+    errorPacket.toIP = "You";
+    errorPacket.tcpOrUdp = "HTTP";
+
+    QDEBUGVAR(errors.size());
+    if (errors.size() > 0) {
+
+        QSslError sError;
+        foreach (sError, errors) {
+            errorPacket.hexString.clear();
+            errorPacket.errorString = sError.errorString();
+            emit packetSent(errorPacket);
+        }
+
+    }
+
+
+    reply->ignoreSslErrors();
+}
+
+void PacketNetwork::httpFinished(QNetworkReply* pReply)
+{
+
+    QByteArray data = pReply->readAll();
+    QString str = QString(data);
+    str.truncate(1000);
+    QDEBUG() << "finished http." << str;
+
+    Packet httpPacket;
+    httpPacket.init();
+
+    QUrl url = pReply->url();
+
+    int defaultPort = 80;
+    if(url.scheme().toLower().contains("https")) {
+        defaultPort = 443;
+    }
+    httpPacket.fromIP = url.host();
+    httpPacket.port = 0;
+    httpPacket.fromPort = static_cast<unsigned int>(url.port(defaultPort));
+    httpPacket.toIP = "You";
+    httpPacket.hexString = Packet::byteArrayToHex(data);
+    httpPacket.tcpOrUdp = "HTTP";
+
+    if(pReply->error() != QNetworkReply::NoError) {
+        QDEBUG() << "Ended in error";
+        httpPacket.errorString = pReply->errorString();
+    }
+
+#ifdef RENDER_ONLY
+    http->setProperty("persistent", false);
+#endif
+
+#ifdef CHROMIUM
+#ifndef RENDER_ONLY
+
+    QDEBUGVAR(http->property("persistent").toBool());
+    if(http->property("persistent").toBool()) {
+        PersistentHTTP * view = new PersistentHTTP();
+        view->init(data, url);
+        view->show();
+        view->setAttribute(Qt::WA_DeleteOnClose);
+    }
+
+#endif
+#endif
+    emit packetSent(httpPacket);
+
+}
+
+
 
 QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
 {
