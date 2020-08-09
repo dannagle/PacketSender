@@ -85,5 +85,6 @@ private:
     PacketNetwork * packetNetwork;
 
 
+    QPushButton *createQPushButtonWithWordWrap(QWidget *parent, const QString &text);
 };
 

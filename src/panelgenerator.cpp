@@ -197,10 +197,6 @@ void PanelGenerator::renderViewMode()
     isViewing = true;
     setHeaders();
     addLinkButton->hide();
-    int id = QFontDatabase::addApplicationFont("://OpenSans-Regular.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont opensans(family);
-
 
     int i = 0;
     foreach(PanelButton pb, panel.buttonList) {
@@ -208,8 +204,6 @@ void PanelGenerator::renderViewMode()
         themePanelButton(btn);
         QDEBUGVAR(btn->text());
         btn->setProperty("script", pb.script);
-        btn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        btn->setFont(opensans);
 
         if (!connect(btn, &QPushButton::clicked, this, &PanelGenerator::button_clicked)) {
             QDEBUG() << "clicked connection false";
@@ -350,14 +344,28 @@ void PanelGenerator::setHeaders()
 
 void PanelGenerator::themePanelButton(QPushButton *button)
 {
-    QPalette pal = button->palette();
-    pal.setColor(QPalette::Button, QColor("#F5F5F5"));
-    button->setAutoFillBackground(true);
-    button->setPalette(pal);
-    button->setStyleSheet("QPushButton { font-size: 24pt; color: white; } QPushButton::hover { color: #BC810C; } ");
 
-    button->setCursor(Qt::PointingHandCursor);
+    // TODO: make this font resize based on window size.
+
+    int id = QFontDatabase::addApplicationFont("://OpenSans-Regular.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    QFont opensans(family);
+
+    auto label = new QLabel(button->text(),button);
+    button->setText("");
+    label->setWordWrap(true);
+    auto layout = new QHBoxLayout(button);
+
+    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    label->setFont(opensans);
+
+    label->setAutoFillBackground(true);
+    label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    label->setCursor(Qt::PointingHandCursor);
     button->update();
+    label->update();
+    layout->addWidget(label,0,Qt::AlignCenter);
 
 }
 
