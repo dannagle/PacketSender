@@ -612,6 +612,7 @@ void PanelGenerator::executeScript(QString script)
 
         bool ispacket = true;
 
+        //TODO: support system calls.
         if( (line.startsWith("sleep:")  || line.startsWith("delay:") || line.startsWith("panel:") ) ) {
 
             ispacket = false;
