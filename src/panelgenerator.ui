@@ -194,6 +194,7 @@
     <addaction name="separator"/>
     <addaction name="actionWin_Package"/>
     <addaction name="actionMac_Package"/>
+    <addaction name="actionLinux_Package"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -284,6 +285,11 @@
   <action name="actionMac_Package">
    <property name="text">
     <string>Portable &amp;macOS Package</string>
+   </property>
+  </action>
+  <action name="actionLinux_Package">
+   <property name="text">
+    <string>Portable Linux Package</string>
    </property>
   </action>
  </widget>

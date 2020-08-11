@@ -21,7 +21,10 @@ void PersistentHTTP::init(QByteArray thedata, QUrl url)
     data = thedata;
     ui->codeView->setPlainText(QString(thedata));
     ui->codeView->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-    ui->codeView->setWordWrapMode(QTextOption::NoWrap);
+    int linecount = data.count('\n');
+    if (linecount > 5) {
+        ui->codeView->setWordWrapMode(QTextOption::NoWrap);
+    }
     ui->codeView->setReadOnly(true);
 
     setWindowTitle("Code/Render "+url.toString());

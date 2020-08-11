@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :
         maxLogSize = 100;
     }
 
+
+    ui->generatePanelButton->hide();
+
     http = new QNetworkAccessManager(this); //Main application http object
 
     QDEBUG() << " http connect attempt:" << connect(http, SIGNAL(finished(QNetworkReply*)),

@@ -58,6 +58,8 @@ private slots:
 
     void on_actionMac_Package_triggered();
 
+    void on_actionLinux_Package_triggered();
+
 private:
     Ui::PanelGenerator *ui;
     void button_clicked();

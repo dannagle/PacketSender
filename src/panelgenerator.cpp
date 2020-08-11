@@ -1254,3 +1254,8 @@ void PanelGenerator::on_actionMac_Package_triggered()
     buildPackage(true);
 
 }
+
+void PanelGenerator::on_actionLinux_Package_triggered()
+{
+    buildPackage(true);
+}
