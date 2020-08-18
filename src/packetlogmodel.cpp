@@ -10,6 +10,7 @@ PacketLogModel::PacketLogModel(QObject *parent)
 
     packetList.clear();
     tableHeaders.clear();
+    useEllipsis = true;
 }
 
 QVariant PacketLogModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -107,7 +108,7 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
             if(packet.isHTTP()) {
                 ascii = packet.requestPath;
             }
-            if(ascii.size() > 1024) {
+            if(useEllipsis && (ascii.size() > 1024)) {
                 ascii.truncate(1000);
                 ascii.append("[...]");
             }
@@ -118,7 +119,7 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
             if(packet.isHTTP()) {
                 hex = packet.asciiString();
             }
-            if(hex.size() > 1024) {
+            if(useEllipsis && (hex.size() > 1024)) {
                 hex.truncate(1000);
                 hex.append("[...]");
             }

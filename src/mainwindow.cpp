@@ -1797,6 +1797,8 @@ void MainWindow::applyNetworkSettings()
         statusBarMessage("Left " + QString::number(joinedSize) + " multicast group(s)");
     }
 
+    packetsLogged.useEllipsis = settings.value("ellipsisCheck", true).toBool();
+
     packetNetwork.kill();
     packetNetwork.init();
     packetNetwork.responseData = settings.value("responseHex", "").toString().trimmed();
