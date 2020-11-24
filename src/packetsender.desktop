@@ -2,7 +2,7 @@
 Name=Packet Sender
 Comment=Network utility for sending and receiving TCP, UDP, SSL packets
 Exec=/usr/bin/packetsender
-Icon=/usr/share/icons/packetsender.png
+Icon=/usr/share/icons/packetsender
 Terminal=false
 Type=Application
 Categories=Network;
