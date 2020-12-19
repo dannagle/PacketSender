@@ -34,7 +34,7 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle("Packet Sender Studio Panels");
+    setWindowTitle("Packet Sender Panels");
     QIcon mIcon("://pslogo.png");
     setWindowIcon(mIcon);
 

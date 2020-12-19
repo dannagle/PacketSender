@@ -118,6 +118,20 @@ MainWindow::MainWindow(QWidget *parent) :
     // default is TCP
     ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("TCP"));
 
+
+    // FEATURES IN ACTIVE DEVELOPMENT
+
+    // HTTP GET/POST Not Finished
+    int http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
+    while(http_indexes > -1) {
+        ui->udptcpComboBox->removeItem(http_indexes);
+        http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
+    }
+
+    // Panel Generation Not Finished
+    ui->actionPanel_Generator->setVisible(false);
+
+
     //load last session
     if (settings.value("restoreSessionCheck", true).toBool()) {
         QDEBUG() << "Restoring last session";
@@ -1608,8 +1622,8 @@ void MainWindow::packetTable_checkMultiSelected()
 
     QDEBUGVAR(packetList.size());
     if (packetList.size() > 1) {
-        //Generate Panel!
-        ui->generatePanelButton->show();
+        // Panel Generation Not Finished
+        // ui->generatePanelButton->show();
 
     }
 
