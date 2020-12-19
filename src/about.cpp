@@ -8,7 +8,6 @@
 #include <QUrl>
 #include <QSslSocket>
 
-
 About::About(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::About)
@@ -16,9 +15,10 @@ About::About(QWidget *parent) :
     ui->setupUi(this);
 
 
-    QString versionBuilder = QString("Version: ") + SW_VERSION;
+    QString versionBuilder = QString("PS Version: ") + SW_VERSION;
+    versionBuilder.append("\nQt Version: " + QString(QT_VERSION_STR));
     if (QSslSocket::supportsSsl()) {
-        versionBuilder.append(" / SSL: ");
+        versionBuilder.append("\nSSL Version: ");
         versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
     }
     ui->buidDateLabel->setText(versionBuilder);

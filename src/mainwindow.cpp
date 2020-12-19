@@ -1932,7 +1932,7 @@ void MainWindow::on_bugsLinkButton_clicked()
 
 void MainWindow::on_forumsPacketSenderButton_clicked()
 {
-    QDesktopServices::openUrl(QUrl("http://forums.packetsender.com/"));
+    QDesktopServices::openUrl(QUrl("http://forums.naglecode.com/"));
 
 
 }

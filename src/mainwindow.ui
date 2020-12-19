@@ -530,6 +530,7 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionHelp"/>
+    <addaction name="actionForums"/>
     <addaction name="actionFollow_NagleCode"/>
     <addaction name="actionConnect_on_LinkedIn"/>
     <addaction name="actionDonate_Thank_You"/>
@@ -680,15 +681,6 @@
     <string>iOS App</string>
    </property>
   </action>
-  <action name="actionForums">
-   <property name="icon">
-    <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/forum-icon.png</normaloff>:/icons/forum-icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>NagleCode Forums</string>
-   </property>
-  </action>
   <action name="actionFollow_NagleCode">
    <property name="icon">
     <iconset resource="packetsender.qrc">
@@ -723,6 +715,15 @@
    </property>
    <property name="text">
     <string>Panel Generator</string>
+   </property>
+  </action>
+  <action name="actionForums">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/forum-icon.png</normaloff>:/icons/forum-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Forums</string>
    </property>
   </action>
  </widget>
