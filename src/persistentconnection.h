@@ -1,5 +1,4 @@
-#ifndef PERSISTENTCONNECTION_H
-#define PERSISTENTCONNECTION_H
+#pragma once
 
 #include <QDialog>
 #include <QTimer>
@@ -86,4 +85,3 @@ private:
         void cancelResends();
 };
 
-#endif // PERSISTENTCONNECTION_H

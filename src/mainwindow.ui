@@ -95,6 +95,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="genPostDataButton">
+           <property name="text">
+            <string>Generate POST Data</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLineEdit" name="packetASCIIEdit">
            <property name="placeholderText">
             <string>ASCII representation</string>
@@ -220,15 +227,6 @@
              </property>
              <item>
               <property name="text">
-               <string>UDP</string>
-              </property>
-              <property name="icon">
-               <iconset resource="packetsender.qrc">
-                <normaloff>:/icons/tx_udp.png</normaloff>:/icons/tx_udp.png</iconset>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>TCP</string>
               </property>
               <property name="icon">
@@ -238,11 +236,56 @@
              </item>
              <item>
               <property name="text">
+               <string>UDP</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_udp.png</normaloff>:/icons/tx_udp.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>SSL</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">
                 <normaloff>:/icons/tx_ssl.png</normaloff>:/icons/tx_ssl.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTP Get</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTP Post</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Get</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Post</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
               </property>
              </item>
             </widget>
@@ -295,6 +338,32 @@
           </item>
           <item>
            <spacer name="horizontalSpacer_7">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="generatePanelButton">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Generate Panel!</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -461,6 +530,7 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionHelp"/>
+    <addaction name="actionForums"/>
     <addaction name="actionFollow_NagleCode"/>
     <addaction name="actionConnect_on_LinkedIn"/>
     <addaction name="actionDonate_Thank_You"/>
@@ -470,6 +540,7 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionCloud"/>
+    <addaction name="actionPanel_Generator"/>
     <addaction name="actionSubnet_Calculator"/>
     <addaction name="actionIntense_Traffic_Generator"/>
     <addaction name="actionAndroid_App"/>
@@ -610,15 +681,6 @@
     <string>iOS App</string>
    </property>
   </action>
-  <action name="actionForums">
-   <property name="icon">
-    <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/forum-icon.png</normaloff>:/icons/forum-icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>NagleCode Forums</string>
-   </property>
-  </action>
   <action name="actionFollow_NagleCode">
    <property name="icon">
     <iconset resource="packetsender.qrc">
@@ -644,6 +706,24 @@
    </property>
    <property name="text">
     <string>Intense &amp;Traffic Generator</string>
+   </property>
+  </action>
+  <action name="actionPanel_Generator">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/panel-generator-icon.png</normaloff>:/icons/panel-generator-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Panel Generator</string>
+   </property>
+  </action>
+  <action name="actionForums">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/forum-icon.png</normaloff>:/icons/forum-icon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Forums</string>
    </property>
   </action>
  </widget>

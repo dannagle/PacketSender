@@ -1,5 +1,6 @@
 	
 SOURCES += main.cpp\
+    $$PWD/panel.cpp \
         mainwindow.cpp \
     packetnetwork.cpp \
     packet.cpp \
@@ -14,9 +15,16 @@ SOURCES += main.cpp\
     cloudui.cpp \
 	multicastsetup.cpp \
 	udpflooding.cpp \
-    $$PWD/packetlogmodel.cpp
+    $$PWD/packetlogmodel.cpp \
+        postdatagen.cpp \
+    panelgenerator.cpp
+
+win32: SOURCES += persistenthttp.cpp
+macx: SOURCES += persistenthttp.cpp
+
 
 HEADERS  += mainwindow.h \
+    $$PWD/panel.h \
     packetnetwork.h \
     packet.h \
     globals.h \
@@ -31,7 +39,14 @@ HEADERS  += mainwindow.h \
     cloudui.h \
 	multicastsetup.h \
 	udpflooding.h \
-    $$PWD/packetlogmodel.h
+    $$PWD/packetlogmodel.h \
+        postdatagen.h\
+    panelgenerator.h
+
+win32: HEADERS += persistenthttp.h
+macx: HEADERS += persistenthttp.h
+
+
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
@@ -41,7 +56,10 @@ FORMS    += mainwindow.ui \
     subnetcalc.ui \
     cloudui.ui \
 	multicastsetup.ui \	
-    udpflooding.ui
+    udpflooding.ui \
+        persistenthttp.ui \
+        postdatagen.ui \
+    panelgenerator.ui
 
 OTHER_FILES += \
     packetsender.css \
@@ -60,6 +78,7 @@ INSTALLS += \
     install_desktop \
     install_icon
 
+# android: include(../../qt_android_openssl/openssl.pri)
 
 win32:RC_FILE = psicon.rc
 

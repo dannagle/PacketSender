@@ -1,5 +1,5 @@
 name: packetsender
-version: 7.0.5
+version: 7.2.0
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -46,6 +46,8 @@ parts:
     - libqt5gui5
     - libgdk-pixbuf2.0-0
     - libqt5svg5
+    - libgtk2.0-0
+
     - try:
       - appmenu-qt5
     - locales-all

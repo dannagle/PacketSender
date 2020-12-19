@@ -124,7 +124,7 @@ Settings::Settings(QWidget *parent) :
 
     ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
 
-
+    ui->ellipsisCheck->setChecked(settings.value("ellipsisCheck", true).toBool());
 
     ui->attemptReceiveCheck->setChecked(settings.value("attemptReceiveCheck", false).toBool());
 
@@ -281,6 +281,8 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("serverSnakeOilCheck", ui->serverSnakeOilCheck->isChecked());
 
+
+    settings.setValue("ellipsisCheck", ui->ellipsisCheck->isChecked());
 
     settings.setValue("attemptReceiveCheck", ui->attemptReceiveCheck->isChecked());
 

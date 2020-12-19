@@ -4,18 +4,18 @@
  * Licensed GPL v2
  * http://PacketSender.com/
  *
- * Copyright Dan Nagle
+ * Copyright NagleCode, LLC
  *
  */
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
 //BEGIN SW VERSION
-#define SW_VERSION "7.0.5"
+#define SW_VERSION "7.2.0"
 //END SW VERSION
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 7,0,5,0
+#define VER_FILEVERSION 7,2,0,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
@@ -24,14 +24,8 @@
 #define DATETIMEFORMAT "hh:mm:ss.zzz"
 #define FULLDATETIMEFORMAT "yyyy-MM-dd hh:mm:ss"
 
-#define IS_STUDIO 0
-#if IS_STUDIO
-#define UPDATE_URL_REMOTE  "https://packetsender.com/updatestudio"
-#define UPDATE_URL_LOCAL  "http://packetsender.com.local/updatestudio"
-#else
 #define UPDATE_URL_REMOTE  "https://packetsender.com/update"
 #define UPDATE_URL_LOCAL  "http://packetsender.com.local/update"
-#endif
 
 #define CLOUD_URL_REMOTE  "https://cloud.packetsender.com/"
 #define CLOUD_URL_LOCAL  "http://cloud.packetsender.com.local/"
@@ -45,11 +39,7 @@
 
 #define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
 
-#if IS_STUDIO
-#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSenderStudio/"
-#else
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
-#endif
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
 //Load local file if it exists

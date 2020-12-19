@@ -38,6 +38,8 @@ public:
 
     const QList<Packet> list();
 
+    bool useEllipsis;
+
 
     void prepend(Packet packet);
 private:
