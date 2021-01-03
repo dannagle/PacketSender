@@ -14,19 +14,29 @@ Packet Sender would like to thank the following sponsors.
 <br>IWL is a California company creating computer networking products.
 <br><br><br>
 
+[![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
+<br>NagleCode is a software publisher and development studio. NagleCode licenses the mobile apps.
+<br><br><br>
+
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
 <br>JetBrains provides world-class programming tools to help speed development.
 <br><br><br>
 
-[![GitHub](screenshots/GitHub_Logo200.png)](https://help.github.com/articles/about-github-sponsors)
+[![GitHub](screenshots/GitHub_Logo200.png)](https://github.com/sponsors/dannagle)
 <br>GitHub provides repositories, downloads, and issue tracking for any code project.
 <br><br><br>
 
-[![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
-<br>NagleCode is a software publisher and development studio.
-<br><br><br>
-
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
+
+
+
+### Support
+
+* Twitter: [@NagleCode](http://twitter.com/NagleCode)
+* Forums are at: [GitHub Discussions](https://github.com/dannagle/PacketSender/discussions).
+* Email: [Packet Sender Contact](https://packetsender.com/contact)
+* Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
+
 
 ## Uses
 
@@ -40,18 +50,32 @@ Packet Sender would like to thank the following sponsors.
 * Tech support (by sending customers a portable Packet Sender with pre-defined settings and packets)
 * Sharing/Saving/Collaboration using the [Packet Sender Cloud](https://cloud.packetsender.com/) service.
 
-## Download
+## Desktop Download
 
-Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/). Some places redistribute Packet Sender.
+Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/download). Some places redistribute Packet Sender.
 
-![Packet Sender logo](screenshots/winlogo150.png) ![Packet Sender logo](screenshots/maclogo150.png) ![Packet Sender logo](screenshots/Tux150.png)  ![Packet Sender logo](screenshots/ios_logo.png)  ![Packet Sender logo](screenshots/android_logo.png)
+![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
 
-## Packet Sender Mobile
+## Mobile Apps
+The Packet Sender mobile editions are fully native, contain bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. This is software that respsects you. Thank you for supporting this effort.
 
-The mobile apps are open source and available at :
-https://github.com/dannagle/Packet_Sender_Mobile
+### Android
+![Android Logo](screenshots/android_logo.png)
 
-Packet Sender Mobile binaries for iOS and Android may be purchased for a small fee on the [Apple App Store](https://itunes.apple.com/us/app/packet-sender-mobile/id1338199854?ls=1&mt=8) and the [Google Play Store](https://play.google.com/store/apps/details?id=com.packetsender.mobile). Packet Sender Mobile contains bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. It is absolutely nothing but the app. This is old-fashioned software development that respects the user. Please show your support.
+The Android version is now LIVE and available [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://play.google.com/store/apps/details?id=com.packetsender.compose)
+
+
+<!--
+-->
+
+
+![Android Logo](screenshots/packetsender_android_screenshot.png)
+
+### iOS
+![Packet Sender logo](screenshots/ios_logo.png)
+
+*The iOS version is currently in development. Stay tuned!*
+
 
 ## Packet Sender Cloud
 
@@ -70,13 +94,6 @@ If you are publishing a network API, maintaining a public cloud page is signific
 
 More information about it can be found at
 https://cloud.packetsender.com/help
-
-### Support
-
-* Twitter: [@NagleCode](http://twitter.com/NagleCode)
-* You may also track this project on [GitHub](http://github.com/dannagle/PacketSender).
-* Email: hello AT packetsender DOT com
-* Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
 
 ### Portable Mode
 
