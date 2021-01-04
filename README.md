@@ -62,11 +62,7 @@ The Packet Sender mobile editions are fully native, contain bare minimum permiss
 ### Android
 ![Android Logo](screenshots/android_logo.png)
 
-The Android version is now LIVE and available [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose)
-
-<!--
- or [on Amazon Appstore](https://play.google.com/store/apps/details?id=com.packetsender.compose)
--->
+The Android version is now LIVE and available [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
 
 ![Android Logo](screenshots/packetsender_android_screenshot.png)
