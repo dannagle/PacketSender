@@ -13,6 +13,9 @@ namespace Ui
 class PersistentConnection;
 }
 
+
+
+
 class PersistentConnection : public QDialog
 {
         Q_OBJECT
@@ -23,6 +26,8 @@ class PersistentConnection : public QDialog
         Packet sendPacket;
         Packet reSendPacket;
         TCPThread *thread;
+
+        static const QString RESEND_BUTTON_STYLE;
 
         void init();
 

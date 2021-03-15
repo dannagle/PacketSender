@@ -15,6 +15,9 @@
 #include <QMessageBox>
 
 
+
+const QString PersistentConnection::RESEND_BUTTON_STYLE = "QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ";
+
 PersistentConnection::PersistentConnection(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PersistentConnection)
@@ -26,8 +29,6 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
     suppressSlot = true;
     previousCommands.clear();
-
-
 
     QDEBUG();
     sendPacket.clear();
@@ -187,7 +188,7 @@ void PersistentConnection::init()
     ui->appendCRcheck->setChecked(appendCR);
 
 
-    ui->stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    ui->stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     ui->stopResendingButton->setFlat(true);
     ui->stopResendingButton->setCursor(Qt::PointingHandCursor);
     ui->stopResendingButton->setIcon(QIcon(PSLOGO));

@@ -1,24 +1,17 @@
-
-QLineEdit::focus
-{
-    color:black;
-    background-color: qlineargradient(x1: 0, y1: 0.5, x2: 1, y2: 0.5, stop: 0 #ffffff, stop: 1  #FCE5A6); /*#D7DEF0;*/
-}
-QStatusBar::item
-{
-    border-radius: 3px;
-    background-color: #ffffff;
-    border: none;
-    color: blue;
-}
-
-QStatusBar
-{
-    color: white;
-    background-color: #4C4C4C; /*#D7DEF0;*/
-}
-
 QTableView::item
 {
     qproperty-wordWrap: false;
 }
+
+QStatusBar::item {
+    padding: 3px;
+    border-radius: 3px;
+} 
+
+/*
+QStatusBar QPushButton:hover,
+QStatusBar QPushButton:checked:hover{
+    border: 1px transparent #148CD2;
+}
+
+*/

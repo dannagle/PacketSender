@@ -209,10 +209,6 @@ private:
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
 
-        QString IPv4Stylesheet;
-        QString IPv6Stylesheet;
-
-
 
         QStringList packetTableHeaders;
         QStringList packetSavedTableHeaders;

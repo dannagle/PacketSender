@@ -743,11 +743,25 @@ int main(int argc, char *argv[])
 
         //Use default OS styling for non-Windows. Too many theme variants.
 
-        QFile file(":/qdarkstyle/style.qss");
-        if (file.open(QFile::ReadOnly)) {
-            QString StyleSheet = QLatin1String(file.readAll());
-            //  qDebug() << "stylesheet: " << StyleSheet;
-            a.setStyleSheet(StyleSheet);
+
+        QFile file_system(":/packetsender.css");
+        QFile file_dark(":/qdarkstyle/style.qss");
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        bool useDark = settings.value("darkModeCheck", true).toBool();
+
+        if(useDark) {
+            if (file_dark.open(QFile::ReadOnly)) {
+                QString StyleSheet = QLatin1String(file_dark.readAll());
+                a.setStyleSheet(StyleSheet);
+                file_dark.close();
+            }
+        } else {
+            if (file_system.open(QFile::ReadOnly)) {
+                QString StyleSheet = QLatin1String(file_system.readAll());
+                a.setStyleSheet(StyleSheet);
+                file_system.close();
+            }
         }
 
 

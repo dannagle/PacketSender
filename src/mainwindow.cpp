@@ -205,7 +205,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     stopResendingButton = new QPushButton("Resending");
-    stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     themeTheButton(stopResendingButton);
     stopResendingButton->setIcon(QIcon(PSLOGO));
 
@@ -250,15 +250,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     statusBar()->insertPermanentWidget(4, sslServerStatus);
 
-    IPv4Stylesheet = "QPushButton {width:75px; color: lightgreen; } QPushButton::hover { color: #BC810C; } ";
-    IPv6Stylesheet = "QPushButton {width:75px; color: lightblue; } QPushButton::hover { color: #BC810C; } ";
-
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
     themeTheButton(IPmodeButton);
     statusBar()->insertPermanentWidget(5, IPmodeButton);
 
     setIPMode();
+
 
 
     connect(IPmodeButton, SIGNAL(clicked()),
@@ -979,7 +977,7 @@ void MainWindow::sendClick(QString packetName)
             if (toSend.repeat > 0) {
                 toSend.timestamp = QDateTime::currentDateTime();
 
-                stopResendingButton->setStyleSheet("QPushButton { color: green; } QPushButton::hover { color: #BC810C; } ");
+                stopResendingButton->setStyleSheet("QPushButton { color: green; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
                 packetsRepeat.append(toSend);
                 stopResendingButton->setText("Resending (" + QString::number(packetsRepeat.size()) + ")");
                 stopResending = 0;
@@ -1230,7 +1228,7 @@ void MainWindow::on_testPacketButton_clicked()
 
         testPacket.timestamp = QDateTime::currentDateTime();
 
-        stopResendingButton->setStyleSheet("QPushButton { color: green; } QPushButton::hover { color: #BC810C; } ");
+        stopResendingButton->setStyleSheet("QPushButton { color: green; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
         packetsRepeat.append(testPacket);
         stopResendingButton->setText("Resending (" + QString::number(packetsRepeat.size()) + ")");
         stopResending = 0;
@@ -1828,7 +1826,7 @@ void MainWindow::applyNetworkSettings()
 
 void MainWindow::cancelResends()
 {
-    stopResendingButton->setStyleSheet("QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ");
+    stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     stopResendingButton->setText("Resending");
     stopResending = 1;
 }
@@ -2020,12 +2018,12 @@ void MainWindow::setIPMode()
     bool isIPv6 = packetNetwork.IPv6Enabled();
 
     IPmodeButton->setText(packetNetwork.getIPmode());
+    themeTheButton(IPmodeButton);
 
-    if (isIPv6) {
-        QDEBUG() << "Set IPv6 stylesheet";
-        IPmodeButton->setStyleSheet(IPv6Stylesheet);
+    if(isIPv6) {
+        IPmodeButton->setStyleSheet("QPushButton { color: lightblue}");
     } else {
-        IPmodeButton->setStyleSheet(IPv4Stylesheet);
+        IPmodeButton->setStyleSheet("QPushButton { color: lightgreen}");
     }
 
 

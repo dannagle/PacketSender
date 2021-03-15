@@ -39,14 +39,13 @@ void SendPacketButton::sendClicked()
 //used by mainwindow.cpp and panelgenerator.cpp
 void themeTheButton(QPushButton * button)
 {
+    button->setCursor(Qt::PointingHandCursor);
+    button->update();
+    return;
     QPalette pal = button->palette();
     pal.setColor(QPalette::Button, QColor("#F5F5F5"));
     button->setAutoFillBackground(true);
     button->setPalette(pal);
-    button->setStyleSheet("QPushButton { color: white; } QPushButton::hover { color: #BC810C; } ");
-    button->setFlat(true);
-    button->setCursor(Qt::PointingHandCursor);
-    button->update();
-
+    button->setStyleSheet("QPushButton { color: white; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
 
 }

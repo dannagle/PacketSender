@@ -95,6 +95,9 @@ Settings::Settings(QWidget *parent) :
     on_smartResponseEnableCheck_clicked();
 
 
+
+    ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
+
     ui->translateMacroSendCheck->setChecked(settings.value("translateMacroSendCheck", true).toBool());
 
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
@@ -307,6 +310,9 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
+
+    settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
+
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 

@@ -517,6 +517,13 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_18">
           <item>
+           <widget class="QCheckBox" name="darkModeCheck">
+            <property name="text">
+             <string>Use Dark Theme (requires restart)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QCheckBox" name="copyUnformattedCheck">
             <property name="text">
              <string>Copy to Clipboard button uses raw data</string>
