@@ -212,8 +212,8 @@ void PacketNetwork::init()
     msgBoxBindError.setStandardButtons(QMessageBox::Ok);
     msgBoxBindError.setDefaultButton(QMessageBox::Ok);
     msgBoxBindError.setIcon(QMessageBox::Warning);
-    const QString lowPortText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
-    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to a UDP port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?";
+    const QString lowPortText = "Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
+    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?";
 
 #ifdef RENDER_ONLY
     tcpPortList.clear();
