@@ -81,6 +81,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(mIcon);
 
     tableActive = false;
+    darkMode = settings.value("darkModeCheck", true).toBool();
+
+
 
     //seed qrand
     QTime time = QTime::currentTime();
@@ -2020,10 +2023,16 @@ void MainWindow::setIPMode()
     IPmodeButton->setText(packetNetwork.getIPmode());
     themeTheButton(IPmodeButton);
 
+    QString islight = "";
+
+    if(darkMode) {
+        islight = "light";
+    }
+
     if(isIPv6) {
-        IPmodeButton->setStyleSheet("QPushButton { color: lightblue}");
+        IPmodeButton->setStyleSheet("QPushButton { color: " + islight +"blue}");
     } else {
-        IPmodeButton->setStyleSheet("QPushButton { color: lightgreen}");
+        IPmodeButton->setStyleSheet("QPushButton { color:  " + islight +"green}");
     }
 
 

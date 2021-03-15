@@ -215,6 +215,8 @@ private:
 
         Packet lastSendPacket;
 
+        bool darkMode;
+
         int maxLogSize;
 
         float multiSendDelay;
