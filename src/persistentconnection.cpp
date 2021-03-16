@@ -318,20 +318,17 @@ void PersistentConnection::loadTrafficView()
 
 }
 
+
 void PersistentConnection::packetSentSlot(Packet pkt)
 {
-
     QDEBUGVAR(pkt.hexString.size());
     trafficList.append(pkt);
     loadTrafficView();
-
 }
 
 void PersistentConnection::packetReceivedSlot(Packet pkt)
 {
-    QDEBUGVAR(pkt.hexString.size());
-    trafficList.append(pkt);
-    loadTrafficView();
+    packetSentSlot(pkt);
 }
 
 void PersistentConnection::socketDisconnected()

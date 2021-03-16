@@ -260,6 +260,10 @@ void TCPThread::persistentConnectionLoop()
                 tcpRCVPacket.fromPort =    clientConnection->peerPort();
                 if (tcpRCVPacket.hexString.size() > 0) {
                     emit packetSent(tcpRCVPacket);
+
+                    // Do I need to reply?
+                    writeResponse(clientConnection, tcpRCVPacket);
+
                 }
 
             } else {
@@ -270,10 +274,12 @@ void TCPThread::persistentConnectionLoop()
 
 
         //sendPacket.fromPort = clientConnection->localPort();
-        emit connectStatus("Sending data:" + sendPacket.asciiString());
-        QDEBUG() << "Attempting write data";
-        clientConnection->write(sendPacket.getByteArray());
-        emit packetSent(sendPacket);
+        if(sendPacket.getByteArray().size() > 0) {
+            emit connectStatus("Sending data:" + sendPacket.asciiString());
+            QDEBUG() << "Attempting write data";
+            clientConnection->write(sendPacket.getByteArray());
+            emit packetSent(sendPacket);
+        }
 
         Packet tcpPacket;
         tcpPacket.timestamp = QDateTime::currentDateTime();
@@ -323,6 +329,8 @@ void TCPThread::persistentConnectionLoop()
             emit packetSent(tcpPacket);
         }
 
+        // Do I need to reply?
+        writeResponse(clientConnection, tcpPacket);
 
 
         emit connectStatus("Reading response");
@@ -334,6 +342,10 @@ void TCPThread::persistentConnectionLoop()
 
         if (tcpPacket.hexString.size() > 0) {
             emit packetSent(tcpPacket);
+
+            // Do I need to reply?
+            writeResponse(clientConnection, tcpPacket);
+
         }
 
 
