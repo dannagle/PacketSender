@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 6.2.0)"
+    echo "Please supply build version (e.g. 7.1.0)"
     exit
 fi
 
@@ -42,9 +42,9 @@ sed -i '' '/BEGIN/,/END/c\
 echo "Replacing Info.plist with $BUILD_VERSION"
 sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
 
-"/Users/dannagle/Qt/5.15.1/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
+"/Users/dannagle/Qt/5.15.2/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
-/Users/dannagle/Qt/5.15.1/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
+/Users/dannagle/Qt/5.15.2/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
 codesign --option runtime --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" packetsender.app
 mv packetsender.app PacketSender2.app
 mv PacketSender2.app PacketSender.app
