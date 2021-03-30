@@ -725,13 +725,17 @@ int main(int argc, char *argv[])
     } else {
 
 
+
 #ifdef __linux__
-        //Workaround linux check for those that support xrandr
+#ifndef ISSNAP
+
+        //Workaround linux check for those that support xrandr. Does not work for snaps
         //Note that this bug is actually within Qt.
         if (!isGuiApp()) {
             printf("\nCannot open display. Try --help to access console app.\n");
             return -1;
         }
+#endif
 #endif
 
         QApplication a(argc, argv);
