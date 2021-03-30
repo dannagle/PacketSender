@@ -7,10 +7,10 @@
 QT  += core gui network widgets
 
 # Comment out these lines to remove support for Chromium web view.
-win32: QT += webenginewidgets
-macx: QT += webenginewidgets
-win32: DEFINES += "CHROMIUM=1"
-macx: DEFINES += "CHROMIUM=1"
+#win32: QT += webenginewidgets
+#macx: QT += webenginewidgets
+#win32: DEFINES += "CHROMIUM=1"
+#macx: DEFINES += "CHROMIUM=1"
 
 
 TARGET = packetsender
