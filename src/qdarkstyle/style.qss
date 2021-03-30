@@ -1895,6 +1895,18 @@ QTableCornerButton::section {
   border-radius: 0px;
 }
 
+
+
+/* QHeaderView ------------------------------------------------------------
+Alternating row highlight... added by Packet Sender project
+--------------------------------------------------------------------------- */
+
+QListView,QTreeView,QTableView,QColumnView {
+    alternate-background-color: #2a232D;
+}
+
+
+
 /* QHeaderView ------------------------------------------------------------
 
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qheaderview
