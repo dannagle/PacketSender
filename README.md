@@ -66,7 +66,7 @@ The Packet Sender mobile editions are fully native, contain bare minimum permiss
 The Android version is located [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
 
-![Packet Sender Android](screenshots/packetsender_android_screenshot.png)
+[![Packet Sender Android](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose)
 
 ### iOS
 ![Packet Sender logo](screenshots/ios_logo.png)
@@ -75,7 +75,7 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 
-![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)
+[![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 
 ## Packet Sender Cloud
