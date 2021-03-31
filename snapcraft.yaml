@@ -1,5 +1,5 @@
 name: packetsender
-version: 7.2.1
+version: 7.2.2
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -8,14 +8,19 @@ description: |
 
 # sudo snap install packetsender*.snap --dangerous
 
-grade: stable
+grade: devel
 base: core18
 confinement: strict
 architectures: [amd64]
 
 apps:
   packetsender:
-    command: desktop-launch $SNAP/usr/local/bin/packetsender
+    environment:
+      # Set theme fix on gnome/gtk
+      QT_QPA_PLATFORMTHEME: gtk3
+    extensions:
+      - kde-neon
+    command: usr/local/bin/packetsender
     desktop: usr/share/applications/packetsender.desktop
     plugs:
       - unity7
@@ -26,6 +31,9 @@ apps:
 
 parts:
   desktop-qt5:
+    build-snaps:
+      - kde-frameworks-5-core18-sdk
+      - kde-frameworks-5-core18
     build-packages:
     - build-essential
     - qtbase5-dev
@@ -59,9 +67,9 @@ parts:
   packetsender:
     plugin: qmake
     qt-version: qt5
-    project-files: ["src/PacketSender.pro"]
+    project-files: ["src/PacketSenderSnap.pro"]
     source: https://github.com/dannagle/PacketSender.git
-    source-branch: master
+    source-branch: development
     stage-packages:
       - libxkbcommon0
       - ttf-ubuntu-font-family
