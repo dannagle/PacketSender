@@ -37,6 +37,7 @@ Packet Sender would like to thank the following sponsors.
 * Email: [Packet Sender Contact](https://packetsender.com/contact)
 * Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
 
+*NOTE:* Try (temporarily) disabling your firewall if having problems in Windows.
 
 ## Uses
 
@@ -57,12 +58,12 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 ![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
 
 ## Mobile Apps
-The Packet Sender mobile editions are fully native, contain bare minimum permissions, no ads, no analytics, no "Review me!" nags, no email list sign-ups, no notifications, and no IAPs. This is software that respsects you. Thank you for supporting this effort.
+The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
 
 ### Android
 ![Android Logo](screenshots/android_logo.png)
 
-The Android version is now LIVE and available [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
+The Android version is located [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
 
 ![Android Logo](screenshots/packetsender_android_screenshot.png)
@@ -70,7 +71,8 @@ The Android version is now LIVE and available [on Google Play](https://play.goog
 ### iOS
 ![Packet Sender logo](screenshots/ios_logo.png)
 
-*The iOS version is currently in development. Stay tuned!*
+
+The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 
 ## Packet Sender Cloud
