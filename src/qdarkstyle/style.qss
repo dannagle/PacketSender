@@ -1199,8 +1199,64 @@ QCommandLinkButton:disabled {
 https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qcombobox
 
 
-QComboBox styling removed by Packet Sender project
+QComboBox styling adjusted by Packet Sender project
 --------------------------------------------------------------------------- */
+QComboBox {
+  border: 1px solid #455364;
+  border-radius: 4px;
+}
+
+QComboBox QAbstractItemView {
+  border: 1px solid #455364;
+  border-radius: 0;
+  background-color: #19232D;
+  selection-background-color: #346792;
+}
+
+QComboBox QAbstractItemView:hover {
+  background-color: #19232D;
+  color: #E0E1E3;
+}
+
+QComboBox QAbstractItemView:selected {
+  background: #346792;
+  color: #455364;
+}
+
+QComboBox QAbstractItemView:alternate {
+  background: #19232D;
+}
+
+QComboBox:disabled {
+  background-color: #19232D;
+  color: #9DA9B5;
+}
+
+QComboBox:hover {
+  border: 1px solid #346792;
+}
+
+QComboBox:focus {
+  border: 1px solid #1A72BB;
+}
+
+QComboBox:on {
+  selection-background-color: #346792;
+}
+
+QComboBox::indicator {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  selection-background-color: transparent;
+  color: transparent;
+  selection-color: transparent;
+  /* Needed to remove indicator - fix #132 */
+}
+
+QComboBox::indicator:alternate {
+  background: #19232D;
+}
 
 
 

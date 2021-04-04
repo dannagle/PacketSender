@@ -113,15 +113,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // FEATURES IN ACTIVE DEVELOPMENT
 
-    // HTTP GET/POST Not Finished
-    int http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
-    while(http_indexes > -1) {
-        ui->udptcpComboBox->removeItem(http_indexes);
-        http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
-    }
-
     // Panel Generation Not Finished
     ui->actionPanel_Generator->setVisible(false);
+
 
 
     //load last session
