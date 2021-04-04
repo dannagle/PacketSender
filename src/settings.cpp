@@ -698,6 +698,44 @@ void Settings::deleteHTTPHeader(QString host, QString header)
 
 }
 
+QPair<QString, QString> Settings::header2keyvalue(QString header)
+{
+
+    QPair<QString, QString> keyvalue;
+
+    QString key = "";
+    QString value = "";
+    QStringList headerSplit = header.split(":");
+    if(headerSplit.size() > 1) {
+        key = headerSplit.first();
+        headerSplit.pop_front();
+        value = headerSplit.join(":");
+    }
+
+    keyvalue.first = key;
+    keyvalue.second = value;
+
+    return keyvalue;
+
+}
+
+
+QHash<QString, QString> Settings::getRawHTTPHeaders(QString host)
+{
+    QHash<QString, QString> headers;
+    QStringList headerList = Settings::getHTTPHeaders(host);
+    foreach(QString header, headerList) {
+        auto keyvalue = Settings::header2keyvalue(header);
+        QString key = keyvalue.first;
+        QString value = keyvalue.second;
+        if(key.size() > 1) {
+            headers[key] = value;
+        }
+    }
+    return headers;
+}
+
+
 QStringList Settings::getHTTPHeaders(QString host)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -752,28 +790,37 @@ void Settings::loadCredentialTable()
     QHash<QString, QStringList> allHttps = Settings::getAllHTTPHeaders();
     QStringList keys = allHttps.keys();
     QString key;
-    ui->httpCredentialTable->setColumnCount(2);
+    ui->httpCredentialTable->setColumnCount(3);
     int row = 0;
     foreach(key, keys) {
         QString header;
         foreach(header, allHttps[key]) {
             ui->httpCredentialTable->setRowCount(row + 1);
 
+            auto keyvalue = Settings::header2keyvalue(header);
+            if(keyvalue.first.isEmpty()) continue;
+
             QTableWidgetItem * hostItem = new QTableWidgetItem(key);
-            QTableWidgetItem * headerItem = new QTableWidgetItem(header);
+            QTableWidgetItem * keyItem = new QTableWidgetItem(keyvalue.first);
+            QTableWidgetItem * valueItem = new QTableWidgetItem(keyvalue.second);
+
 
             hostItem->setData(Qt::UserRole, key);
             hostItem->setData(Qt::UserRole + 1, header);
-            headerItem->setData(Qt::UserRole, key);
-            headerItem->setData(Qt::UserRole + 1, header);
+            keyItem->setData(Qt::UserRole, key);
+            keyItem->setData(Qt::UserRole + 1, header);
+            valueItem->setData(Qt::UserRole, key);
+            valueItem->setData(Qt::UserRole + 1, header);
+
 
             ui->httpCredentialTable->setItem(row, 0, hostItem);
-            ui->httpCredentialTable->setItem(row, 1, headerItem);
+            ui->httpCredentialTable->setItem(row, 1, keyItem);
+            ui->httpCredentialTable->setItem(row, 2, valueItem);
             row++;
         }
     }
 
-    QStringList tableHeaders = {"Host", "Custom Header"};
+    QStringList tableHeaders = {"Host", "Key", "Value"};
     ui->httpCredentialTable->verticalHeader()->show();
     ui->httpCredentialTable->horizontalHeader()->show();
     ui->httpCredentialTable->setHorizontalHeaderLabels(tableHeaders);

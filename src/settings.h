@@ -48,6 +48,7 @@ class Settings : public QDialog
         void statusBarMessage(QString msg);
 
         static QStringList getHTTPHeaders(QString host);
+        static QHash<QString, QString> getRawHTTPHeaders(QString host);
         static QHash<QString, QStringList> getAllHTTPHeaders();
 
 private slots:
@@ -91,8 +92,7 @@ private:
         void saveHTTPHeader(QString host, QString header);
         void deleteHTTPHeader(QString host, QString header);
         void clearHTTPHeaders(QString host);
-
-
+        static QPair<QString, QString> header2keyvalue(QString header);
 };
 
 #endif // SETTINGS_H

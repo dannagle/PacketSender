@@ -837,6 +837,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         }
         url += sendpacket.toIP + portUrl + sendpacket.requestPath;
 
+        QHash<QString, QString> bonusHeaders = Settings::getRawHTTPHeaders(sendpacket.toIP);
+
 
         //QDEBUGVAR(sendpacket.toIP);
         //QDEBUGVAR(sendpacket.requestPath);
@@ -848,6 +850,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         sendpacket.fromPort = 0;
 
         http->setProperty("persistent", sendpacket.persistent);
+        foreach(QString key, bonusHeaders.keys()) {
+            QDEBUG()<<"Setting header" << key << bonusHeaders[key];
+            request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
+        }
 
         if(sendpacket.isPOST()) {
 
