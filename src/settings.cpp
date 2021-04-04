@@ -661,6 +661,9 @@ void Settings::saveHTTPHeader(QString host, QString header)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
+    QDEBUG() << "saving" << host << ":" << header;
+
+
     QStringList hostHeaders = Settings::getHTTPHeaders(host);
     hostHeaders.append(header);
     hostHeaders.removeDuplicates();
@@ -674,6 +677,24 @@ void Settings::saveHTTPHeader(QString host, QString header)
     settings.setValue(Settings::ALLHTTPSHOSTS, allHosts);
 
     loadCredentialTable();
+
+}
+
+
+
+void Settings::deleteHTTPHeader(QString host, QString header)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QDEBUG() << "removing" << host << ":" << header;
+
+    QStringList hostHeaders = Settings::getHTTPHeaders(host);
+    hostHeaders.removeDuplicates();
+    int i = hostHeaders.indexOf(header);
+    if(i > -1) {
+        hostHeaders.removeAt(i);
+        settings.setValue(Settings::HTTPHEADERINDEX + host, hostHeaders);
+    }
 
 }
 
@@ -741,6 +762,11 @@ void Settings::loadCredentialTable()
             QTableWidgetItem * hostItem = new QTableWidgetItem(key);
             QTableWidgetItem * headerItem = new QTableWidgetItem(header);
 
+            hostItem->setData(Qt::UserRole, key);
+            hostItem->setData(Qt::UserRole + 1, header);
+            headerItem->setData(Qt::UserRole, key);
+            headerItem->setData(Qt::UserRole + 1, header);
+
             ui->httpCredentialTable->setItem(row, 0, hostItem);
             ui->httpCredentialTable->setItem(row, 1, headerItem);
             row++;
@@ -758,3 +784,17 @@ void Settings::loadCredentialTable()
 
 
 
+
+void Settings::on_httpDeleteHeaderButton_clicked()
+{
+
+    QList<QTableWidgetItem *> totalSelected  = ui->httpCredentialTable->selectedItems();
+    QTableWidgetItem * item;
+    foreach (item, totalSelected) {
+        QString host = item->data(Qt::UserRole).toString();
+        QString header = item->data(Qt::UserRole + 1).toString();
+        deleteHTTPHeader(host, header);
+    }
+    ui->httpCredentialTable->clearSelection();
+    loadCredentialTable();
+}

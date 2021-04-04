@@ -76,6 +76,8 @@ private slots:
 
         void on_addCredentialButton_clicked();
 
+        void on_httpDeleteHeaderButton_clicked();
+
 private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
@@ -87,6 +89,7 @@ private:
         void loadTableHeaders();
         void loadCredentialTable();
         void saveHTTPHeader(QString host, QString header);
+        void deleteHTTPHeader(QString host, QString header);
         void clearHTTPHeaders(QString host);
 
 
