@@ -490,7 +490,7 @@ ____________
 
     i++;
     //add new item button.
-    auto newButton = new QPushButton("Add New Button");
+    auto newButton = new QPushButton("New Button");
 
     connect(newButton, &QPushButton::clicked, this, [this]{
        PanelButton pb;

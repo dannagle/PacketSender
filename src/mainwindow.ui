@@ -540,7 +540,6 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionCloud"/>
-    <addaction name="actionPanel_Generator"/>
     <addaction name="actionSubnet_Calculator"/>
     <addaction name="actionIntense_Traffic_Generator"/>
     <addaction name="actionAndroid_App"/>
@@ -552,10 +551,17 @@
     </property>
     <addaction name="actionJoin_IPv4"/>
    </widget>
+   <widget class="QMenu" name="menuPanels">
+    <property name="title">
+     <string>Panels</string>
+    </property>
+    <addaction name="actionPanel_Generator"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
    <addaction name="menuMulitcast"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuPanels"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -708,15 +714,6 @@
     <string>Intense &amp;Traffic Generator</string>
    </property>
   </action>
-  <action name="actionPanel_Generator">
-   <property name="icon">
-    <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/panel-generator-icon.png</normaloff>:/icons/panel-generator-icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Panel Generator</string>
-   </property>
-  </action>
   <action name="actionForums">
    <property name="icon">
     <iconset resource="packetsender.qrc">
@@ -724,6 +721,11 @@
    </property>
    <property name="text">
     <string>Forums</string>
+   </property>
+  </action>
+  <action name="actionPanel_Generator">
+   <property name="text">
+    <string>Panel Generator</string>
    </property>
   </action>
  </widget>

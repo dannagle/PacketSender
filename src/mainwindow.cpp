@@ -111,13 +111,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("TCP"));
 
 
-    // FEATURES IN ACTIVE DEVELOPMENT
-
-    // Panel Generation Not Finished
-    ui->actionPanel_Generator->setVisible(false);
-
-
-
     //load last session
     if (settings.value("restoreSessionCheck", true).toBool()) {
         QDEBUG() << "Restoring last session";
@@ -1591,13 +1584,9 @@ void MainWindow::packetTable_checkMultiSelected()
         }
     }
 
-    ui->generatePanelButton->hide();
-
     QDEBUGVAR(packetList.size());
     if (packetList.size() > 1) {
-        // Panel Generation Not Finished
-        // ui->generatePanelButton->show();
-
+       ui->generatePanelButton->show();
     }
 
     ui->testPacketButton->setText("Send");
@@ -2521,9 +2510,11 @@ void MainWindow::on_generatePanelButton_clicked()
     gpanel->show();
 }
 
+
 void MainWindow::on_actionPanel_Generator_triggered()
 {
     PanelGenerator * gpanel = new PanelGenerator(this);
     gpanel->initAutoLaunchOrEditMode();
     gpanel->show();
+
 }

@@ -11,11 +11,11 @@
 #define GLOBALS_H
 
 //BEGIN SW VERSION
-#define SW_VERSION "7.3.1"
+#define SW_VERSION "8.0.1"
 //END SW VERSION
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 7,3,1,0
+#define VER_FILEVERSION 8,0,1,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
