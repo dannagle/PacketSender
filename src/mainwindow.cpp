@@ -429,18 +429,6 @@ void MainWindow::generateConnectionMenu()
 
 
 }
-/*
-
-{"githubpath":"https:\/\/api.github.com\/repos\/dannagle\/PacketSender\/releases\/7612134",
-"windowsversion":"v5.4.2","macversion":"v5.4.2","linuxversion":"v5.4.2","windowsdownload":
-"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_5_4_2_2017-09-01.exe",
-"windowsportable":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderPortable_5_4_2_2017-09-01.zip",
-"macdownload":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_v5_4_2_2017-09-01.dmg","linuxdownload":
-"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderLinux_5_4_2_2017-09-01.AppImage"}
-
-
-*/
-
 
 void parserMajorMinorBuild(QString sw, unsigned int & major, unsigned int & minor, unsigned int & build)
 {
