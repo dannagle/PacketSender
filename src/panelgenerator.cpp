@@ -704,6 +704,7 @@ void PanelGenerator::executeScript(QString script)
             Packet pkt = Packet::fetchFromList(line, packetList);
             if(pkt.name == line) {
                 QDEBUG() << "Need to send packet" << pkt.name;
+                pkt.repeat = 0;
                 emit sendPacket(pkt);
                 QThread::msleep(100); //give time to send
             }

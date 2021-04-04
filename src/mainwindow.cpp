@@ -1573,6 +1573,7 @@ void MainWindow::packetTable_checkMultiSelected()
     QStringList buttonsList;
     buttonsList.clear();
 
+    ui->generatePanelButton->hide();
 
     foreach (checkItem, totalSelected) {
         clickedPacket = Packet::fetchTableWidgetItemData(checkItem);
