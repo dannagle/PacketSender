@@ -1261,3 +1261,9 @@ void PanelGenerator::on_actionLinux_Package_triggered()
 {
     buildPackage(true);
 }
+
+void PanelGenerator::on_actionNew_triggered()
+{
+    PanelGenerator * gpanel = new PanelGenerator(this);
+    gpanel->show();
+}

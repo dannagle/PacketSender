@@ -60,6 +60,8 @@ private slots:
 
     void on_actionLinux_Package_triggered();
 
+    void on_actionNew_triggered();
+
 private:
     Ui::PanelGenerator *ui;
     void button_clicked();
