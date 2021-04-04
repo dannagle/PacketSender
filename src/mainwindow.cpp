@@ -2422,7 +2422,7 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     auto isPost = arg1.toLower().contains("post") && isHttp;
 
     if(isHttp) {
-        ui->asciiLabel->setText("Post Data");
+        ui->asciiLabel->setText("Data");
     } else {
         ui->asciiLabel->setText("ASCII");
     }
@@ -2519,3 +2519,4 @@ void MainWindow::on_actionPanel_Generator_triggered()
     gpanel->show();
 
 }
+

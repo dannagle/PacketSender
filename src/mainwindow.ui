@@ -97,7 +97,7 @@
          <item>
           <widget class="QPushButton" name="genPostDataButton">
            <property name="text">
-            <string>Generate POST Data</string>
+            <string>Generate Data</string>
            </property>
           </widget>
          </item>
@@ -108,6 +108,13 @@
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loadFileButton">
+           <property name="text">
+            <string>Load File</string>
            </property>
           </widget>
          </item>
@@ -129,13 +136,6 @@
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="loadFileButton">
-           <property name="text">
-            <string>Load File</string>
            </property>
           </widget>
          </item>

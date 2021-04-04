@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QShortcut>
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QGroupBox>
@@ -58,7 +59,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     QDEBUG() << " panel RENDER_ONLY mode";
 #else
     QDEBUG() << " panel building mode";
-
 #endif
 
 

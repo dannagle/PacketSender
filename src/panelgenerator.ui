@@ -295,7 +295,10 @@
   </action>
   <action name="actionNew">
    <property name="text">
-    <string>New Panel</string>
+    <string>&amp;New Panel</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
  </widget>

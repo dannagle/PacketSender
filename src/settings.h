@@ -40,9 +40,15 @@ class Settings : public QDialog
         static const QString FROMPORT_STR;
         static const QString ERROR_STR;
 
+        static const QString ALLHTTPSHOSTS;
+        static const QString HTTPHEADERINDEX;
+
         static QList<int> portsToIntList(QString ports);
         static QString intListToPorts(QList<int> portList);
         void statusBarMessage(QString msg);
+
+        static QStringList getHTTPHeaders(QString host);
+        static QHash<QString, QStringList> getAllHTTPHeaders();
 
 private slots:
         void on_buttonBox_accepted();
@@ -66,16 +72,22 @@ private slots:
 
         void on_documentationButton_clicked();
 
-    private:
+
+
+        void on_addCredentialButton_clicked();
+
+private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
         QStringList packetTableHeaders;
         QStringList packetSavedTableHeaders;
 
-
         void setDefaultTableHeaders();
         void setStoredTableHeaders();
         void loadTableHeaders();
+        void loadCredentialTable();
+        void saveHTTPHeader(QString host, QString header);
+        void clearHTTPHeaders(QString host);
 
 
 };

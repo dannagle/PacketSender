@@ -30,6 +30,12 @@ const QString Settings::FROMIP_STR = "From IP";
 const QString Settings::FROMPORT_STR = "From Port";
 const QString Settings::ERROR_STR = "Error";
 
+
+
+const QString Settings::ALLHTTPSHOSTS = "HTTPHeaderHosts";
+const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
+
+
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
@@ -53,6 +59,9 @@ Settings::Settings(QWidget *parent) :
     //this is no longer working thanks to faster traffic log
     ui->displayOrderListTraffic->hide();
     ui->displayGroupBoxTraffic->setTitle("");
+
+
+    loadCredentialTable();
 
 
     //smart responses...
@@ -97,6 +106,7 @@ Settings::Settings(QWidget *parent) :
 
 
     ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
+    ui->httpAdjustContentTypeCheck->setChecked(settings.value("httpAdjustContentTypeCheck", true).toBool());
 
     ui->translateMacroSendCheck->setChecked(settings.value("translateMacroSendCheck", true).toBool());
 
@@ -312,7 +322,7 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
     settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
-
+    settings.setValue("httpAdjustContentTypeCheck", ui->httpAdjustContentTypeCheck->isChecked());
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 
@@ -646,3 +656,105 @@ void Settings::on_documentationButton_clicked()
     //Open URL in browser
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
+
+void Settings::saveHTTPHeader(QString host, QString header)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QStringList hostHeaders = Settings::getHTTPHeaders(host);
+    hostHeaders.append(header);
+    hostHeaders.removeDuplicates();
+
+    settings.setValue(Settings::HTTPHEADERINDEX + host, hostHeaders);
+
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    allHosts.append(host);
+    allHosts.removeDuplicates();
+    settings.setValue(Settings::ALLHTTPSHOSTS, allHosts);
+
+    loadCredentialTable();
+
+}
+
+QStringList Settings::getHTTPHeaders(QString host)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    return settings.value(Settings::HTTPHEADERINDEX + host, QStringList()).toStringList();
+}
+
+QHash<QString, QStringList> Settings::getAllHTTPHeaders()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    QString host;
+    QHash<QString, QStringList> allHttps;
+    foreach(host, allHosts) {
+        allHttps[host] = Settings::getHTTPHeaders(host);
+    }
+    return allHttps;
+
+}
+
+void Settings::clearHTTPHeaders(QString host)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    int i = allHosts.indexOf(host);
+    if(i > -1) {
+        allHosts.removeAt(i);
+        settings.setValue(Settings::ALLHTTPSHOSTS, allHosts);
+        settings.remove(Settings::HTTPHEADERINDEX + host);
+    }
+}
+
+void Settings::on_addCredentialButton_clicked()
+{
+    QString host = ui->httpHostEdit->text();
+    QString un = ui->httpUNEdit->text();
+    QString pw = ui->httpPWEdit->text();
+
+    QString b64 = QString((un+":"+pw).toLatin1().toBase64());
+    QString header = "Authorization: Basic " + b64;
+
+    saveHTTPHeader(host, header);
+    loadCredentialTable();
+
+}
+
+
+void Settings::loadCredentialTable()
+{
+
+    QHash<QString, QStringList> allHttps = Settings::getAllHTTPHeaders();
+    QStringList keys = allHttps.keys();
+    QString key;
+    ui->httpCredentialTable->setColumnCount(2);
+    int row = 0;
+    foreach(key, keys) {
+        QString header;
+        foreach(header, allHttps[key]) {
+            ui->httpCredentialTable->setRowCount(row + 1);
+
+            QTableWidgetItem * hostItem = new QTableWidgetItem(key);
+            QTableWidgetItem * headerItem = new QTableWidgetItem(header);
+
+            ui->httpCredentialTable->setItem(row, 0, hostItem);
+            ui->httpCredentialTable->setItem(row, 1, headerItem);
+            row++;
+        }
+    }
+
+    QStringList tableHeaders = {"Host", "Custom Header"};
+    ui->httpCredentialTable->verticalHeader()->show();
+    ui->httpCredentialTable->horizontalHeader()->show();
+    ui->httpCredentialTable->setHorizontalHeaderLabels(tableHeaders);
+    ui->httpCredentialTable->resizeColumnsToContents();
+    ui->httpCredentialTable->resizeRowsToContents();
+    ui->httpCredentialTable->horizontalHeader()->setStretchLastSection(true);
+}
+
+
+
