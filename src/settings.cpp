@@ -664,7 +664,16 @@ void Settings::saveHTTPHeader(QString host, QString header)
     QDEBUG() << "saving" << host << ":" << header;
 
 
+    // Search for a duplicate and remove it.
+    auto keyvalue = Settings::header2keyvalue(header);
     QStringList hostHeaders = Settings::getHTTPHeaders(host);
+    for(int i=0; i<hostHeaders.size(); i++) {
+        auto keyvaluecheck = Settings::header2keyvalue(hostHeaders[i]);
+        if(keyvalue.first == keyvaluecheck.first) {
+            hostHeaders.removeAt(i);
+            break;
+        }
+    }
     hostHeaders.append(header);
     hostHeaders.removeDuplicates();
 
