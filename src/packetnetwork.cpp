@@ -23,10 +23,8 @@
 
 #include "persistentconnection.h"
 
-#ifdef CHROMIUM
 #ifndef RENDER_ONLY
 #include "persistenthttp.h"
-#endif
 #endif
 
 PacketNetwork::PacketNetwork(QWidget *parent) :
@@ -946,7 +944,6 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
     http->setProperty("persistent", false);
 #endif
 
-#ifdef CHROMIUM
 #ifndef RENDER_ONLY
 
     QDEBUGVAR(http->property("persistent").toBool());
@@ -957,7 +954,6 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
         view->setAttribute(Qt::WA_DeleteOnClose);
     }
 
-#endif
 #endif
     emit packetSent(httpPacket);
 

@@ -1,12 +1,18 @@
 
-#ifdef CHROMIUM
-
 #include "persistenthttp.h"
 #include "ui_persistenthttp.h"
 
+#include "globals.h"
+
 #include <QFontDatabase>
 #include <QClipboard>
-#include <QWebEngineSettings>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QFileInfo>
+#include <QDateTime>
+#include <QDir>
+
+
 
 PersistentHTTP::PersistentHTTP(QWidget *parent) :
     QDialog(parent),
@@ -14,6 +20,7 @@ PersistentHTTP::PersistentHTTP(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    tempFiles.clear();
 }
 
 void PersistentHTTP::init(QByteArray thedata, QUrl url)
@@ -29,20 +36,15 @@ void PersistentHTTP::init(QByteArray thedata, QUrl url)
 
     setWindowTitle("Code/Render "+url.toString());
 
-    ui->webView->settings()->setAttribute(QWebEngineSettings::FocusOnNavigationEnabled, false);
-    ui->webView->setHtml(QString(thedata));
-    ui->webView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    ui->copyRenderButton->hide(); // for now
-
 }
 
 PersistentHTTP::~PersistentHTTP()
 {
-    /*
-    ui->webView->close();
-    ui->webView->page()->deleteLater();
-    */
+    QString f;
+    foreach(f, tempFiles) {
+        QFile(f).remove();
+    }
+
     delete ui;
 }
 
@@ -54,15 +56,33 @@ void PersistentHTTP::on_copyCodeButton_clicked()
 
 }
 
-void PersistentHTTP::on_copyRenderButton_clicked()
-{
-    ui->webView->setEnabled(true);
-    ui->webView->setFocus();
-    ui->webView->triggerPageAction(QWebEnginePage::SelectAll);
-    ui->webView->triggerPageAction(QWebEnginePage::Copy);
-    //ui->webView->triggerPageAction(QWebEnginePage::Unselect);
 
+void PersistentHTTP::on_browserViewButton_clicked()
+{
+    // holds temporary files until window closes
+    QString dl = QDir::homePath() + "/Downloads";
+    if(!QFile(dl).exists()) {
+        dl = QDir::homePath();
+    }
+
+    QDateTime now = QDateTime::currentDateTime();
+    QString nowString = now.toString("yyyy-MM-dd_hh_mm_ss");
+
+
+    QFile file(dl + "/" +nowString + "-packetsender-httpview.html");
+    if (file.open(QFile::WriteOnly)) {
+        file.write(data);
+        file.close();
+
+        QFileInfo fileInfo(file);
+
+        QDEBUGVAR(fileInfo.canonicalFilePath());
+        tempFiles.append(fileInfo.canonicalFilePath());
+
+        //tempReferences.append(file);
+
+        QDesktopServices::openUrl(QUrl(fileInfo.canonicalFilePath()));
+
+    }
 
 }
-#endif
-
