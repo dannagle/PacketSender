@@ -27,7 +27,14 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QTextEdit" name="codeView"/>
+    <widget class="QTextEdit" name="codeView">
+     <property name="acceptDrops">
+      <bool>false</bool>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -54,7 +61,7 @@
      <item>
       <widget class="QPushButton" name="browserViewButton">
        <property name="text">
-        <string>Browser View</string>
+        <string>.html View/Edit</string>
        </property>
       </widget>
      </item>

@@ -36,6 +36,19 @@ void PersistentHTTP::init(QByteArray thedata, QUrl url)
 
     setWindowTitle("Code/Render "+url.toString());
 
+
+    // holds temporary files until window closes
+    QString dl = QDir::homePath() + "/Downloads";
+    if(!QFile(dl).exists()) {
+        dl = QDir::homePath();
+    }
+
+
+    QDateTime now = QDateTime::currentDateTime();
+    QString nowString = now.toString("yyyy-MM-dd_hh_mm_ss");
+    ui->browserViewButton->setProperty("html-download", dl + "/" +nowString + "-packetsender-httpview.html");
+    ui->browserViewButton->setText(nowString + "-packetsender.html");
+
 }
 
 PersistentHTTP::~PersistentHTTP()
@@ -59,17 +72,9 @@ void PersistentHTTP::on_copyCodeButton_clicked()
 
 void PersistentHTTP::on_browserViewButton_clicked()
 {
-    // holds temporary files until window closes
-    QString dl = QDir::homePath() + "/Downloads";
-    if(!QFile(dl).exists()) {
-        dl = QDir::homePath();
-    }
 
-    QDateTime now = QDateTime::currentDateTime();
-    QString nowString = now.toString("yyyy-MM-dd_hh_mm_ss");
-
-
-    QFile file(dl + "/" +nowString + "-packetsender-httpview.html");
+    QString dl = ui->browserViewButton->property("html-download").toString();
+    QFile file(dl);
     if (file.open(QFile::WriteOnly)) {
         file.write(data);
         file.close();
