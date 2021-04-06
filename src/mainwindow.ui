@@ -512,7 +512,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -556,6 +556,7 @@
      <string>Panels</string>
     </property>
     <addaction name="actionPanel_Generator"/>
+    <addaction name="actionNew_Panel"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -725,7 +726,12 @@
   </action>
   <action name="actionPanel_Generator">
    <property name="text">
-    <string>Panel Generator</string>
+    <string>Load Starter Panel</string>
+   </property>
+  </action>
+  <action name="actionNew_Panel">
+   <property name="text">
+    <string>New Empty Panel</string>
    </property>
   </action>
  </widget>

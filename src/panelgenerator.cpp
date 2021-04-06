@@ -327,9 +327,9 @@ void PanelGenerator::setHeaders()
 
 
         if(panel.isLaunchPanel()) {
-            ui->actionLaunch_Panel->setText("Auto-launch: Yes");
+            ui->actionLaunch_Panel->setText("Starter Panel: Yes");
         } else {
-            ui->actionLaunch_Panel->setText("Auto-launch: No");
+            ui->actionLaunch_Panel->setText("Starter Panel: No");
         }
         ui->menubar->show();
         editToggleButton->setText("Editing");
@@ -1173,10 +1173,10 @@ void PanelGenerator::on_actionLaunch_Panel_triggered()
 {
     if(panel.isLaunchPanel()) {
         panel.launch = 0;
-        statusBar()->showMessage("Panel is no longer launch panel", 2000);
+        statusBar()->showMessage("Panel is no longer starter panel", 2000);
     } else {
         panel.launch = 1;
-        statusBar()->showMessage("panel is now launch panel", 2000);
+        statusBar()->showMessage("panel is now starter panel", 2000);
     }
 
     panel.saveToDB();

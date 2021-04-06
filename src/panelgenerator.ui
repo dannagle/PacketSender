@@ -270,7 +270,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Launch Panel:</string>
+    <string>Starter Panel:</string>
    </property>
   </action>
   <action name="actionDelete_Panel">

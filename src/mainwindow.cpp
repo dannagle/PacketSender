@@ -2515,8 +2515,21 @@ void MainWindow::on_generatePanelButton_clicked()
 void MainWindow::on_actionPanel_Generator_triggered()
 {
     PanelGenerator * gpanel = new PanelGenerator(this);
+
+    QDEBUG() << " packet send connect attempt:" << connect(gpanel, SIGNAL(sendPacket(Packet)),
+             &packetNetwork, SLOT(packetToSend(Packet)));
+
     gpanel->initAutoLaunchOrEditMode();
     gpanel->show();
 
 }
 
+
+void MainWindow::on_actionNew_Panel_triggered()
+{
+    PanelGenerator * gpanel = new PanelGenerator(this);
+
+    QDEBUG() << " packet send connect attempt:" << connect(gpanel, SIGNAL(sendPacket(Packet)),
+             &packetNetwork, SLOT(packetToSend(Packet)));
+    gpanel->show();
+}
