@@ -1585,7 +1585,6 @@ void MainWindow::packetTable_checkMultiSelected()
         }
     }
 
-    QDEBUGVAR(packetList.size());
     if (packetList.size() > 1) {
        ui->generatePanelButton->show();
     }

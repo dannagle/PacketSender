@@ -79,11 +79,15 @@ private slots:
 
         void on_httpDeleteHeaderButton_clicked();
 
+        void on_httpCredentialTable_itemChanged(QTableWidgetItem *item);
+
 private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
         QStringList packetTableHeaders;
         QStringList packetSavedTableHeaders;
+
+        bool httpSettingsLoading;
 
         void setDefaultTableHeaders();
         void setStoredTableHeaders();

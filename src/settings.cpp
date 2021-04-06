@@ -44,7 +44,6 @@ Settings::Settings(QWidget *parent) :
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-
     //not working yet...
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
@@ -796,6 +795,8 @@ void Settings::on_addCredentialButton_clicked()
 void Settings::loadCredentialTable()
 {
 
+
+    httpSettingsLoading = true;
     QHash<QString, QStringList> allHttps = Settings::getAllHTTPHeaders();
     QStringList keys = allHttps.keys();
     QString key;
@@ -816,10 +817,15 @@ void Settings::loadCredentialTable()
 
             hostItem->setData(Qt::UserRole, key);
             hostItem->setData(Qt::UserRole + 1, header);
+            hostItem->setData(Qt::UserRole + 2, "host");
+
             keyItem->setData(Qt::UserRole, key);
             keyItem->setData(Qt::UserRole + 1, header);
+            keyItem->setData(Qt::UserRole + 2, "key");
+
             valueItem->setData(Qt::UserRole, key);
             valueItem->setData(Qt::UserRole + 1, header);
+            valueItem->setData(Qt::UserRole + 2, "value");
 
 
             ui->httpCredentialTable->setItem(row, 0, hostItem);
@@ -836,6 +842,8 @@ void Settings::loadCredentialTable()
     ui->httpCredentialTable->resizeColumnsToContents();
     ui->httpCredentialTable->resizeRowsToContents();
     ui->httpCredentialTable->horizontalHeader()->setStretchLastSection(true);
+
+    httpSettingsLoading = false;
 }
 
 
@@ -853,4 +861,38 @@ void Settings::on_httpDeleteHeaderButton_clicked()
     }
     ui->httpCredentialTable->clearSelection();
     loadCredentialTable();
+}
+
+
+void Settings::on_httpCredentialTable_itemChanged(QTableWidgetItem *item)
+{
+
+    if(httpSettingsLoading) return;
+
+    QString newText = item->text();
+    QDEBUGVAR(newText);
+
+    QString index = item->data(Qt::UserRole + 2).toString();
+    QString host = item->data(Qt::UserRole).toString();
+    QString header = item->data(Qt::UserRole + 1).toString();
+    auto keyvalue = Settings::header2keyvalue(header);
+
+    if(index == "host") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(newText, header);
+    }
+
+    if(index == "key") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(host, newText + ": " + keyvalue.second);
+    }
+
+    if(index == "value") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(host, keyvalue.first + ": " + newText);
+    }
+
+    ui->httpCredentialTable->clearSelection();
+    loadCredentialTable();
+
 }
