@@ -441,7 +441,7 @@ ____________
         setMetaData(pb, groupBox);
 
         QDEBUGVAR(textEdit->toPlainText());
-        textEdit->setFixedSize(200, 50);
+        textEdit->setMinimumSize(200, 50);
         textEditLast = textEdit;
         if(i == 0) {
             textEditFirst = textEdit;
