@@ -81,6 +81,8 @@ private slots:
 
         void on_httpCredentialTable_itemChanged(QTableWidgetItem *item);
 
+        void on_genAuthCheck_clicked(bool checked);
+
 private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;

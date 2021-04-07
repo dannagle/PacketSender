@@ -61,6 +61,7 @@ Settings::Settings(QWidget *parent) :
 
 
     loadCredentialTable();
+    on_genAuthCheck_clicked(false);
 
 
     //smart responses...
@@ -780,13 +781,19 @@ void Settings::clearHTTPHeaders(QString host)
 void Settings::on_addCredentialButton_clicked()
 {
     QString host = ui->httpHostEdit->text();
-    QString un = ui->httpUNEdit->text();
-    QString pw = ui->httpPWEdit->text();
+    QString key = ui->httpUNEdit->text();
+    QString value = ui->httpPWEdit->text();
 
-    QString b64 = QString((un+":"+pw).toLatin1().toBase64());
-    QString header = "Authorization: Basic " + b64;
+    QString header = key + ": " + value;
 
+    if(ui->genAuthCheck->isChecked()) {
+        QString b64 = QString((key+":"+value).toLatin1().toBase64());
+        header = "Authorization: Basic " + b64;
+        ui->genAuthCheck->setChecked(false);
+        on_genAuthCheck_clicked(false);
+    }
     saveHTTPHeader(host, header);
+
     loadCredentialTable();
 
 }
@@ -894,5 +901,19 @@ void Settings::on_httpCredentialTable_itemChanged(QTableWidgetItem *item)
 
     ui->httpCredentialTable->clearSelection();
     loadCredentialTable();
+
+}
+
+void Settings::on_genAuthCheck_clicked(bool checked)
+{
+    if(ui->genAuthCheck->isChecked()) {
+        ui->httpKeyLabel->setText("UN/ClientID");
+        ui->httpValueLabel->setText("PW/Access");
+        ui->addCredentialButton->setText("HTTP Auth Header");
+    } else {
+        ui->httpKeyLabel->setText("Key");
+        ui->httpValueLabel->setText("Value");
+        ui->addCredentialButton->setText("HTTP Header");
+    }
 
 }

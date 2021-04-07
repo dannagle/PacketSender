@@ -429,13 +429,37 @@
       <attribute name="title">
        <string>HTTP</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_9">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QCheckBox" name="httpAdjustContentTypeCheck">
          <property name="text">
           <string>Automatically adjust ContentType when sending XML or JSON</string>
          </property>
         </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_19">
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>578</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="genAuthCheck">
+           <property name="text">
+            <string>Generate Auth Header</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_17">
@@ -450,7 +474,7 @@
           <widget class="QLineEdit" name="httpHostEdit"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_21">
+          <widget class="QLabel" name="httpKeyLabel">
            <property name="text">
             <string>Username/ClientID</string>
            </property>
@@ -460,7 +484,7 @@
           <widget class="QLineEdit" name="httpUNEdit"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_22">
+          <widget class="QLabel" name="httpValueLabel">
            <property name="text">
             <string>Password/AccessCode</string>
            </property>
@@ -472,22 +496,18 @@
          <item>
           <widget class="QPushButton" name="addCredentialButton">
            <property name="text">
-            <string>Generate Auth Header</string>
+            <string>HTTP Header</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_8">
-         <item>
-          <widget class="QTableWidget" name="httpCredentialTable">
-           <property name="selectionBehavior">
-            <enum>QAbstractItemView::SelectRows</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QTableWidget" name="httpCredentialTable">
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_18">
