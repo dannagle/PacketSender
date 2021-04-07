@@ -51,6 +51,7 @@ class Settings : public QDialog
         static QHash<QString, QString> getRawHTTPHeaders(QString host);
         static QHash<QString, QStringList> getAllHTTPHeaders();
 
+        static bool detectJSON_XML();
 private slots:
         void on_buttonBox_accepted();
 

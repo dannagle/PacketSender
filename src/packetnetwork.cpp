@@ -853,10 +853,28 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
         }
 
-        if(sendpacket.isPOST()) {
+        QByteArray bytes = sendpacket.getByteArray();
+        QString bytes_trimmed = QString(bytes.trimmed());
 
+        if(sendpacket.isPOST()) {
             request.setHeader(QNetworkRequest::ContentTypeHeader,
                 "application/x-www-form-urlencoded");
+
+            if(Settings::detectJSON_XML()) {
+
+                if ((bytes_trimmed.startsWith("{") && bytes_trimmed.endsWith("}")) ||
+                    (bytes_trimmed.startsWith("[") && bytes_trimmed.endsWith("]")) )  {
+                    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                        "application/json");
+                }
+
+
+                if (bytes_trimmed.startsWith("<") && bytes_trimmed.endsWith(">")) {
+                    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                        "application/xml");
+                }
+            }
+
 
             http->post(request, sendpacket.getByteArray());
 

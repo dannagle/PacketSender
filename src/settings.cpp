@@ -744,6 +744,12 @@ QHash<QString, QString> Settings::getRawHTTPHeaders(QString host)
     return headers;
 }
 
+bool Settings::detectJSON_XML()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    return settings.value("httpAdjustContentTypeCheck", true).toBool();
+}
+
 
 QStringList Settings::getHTTPHeaders(QString host)
 {
