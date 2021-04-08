@@ -128,9 +128,9 @@ void PostDataGen::on_buttonBox_accepted()
         params.addQueryItem(key.first, key.second);
     }
 
-    QDEBUGVAR(params.query());
+    QDEBUGVAR(params.query( QUrl::FullyEncoded));
 
-    emit postGenerated(params.query());
+    emit postGenerated(params.query(QUrl::FullyEncoded));
 }
 
 void PostDataGen::on_addParamButton_clicked()
@@ -140,7 +140,7 @@ void PostDataGen::on_addParamButton_clicked()
 
     QPair<QString,QString> key;
     if(!param.isEmpty()) {
-        key.first = param;
+        key.first =  param;
         key.second = val;
         paramList.append(key);
         generateParamUI();
