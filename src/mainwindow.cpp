@@ -963,6 +963,17 @@ void MainWindow::sendClick(QString packetName)
 void MainWindow::on_savePacketButton_clicked()
 {
 
+
+    if(ui->packetASCIIEdit->hasFocus()) {
+        QDEBUG() << "Forcing ASCII edit trigger";
+        on_packetASCIIEdit_editingFinished();
+    }
+
+    if(ui->packetHexEdit->hasFocus()) {
+        QDEBUG() << "Forcing HEX edit trigger";
+        on_packetHexEdit_editingFinished();
+    }
+
     Packet testPacket;
     testPacket.init();
     testPacket.name = ui->packetNameEdit->text().trimmed();
