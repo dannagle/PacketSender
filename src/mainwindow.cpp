@@ -534,6 +534,7 @@ void MainWindow::updateManager(QByteArray response)
 
     if (!settings.value("checkforUpdatesAsked", false).toBool()) {
         settings.setValue("checkforUpdatesAsked", true);
+        settings.setValue("SW_VERSION", SW_VERSION); // first run. Save the current version.
         QMessageBox msgBox;
         msgBox.setWindowIcon(QIcon(":pslogo.png"));
         msgBox.setWindowTitle("Updates.");
@@ -551,6 +552,25 @@ void MainWindow::updateManager(QByteArray response)
         }
 
         settings.sync();
+    } else {
+
+        //This is not the first run.
+        QString previousVersion = settings.value("SW_VERSION", "unknown").toString();
+
+        if(previousVersion != SW_VERSION) {
+            settings.setValue("SW_VERSION", SW_VERSION);
+            QMessageBox msgBox;
+            msgBox.setWindowIcon(QIcon(":pslogo.png"));
+            msgBox.setWindowTitle("Packet Sender Updated!");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Updated to " SW_VERSION "!\n\nWould you like to read the release notes?");
+            int yesno = msgBox.exec();
+            if (yesno == QMessageBox::Yes) {
+                QDesktopServices::openUrl(QUrl("https://github.com/dannagle/PacketSender/releases/latest"));
+            }
+        }
     }
 
 
