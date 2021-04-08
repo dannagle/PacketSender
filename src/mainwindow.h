@@ -194,6 +194,8 @@ class MainWindow : public QMainWindow
 
         void on_actionNew_Panel_triggered();
 
+        void on_testPacketButton_pressed();
+
 private:
         Ui::MainWindow *ui;
         PacketLogModel packetsLogged;

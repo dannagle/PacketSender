@@ -2532,3 +2532,17 @@ void MainWindow::on_actionNew_Panel_triggered()
              &packetNetwork, SLOT(packetToSend(Packet)));
     gpanel->show();
 }
+
+void MainWindow::on_testPacketButton_pressed()
+{
+    if(ui->packetASCIIEdit->hasFocus()) {
+        QDEBUG() << "Forcing ASCII edit trigger";
+        on_packetASCIIEdit_editingFinished();
+    }
+
+    if(ui->packetHexEdit->hasFocus()) {
+        QDEBUG() << "Forcing HEX edit trigger";
+        on_packetHexEdit_editingFinished();
+    }
+
+}
