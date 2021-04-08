@@ -853,6 +853,11 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
         }
 
+        if(translateMacroSend) {
+            QString data = Packet::macroSwap(sendpacket.asciiString());
+            sendpacket.hexString = Packet::ASCIITohex(data);
+        }
+
         QByteArray bytes = sendpacket.getByteArray();
         QString bytes_trimmed = QString(bytes.trimmed());
 
