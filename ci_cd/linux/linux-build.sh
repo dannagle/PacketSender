@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]
   then
-    echo "Please supply build version (e.g. 8.0.2)"
+    echo "Please supply build version (e.g. 8.0.3)"
     exit
 fi
 BUILD_VERSION="$1";
@@ -14,8 +14,8 @@ qmake PacketSender.pro
 make clean
 make -j4
 ls
-mkdir -p appdir/usr/bin ; 
-mkdir -p appdir/usr/share/icons ; 
+mkdir -p appdir/usr/bin ;
+mkdir -p appdir/usr/share/icons ;
 cd appdir
 cp ../packetsender usr/bin/
 cp ../pslogo256.png packetsender.png
