@@ -556,6 +556,7 @@ void MainWindow::updateManager(QByteArray response)
 
         //This is not the first run.
         QString previousVersion = settings.value("SW_VERSION", "unknown").toString();
+        previousVersion.replace("v", ""); // remove v prefix (not used in all installations)
 
         if(previousVersion != SW_VERSION) {
             settings.setValue("SW_VERSION", SW_VERSION);
