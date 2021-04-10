@@ -798,7 +798,10 @@ QString Packet::macroSwap(QString data)
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
     if (data.contains("{{UNIQUE}}")) {
-        data = data.replace("{{UNIQUE}}", QUuid::createUuid().toString());
+        QString uuidString = QUuid::createUuid().toString();
+        uuidString.replace("{", ""); //do not want brackets in generated string
+        uuidString.replace("}", "");
+        data = data.replace("{{UNIQUE}}", uuidString);
     }
 
     return data;
