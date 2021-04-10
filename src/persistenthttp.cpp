@@ -34,7 +34,7 @@ void PersistentHTTP::init(QByteArray thedata, QUrl url)
     }
     ui->codeView->setReadOnly(true);
 
-    setWindowTitle("Code/Render "+url.toString());
+    setWindowTitle("HTTP "+url.toString());
 
 
     // holds temporary files until window closes
