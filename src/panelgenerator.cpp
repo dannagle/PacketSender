@@ -122,9 +122,24 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
         } else {
 
             bool ok = false;
-            QString linkURL = QInputDialog::getText(this, tr("URL location"),
-                                                 tr("URL location:"), QLineEdit::Normal,
+            QString linkURL = QInputDialog::getText(this, tr("URL or File"),
+                                                 tr("URL or File:"), QLineEdit::Normal,
                                                  "", &ok);
+
+            QDEBUGVAR(linkURL);
+            if(!linkURL.contains("://")) {
+                //This is a file path.
+                if(linkURL.startsWith("\"")) {
+                    linkURL.remove(0, 1);
+                }
+                if(linkURL.endsWith("\"")) {
+                    linkURL.remove(linkURL.size() - 1, 1);
+                }
+                QFileInfo fInfo(linkURL);
+                QDEBUGVAR(fInfo.canonicalFilePath());
+                linkURL = fInfo.canonicalFilePath();
+            }
+
             if (ok && (!linkURL.isEmpty())) {
 
                 QString linkText = QInputDialog::getText(this, tr("Link text"),
@@ -222,10 +237,7 @@ void PanelGenerator::renderViewMode()
         themeTheButton(btn);
         connect(btn, &QPushButton::clicked, this, [btn]{
             QString url = btn->property("w-url").toString();
-            if(!url.startsWith("http")) {
-                url.prepend("http://");
-            }
-            //QDEBUGVAR(url);
+            QDEBUGVAR(url);
             QDesktopServices::openUrl(QUrl(url));
 
         });
