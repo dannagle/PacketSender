@@ -556,17 +556,22 @@ void MainWindow::updateManager(QByteArray response)
 
         //This is not the first run.
         QString previousVersion = settings.value("SW_VERSION", "unknown").toString();
-        previousVersion.replace("v", ""); // remove v prefix (not used in all installations)
+        QString swCheck = SW_VERSION;
 
-        if(previousVersion != SW_VERSION) {
-            settings.setValue("SW_VERSION", SW_VERSION);
+        // remove v prefix (not used in all installations)
+        previousVersion.replace("v", "");
+        swCheck.replace("v", swCheck); // remove v prefix (not used in all installations)
+
+        if(previousVersion != swCheck) {
+            QDEBUG() << "New version detected:" << previousVersion << "!=" << swCheck;
+            settings.setValue("SW_VERSION", swCheck);
             QMessageBox msgBox;
             msgBox.setWindowIcon(QIcon(":pslogo.png"));
             msgBox.setWindowTitle("Packet Sender Updated!");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Updated to " SW_VERSION "!\n\nWould you like to read the release notes?");
+            msgBox.setText("Updated to " + swCheck + "!\n\nWould you like to read the release notes?");
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
                 QDesktopServices::openUrl(QUrl("https://github.com/dannagle/PacketSender/releases/latest"));
