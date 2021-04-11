@@ -560,7 +560,7 @@ void MainWindow::updateManager(QByteArray response)
 
         // remove v prefix (not used in all installations)
         previousVersion.replace("v", "");
-        swCheck.replace("v", swCheck); // remove v prefix (not used in all installations)
+        swCheck.replace("v", ""); // remove v prefix (not used in all installations)
 
         if(previousVersion != swCheck) {
             QDEBUG() << "New version detected:" << previousVersion << "!=" << swCheck;
