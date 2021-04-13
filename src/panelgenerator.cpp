@@ -556,7 +556,7 @@ void PanelGenerator::init(QList<Packet> packets)
 {
     QDEBUGVAR(packets.size());
     panel.buttonList.clear();
-    panel.id = 1;
+    panel.id = 0;
     panel.name = "Test Panel";
     int buttonID = 1;
     foreach(Packet pkt, packets) {
@@ -644,7 +644,7 @@ void PanelGenerator::executeScript(QString script)
             int panelnum = cmdSplit[1].toInt();
             Panel p = Panel::fromDB(panelnum);
             if(p.id == 0) {
-                errorMessages.append("\nInvalid panel id:" + line);
+                errorMessages.append("\nInvalid panel id:" + QString::number(panelnum));
                 continue;
             } else {
                 toLoad = p.id;
@@ -702,7 +702,7 @@ void PanelGenerator::executeScript(QString script)
             if( line.startsWith("panel:")) {
                 int panelnum = cmdSplit[1].toInt();
                 Panel p = Panel::fromDB(panelnum);
-                if(p.id > 0) {
+                if(p.isNotNew()) {
                     QDEBUG() << "load panel" << p.name;
                 } else {
                     QDEBUG() << "unknown panel" << p.name;
@@ -733,23 +733,24 @@ void PanelGenerator::executeScript(QString script)
            if(toLoad > 0) {
                QDEBUG() << "Need to load new panel" << toLoad;
                Panel p = Panel::fromDB(toLoad);
-               if(p.id > 0) {
+               if(p.isNotNew()) {
                    if(isViewing) {
                        bool loadPanel = true;
-#ifndef RENDER_ONLY
-                       loadPanel = false;
                        QMessageBox msgBox;
-                       msgBox.setWindowTitle("Transition Panel");
-                       msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                       msgBox.setDefaultButton(QMessageBox::No);
-                       msgBox.setIcon(QMessageBox::Warning);
-                       msgBox.setText("Tranisition to Panel "+p.name + "?\nYou may lose unsaved changes.");
-                       int yesno = msgBox.exec();
-                       if (yesno == QMessageBox::Yes) {
-                            loadPanel = true;
+
+                       if(panel.isNew()) {
+                           QDEBUGVAR(panel.id);
+                           msgBox.setWindowTitle("Transition Panel");
+                           msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                           msgBox.setDefaultButton(QMessageBox::No);
+                           msgBox.setIcon(QMessageBox::Warning);
+                           msgBox.setText("Tranisition to Panel \""+p.name + "\"?\nThis panel has not been saved. You may lose changes.");
+                           int yesno = msgBox.exec();
+                           if (yesno == QMessageBox::No) {
+                                loadPanel = false;
+                           }
                        }
 
-#endif
 
                        if(loadPanel) {
                            this->panel.copy(p);
@@ -850,8 +851,11 @@ void PanelGenerator::editToggle()
         renderEditMode();
 
     } else {
-
-        parseEditView();
+        if(panel.isNotNew()) {
+            on_actionSave_triggered();
+        } else {
+            parseEditView();
+        }
         renderViewMode();
 
     }
@@ -1055,7 +1059,7 @@ void PanelGenerator::on_actionImport_File_triggered()
             //append
             foreach(Panel p, importList) {
                 QDEBUGVAR(p.id);
-                if(panelMap[p.id].id > 0) {
+                if(panelMap[p.id].isNotNew()) {
                     p.id = Panel::newPanelID(savedList);
                     savedList.append(p);
                 }

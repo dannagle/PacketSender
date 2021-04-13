@@ -731,7 +731,7 @@
   </action>
   <action name="actionNew_Panel">
    <property name="text">
-    <string>New Empty Panel</string>
+    <string>Empty Panel Project</string>
    </property>
   </action>
  </widget>

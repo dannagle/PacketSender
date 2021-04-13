@@ -102,6 +102,16 @@ void Panel::sortButtons()
     std::sort(buttonList.begin(), buttonList.end(), comparePanelButtonsByID);
 }
 
+bool Panel::isNew()
+{
+    return id == 0;
+}
+
+bool Panel::isNotNew()
+{
+    return !isNew();
+}
+
 bool comparePanelsByID(const Panel &panelA, const Panel &panelB)
 {
     return  panelA.id < panelB.id;
