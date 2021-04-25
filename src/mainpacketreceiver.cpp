@@ -9,12 +9,13 @@ MainPacketReceiver::MainPacketReceiver(QObject *parent) :QObject(parent) {
 
     QDEBUG();
 
-    if (!connect(this->packetNetwork, &PacketNetwork::packetSent, this, &MainPacketReceiver::toTrafficLog)) {
-        QDEBUG() << "packetNetwork packetSent false";
-    }
-    QDEBUG();
 
     if (!connect(this->packetNetwork, &PacketNetwork::packetReceived, this, &MainPacketReceiver::toTrafficLog)) {
+        QDEBUG() << "packetNetwork packetReceived false";
+    }
+
+
+    if (!connect(this->packetNetwork, &PacketNetwork::packetSent, this, &MainPacketReceiver::toTrafficLog)) {
         QDEBUG() << "packetNetwork packetReceived false";
     }
     QDEBUG();
@@ -49,5 +50,8 @@ void MainPacketReceiver::send(Packet packetToSend) {
 
 
 void MainPacketReceiver::toTrafficLog(Packet sendpacket) {
-    QDEBUGVAR(sendpacket.asciiString());
+
+    if(sendpacket.toIP.toLower() == "you") {
+        receivedPacket = sendpacket;
+    }
 }

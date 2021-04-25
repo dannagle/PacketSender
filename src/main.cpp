@@ -396,6 +396,7 @@ int main(int argc, char *argv[])
 
 
 
+
         //Create the packet to send.
         if (!name.isEmpty()) {
             sendPacket = Packet::fetchFromDB(name);
@@ -519,7 +520,6 @@ int main(int argc, char *argv[])
             sendPacket.requestPath = Packet::getRequestFromURL(address);
             sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
             if(dataString.size() > 0) {
-                OUTIF() << "Using POST to send data";
                 sendPacket.tcpOrUdp.replace("Get", "Post");
                 sendPacket.hexString = dataString;
             }
@@ -528,16 +528,29 @@ int main(int argc, char *argv[])
             sendPacket.toIP = Packet::getHostFromURL(address);
             sendPacket.persistent = false;
             MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+
+
+            OUTIF() << sendPacket.tcpOrUdp <<" " << address << " " << dataString;
+
             receiver->send(sendPacket);
 
             for(int i=0; i<10; i++) {
                 QApplication::processEvents();
-                QThread::sleep(1);
+                QThread::msleep(500);
                 if(receiver->finished) {
                     break;
                 }
             }
+
             OUTPUT();
+            if(!receiver->receivedPacket.hexString.isEmpty()) {
+                if (quiet) {
+                    out << "\n" << receiver->receivedPacket.asciiString();
+                } else {
+                    out << "\n" << QString(receiver->receivedPacket.getByteArray());
+                }
+            }
+
             return 0;
 
         }

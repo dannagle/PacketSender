@@ -12,6 +12,7 @@ class MainPacketReceiver : public QObject
         bool finished;
         void toTrafficLog(Packet sendpacket);
         void send(Packet packetToSend);
+        Packet receivedPacket;
 
 
     signals:
