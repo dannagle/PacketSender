@@ -92,6 +92,11 @@ class Packet
         static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
         static QByteArray encodingToByteArray(QString encoding, QString data);
 
+        static int getPortFromURL(QString path);
+        static QString getRequestFromURL(QString path);
+        static QString getMethodFromURL(QString path);
+        static QString getHostFromURL(QString path);
+
         static const int PACKET_NAME;
         static const int PACKET_HEX;
         static const int FROM_IP;

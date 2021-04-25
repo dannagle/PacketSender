@@ -18,8 +18,11 @@
 #include <QDeadlineTimer>
 #include <QProcess>
 
+#include "mainpacketreceiver.h"
+
 #include "mainwindow.h"
 #define DEBUGMODE 0
+
 
 
 bool isGuiApp()
@@ -210,6 +213,10 @@ int main(int argc, char *argv[])
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
 
+        // A boolean option with single name
+        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP.");
+        parser.addOption(httpOption);
+
         // An option with a value
         QCommandLineOption nameOption(QStringList() << "n" << "name",
                                       "Send previously saved packet named <name>. Other options overrides saved packet parameters.",
@@ -217,9 +224,9 @@ int main(int argc, char *argv[])
         parser.addOption(nameOption);
 
 
-        parser.addPositionalArgument("address", "Destination address. Optional for saved packet.");
-        parser.addPositionalArgument("port", "Destination port. Optional for saved packet.");
-        parser.addPositionalArgument("data", "Data to send. Optional for saved packet.");
+        parser.addPositionalArgument("address", "Destination address/URL. Optional for saved packet.");
+        parser.addPositionalArgument("port", "Destination port/POST data. Optional for saved packet.");
+        parser.addPositionalArgument("data", "Data to send. Optional for saved packet or HTTP.");
 
 
         // Process the actual command line arguments given by the user
@@ -245,6 +252,7 @@ int main(int argc, char *argv[])
         bool sslNoError = parser.isSet(sslNoErrorOption);
         bool ipv6  = parser.isSet(bindIPv6Option);
         bool ipv4  = parser.isSet(bindIPv4Option);
+        bool http  = parser.isSet(httpOption);
 
         if (sslNoError) ssl = true;
 
@@ -264,11 +272,19 @@ int main(int argc, char *argv[])
         if (argssize >= 1) {
             address = args[0];
         }
-        if (argssize >= 2) {
-            port = args[1].toUInt();
-        }
-        if (argssize >= 3) {
-            data = (args[2]);
+        if(http) {
+            if (argssize >= 2) {
+                data = (args[1]);
+            }
+
+        } else {
+
+            if (argssize >= 2) {
+                port = args[1].toUInt();
+            }
+            if (argssize >= 3) {
+                data = (args[2]);
+            }
         }
 
         bool multicast = PacketNetwork::isMulticast(address);
@@ -301,6 +317,7 @@ int main(int argc, char *argv[])
             ssl = false;
             ipv6 = false;
             ipv4 = true;
+            http = false;
         }
 
 
@@ -310,6 +327,11 @@ int main(int argc, char *argv[])
         }
         if (tcp && ssl) {
             OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
+            tcp = false;
+        }
+
+        if (http && tcp) {
+            OUTIF() << "Warning: both HTTP and TCP set. Defaulting to HTTP.";
             tcp = false;
         }
 
@@ -359,7 +381,7 @@ int main(int argc, char *argv[])
         }
 
 
-        if (!port && name.isEmpty()) {
+        if (!port && name.isEmpty() && !http) {
             OUTIF() << "Warning: Sending to port zero.";
         }
 
@@ -368,7 +390,7 @@ int main(int argc, char *argv[])
             hex = true;
         }
 
-        if (!tcp && !udp && !ssl) {
+        if (!tcp && !udp && !ssl && !http) {
             tcp = true;
         }
 
@@ -386,6 +408,7 @@ int main(int argc, char *argv[])
                 ssl = sendPacket.isSSL();
                 tcp = sendPacket.isTCP();
                 udp = sendPacket.isUDP();
+                http = sendPacket.isHTTP() || sendPacket.isHTTPS();
 
                 if (data.isEmpty()) {
                     data  = sendPacket.hexString;
@@ -424,7 +447,7 @@ int main(int argc, char *argv[])
             QFile dataFile(filePath);
             if (dataFile.open(QFile::ReadOnly)) {
 
-                if (tcp || ssl) {
+                if (tcp || ssl || http) {
                     QByteArray dataArray = dataFile.read(1024 * 1024 * 100);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
@@ -460,6 +483,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
         QDEBUGVAR(ssl);
+        QDEBUGVAR(http);
         QDEBUGVAR(sslNoError);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
@@ -487,12 +511,40 @@ int main(int argc, char *argv[])
             dataString = Packet::ASCIITohex(data);
         }
 
-        if (dataString.isEmpty()) {
+        if (dataString.isEmpty() && !http) {
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
 
+        if(http) {
+            sendPacket.requestPath = Packet::getRequestFromURL(address);
+            sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
+            if(dataString.size() > 0) {
+                OUTIF() << "Using POST to send data";
+                sendPacket.tcpOrUdp.replace("Get", "Post");
+                sendPacket.hexString = dataString;
+            }
+
+            sendPacket.port = Packet::getPortFromURL(address);
+            sendPacket.toIP = Packet::getHostFromURL(address);
+            sendPacket.persistent = false;
+            MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+            receiver->send(sendPacket);
+
+            for(int i=0; i<10; i++) {
+                QApplication::processEvents();
+                QThread::sleep(1);
+                if(receiver->finished) {
+                    break;
+                }
+            }
+            OUTPUT();
+            return 0;
+
+        }
+
+
         QHostAddress addy;
-        if (!addy.setAddress(address)) {
+        if (!addy.setAddress(address) && !http) {
             QHostInfo info = QHostInfo::fromName(address);
             if (info.error() != QHostInfo::NoError) {
                 OUTIF() << "Error: Could not resolve address:" + address;

@@ -1,7 +1,8 @@
 	
 SOURCES += main.cpp\
-    $$PWD/panel.cpp \
+    panel.cpp \
         mainwindow.cpp \
+        mainpacketreceiver.cpp \
     packetnetwork.cpp \
     packet.cpp \
     sendpacketbutton.cpp \
@@ -15,7 +16,7 @@ SOURCES += main.cpp\
     cloudui.cpp \
 	multicastsetup.cpp \
 	udpflooding.cpp \
-    $$PWD/packetlogmodel.cpp \
+    packetlogmodel.cpp \
         postdatagen.cpp \
     panelgenerator.cpp
 
@@ -24,7 +25,8 @@ macx: SOURCES += persistenthttp.cpp
 
 
 HEADERS  += mainwindow.h \
-    $$PWD/panel.h \
+    mainpacketreceiver.h \
+    panel.h \
     packetnetwork.h \
     packet.h \
     globals.h \
@@ -39,7 +41,7 @@ HEADERS  += mainwindow.h \
     cloudui.h \
 	multicastsetup.h \
 	udpflooding.h \
-    $$PWD/packetlogmodel.h \
+    packetlogmodel.h \
         postdatagen.h\
     panelgenerator.h
 

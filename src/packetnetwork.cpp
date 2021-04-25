@@ -27,7 +27,7 @@
 #include "persistenthttp.h"
 #endif
 
-PacketNetwork::PacketNetwork(QWidget *parent) :
+PacketNetwork::PacketNetwork(QObject *parent) :
     QObject(parent)
 {
 
@@ -35,6 +35,7 @@ PacketNetwork::PacketNetwork(QWidget *parent) :
     http = new QNetworkAccessManager(this);
     QDEBUG() << " http connect attempt:" << connect(http, SIGNAL(finished(QNetworkReply*)),
              this, SLOT(httpFinished(QNetworkReply*)));
+    consoleMode = false;
 }
 
 
@@ -708,6 +709,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.receiveBeforeSend = receiveBeforeSend;
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
+    if(consoleMode) {
+        sendpacket.persistent = false;
+    }
 
     if(translateMacroSend) {
         QString data = Packet::macroSwap(sendpacket.asciiString());
@@ -846,6 +850,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         sendpacket.fromIP = "You";
         sendpacket.fromPort = 0;
+        if(consoleMode) {
+            sendpacket.persistent = false;
+        }
 
         http->setProperty("persistent", sendpacket.persistent);
         foreach(QString key, bonusHeaders.keys()) {
@@ -881,9 +888,11 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             }
 
 
+            QDEBUG() << "http post request";
             http->post(request, sendpacket.getByteArray());
 
         } else {
+            QDEBUG() << "http get request";
             http->get(request);
         }
 
@@ -897,6 +906,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 void PacketNetwork::httpError(QNetworkRequest* pReply)
 {
+    QDEBUGVAR(pReply);
 
 }
 

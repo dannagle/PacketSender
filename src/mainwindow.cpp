@@ -849,47 +849,20 @@ void MainWindow::on_requestPathEdit_lostFocus()
 {
     QDEBUG();
 
-
     auto isHttp = ui->udptcpComboBox->currentText().toLower().contains("http");
-    auto isHttps = ui->udptcpComboBox->currentText().toLower().contains("https");
 
     if(isHttp) {
 
         QString quicktestURL =  ui->requestPathEdit->text();
-        QUrl url = QUrl(quicktestURL);
 
-        if(url.isValid() && (quicktestURL.startsWith("http://") || quicktestURL.startsWith("https://"))) {
-
-            int defaultPort = 80;
-            if(quicktestURL.startsWith("https://")) {
-                defaultPort = 443;
-                if(!isHttps) {
-                    ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("HTTPS Get"));
-                    isHttps = true;
-                }
-            } else {
-                if(isHttps) {
-                    ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("HTTP Get"));
-                    isHttps = false;
-                }
-            }
-
-            ui->packetPortEdit->setText(QString::number(url.port(defaultPort)));
-            ui->packetIPEdit->setText((url.host()));
-            auto urlpath = url.path();
-            auto urlquery = url.query();
-            if(!urlquery.isEmpty()) {
-                ui->requestPathEdit->setText(url.path() + "?" + urlquery);
-            } else {
-                ui->requestPathEdit->setText(url.path());
-            }
-
-            quicktestURL =  ui->requestPathEdit->text();
+        ui->packetPortEdit->setText(QString::number(Packet::getPortFromURL(quicktestURL)));
+        ui->packetIPEdit->setText(Packet::getHostFromURL(quicktestURL));
+        ui->requestPathEdit->setText(Packet::getRequestFromURL(quicktestURL));
+        int index = ui->udptcpComboBox->findText(Packet::getMethodFromURL(quicktestURL));
+        if(index >= 0) {
+            ui->udptcpComboBox->setCurrentIndex(index);
         }
-
-
     }
-
 }
 
 void MainWindow::on_packetASCIIEdit_lostFocus()

@@ -20,6 +20,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QUrl>
 #include <time.h>
 
 
@@ -826,6 +827,65 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data)
     //fallback mixed ascii
     QString hex = Packet::ASCIITohex(data);
     return (Packet::HEXtoByteArray(hex));
+
+}
+
+int Packet::getPortFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return -1;
+    }
+    int defaultPort = 80;
+    if(path.startsWith("https")) {
+        defaultPort = 443;
+    }
+
+    return url.port(defaultPort);
+
+}
+
+QString Packet::getRequestFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    QString urlpath = url.path();
+    QString urlquery = url.query();
+
+    if(!urlquery.isEmpty()) {
+        return urlpath + "?" + urlquery;
+    } else {
+        return url.path();
+    }
+
+}
+
+QString Packet::getMethodFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    if(path.startsWith("https")) {
+        return "HTTPS Get";
+    } else {
+        return "HTTP Get";
+    }
+
+}
+
+QString Packet::getHostFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    return url.host();
 
 }
 
