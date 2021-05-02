@@ -800,9 +800,10 @@ int main(int argc, char *argv[])
 
             if(intense) {
                 OUTIF() << "Starting Intense Traffic Generator";
-                out.flush();
+                OUTPUT();
 
-                return intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, nsdelay);
+                int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, nsdelay);
+                return done;
 
             }
 
@@ -930,19 +931,15 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
 {
     QByteArray sendData = Packet::HEXtoByteArray(hexString);
 
-    QDEBUG();
-    if(bps > 0.1) {
+    if(bps > 0.1 && nsdelay == 0) {
         QDEBUG() << "Convert bps to rate for bytes :"  << sendData.size();
         double bytespersecond = bps / 8;
         double totalbytes = (sendData.size() + 20);
         rate = bytespersecond  / totalbytes;
         out << "Calculated rate to send a " << totalbytes << " byte UDP packet at " << bps << " bps is " << rate << " packets/second" << Qt::endl;
-        nsdelay = 0;
-
     }
 
     auto hasstop = stopnum > 0;
-    QDEBUG();
 
     if(hasstop) {
         if(stopnum < 50) {
@@ -950,7 +947,6 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         }
     }
 
-    QDEBUG();
     if(rate > 0 && rate < 0.2) {
         out << "Slowest supported rate is 0.2. Exiting." << Qt::endl;
         return -1;
@@ -961,19 +957,15 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         return -1;
     }
 
-    QDEBUG();
-
     qint64 stopcounter = 0;
     if(hasstop) {
         out << "Will stop sending after " << stopnum << " packets" << Qt::endl;
     }
 
-    QDEBUG();
 
 
     QElapsedTimer totalTime;
     totalTime.start();
-    QDEBUG();
 
     if(rate < 0.2 && nsdelay == 0 && bps < 0.1) {
         out << "Sending as fast as possible. Use Ctrl+C to quit." << Qt::endl;
@@ -984,28 +976,14 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
 
         }
     } else {
-        QDEBUG();
+
+        // Calculate the msdelay.
+        double msdelay = (1000 / rate);
 
         if(rate > 0.2) {
-            QDEBUG();
 
             out << "Sending at a rate of " << rate << " packets/second" << Qt::endl;
-            QDEBUG();
-            double msdelay = (1000 / rate);
-            QDEBUG() <<"HERE IS WHERE IT CRASHES!";
-            // TODO: fix this to support slower values.
             QDEBUGVAR(rate);
-            auto tooslow = static_cast<unsigned long>(rate) < 1;
-            if(tooslow) {
-                out << "Sorry, I cannot send that slow." << Qt::endl;
-                return -1;
-            }
-            QDEBUGVAR(static_cast<unsigned long>(rate));
-            unsigned long msdelayLong = (1000 / static_cast<unsigned long>(rate));
-            QDEBUG();
-
-            QDEBUG();
-
             QDEBUGVAR(msdelay);
             QElapsedTimer elasped;
             elasped.start();
@@ -1019,15 +997,10 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
                         elasped.start();
                         break;
                     } else {
-                        unsigned long tdiff = msdelayLong - static_cast<unsigned long>(elasped.elapsed());
-                        if(tdiff > 30) {
-                            QThread::msleep(tdiff - 5);
-                        } else {
-                            if(tdiff > 1) {
-                                QThread::usleep(tdiff * 1000);
-                            }
+                        double telapsed_diff = msdelay - t * 1.0;
+                        if (telapsed_diff > 5) {
+                            QThread::msleep(5);
                         }
-
                     }
 
                 }
