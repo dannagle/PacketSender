@@ -34,7 +34,7 @@
 
 
 
-int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 nsdelay);
+int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay);
 
 
 
@@ -249,8 +249,8 @@ int main(int argc, char *argv[])
         parser.addOption(numOption);
         QCommandLineOption rateOption(QStringList() << "rate", "Intense traffic. Rate. Ignored in bps option.", "Hertz");
         parser.addOption(rateOption);
-        QCommandLineOption nsdelayOption(QStringList() << "nsdelay", "Intense traffic. Resend delay. Used if rate is 0. Ignored in bps option.", "ns");
-        parser.addOption(nsdelayOption);
+        QCommandLineOption usdelayOption(QStringList() << "usdelay", "Intense traffic. Resend delay. Used if rate is 0. Ignored in bps option.", "microseconds");
+        parser.addOption(usdelayOption);
 
 
 
@@ -286,11 +286,11 @@ int main(int argc, char *argv[])
 
         bool okbps = false;
         bool okrate = false;
-        bool intense = parser.isSet(bpsOption) || parser.isSet(numOption)|| parser.isSet(rateOption) || parser.isSet(nsdelayOption);
+        bool intense = parser.isSet(bpsOption) || parser.isSet(numOption)|| parser.isSet(rateOption) || parser.isSet(usdelayOption);
         double bps = parser.value(bpsOption).toDouble(&okbps);
         qint64 stopnum = parser.value(numOption).toULongLong();
         double rate = parser.value(rateOption).toDouble(&okrate);
-        qint64 nsdelay = parser.value(nsdelayOption).toULongLong();
+        qint64 usdelay = parser.value(usdelayOption).toULongLong();
         if(intense) {
             if (!okrate && !okbps) {
                 OUTIF() << "Warning: Invalide rate and/or bps. Intense traffic will free-run.";
@@ -556,7 +556,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(bps);
         QDEBUGVAR(stopnum);
         QDEBUGVAR(rate);
-        QDEBUGVAR(nsdelay);
+        QDEBUGVAR(usdelay);
 
         //NOW LETS DO THIS!
 
@@ -802,7 +802,7 @@ int main(int argc, char *argv[])
                 OUTIF() << "Starting Intense Traffic Generator";
                 OUTPUT();
 
-                int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, nsdelay);
+                int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
                 return done;
 
             }
@@ -927,11 +927,11 @@ int main(int argc, char *argv[])
 
 
 
-int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 nsdelay)
+int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay)
 {
     QByteArray sendData = Packet::HEXtoByteArray(hexString);
 
-    if(bps > 0.1 && nsdelay == 0) {
+    if(bps > 0.1 && usdelay == 0) {
         QDEBUG() << "Convert bps to rate for bytes :"  << sendData.size();
         double bytespersecond = bps / 8;
         double totalbytes = (sendData.size() + 20);
@@ -967,7 +967,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
     QElapsedTimer totalTime;
     totalTime.start();
 
-    if(rate < 0.2 && nsdelay == 0 && bps < 0.1) {
+    if(rate < 0.2 && usdelay == 0 && bps < 0.1) {
         out << "Sending as fast as possible. Use Ctrl+C to quit." << Qt::endl;
         while(1) {
 
@@ -980,7 +980,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         // Calculate the msdelay.
         double msdelay = (1000 / rate);
 
-        if(rate > 0.2) {
+        if(rate > 0.2 && usdelay == 0) {
 
             out << "Sending at a rate of " << rate << " packets/second" << Qt::endl;
             QDEBUGVAR(rate);
@@ -1011,29 +1011,20 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         } else {
             QDEBUG();
 
-            //do the nsdelay technique of simply counting numbers.
-            //declare volatile to prevent optimization
-            volatile qint64 delay = 0;
-            out << "Sending using nsdelay set to " << nsdelay << Qt::endl;
+            out << "Sending using usdelay set to " << usdelay << Qt::endl;
             while(1) {
                 sock.writeDatagram(sendData, addy, port);
                 STOPSENDCHECK();
 
-                for(delay = 0; delay < nsdelay; delay++) {
-                    if((delay % 1000) == 0) {
-                        QCoreApplication::processEvents();
-                    }
-                }
+                QThread::usleep(usdelay);
+                QCoreApplication::processEvents();
 
             }
 
         }
     }
-    QDEBUG();
 
     auto elasped = totalTime.elapsed();
-    QDEBUG();
-
     out << "Run time: " << elasped <<" milliseconds" << Qt::endl;
     if(stopcounter > 0) {
         qint64 totalbytes = stopcounter * (sendData.size() + 20);
