@@ -172,6 +172,7 @@ void ThreadSender::run()
 
     QUdpSocket *socket = new QUdpSocket();
     socket->bind(0);
+    socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
     sourcePort = socket->localPort();
 

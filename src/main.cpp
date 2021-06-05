@@ -777,6 +777,8 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
+            sock.setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+
             bool bindsuccess = sock.bind(bindIP, bind);
             if(!bindsuccess) {
                 OUTIF() << "Error: Could not bind to " << bindIP.toString() << ":" << bind;
