@@ -936,30 +936,30 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         double bytespersecond = bps / 8;
         double totalbytes = (sendData.size() + 20);
         rate = bytespersecond  / totalbytes;
-        out << "Calculated rate to send a " << totalbytes << " byte UDP packet at " << bps << " bps is " << rate << " packets/second" << Qt::endl;
+        out << "Calculated rate to send a " << totalbytes << " byte UDP packet at " << bps << " bps is " << rate << " packets/second\n";
     }
 
     auto hasstop = stopnum > 0;
 
     if(hasstop) {
         if(stopnum < 50) {
-            out << "Rate calculation is unreliable with low stop number. " << Qt::endl;
+            out << "Rate calculation is unreliable with low stop number. \n";
         }
     }
 
     if(rate > 0 && rate < 0.2) {
-        out << "Slowest supported rate is 0.2. Exiting." << Qt::endl;
+        out << "Slowest supported rate is 0.2. Exiting.\n";
         return -1;
     }
 
     if(bps > 0 && bps < 0.2) {
-        out << "Slowest supported bps is 0.2. Exiting." << Qt::endl;
+        out << "Slowest supported bps is 0.2. Exiting.\n";
         return -1;
     }
 
     qint64 stopcounter = 0;
     if(hasstop) {
-        out << "Will stop sending after " << stopnum << " packets" << Qt::endl;
+        out << "Will stop sending after " << stopnum << " packets\n";
     }
 
 
@@ -968,7 +968,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
     totalTime.start();
 
     if(rate < 0.2 && usdelay == 0 && bps < 0.1) {
-        out << "Sending as fast as possible. Use Ctrl+C to quit." << Qt::endl;
+        out << "Sending as fast as possible. Use Ctrl+C to quit.\n";
         while(1) {
 
             sock.writeDatagram(sendData, addy, port);
@@ -982,7 +982,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
 
         if(rate > 0.2 && usdelay == 0) {
 
-            out << "Sending at a rate of " << rate << " packets/second" << Qt::endl;
+            out << "Sending at a rate of " << rate << " packets/second\n";
             QDEBUGVAR(rate);
             QDEBUGVAR(msdelay);
             QElapsedTimer elasped;
@@ -1011,7 +1011,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         } else {
             QDEBUG();
 
-            out << "Sending using usdelay set to " << usdelay << Qt::endl;
+            out << "Sending using usdelay set to " << usdelay << "\n";
             while(1) {
                 sock.writeDatagram(sendData, addy, port);
                 STOPSENDCHECK();
@@ -1025,7 +1025,7 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
     }
 
     auto elasped = totalTime.elapsed();
-    out << "Run time: " << elasped <<" milliseconds" << Qt::endl;
+    out << "Run time: " << elasped <<" milliseconds\n";
     if(stopcounter > 0) {
         qint64 totalbytes = stopcounter * (sendData.size() + 20);
         double elaspedDouble = static_cast<double>(elasped);
@@ -1033,9 +1033,9 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         double totalbytesDouble = static_cast<double>(totalbytes);
         double effectiverate = (totalbytesDouble) * 8 * 1000  / (elaspedDouble);
         double effectivehertz = (stopcounterDouble) * 1000 / (elaspedDouble );
-        out << "Sent " << stopcounter <<" packets, " << totalbytes << " total bytes " << Qt::endl;
-        out << "Effective rate = " << effectivehertz <<" packets per second" << Qt::endl;
-        out << "Effective bps = " << effectiverate <<" bits per second" << Qt::endl;
+        out << "Sent " << stopcounter <<" packets, " << totalbytes << " total bytes \n";
+        out << "Effective rate = " << effectivehertz <<" packets per second\n";
+        out << "Effective bps = " << effectiverate <<" bits per second\n";
     }
 
     return 0;
