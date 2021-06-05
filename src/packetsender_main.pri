@@ -18,11 +18,8 @@ SOURCES += main.cpp\
 	udpflooding.cpp \
     packetlogmodel.cpp \
         postdatagen.cpp \
-    panelgenerator.cpp
-
-win32: SOURCES += persistenthttp.cpp
-macx: SOURCES += persistenthttp.cpp
-
+    panelgenerator.cpp \
+    persistenthttp.cpp
 
 HEADERS  += mainwindow.h \
     mainpacketreceiver.h \
@@ -43,11 +40,8 @@ HEADERS  += mainwindow.h \
 	udpflooding.h \
     packetlogmodel.h \
         postdatagen.h\
-    panelgenerator.h
-
-win32: HEADERS += persistenthttp.h
-macx: HEADERS += persistenthttp.h
-
+    panelgenerator.h \
+    persistenthttp.h
 
 
 FORMS    += mainwindow.ui \
