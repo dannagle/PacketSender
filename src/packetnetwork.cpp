@@ -232,6 +232,8 @@ void PacketNetwork::init()
                               IPV4_OR_IPV6
                               , udpPort);
 
+        udpSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+
         if ((!bindResult) && (!erroronce)) {
             QDEBUGVAR(udpPort);
             erroronce = true;
