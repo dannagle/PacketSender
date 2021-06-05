@@ -26,9 +26,6 @@ cd ..
 wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt*.AppImage
 unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -bundle-non-qt-libs -unsupported-allow-new-glibc
-./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -appimage  -unsupported-allow-new-glibc
-rm -rf /home/dan/installers/PacketSender_Linux_x64_v$BUILD_VERSION.AppImage || true
-mv src/Packet_Sender*.AppImage /home/dan/installers/
+./linuxdeployqt*.AppImage ./appdir/usr/bin/packetsender -appimage  -bundle-non-qt-libs
 
 #curl --upload-file ./PacketSender-*.AppImage https://transfer.sh/PacketSender-git$(git rev-parse --short HEAD)-x86_64.AppImage
