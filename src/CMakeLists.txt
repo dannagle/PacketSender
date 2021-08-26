@@ -13,7 +13,10 @@ set(
   about.h
   brucethepoodle.h
   mainwindow.h
+  panel.h
+  panelgenerator.h
   persistentconnection.h
+  postdatagen.h
   settings.h
   udpflooding.h
 )
@@ -25,7 +28,9 @@ set(
   cloudui.ui
   mainwindow.ui
   multicastsetup.ui
+  panelgenerator.ui
   persistentconnection.ui
+  postdatagen.ui
   settings.ui
   subnetcalc.ui
   udpflooding.ui
@@ -42,7 +47,10 @@ set(
   packet.cpp
   packetlogmodel.cpp
   packetnetwork.cpp
+  panel.cpp
+  panelgenerator.cpp
   persistentconnection.cpp
+  postdatagen.cpp
   sendpacketbutton.cpp
   settings.cpp
   subnetcalc.cpp
