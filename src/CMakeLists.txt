@@ -12,8 +12,13 @@ set(
   PACKETSENDER_UI_HEADERS
   about.h
   brucethepoodle.h
+  mainpacketreceiver.h
   mainwindow.h
+  panel.h
+  panelgenerator.h
   persistentconnection.h
+  persistenthttp.h
+  postdatagen.h
   settings.h
   udpflooding.h
 )
@@ -25,7 +30,10 @@ set(
   cloudui.ui
   mainwindow.ui
   multicastsetup.ui
+  panelgenerator.ui
   persistentconnection.ui
+  persistenthttp.ui
+  postdatagen.ui
   settings.ui
   subnetcalc.ui
   udpflooding.ui
@@ -37,12 +45,17 @@ set(
   brucethepoodle.cpp
   cloudui.cpp
   main.cpp
+  mainpacketreceiver.cpp
   mainwindow.cpp
   multicastsetup.cpp
   packet.cpp
   packetlogmodel.cpp
   packetnetwork.cpp
+  panel.cpp
+  panelgenerator.cpp
   persistentconnection.cpp
+  persistenthttp.cpp
+  postdatagen.cpp
   sendpacketbutton.cpp
   settings.cpp
   subnetcalc.cpp
