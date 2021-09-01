@@ -34,6 +34,29 @@ namespace Ui
 class MainWindow;
 }
 
+class PreviewFilter : public QObject
+{
+
+public:
+    explicit PreviewFilter(QObject * parent, bool roundAbout)
+        : QObject{parent}, _doRoundTrip{roundAbout}
+    {
+        addTo(parent);
+    }
+
+    void addTo(QObject * obj)
+    {
+        if (obj)
+        {
+            obj->installEventFilter(this);
+        }
+    }
+
+private:
+    bool eventFilter(QObject *watched, QEvent *event);
+    bool _doRoundTrip;
+};
+
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
@@ -212,6 +235,8 @@ private:
         QPushButton * sslServerStatus;
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
+        QAction* previewAction = nullptr;
+        PreviewFilter* previewFilter;
 
 
         QStringList packetTableHeaders;

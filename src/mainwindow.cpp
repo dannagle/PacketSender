@@ -28,6 +28,7 @@
 #include <QSslKey>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QPlainTextEdit>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -181,7 +182,9 @@ MainWindow::MainWindow(QWidget *parent) :
 //   statusBar()->insertPermanentWidget(0, generatePSLink());
 //   statusBar()->insertPermanentWidget(1, generateDNLink());
 
-
+    // handle double-clicking the ASCII window
+    previewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
+    previewFilter = new PreviewFilter{ui->packetHexEdit, false};
 
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
@@ -2555,4 +2558,40 @@ void MainWindow::on_testPacketButton_pressed()
         on_packetHexEdit_editingFinished();
     }
 
+}
+
+bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonDblClick)
+    {
+        QDialog previewDlg;
+        QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
+        QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
+        QPushButton* closeButton = new QPushButton(tr("Close"));
+        QObject::connect(closeButton, &QPushButton::clicked,
+            [&previewDlg]
+            {
+                previewDlg.close();
+            });
+
+        layout->addWidget(editor);
+        layout->addWidget(closeButton);
+
+        previewDlg.setLayout(layout);
+        previewDlg.setModal(true);
+        editor->setReadOnly(true);
+
+        // we have to make a round trip, ascii to hex and then back to ascii with whitespace
+        QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());
+        auto asciidata = _lineEdit->text().simplified(); // ascii text
+        if (_doRoundTrip)
+        {
+            asciidata = Packet::ASCIITohex(asciidata);
+        }
+        editor->setPlainText(Packet::hexToASCII(asciidata, false));
+
+        previewDlg.exec();
+    }
+
+    return QObject::eventFilter(watched, event);
 }
