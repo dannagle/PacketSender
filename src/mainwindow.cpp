@@ -183,8 +183,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //   statusBar()->insertPermanentWidget(1, generateDNLink());
 
     // handle double-clicking the ASCII window
-    previewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
-    previewFilter = new PreviewFilter{ui->packetHexEdit, false};
+    asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
+    hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, false};
 
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);

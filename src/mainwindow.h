@@ -236,7 +236,8 @@ private:
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
         QAction* previewAction = nullptr;
-        PreviewFilter* previewFilter;
+        PreviewFilter* asciiPreviewFilter;
+        PreviewFilter* hexPreviewFilter;
 
 
         QStringList packetTableHeaders;
