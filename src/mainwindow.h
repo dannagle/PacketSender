@@ -235,7 +235,6 @@ private:
         QPushButton * sslServerStatus;
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
-        QAction* previewAction = nullptr;
         PreviewFilter* asciiPreviewFilter;
         PreviewFilter* hexPreviewFilter;
 
