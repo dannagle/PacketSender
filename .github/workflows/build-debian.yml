@@ -1,0 +1,24 @@
+name: build-debian
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: create_tarball
+      run: |
+           cd ..
+           tar --exclude=.git -cvzf packetsender_0.1+testonly.orig.tar.gz PacketSender
+    - name: create_debian_dir
+      run: |
+           cp -a .github/workflows/debian .
+    - name: install_dependencies
+      run: |
+           sudo apt install cmake debhelper devscripts qttools5-dev
+    - name: build
+      run: |
+           debuild --no-lintian --no-sign
