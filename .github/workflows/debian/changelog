@@ -1,0 +1,5 @@
+packetsender (0.1+testonly) unstable; urgency=medium
+
+  * Initial release. (Closes: #958440)
+
+ -- Joao Eriberto Mota Filho <eriberto@debian.org>  Sat, 04 Sep 2021 10:34:04 -0300

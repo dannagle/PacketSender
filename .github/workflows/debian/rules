@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+#export DH_VERBOSE = 1
+
+export QT_SELECT = qt5
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --sourcedirectory=src
+
+override_dh_auto_install:
+	dh_auto_install
+	mv debian/packetsender/usr/bin/PacketSender debian/packetsender/usr/bin/packetsender
