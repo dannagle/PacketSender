@@ -320,7 +320,7 @@ QIcon Packet::getIcon()
 
 }
 
-QString Packet::hexToASCII(QString &hex)
+QString Packet::hexToASCII(QString &hex, bool convertWhitespace)
 {
 
 
@@ -430,7 +430,7 @@ QString Packet::hexToASCII(QString &hex)
         convertInt = hexSplit.at(i).toUInt(&ok, 16);
         // qDebug() << __FILE__ << "/" << __LINE__ << __FUNCTION__  <<"hex at"<< QString::number(i) << "is" << QString::number(convertInt);
         if (ok) {
-            if (convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\') {
+            if ((convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\') || !convertWhitespace) {
                 // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ << "Converted to " << QChar(convertInt);
                 asciiText.append((QChar(convertInt)));
             } else {

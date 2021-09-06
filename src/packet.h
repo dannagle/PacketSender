@@ -73,7 +73,7 @@ class Packet
         bool persistent;
 
         static QString ASCIITohex(QString &ascii);
-        static QString hexToASCII(QString &hex);
+        static QString hexToASCII(QString &hex, bool convertWhitespace = true);
         static QString byteArrayToHex(QByteArray data);
         static QByteArray HEXtoByteArray(QString thehex);
         static QString removeIPv6Mapping(QHostAddress ipv6);
