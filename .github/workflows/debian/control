@@ -1,0 +1,42 @@
+Source: packetsender
+Section: net
+Priority: optional
+Maintainer: Joao Eriberto Mota Filho <eriberto@debian.org>
+Build-Depends: debhelper-compat (= 12), cmake, qttools5-dev
+Standards-Version: 4.5.0
+Homepage: https://packetsender.com/
+Rules-Requires-Root: no
+
+Package: packetsender
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Network utility for sending and receiving TCP, UDP, SSL packets
+ Packet Sender is a utility that sends and receives TCP, UDP and SSL (encrypted
+ TCP) packets on the ports of your choosing. It supports IPv4 and IPv6 and
+ provides a GUI for final users. However, is also possible use Packet Sender in
+ text mode via command line.
+ .
+ Some features:
+   * Can act as client/server to send and receive network traffic.
+   * A payload can be created in ASCII or hex.
+   * Command line mode is available for automation and scripting.
+   * Packet Sender cloud is a disposable resource to be used to publicly
+     display and distribute packets (via an URL) for collaboration, tutorials,
+     end users, etc. Packet Sender may import public packet sets with public
+     URL.
+ .
+ Some uses:
+   * Control network-based devices in ways beyond their original apps.
+   * Test automation (using command line tool and/or hotkeys).
+   * Test network APIs (using the built-in TCP, UDP, SSL clients).
+   * Malware analysis (using the built-in UDP, TCP, SSL servers).
+   * Troubleshoot secure connections (using SSL).
+   * Test network connectivity/firewalls (by having 2 Packet Senders talk
+     to each other).
+   * Stress-test a device (using intense network generator tool).
+   * Tech support (by sending customers a portable Packet Sender with
+     pre-defined settings and packets).
+   * Share/Save/Collaborate using the Packet Sender Cloud service.
+ .
+ Packet Sender is useful for network security, network teaching, pentesters
+ and to test firewall systems.
