@@ -2564,9 +2564,15 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonDblClick)
     {
+
         QDialog previewDlg;
+        previewDlg.setWindowFlags(previewDlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+        previewDlg.setWindowTitle("Preview");
         QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
         QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
+        QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());
+
+        QPushButton* updateButton = new QPushButton(tr("Update"));
         QPushButton* closeButton = new QPushButton(tr("Close"));
         QObject::connect(closeButton, &QPushButton::clicked,
             [&previewDlg]
@@ -2574,21 +2580,35 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
                 previewDlg.close();
             });
 
+        QObject::connect(updateButton, &QPushButton::clicked,
+            [&previewDlg, &editor, &_lineEdit]
+            {
+                QString contents = editor->toPlainText();
+                auto br = Packet::byteArrayToHex(contents.toLatin1());
+                _lineEdit->setText(Packet::hexToASCII(br));
+                previewDlg.close();
+            });
+
         layout->addWidget(editor);
+        // Allow editing if ASCII is focused.
+        if(_doRoundTrip) {
+            layout->addWidget(updateButton);
+        }
         layout->addWidget(closeButton);
 
         previewDlg.setLayout(layout);
         previewDlg.setModal(true);
-        editor->setReadOnly(true);
+        // Read-only if not ASCII (perhaps this could be supported later)
+        editor->setReadOnly(!_doRoundTrip);
 
         // we have to make a round trip, ascii to hex and then back to ascii with whitespace
-        QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());
         auto asciidata = _lineEdit->text().simplified(); // ascii text
         if (_doRoundTrip)
         {
             asciidata = Packet::ASCIITohex(asciidata);
         }
         editor->setPlainText(Packet::hexToASCII(asciidata, false));
+        editor->moveCursor(QTextCursor::End);
 
         previewDlg.exec();
     }
