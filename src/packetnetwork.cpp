@@ -959,6 +959,12 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
 
     QUrl url = pReply->url();
 
+    QVariant status_code = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    if (status_code.isValid()) {
+        // status_code.toInt();
+        httpPacket.errorString = status_code.toString();
+    }
+
     int defaultPort = 80;
     if(url.scheme().toLower().contains("https")) {
         defaultPort = 443;
@@ -972,7 +978,11 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
 
     if(pReply->error() != QNetworkReply::NoError) {
         QDEBUG() << "Ended in error";
-        httpPacket.errorString = pReply->errorString();
+        if(httpPacket.errorString.isEmpty()) {
+            httpPacket.errorString = pReply->errorString();
+        } else {
+            httpPacket.errorString += ", " + pReply->errorString();
+        }
     }
 
 #ifdef RENDER_ONLY

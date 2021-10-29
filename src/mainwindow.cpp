@@ -854,9 +854,10 @@ void MainWindow::on_requestPathEdit_lostFocus()
 
     auto isHttp = ui->udptcpComboBox->currentText().toLower().contains("http");
 
-    if(isHttp) {
+    QString quicktestURL =  ui->requestPathEdit->text().trimmed().toLower();
+    auto checkHTTP = quicktestURL.startsWith("http://") || quicktestURL.startsWith("https://");
 
-        QString quicktestURL =  ui->requestPathEdit->text();
+    if(isHttp && checkHTTP) {
 
         ui->packetPortEdit->setText(QString::number(Packet::getPortFromURL(quicktestURL)));
         ui->packetIPEdit->setText(Packet::getHostFromURL(quicktestURL));
