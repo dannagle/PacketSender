@@ -259,16 +259,18 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection. The SSL server always ignores errors.
 
 # HTTP/HTTPS POST & GET
-Packet Sender now supports sending POST/GET requests via HTTP and HTTPS. 
-Protocol dropdown now includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. Input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
+Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
+Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
 
 ## Sending HTTP/HTTPS GET/POST Requests
 ![](/screenshots/ps_httpgetfields.PNG)
-* Select HTTP POST or HTTPS POST from the protocol dropdown
-* In *Address* field input the web address
+* Select HTTP(S) GET or POST from the protocol dropdown
+* In *Address* field input the domain or IP
 * In *Request* field add the URL path, if needed
-* In *Port* field, input 80 for HTTP or 443 for HTTPS
-* Check *Persistent TCP* to see the response data more clearly (HTTP headers will be removed automatically). 
+* In *Port* field, the default for HTTP is 80 and HTTPS is 443
+* Check *Persistent TCP* to see the server data more clearly (HTTP headers are removed automatically). 
+
+**You may also paste a complete URL in the Request field and Packet Sender will parse and auto-populate the other fields.**
 
 ### For POST Requests:
 * You can manually add in the data into the *Data* field.
