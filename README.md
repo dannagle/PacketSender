@@ -258,6 +258,39 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * Resolve DNS during input. The default is to resolve DNS just before sending.
 * Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection. The SSL server always ignores errors.
 
+# HTTP/HTTPS POST & GET
+Packet Sender now supports sending POST/GET requests via HTTP and HTTPS. 
+Protocol dropdown now includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. Input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
+
+## Sending HTTP/HTTPS GET/POST Requests
+![](/screenshots/ps_httpgetfields.PNG)
+* Select HTTP POST or HTTPS POST from the protocol dropdown
+* In *Address* field input the web address
+* In *Request* field add the URL path, if needed
+* In *Port* field, input 80 for HTTP or 443 for HTTPS
+* Check *Persistent TCP* to see the response data more clearly (HTTP headers will be removed automatically). 
+
+### For POST Requests:
+* You can manually add in the data into the *Data* field.
+	* Format would go: key=value
+	* For multiple paramaters: key=value&key=value&key=value
+* Or you can click on the *Generate Data* button
+
+![Generate Data](/screenshots/ps_http_generatedata.PNG)
+* To add data, input the Key and Value parameters. Click the + button. 
+* Can add multiple parameters with the + button. 
+* Remove parameters by clicking the X button next to the parameter
+* Once parameters are added, click Ok and data will be generated in the Data field. 
+
+### To add Authentication credentials:
+![Authentication](/screenshots/ps_http_authgenerator1.PNG)
+* Go to File -> Settings -> HTTP
+* Check *Generate Auth Header*
+* Input the *Host*, *UN/Client ID*, and *PW/Access
+* Click on *HTTP Auth Header* to generate the authentication header
+
+
+
 ## Documentation (Command Line)
 
 The command line extension used in Windows installations is .com. Using .exe will launch the GUI. Leave off the extension and Windows will choose the correct program. The same executable controls the command line and GUI for Mac and Linux operating systems.
