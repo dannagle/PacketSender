@@ -29,6 +29,8 @@
 
 extern void themeTheButton(QPushButton * button);
 
+bool PanelGenerator::darkMode = false;
+
 PanelGenerator::PanelGenerator(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::PanelGenerator)
@@ -51,7 +53,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     editToggleButton = new QPushButton("Viewing");
     themeTheButton(editToggleButton);
     editToggleButton->setIcon(QIcon(PSLOGO));
-
 
     packetNetwork = nullptr;
 
@@ -373,7 +374,11 @@ void PanelGenerator::themePanelButton(QPushButton *button)
     label->setFont(opensans);
 
     label->setAutoFillBackground(true);
-    label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    if(PanelGenerator::darkMode) {
+        label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    } else {
+        label->setStyleSheet("QLabel { font-size: 20pt; color: black; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    }
     label->setCursor(Qt::PointingHandCursor);
     button->update();
     label->update();
@@ -1099,9 +1104,8 @@ void PanelGenerator::showFileInFolder(const QString &path){
     #elif defined(__APPLE__)    //Code for Mac
         QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to reveal POSIX file \"" + path + "\""});
         QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to activate"});
-    #endif
+#endif
 }
-
 
 void PanelGenerator::buildPackage(bool isMac)
 {

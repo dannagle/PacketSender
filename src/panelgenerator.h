@@ -17,10 +17,12 @@ class PanelGenerator;
 
 class PanelGenerator : public QMainWindow
 {
+
     Q_OBJECT
 
 public:
     explicit PanelGenerator(QWidget *parent = nullptr);
+    static bool darkMode;
     ~PanelGenerator();
 
     void init(QList<Packet> packets);
@@ -33,6 +35,8 @@ public:
     void editLink(QPair<QString, QString> link, int index);
 
     static void showFileInFolder(const QString &path);
+
+
 signals:
     void sendPacket(Packet sendpacket);
 

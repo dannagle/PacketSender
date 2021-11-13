@@ -73,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent) :
     tableActive = false;
     darkMode = settings.value("darkModeCheck", true).toBool();
 
+    PanelGenerator::darkMode = darkMode;
+
 
 
     //seed qrand
