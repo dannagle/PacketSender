@@ -291,7 +291,55 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 * Input the *Host*, *UN/Client ID*, and *PW/Access
 * Click on *HTTP Auth Header* to generate the authentication header
 
+# Panel Generator
+Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
+![](/screenshots/ps_panel_1)
 
+## Loading a Panel
+Panels can be created one of two ways:
+* Clicking **Panels** on the toolbar and selecting either Load Starter Panel or Empty Panel Project
+	* Load Starter Panel will load the Panel assigned as starter. If no panel is set as the starter, an empty panel project will open. 
+* Highlighting 2 or more saved packets and clicking on the **Generate Panel** button (Generate Panel button only appears when multiple packets are selected) 
+![](/screenshots/ps_panel_generate.PNG)
+
+
+## Scripting a Panel
+To begin scripting the buttons on your panel, you will need to open a panel and go to the Editing screen. Once a panel project is opened, check the button in the bottom right corner. If this button says "Viewing", you are on the Viewing screen. Click the button to move the panel to the Editing screen. 
+
+Once at the Editing screen, buttons and scripts can be added to the panel. 
+
+### Button Scripting
+Button scripts will contain the name of the packet to be sent. 
+![](/screenshots/ps_panel_2)
+
+Multiple packets can be set to a button by adding each name on a new line.
+![](/screenshots/ps_panel_5)
+
+Panel Generator supports adding a delay between multiple packets by adding "delay:<number of seconds>" in between packets.
+![](/screenshots/ps_panel_4) 
+
+### Adding Files/URLs
+Panel Generator supports adding buttons that link to locally-stored files or URLs. 
+File/URL buttons can be added while in the Editing screen by clicking the *+* in the bottom right corner. 
+* For files: Go to the file on the PC, right click on the file and select Copy. Paste this into the _URL or File_ textbox in Packet Sender
+* For URLs: Copy the URL into the _URL or File_ textbox in Packet Sender
+	* URLs must begin with http:// or https://
+
+Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
+
+While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button.
+
+When on the Viewing screen, clicking these buttons will launch the URL in the default browser or open the file (with the default program for the file type). 
+
+### Panel Editing/Saving
+While in the Editing screen of a Panel, there will be a toolbar with menus File, Export, Settings, Help. You can save, export, import, load panel projects, and edit the current panel project from this toolbar. 
+
+From Settings, you can do the following:
+* Set Panel Name - select this to rename the current panel project
+* Set Panel ID - select this to change the ID associated with the current panel project
+_Note: Setting an ID in use will replace that panel_
+* Starter Panel - select this to set the current panel project as the starter panel. 
+* Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
 
 ## Documentation (Command Line)
 
