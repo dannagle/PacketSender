@@ -293,6 +293,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 
 # Panel Generator
 Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
+
 ![](/screenshots/ps_panel_1.PNG)
 
 ## Loading a Panel
