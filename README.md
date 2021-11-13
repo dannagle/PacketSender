@@ -293,7 +293,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 
 # Panel Generator
 Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
-![](/screenshots/ps_panel_1)
+![](/screenshots/ps_panel_1.PNG)
 
 ## Loading a Panel
 Panels can be created one of two ways:
@@ -310,13 +310,13 @@ Once at the Editing screen, buttons and scripts can be added to the panel.
 
 ### Button Scripting
 Button scripts will contain the name of the packet to be sent. 
-![](/screenshots/ps_panel_2)
+![](/screenshots/ps_panel_2.PNG)
 
 Multiple packets can be set to a button by adding each name on a new line.
-![](/screenshots/ps_panel_5)
+![](/screenshots/ps_panel_5.PNG)
 
-Panel Generator supports adding a delay between multiple packets by adding "delay:<number of seconds>" in between packets.
-![](/screenshots/ps_panel_4) 
+Panel Generator supports adding a delay between multiple packets by adding "delay:# of seconds" in between packets.
+![](/screenshots/ps_panel_4.PNG) 
 
 ### Adding Files/URLs
 Panel Generator supports adding buttons that link to locally-stored files or URLs. 
