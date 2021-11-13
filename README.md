@@ -330,11 +330,17 @@ File/URL buttons can be added while in the Editing screen by clicking the *+* in
 * For URLs: Copy the URL into the _URL or File_ textbox in Packet Sender
 	* URLs must begin with http:// or https://
 
+
+![](/screenshots/ps_panel_7.PNG) 
+
 Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
 
 While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button.
 
 When on the Viewing screen, clicking these buttons will launch the URL in the default browser or open the file (with the default program for the file type). 
+
+
+![](/screenshots/ps_panel_6.PNG) 
 
 ### Panel Editing/Saving
 While in the Editing screen of a Panel, there will be a toolbar with menus File, Export, Settings, Help. You can save, export, import, load panel projects, and edit the current panel project from this toolbar. 
