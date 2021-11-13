@@ -301,6 +301,7 @@ Panels can be created one of two ways:
 * Clicking **Panels** on the toolbar and selecting either Load Starter Panel or Empty Panel Project
 	* Load Starter Panel will load the Panel assigned as starter. If no panel is set as the starter, an empty panel project will open. 
 * Highlighting 2 or more saved packets and clicking on the **Generate Panel** button (Generate Panel button only appears when multiple packets are selected) 
+
 ![](/screenshots/ps_panel_generate.PNG)
 
 
@@ -311,12 +312,15 @@ Once at the Editing screen, buttons and scripts can be added to the panel.
 
 ### Button Scripting
 Button scripts will contain the name of the packet to be sent. 
+
 ![](/screenshots/ps_panel_2.PNG)
 
 Multiple packets can be set to a button by adding each name on a new line.
+
 ![](/screenshots/ps_panel_5.PNG)
 
 Panel Generator supports adding a delay between multiple packets by adding "delay:# of seconds" in between packets.
+
 ![](/screenshots/ps_panel_4.PNG) 
 
 ### Adding Files/URLs
