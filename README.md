@@ -319,9 +319,14 @@ Multiple packets can be set to a button by adding each name on a new line.
 
 ![](/screenshots/ps_panel_5.PNG)
 
-Panel Generator supports adding a delay between multiple packets by adding "delay:# of seconds" in between packets.
+Panel Generator supports adding a delay between multiple packets by adding "delay:_# of seconds_" in between packets.
 
 ![](/screenshots/ps_panel_4.PNG) 
+
+Panel Generator supports adding a script to load a new panel by adding "panel:_panel name_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
+
+![](/screenshots/ps_panel_8.PNG)
+
 
 ### Adding Files/URLs
 Panel Generator supports adding buttons that link to locally-stored files or URLs. 
