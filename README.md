@@ -279,16 +279,19 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 * Or you can click on the *Generate Data* button
 
 <img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
-* To add data, input the Key and Value parameters. Click the + button. 
+
+* To add data, input the Key and Value parameters. Click the **+** button. 
 * Can add multiple parameters with the + button. 
 * Remove parameters by clicking the X button next to the parameter
 * Once parameters are added, click Ok and data will be generated in the Data field. 
 
 ### To add Authentication credentials:
+
 <img src="/screenshots/ps_http_authgenerator.PNG" width="800" height="339">
+
 * Go to File -> Settings -> HTTP
 * Check *Generate Auth Header*
-* Input the *Host*, *UN/Client ID*, and *PW/Access
+* Input the *Host*, *UN/Client ID*, and *PW/Access*
 * Click on *HTTP Auth Header* to generate the authentication header
 
 # Panel Generator
@@ -340,7 +343,7 @@ File/URL buttons can be added while in the Editing screen by clicking the *+* in
 
 Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
 
-While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button. You can also delete the button by clicking the *X* on the popup. 
+While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button. You can also delete the button by clicking the **X** on the popup. 
 
 ![](/screenshots/ps_http_changeURL.PNG)
 
