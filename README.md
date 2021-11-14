@@ -285,7 +285,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 * Once parameters are added, click Ok and data will be generated in the Data field. 
 
 ### To add Authentication credentials:
-![Authentication](/screenshots/ps_http_authgenerator.PNG width="800" height="339")
+![Authentication](/screenshots/ps_http_authgenerator.PNG)
 * Go to File -> Settings -> HTTP
 * Check *Generate Auth Header*
 * Input the *Host*, *UN/Client ID*, and *PW/Access
