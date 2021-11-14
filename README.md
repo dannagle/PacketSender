@@ -278,14 +278,14 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 	* For multiple paramaters: key=value&key=value&key=value
 * Or you can click on the *Generate Data* button
 
-![Generate Data](/screenshots/ps_http_datagenerator.PNG)
+<img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
 * To add data, input the Key and Value parameters. Click the + button. 
 * Can add multiple parameters with the + button. 
 * Remove parameters by clicking the X button next to the parameter
 * Once parameters are added, click Ok and data will be generated in the Data field. 
 
 ### To add Authentication credentials:
-![Authentication](/screenshots/ps_http_authgenerator.PNG)
+<img src="/screenshots/ps_http_authgenerator.PNG" width="800" height="339">
 * Go to File -> Settings -> HTTP
 * Check *Generate Auth Header*
 * Input the *Host*, *UN/Client ID*, and *PW/Access
@@ -294,7 +294,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 # Panel Generator
 Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
 
-![](/screenshots/ps_panel_1.PNG)
+<img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
 
 ## Loading a Panel
 Panels can be created one of two ways:
@@ -313,19 +313,19 @@ Once at the Editing screen, buttons and scripts can be added to the panel.
 ### Button Scripting
 Button scripts will contain the name of the packet to be sent. 
 
-![](/screenshots/ps_panel_2.PNG)
+<img src="/screenshots/ps_panel_2.PNG" width="400" height="360">
 
 Multiple packets can be set to a button by adding each name on a new line.
 
-![](/screenshots/ps_panel_5.PNG)
+<img src="/screenshots/ps_panel_5.PNG" width="400" height="358">
 
 Panel Generator supports adding a delay between multiple packets by adding "delay:_# of seconds_" in between packets.
 
-![](/screenshots/ps_panel_4.PNG) 
+<img src="/screenshots/ps_panel_4.PNG" width="400" height="359">
 
 Panel Generator supports adding a script to load a new panel by adding "panel:_panel name_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
 
-![](/screenshots/ps_panel_8.PNG)
+<img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
 
 
 ### Adding Files/URLs
