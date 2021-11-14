@@ -326,7 +326,7 @@ Panel Generator supports adding a delay between multiple packets by adding "dela
 
 <img src="/screenshots/ps_panel_4.PNG" width="400" height="359">
 
-Panel Generator supports adding a script to load a new panel by adding "panel:_panel name_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
+Panel Generator supports adding a script to load a new panel by adding "panel:_panel id #_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
 
 <img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
 
