@@ -263,7 +263,7 @@ Packet Sender supports sending POST/GET requests via HTTP and HTTPS.
 Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
 
 ## Sending HTTP/HTTPS GET/POST Requests
-![](/screenshots/ps_httpgetfields.PNG)
+![](/screenshots/ps_http_getfields.PNG)
 * Select HTTP(S) GET or POST from the protocol dropdown
 * In *Address* field input the domain or IP
 * In *Request* field add the URL path, if needed
@@ -278,14 +278,14 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 	* For multiple paramaters: key=value&key=value&key=value
 * Or you can click on the *Generate Data* button
 
-![Generate Data](/screenshots/ps_http_generatedata.PNG)
+![Generate Data](/screenshots/ps_http_datagenerator.PNG)
 * To add data, input the Key and Value parameters. Click the + button. 
 * Can add multiple parameters with the + button. 
 * Remove parameters by clicking the X button next to the parameter
 * Once parameters are added, click Ok and data will be generated in the Data field. 
 
 ### To add Authentication credentials:
-![Authentication](/screenshots/ps_http_authgenerator1.PNG)
+![Authentication](/screenshots/ps_http_authgenerator.PNG)
 * Go to File -> Settings -> HTTP
 * Check *Generate Auth Header*
 * Input the *Host*, *UN/Client ID*, and *PW/Access
@@ -340,7 +340,9 @@ File/URL buttons can be added while in the Editing screen by clicking the *+* in
 
 Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
 
-While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button.
+While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button. You can also delete the button by clicking the *X* on the popup. 
+
+![](/screenshots/ps_http_changeURL.PNG)
 
 When on the Viewing screen, clicking these buttons will launch the URL in the default browser or open the file (with the default program for the file type). 
 
