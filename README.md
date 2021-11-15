@@ -258,6 +258,110 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * Resolve DNS during input. The default is to resolve DNS just before sending.
 * Ignore SSL errors. Packet Sender will note the error and continue with encryption. Otherwise, Packet Sender abandons the connection. The SSL server always ignores errors.
 
+# HTTP/HTTPS POST & GET
+Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
+Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
+
+## Sending HTTP/HTTPS GET/POST Requests
+![](/screenshots/ps_http_getfields.PNG)
+* Select HTTP(S) GET or POST from the protocol dropdown
+* In *Address* field input the domain or IP
+* In *Request* field add the URL path, if needed
+* In *Port* field, the default for HTTP is 80 and HTTPS is 443
+* Check *Persistent TCP* to see the server data more clearly (HTTP headers are removed automatically). 
+
+**You may also paste a complete URL in the Request field and Packet Sender will parse and auto-populate the other fields.**
+
+### For POST Requests:
+* You can manually add in the data into the *Data* field.
+	* Format would go: key=value
+	* For multiple paramaters: key=value&key=value&key=value
+* Or you can click on the *Generate Data* button
+
+<img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
+
+* To add data, input the Key and Value parameters. Click the **+** button. 
+* Can add multiple parameters with the + button. 
+* Remove parameters by clicking the X button next to the parameter
+* Once parameters are added, click Ok and data will be generated in the Data field. 
+
+### To add Authentication credentials:
+
+<img src="/screenshots/ps_http_authgenerator.PNG" width="800" height="339">
+
+* Go to File -> Settings -> HTTP
+* Check *Generate Auth Header*
+* Input the *Host*, *UN/Client ID*, and *PW/Access*
+* Click on *HTTP Auth Header* to generate the authentication header
+
+# Panel Generator
+Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
+
+<img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
+
+## Loading a Panel
+Panels can be created one of two ways:
+* Clicking **Panels** on the toolbar and selecting either Load Starter Panel or Empty Panel Project
+	* Load Starter Panel will load the Panel assigned as starter. If no panel is set as the starter, an empty panel project will open. 
+* Highlighting 2 or more saved packets and clicking on the **Generate Panel** button (Generate Panel button only appears when multiple packets are selected) 
+
+![](/screenshots/ps_panel_generate.PNG)
+
+
+## Scripting a Panel
+To begin scripting the buttons on your panel, you will need to open a panel and go to the Editing screen. Once a panel project is opened, check the button in the bottom right corner. If this button says "Viewing", you are on the Viewing screen. Click the button to move the panel to the Editing screen. 
+
+Once at the Editing screen, buttons and scripts can be added to the panel. 
+
+### Button Scripting
+Button scripts will contain the name of the packet to be sent. 
+
+<img src="/screenshots/ps_panel_2.PNG" width="400" height="360">
+
+Multiple packets can be set to a button by adding each name on a new line.
+
+<img src="/screenshots/ps_panel_5.PNG" width="400" height="358">
+
+Panel Generator supports adding a delay between multiple packets by adding "delay:_# of seconds_" in between packets.
+
+<img src="/screenshots/ps_panel_4.PNG" width="400" height="359">
+
+Panel Generator supports adding a script to load a new panel by adding "panel:_panel id #_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
+
+<img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
+
+
+### Adding Files/URLs
+Panel Generator supports adding buttons that link to locally-stored files or URLs. 
+File/URL buttons can be added while in the Editing screen by clicking the *+* in the bottom right corner. 
+* For files: Go to the file on the PC, right click on the file and select Copy. Paste this into the _URL or File_ textbox in Packet Sender
+* For URLs: Copy the URL into the _URL or File_ textbox in Packet Sender
+	* URLs must begin with http:// or https://
+
+
+![](/screenshots/ps_panel_7.PNG) 
+
+Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
+
+While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button. You can also delete the button by clicking the **X** on the popup. 
+
+![](/screenshots/ps_http_changeURL.PNG)
+
+When on the Viewing screen, clicking these buttons will launch the URL in the default browser or open the file (with the default program for the file type). 
+
+
+![](/screenshots/ps_panel_6.PNG) 
+
+### Panel Editing/Saving
+While in the Editing screen of a Panel, there will be a toolbar with menus File, Export, Settings, Help. You can save, export, import, load panel projects, and edit the current panel project from this toolbar. 
+
+From Settings, you can do the following:
+* Set Panel Name - select this to rename the current panel project
+* Set Panel ID - select this to change the ID associated with the current panel project
+_Note: Setting an ID in use will replace that panel_
+* Starter Panel - select this to set the current panel project as the starter panel. 
+* Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
+
 ## Documentation (Command Line)
 
 The command line extension used in Windows installations is .com. Using .exe will launch the GUI. Leave off the extension and Windows will choose the correct program. The same executable controls the command line and GUI for Mac and Linux operating systems.
