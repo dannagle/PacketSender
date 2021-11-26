@@ -213,6 +213,8 @@ void PanelGenerator::renderViewMode()
     setHeaders();
     addLinkButton->hide();
 
+    panel.sortButtons();
+
     int i = 0;
     foreach(PanelButton pb, panel.buttonList) {
         QPushButton * const btn = new QPushButton(pb.title);
