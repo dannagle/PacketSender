@@ -686,7 +686,7 @@ int main(int argc, char *argv[])
             if (ssl) {
                 sock.waitForEncrypted(5000);
 
-                QList<QSslError> sslErrorsList  = sock.sslErrors();
+                QList<QSslError> sslErrorsList  = sock.sslHandshakeErrors();
 
 
                 if (sslErrorsList.size() > 0) {

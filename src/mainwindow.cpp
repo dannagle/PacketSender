@@ -35,7 +35,7 @@
 #include <QJsonObject>
 
 #include <QStringList>
-
+#include <QRandomGenerator>
 
 #include "brucethepoodle.h"
 #include "settings.h"
@@ -74,12 +74,6 @@ MainWindow::MainWindow(QWidget *parent) :
     darkMode = settings.value("darkModeCheck", true).toBool();
 
     PanelGenerator::darkMode = darkMode;
-
-
-
-    //seed qrand
-    QTime time = QTime::currentTime();
-    qsrand( static_cast<unsigned int>(time.msec()));
 
     maxLogSize = 10000;
 

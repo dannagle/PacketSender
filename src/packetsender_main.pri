@@ -78,6 +78,9 @@ INSTALLS += \
 
 win32:RC_FILE = psicon.rc
 
+# Enable before porting to Qt6
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
+
 
 macx:ICON = psicons.icns
 

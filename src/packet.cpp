@@ -21,8 +21,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrl>
-#include <time.h>
-
+#include <QRandomGenerator>
 
 
 const int Packet::PACKET_NAME = Qt::UserRole +  0;
@@ -784,6 +783,7 @@ QString Packet::macroSwap(QString data)
 {
 
     QDateTime now = QDateTime::currentDateTime();
+    QRandomGenerator * num = QRandomGenerator::global();
 
     if (data.contains("{{TIME}}")) {
         data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
@@ -792,8 +792,7 @@ QString Packet::macroSwap(QString data)
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
     }
     if (data.contains("{{RANDOM}}")) {
-	srand(time(NULL));
-        data = data.replace("{{RANDOM}}", QString::number(rand()));
+        data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
     }
     if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));

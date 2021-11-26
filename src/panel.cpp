@@ -4,6 +4,7 @@
 #include "globals.h"
 #include <QDebug>
 #include <QStandardPaths>
+#include <QRandomGenerator>
 #include <algorithm>
 #include <QHash>
 #include <QPair>
@@ -394,7 +395,8 @@ int Panel::newPanelID(QList<Panel> allPanels)
         }
     }
 
-    return qrand();
+    QRandomGenerator * num = QRandomGenerator::global();
+    return num->bounded(0, 65000);
 
 }
 

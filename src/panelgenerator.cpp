@@ -25,7 +25,6 @@
 
 #include <QtConcurrent/QtConcurrent>
 #include <algorithm>
-#include <random>
 
 extern void themeTheButton(QPushButton * button);
 
@@ -474,7 +473,7 @@ ____________
         vbox->addLayout(hbox);
         vbox->addWidget(textEdit);
         vbox->addWidget(testButton);
-        vbox->setMargin(10);
+        //vbox->setMargin(10);
 
         groupBox->setLayout(vbox);
 
@@ -608,7 +607,7 @@ void PanelGenerator::testButtonClicked()
 
 void PanelGenerator::executeScript(QString script)
 {
-    QStringList linesAll = script.split("\n", QString::SkipEmptyParts);
+    QStringList linesAll = script.split("\n", Qt::SkipEmptyParts);
 
     QString errorMessages = "";
 
@@ -986,7 +985,7 @@ void PanelGenerator::on_actionImport_File_triggered()
     if(loadFile.open(QFile::ReadOnly)) {
         QString contents = QString(loadFile.readAll());
         loadFile.close();
-        QStringList split = contents.split(PACKETS_PANELS_DELIM, QString::SkipEmptyParts);
+        QStringList split = contents.split(PACKETS_PANELS_DELIM, Qt::SkipEmptyParts);
         if(split.size() == 2) {
             packetsjson = split[0];
             panelsjson = split[1];
