@@ -55,6 +55,12 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 
     packetNetwork = nullptr;
 
+
+
+    // not working... not sure if ever will work
+    ui->menuExport->deleteLater();
+
+
 #ifdef RENDER_ONLY
     QDEBUG() << " panel RENDER_ONLY mode";
 #else
@@ -381,6 +387,7 @@ void PanelGenerator::themePanelButton(QPushButton *button)
         label->setStyleSheet("QLabel { font-size: 20pt; color: black; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
     }
     label->setCursor(Qt::PointingHandCursor);
+    button->setCursor(Qt::PointingHandCursor);
     button->update();
     label->update();
     layout->addWidget(label,0,Qt::AlignCenter);
@@ -802,9 +809,8 @@ void PanelGenerator::initAutoLaunchOrEditMode()
 {
     panel.copy(Panel::getLaunchPanel());
     QDEBUGVAR(panel.toString());
-    if(panel.id == 0) {
-        renderEditMode();
-    } else {
+    renderEditMode();
+    if(panel.id > 0) {
         renderViewMode();
     }
 
