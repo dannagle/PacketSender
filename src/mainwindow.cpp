@@ -561,7 +561,25 @@ void MainWindow::updateManager(QByteArray response)
         previousVersion.replace("v", "");
         swCheck.replace("v", ""); // remove v prefix (not used in all installations)
 
-        if(previousVersion != swCheck) {
+        // We only pop the update prompt if it is a newer version we haven't seen.
+        QStringList previousList = previousVersion.split(".");
+        QStringList swList = swCheck.split(".");
+        int swListCount = 1;
+        int prevListCount = 0;
+        if((swList.size() == 3) && (previousList.size() == 3)) {
+            swListCount = swList[0].toUInt() * 10000 + swList[1].toUInt() * 100 + swList[2].toUInt();
+            prevListCount = previousList[0].toUInt() * 10000 + previousList[1].toUInt() * 100 + previousList[2].toUInt();
+            if(swListCount != prevListCount) {
+                if(swListCount > prevListCount) {
+                    QDEBUG() << "New version unseen before. We pop the prompt!";
+                } else {
+                    QDEBUG() << "This is an older version. Do not prompt.";
+                }
+            }
+        }
+
+
+        if((swListCount > prevListCount) && (previousVersion != swCheck)) {
             QDEBUG() << "New version detected:" << previousVersion << "!=" << swCheck;
             settings.setValue("SW_VERSION", swCheck);
             QMessageBox msgBox;

@@ -561,8 +561,8 @@
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
    <addaction name="menuMulitcast"/>
-   <addaction name="menuHelp"/>
    <addaction name="menuPanels"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
