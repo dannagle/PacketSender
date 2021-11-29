@@ -22,6 +22,7 @@
 #include <QJsonObject>
 #include <QUrl>
 #include <QRandomGenerator>
+#include <QStandardPaths>
 
 
 const int Packet::PACKET_NAME = Qt::UserRole +  0;

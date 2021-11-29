@@ -22,6 +22,7 @@
 #include <QSslSocket>
 #include <QSslCipher>
 #include <QSslConfiguration>
+#include <QStandardPaths>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)

@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QtGlobal>
 #include <QSettings>
+#include <QStandardPaths>
 
 #include "globals.h"
 #include "tcpthread.h"

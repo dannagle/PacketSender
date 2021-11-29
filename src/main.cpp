@@ -17,6 +17,7 @@
 #include <QSslCipher>
 #include <QDeadlineTimer>
 #include <QProcess>
+#include <QStandardPaths>
 
 #include "mainpacketreceiver.h"
 

@@ -19,6 +19,8 @@
 #include <QHostInfo>
 #include <QtGlobal>
 #include <QUrlQuery>
+#include <QStandardPaths>
+
 #include "settings.h"
 
 #include "persistentconnection.h"

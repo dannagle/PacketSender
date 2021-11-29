@@ -12,7 +12,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QHostAddress>
-
+#include <QStandardPaths>
 
 
 const QString Settings::SEND_STR = "Send";

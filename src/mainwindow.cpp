@@ -36,6 +36,7 @@
 
 #include <QStringList>
 #include <QRandomGenerator>
+#include <QStandardPaths>
 
 #include "brucethepoodle.h"
 #include "settings.h"
