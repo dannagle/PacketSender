@@ -783,21 +783,19 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
 QString Packet::macroSwap(QString data)
 {
 
-    QDateTime now = QDateTime::currentDateTime();
-    QRandomGenerator * num = QRandomGenerator::global();
 
-    if (data.contains("{{TIME}}")) {
+    if (data.contains("{{TIME}}") || data.contains("{{DATE}}") || data.contains("{{UNIXTIME}}")) {
+        QDateTime now = QDateTime::currentDateTime();
         data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
-    }
-    if (data.contains("{{DATE}}")) {
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
-    }
-    if (data.contains("{{RANDOM}}")) {
-        data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
-    }
-    if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
+
+    if (data.contains("{{RANDOM}}")) {
+        QRandomGenerator * num = QRandomGenerator::global();
+        data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
+    }
+
     if (data.contains("{{UNIQUE}}")) {
         QString uuidString = QUuid::createUuid().toString();
         uuidString.replace("{", ""); //do not want brackets in generated string

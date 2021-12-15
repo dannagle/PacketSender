@@ -179,8 +179,18 @@ void ThreadSender::run()
     packetssent = 0;
 
     QHostAddress resolved = PacketNetwork::resolveDNS(ip);
-    QString data = Packet::ASCIITohex(ascii);
+
+
+
+    // do a swap test to see if it is used.
+    QString swapped = Packet::macroSwap(ascii);
+    QString data = Packet::ASCIITohex(swapped);
     hex = Packet::HEXtoByteArray(data);
+
+    // Note this can be a performance hit. Don't check if not used.
+    bool hasMacros = swapped != ascii;
+
+    QDEBUGVAR(hasMacros);
 
 
     issending = true;
@@ -194,6 +204,13 @@ void ThreadSender::run()
 
     if (full_speed) {
         while (!stopsending) {
+
+            if(hasMacros) {
+                swapped = Packet::macroSwap(ascii);
+                data = Packet::ASCIITohex(swapped);
+                hex = Packet::HEXtoByteArray(data);
+            }
+
             qint64 byteSent = socket->writeDatagram(hex, resolved, port);
             if (byteSent > 0) {
                 packetssent++;
@@ -226,6 +243,13 @@ void ThreadSender::run()
         }
     } else if (delay > 0) {
         while (!stopsending) {
+
+            if(hasMacros) {
+                swapped = Packet::macroSwap(ascii);
+                data = Packet::ASCIITohex(swapped);
+                hex = Packet::HEXtoByteArray(data);
+            }
+
             qint64 byteSent = socket->writeDatagram(hex, resolved, port);
             if (byteSent > 0) {
                 packetssent++;
