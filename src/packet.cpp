@@ -786,7 +786,8 @@ QString Packet::macroSwap(QString data)
 
     if (data.contains("{{TIME}}") || data.contains("{{DATE}}") || data.contains("{{UNIXTIME}}")) {
         QDateTime now = QDateTime::currentDateTime();
-        data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
+        //now = QDateTime::fromSecsSinceEpoch(1609895308);
+        data = data.replace("{{TIME}}", now.toString("hh:mm:ss ap"));
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
