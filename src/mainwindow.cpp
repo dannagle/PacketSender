@@ -1728,7 +1728,7 @@ void MainWindow::refreshTimerTimeout()
 
 
     while (maxLogSize > 0 && packetsLogged.size() > maxLogSize) {
-        packetsLogged.removeFirst();
+        packetsLogged.removeLast();
     }
 
 
