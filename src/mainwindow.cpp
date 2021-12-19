@@ -372,6 +372,32 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //on_actionExport_Packets_JSON_triggered();
 
+
+
+    // QTimer::singleShot(100.0, [this](){ this->timeout();});
+
+    if(settings.value("autolaunchStarterPanelButton", false).toBool()) {
+        statusBarMessage("Auto-launching starter panel.", 3000, true);
+
+    }
+
+    // Delayed to give message time to display, and make sure this is on top.
+    QTimer::singleShot(1500, this, [this] () {
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        if(settings.value("autolaunchStarterPanelButton", false).toBool()) {
+            QDEBUG() << "Auto-launching starter panel";
+            this->on_actionPanel_Generator_triggered();
+        }
+
+    } );
+
+
+
+
+
+
+
+
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
 

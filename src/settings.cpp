@@ -103,7 +103,7 @@ Settings::Settings(QWidget *parent) :
 
     on_smartResponseEnableCheck_clicked();
 
-
+    ui->autolaunchStarterPanelButton->setChecked(settings.value("autolaunchStarterPanelButton", false).toBool());
 
     ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
     ui->httpAdjustContentTypeCheck->setChecked(settings.value("httpAdjustContentTypeCheck", true).toBool());
@@ -321,6 +321,8 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
+
+    settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());
     settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
     settings.setValue("httpAdjustContentTypeCheck", ui->httpAdjustContentTypeCheck->isChecked());
 

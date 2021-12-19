@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -665,6 +665,13 @@
            <widget class="QCheckBox" name="ellipsisCheck">
             <property name="text">
              <string>Use ellipsis [...] for long data entries (helps performance)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="autolaunchStarterPanelButton">
+            <property name="text">
+             <string>Auto-Launch Starter Panel</string>
             </property>
            </widget>
           </item>
