@@ -186,6 +186,14 @@ MainWindow::MainWindow(QWidget *parent) :
     asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, ui->packetASCIIEdit, ui->packetHexEdit};
     hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, ui->packetASCIIEdit, ui->packetHexEdit};
 
+    if (!connect(asciiPreviewFilter, &PreviewFilter::asciiUpdated, this, &MainWindow::on_packetASCIIEdit_lostFocus)) {
+        QDEBUG() << "asciiPreviewFilter connection false";
+    }
+
+    if (!connect(hexPreviewFilter, &PreviewFilter::hexUpdated, this, &MainWindow::on_packetHexEdit_lostFocus)) {
+        QDEBUG() << "hexPreviewFilter connection false";
+    }
+
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     themeTheButton(stopResendingButton);
@@ -888,6 +896,12 @@ void MainWindow::on_packetHexEdit_lostFocus()
     ui->packetHexEdit->setText(quicktestHex);
 
 
+    QTimer::singleShot(100.0, [this](){
+        ui->packetHexEdit->deselect();
+        ui->packetHexEdit->setCursorPosition(ui->packetHexEdit->text().size());
+    });
+
+
 }
 
 
@@ -925,6 +939,12 @@ void MainWindow::on_packetASCIIEdit_lostFocus()
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestASCII2));
     ui->packetASCIIEdit->setToolTip("");
+
+    QTimer::singleShot(100.0, [this](){
+        ui->packetASCIIEdit->deselect();
+        ui->packetASCIIEdit->setCursorPosition(ui->packetASCIIEdit->text().size());
+    });
+
 
 
 }
@@ -2631,19 +2651,12 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
             {
                 QString contents = editor->toPlainText();
                 if(_lineEdit == this->asciiEdit) {
-
-                    this->hexEdit->setText(Packet::ASCIITohex(contents));
-                    QString quicktestASCII2 =  this->hexEdit->text();
-                    this->asciiEdit->setText(Packet::hexToASCII(quicktestASCII2));
-                    this->asciiEdit->setToolTip("");
-                    this->asciiEdit->setCursorPosition(this->asciiEdit->text().size());
+                    this->asciiEdit->setText(contents);
+                    emit asciiUpdated();
                 }
                 if(_lineEdit == this->hexEdit) {
-
-                    this->asciiEdit->setText(Packet::hexToASCII(contents));
-                    this->asciiEdit->setToolTip("");
                     this->hexEdit->setText(contents);
-                    this->hexEdit->setCursorPosition(this->hexEdit->text().size());
+                    emit hexUpdated();
                 }
                 previewDlg.close();
             });

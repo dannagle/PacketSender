@@ -36,12 +36,12 @@ class MainWindow;
 
 class PreviewFilter : public QObject
 {
+    Q_OBJECT
 
 public:
     explicit PreviewFilter(QObject * parent, QLineEdit * asciiEdit, QLineEdit * hexEdit)
         : QObject{parent}, asciiEdit{asciiEdit}, hexEdit{hexEdit}
     {
-        _doRoundTrip = true;
         addTo(parent);
     }
 
@@ -53,9 +53,12 @@ public:
         }
     }
 
+signals:
+    void asciiUpdated();
+    void hexUpdated();
+
 private:
     bool eventFilter(QObject *watched, QEvent *event);
-    bool _doRoundTrip;
     QLineEdit * asciiEdit;
     QLineEdit * hexEdit;
 };

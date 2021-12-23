@@ -326,16 +326,20 @@ QString Packet::hexToASCII(QString &hex, bool convertWhitespace)
 
     QStringList hexSplit;
 
-    //remove invalid characters of popular deliminators...
-    hex = hex.replace(",", " ");
-    hex = hex.replace(".", " ");
-    hex = hex.replace(":", " ");
-    hex = hex.replace(";", " ");
+    //replace popular deliminators...
     hex = hex.replace("0x", " ");
-    hex = hex.replace("x", " ");
     hex = hex.replace("\n", " ");
     hex = hex.replace("\r", " ");
     hex = hex.replace("\t", " ");
+
+
+    //Now replace the rest
+    QString allowedChars = "abcdef 01234567890 ABCDEF";
+    for(int i=0; i<hex.size(); i++) {
+        if(!allowedChars.contains(hex[i])) {
+            hex[i] = ' ';
+        }
+    }
 
     QString hexText = hex.simplified();
     if (hexText.isEmpty()) {
