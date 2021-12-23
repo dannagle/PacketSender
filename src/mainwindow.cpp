@@ -180,8 +180,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //   statusBar()->insertPermanentWidget(1, generateDNLink());
 
     // handle double-clicking the ASCII window
-    asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
-    hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, false};
+    //asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
+    //hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, false};
+
+    asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, ui->packetASCIIEdit, ui->packetHexEdit};
+    hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, ui->packetASCIIEdit, ui->packetHexEdit};
 
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
@@ -2609,10 +2612,11 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 
         QDialog previewDlg;
         previewDlg.setWindowFlags(previewDlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-        previewDlg.setWindowTitle("Preview");
+        previewDlg.setWindowTitle("Multi-line editor");
         QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
         QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
         QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());
+        _lineEdit->deselect();
 
         QPushButton* updateButton = new QPushButton(tr("Update"));
         QPushButton* closeButton = new QPushButton(tr("Close"));
@@ -2623,33 +2627,47 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
             });
 
         QObject::connect(updateButton, &QPushButton::clicked,
-            [&previewDlg, &editor, &_lineEdit]
+            [&previewDlg, &editor, &_lineEdit, this]
             {
                 QString contents = editor->toPlainText();
-                auto br = Packet::byteArrayToHex(contents.toLatin1());
-                _lineEdit->setText(Packet::hexToASCII(br));
+                if(_lineEdit == this->asciiEdit) {
+
+                    this->hexEdit->setText(Packet::ASCIITohex(contents));
+                    QString quicktestASCII2 =  this->hexEdit->text();
+                    this->asciiEdit->setText(Packet::hexToASCII(quicktestASCII2));
+                    this->asciiEdit->setToolTip("");
+                    this->asciiEdit->setCursorPosition(this->asciiEdit->text().size());
+                }
+                if(_lineEdit == this->hexEdit) {
+
+                    this->asciiEdit->setText(Packet::hexToASCII(contents));
+                    this->asciiEdit->setToolTip("");
+                    this->hexEdit->setText(contents);
+                    this->hexEdit->setCursorPosition(this->hexEdit->text().size());
+                }
                 previewDlg.close();
             });
 
         layout->addWidget(editor);
-        // Allow editing if ASCII is focused.
-        if(_doRoundTrip) {
-            layout->addWidget(updateButton);
-        }
+        layout->addWidget(updateButton);
         layout->addWidget(closeButton);
 
         previewDlg.setLayout(layout);
         previewDlg.setModal(true);
-        // Read-only if not ASCII (perhaps this could be supported later)
-        editor->setReadOnly(!_doRoundTrip);
 
         // we have to make a round trip, ascii to hex and then back to ascii with whitespace
-        auto asciidata = _lineEdit->text().simplified(); // ascii text
-        if (_doRoundTrip)
+        auto asciidata = _lineEdit->text();
+        if(_lineEdit == this->hexEdit)
         {
-            asciidata = Packet::ASCIITohex(asciidata);
+            editor->setPlainText(asciidata.simplified() + " ");
         }
-        editor->setPlainText(Packet::hexToASCII(asciidata, false));
+        if(_lineEdit == this->asciiEdit)
+        {
+            //do round trip conversion
+            asciidata = Packet::ASCIITohex(asciidata);
+            auto br = Packet::HEXtoByteArray(asciidata);
+            editor->setPlainText(QString(br));
+        }
         editor->moveCursor(QTextCursor::End);
 
         previewDlg.exec();
