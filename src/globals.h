@@ -42,12 +42,12 @@
 #define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
-//Load local file if it exists
-#define SETTINGSFILE ((QFile::exists("ps_settings.ini")) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
-#define PACKETSFILE ((QFile::exists("packets.ini")) ? ("packets.ini") : ((SETTINGSPATH)  + "packets.ini"))
-#define CERTFILE ((QFile::exists("cert.pem")) ? ("cert.pem") : ((SETTINGSPATH)  + "cert.pem"))
-#define KEYFILE ((QFile::exists("key.pem")) ? ("key.pem") : ((SETTINGSPATH)  + "key.pem"))
-#define PANELSFILE ((QFile::exists("ps_panels.json")) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
+//Load local file if it exists or if portablemode.txt exists
+#define SETTINGSFILE ((QFile::exists("ps_settings.ini") || QFile::exists("portablemode.txt") ) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
+#define PACKETSFILE ((QFile::exists("packets.ini") || QFile::exists("portablemode.txt") ) ? ("packets.ini") : ((SETTINGSPATH)  + "packets.ini"))
+#define CERTFILE ((QFile::exists("cert.pem") || QFile::exists("portablemode.txt") ) ? ("cert.pem") : ((SETTINGSPATH)  + "cert.pem"))
+#define KEYFILE ((QFile::exists("key.pem") || QFile::exists("portablemode.txt") ) ? ("key.pem") : ((SETTINGSPATH)  + "key.pem"))
+#define PANELSFILE ((QFile::exists("ps_panels.json") || QFile::exists("portablemode.txt") ) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
 
 #define NAMEINIKEY "NAMES"
 
