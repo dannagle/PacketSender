@@ -104,7 +104,7 @@ chmod a+x PacketSender
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/ps_GUI.PNG)
+![Packet Sender screenshot](screenshots/ps_GUI.png)
 
 1. A packet has a name, destination address (domain names are default resolved just before sending), port, and data associated with it.
 2. In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
