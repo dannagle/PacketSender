@@ -104,7 +104,7 @@ chmod a+x PacketSender
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
-![Packet Sender screenshot](screenshots/packetsender_ubuntu_screenshot.png)
+![Packet Sender screenshot](screenshots/ps_GUI.PNG)
 
 1. A packet has a name, destination address (domain names are default resolved just before sending), port, and data associated with it.
 2. In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
@@ -140,12 +140,12 @@ Packet Sender's built-in servers are configured to support either IPv4 or IPv6 b
 
 Inside the settings, you may also force Packet Sender's servers to bind to a custom IP address. This can be very useful for systems with multiple NICs or complicated IP setups. Packet Sender will trigger an error if told to bind to an address that does not exist.
 
-![IP Specific binding](screenshots/ip-specific-binding.png)
+![IP Specific binding](screenshots/ip-specific-binding.PNG)
 
 ## IPv4 Subnet Calculator
 
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
-![Packet Sender Subnet Calc](screenshots/packetsender_subnetcalc.png)
+![Packet Sender Subnet Calc](screenshots/packetsender_subnetcalc.PNG)
 
 * The log window (bottom section) will display non-loopback IPv4 and IPv6 addresses found on your computer.
 * On the left side, input the IPv4 address in the IP field. 
@@ -162,7 +162,7 @@ Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sende
 
 _This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)_
 
-![Packet Sender Direct TCP](screenshots/packetsender_ssl.png)
+![Packet Sender Direct TCP](screenshots/packetsender_ssl.PNG)
 
 SSL Notes:
 * The certificate negotiation is handled immediately during connection.
@@ -195,7 +195,7 @@ For when the normal send system is not enough, you can hammer a target IP with p
 
 Please note that this feature is experimental and the metrics displayed have not been fully tested.
 
-![IP Specific binding](screenshots/udp-traffic-sending.png)
+![IP Specific binding](screenshots/udp-traffic-sending.PNG)
 
 # Packet Sender Features
 
@@ -253,7 +253,7 @@ Packet Sender supports up to 5 smart responses.
 
 To enable this feature, go to _File -> Settings_ at the GUI toolbar. Go to the _Smart Responses_ tab and enable the **Send a Smart Response** checkbox.  
 
-![Packet Sender Direct TCP](screenshots/packetsender_smartreply.png)
+![Packet Sender Direct TCP](screenshots/packetsender_smartreply.PNG)
 
 * Packet Sender will compare the packet within the encoding you choose.
 * Packet Sender translates the encoding before sending out the reply.
@@ -277,7 +277,7 @@ Packet Sender will swap the macro with real values before sending.
 
 Packet Sender supports persistent TCP and SSL connections via a separate GUI window. It is enabled by a checkbox on the main window or through the Settings window.
 
-![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.png)
+![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.PNG)
 
 ### Notes on Persistent TCP and SSL:
 * Any number of persistent connections can be created.
