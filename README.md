@@ -140,7 +140,7 @@ Packet Sender's built-in servers are configured to support either IPv4 or IPv6 b
 
 Inside the settings, you may also force Packet Sender's servers to bind to a custom IP address. This can be very useful for systems with multiple NICs or complicated IP setups. Packet Sender will trigger an error if told to bind to an address that does not exist.
 
-![IP Specific binding](screenshots/ip-specific-binding.PNG)
+![IP Specific binding](screenshots/ip-specific-binding.png)
 
 ## IPv4 Subnet Calculator
 
