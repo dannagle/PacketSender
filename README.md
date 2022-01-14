@@ -4,8 +4,21 @@
 
 [![Downloads](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
 
-Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use.
+Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets as well as HTTP/HTTPS requests and panel generation. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use. If you find the app useful, please consider donating/sponsoring so development may continue.
 
+
+
+# Table Of Contents
+* [Sponsors](#sponsors)
+* [GUI](#gui)
+* [Network](#network)
+* [Downloads](#downloads)
+* [Support](#support)
+* [IPv4 Subnet Calculator](#subnetcalculator)
+
+
+
+<a id="sponsors"></a>
 ## Sponsors
 
 Packet Sender would like to thank the following sponsors.
@@ -30,6 +43,7 @@ Packet Sender would like to thank the following sponsors.
 
 
 
+<a id="support"></a>
 ## Support
 
 * Twitter: [@NagleCode](http://twitter.com/NagleCode)
@@ -39,6 +53,7 @@ Packet Sender would like to thank the following sponsors.
 
 *NOTE:* Try (temporarily) disabling your firewall if having problems in Windows.
 
+<a id="downloads"></a>
 # Downloads
 
 ## Desktop Download
@@ -68,7 +83,8 @@ The iOS version is located [on the Apple App Store](https://apps.apple.com/app/i
 
 [![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
-# GUI
+<a id="gui"></a>
+# GUI 
 
 Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
 
@@ -100,6 +116,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 
 
 
+<a id="network"></a>
 # Network Features
 
 ## IPv4, IPv6, Custom IP
@@ -110,6 +127,8 @@ Inside the settings, you may also force Packet Sender's servers to bind to a cus
 
 ![IP Specific binding](screenshots/ip-specific-binding.png)
 
+
+<a id="subnetcalculator"></a>
 ## IPv4 Subnet Calculator
 
 Packet Sender has a built-in subnet calculator. It is under the Tools menu.
