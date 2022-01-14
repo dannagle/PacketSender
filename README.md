@@ -10,7 +10,12 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 
 # Table Of Contents
 * [Sponsors](#sponsors)
+  * Visit [IWL.com](https://www.iwl.com/)
+  * Visit [NagleCode.com](https://dannagle.com/)
+  * Visit [JetBrains.com](https://www.jetbrains.com/)
+
 * [GUI](#gui)
+* [Intense Traffic Generator (GUI)](#udptraffic)
 * [Network](#network)
 * [Downloads](#downloads)
 * [Support](#support)
@@ -22,6 +27,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [HTTP/HTTPS Requests](#http)
 * [Panel Generator](#panelgen)
 * [Command Line Interface](#cli)
+* [Intense Traffic Generator (CLI)](#cliintensetraffic)
 * [Building Packet Sender](#building)
 
 
@@ -32,7 +38,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 
 Packet Sender would like to thank the following sponsors.
 
-[![IWL](screenshots/iwl_logo.png)](https://iwl.com/)
+[![IWL](screenshots/iwl_logo.png)](https://www.iwl.com/)
 <br>IWL is a California company creating computer networking products.
 <br><br><br>
 
@@ -42,10 +48,6 @@ Packet Sender would like to thank the following sponsors.
 
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
 <br>JetBrains provides world-class programming tools to help speed development.
-<br><br><br>
-
-[![GitHub](screenshots/GitHub_Logo200.png)](https://github.com/sponsors/dannagle)
-<br>GitHub provides repositories, downloads, and issue tracking for any code project.
 <br><br><br>
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
@@ -126,6 +128,27 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB.
 
 
+## Hotkeys/Keyboard Shortcuts
+
+The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
+
+The hotkeys and fields are:
+* CTRL + 1 = Name
+* CTRL + 2 = ASCII
+* CTRL + 3 = HEX
+* CTRL + 4 = Address
+* CTRL + 5 = Port
+* CTRL + 6 = Resend Delay
+* CTRL + 7 = Protocol Selection
+* CTRL + 8 = Send (executes)
+
+
+Some notes:
+* The fields are linked to the corresponding hotkey regardless of protocol selection.
+* When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s/h characters to make a selection.
+* If you are going to automate with hotkeys (using tools such at [AutoHotKey](https://www.autohotkey.com/)), you may want to turn off "Restore previous session".
+
+
 
 <a id="network"></a>
 # Network Features
@@ -187,6 +210,8 @@ Packet Sender's multicast support is triggered by attempting to send to a IPv4 m
 
 There is no IPv6 multicast support, though it is on the roadmap. Sponsors wanting IPv6 multicast support are welcome to contact me.
 
+<a id="udptraffic"></a>
+
 ## UDP Traffic Generator (Experimental)
 
 For when the normal send system is not enough, you can hammer a target IP with packets to see if your device can handle it. This can be found in the GUI toolbar at _Tools -> Intense Traffic Generator_
@@ -228,26 +253,6 @@ For Windows users, this directory is the same place as the .exe.
 
 For MAC users, this run-time directory is at `PacketSender.app/Contents/MacOS`.
 If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
-
-## Hotkeys/Keyboard Shortcuts
-
-The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
-
-The hotkeys and fields are:
-* CTRL + 1 = Name
-* CTRL + 2 = ASCII
-* CTRL + 3 = HEX
-* CTRL + 4 = Address
-* CTRL + 5 = Port
-* CTRL + 6 = Resend Delay
-* CTRL + 7 = Protocol Selection
-* CTRL + 8 = Send (executes)
-
-
-Some notes:
-* The fields are linked to the corresponding hotkey regardless of protocol selection.
-* When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s/h characters to make a selection.
-* If you are going to automate with hotkeys (using tools such at [AutoHotKey](https://www.autohotkey.com/)), you may want to turn off "Restore previous session".
 
 
 <a id="smartresponses"></a>
@@ -504,6 +509,9 @@ Response Time:3:24:55.695 pm
 Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
 Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
 ```
+
+
+<a id="cliintensetraffic"></a>
 
 ## Example using CLI Intense Traffic Generator
 The command intense traffic generator works much the same way as the GUI version but it is a bit more accurate, with more control options, (and more intensity!).
