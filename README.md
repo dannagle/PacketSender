@@ -15,6 +15,15 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Downloads](#downloads)
 * [Support](#support)
 * [IPv4 Subnet Calculator](#subnetcalculator)
+* [Packet Sender Cloud](#cloud)
+* [Portable Mode](#portable)
+* [Macros and Smart Responses](#smartresponses)
+* [Persistent TCP and SSL](#persistent)
+* [HTTP/HTTPS Requests](#http)
+* [Panel Generator](#panelgen)
+* [Command Line Interface](#cli)
+* [Building Packet Sender](#building)
+
 
 
 
@@ -75,6 +84,8 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 [![Packet Sender Android](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
 
 -->
+
+
 ### iOS Mobile App
 
 ![Packet Sender logo](screenshots/ios_logo.png)
@@ -186,6 +197,8 @@ Please note that this feature is experimental and the metrics displayed have not
 
 # Packet Sender Features
 
+
+<a id="cloud"></a>
 ## Packet Sender Cloud
 
 Packet sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
@@ -204,6 +217,8 @@ If you are publishing a network API, maintaining a public cloud page is signific
 More information about it can be found at
 https://cloud.packetsender.com/help
 
+
+<a id="portable"></a>
 ## Portable Mode
 
 Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in
@@ -234,6 +249,8 @@ Some notes:
 * When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s/h characters to make a selection.
 * If you are going to automate with hotkeys (using tools such at [AutoHotKey](https://www.autohotkey.com/)), you may want to turn off "Restore previous session".
 
+
+<a id="smartresponses"></a>
 ## Smart Responses
 
 Packet Sender supports up to 5 smart responses. 
@@ -260,6 +277,8 @@ Packet Sender supports these macros when sending responses:
 * {{UNIQUE}} -- Sends a random string. Uses an internal UUID to generate it.
 Packet Sender will swap the macro with real values before sending.
 
+
+<a id="persistent"></a>
 ## Persistent TCP and SSL
 
 Packet Sender supports persistent TCP and SSL connections via a separate GUI window. It is enabled by a checkbox on the main window or through the Settings window.
@@ -279,6 +298,8 @@ Packet Sender supports persistent TCP and SSL connections via a separate GUI win
 
 Persistent connections are not supported via the command line.
 
+
+<a id="http"></a>
 # HTTP/HTTPS POST & GET
 Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
 Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
@@ -315,6 +336,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 * Input the *Host*, *UN/Client ID*, and *PW/Access*
 * Click on *HTTP Auth Header* to generate the authentication header
 
+<a id="panelgen"></a>
 # Panel Generator
 Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
 
@@ -383,6 +405,9 @@ _Note: Setting an ID in use will replace that panel_
 * Starter Panel - select this to set the current panel project as the starter panel. 
 * Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
 
+
+
+<a id="cli"></a>
 # Command Line
 Packet Sender can be used from the command line on your computer. 
 
@@ -500,6 +525,7 @@ packetsender --usdelay 2000000 --name "My Awesome Packet"
 ```
 
 
+<a id="building"></a>
 # Building Packet Sender
 The only dependency is Qt SDK
 
