@@ -15,7 +15,7 @@ Packet Sender would like to thank the following sponsors.
 <br><br><br>
 
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
-<br>NagleCode is a software publisher and development studio. NagleCode licenses the mobile apps.
+<br>NagleCode is a software publisher and development studio. 
 <br><br><br>
 
 [![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
@@ -49,6 +49,9 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 ## Mobile Apps
 The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
 
+<!--
+Not sure when this will be back.
+
 ### Android Mobile App
 ![Android Logo](screenshots/android_logo.png)
 
@@ -56,6 +59,7 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 
 [![Packet Sender Android](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
 
+-->
 ### iOS Mobile App
 
 ![Packet Sender logo](screenshots/ios_logo.png)
@@ -63,42 +67,6 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 [![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
-
-# Building Packet Sender
-The only dependency is Qt SDK
-
-## Building Packet Sender for Windows/MAC
-1. Download the Qt installer from http://www.qt.io/download-open-source/
-1. Let it install MingGW if you don't have a compiler.
-1. Open the project PacketSender.pro
-1. Build! Qt is the only dependency!
-
-The Windows and Mac versions were built using Qt 5.12
-
-## Building Packet Sender for Linux
-Here is the sequence of commands for Ubuntu 16.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard has insight, please let me know, and I'll add your instructions.
-
-If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
-
-```
-sudo apt-get update
-sudo apt-get install qt5-default build-essential
-wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
-tar -xzvf (Version).tar.gz
-cd PacketSender-(Version)/src
-qmake PacketSender.pro
-make
-```
-
-To run use:
-```
-./PacketSender
-```
-
-If it doesn't run, you may need to set it executable
-```
-chmod a+x PacketSender
-```
 
 # GUI
 
@@ -193,7 +161,7 @@ There is no IPv6 multicast support, though it is on the roadmap. Sponsors wantin
 
 For when the normal send system is not enough, you can hammer a target IP with packets to see if your device can handle it. This can be found in the GUI toolbar at _Tools -> Intense Traffic Generator_
 
-Please note that this feature is experimental and the metrics displayed have not been fully tested.
+Please note that this feature is experimental and the metrics displayed have not been fully tested. For a more accurate test, you may want to look at the CLI version of this tool.
 
 ![IP Specific binding](screenshots/udp-traffic-sending.PNG)
 
@@ -406,58 +374,74 @@ For Windows, use the extension .com (`packetsender.com`) to use the command line
 
 For Linux, the command line system in Packet Sender follows the same pattern as other Linux utilities. It has a long name (such as --version) and a short name (such as -v). These options can be arranged in any order and Packet Sender will parse them correctly. The last 3 options are positional and must appear last. They are IP, port, and data. These last options are optional if using a stored packet.
 
-    packetsender --help
-    Usage: packetsender [options] address port data
-    Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode
-    See https://PacketSender.com/ for more information.
+```
+packetsender --help
+Usage: packetsender [options] address port data
+Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode
+See https://PacketSender.com/ for more information.
 
-    Options:
-    -?, -h, --help     Displays this help.
-    -v, --version      Displays version information.
-    -q, --quiet        Quiet mode. Only output received data.
-    -x, --hex          Parse data-to-send as hex (default).
-    -a, --ascii        Parse data-to-send as mixed-ascii (like the GUI).
-    -A, --ASCII        Parse data-to-send as pure ascii (no \xx translation).
-    -w, --wait <ms>    Wait up to <milliseconds> for a response after sending.
-                          Zero means do not wait (Default).
-    -f, --file <path>  Send contents of specified path. Max 10 MiB for UDP, 100
-                           MiB for TCP/SSL.
-    -b, --bind <port>  Bind port. Default is 0 (dynamic).
-    -6, --ipv6         Force IPv6. Same as -B "::". Default is IP:Any.
-    -4, --ipv4         Force IPv4.    Same as -B "0.0.0.0". Default is IP:Any.
-    -B, --bindip <IP>  Bind custom IP. Default is IP:Any.
-    -t, --tcp          Send TCP (default).
-    -s, --ssl          Send SSL and ignore errors.
-    -S, --SSL          Send SSL and stop for errors.
-    -u, --udp          Send UDP.
-    -n, --name <name>  Send previously saved packet named <name>. Other options
-                           overrides saved packet parameters.
+Options:
+  -?, -h, --help            Displays help on commandline options.
+  --help-all                Displays help including Qt specific options.
+  -v, --version             Displays version information.
+  -q, --quiet               Quiet mode. Only output received data.
+  -x, --hex                 Parse data-to-send as hex (default).
+  -a, --ascii               Parse data-to-send as mixed-ascii (like the GUI).
+  -A, --ASCII               Parse data-to-send as pure ascii (no \xx
+                            translation).
+  -w, --wait <ms>           Wait up to <milliseconds> for a response after
+                            sending. Zero means do not wait (Default).
+  -f, --file <path>         Send contents of specified path. Max 10 MiB for
+                            UDP, 100 MiB for TCP/SSL.
+  -b, --bind <port>         Bind port. Default is 0 (dynamic).
+  -6, --ipv6                Force IPv6. Same as -B "::". Default is IP:Any.
+  -4, --ipv4                Force IPv4.  Same as -B "0.0.0.0". Default is
+                            IP:Any.
+  -B, --bindip <IP>         Bind custom IP. Default is IP:Any.
+  -t, --tcp                 Send TCP (default).
+  -s, --ssl                 Send SSL and ignore errors.
+  -S, --SSL                 Send SSL and stop for errors.
+  -u, --udp                 Send UDP.
+  --http                    Send HTTP.
+  -n, --name <name>         Send previously saved packet named <name>. Other
+                            options overrides saved packet parameters.
+  --bps <bps>               Intense traffic. Calculate rate based on value of
+                            bits per second.
+  --num <number>            Intense traffic. Number of packets to send. Default
+                            unlimited.
+  --rate <Hertz>            Intense traffic. Rate. Ignored in bps option.
+  --usdelay <microseconds>  Intense traffic. Resend delay. Used if rate is 0.
+                            Ignored in bps option.
 
-    Arguments:
-    address            Destination address. Optional for saved packet.
-    port               Destination port. Optional for saved packet.
-    data               Data to send. Optional for saved packet.
-
+Arguments:
+  address                   Destination address/URL. Optional for saved packet.
+  port                      Destination port/POST data. Optional for saved
+                            packet.
+  data                      Data to send. Optional for saved packet or HTTP.
+```
 ## Example CLI
 The CLI follows the same format between Windows, Linux, and MAC. 
 
 The format is: `packetsender [options] address port data`
 
-    packetsender -taw 500 mirrors.xmission.com 21 "USER anonymous\r\nPASS chrome@example.com\r\n"
-    TCP (65505)://mirrors.xmission.com:21 55 53 45 52 20 61 6e 6f 6e 79 6d 6f 75 73 0d 0a 50 41 53 53 20 63 68 72 6f 6d 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 0d 0a
-    Response Time:5:51:37.042 pm
-    Response HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
-    Response ASCII:220-Welcome to XMission Internet...
+```
+packetsender -taw 500 mirrors.xmission.com 21 "USER anonymous\r\nPASS chrome@example.com\r\n"
+TCP (65505)://mirrors.xmission.com:21 55 53 45 52 20 61 6e 6f 6e 79 6d 6f 75 73 0d 0a 50 41 53 53 20 63 68 72 6f 6d 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 0d 0a
+Response Time:5:51:37.042 pm
+Response HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
+Response ASCII:220-Welcome to XMission Internet...
+```
 
 ## Examples binding to port and custom IP, IPv4, or IPv6
 
 Packet Sender command line can bind to custom ports to force IPv4/6 modes or multiple NIC using the -B option.
-
-    packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
-    packetsender -taw 3000 192.168.0.201 5005 "Hello\r"
-    packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hello\r"
-    packetsender -B fe80::a437:399a:3091:266a%ethernet_32769 -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
-    packetsender -B fe80::a437:399a:3091:266a -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+```
+packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+packetsender -taw 3000 192.168.0.201 5005 "Hello\r"
+packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hello\r"
+packetsender -B fe80::a437:399a:3091:266a%ethernet_32769 -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+packetsender -B fe80::a437:399a:3091:266a -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+```
 
 ## Example CLI using SSL and ignoring errors
 
@@ -466,16 +450,75 @@ The command line has the option to ignore or abandon on SSL errors. The default 
 * Use -s option to send SSL and ignore errors.
 * Use -S option to send SSL and stop for errors
 
+```
+packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
+SSL Error: The certificate has expired
+SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
+Cipher: Encrypted with AES(128)
 
-    packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
-    SSL Error: The certificate has expired
-    SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
-    Cipher: Encrypted with AES(128)
+Response Time:3:24:55.695 pm
+Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
+Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
+```
 
-    Response Time:3:24:55.695 pm
-    Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
-    Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
-    
+## Example using CLI Intense Traffic Generator
+The command intense traffic generator works much the same way as the GUI version but it is a bit more accurate, with more control options, (and more intensity!).
+
+See below for examples how to use it. Note that these calculations are "Best Effort". It does OK, but processor spikes or various network hiccups can throw it off. The threading is not real-time, and is not super-smart with its attempts to compensate.
+
+* Resend "My Awesome Packet" at a rate of 20 Hz
+* Resend "My Awesome Packet" at a bps of 2000 baud
+* Resend "My Awesome Packet" as fast as possible
+* Resend "My Awesome Packet" with 2000000 microsecond delay between each packet
+
+**Note: For Windows, use the ".com" build, so each example would be packetsender.com**
+
+```
+packetsender --rate 20 --name "My Awesome Packet"
+packetsender --bps 2000 --name "My Awesome Packet"
+packetsender --rate 0 --name "My Awesome Packet"
+packetsender --usdelay 2000000 --name "My Awesome Packet"
+```
+
+
+# Building Packet Sender
+The only dependency is Qt SDK
+
+## Building Packet Sender for Windows/MAC
+1. Download the Qt installer from http://www.qt.io/download-open-source/
+1. Let it install MingGW if you don't have a compiler.
+1. Open the project PacketSender.pro
+1. Build! Qt is the only dependency!
+
+The Windows and Mac versions were built using Qt 5.12. Packet Sender does support Qt 6, however it does not
+support cmake.
+
+## Building Packet Sender for Linux
+Here is the sequence of commands for Ubuntu 16.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard has insight, please let me know, and I'll add your instructions.
+
+If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
+
+```bash
+sudo apt-get update
+sudo apt-get install qt5-default build-essential
+wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
+tar -xzvf (Version).tar.gz
+cd PacketSender-(Version)/src
+qmake PacketSender.pro
+make
+```
+
+To run use:
+```
+./PacketSender
+```
+
+If it doesn't run, you may need to set it executable
+```
+chmod a+x PacketSender
+```
+
+
 # Enhancements/Requests
 
 Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
