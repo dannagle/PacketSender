@@ -7,6 +7,7 @@ SOURCES += main.cpp\
     packet.cpp \
     sendpacketbutton.cpp \
     brucethepoodle.cpp \
+    irisandmarigold.cpp \
     tcpthread.cpp \
     persistentconnection.cpp \
     settings.cpp \
@@ -29,6 +30,7 @@ HEADERS  += mainwindow.h \
     globals.h \
     sendpacketbutton.h \
     brucethepoodle.h \
+    irisandmarigold.h \
     tcpthread.h \
     persistentconnection.h \
     settings.h \
@@ -46,6 +48,7 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
+    irisandmarigold.ui \
     persistentconnection.ui \
     settings.ui \
     about.ui \

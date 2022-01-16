@@ -39,6 +39,7 @@
 #include <QStandardPaths>
 
 #include "brucethepoodle.h"
+#include "irisandmarigold.h"
 #include "settings.h"
 #include "about.h"
 #include "subnetcalc.h"
@@ -287,11 +288,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    //Bruce is my pet poodle.
+    //Bruce was my wonderful poodle rescue. 2008-2021
     //Dog easter egg.  CTRL D, O, G.
     //             or  CMD D, O, G.
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D, Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G), this);
-    QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcut, SIGNAL(activated()), this, SLOT(poodlepic()));
+    QShortcut *shortcutDog = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D, Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G), this);
+    QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcutDog, SIGNAL(activated()), this, SLOT(poodlepic()));
+
+
+    //Iris and Marigold are my rescue puppies.
+    //Pup easter egg.  CTRL P, U, P.
+    //             or  CMD P, U, P.
+    QShortcut *shortcutPup = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P, Qt::CTRL + Qt::Key_U, Qt::CTRL + Qt::Key_P), this);
+    QDEBUG() << ": puppy easter egg Connection attempt " << connect(shortcutPup, SIGNAL(activated()), this, SLOT(puppypic()));
+
 
     QShortcut *field1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this);
     QShortcut *field2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this);
@@ -1491,6 +1500,14 @@ void MainWindow::poodlepic()
 
     BruceThePoodle *bruce = new BruceThePoodle(this);
     bruce->show();
+}
+
+void MainWindow::puppypic()
+{
+    QDEBUG();
+
+    IrisAndMarigold *pups = new IrisAndMarigold(this);
+    pups->show();
 }
 
 void MainWindow::shortcutkey1()

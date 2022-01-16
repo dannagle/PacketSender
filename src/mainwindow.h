@@ -105,6 +105,7 @@ class MainWindow : public QMainWindow
 
         //shortcut keys... would be better if used lambda
         void poodlepic();
+        void puppypic();
         void shortcutkey1();
         void shortcutkey2();
         void shortcutkey3();
