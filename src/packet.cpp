@@ -21,9 +21,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUrl>
-#include <QRandomGenerator>
 #include <QStandardPaths>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+#else
+#include <QRandomGenerator>
+#endif
 
 const int Packet::PACKET_NAME = Qt::UserRole +  0;
 const int Packet::PACKET_HEX = Qt::UserRole + 1;
@@ -797,8 +801,16 @@ QString Packet::macroSwap(QString data)
     }
 
     if (data.contains("{{RANDOM}}")) {
+
+
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        data = data.replace("{{RANDOM}}", QString::number(rand()));
+#else
         QRandomGenerator * num = QRandomGenerator::global();
         data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
+
+#endif
     }
 
     if (data.contains("{{UNIQUE}}")) {

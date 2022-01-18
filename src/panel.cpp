@@ -4,7 +4,14 @@
 #include "globals.h"
 #include <QDebug>
 #include <QStandardPaths>
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+#else
 #include <QRandomGenerator>
+#endif
+
+
 #include <algorithm>
 #include <QHash>
 #include <QPair>
@@ -395,8 +402,14 @@ int Panel::newPanelID(QList<Panel> allPanels)
         }
     }
 
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        return rand();
+#else
     QRandomGenerator * num = QRandomGenerator::global();
     return num->bounded(0, 65000);
+
+#endif
 
 }
 

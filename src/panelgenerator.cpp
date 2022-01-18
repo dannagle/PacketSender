@@ -616,7 +616,16 @@ void PanelGenerator::testButtonClicked()
 
 void PanelGenerator::executeScript(QString script)
 {
-    QStringList linesAll = script.split("\n", Qt::SkipEmptyParts);
+
+
+    QStringList linesAll = script.split("\n",
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+                                        QString::SplitBehavior::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+                                        );
 
     QString errorMessages = "";
 
@@ -993,7 +1002,16 @@ void PanelGenerator::on_actionImport_File_triggered()
     if(loadFile.open(QFile::ReadOnly)) {
         QString contents = QString(loadFile.readAll());
         loadFile.close();
-        QStringList split = contents.split(PACKETS_PANELS_DELIM, Qt::SkipEmptyParts);
+        QStringList split = contents.split(PACKETS_PANELS_DELIM,
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+                                       QString::SplitBehavior::SkipEmptyParts
+#else
+                                       Qt::SkipEmptyParts
+#endif
+                                           );
+
         if(split.size() == 2) {
             packetsjson = split[0];
             panelsjson = split[1];

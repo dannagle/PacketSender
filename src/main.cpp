@@ -140,6 +140,10 @@ int main(int argc, char *argv[])
 
 
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    srand(time(NULL));
+#endif
+
     if ((argc > 1) && !gatekeeper) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
@@ -687,7 +691,14 @@ int main(int argc, char *argv[])
             if (ssl) {
                 sock.waitForEncrypted(5000);
 
-                QList<QSslError> sslErrorsList  = sock.sslHandshakeErrors();
+                QList<QSslError> sslErrorsList  = sock
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
+
 
 
                 if (sslErrorsList.size() > 0) {

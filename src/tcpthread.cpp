@@ -428,7 +428,13 @@ void TCPThread::run()
 
             QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
 
-            QList<QSslError> sslErrorsList  = clientConnection->sslHandshakeErrors();
+            QList<QSslError> sslErrorsList  = clientConnection->
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                    sslErrors();
+#else
+                    sslHandshakeErrors();
+#endif
+
             Packet errorPacket = sendPacket;
             if (sslErrorsList.size() > 0) {
                 QSslError sError;
@@ -562,7 +568,13 @@ void TCPThread::run()
         sock.startServerEncryption();
         sock.waitForEncrypted();
 
-        QList<QSslError> sslErrorsList  = sock.sslHandshakeErrors();
+        QList<QSslError> sslErrorsList  = sock
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
 
         Packet errorPacket;
         errorPacket.init();
@@ -620,7 +632,16 @@ void TCPThread::run()
         }
 
 
-        QDEBUG() << "Errors" << sock.sslHandshakeErrors();
+        QDEBUG() << "Errors" << sock
+
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
+
+
 
     }
 
