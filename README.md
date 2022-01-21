@@ -72,11 +72,13 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 
 ![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
 
-## Mobile Apps
-The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
 
 <!--
 Not sure when this will be back.
+
+## Mobile Apps
+The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
+
 
 ### Android Mobile App
 ![Android Logo](screenshots/android_logo.png)
@@ -88,7 +90,7 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 -->
 
 
-### iOS Mobile App
+## iOS Mobile App
 
 ![Packet Sender logo](screenshots/ios_logo.png)
 
@@ -112,15 +114,14 @@ Packet Sender is identical for all the desktop versions. The only difference is 
 * A resend value of "0" means it is a single-shot packet.
 * During packet resending, there will be a button to cancel all resends.
 * Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
-* Select multiple packets to enable "Multi-Send". Selected packets are shown in a quick-send area above the traffic log.
-* An optional response can be sent. The same response is used for TCP and UDP.
-* Fields can be rearranged by drag-and-drop in the settings menu.
+* An optional response can be sent. The same response is used for TCP,  UDP, and SSL.
 * For IPv6 sending, you will also need the scope ID.
 * Packet Sender supports mixed ASCII and HEX notation:
+  * Double-click either field to bring up the multi-line editor
   * \XX gets translated to XX in hex
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
-    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct.
+    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct. It is very fault-tolerent.
     * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
@@ -155,7 +156,7 @@ Some notes:
 
 ## IPv4, IPv6, Custom IP
 
-Packet Sender's built-in servers are configured to support either IPv4 or IPv6 but not both at the same time. For clients, Packet Sender GUI and CLI will seamlessly switch between the two modes upon sending (scope ID is needed for IPv6). Click the IPv4 / IPv6 toggle on the bottom right to switch between the two.
+Packet Sender's built-in servers are configured to support either IPv4 or IPv6 but not both at the same time. For clients, Packet Sender GUI and CLI will seamlessly switch between the two modes upon sending (scope ID may be needed for IPv6). Click the IPv4 / IPv6 toggle on the bottom right to switch between the two.
 
 Inside the settings, you may also force Packet Sender's servers to bind to a custom IP address. This can be very useful for systems with multiple NICs or complicated IP setups. Packet Sender will trigger an error if told to bind to an address that does not exist.
 
@@ -246,10 +247,10 @@ https://cloud.packetsender.com/help
 <a id="portable"></a>
 ## Portable Mode
 
-Packet Sender has a "portable" mode. At launch, it will look for `packets.ini` and `ps_settings.ini` in
-its run-time directory. For the SSL server, it will look for `ps.key` and `ps.pem`.
+Packet Sender has a "portable" mode. At launch, it will look for `portablemode.txt` and populate any missing settings files in that run-time directory. These files are  `packets.ini`, `ps_settings.ini`, `ps.key`, and `ps.pem`.
+You may also have some files portable and the other in their standard location by removing portablemode.txt.
 
-For Windows users, this directory is the same place as the .exe.
+The run-time directory Windows users is the same place as the .exe.
 
 For MAC users, this run-time directory is at `PacketSender.app/Contents/MacOS`.
 If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
@@ -269,7 +270,7 @@ To enable this feature, go to _File -> Settings_ at the GUI toolbar. Go to the _
 * The available encodings are:
   * Mixed ASCII -- The standard Packet Sender way of encoding ASCII along with non-printable characters
   * HEX -- Packet Sender's normal HEX encoding
-  * [EBCDIC](https://en.wikipedia.org/wiki/EBCDIC) (deprecated) -- An encoding used mostly by IBM mainframes. The input field is normal Mixed ASCII and is translated when performing the comparison and sending.
+
 
 ## Macros
 
