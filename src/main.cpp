@@ -693,7 +693,7 @@ int main(int argc, char *argv[])
 
                 QList<QSslError> sslErrorsList  = sock
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                             .sslErrors();
 #else
                             .sslHandshakeErrors();
