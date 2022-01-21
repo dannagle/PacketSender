@@ -12,6 +12,7 @@ set(
   PACKETSENDER_UI_HEADERS
   about.h
   brucethepoodle.h
+  irisandmarigold.h
   mainpacketreceiver.h
   mainwindow.h
   panel.h
@@ -27,6 +28,7 @@ set(
   PACKETSENDER_UIS
   about.ui
   brucethepoodle.ui
+  irisandmarigold.ui
   cloudui.ui
   mainwindow.ui
   multicastsetup.ui
@@ -43,6 +45,7 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  irisandmarigold.cpp
   cloudui.cpp
   main.cpp
   mainpacketreceiver.cpp
