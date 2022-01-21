@@ -619,7 +619,7 @@ void PanelGenerator::executeScript(QString script)
 
 
     QStringList linesAll = script.split("\n",
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 
                                         QString::SplitBehavior::SkipEmptyParts
 #else
@@ -1004,7 +1004,7 @@ void PanelGenerator::on_actionImport_File_triggered()
         loadFile.close();
         QStringList split = contents.split(PACKETS_PANELS_DELIM,
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 
                                        QString::SplitBehavior::SkipEmptyParts
 #else
