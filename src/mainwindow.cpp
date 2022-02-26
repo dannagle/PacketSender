@@ -28,6 +28,7 @@
 #include <QSslKey>
 #include <QUrl>
 #include <QUrlQuery>
+#include <QPlainTextEdit>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -35,8 +36,17 @@
 
 #include <QStringList>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+#else
+#include <QRandomGenerator>
+#endif
+
+
+#include <QStandardPaths>
 
 #include "brucethepoodle.h"
+#include "irisandmarigold.h"
 #include "settings.h"
 #include "about.h"
 #include "subnetcalc.h"
@@ -72,11 +82,7 @@ MainWindow::MainWindow(QWidget *parent) :
     tableActive = false;
     darkMode = settings.value("darkModeCheck", true).toBool();
 
-
-
-    //seed qrand
-    QTime time = QTime::currentTime();
-    qsrand( static_cast<unsigned int>(time.msec()));
+    PanelGenerator::darkMode = darkMode;
 
     maxLogSize = 10000;
 
@@ -109,19 +115,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // default is TCP
     ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("TCP"));
-
-
-    // FEATURES IN ACTIVE DEVELOPMENT
-
-    // HTTP GET/POST Not Finished
-    int http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
-    while(http_indexes > -1) {
-        ui->udptcpComboBox->removeItem(http_indexes);
-        http_indexes = ui->udptcpComboBox->findText("HTTP", Qt::MatchContains);
-    }
-
-    // Panel Generation Not Finished
-    ui->actionPanel_Generator->setVisible(false);
 
 
     //load last session
@@ -194,7 +187,20 @@ MainWindow::MainWindow(QWidget *parent) :
 //   statusBar()->insertPermanentWidget(0, generatePSLink());
 //   statusBar()->insertPermanentWidget(1, generateDNLink());
 
+    // handle double-clicking the ASCII window
+    //asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, true};
+    //hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, false};
 
+    asciiPreviewFilter = new PreviewFilter{ui->packetASCIIEdit, ui->packetASCIIEdit, ui->packetHexEdit};
+    hexPreviewFilter = new PreviewFilter{ui->packetHexEdit, ui->packetASCIIEdit, ui->packetHexEdit};
+
+    if (!connect(asciiPreviewFilter, &PreviewFilter::asciiUpdated, this, &MainWindow::on_packetASCIIEdit_lostFocus)) {
+        QDEBUG() << "asciiPreviewFilter connection false";
+    }
+
+    if (!connect(hexPreviewFilter, &PreviewFilter::hexUpdated, this, &MainWindow::on_packetHexEdit_lostFocus)) {
+        QDEBUG() << "hexPreviewFilter connection false";
+    }
 
     stopResendingButton = new QPushButton("Resending");
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
@@ -289,11 +295,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    //Bruce is my pet poodle.
+    //Bruce was my wonderful poodle rescue. 2008-2021
     //Dog easter egg.  CTRL D, O, G.
     //             or  CMD D, O, G.
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D, Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G), this);
-    QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcut, SIGNAL(activated()), this, SLOT(poodlepic()));
+    QShortcut *shortcutDog = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D, Qt::CTRL + Qt::Key_O, Qt::CTRL + Qt::Key_G), this);
+    QDEBUG() << ": dog easter egg Connection attempt " << connect(shortcutDog, SIGNAL(activated()), this, SLOT(poodlepic()));
+
+
+    //Iris and Marigold are my rescue puppies.
+    //Pup easter egg.  CTRL P, U, P.
+    //             or  CMD P, U, P.
+    QShortcut *shortcutPup = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_P, Qt::CTRL + Qt::Key_U, Qt::CTRL + Qt::Key_P), this);
+    QDEBUG() << ": puppy easter egg Connection attempt " << connect(shortcutPup, SIGNAL(activated()), this, SLOT(puppypic()));
+
 
     QShortcut *field1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_1), this);
     QShortcut *field2 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_2), this);
@@ -385,6 +399,32 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //on_actionExport_Packets_JSON_triggered();
 
+
+
+    // QTimer::singleShot(100.0, [this](){ this->timeout();});
+
+    if(settings.value("autolaunchStarterPanelButton", false).toBool()) {
+        statusBarMessage("Auto-launching starter panel.", 3000, true);
+
+    }
+
+    // Delayed to give message time to display, and make sure this is on top.
+    QTimer::singleShot(1500, this, [this] () {
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        if(settings.value("autolaunchStarterPanelButton", false).toBool()) {
+            QDEBUG() << "Auto-launching starter panel";
+            this->on_actionPanel_Generator_triggered();
+        }
+
+    } );
+
+
+
+
+
+
+
+
     QDEBUG() << "Settings file loaded" << SETTINGSFILE;
     QDEBUG() << "Packets file loaded" << PACKETSFILE;
 
@@ -435,18 +475,6 @@ void MainWindow::generateConnectionMenu()
 
 
 }
-/*
-
-{"githubpath":"https:\/\/api.github.com\/repos\/dannagle\/PacketSender\/releases\/7612134",
-"windowsversion":"v5.4.2","macversion":"v5.4.2","linuxversion":"v5.4.2","windowsdownload":
-"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_5_4_2_2017-09-01.exe",
-"windowsportable":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderPortable_5_4_2_2017-09-01.zip",
-"macdownload":"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSender_v5_4_2_2017-09-01.dmg","linuxdownload":
-"https:\/\/github.com\/dannagle\/PacketSender\/releases\/download\/v5.4.2\/PacketSenderLinux_5_4_2_2017-09-01.AppImage"}
-
-
-*/
-
 
 void parserMajorMinorBuild(QString sw, unsigned int & major, unsigned int & minor, unsigned int & build)
 {
@@ -559,6 +587,7 @@ void MainWindow::updateManager(QByteArray response)
 
     if (!settings.value("checkforUpdatesAsked", false).toBool()) {
         settings.setValue("checkforUpdatesAsked", true);
+        settings.setValue("SW_VERSION", SW_VERSION); // first run. Save the current version.
         QMessageBox msgBox;
         msgBox.setWindowIcon(QIcon(":pslogo.png"));
         msgBox.setWindowTitle("Updates.");
@@ -576,6 +605,49 @@ void MainWindow::updateManager(QByteArray response)
         }
 
         settings.sync();
+    } else {
+
+        //This is not the first run.
+        QString previousVersion = settings.value("SW_VERSION", "unknown").toString();
+        QString swCheck = SW_VERSION;
+
+        // remove v prefix (not used in all installations)
+        previousVersion.replace("v", "");
+        swCheck.replace("v", ""); // remove v prefix (not used in all installations)
+
+        // We only pop the update prompt if it is a newer version we haven't seen.
+        QStringList previousList = previousVersion.split(".");
+        QStringList swList = swCheck.split(".");
+        int swListCount = 1;
+        int prevListCount = 0;
+        if((swList.size() == 3) && (previousList.size() == 3)) {
+            swListCount = swList[0].toUInt() * 10000 + swList[1].toUInt() * 100 + swList[2].toUInt();
+            prevListCount = previousList[0].toUInt() * 10000 + previousList[1].toUInt() * 100 + previousList[2].toUInt();
+            if(swListCount != prevListCount) {
+                if(swListCount > prevListCount) {
+                    QDEBUG() << "New version unseen before. We pop the prompt!";
+                } else {
+                    QDEBUG() << "This is an older version. Do not prompt.";
+                }
+            }
+        }
+
+
+        if((swListCount > prevListCount) && (previousVersion != swCheck)) {
+            QDEBUG() << "New version detected:" << previousVersion << "!=" << swCheck;
+            settings.setValue("SW_VERSION", swCheck);
+            QMessageBox msgBox;
+            msgBox.setWindowIcon(QIcon(":pslogo.png"));
+            msgBox.setWindowTitle("Packet Sender Updated!");
+            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+            msgBox.setDefaultButton(QMessageBox::Yes);
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText("Updated to " + swCheck + "!\n\nWould you like to read the release notes?");
+            int yesno = msgBox.exec();
+            if (yesno == QMessageBox::Yes) {
+                QDesktopServices::openUrl(QUrl("https://github.com/dannagle/PacketSender/releases/latest"));
+            }
+        }
     }
 
 
@@ -840,6 +912,12 @@ void MainWindow::on_packetHexEdit_lostFocus()
     ui->packetHexEdit->setText(quicktestHex);
 
 
+    QTimer::singleShot(100.0, [this](){
+        ui->packetHexEdit->deselect();
+        ui->packetHexEdit->setCursorPosition(ui->packetHexEdit->text().size());
+    });
+
+
 }
 
 
@@ -848,47 +926,21 @@ void MainWindow::on_requestPathEdit_lostFocus()
 {
     QDEBUG();
 
-
     auto isHttp = ui->udptcpComboBox->currentText().toLower().contains("http");
-    auto isHttps = ui->udptcpComboBox->currentText().toLower().contains("https");
 
-    if(isHttp) {
+    QString quicktestURL =  ui->requestPathEdit->text().trimmed().toLower();
+    auto checkHTTP = quicktestURL.startsWith("http://") || quicktestURL.startsWith("https://");
 
-        QString quicktestURL =  ui->requestPathEdit->text();
-        QUrl url = QUrl(quicktestURL);
+    if(isHttp && checkHTTP) {
 
-        if(url.isValid() && (quicktestURL.startsWith("http://") || quicktestURL.startsWith("https://"))) {
-
-            int defaultPort = 80;
-            if(quicktestURL.startsWith("https://")) {
-                defaultPort = 443;
-                if(!isHttps) {
-                    ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("HTTPS Get"));
-                    isHttps = true;
-                }
-            } else {
-                if(isHttps) {
-                    ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("HTTP Get"));
-                    isHttps = false;
-                }
-            }
-
-            ui->packetPortEdit->setText(QString::number(url.port(defaultPort)));
-            ui->packetIPEdit->setText((url.host()));
-            auto urlpath = url.path();
-            auto urlquery = url.query();
-            if(!urlquery.isEmpty()) {
-                ui->requestPathEdit->setText(url.path() + "?" + urlquery);
-            } else {
-                ui->requestPathEdit->setText(url.path());
-            }
-
-            quicktestURL =  ui->requestPathEdit->text();
+        ui->packetPortEdit->setText(QString::number(Packet::getPortFromURL(quicktestURL)));
+        ui->packetIPEdit->setText(Packet::getHostFromURL(quicktestURL));
+        ui->requestPathEdit->setText(Packet::getRequestFromURL(quicktestURL));
+        int index = ui->udptcpComboBox->findText(Packet::getMethodFromURL(quicktestURL));
+        if(index >= 0) {
+            ui->udptcpComboBox->setCurrentIndex(index);
         }
-
-
     }
-
 }
 
 void MainWindow::on_packetASCIIEdit_lostFocus()
@@ -903,6 +955,12 @@ void MainWindow::on_packetASCIIEdit_lostFocus()
 
     ui->packetASCIIEdit->setText(Packet::hexToASCII(quicktestASCII2));
     ui->packetASCIIEdit->setToolTip("");
+
+    QTimer::singleShot(100.0, [this](){
+        ui->packetASCIIEdit->deselect();
+        ui->packetASCIIEdit->setCursorPosition(ui->packetASCIIEdit->text().size());
+    });
+
 
 
 }
@@ -987,6 +1045,17 @@ void MainWindow::sendClick(QString packetName)
 
 void MainWindow::on_savePacketButton_clicked()
 {
+
+
+    if(ui->packetASCIIEdit->hasFocus()) {
+        QDEBUG() << "Forcing ASCII edit trigger";
+        on_packetASCIIEdit_editingFinished();
+    }
+
+    if(ui->packetHexEdit->hasFocus()) {
+        QDEBUG() << "Forcing HEX edit trigger";
+        on_packetHexEdit_editingFinished();
+    }
 
     Packet testPacket;
     testPacket.init();
@@ -1440,6 +1509,14 @@ void MainWindow::poodlepic()
     bruce->show();
 }
 
+void MainWindow::puppypic()
+{
+    QDEBUG();
+
+    IrisAndMarigold *pups = new IrisAndMarigold(this);
+    pups->show();
+}
+
 void MainWindow::shortcutkey1()
 {
     ui->packetNameEdit->setFocus();
@@ -1598,6 +1675,7 @@ void MainWindow::packetTable_checkMultiSelected()
     QStringList buttonsList;
     buttonsList.clear();
 
+    ui->generatePanelButton->hide();
 
     foreach (checkItem, totalSelected) {
         clickedPacket = Packet::fetchTableWidgetItemData(checkItem);
@@ -1609,13 +1687,8 @@ void MainWindow::packetTable_checkMultiSelected()
         }
     }
 
-    ui->generatePanelButton->hide();
-
-    QDEBUGVAR(packetList.size());
     if (packetList.size() > 1) {
-        // Panel Generation Not Finished
-        // ui->generatePanelButton->show();
-
+       ui->generatePanelButton->show();
     }
 
     ui->testPacketButton->setText("Send");
@@ -1728,7 +1801,7 @@ void MainWindow::refreshTimerTimeout()
 
 
     while (maxLogSize > 0 && packetsLogged.size() > maxLogSize) {
-        packetsLogged.removeFirst();
+        packetsLogged.removeLast();
     }
 
 
@@ -2450,7 +2523,7 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     auto isPost = arg1.toLower().contains("post") && isHttp;
 
     if(isHttp) {
-        ui->asciiLabel->setText("Post Data");
+        ui->asciiLabel->setText("Data");
     } else {
         ui->asciiLabel->setText("ASCII");
     }
@@ -2539,9 +2612,103 @@ void MainWindow::on_generatePanelButton_clicked()
     gpanel->show();
 }
 
+
 void MainWindow::on_actionPanel_Generator_triggered()
 {
     PanelGenerator * gpanel = new PanelGenerator(this);
+
+    QDEBUG() << " packet send connect attempt:" << connect(gpanel, SIGNAL(sendPacket(Packet)),
+             &packetNetwork, SLOT(packetToSend(Packet)));
+
     gpanel->initAutoLaunchOrEditMode();
     gpanel->show();
+
+}
+
+
+void MainWindow::on_actionNew_Panel_triggered()
+{
+    PanelGenerator * gpanel = new PanelGenerator(this);
+
+    QDEBUG() << " packet send connect attempt:" << connect(gpanel, SIGNAL(sendPacket(Packet)),
+             &packetNetwork, SLOT(packetToSend(Packet)));
+    gpanel->show();
+}
+
+void MainWindow::on_testPacketButton_pressed()
+{
+    if(ui->packetASCIIEdit->hasFocus()) {
+        QDEBUG() << "Forcing ASCII edit trigger";
+        on_packetASCIIEdit_editingFinished();
+    }
+
+    if(ui->packetHexEdit->hasFocus()) {
+        QDEBUG() << "Forcing HEX edit trigger";
+        on_packetHexEdit_editingFinished();
+    }
+
+}
+
+bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonDblClick)
+    {
+
+        QDialog previewDlg;
+        previewDlg.setWindowFlags(previewDlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
+        previewDlg.setWindowTitle("Multi-line editor");
+        QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
+        QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
+        QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());
+        _lineEdit->deselect();
+
+        QPushButton* updateButton = new QPushButton(tr("Update"));
+        QPushButton* closeButton = new QPushButton(tr("Close"));
+        QObject::connect(closeButton, &QPushButton::clicked,
+            [&previewDlg]
+            {
+                previewDlg.close();
+            });
+
+        QObject::connect(updateButton, &QPushButton::clicked,
+            [&previewDlg, &editor, &_lineEdit, this]
+            {
+                QString contents = editor->toPlainText();
+                if(_lineEdit == this->asciiEdit) {
+                    this->asciiEdit->setText(contents);
+                    emit asciiUpdated();
+                }
+                if(_lineEdit == this->hexEdit) {
+                    this->hexEdit->setText(contents);
+                    emit hexUpdated();
+                }
+                previewDlg.close();
+            });
+
+        layout->addWidget(editor);
+        layout->addWidget(updateButton);
+        layout->addWidget(closeButton);
+
+        previewDlg.setLayout(layout);
+        previewDlg.setModal(true);
+
+        // we have to make a round trip, ascii to hex and then back to ascii with whitespace
+        auto asciidata = _lineEdit->text();
+        if(_lineEdit == this->hexEdit)
+        {
+            editor->setPlainText(asciidata.simplified() + " ");
+        }
+        if(_lineEdit == this->asciiEdit)
+        {
+            //do round trip conversion
+            asciidata = Packet::ASCIITohex(asciidata);
+            auto br = Packet::HEXtoByteArray(asciidata);
+            editor->setPlainText(QString(br));
+        }
+        editor->moveCursor(QTextCursor::End);
+
+        previewDlg.exec();
+    }
+
+    return QObject::eventFilter(watched, event);
 }

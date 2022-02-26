@@ -19,17 +19,17 @@
 #include <QHostInfo>
 #include <QtGlobal>
 #include <QUrlQuery>
+#include <QStandardPaths>
+
 #include "settings.h"
 
 #include "persistentconnection.h"
 
-#ifdef CHROMIUM
 #ifndef RENDER_ONLY
 #include "persistenthttp.h"
 #endif
-#endif
 
-PacketNetwork::PacketNetwork(QWidget *parent) :
+PacketNetwork::PacketNetwork(QObject *parent) :
     QObject(parent)
 {
 
@@ -37,6 +37,7 @@ PacketNetwork::PacketNetwork(QWidget *parent) :
     http = new QNetworkAccessManager(this);
     QDEBUG() << " http connect attempt:" << connect(http, SIGNAL(finished(QNetworkReply*)),
              this, SLOT(httpFinished(QNetworkReply*)));
+    consoleMode = false;
 }
 
 
@@ -232,6 +233,8 @@ void PacketNetwork::init()
         bool bindResult = udpSocket->bind(
                               IPV4_OR_IPV6
                               , udpPort);
+
+        udpSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
         if ((!bindResult) && (!erroronce)) {
             QDEBUGVAR(udpPort);
@@ -710,6 +713,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.receiveBeforeSend = receiveBeforeSend;
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
+    if(consoleMode) {
+        sendpacket.persistent = false;
+    }
 
     if(translateMacroSend) {
         QString data = Packet::macroSwap(sendpacket.asciiString());
@@ -837,6 +843,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         }
         url += sendpacket.toIP + portUrl + sendpacket.requestPath;
 
+        QHash<QString, QString> bonusHeaders = Settings::getRawHTTPHeaders(sendpacket.toIP);
+
 
         //QDEBUGVAR(sendpacket.toIP);
         //QDEBUGVAR(sendpacket.requestPath);
@@ -846,17 +854,49 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         sendpacket.fromIP = "You";
         sendpacket.fromPort = 0;
+        if(consoleMode) {
+            sendpacket.persistent = false;
+        }
 
         http->setProperty("persistent", sendpacket.persistent);
+        foreach(QString key, bonusHeaders.keys()) {
+            QDEBUG()<<"Setting header" << key << bonusHeaders[key];
+            request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
+        }
+
+        if(translateMacroSend) {
+            QString data = Packet::macroSwap(sendpacket.asciiString());
+            sendpacket.hexString = Packet::ASCIITohex(data);
+        }
+
+        QByteArray bytes = sendpacket.getByteArray();
+        QString bytes_trimmed = QString(bytes.trimmed());
 
         if(sendpacket.isPOST()) {
-
             request.setHeader(QNetworkRequest::ContentTypeHeader,
                 "application/x-www-form-urlencoded");
 
+            if(Settings::detectJSON_XML()) {
+
+                if ((bytes_trimmed.startsWith("{") && bytes_trimmed.endsWith("}")) ||
+                    (bytes_trimmed.startsWith("[") && bytes_trimmed.endsWith("]")) )  {
+                    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                        "application/json");
+                }
+
+
+                if (bytes_trimmed.startsWith("<") && bytes_trimmed.endsWith(">")) {
+                    request.setHeader(QNetworkRequest::ContentTypeHeader,
+                        "application/xml");
+                }
+            }
+
+
+            QDEBUG() << "http post request";
             http->post(request, sendpacket.getByteArray());
 
         } else {
+            QDEBUG() << "http get request";
             http->get(request);
         }
 
@@ -870,6 +910,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 void PacketNetwork::httpError(QNetworkRequest* pReply)
 {
+    QDEBUGVAR(pReply);
 
 }
 
@@ -920,6 +961,12 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
 
     QUrl url = pReply->url();
 
+    QVariant status_code = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+    if (status_code.isValid()) {
+        // status_code.toInt();
+        httpPacket.errorString = status_code.toString();
+    }
+
     int defaultPort = 80;
     if(url.scheme().toLower().contains("https")) {
         defaultPort = 443;
@@ -933,14 +980,17 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
 
     if(pReply->error() != QNetworkReply::NoError) {
         QDEBUG() << "Ended in error";
-        httpPacket.errorString = pReply->errorString();
+        if(httpPacket.errorString.isEmpty()) {
+            httpPacket.errorString = pReply->errorString();
+        } else {
+            httpPacket.errorString += ", " + pReply->errorString();
+        }
     }
 
 #ifdef RENDER_ONLY
     http->setProperty("persistent", false);
 #endif
 
-#ifdef CHROMIUM
 #ifndef RENDER_ONLY
 
     QDEBUGVAR(http->property("persistent").toBool());
@@ -951,7 +1001,6 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
         view->setAttribute(Qt::WA_DeleteOnClose);
     }
 
-#endif
 #endif
     emit packetSent(httpPacket);
 

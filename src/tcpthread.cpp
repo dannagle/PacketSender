@@ -22,7 +22,7 @@
 #include <QSslSocket>
 #include <QSslCipher>
 #include <QSslConfiguration>
-#include <QTemporaryFile>
+#include <QStandardPaths>
 
 
 TCPThread::TCPThread(int socketDescriptor, QObject *parent)
@@ -66,7 +66,7 @@ void TCPThread::loadSSLCerts(QSslSocket * sock, bool allowSnakeOil)
 
         // set the ca certificates from the configured path
         if (!settings.value("sslCaPath").toString().isEmpty()) {
-            sock->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
+           // sock->setCaCertificates(QSslCertificate::fromPath(settings.value("sslCaPath").toString()));
         }
 
         // set the local certificates from the configured file path
@@ -428,7 +428,13 @@ void TCPThread::run()
 
             QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
 
-            QList<QSslError> sslErrorsList  = clientConnection->sslErrors();
+            QList<QSslError> sslErrorsList  = clientConnection->
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                    sslErrors();
+#else
+                    sslHandshakeErrors();
+#endif
+
             Packet errorPacket = sendPacket;
             if (sslErrorsList.size() > 0) {
                 QSslError sError;
@@ -562,7 +568,13 @@ void TCPThread::run()
         sock.startServerEncryption();
         sock.waitForEncrypted();
 
-        QList<QSslError> sslErrorsList  = sock.sslErrors();
+        QList<QSslError> sslErrorsList  = sock
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
 
         Packet errorPacket;
         errorPacket.init();
@@ -620,7 +632,16 @@ void TCPThread::run()
         }
 
 
-        QDEBUG() << "Errors" << sock.sslErrors();
+        QDEBUG() << "Errors" << sock
+
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
+
+
 
     }
 

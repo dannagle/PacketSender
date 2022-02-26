@@ -12,7 +12,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QHostAddress>
-
+#include <QStandardPaths>
 
 
 const QString Settings::SEND_STR = "Send";
@@ -30,6 +30,12 @@ const QString Settings::FROMIP_STR = "From IP";
 const QString Settings::FROMPORT_STR = "From Port";
 const QString Settings::ERROR_STR = "Error";
 
+
+
+const QString Settings::ALLHTTPSHOSTS = "HTTPHeaderHosts";
+const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
+
+
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Settings)
@@ -37,7 +43,6 @@ Settings::Settings(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
 
     //not working yet...
     ui->multiSendDelayLabel->hide();
@@ -53,6 +58,10 @@ Settings::Settings(QWidget *parent) :
     //this is no longer working thanks to faster traffic log
     ui->displayOrderListTraffic->hide();
     ui->displayGroupBoxTraffic->setTitle("");
+
+
+    loadCredentialTable();
+    on_genAuthCheck_clicked(false);
 
 
     //smart responses...
@@ -94,9 +103,10 @@ Settings::Settings(QWidget *parent) :
 
     on_smartResponseEnableCheck_clicked();
 
-
+    ui->autolaunchStarterPanelButton->setChecked(settings.value("autolaunchStarterPanelButton", false).toBool());
 
     ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
+    ui->httpAdjustContentTypeCheck->setChecked(settings.value("httpAdjustContentTypeCheck", true).toBool());
 
     ui->translateMacroSendCheck->setChecked(settings.value("translateMacroSendCheck", true).toBool());
 
@@ -311,8 +321,10 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
-    settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
 
+    settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());
+    settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
+    settings.setValue("httpAdjustContentTypeCheck", ui->httpAdjustContentTypeCheck->isChecked());
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());
 
@@ -645,4 +657,271 @@ void Settings::on_documentationButton_clicked()
 
     //Open URL in browser
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
+}
+
+void Settings::saveHTTPHeader(QString host, QString header)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QDEBUG() << "saving" << host << ":" << header;
+
+
+    // Search for a duplicate and remove it.
+    auto keyvalue = Settings::header2keyvalue(header);
+    QStringList hostHeaders = Settings::getHTTPHeaders(host);
+    for(int i=0; i<hostHeaders.size(); i++) {
+        auto keyvaluecheck = Settings::header2keyvalue(hostHeaders[i]);
+        if(keyvalue.first == keyvaluecheck.first) {
+            hostHeaders.removeAt(i);
+            break;
+        }
+    }
+    hostHeaders.append(header);
+    hostHeaders.removeDuplicates();
+
+    settings.setValue(Settings::HTTPHEADERINDEX + host, hostHeaders);
+
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    allHosts.append(host);
+    allHosts.removeDuplicates();
+    settings.setValue(Settings::ALLHTTPSHOSTS, allHosts);
+
+    loadCredentialTable();
+
+}
+
+
+
+void Settings::deleteHTTPHeader(QString host, QString header)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QDEBUG() << "removing" << host << ":" << header;
+
+    QStringList hostHeaders = Settings::getHTTPHeaders(host);
+    hostHeaders.removeDuplicates();
+    int i = hostHeaders.indexOf(header);
+    if(i > -1) {
+        hostHeaders.removeAt(i);
+        settings.setValue(Settings::HTTPHEADERINDEX + host, hostHeaders);
+    }
+
+}
+
+QPair<QString, QString> Settings::header2keyvalue(QString header)
+{
+
+    QPair<QString, QString> keyvalue;
+
+    QString key = "";
+    QString value = "";
+    QStringList headerSplit = header.split(":");
+    if(headerSplit.size() > 1) {
+        key = headerSplit.first();
+        headerSplit.pop_front();
+        value = headerSplit.join(":");
+    }
+
+    keyvalue.first = key;
+    keyvalue.second = value;
+
+    return keyvalue;
+
+}
+
+
+QHash<QString, QString> Settings::getRawHTTPHeaders(QString host)
+{
+    QHash<QString, QString> headers;
+    QStringList headerList = Settings::getHTTPHeaders(host);
+    foreach(QString header, headerList) {
+        auto keyvalue = Settings::header2keyvalue(header);
+        QString key = keyvalue.first;
+        QString value = keyvalue.second;
+        if(key.size() > 1) {
+            headers[key] = value;
+        }
+    }
+    return headers;
+}
+
+bool Settings::detectJSON_XML()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    return settings.value("httpAdjustContentTypeCheck", true).toBool();
+}
+
+
+QStringList Settings::getHTTPHeaders(QString host)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    return settings.value(Settings::HTTPHEADERINDEX + host, QStringList()).toStringList();
+}
+
+QHash<QString, QStringList> Settings::getAllHTTPHeaders()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    QString host;
+    QHash<QString, QStringList> allHttps;
+    foreach(host, allHosts) {
+        allHttps[host] = Settings::getHTTPHeaders(host);
+    }
+    return allHttps;
+
+}
+
+void Settings::clearHTTPHeaders(QString host)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QStringList allHosts = settings.value(Settings::ALLHTTPSHOSTS, QStringList()).toStringList();
+    int i = allHosts.indexOf(host);
+    if(i > -1) {
+        allHosts.removeAt(i);
+        settings.setValue(Settings::ALLHTTPSHOSTS, allHosts);
+        settings.remove(Settings::HTTPHEADERINDEX + host);
+    }
+}
+
+void Settings::on_addCredentialButton_clicked()
+{
+    QString host = ui->httpHostEdit->text();
+    QString key = ui->httpUNEdit->text();
+    QString value = ui->httpPWEdit->text();
+
+    QString header = key + ": " + value;
+
+    if(ui->genAuthCheck->isChecked()) {
+        QString b64 = QString((key+":"+value).toLatin1().toBase64());
+        header = "Authorization: Basic " + b64;
+        ui->genAuthCheck->setChecked(false);
+        on_genAuthCheck_clicked(false);
+    }
+    saveHTTPHeader(host, header);
+
+    loadCredentialTable();
+
+}
+
+
+void Settings::loadCredentialTable()
+{
+
+
+    httpSettingsLoading = true;
+    QHash<QString, QStringList> allHttps = Settings::getAllHTTPHeaders();
+    QStringList keys = allHttps.keys();
+    QString key;
+    ui->httpCredentialTable->setColumnCount(3);
+    int row = 0;
+    foreach(key, keys) {
+        QString header;
+        foreach(header, allHttps[key]) {
+            ui->httpCredentialTable->setRowCount(row + 1);
+
+            auto keyvalue = Settings::header2keyvalue(header);
+            if(keyvalue.first.isEmpty()) continue;
+
+            QTableWidgetItem * hostItem = new QTableWidgetItem(key);
+            QTableWidgetItem * keyItem = new QTableWidgetItem(keyvalue.first);
+            QTableWidgetItem * valueItem = new QTableWidgetItem(keyvalue.second);
+
+
+            hostItem->setData(Qt::UserRole, key);
+            hostItem->setData(Qt::UserRole + 1, header);
+            hostItem->setData(Qt::UserRole + 2, "host");
+
+            keyItem->setData(Qt::UserRole, key);
+            keyItem->setData(Qt::UserRole + 1, header);
+            keyItem->setData(Qt::UserRole + 2, "key");
+
+            valueItem->setData(Qt::UserRole, key);
+            valueItem->setData(Qt::UserRole + 1, header);
+            valueItem->setData(Qt::UserRole + 2, "value");
+
+
+            ui->httpCredentialTable->setItem(row, 0, hostItem);
+            ui->httpCredentialTable->setItem(row, 1, keyItem);
+            ui->httpCredentialTable->setItem(row, 2, valueItem);
+            row++;
+        }
+    }
+
+    QStringList tableHeaders = {"Host", "Key", "Value"};
+    ui->httpCredentialTable->verticalHeader()->show();
+    ui->httpCredentialTable->horizontalHeader()->show();
+    ui->httpCredentialTable->setHorizontalHeaderLabels(tableHeaders);
+    ui->httpCredentialTable->resizeColumnsToContents();
+    ui->httpCredentialTable->resizeRowsToContents();
+    ui->httpCredentialTable->horizontalHeader()->setStretchLastSection(true);
+
+    httpSettingsLoading = false;
+}
+
+
+
+
+void Settings::on_httpDeleteHeaderButton_clicked()
+{
+
+    QList<QTableWidgetItem *> totalSelected  = ui->httpCredentialTable->selectedItems();
+    QTableWidgetItem * item;
+    foreach (item, totalSelected) {
+        QString host = item->data(Qt::UserRole).toString();
+        QString header = item->data(Qt::UserRole + 1).toString();
+        deleteHTTPHeader(host, header);
+    }
+    ui->httpCredentialTable->clearSelection();
+    loadCredentialTable();
+}
+
+
+void Settings::on_httpCredentialTable_itemChanged(QTableWidgetItem *item)
+{
+
+    if(httpSettingsLoading) return;
+
+    QString newText = item->text();
+    QDEBUGVAR(newText);
+
+    QString index = item->data(Qt::UserRole + 2).toString();
+    QString host = item->data(Qt::UserRole).toString();
+    QString header = item->data(Qt::UserRole + 1).toString();
+    auto keyvalue = Settings::header2keyvalue(header);
+
+    if(index == "host") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(newText, header);
+    }
+
+    if(index == "key") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(host, newText + ": " + keyvalue.second);
+    }
+
+    if(index == "value") {
+        deleteHTTPHeader(host, header);
+        saveHTTPHeader(host, keyvalue.first + ": " + newText);
+    }
+
+    ui->httpCredentialTable->clearSelection();
+    loadCredentialTable();
+
+}
+
+void Settings::on_genAuthCheck_clicked(bool checked)
+{
+    if(ui->genAuthCheck->isChecked()) {
+        ui->httpKeyLabel->setText("UN/ClientID");
+        ui->httpValueLabel->setText("PW/Access");
+        ui->addCredentialButton->setText("HTTP Auth Header");
+    } else {
+        ui->httpKeyLabel->setText("Key");
+        ui->httpValueLabel->setText("Value");
+        ui->addCredentialButton->setText("HTTP Header");
+    }
+
 }

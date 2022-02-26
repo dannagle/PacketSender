@@ -1,8 +1,8 @@
 #pragma once
 
-#ifdef CHROMIUM
 
 #include <QDialog>
+#include <QStringList>
 
 namespace Ui {
 class PersistentHTTP;
@@ -20,11 +20,16 @@ public:
 private slots:
     void on_copyCodeButton_clicked();
 
-    void on_copyRenderButton_clicked();
+
+
+    void on_browserViewButton_clicked();
 
 private:
     Ui::PersistentHTTP *ui;
     QByteArray data;
+    QStringList tempFiles;
+
+
 };
 
-#endif
+

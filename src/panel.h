@@ -45,5 +45,7 @@ public:
     void deleteFromDB();
     QDateTime getLastModified();
     void sortButtons();
+    bool isNew();
+    bool isNotNew();
 };
 

@@ -20,9 +20,14 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <time.h>
+#include <QUrl>
+#include <QStandardPaths>
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 
+#else
+#include <QRandomGenerator>
+#endif
 
 const int Packet::PACKET_NAME = Qt::UserRole +  0;
 const int Packet::PACKET_HEX = Qt::UserRole + 1;
@@ -319,22 +324,26 @@ QIcon Packet::getIcon()
 
 }
 
-QString Packet::hexToASCII(QString &hex)
+QString Packet::hexToASCII(QString &hex, bool convertWhitespace)
 {
 
 
     QStringList hexSplit;
 
-    //remove invalid characters of popular deliminators...
-    hex = hex.replace(",", " ");
-    hex = hex.replace(".", " ");
-    hex = hex.replace(":", " ");
-    hex = hex.replace(";", " ");
+    //replace popular deliminators...
     hex = hex.replace("0x", " ");
-    hex = hex.replace("x", " ");
     hex = hex.replace("\n", " ");
     hex = hex.replace("\r", " ");
     hex = hex.replace("\t", " ");
+
+
+    //Now replace the rest
+    QString allowedChars = "abcdef 01234567890 ABCDEF";
+    for(int i=0; i<hex.size(); i++) {
+        if(!allowedChars.contains(hex[i])) {
+            hex[i] = ' ';
+        }
+    }
 
     QString hexText = hex.simplified();
     if (hexText.isEmpty()) {
@@ -429,7 +438,7 @@ QString Packet::hexToASCII(QString &hex)
         convertInt = hexSplit.at(i).toUInt(&ok, 16);
         // qDebug() << __FILE__ << "/" << __LINE__ << __FUNCTION__  <<"hex at"<< QString::number(i) << "is" << QString::number(convertInt);
         if (ok) {
-            if (convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\') {
+            if ((convertInt >= 0x20 && convertInt <= 0x7e && convertInt != '\\') || !convertWhitespace) {
                 // qDebug() << __FILE__ << "/" << __LINE__  << __FUNCTION__ << "Converted to " << QChar(convertInt);
                 asciiText.append((QChar(convertInt)));
             } else {
@@ -782,23 +791,33 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
 QString Packet::macroSwap(QString data)
 {
 
-    QDateTime now = QDateTime::currentDateTime();
 
-    if (data.contains("{{TIME}}")) {
-        data = data.replace("{{TIME}}", now.toString("h:mm:ss ap"));
-    }
-    if (data.contains("{{DATE}}")) {
+    if (data.contains("{{TIME}}") || data.contains("{{DATE}}") || data.contains("{{UNIXTIME}}")) {
+        QDateTime now = QDateTime::currentDateTime();
+        //now = QDateTime::fromSecsSinceEpoch(1609895308);
+        data = data.replace("{{TIME}}", now.toString("hh:mm:ss ap"));
         data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
-    }
-    if (data.contains("{{RANDOM}}")) {
-	srand(time(NULL));
-        data = data.replace("{{RANDOM}}", QString::number(rand()));
-    }
-    if (data.contains("{{UNIXTIME}}")) {
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
+
+    if (data.contains("{{RANDOM}}")) {
+
+
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        data = data.replace("{{RANDOM}}", QString::number(rand()));
+#else
+        QRandomGenerator * num = QRandomGenerator::global();
+        data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
+
+#endif
+    }
+
     if (data.contains("{{UNIQUE}}")) {
-        data = data.replace("{{UNIQUE}}", QUuid::createUuid().toString());
+        QString uuidString = QUuid::createUuid().toString();
+        uuidString.replace("{", ""); //do not want brackets in generated string
+        uuidString.replace("}", "");
+        data = data.replace("{{UNIQUE}}", uuidString);
     }
 
     return data;
@@ -823,6 +842,65 @@ QByteArray Packet::encodingToByteArray(QString encoding, QString data)
     //fallback mixed ascii
     QString hex = Packet::ASCIITohex(data);
     return (Packet::HEXtoByteArray(hex));
+
+}
+
+int Packet::getPortFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return -1;
+    }
+    int defaultPort = 80;
+    if(path.startsWith("https")) {
+        defaultPort = 443;
+    }
+
+    return url.port(defaultPort);
+
+}
+
+QString Packet::getRequestFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    QString urlpath = url.path();
+    QString urlquery = url.query();
+
+    if(!urlquery.isEmpty()) {
+        return urlpath + "?" + urlquery;
+    } else {
+        return url.path();
+    }
+
+}
+
+QString Packet::getMethodFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    if(path.startsWith("https")) {
+        return "HTTPS Get";
+    } else {
+        return "HTTP Get";
+    }
+
+}
+
+QString Packet::getHostFromURL(QString path)
+{
+    QUrl url = QUrl(path);
+    if(!path.startsWith("http") || (!url.isValid())) {
+        return "";
+    }
+
+    return url.host();
 
 }
 

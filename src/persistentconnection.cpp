@@ -13,7 +13,7 @@
 #include <QFileDialog>
 #include <QClipboard>
 #include <QMessageBox>
-
+#include <QStandardPaths>
 
 
 const QString PersistentConnection::RESEND_BUTTON_STYLE = "QPushButton { color: black; } QPushButton::hover { color: #BC810C; } ";

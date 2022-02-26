@@ -40,10 +40,18 @@ class Settings : public QDialog
         static const QString FROMPORT_STR;
         static const QString ERROR_STR;
 
+        static const QString ALLHTTPSHOSTS;
+        static const QString HTTPHEADERINDEX;
+
         static QList<int> portsToIntList(QString ports);
         static QString intListToPorts(QList<int> portList);
         void statusBarMessage(QString msg);
 
+        static QStringList getHTTPHeaders(QString host);
+        static QHash<QString, QString> getRawHTTPHeaders(QString host);
+        static QHash<QString, QStringList> getAllHTTPHeaders();
+
+        static bool detectJSON_XML();
 private slots:
         void on_buttonBox_accepted();
 
@@ -66,18 +74,32 @@ private slots:
 
         void on_documentationButton_clicked();
 
-    private:
+
+
+        void on_addCredentialButton_clicked();
+
+        void on_httpDeleteHeaderButton_clicked();
+
+        void on_httpCredentialTable_itemChanged(QTableWidgetItem *item);
+
+        void on_genAuthCheck_clicked(bool checked);
+
+private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
         QStringList packetTableHeaders;
         QStringList packetSavedTableHeaders;
 
+        bool httpSettingsLoading;
 
         void setDefaultTableHeaders();
         void setStoredTableHeaders();
         void loadTableHeaders();
-
-
+        void loadCredentialTable();
+        void saveHTTPHeader(QString host, QString header);
+        void deleteHTTPHeader(QString host, QString header);
+        void clearHTTPHeaders(QString host);
+        static QPair<QString, QString> header2keyvalue(QString header);
 };
 
 #endif // SETTINGS_H

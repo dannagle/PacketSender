@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QShortcut>
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QGroupBox>
@@ -24,9 +25,10 @@
 
 #include <QtConcurrent/QtConcurrent>
 #include <algorithm>
-#include <random>
 
 extern void themeTheButton(QPushButton * button);
+
+bool PanelGenerator::darkMode = false;
 
 PanelGenerator::PanelGenerator(QWidget *parent) :
     QMainWindow(parent),
@@ -51,14 +53,18 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     themeTheButton(editToggleButton);
     editToggleButton->setIcon(QIcon(PSLOGO));
 
-
     packetNetwork = nullptr;
+
+
+
+    // not working... not sure if ever will work
+    ui->menuExport->deleteLater();
+
 
 #ifdef RENDER_ONLY
     QDEBUG() << " panel RENDER_ONLY mode";
 #else
     QDEBUG() << " panel building mode";
-
 #endif
 
 
@@ -122,9 +128,24 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
         } else {
 
             bool ok = false;
-            QString linkURL = QInputDialog::getText(this, tr("URL location"),
-                                                 tr("URL location:"), QLineEdit::Normal,
+            QString linkURL = QInputDialog::getText(this, tr("URL or File"),
+                                                 tr("URL or File:"), QLineEdit::Normal,
                                                  "", &ok);
+
+            QDEBUGVAR(linkURL);
+            if(!linkURL.contains("://")) {
+                //This is a file path.
+                if(linkURL.startsWith("\"")) {
+                    linkURL.remove(0, 1);
+                }
+                if(linkURL.endsWith("\"")) {
+                    linkURL.remove(linkURL.size() - 1, 1);
+                }
+                QFileInfo fInfo(linkURL);
+                QDEBUGVAR(fInfo.canonicalFilePath());
+                linkURL = fInfo.canonicalFilePath();
+            }
+
             if (ok && (!linkURL.isEmpty())) {
 
                 QString linkText = QInputDialog::getText(this, tr("Link text"),
@@ -198,6 +219,8 @@ void PanelGenerator::renderViewMode()
     setHeaders();
     addLinkButton->hide();
 
+    panel.sortButtons();
+
     int i = 0;
     foreach(PanelButton pb, panel.buttonList) {
         QPushButton * const btn = new QPushButton(pb.title);
@@ -222,10 +245,7 @@ void PanelGenerator::renderViewMode()
         themeTheButton(btn);
         connect(btn, &QPushButton::clicked, this, [btn]{
             QString url = btn->property("w-url").toString();
-            if(!url.startsWith("http")) {
-                url.prepend("http://");
-            }
-            //QDEBUGVAR(url);
+            QDEBUGVAR(url);
             QDesktopServices::openUrl(QUrl(url));
 
         });
@@ -327,9 +347,9 @@ void PanelGenerator::setHeaders()
 
 
         if(panel.isLaunchPanel()) {
-            ui->actionLaunch_Panel->setText("Auto-launch: Yes");
+            ui->actionLaunch_Panel->setText("Starter Panel: Yes");
         } else {
-            ui->actionLaunch_Panel->setText("Auto-launch: No");
+            ui->actionLaunch_Panel->setText("Starter Panel: No");
         }
         ui->menubar->show();
         editToggleButton->setText("Editing");
@@ -361,8 +381,13 @@ void PanelGenerator::themePanelButton(QPushButton *button)
     label->setFont(opensans);
 
     label->setAutoFillBackground(true);
-    label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    if(PanelGenerator::darkMode) {
+        label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    } else {
+        label->setStyleSheet("QLabel { font-size: 20pt; color: black; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+    }
     label->setCursor(Qt::PointingHandCursor);
+    button->setCursor(Qt::PointingHandCursor);
     button->update();
     label->update();
     layout->addWidget(label,0,Qt::AlignCenter);
@@ -441,7 +466,7 @@ ____________
         setMetaData(pb, groupBox);
 
         QDEBUGVAR(textEdit->toPlainText());
-        textEdit->setFixedSize(200, 50);
+        textEdit->setMinimumSize(200, 50);
         textEditLast = textEdit;
         if(i == 0) {
             textEditFirst = textEdit;
@@ -457,7 +482,7 @@ ____________
         vbox->addLayout(hbox);
         vbox->addWidget(textEdit);
         vbox->addWidget(testButton);
-        vbox->setMargin(10);
+        //vbox->setMargin(10);
 
         groupBox->setLayout(vbox);
 
@@ -490,7 +515,7 @@ ____________
 
     i++;
     //add new item button.
-    auto newButton = new QPushButton("Add New Button");
+    auto newButton = new QPushButton("New Button");
 
     connect(newButton, &QPushButton::clicked, this, [this]{
        PanelButton pb;
@@ -544,7 +569,7 @@ void PanelGenerator::init(QList<Packet> packets)
 {
     QDEBUGVAR(packets.size());
     panel.buttonList.clear();
-    panel.id = 1;
+    panel.id = 0;
     panel.name = "Test Panel";
     int buttonID = 1;
     foreach(Packet pkt, packets) {
@@ -591,7 +616,16 @@ void PanelGenerator::testButtonClicked()
 
 void PanelGenerator::executeScript(QString script)
 {
-    QStringList linesAll = script.split("\n", QString::SkipEmptyParts);
+
+
+    QStringList linesAll = script.split("\n",
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+
+                                        QString::SplitBehavior::SkipEmptyParts
+#else
+                                        Qt::SkipEmptyParts
+#endif
+                                        );
 
     QString errorMessages = "";
 
@@ -632,7 +666,7 @@ void PanelGenerator::executeScript(QString script)
             int panelnum = cmdSplit[1].toInt();
             Panel p = Panel::fromDB(panelnum);
             if(p.id == 0) {
-                errorMessages.append("\nInvalid panel id:" + line);
+                errorMessages.append("\nInvalid panel id:" + QString::number(panelnum));
                 continue;
             } else {
                 toLoad = p.id;
@@ -690,7 +724,7 @@ void PanelGenerator::executeScript(QString script)
             if( line.startsWith("panel:")) {
                 int panelnum = cmdSplit[1].toInt();
                 Panel p = Panel::fromDB(panelnum);
-                if(p.id > 0) {
+                if(p.isNotNew()) {
                     QDEBUG() << "load panel" << p.name;
                 } else {
                     QDEBUG() << "unknown panel" << p.name;
@@ -704,6 +738,7 @@ void PanelGenerator::executeScript(QString script)
             Packet pkt = Packet::fetchFromList(line, packetList);
             if(pkt.name == line) {
                 QDEBUG() << "Need to send packet" << pkt.name;
+                pkt.repeat = 0;
                 emit sendPacket(pkt);
                 QThread::msleep(100); //give time to send
             }
@@ -720,23 +755,24 @@ void PanelGenerator::executeScript(QString script)
            if(toLoad > 0) {
                QDEBUG() << "Need to load new panel" << toLoad;
                Panel p = Panel::fromDB(toLoad);
-               if(p.id > 0) {
+               if(p.isNotNew()) {
                    if(isViewing) {
                        bool loadPanel = true;
-#ifndef RENDER_ONLY
-                       loadPanel = false;
                        QMessageBox msgBox;
-                       msgBox.setWindowTitle("Transition Panel");
-                       msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                       msgBox.setDefaultButton(QMessageBox::No);
-                       msgBox.setIcon(QMessageBox::Warning);
-                       msgBox.setText("Tranisition to Panel "+p.name + "?\nYou may lose unsaved changes.");
-                       int yesno = msgBox.exec();
-                       if (yesno == QMessageBox::Yes) {
-                            loadPanel = true;
+
+                       if(panel.isNew()) {
+                           QDEBUGVAR(panel.id);
+                           msgBox.setWindowTitle("Transition Panel");
+                           msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+                           msgBox.setDefaultButton(QMessageBox::No);
+                           msgBox.setIcon(QMessageBox::Warning);
+                           msgBox.setText("Tranisition to Panel \""+p.name + "\"?\nThis panel has not been saved. You may lose changes.");
+                           int yesno = msgBox.exec();
+                           if (yesno == QMessageBox::No) {
+                                loadPanel = false;
+                           }
                        }
 
-#endif
 
                        if(loadPanel) {
                            this->panel.copy(p);
@@ -782,9 +818,8 @@ void PanelGenerator::initAutoLaunchOrEditMode()
 {
     panel.copy(Panel::getLaunchPanel());
     QDEBUGVAR(panel.toString());
-    if(panel.id == 0) {
-        renderEditMode();
-    } else {
+    renderEditMode();
+    if(panel.id > 0) {
         renderViewMode();
     }
 
@@ -837,8 +872,11 @@ void PanelGenerator::editToggle()
         renderEditMode();
 
     } else {
-
-        parseEditView();
+        if(panel.isNotNew()) {
+            on_actionSave_triggered();
+        } else {
+            parseEditView();
+        }
         renderViewMode();
 
     }
@@ -964,7 +1002,16 @@ void PanelGenerator::on_actionImport_File_triggered()
     if(loadFile.open(QFile::ReadOnly)) {
         QString contents = QString(loadFile.readAll());
         loadFile.close();
-        QStringList split = contents.split(PACKETS_PANELS_DELIM, QString::SkipEmptyParts);
+        QStringList split = contents.split(PACKETS_PANELS_DELIM,
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+
+                                       QString::SplitBehavior::SkipEmptyParts
+#else
+                                       Qt::SkipEmptyParts
+#endif
+                                           );
+
         if(split.size() == 2) {
             packetsjson = split[0];
             panelsjson = split[1];
@@ -1042,7 +1089,7 @@ void PanelGenerator::on_actionImport_File_triggered()
             //append
             foreach(Panel p, importList) {
                 QDEBUGVAR(p.id);
-                if(panelMap[p.id].id > 0) {
+                if(panelMap[p.id].isNotNew()) {
                     p.id = Panel::newPanelID(savedList);
                     savedList.append(p);
                 }
@@ -1082,9 +1129,8 @@ void PanelGenerator::showFileInFolder(const QString &path){
     #elif defined(__APPLE__)    //Code for Mac
         QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to reveal POSIX file \"" + path + "\""});
         QProcess::execute("/usr/bin/osascript", {"-e", "tell application \"Finder\" to activate"});
-    #endif
+#endif
 }
-
 
 void PanelGenerator::buildPackage(bool isMac)
 {
@@ -1172,10 +1218,10 @@ void PanelGenerator::on_actionLaunch_Panel_triggered()
 {
     if(panel.isLaunchPanel()) {
         panel.launch = 0;
-        statusBar()->showMessage("Panel is no longer launch panel", 2000);
+        statusBar()->showMessage("Panel is no longer starter panel", 2000);
     } else {
         panel.launch = 1;
-        statusBar()->showMessage("panel is now launch panel", 2000);
+        statusBar()->showMessage("panel is now starter panel", 2000);
     }
 
     panel.saveToDB();
@@ -1259,4 +1305,10 @@ void PanelGenerator::on_actionMac_Package_triggered()
 void PanelGenerator::on_actionLinux_Package_triggered()
 {
     buildPackage(true);
+}
+
+void PanelGenerator::on_actionNew_triggered()
+{
+    PanelGenerator * gpanel = new PanelGenerator(this);
+    gpanel->show();
 }

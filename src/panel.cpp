@@ -4,6 +4,14 @@
 #include "globals.h"
 #include <QDebug>
 #include <QStandardPaths>
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+
+#else
+#include <QRandomGenerator>
+#endif
+
+
 #include <algorithm>
 #include <QHash>
 #include <QPair>
@@ -100,6 +108,16 @@ void Panel::sortButtons()
 {
 
     std::sort(buttonList.begin(), buttonList.end(), comparePanelButtonsByID);
+}
+
+bool Panel::isNew()
+{
+    return id == 0;
+}
+
+bool Panel::isNotNew()
+{
+    return !isNew();
 }
 
 bool comparePanelsByID(const Panel &panelA, const Panel &panelB)
@@ -384,7 +402,14 @@ int Panel::newPanelID(QList<Panel> allPanels)
         }
     }
 
-    return qrand();
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+        return rand();
+#else
+    QRandomGenerator * num = QRandomGenerator::global();
+    return num->bounded(0, 65000);
+
+#endif
 
 }
 

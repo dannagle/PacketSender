@@ -17,9 +17,26 @@
 #include <QSslCipher>
 #include <QDeadlineTimer>
 #include <QProcess>
+#include <QStandardPaths>
+
+#include "mainpacketreceiver.h"
 
 #include "mainwindow.h"
 #define DEBUGMODE 0
+
+
+
+#define STOPSENDCHECK()     if(hasstop) { \
+                                stopcounter++; \
+                                if(stopcounter >= stopnum) { \
+                                    break; \
+                                } \
+                            }
+
+
+
+int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay);
+
 
 
 bool isGuiApp()
@@ -58,6 +75,8 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 #define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
 #define OUTIF()  if(!quiet) o<< "\n"
 #define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear();
+
+
 
 
 int main(int argc, char *argv[])
@@ -121,6 +140,10 @@ int main(int argc, char *argv[])
 
 
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    srand(time(NULL));
+#endif
+
     if ((argc > 1) && !gatekeeper) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
@@ -169,6 +192,8 @@ int main(int argc, char *argv[])
         QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data-to-send as pure ascii (no \\xx translation).");
         parser.addOption(pureAsciiOption);
 
+
+
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
                                       "Wait up to <milliseconds> for a response after sending. Zero means do not wait (Default).",
@@ -210,6 +235,10 @@ int main(int argc, char *argv[])
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
 
+        // A boolean option with single name
+        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP.");
+        parser.addOption(httpOption);
+
         // An option with a value
         QCommandLineOption nameOption(QStringList() << "n" << "name",
                                       "Send previously saved packet named <name>. Other options overrides saved packet parameters.",
@@ -217,9 +246,22 @@ int main(int argc, char *argv[])
         parser.addOption(nameOption);
 
 
-        parser.addPositionalArgument("address", "Destination address. Optional for saved packet.");
-        parser.addPositionalArgument("port", "Destination port. Optional for saved packet.");
-        parser.addPositionalArgument("data", "Data to send. Optional for saved packet.");
+
+        // Intense Traffic Generator
+        QCommandLineOption bpsOption(QStringList() << "bps", "Intense traffic. Calculate rate based on value of bits per second.", "bps");
+        parser.addOption(bpsOption);
+        QCommandLineOption numOption(QStringList() << "num", "Intense traffic. Number of packets to send. Default unlimited.", "number");
+        parser.addOption(numOption);
+        QCommandLineOption rateOption(QStringList() << "rate", "Intense traffic. Rate. Ignored in bps option.", "Hertz");
+        parser.addOption(rateOption);
+        QCommandLineOption usdelayOption(QStringList() << "usdelay", "Intense traffic. Resend delay. Used if rate is 0. Ignored in bps option.", "microseconds");
+        parser.addOption(usdelayOption);
+
+
+
+        parser.addPositionalArgument("address", "Destination address/URL. Optional for saved packet.");
+        parser.addPositionalArgument("port", "Destination port/POST data. Optional for saved packet.");
+        parser.addPositionalArgument("data", "Data to send. Optional for saved packet or HTTP.");
 
 
         // Process the actual command line arguments given by the user
@@ -245,6 +287,22 @@ int main(int argc, char *argv[])
         bool sslNoError = parser.isSet(sslNoErrorOption);
         bool ipv6  = parser.isSet(bindIPv6Option);
         bool ipv4  = parser.isSet(bindIPv4Option);
+        bool http  = parser.isSet(httpOption);
+
+        bool okbps = false;
+        bool okrate = false;
+        bool intense = parser.isSet(bpsOption) || parser.isSet(numOption)|| parser.isSet(rateOption) || parser.isSet(usdelayOption);
+        double bps = parser.value(bpsOption).toDouble(&okbps);
+        qint64 stopnum = parser.value(numOption).toULongLong();
+        double rate = parser.value(rateOption).toDouble(&okrate);
+        qint64 usdelay = parser.value(usdelayOption).toULongLong();
+        if(intense) {
+            if (!okrate && !okbps) {
+                OUTIF() << "Warning: Invalide rate and/or bps. Intense traffic will free-run.";
+                bps = 0;
+                rate = 0;
+            }
+        }
 
         if (sslNoError) ssl = true;
 
@@ -264,11 +322,19 @@ int main(int argc, char *argv[])
         if (argssize >= 1) {
             address = args[0];
         }
-        if (argssize >= 2) {
-            port = args[1].toUInt();
-        }
-        if (argssize >= 3) {
-            data = (args[2]);
+        if(http) {
+            if (argssize >= 2) {
+                data = (args[1]);
+            }
+
+        } else {
+
+            if (argssize >= 2) {
+                port = args[1].toUInt();
+            }
+            if (argssize >= 3) {
+                data = (args[2]);
+            }
         }
 
         bool multicast = PacketNetwork::isMulticast(address);
@@ -301,6 +367,7 @@ int main(int argc, char *argv[])
             ssl = false;
             ipv6 = false;
             ipv4 = true;
+            http = false;
         }
 
 
@@ -310,6 +377,11 @@ int main(int argc, char *argv[])
         }
         if (tcp && ssl) {
             OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
+            tcp = false;
+        }
+
+        if (http && tcp) {
+            OUTIF() << "Warning: both HTTP and TCP set. Defaulting to HTTP.";
             tcp = false;
         }
 
@@ -359,7 +431,7 @@ int main(int argc, char *argv[])
         }
 
 
-        if (!port && name.isEmpty()) {
+        if (!port && name.isEmpty() && !http) {
             OUTIF() << "Warning: Sending to port zero.";
         }
 
@@ -368,10 +440,20 @@ int main(int argc, char *argv[])
             hex = true;
         }
 
-        if (!tcp && !udp && !ssl) {
+        if (!tcp && !udp && !ssl && !http) {
             tcp = true;
         }
 
+        if ((tcp || ssl || http) && intense) {
+            OUTIF() << "Warning: Intense Traffic is UDP only.";
+        }
+
+        if(intense) {
+            udp = true;
+            tcp = false;
+            ssl = false;
+            http = false;
+        }
 
 
         //Create the packet to send.
@@ -386,6 +468,7 @@ int main(int argc, char *argv[])
                 ssl = sendPacket.isSSL();
                 tcp = sendPacket.isTCP();
                 udp = sendPacket.isUDP();
+                http = sendPacket.isHTTP() || sendPacket.isHTTPS();
 
                 if (data.isEmpty()) {
                     data  = sendPacket.hexString;
@@ -407,10 +490,19 @@ int main(int argc, char *argv[])
                 }
                 if (parser.isSet(tcpOption)) {
                     tcp = true;
+                    http = false;
                 }
                 if (parser.isSet(sslOption)) {
                     ssl = true;
                     tcp = true;
+                    http = false;
+                }
+
+                if (intense) {
+                    udp = true;
+                    ssl = false;
+                    tcp = false;
+                    http = false;
                 }
             }
 
@@ -424,7 +516,7 @@ int main(int argc, char *argv[])
             QFile dataFile(filePath);
             if (dataFile.open(QFile::ReadOnly)) {
 
-                if (tcp || ssl) {
+                if (tcp || ssl || http) {
                     QByteArray dataArray = dataFile.read(1024 * 1024 * 100);;
                     dataString = Packet::byteArrayToHex(dataArray);
                 } else {
@@ -460,10 +552,16 @@ int main(int argc, char *argv[])
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
         QDEBUGVAR(ssl);
+        QDEBUGVAR(http);
         QDEBUGVAR(sslNoError);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
         QDEBUGVAR(filePath);
+        QDEBUGVAR(intense);
+        QDEBUGVAR(bps);
+        QDEBUGVAR(stopnum);
+        QDEBUGVAR(rate);
+        QDEBUGVAR(usdelay);
 
         //NOW LETS DO THIS!
 
@@ -487,12 +585,52 @@ int main(int argc, char *argv[])
             dataString = Packet::ASCIITohex(data);
         }
 
-        if (dataString.isEmpty()) {
+        if (dataString.isEmpty() && !http) {
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
 
+        if(http) {
+            sendPacket.requestPath = Packet::getRequestFromURL(address);
+            sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
+            if(dataString.size() > 0) {
+                sendPacket.tcpOrUdp.replace("Get", "Post");
+                sendPacket.hexString = dataString;
+            }
+
+            sendPacket.port = Packet::getPortFromURL(address);
+            sendPacket.toIP = Packet::getHostFromURL(address);
+            sendPacket.persistent = false;
+            MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+
+
+            OUTIF() << sendPacket.tcpOrUdp <<" " << address << " " << dataString;
+
+            receiver->send(sendPacket);
+
+            for(int i=0; i<10; i++) {
+                QApplication::processEvents();
+                QThread::msleep(500);
+                if(receiver->finished) {
+                    break;
+                }
+            }
+
+            OUTPUT();
+            if(!receiver->receivedPacket.hexString.isEmpty()) {
+                if (quiet) {
+                    out << "\n" << receiver->receivedPacket.asciiString();
+                } else {
+                    out << "\n" << QString(receiver->receivedPacket.getByteArray());
+                }
+            }
+
+            return 0;
+
+        }
+
+
         QHostAddress addy;
-        if (!addy.setAddress(address)) {
+        if (!addy.setAddress(address) && !http) {
             QHostInfo info = QHostInfo::fromName(address);
             if (info.error() != QHostInfo::NoError) {
                 OUTIF() << "Error: Could not resolve address:" + address;
@@ -553,7 +691,14 @@ int main(int argc, char *argv[])
             if (ssl) {
                 sock.waitForEncrypted(5000);
 
-                QList<QSslError> sslErrorsList  = sock.sslErrors();
+                QList<QSslError> sslErrorsList  = sock
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+                            .sslErrors();
+#else
+                            .sslHandshakeErrors();
+#endif
+
 
 
                 if (sslErrorsList.size() > 0) {
@@ -644,6 +789,8 @@ int main(int argc, char *argv[])
 
         } else {
             QUdpSocket sock;
+            sock.setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+
             bool bindsuccess = sock.bind(bindIP, bind);
             if(!bindsuccess) {
                 OUTIF() << "Error: Could not bind to " << bindIP.toString() << ":" << bind;
@@ -664,6 +811,16 @@ int main(int argc, char *argv[])
 
 
             OUTIF() << "UDP (" << sock.localPort() << ")://" << address << ":" << port << " " << dataString;
+
+            if(intense) {
+                OUTIF() << "Starting Intense Traffic Generator";
+                OUTPUT();
+
+                int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
+                return done;
+
+            }
+
 
             bytesWriten = sock.writeDatagram(sendData, addy, port);
             //OUTIF() << "Wrote " << bytesWriten << " bytes";
@@ -779,7 +936,124 @@ int main(int argc, char *argv[])
     }
 
 
+    return 0;
+}
+
+
+
+int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay)
+{
+    QByteArray sendData = Packet::HEXtoByteArray(hexString);
+
+    if(bps > 0.1 && usdelay == 0) {
+        QDEBUG() << "Convert bps to rate for bytes :"  << sendData.size();
+        double bytespersecond = bps / 8;
+        double totalbytes = (sendData.size() + 20);
+        rate = bytespersecond  / totalbytes;
+        out << "Calculated rate to send a " << totalbytes << " byte UDP packet at " << bps << " bps is " << rate << " packets/second\n";
+    }
+
+    auto hasstop = stopnum > 0;
+
+    if(hasstop) {
+        if(stopnum < 50) {
+            out << "Rate calculation is unreliable with low stop number. \n";
+        }
+    }
+
+    if(rate > 0 && rate < 0.2) {
+        out << "Slowest supported rate is 0.2. Exiting.\n";
+        return -1;
+    }
+
+    if(bps > 0 && bps < 0.2) {
+        out << "Slowest supported bps is 0.2. Exiting.\n";
+        return -1;
+    }
+
+    qint64 stopcounter = 0;
+    if(hasstop) {
+        out << "Will stop sending after " << stopnum << " packets\n";
+    }
+
+
+
+    QElapsedTimer totalTime;
+    totalTime.start();
+
+    if(rate < 0.2 && usdelay == 0 && bps < 0.1) {
+        out << "Sending as fast as possible. Use Ctrl+C to quit.\n";
+        while(1) {
+
+            sock.writeDatagram(sendData, addy, port);
+            STOPSENDCHECK();
+
+        }
+    } else {
+
+        // Calculate the msdelay.
+        double msdelay = (1000 / rate);
+
+        if(rate > 0.2 && usdelay == 0) {
+
+            out << "Sending at a rate of " << rate << " packets/second\n";
+            QDEBUGVAR(rate);
+            QDEBUGVAR(msdelay);
+            QElapsedTimer elasped;
+            elasped.start();
+            while(1) {
+                sock.writeDatagram(sendData, addy, port);
+                STOPSENDCHECK();
+
+                while(1) {
+                    qint64 t = elasped.elapsed();
+                    if(t > msdelay) {
+                        elasped.start();
+                        break;
+                    } else {
+                        double telapsed_diff = msdelay - t * 1.0;
+                        if (telapsed_diff > 5) {
+                            QThread::msleep(5);
+                        }
+                    }
+
+                }
+            }
+            QDEBUG();
+
+
+        } else {
+            QDEBUG();
+
+            out << "Sending using usdelay set to " << usdelay << "\n";
+            while(1) {
+                sock.writeDatagram(sendData, addy, port);
+                STOPSENDCHECK();
+
+                QThread::usleep(usdelay);
+                QCoreApplication::processEvents();
+
+            }
+
+        }
+    }
+
+    auto elasped = totalTime.elapsed();
+    out << "Run time: " << elasped <<" milliseconds\n";
+    if(stopcounter > 0) {
+        qint64 totalbytes = stopcounter * (sendData.size() + 20);
+        double elaspedDouble = static_cast<double>(elasped);
+        double stopcounterDouble = static_cast<double>(stopcounter);
+        double totalbytesDouble = static_cast<double>(totalbytes);
+        double effectiverate = (totalbytesDouble) * 8 * 1000  / (elaspedDouble);
+        double effectivehertz = (stopcounterDouble) * 1000 / (elaspedDouble );
+        out << "Sent " << stopcounter <<" packets, " << totalbytes << " total bytes \n";
+        out << "Effective rate = " << effectivehertz <<" packets per second\n";
+        out << "Effective bps = " << effectiverate <<" bits per second\n";
+    }
 
     return 0;
-
 }
+
+
+

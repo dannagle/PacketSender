@@ -35,6 +35,7 @@ public:
     int size();
     void clear();
     void removeFirst();
+    void removeLast();
 
     const QList<Packet> list();
 

@@ -73,7 +73,7 @@ class Packet
         bool persistent;
 
         static QString ASCIITohex(QString &ascii);
-        static QString hexToASCII(QString &hex);
+        static QString hexToASCII(QString &hex, bool convertWhitespace = true);
         static QString byteArrayToHex(QByteArray data);
         static QByteArray HEXtoByteArray(QString thehex);
         static QString removeIPv6Mapping(QHostAddress ipv6);
@@ -91,6 +91,11 @@ class Packet
         static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
         static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
         static QByteArray encodingToByteArray(QString encoding, QString data);
+
+        static int getPortFromURL(QString path);
+        static QString getRequestFromURL(QString path);
+        static QString getMethodFromURL(QString path);
+        static QString getHostFromURL(QString path);
 
         static const int PACKET_NAME;
         static const int PACKET_HEX;

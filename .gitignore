@@ -50,3 +50,6 @@ Makefile*
 
 .idea
 .vscode
+
+# Do not accidently commit credentials...
+access-token*.txt

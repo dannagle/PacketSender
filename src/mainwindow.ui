@@ -97,7 +97,7 @@
          <item>
           <widget class="QPushButton" name="genPostDataButton">
            <property name="text">
-            <string>Generate POST Data</string>
+            <string>Generate Data</string>
            </property>
           </widget>
          </item>
@@ -108,6 +108,13 @@
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="loadFileButton">
+           <property name="text">
+            <string>Load File</string>
            </property>
           </widget>
          </item>
@@ -129,13 +136,6 @@
            </property>
            <property name="clearButtonEnabled">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="loadFileButton">
-           <property name="text">
-            <string>Load File</string>
            </property>
           </widget>
          </item>
@@ -221,7 +221,7 @@
              </property>
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>130</width>
                <height>20</height>
               </size>
              </property>
@@ -540,7 +540,6 @@
      <string>&amp;Tools</string>
     </property>
     <addaction name="actionCloud"/>
-    <addaction name="actionPanel_Generator"/>
     <addaction name="actionSubnet_Calculator"/>
     <addaction name="actionIntense_Traffic_Generator"/>
     <addaction name="actionAndroid_App"/>
@@ -552,9 +551,17 @@
     </property>
     <addaction name="actionJoin_IPv4"/>
    </widget>
+   <widget class="QMenu" name="menuPanels">
+    <property name="title">
+     <string>Panels</string>
+    </property>
+    <addaction name="actionPanel_Generator"/>
+    <addaction name="actionNew_Panel"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
    <addaction name="menuMulitcast"/>
+   <addaction name="menuPanels"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -708,15 +715,6 @@
     <string>Intense &amp;Traffic Generator</string>
    </property>
   </action>
-  <action name="actionPanel_Generator">
-   <property name="icon">
-    <iconset resource="packetsender.qrc">
-     <normaloff>:/icons/panel-generator-icon.png</normaloff>:/icons/panel-generator-icon.png</iconset>
-   </property>
-   <property name="text">
-    <string>Panel Generator</string>
-   </property>
-  </action>
   <action name="actionForums">
    <property name="icon">
     <iconset resource="packetsender.qrc">
@@ -724,6 +722,16 @@
    </property>
    <property name="text">
     <string>Forums</string>
+   </property>
+  </action>
+  <action name="actionPanel_Generator">
+   <property name="text">
+    <string>Load Starter Panel</string>
+   </property>
+  </action>
+  <action name="actionNew_Panel">
+   <property name="text">
+    <string>Empty Panel Project</string>
    </property>
   </action>
  </widget>

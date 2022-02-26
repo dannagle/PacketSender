@@ -194,6 +194,12 @@ void PacketLogModel::removeFirst()
     packetList.removeFirst();
 }
 
+
+void PacketLogModel::removeLast()
+{
+    packetList.removeLast();
+}
+
 const QList<Packet> PacketLogModel::list()
 {
     const QList<Packet> retList = packetList;

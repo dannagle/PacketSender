@@ -34,6 +34,35 @@ namespace Ui
 class MainWindow;
 }
 
+class PreviewFilter : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit PreviewFilter(QObject * parent, QLineEdit * asciiEdit, QLineEdit * hexEdit)
+        : QObject{parent}, asciiEdit{asciiEdit}, hexEdit{hexEdit}
+    {
+        addTo(parent);
+    }
+
+    void addTo(QObject * obj)
+    {
+        if (obj)
+        {
+            obj->installEventFilter(this);
+        }
+    }
+
+signals:
+    void asciiUpdated();
+    void hexUpdated();
+
+private:
+    bool eventFilter(QObject *watched, QEvent *event);
+    QLineEdit * asciiEdit;
+    QLineEdit * hexEdit;
+};
+
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
@@ -76,6 +105,7 @@ class MainWindow : public QMainWindow
 
         //shortcut keys... would be better if used lambda
         void poodlepic();
+        void puppypic();
         void shortcutkey1();
         void shortcutkey2();
         void shortcutkey3();
@@ -192,6 +222,10 @@ class MainWindow : public QMainWindow
 
         void on_actionPanel_Generator_triggered();
 
+        void on_actionNew_Panel_triggered();
+
+        void on_testPacketButton_pressed();
+
 private:
         Ui::MainWindow *ui;
         PacketLogModel packetsLogged;
@@ -208,6 +242,8 @@ private:
         QPushButton * sslServerStatus;
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
+        PreviewFilter* asciiPreviewFilter;
+        PreviewFilter* hexPreviewFilter;
 
 
         QStringList packetTableHeaders;

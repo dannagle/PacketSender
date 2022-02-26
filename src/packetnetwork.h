@@ -34,7 +34,7 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
-        explicit PacketNetwork(QWidget *parent = nullptr);
+        explicit PacketNetwork(QObject *parent = nullptr);
         void init();
 
         QString debugQByteArray(QByteArray debugArray);
@@ -49,6 +49,7 @@ class PacketNetwork : public QObject
 
         QStringList multicastStringList();
 
+        bool consoleMode;
 
         void kill();
         QString responseData;
@@ -72,6 +73,7 @@ class PacketNetwork : public QObject
         bool IPv6Enabled();
         bool IPv4Enabled();
 
+        QNetworkAccessManager * http;
 
         QList<SmartResponseConfig> smartList;
 
@@ -114,7 +116,6 @@ private:
 
         QList<TCPThread *> tcpthreadList;
         QList<PersistentConnection *> pcList;
-        QNetworkAccessManager * http;
 
         //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;

@@ -1,11 +1,13 @@
 	
 SOURCES += main.cpp\
-    $$PWD/panel.cpp \
+    panel.cpp \
         mainwindow.cpp \
+        mainpacketreceiver.cpp \
     packetnetwork.cpp \
     packet.cpp \
     sendpacketbutton.cpp \
     brucethepoodle.cpp \
+    irisandmarigold.cpp \
     tcpthread.cpp \
     persistentconnection.cpp \
     settings.cpp \
@@ -15,21 +17,20 @@ SOURCES += main.cpp\
     cloudui.cpp \
 	multicastsetup.cpp \
 	udpflooding.cpp \
-    $$PWD/packetlogmodel.cpp \
+    packetlogmodel.cpp \
         postdatagen.cpp \
-    panelgenerator.cpp
-
-win32: SOURCES += persistenthttp.cpp
-macx: SOURCES += persistenthttp.cpp
-
+    panelgenerator.cpp \
+    persistenthttp.cpp
 
 HEADERS  += mainwindow.h \
-    $$PWD/panel.h \
+    mainpacketreceiver.h \
+    panel.h \
     packetnetwork.h \
     packet.h \
     globals.h \
     sendpacketbutton.h \
     brucethepoodle.h \
+    irisandmarigold.h \
     tcpthread.h \
     persistentconnection.h \
     settings.h \
@@ -39,17 +40,15 @@ HEADERS  += mainwindow.h \
     cloudui.h \
 	multicastsetup.h \
 	udpflooding.h \
-    $$PWD/packetlogmodel.h \
+    packetlogmodel.h \
         postdatagen.h\
-    panelgenerator.h
-
-win32: HEADERS += persistenthttp.h
-macx: HEADERS += persistenthttp.h
-
+    panelgenerator.h \
+    persistenthttp.h
 
 
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
+    irisandmarigold.ui \
     persistentconnection.ui \
     settings.ui \
     about.ui \
@@ -81,6 +80,9 @@ INSTALLS += \
 # android: include(../../qt_android_openssl/openssl.pri)
 
 win32:RC_FILE = psicon.rc
+
+# Enable before porting to Qt6
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
 
 macx:ICON = psicons.icns
