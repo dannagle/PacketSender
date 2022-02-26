@@ -44,15 +44,14 @@ sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.pli
 
 "/Users/dannagle/Qt/5.15.2/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
-/Users/dannagle/Qt/5.15.2/clang_64/bin/macdeployqt PacketSender.app -appstore-compliant
-codesign --option runtime --deep --force --sign "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" packetsender.app
-mv packetsender.app PacketSender2.app
-mv PacketSender2.app PacketSender.app
+/Users/dannagle/Qt/5.15.2/clang_64/bin/macdeployqt packetsender.app -appstore-compliant
+codesign --option runtime --deep --force --sign 38E41C6C66CCA827750A10E26539E038F033E933 --timestamp packetsender.app
+mv packetsender.app PacketSender.app
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
 
 rm -rf newbuild.dmg  || true
-"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg  -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "Developer ID Application: NagleCode, LLC (C77T3Q8VPT)" -notarizationAppleID "$2" -notarizationPassword "$3"
+"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg  -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "38E41C6C66CCA827750A10E26539E038F033E933" -notarizationAppleID "$2" -notarizationPassword "$3"
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg || true
 mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg
