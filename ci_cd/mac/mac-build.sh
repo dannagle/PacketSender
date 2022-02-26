@@ -24,7 +24,7 @@ APPLE_UNAME="$2";
 APPLE_PWORD="$3";
 
 
-pushd /tmp/
+pushd $TMPDIR
 rm -rf workspace || true
 mkdir workspace
 cd workspace
