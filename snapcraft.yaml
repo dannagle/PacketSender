@@ -1,5 +1,5 @@
 name: packetsender
-version: 8.0.9
+version: 8.0.10
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -8,7 +8,7 @@ description: |
 
 # sudo snap install packetsender*.snap --dangerous
 
-grade: devel
+grade: stable
 base: core18
 confinement: strict
 architectures: [amd64]
