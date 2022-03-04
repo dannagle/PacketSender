@@ -298,7 +298,7 @@ int main(int argc, char *argv[])
         qint64 usdelay = parser.value(usdelayOption).toULongLong();
         if(intense) {
             if (!okrate && !okbps) {
-                OUTIF() << "Warning: Invalide rate and/or bps. Intense traffic will free-run.";
+                OUTIF() << "Warning: Invalid rate and/or bps. Intense traffic will free-run.";
                 bps = 0;
                 rate = 0;
             }
