@@ -84,6 +84,7 @@ private:
         bool translateMacroSend;
         QStringList previousCommands;
 
+        bool darkMode;
 
         void loadComboBox();
         void loadTrafficView();

@@ -115,7 +115,12 @@ void PersistentConnection::statusReceiver(QString message)
 
         QDEBUG() << "Setting style sheet";
 
-        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #000 }");
+        if(this->darkMode) {
+            ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #000 }");
+        } else {
+            ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #ddd }");
+        }
+
         ui->asciiSendButton->setEnabled(false);
         ui->asciiLineEdit->setEnabled(false);
         ui->packetComboBox->setEnabled(false);
@@ -186,6 +191,8 @@ void PersistentConnection::init()
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     bool appendCR = settings.value("appendCRcheck", true).toBool();
     ui->appendCRcheck->setChecked(appendCR);
+
+    this->darkMode = settings.value("darkModeCheck", true).toBool();
 
 
     ui->stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
