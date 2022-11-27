@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
         parser.addOption(udpOption);
 
         // A boolean option with single name
-        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP.");
+        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP. Allowed values are GET (default) and POST");
         parser.addOption(httpOption);
 
         // An option with a value
@@ -324,6 +324,9 @@ int main(int argc, char *argv[])
         if (sslNoError) ssl = true;
 
         QString name = parser.value(nameOption);
+
+        QString httpMethod = parser.value(nameOption).trimmed().toUpper();
+
 
         QString filePath = parser.value(fileOption);
 
@@ -487,7 +490,7 @@ int main(int argc, char *argv[])
                 udp = sendPacket.isUDP();
                 http = sendPacket.isHTTP() || sendPacket.isHTTPS();
 
-                if (data.isEmpty()) {
+                if (data.isEmpty() && (!http)) {
                     data  = sendPacket.hexString;
                     hex = true;
                     ascii = false;
@@ -607,16 +610,38 @@ int main(int argc, char *argv[])
         }
 
         if(http) {
-            sendPacket.requestPath = Packet::getRequestFromURL(address);
-            sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
-            if(dataString.size() > 0) {
+            sendPacket.requestPath = Packet::getRequestFromURL(data);
+            sendPacket.tcpOrUdp = Packet::getMethodFromURL(data);
+            if(httpMethod.contains("POST")) {
                 sendPacket.tcpOrUdp.replace("Get", "Post");
-                sendPacket.hexString = dataString;
             }
 
             sendPacket.port = Packet::getPortFromURL(address);
             sendPacket.toIP = Packet::getHostFromURL(address);
             sendPacket.persistent = false;
+
+
+
+            QString url = "";
+            QString portUrl = "";
+            QString portUrlS = ":" + QString::number(sendPacket.port);
+
+            if(sendPacket.isHTTPS()) {
+                url = "https://";
+                if(sendPacket.port != 443) {
+                    portUrl = portUrlS;
+                }
+            } else {
+                url = "http://";
+                if(sendPacket.port != 80) {
+                    portUrl = portUrlS;
+                }
+            }
+
+            QDEBUG() << "URL is" << sendPacket.toIP + portUrl + sendPacket.requestPath;
+
+
+            QDEBUG() << "HTTP" << sendPacket.tcpOrUdp << sendPacket.requestPath;
             MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
 
 
