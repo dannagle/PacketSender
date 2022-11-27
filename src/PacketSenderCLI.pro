@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network widgets
+QT       += core network widgets
 
 TARGET = packetsendercli
 TEMPLATE = app

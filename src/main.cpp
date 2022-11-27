@@ -1,15 +1,19 @@
 /*
+ *
  * This file is part of Packet Sender
  *
  * Licensed GPL v2
- * http://PacketSender.com/
+ * https://PacketSender.com/
  *
  * Copyright NagleCode, LLC
  *
  */
-#include <QtWidgets/QApplication>
+
+#ifndef CONSOLE_BUILD
+    #include <QtWidgets/QApplication>
+    #include <QDesktopServices>
+#endif
 #include <QDir>
-#include <QDesktopServices>
 #include <QCommandLineParser>
 #include <QHostInfo>
 #include <QSslError>
@@ -21,7 +25,9 @@
 
 #include "mainpacketreceiver.h"
 
-#include "mainwindow.h"
+#ifndef CONSOLE_BUILD
+    #include "mainwindow.h"
+#endif
 #define DEBUGMODE 0
 
 
@@ -144,7 +150,12 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 #endif
 
-    if ((argc > 1) && !gatekeeper) {
+    if (((argc > 1) && (!gatekeeper))
+
+#ifdef CONSOLE_BUILD
+    || true
+#endif
+    ) {
         QCoreApplication a(argc, argv);
         args = a.arguments();
 
@@ -174,9 +185,10 @@ int main(int argc, char *argv[])
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
-        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode\nSee https://PacketSender.com/ for more information.");
+        parser.setApplicationDescription("Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode\nSee https://PacketSender.com/ for more information.");
         parser.addHelpOption();
         parser.addVersionOption();
+
 
         // A boolean option with a single name (-p)
         QCommandLineOption quietOption(QStringList() << "q" << "quiet", "Quiet mode. Only output received data.");
@@ -263,6 +275,11 @@ int main(int argc, char *argv[])
         parser.addPositionalArgument("port", "Destination port/POST data. Optional for saved packet.");
         parser.addPositionalArgument("data", "Data to send. Optional for saved packet or HTTP.");
 
+
+        if (argc < 2) {
+            parser.showHelp();
+            return 0;
+        }
 
         // Process the actual command line arguments given by the user
         parser.process(a);
@@ -608,7 +625,7 @@ int main(int argc, char *argv[])
             receiver->send(sendPacket);
 
             for(int i=0; i<10; i++) {
-                QApplication::processEvents();
+                QCoreApplication::processEvents();
                 QThread::msleep(500);
                 if(receiver->finished) {
                     break;
@@ -895,6 +912,9 @@ int main(int argc, char *argv[])
 #endif
 #endif
 
+
+#ifndef CONSOLE_BUILD
+
         QApplication a(argc, argv);
 
         QDEBUGVAR(args);
@@ -932,6 +952,8 @@ int main(int argc, char *argv[])
         w.show();
 
         return a.exec();
+
+#endif
 
     }
 
