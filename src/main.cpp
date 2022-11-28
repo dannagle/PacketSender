@@ -484,6 +484,7 @@ int main(int argc, char *argv[])
                 OUTPUT();
                 return -1;
             } else {
+                QDEBUGVAR(sendPacket.name);
 
                 ssl = sendPacket.isSSL();
                 tcp = sendPacket.isTCP();
@@ -609,15 +610,17 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
 
-        if(http) {
-            sendPacket.requestPath = Packet::getRequestFromURL(data);
-            sendPacket.tcpOrUdp = Packet::getMethodFromURL(data);
-            if(httpMethod.contains("POST")) {
-                sendPacket.tcpOrUdp.replace("Get", "Post");
-            }
+        if(http) {            
+            if (name.isEmpty()) {
+                sendPacket.requestPath = Packet::getRequestFromURL(data);
+                sendPacket.tcpOrUdp = Packet::getMethodFromURL(data);
+                if(httpMethod.contains("POST")) {
+                    sendPacket.tcpOrUdp.replace("Get", "Post");
+                }
 
-            sendPacket.port = Packet::getPortFromURL(address);
-            sendPacket.toIP = Packet::getHostFromURL(address);
+                sendPacket.port = Packet::getPortFromURL(data);
+                sendPacket.toIP = Packet::getHostFromURL(data);
+            }
             sendPacket.persistent = false;
 
 
