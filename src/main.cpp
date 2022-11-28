@@ -22,6 +22,7 @@
 #include <QDeadlineTimer>
 #include <QProcess>
 #include <QStandardPaths>
+#include <QSettings>
 
 #include "mainpacketreceiver.h"
 
@@ -506,10 +507,20 @@ int main(int argc, char *argv[])
             http = false;
         }
 
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        bool translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
+
 
         //Create the packet to send.
         if (!name.isEmpty()) {
             sendPacket = Packet::fetchFromDB(name);
+
+            if(translateMacroSend && (!intense)) {
+                QString data = Packet::macroSwap(sendPacket.asciiString());
+                sendPacket.hexString = Packet::ASCIITohex(data);
+            }
+
+
             if (sendPacket.name.isEmpty()) {
                 OUTIF() << "Error: Saved packet \"" << name << "\" not found.";
                 OUTPUT();
@@ -614,6 +625,8 @@ int main(int argc, char *argv[])
         QDEBUGVAR(stopnum);
         QDEBUGVAR(rate);
         QDEBUGVAR(usdelay);
+        QDEBUGVAR(translateMacroSend);
+
 
         //NOW LETS DO THIS!
 
@@ -626,20 +639,35 @@ int main(int argc, char *argv[])
 
 
         if (ascii) { //pure ascii
+            if((!intense)) {
+                data = Packet::macroSwap(data);
+            }
             dataString = Packet::byteArrayToHex(data.toLatin1());
         }
 
         if (hex) { //hex
             dataString = Packet::byteArrayToHex(Packet::HEXtoByteArray(data));
+
+            if((!intense)) {
+                Packet pkt;
+                pkt.hexString = dataString;
+                QString data = Packet::macroSwap(pkt.asciiString());
+                dataString = Packet::ASCIITohex(data);
+            }
+
         }
 
         if (mixedascii) { //mixed ascii
+            if((!intense)) {
+                data = Packet::macroSwap(data);
+            }
             dataString = Packet::ASCIITohex(data);
         }
 
         if (dataString.isEmpty() && !http) {
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
+
 
         // HTTP section
         // Test packet 1:  .\packetsender.com --name "HTTPS POST Params"
@@ -659,9 +687,6 @@ int main(int argc, char *argv[])
             }
 
             sendPacket.persistent = false;
-
-            QDEBUGVAR(dataString);
-
 
             if (!dataString.isEmpty()) {
                 sendPacket.hexString = dataString;
@@ -902,6 +927,9 @@ int main(int argc, char *argv[])
             OUTIF() << "UDP (" << sock.localPort() << ")://" << address << ":" << port << " " << dataString;
 
             if(intense) {
+                if(translateMacroSend) {
+                    OUTIF() << "Warning: Macros can slow down intense traffic";
+                }
                 OUTIF() << "Starting Intense Traffic Generator";
                 OUTPUT();
 
@@ -1037,6 +1065,10 @@ int main(int argc, char *argv[])
 
 int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay)
 {
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    bool translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
+
     QByteArray sendData = Packet::HEXtoByteArray(hexString);
 
     if(bps > 0.1 && usdelay == 0) {
@@ -1070,6 +1102,8 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
         out << "Will stop sending after " << stopnum << " packets\n";
     }
 
+    Packet pkt;
+    pkt.hexString = Packet::byteArrayToHex(sendData);
 
 
     QElapsedTimer totalTime;
@@ -1078,6 +1112,12 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
     if(rate < 0.2 && usdelay == 0 && bps < 0.1) {
         out << "Sending as fast as possible. Use Ctrl+C to quit.\n";
         while(1) {
+
+            if(translateMacroSend) {
+                QString data = Packet::macroSwap(pkt.asciiString());
+                pkt.hexString = Packet::ASCIITohex(data);
+                sendData = pkt.getByteArray();
+            }
 
             sock.writeDatagram(sendData, addy, port);
             STOPSENDCHECK();
@@ -1096,6 +1136,13 @@ int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress add
             QElapsedTimer elasped;
             elasped.start();
             while(1) {
+
+                if(translateMacroSend) {
+                    QString data = Packet::macroSwap(pkt.asciiString());
+                    pkt.hexString = Packet::ASCIITohex(data);
+                    sendData = pkt.getByteArray();
+                }
+
                 sock.writeDatagram(sendData, addy, port);
                 STOPSENDCHECK();
 
