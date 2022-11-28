@@ -426,8 +426,7 @@ For Linux, the command line system in Packet Sender follows the same pattern as 
 
 ```
 packetsender --help
-Usage: packetsender [options] address port data
-Packet Sender is a Network UDP/TCP/SSL Test Utility by NagleCode
+Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
 See https://PacketSender.com/ for more information.
 
 Options:
@@ -435,8 +434,10 @@ Options:
   --help-all                Displays help including Qt specific options.
   -v, --version             Displays version information.
   -q, --quiet               Quiet mode. Only output received data.
-  -x, --hex                 Parse data-to-send as hex (default).
-  -a, --ascii               Parse data-to-send as mixed-ascii (like the GUI).
+  -x, --hex                 Parse data-to-send as hex (default for
+                            TCP/UDP/SSL).
+  -a, --ascii               Parse data-to-send as mixed-ascii (default for http
+                            and GUI).
   -A, --ASCII               Parse data-to-send as pure ascii (no \xx
                             translation).
   -w, --wait <ms>           Wait up to <milliseconds> for a response after
@@ -452,7 +453,8 @@ Options:
   -s, --ssl                 Send SSL and ignore errors.
   -S, --SSL                 Send SSL and stop for errors.
   -u, --udp                 Send UDP.
-  --http                    Send HTTP.
+  --http <http>             Send HTTP. Allowed values are GET (default) and
+                            POST
   -n, --name <name>         Send previously saved packet named <name>. Other
                             options overrides saved packet parameters.
   --bps <bps>               Intense traffic. Calculate rate based on value of
@@ -467,7 +469,7 @@ Arguments:
   address                   Destination address/URL. Optional for saved packet.
   port                      Destination port/POST data. Optional for saved
                             packet.
-  data                      Data to send. Optional for saved packet or HTTP.
+  data                      Data to send. Optional for saved packet.
 ```
 ## Example CLI
 The CLI follows the same format between Windows, Linux, and MAC. 
@@ -510,6 +512,15 @@ Response Time:3:24:55.695 pm
 Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
 Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
 ```
+
+## Example CLI using HTTP
+Note this uses the built-in default packets.
+```
+packetsender --name "HTTPS POST Params"
+packetsender --http GET "https://httpbin.org/get"
+packetsender --http POST "https://httpbin.org/post" "{}"
+```
+
 
 
 <a id="cliintensetraffic"></a>

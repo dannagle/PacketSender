@@ -195,10 +195,10 @@ int main(int argc, char *argv[])
         parser.addOption(quietOption);
 
 
-        QCommandLineOption hexOption(QStringList() << "x" << "hex", "Parse data-to-send as hex (default).");
+        QCommandLineOption hexOption(QStringList() << "x" << "hex", "Parse data-to-send as hex (default for TCP/UDP/SSL).");
         parser.addOption(hexOption);
 
-        QCommandLineOption asciiOption(QStringList() << "a" << "ascii", "Parse data-to-send as mixed-ascii (like the GUI).");
+        QCommandLineOption asciiOption(QStringList() << "a" << "ascii", "Parse data-to-send as mixed-ascii (default for http and GUI).");
         parser.addOption(asciiOption);
 
         QCommandLineOption pureAsciiOption(QStringList() << "A" << "ASCII", "Parse data-to-send as pure ascii (no \\xx translation).");
@@ -247,8 +247,8 @@ int main(int argc, char *argv[])
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
 
-        // A boolean option with single name
-        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP. Allowed values are GET (default) and POST");
+        // A single option with a value
+        QCommandLineOption httpOption(QStringList() << "http", "Send HTTP. Allowed values are GET (default) and POST", "http");
         parser.addOption(httpOption);
 
         // An option with a value
@@ -273,7 +273,7 @@ int main(int argc, char *argv[])
 
         parser.addPositionalArgument("address", "Destination address/URL. Optional for saved packet.");
         parser.addPositionalArgument("port", "Destination port/POST data. Optional for saved packet.");
-        parser.addPositionalArgument("data", "Data to send. Optional for saved packet or HTTP.");
+        parser.addPositionalArgument("data", "Data to send. Optional for saved packet.");
 
 
         if (argc < 2) {
@@ -325,7 +325,8 @@ int main(int argc, char *argv[])
 
         QString name = parser.value(nameOption);
 
-        QString httpMethod = parser.value(nameOption).trimmed().toUpper();
+        QString httpMethod = parser.value(httpOption).trimmed().toUpper();
+
 
 
         QString filePath = parser.value(fileOption);
@@ -336,6 +337,7 @@ int main(int argc, char *argv[])
         unsigned int port = 0;
 
         int argssize = args.size();
+        QDEBUGVAR(argssize);
         QString data, dataString;
         data.clear();
         dataString.clear();
@@ -343,12 +345,37 @@ int main(int argc, char *argv[])
             address = args[0];
         }
         if(http) {
-            if (argssize >= 2) {
-                data = (args[1]);
+            if(parser.isSet(httpOption)) {
+                if(httpMethod != "GET" && httpMethod != "POST") {
+                    OUTIF() << "Error: supported HTTP methods are GET and POST. Specified: " << httpMethod;
+                    filePath.clear();
+                    OUTPUT();
+                    return -1;
+                }
+
+                if(name.isEmpty()) {
+                    if(address.isEmpty()) {
+                        OUTIF() << "Error: URL is required after HTTP method is no name is supplied.";
+                        filePath.clear();
+                        OUTPUT();
+                        return -1;
+                    }
+                }
+
+                if(httpMethod == "POST") {
+                    if(argssize < 2) {
+                        OUTIF() << "Error: data is required after specifying POST.";
+                        filePath.clear();
+                        OUTPUT();
+                        return -1;
+                    } else {
+                        data = args[1];
+                    }
+                }
+
             }
 
         } else {
-
             if (argssize >= 2) {
                 port = args[1].toUInt();
             }
@@ -457,7 +484,11 @@ int main(int argc, char *argv[])
 
         //set default choices
         if (!hex && !ascii && !mixedascii) {
-            hex = true;
+            if(http) {
+                mixedascii = true;
+            } else {
+                hex = true;
+            }
         }
 
         if (!tcp && !udp && !ssl && !http) {
@@ -610,19 +641,32 @@ int main(int argc, char *argv[])
             OUTIF() << "Warning: No data to send. Is your formatting correct?";
         }
 
-        if(http) {            
-            if (name.isEmpty()) {
-                sendPacket.requestPath = Packet::getRequestFromURL(data);
-                sendPacket.tcpOrUdp = Packet::getMethodFromURL(data);
-                if(httpMethod.contains("POST")) {
-                    sendPacket.tcpOrUdp.replace("Get", "Post");
-                }
+        // HTTP section
+        // Test packet 1:  .\packetsender.com --name "HTTPS POST Params"
+        // Test packet 2: .\packetsender.com --http GET "https://httpbin.org/get"
+        // Test packet 3: .\packetsender.com --http POST "https://httpbin.org/post" "{""hello"":1}"
 
-                sendPacket.port = Packet::getPortFromURL(data);
-                sendPacket.toIP = Packet::getHostFromURL(data);
+        if(http) {            
+            if ((!address.isEmpty()) && address.contains("://")) {
+                sendPacket.requestPath = Packet::getRequestFromURL(address);
+                sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
+                sendPacket.port = Packet::getPortFromURL(address);
+                sendPacket.toIP = Packet::getHostFromURL(address);
             }
+
+            if(httpMethod.contains("POST")) {
+                sendPacket.tcpOrUdp.replace("Get", "Post");
+            }
+
             sendPacket.persistent = false;
 
+            QDEBUGVAR(dataString);
+
+
+            if (!dataString.isEmpty()) {
+                sendPacket.hexString = dataString;
+
+            }
 
 
             QString url = "";
