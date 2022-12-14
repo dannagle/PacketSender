@@ -5,6 +5,8 @@
 #include <QAbstractSocket>
 #include <QList>
 #include <QDebug>
+#include <QSettings>
+#include <QStandardPaths>
 #include <QNetworkAddressEntry>
 #include <cmath>
 #include "packetnetwork.h"
@@ -166,12 +168,15 @@ int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *r
 
 void ThreadSender::run()
 {
-    QDEBUG() << "Begin send";
+
 
     QHostAddress addy(ip);
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
+
     QUdpSocket *socket = new QUdpSocket();
-    socket->bind(0);
+    socket->bind(IPV4_OR_IPV6, 0);
     socket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
     sourcePort = socket->localPort();
@@ -180,6 +185,8 @@ void ThreadSender::run()
 
     QHostAddress resolved = PacketNetwork::resolveDNS(ip);
 
+
+    QDEBUG() << "Flood socket bound to" << socket->localAddress() << sourcePort;
 
 
     // do a swap test to see if it is used.
