@@ -116,7 +116,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // default is TCP
     ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText("TCP"));
 
-
     //load last session
     if (settings.value("restoreSessionCheck", true).toBool()) {
         QDEBUG() << "Restoring last session";
@@ -1709,7 +1708,6 @@ void MainWindow::packetTable_checkMultiSelected()
 void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
 {
 
-
     packetTable_checkMultiSelected();
 
 
@@ -1723,9 +1721,14 @@ void MainWindow::on_packetsTable_itemClicked(QTableWidgetItem *item)
             ui->packetIPEdit->setText(clickedPacket.toIP);
             ui->packetPortEdit->setText(QString::number(clickedPacket.port));
             ui->resendEdit->setText(QString::number(clickedPacket.repeat));
+            QString oldText = ui->udptcpComboBox->currentText();
             ui->udptcpComboBox->setCurrentIndex(ui->udptcpComboBox->findText(clickedPacket.tcpOrUdp));
             ui->packetASCIIEdit->setText(Packet::hexToASCII(clickedPacket.hexString));
             ui->packetASCIIEdit->setToolTip("");
+
+            if(oldText != clickedPacket.tcpOrUdp) {
+                on_udptcpComboBox_currentIndexChanged(clickedPacket.tcpOrUdp);
+            }
 
         }
     }
@@ -2519,8 +2522,10 @@ void MainWindow::on_actionDonate_Thank_You_triggered()
 
 void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 {
-    auto isHttp = arg1.toLower().contains("http");
-    auto isPost = arg1.toLower().contains("post") && isHttp;
+
+    QString selectedText = ui->udptcpComboBox->currentText().toLower();
+    auto isHttp = selectedText.contains("http");
+    auto isPost = selectedText.contains("post") && isHttp;
 
     if(isHttp) {
         ui->asciiLabel->setText("Data");
