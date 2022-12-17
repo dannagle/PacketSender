@@ -9,25 +9,60 @@
  */
 
 #include "packetnetwork.h"
-#include <QApplication>
+#include "globals.h"
+#include "settings.h"
+#include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QDir>
 #include <QSettings>
-#include <QMessageBox>
 #include <QHostInfo>
 #include <QtGlobal>
 #include <QUrlQuery>
 #include <QStandardPaths>
+#ifdef CONSOLE_BUILD
+class QMessageBox {
+public:
+    static const int Ok = 0;
+    static const int Warning = 0;
+    void setWindowTitle(QString dummy){
+        Q_UNUSED(dummy);
+    }
+    void setStandardButtons(int dummy) {
+        Q_UNUSED(dummy);
 
-#include "settings.h"
+    }
+    void setDefaultButton(int dummy) {
+        Q_UNUSED(dummy);
+
+    }
+    void setIcon(int dummy) {
+        Q_UNUSED(dummy);
+
+    }
+
+    void setText(QString dummy) {
+        Q_UNUSED(dummy);
+
+    }
+
+    void exec() {
+
+    }
+
+};
+
+#else
+#include <QMessageBox>
 
 #include "persistentconnection.h"
 
 #ifndef RENDER_ONLY
 #include "persistenthttp.h"
 #endif
+#endif
+
 
 PacketNetwork::PacketNetwork(QObject *parent) :
     QObject(parent)
@@ -72,7 +107,7 @@ void PacketNetwork::kill()
 
     QDEBUG();
 
-    QApplication::processEvents();
+    QCoreApplication::processEvents();
 
 }
 
@@ -207,7 +242,6 @@ void PacketNetwork::init()
 
     QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
-
     QMessageBox msgBoxBindError;
     msgBoxBindError.setWindowTitle("Port bind error.");
     msgBoxBindError.setStandardButtons(QMessageBox::Ok);
@@ -722,6 +756,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         sendpacket.hexString = Packet::ASCIITohex(data);
     }
 
+#ifndef CONSOLE_BUILD
     if (sendpacket.persistent && (sendpacket.isTCP())) {
         //spawn a window.
         PersistentConnection * pcWindow = new PersistentConnection();
@@ -756,6 +791,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         return;
 
     }
+#endif
 
     QHostAddress address;
     address.setAddress(sendpacket.toIP);
@@ -780,7 +816,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     }
 
 
-    QApplication::processEvents();
+    QCoreApplication::processEvents();
 
     sendpacket.fromIP = "You";
     sendpacket.timestamp = QDateTime::currentDateTime();
@@ -993,6 +1029,7 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
 
 #ifndef RENDER_ONLY
 
+#ifndef CONSOLE_BUILD
     QDEBUGVAR(http->property("persistent").toBool());
     if(http->property("persistent").toBool()) {
         PersistentHTTP * view = new PersistentHTTP();
@@ -1000,7 +1037,7 @@ void PacketNetwork::httpFinished(QNetworkReply* pReply)
         view->show();
         view->setAttribute(Qt::WA_DeleteOnClose);
     }
-
+#endif
 #endif
     emit packetSent(httpPacket);
 
@@ -1024,3 +1061,4 @@ QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
 
     return theServers;
 }
+

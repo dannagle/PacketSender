@@ -1,68 +1,27 @@
-	
+
 SOURCES += main.cpp\
-    panel.cpp \
-        mainwindow.cpp \
         mainpacketreceiver.cpp \
     packetnetwork.cpp \
     packet.cpp \
-    sendpacketbutton.cpp \
-    brucethepoodle.cpp \
-    irisandmarigold.cpp \
-    tcpthread.cpp \
-    persistentconnection.cpp \
     settings.cpp \
-    about.cpp \
-    subnetcalc.cpp \
-    threadedtcpserver.cpp \
-    cloudui.cpp \
-	multicastsetup.cpp \
-	udpflooding.cpp \
-    packetlogmodel.cpp \
-        postdatagen.cpp \
-    panelgenerator.cpp \
-    persistenthttp.cpp
+    tcpthread.cpp \
+    threadedtcpserver.cpp
 
-HEADERS  += mainwindow.h \
-    mainpacketreceiver.h \
-    panel.h \
+
+HEADERS  += mainpacketreceiver.h \
     packetnetwork.h \
     packet.h \
     globals.h \
-    sendpacketbutton.h \
-    brucethepoodle.h \
-    irisandmarigold.h \
-    tcpthread.h \
-    persistentconnection.h \
     settings.h \
-    about.h \
-    subnetcalc.h \
-    threadedtcpserver.h \
-    cloudui.h \
-	multicastsetup.h \
-	udpflooding.h \
-    packetlogmodel.h \
-        postdatagen.h\
-    panelgenerator.h \
-    persistenthttp.h
+    tcpthread.h \
+    threadedtcpserver.h
 
 
-FORMS    += mainwindow.ui \
-    brucethepoodle.ui \
-    irisandmarigold.ui \
-    persistentconnection.ui \
-    settings.ui \
-    about.ui \
-    subnetcalc.ui \
-    cloudui.ui \
-	multicastsetup.ui \	
-    udpflooding.ui \
-        persistenthttp.ui \
-        postdatagen.ui \
-    panelgenerator.ui
 
 OTHER_FILES += \
     packetsender.css \
    packetsender_mac.css
+
 
 linux:target.path = /usr/local/bin/
 linux:INSTALLS += target

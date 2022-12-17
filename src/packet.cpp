@@ -9,6 +9,7 @@
  */
 
 #include "packet.h"
+#include "globals.h"
 
 #include <QDebug>
 #include <QStringList>
@@ -254,6 +255,8 @@ QList<Packet> Packet::ImportJSON(QByteArray data)
     return returnList;
 }
 
+#ifndef CONSOLE_BUILD
+
 
 SendPacketButton * Packet::getSendButton(QTableWidget * parent)
 {
@@ -323,6 +326,7 @@ QIcon Packet::getIcon()
     return myIcon;
 
 }
+#endif
 
 QString Packet::hexToASCII(QString &hex, bool convertWhitespace)
 {
@@ -756,6 +760,7 @@ bool Packet::removeFromDB(QString thename)
     return true;
 }
 
+#ifndef CONSOLE_BUILD
 
 Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
 {
@@ -773,6 +778,7 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
     returnPacket.requestPath = tItem->data(Packet::REQUEST_URL).toString();
     return returnPacket;
 }
+#endif
 
 SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
 {
@@ -932,6 +938,7 @@ bool Packet::operator()(const Packet *a, const Packet *b) const
     return a->timestamp < b->timestamp;
 }
 
+#ifndef CONSOLE_BUILD
 
 void Packet::populateTableWidgetItem(QTableWidgetItem * tItem, Packet thepacket)
 {
@@ -967,7 +974,7 @@ void Packet::setBoldItem(QTableWidgetItem * tItem, Packet thepacket)
     }
     */
 }
-
+#endif
 
 QByteArray Packet::HEXtoByteArray(QString thehex)
 {

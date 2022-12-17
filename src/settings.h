@@ -1,12 +1,54 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "globals.h"
+
+#ifndef CONSOLE_BUILD
 #include <QDialog>
+#include "packet.h"
+#endif
 #include <QSettings>
 #include <QList>
-#include "globals.h"
-#include "packet.h"
 
+
+#ifdef CONSOLE_BUILD
+class Settings {
+public:
+    static QList<int> portsToIntList(QString ports);
+    static QString intListToPorts(QList<int> portList);
+
+    static QStringList getHTTPHeaders(QString host);
+    static QHash<QString, QString> getRawHTTPHeaders(QString host);
+    static QHash<QString, QStringList> getAllHTTPHeaders();
+
+    static bool detectJSON_XML();
+
+
+    static const QString SEND_STR;
+    static const QString NAME_STR;
+    static const QString RESEND_STR;
+    static const QString TOADDRESS_STR;
+    static const QString TOPORT_STR;
+    static const QString METHOD_STR;
+    static const QString ASCII_STR;
+    static const QString HEX_STR;
+    static const QString REQUEST_STR;
+
+    static const QString TIME_STR;
+    static const QString FROMIP_STR;
+    static const QString FROMPORT_STR;
+    static const QString ERROR_STR;
+
+    static const QString ALLHTTPSHOSTS;
+    static const QString HTTPHEADERINDEX;
+
+
+private:
+    static QPair<QString, QString> header2keyvalue(QString header);
+
+
+};
+#else
 
 
 namespace Ui
@@ -102,4 +144,5 @@ private:
         static QPair<QString, QString> header2keyvalue(QString header);
 };
 
+#endif
 #endif // SETTINGS_H

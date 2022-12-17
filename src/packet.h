@@ -15,12 +15,15 @@
 #include <QUdpSocket>
 #include <QDebug>
 #include <QDateTime>
+#ifndef CONSOLE_BUILD
 #include <QTableWidgetItem>
 #include <QPushButton>
+#endif
 #include <QNetworkDatagram>
 #include <QHash>
-#include "globals.h"
+#ifndef CONSOLE_BUILD
 #include "sendpacketbutton.h"
+#endif
 
 
 struct SmartResponseConfig {
@@ -86,8 +89,10 @@ class Packet
         static Packet fetchFromDB(QString thename);
         static QList<Packet> fetchAllfromDB(QString importFile);
         static bool removeFromDB(QString thename);
+#ifndef CONSOLE_BUILD
         static void populateTableWidgetItem(QTableWidgetItem *tItem, Packet thepacket);
         static Packet fetchTableWidgetItemData(QTableWidgetItem *tItem);
+#endif
         static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
         static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
         static QByteArray encodingToByteArray(QString encoding, QString data);
@@ -114,8 +119,10 @@ class Packet
 
         bool operator()(const Packet* a, const Packet* b) const;
 
+#ifndef CONSOLE_BUILD
         SendPacketButton * getSendButton(QTableWidget *parent);
         QIcon getIcon();
+#endif
         static void sortByName(QList<Packet> &packetList);
         static void sortByTime(QList<Packet> &packetList);
         static float oneDecimal(float value);
@@ -123,7 +130,9 @@ class Packet
         static QByteArray ExportJSON(QList<Packet> packetList);
         static QList<Packet> ImportJSON(QByteArray data);
         void static removeFromDBList(QStringList nameList);
+#ifndef CONSOLE_BUILD
         static void setBoldItem(QTableWidgetItem *tItem, Packet thepacket);
+#endif
         static Packet fetchFromList(QString thename, QList<Packet> packets);
 private:
         static int hexToInt(QChar hex);

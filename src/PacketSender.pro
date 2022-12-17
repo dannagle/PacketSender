@@ -8,5 +8,58 @@ QT  += core gui network widgets
 
 TARGET = packetsender
 TEMPLATE = app
+DEFINES += GUI_BUILD
+
+
+
+SOURCES += mainwindow.cpp \
+    panel.cpp \
+    sendpacketbutton.cpp \
+    brucethepoodle.cpp \
+    irisandmarigold.cpp \
+    persistentconnection.cpp \
+    about.cpp \
+    subnetcalc.cpp \
+    cloudui.cpp \
+    multicastsetup.cpp \
+    udpflooding.cpp \
+    packetlogmodel.cpp \
+    postdatagen.cpp \
+    panelgenerator.cpp \
+    persistenthttp.cpp
+
+HEADERS  += mainwindow.h \
+    panel.h \
+    sendpacketbutton.h \
+    brucethepoodle.h \
+    irisandmarigold.h \
+    persistentconnection.h \
+    about.h \
+    subnetcalc.h \
+    cloudui.h \
+    multicastsetup.h \
+    udpflooding.h \
+    packetlogmodel.h \
+    postdatagen.h\
+    panelgenerator.h \
+    persistenthttp.h
+
+
+
+FORMS    += mainwindow.ui \
+    brucethepoodle.ui \
+    irisandmarigold.ui \
+    persistentconnection.ui \
+    settings.ui \
+    about.ui \
+    subnetcalc.ui \
+    cloudui.ui \
+        multicastsetup.ui \
+    udpflooding.ui \
+        persistenthttp.ui \
+        postdatagen.ui \
+    panelgenerator.ui
+
 
 include(packetsender_main.pri)
+

@@ -6,8 +6,9 @@
 #include <QList>
 
 #include "tcpthread.h"
+#ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
-
+#endif
 class ThreadedTCPServer : public QTcpServer
 {
         Q_OBJECT
@@ -37,8 +38,10 @@ class ThreadedTCPServer : public QTcpServer
 
 
         QList<TCPThread *> tcpthreadList;
-        QList<PersistentConnection *> pcList;
+#ifndef CONSOLE_BUILD
 
+        QList<PersistentConnection *> pcList;
+#endif
 
 };
 

@@ -4,13 +4,14 @@
 #
 #-------------------------------------------------
 
-QT       += core network widgets
+QT       += core network
 
 TARGET = packetsendercli
 TEMPLATE = app
 
 win32:CONFIG += console
 win32:DEFINES += CONSOLE_BUILD
+win32:DEFINES -= GUI_BUILD
 
 
 include(packetsender_main.pri)

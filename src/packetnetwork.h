@@ -24,10 +24,11 @@
 #include <QDateTime>
 #include <QHash>
 #include <QHostAddress>
-#include "globals.h"
 #include "tcpthread.h"
 #include "packet.h"
+#ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
+#endif
 #include <threadedtcpserver.h>
 
 class PacketNetwork : public QObject
@@ -115,8 +116,11 @@ private:
         QList<QNetworkAccessManager *> httpList;
 
         QList<TCPThread *> tcpthreadList;
+#ifdef CONSOLE_BUILD
+        QList<void *> pcList;
+#else
         QList<PersistentConnection *> pcList;
-
+#endif
         //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;

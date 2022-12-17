@@ -250,6 +250,10 @@ https://cloud.packetsender.com/help
 Packet Sender has a "portable" mode. At launch, it will look for `portablemode.txt` and populate any missing settings files in that run-time directory. These files are  `packets.ini`, `ps_settings.ini`, `ps.key`, and `ps.pem`.
 You may also have some files portable and the other in their standard location by removing portablemode.txt.
 
+### DDLs that can be removed in Portable Mode
+If you do not require the GUI, you may remove these DDLs
+- Qt5Widgets.dll
+
 The run-time directory Windows users is the same place as the .exe.
 
 For MAC users, this run-time directory is at `PacketSender.app/Contents/MacOS`.

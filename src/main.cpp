@@ -9,6 +9,7 @@
  *
  */
 
+#include "globals.h"
 #ifndef CONSOLE_BUILD
     #include <QtWidgets/QApplication>
     #include <QDesktopServices>

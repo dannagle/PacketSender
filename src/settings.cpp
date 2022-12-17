@@ -1,5 +1,5 @@
 #include "settings.h"
-#include "ui_settings.h"
+
 
 #include <QStringList>
 #include <QDebug>
@@ -7,13 +7,18 @@
 #include <QSettings>
 #include <QDir>
 #include <QPair>
-#include <QDesktopServices>
 #include <QFile>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <QHostAddress>
 #include <QStandardPaths>
 
+
+#ifndef CONSOLE_BUILD
+#include "ui_settings.h"
+
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QMessageBox>
+#endif
 
 const QString Settings::SEND_STR = "Send";
 const QString Settings::NAME_STR = "Name";
@@ -35,6 +40,7 @@ const QString Settings::ERROR_STR = "Error";
 const QString Settings::ALLHTTPSHOSTS = "HTTPHeaderHosts";
 const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
 
+#ifndef CONSOLE_BUILD
 
 Settings::Settings(QWidget *parent) :
     QDialog(parent),
@@ -441,6 +447,8 @@ QStringList Settings::defaultTrafficTableHeader()
 
 }
 
+#endif
+
 QString Settings::intListToPorts(QList<int> portList)
 {
     if(portList.isEmpty()) {
@@ -494,6 +502,7 @@ QList<int> Settings::portsToIntList(QString ports)
 
 }
 
+#ifndef CONSOLE_BUILD
 
 
 void Settings::setDefaultTableHeaders()
@@ -659,6 +668,8 @@ void Settings::on_documentationButton_clicked()
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
+
+
 void Settings::saveHTTPHeader(QString host, QString header)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -708,6 +719,7 @@ void Settings::deleteHTTPHeader(QString host, QString header)
     }
 
 }
+#endif
 
 QPair<QString, QString> Settings::header2keyvalue(QString header)
 {
@@ -773,6 +785,8 @@ QHash<QString, QStringList> Settings::getAllHTTPHeaders()
 
 }
 
+#ifndef CONSOLE_BUILD
+
 void Settings::clearHTTPHeaders(QString host)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -785,6 +799,7 @@ void Settings::clearHTTPHeaders(QString host)
         settings.remove(Settings::HTTPHEADERINDEX + host);
     }
 }
+
 
 void Settings::on_addCredentialButton_clicked()
 {
@@ -925,3 +940,4 @@ void Settings::on_genAuthCheck_clicked(bool checked)
     }
 
 }
+#endif

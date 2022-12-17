@@ -35,8 +35,9 @@ bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, QString ipMode)
 
 
     tcpthreadList.clear();
+#ifndef CONSOLE_BUILD
     pcList.clear();
-
+#endif
 
     bool bindResult = listen(
                           IPV4_OR_IPV6
@@ -60,6 +61,8 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     thread->isSecure = encrypted;
     QDEBUGVAR(thread->isSecure);
     if (persistentConnectCheck) {
+#ifndef CONSOLE_BUILD
+
         PersistentConnection * pcWindow = new PersistentConnection();
         thread->incomingPersistent = true;
         pcWindow->initWithThread(thread, serverPort());
@@ -91,7 +94,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
         //TODO: Use a real connection manager.
         //prevent Qt from auto-destorying this thread while it tries to close.
         tcpthreadList.append(thread);
-
+#endif
     } else {
 
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));

@@ -1,5 +1,5 @@
 #include "mainpacketreceiver.h"
-
+#include "globals.h"
 
 
 MainPacketReceiver::MainPacketReceiver(QObject *parent) :QObject(parent) {
