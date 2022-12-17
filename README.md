@@ -250,9 +250,24 @@ https://cloud.packetsender.com/help
 Packet Sender has a "portable" mode. At launch, it will look for `portablemode.txt` and populate any missing settings files in that run-time directory. These files are  `packets.ini`, `ps_settings.ini`, `ps.key`, and `ps.pem`.
 You may also have some files portable and the other in their standard location by removing portablemode.txt.
 
-### DDLs that can be removed in Portable Mode
+### DDLs that can be removed in Console-only portable Mode
 If you do not require the GUI, you may remove these DDLs
+- Qt5Svg.dll
+- libEGL.dll
+- libGLESv2.dll
 - Qt5Widgets.dll
+- Qt5Gui.dll
+- opengl32sw.dll
+- D3Dcompiler_47.dll
+- iconengines directory
+- imageformats directory
+- styles directory
+
+### DDLs that can be removed if you do not need secure connections
+If you do not require SSL, you may remove these DDLs
+- libcrypto-1_1-x64.dll
+- libssl-1_1-x64.dll
+
 
 The run-time directory Windows users is the same place as the .exe.
 
