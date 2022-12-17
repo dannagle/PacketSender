@@ -1,5 +1,5 @@
 name: packetsender
-version: 8.0.11
+version: 8.1.0
 summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
 description: |
@@ -9,7 +9,7 @@ description: |
 # sudo snap install packetsender*.snap --dangerous
 
 grade: stable
-base: core18
+base: core20
 confinement: strict
 architectures: [amd64]
 
@@ -32,8 +32,7 @@ apps:
 parts:
   desktop-qt5:
     build-snaps:
-      - kde-frameworks-5-core18-sdk
-      - kde-frameworks-5-core18
+      - kde-frameworks-5-qt-5-15-core20-sdk
     build-packages:
     - build-essential
     - qtbase5-dev
