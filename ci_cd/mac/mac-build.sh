@@ -51,7 +51,7 @@ rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
 
 rm -rf newbuild.dmg  || true
-"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg  -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "38E41C6C66CCA827750A10E26539E038F033E933" -notarizationAppleID "$2" -notarizationPassword "$3"
+"/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg -identity  38E41C6C66CCA827750A10E26539E038F033E933 -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "38E41C6C66CCA827750A10E26539E038F033E933" -notarizationAppleID "$2" -notarizationPassword "$3"
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg || true
 mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg
