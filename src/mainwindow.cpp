@@ -33,6 +33,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSortFilterProxyModel>
+
 
 #include <QStringList>
 
@@ -175,11 +177,17 @@ MainWindow::MainWindow(QWidget *parent) :
     packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
     packetsLogged.setTableHeaders(packetTableHeaders);
 
-    ui->trafficLogTable->setModel(&packetsLogged);
+
+    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(&packetsLogged);
+    ui->trafficLogTable->setModel(proxyModel);
 
 
     ui->trafficLogTable->verticalHeader()->show();
     ui->trafficLogTable->horizontalHeader()->show();
+
+    ui->trafficLogTable->setSortingEnabled(true);
+
 
     loadPacketsTable();
 
