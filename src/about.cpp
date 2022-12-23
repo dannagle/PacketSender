@@ -21,6 +21,7 @@ About::About(QWidget *parent) :
         versionBuilder.append("\nSSL Version: ");
         versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
     }
+    versionBuilder.append("\nCommit Hash: " + QString(GIT_CURRENT_SHA1));
     ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");

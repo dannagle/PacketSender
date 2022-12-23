@@ -43,6 +43,8 @@ win32:RC_FILE = psicon.rc
 # Enable before porting to Qt6
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
+DEFINES += GIT_CURRENT_SHA1="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)\\\""
+
 
 macx:ICON = psicons.icns
 
