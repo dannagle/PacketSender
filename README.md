@@ -12,7 +12,6 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Sponsors](#sponsors)
   * Visit [IWL.com](https://www.iwl.com/)
   * Visit [NagleCode.com](https://dannagle.com/)
-  * Visit [JetBrains.com](https://www.jetbrains.com/)
 
 * [GUI](#gui)
 * [Intense Traffic Generator (GUI)](#udptraffic)
@@ -46,9 +45,6 @@ Packet Sender would like to thank the following sponsors.
 <br>NagleCode is a software publisher and development studio. 
 <br><br><br>
 
-[![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
-<br>JetBrains provides world-class programming tools to help speed development.
-<br><br><br>
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
