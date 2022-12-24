@@ -12,7 +12,6 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Sponsors](#sponsors)
   * Visit [IWL.com](https://www.iwl.com/)
   * Visit [NagleCode.com](https://dannagle.com/)
-  * Visit [JetBrains.com](https://www.jetbrains.com/)
 
 * [GUI](#gui)
 * [Intense Traffic Generator (GUI)](#udptraffic)
@@ -46,9 +45,6 @@ Packet Sender would like to thank the following sponsors.
 <br>NagleCode is a software publisher and development studio. 
 <br><br><br>
 
-[![JetBrains](screenshots/JetBrains_Logo200.png)](https://www.jetbrains.com/?from=PacketSender)
-<br>JetBrains provides world-class programming tools to help speed development.
-<br><br><br>
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
@@ -90,6 +86,9 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 -->
 
 
+<!--
+Not sure when this will be back.
+
 ## iOS Mobile App
 
 ![Packet Sender logo](screenshots/ios_logo.png)
@@ -98,6 +97,7 @@ The iOS version is located [on the Apple App Store](https://apps.apple.com/app/i
 
 [![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
+-->
 <a id="gui"></a>
 # GUI 
 
@@ -572,7 +572,7 @@ The only dependency is Qt SDK
 1. Download the Qt installer from http://www.qt.io/download-open-source/
 1. Let it install MingGW if you don't have a compiler.
 1. Open the project PacketSender.pro
-1. Build! Qt is the only dependency!
+1. Build! 
 
 The Windows and Mac versions were built using Qt 5.12. Packet Sender does support Qt 6, however it does not
 support cmake.
@@ -607,11 +607,14 @@ chmod a+x PacketSender
 
 Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
 
-# License
+# Legal / Compliance
 
-GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
+License is GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
+Some distributions of Packet Sender may use [OpenSSL](https://www.openssl.org/).
+The most current VPAT [may be found](vpat_2.4_packetsender.pdf) in this repo.
+
 
 # Copyright
 
-Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://PacketSender.com)
+Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://packetsender.com)
 
