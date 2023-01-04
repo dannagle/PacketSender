@@ -178,7 +178,7 @@ MainWindow::MainWindow(QWidget *parent) :
     packetsLogged.setTableHeaders(packetTableHeaders);
 
 
-    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(&packetsLogged);
     ui->trafficLogTable->setModel(proxyModel);
 
@@ -1844,7 +1844,8 @@ void MainWindow::on_saveTrafficPacket_clicked()
     QString namePrompt;
     bool ok;
     foreach (index, indexes) {
-        Packet savePacket = packetsLogged.getPacket(index);
+        QModelIndex sourceIndex = proxyModel->mapToSource(index);
+        Packet savePacket = packetsLogged.getPacket(sourceIndex);
         QDEBUG() << "Saving" << savePacket.name;
         namePrompt = QInputDialog::getText(this, tr("Save Packet"),
                                            tr("Packet name:"), QLineEdit::Normal,
@@ -1976,7 +1977,8 @@ void MainWindow::on_toClipboardButton_clicked()
         return;
     }
     foreach (index, indexes) {
-        Packet savePacket = packetsLogged.getPacket(index);
+        QModelIndex sourceIndex = proxyModel->mapToSource(index);
+        Packet savePacket = packetsLogged.getPacket(sourceIndex);
         out << "Time: " << savePacket.timestamp.toString(DATETIMEFORMAT) << "\n";
         out << "TO: " << savePacket.toIP << ":" << savePacket.port << "\n";
         out << "From: " << savePacket.fromIP << ":" << savePacket.fromPort << "\n";
