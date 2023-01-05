@@ -181,9 +181,14 @@ int main(int argc, char *argv[])
         QCoreApplication::setApplicationName("Packet Sender");
         QString versionBuilder = QString("version ") + SW_VERSION;
         if (QSslSocket::supportsSsl()) {
-            versionBuilder.append(" / SSL version:");
+            versionBuilder.append(" / SSL:");
             versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
         }
+
+        #ifdef GIT_CURRENT_SHA1
+            versionBuilder.append("/ Commit: " + QString(GIT_CURRENT_SHA1));
+        #endif
+
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
