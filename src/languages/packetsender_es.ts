@@ -39,7 +39,7 @@
     <message>
         <location filename="../brucethepoodle.cpp" line="29"/>
         <source>Bruce The Poodle!</source>
-        <translation type="finished">¡Bruce el caniche!</translation>
+        <translation>¡Bruce el caniche!</translation>
     </message>
 </context>
 <context>
@@ -52,7 +52,7 @@
     <message>
         <location filename="../cloudui.ui" line="28"/>
         <source>Account</source>
-        <translation type="finished">Cuenta</translation>
+        <translation>Cuenta</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="49"/>
@@ -62,42 +62,42 @@
     <message>
         <location filename="../cloudui.ui" line="73"/>
         <source>Username</source>
-        <translation type="finished">Nombre de usuario</translation>
+        <translation>Nombre de usuario</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="91"/>
         <source>Password</source>
-        <translation type="finished">Clave</translation>
+        <translation>Clave</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="112"/>
         <source>Confirm Password</source>
-        <translation type="finished">Confirmar contraseña</translation>
+        <translation>Confirmar contraseña</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="131"/>
         <source>Remember Login</source>
-        <translation type="finished">Recordar Iniciar sesión</translation>
+        <translation>Recordar Iniciar sesión</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="140"/>
         <source>Login</source>
-        <translation type="finished">Acceso</translation>
+        <translation>Acceso</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="150"/>
         <source>Create a new account.</source>
-        <translation type="finished">Crea una cuenta nueva.</translation>
+        <translation>Crea una cuenta nueva.</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="187"/>
         <source>Privacy</source>
-        <translation type="finished">Privacidad</translation>
+        <translation>Privacidad</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="194"/>
         <source>Terms</source>
-        <translation type="finished">Términos de servicio</translation>
+        <translation>Términos de servicio</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="214"/>
@@ -107,33 +107,33 @@
     <message>
         <location filename="../cloudui.ui" line="228"/>
         <source>Import</source>
-        <translation type="finished">importar</translation>
+        <translation>importar</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="239"/>
         <source>Import From URL</source>
-        <translation type="finished">Importar desde URL</translation>
+        <translation>Importar desde URL</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="248"/>
         <location filename="../cloudui.ui" line="372"/>
         <source>Description</source>
-        <translation type="finished">Descripción</translation>
+        <translation>Descripción</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="268"/>
         <source>View URL</source>
-        <translation type="finished">Ver URL</translation>
+        <translation>Ver URL</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="283"/>
         <source>Delete Packet Set</source>
-        <translation type="finished">Eliminar conjunto de paquetes</translation>
+        <translation>Eliminar conjunto de paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="290"/>
         <source>Import Packet Set</source>
-        <translation type="finished">Importar conjunto de paquetes</translation>
+        <translation>Importar conjunto de paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="307"/>
@@ -184,22 +184,22 @@
     <message>
         <location filename="../mainwindow.ui" line="35"/>
         <source>Name</source>
-        <translation type="finished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="48"/>
         <source>Packet Name</source>
-        <translation type="finished">Nombre del paquete</translation>
+        <translation>Nombre del paquete</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="72"/>
         <source>Request</source>
-        <translation type="finished">Solicitud de red</translation>
+        <translation>Solicitud de red</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="79"/>
         <source>URL path</source>
-        <translation type="finished">ruta URL</translation>
+        <translation>ruta URL</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="93"/>
@@ -209,17 +209,17 @@
     <message>
         <location filename="../mainwindow.ui" line="100"/>
         <source>Generate Data</source>
-        <translation type="finished">Generar datos</translation>
+        <translation>Generar datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="107"/>
         <source>ASCII representation</source>
-        <translation type="finished">Representación ASCII</translation>
+        <translation>Representación ASCII</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="117"/>
         <source>Load File</source>
-        <translation type="finished">Cargar archivo</translation>
+        <translation>Cargar archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="128"/>
@@ -229,37 +229,37 @@
     <message>
         <location filename="../mainwindow.ui" line="135"/>
         <source>HEX representation</source>
-        <translation type="finished">Representación HEX</translation>
+        <translation>Representación HEX</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="151"/>
         <source>Address</source>
-        <translation type="finished">Dirección de red</translation>
+        <translation>Dirección de red</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="158"/>
         <source>IPv4, IPv6, DNS Lookup</source>
-        <translation type="finished">IPv4, IPv6, DNS Buscar</translation>
+        <translation>IPv4, IPv6, DNS Buscar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="168"/>
         <source>Port</source>
-        <translation type="finished">Puerto de red</translation>
+        <translation>Puerto de red</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="184"/>
         <source>1 to 65535</source>
-        <translation type="finished">1 a 65535</translation>
+        <translation>1 a 65535</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="194"/>
         <source>Resend Delay</source>
-        <translation type="finished">Reenviar retraso</translation>
+        <translation>Reenviar retraso</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="207"/>
         <source>0.0/blank off</source>
-        <translation type="finished">0.0/apar con</translation>
+        <translation>0.0/apar con</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="230"/>
@@ -299,147 +299,147 @@
     <message>
         <location filename="../mainwindow.ui" line="296"/>
         <source>Send</source>
-        <translation type="finished">Enviar</translation>
+        <translation>Enviar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="303"/>
         <source>Save</source>
-        <translation type="finished">Guardar archivo</translation>
+        <translation>Guardar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="332"/>
         <source>Search Saved Packets...</source>
-        <translation type="finished">Buscar paquetes guardados</translation>
+        <translation>Buscar paquetes guardados</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="361"/>
         <source>Generate Panel!</source>
-        <translation type="finished">¡Generar panel!</translation>
+        <translation>¡Generar panel!</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="384"/>
         <source>Delete Saved Packet</source>
-        <translation type="finished">Eliminar paquete guardado</translation>
+        <translation>Eliminar paquete guardado</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="391"/>
         <source>Persistent TCP</source>
-        <translation type="finished">TCP persistente</translation>
+        <translation>TCP persistente</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="428"/>
         <source>Clear Log</source>
-        <translation type="finished">Borrar registro</translation>
+        <translation>Borrar registro</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="448"/>
         <source>Log Traffic</source>
-        <translation type="finished">Registro de tráfico</translation>
+        <translation>Registro de tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="458"/>
         <source>Save Log</source>
-        <translation type="finished">Guardar registro</translation>
+        <translation>Guardar registro</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="465"/>
         <source>Save Traffic Packet</source>
-        <translation type="finished">Guardar paquete de tráfico</translation>
+        <translation>Guardar paquete de tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="472"/>
         <source>Copy to Clipboard</source>
-        <translation type="finished">Copiar al portapapeles</translation>
+        <translation>Copiar al portapapeles</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="520"/>
         <source>&amp;File</source>
-        <translation type="finished">>&amp;Archivo</translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="529"/>
         <source>&amp;Help</source>
-        <translation type="finished">A&amp;yudar</translation>
+        <translation>A&amp;yudar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="540"/>
         <source>&amp;Tools</source>
-        <translation type="finished">&amp;Herramientas</translation>
+        <translation>&amp;Herramientas</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="550"/>
         <source>&amp;Multicast</source>
-        <translation type="finished">&amp;Multidifusión</translation>
+        <translation>&amp;Multidifusión</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="556"/>
         <source>Panels</source>
-        <translation type="finished">Paneles</translation>
+        <translation>Paneles</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="574"/>
         <source>E&amp;xit</source>
-        <translation type="finished">&amp;Salida</translation>
+        <translation>&amp;Salida</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>&amp;Settings</source>
-        <translation type="finished">Ajus&amp;tes</translation>
+        <translation>Ajus&amp;tes</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="592"/>
         <source>&amp;About</source>
-        <translation type="finished">Sobre</translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="601"/>
         <source>&amp;Import Database</source>
-        <translation type="finished">Importar base de datos</translation>
+        <translation>Importar base de datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="610"/>
         <source>&amp;Export Database</source>
-        <translation type="finished">Exportar base de datos</translation>
+        <translation>Exportar base de datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="615"/>
         <source>Persistent Connection</source>
-        <translation type="finished">Conexión persistente</translation>
+        <translation>Conexión persistente</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="624"/>
         <source>&amp;Subnet Calculator</source>
-        <translation type="finished">Calculadora de subred</translation>
+        <translation>Calculadora de subred</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="633"/>
         <source>D&amp;onate (Thank You!)</source>
-        <translation type="finished">Donar (¡Gracias!)</translation>
+        <translation>Donar (¡Gracias!)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="638"/>
         <source>Documentation</source>
-        <translation type="finished">Documentación</translation>
+        <translation>Documentación</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="647"/>
         <source>&amp;Documentation</source>
-        <translation type="finished">&amp;Documentación</translation>
+        <translation>&amp;Documentación</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="652"/>
         <source>Export To Cloud</source>
-        <translation type="finished">Exportar a la nube</translation>
+        <translation>Exportar a la nube</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="661"/>
         <source>&amp;Cloud Save and Share</source>
-        <translation type="finished">Guardar y compartir en la nube</translation>
+        <translation>Guardar y compartir en la nube</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="670"/>
         <source>&amp;Join/Leave IPv4</source>
-        <translation type="finished">Unirse/Abandonar IPv4</translation>
+        <translation>Unirse/Abandonar IPv4</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="679"/>
@@ -454,37 +454,37 @@
     <message>
         <location filename="../mainwindow.ui" line="697"/>
         <source>Follow on Twitter</source>
-        <translation type="finished">Seguir en Twitter</translation>
+        <translation>Seguir en Twitter</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="706"/>
         <source>Connect on LinkedIn</source>
-        <translation type="finished">Conectar en LinkedIn</translation>
+        <translation>Conectar en LinkedIn</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="715"/>
         <source>Intense &amp;Traffic Generator</source>
-        <translation type="finished">Tráfico Intenso</translation>
+        <translation>Tráfico Intenso</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="724"/>
         <source>Forums</source>
-        <translation type="finished">Foros</translation>
+        <translation>Foros</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="729"/>
         <source>Load Starter Panel</source>
-        <translation type="finished">Panel de inicio de carga</translation>
+        <translation>Panel de inicio de carga</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="734"/>
         <source>Empty Panel Project</source>
-        <translation type="finished">Proyecto de panel vacío</translation>
+        <translation>Proyecto de panel vacío</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1850"/>
         <source>Save Packet</source>
-        <translation type="finished">Guardar paquete</translation>
+        <translation>Guardar paquete</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1851"/>
@@ -586,7 +586,7 @@
     <message>
         <location filename="../panelgenerator.ui" line="183"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="192"/>
@@ -596,7 +596,7 @@
     <message>
         <location filename="../panelgenerator.ui" line="203"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">A&amp;yudar</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="209"/>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../panelgenerator.ui" line="252"/>
         <source>&amp;Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Documentación</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="255"/>
@@ -820,7 +820,7 @@
     <message>
         <location filename="../persistentconnection.ui" line="94"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Enviar</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="104"/>
@@ -836,7 +836,7 @@
     <message>
         <location filename="../persistentconnection.ui" line="158"/>
         <source>Clear Log</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Borrar registro</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="165"/>
@@ -910,6 +910,19 @@
     <message>
         <location filename="../mainwindow.cpp" line="2681"/>
         <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../packet.cpp" line="266"/>
+        <source>Send</source>
+        <translation type="finished">Enviar</translation>
+    </message>
+    <message>
+        <location filename="../packet.cpp" line="267"/>
+        <source>Send &lt;b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1168,7 +1181,7 @@
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="560"/>
@@ -1454,7 +1467,7 @@
     <message>
         <location filename="../udpflooding.ui" line="38"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Puerto de red</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="54"/>

@@ -263,8 +263,8 @@ SendPacketButton * Packet::getSendButton(QTableWidget * parent)
     SendPacketButton * returnButton = new SendPacketButton(parent);
     returnButton->name = name;
     returnButton->init();
-    returnButton->setText("Send");
-    returnButton->setToolTip("Send <b>" + name + "</b>");
+    returnButton->setText(QObject::tr("Send"));
+    returnButton->setToolTip(QObject::tr("Send <b>") + name + "</b>");
     returnButton->setProperty("name", name);
     fromIP = "YOU";
     returnButton->setIcon(getIcon());
