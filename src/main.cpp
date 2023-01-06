@@ -14,6 +14,7 @@
     #include <QtWidgets/QApplication>
     #include <QDesktopServices>
     #include <QTranslator>
+    #include <QLibraryInfo>
     #include "settings.h"
 #endif
 #include <QDir>
@@ -1028,27 +1029,19 @@ int main(int argc, char *argv[])
 
         qRegisterMetaType<Packet>();
 
-        QTranslator translator;
+        QTranslator translator, translator_qt, translator_qtbase;
 
-        /*
-        bool loaded = translator.load("D:/github/PacketSender/src/languages/packetsender_es.qm");
-        auto done = QApplication::installTranslator(&translator);
-        if(loaded && done) {
-            QDEBUG() << "Spanish Translation Loaded" << done;
-        } else {
-            return -1;
-        }
-        */
+        // Locale translation...
+        QString locale = QLocale::system().name().section("", 0, 2);
+        QDEBUGVAR(locale);
+
 
         QString language = Settings::language();
         if(language == "Spanish") {
-            bool loaded = translator.load(":/languages/packetsender_es.qm");
-            if(!loaded) {
-                QDEBUG() << "Could not load translation";
-            } else {
-                auto done = QApplication::installTranslator(&translator);
-                QDEBUG() << "Spanish Translation Loaded" << done;
-            }
+            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_es.qm");
+            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
         } else {
             QDEBUG() << "Loading Default English";
         }

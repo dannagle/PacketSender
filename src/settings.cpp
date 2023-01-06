@@ -11,7 +11,6 @@
 #include <QHostAddress>
 #include <QStandardPaths>
 
-
 #ifndef CONSOLE_BUILD
 #include "ui_settings.h"
 
@@ -244,9 +243,11 @@ Settings::~Settings()
 
 QString Settings::language()
 {
+
+    QString locale = QLocale::system().name().section("", 0, 2);
+    QDEBUGVAR(locale);
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString language = settings.value("languageCombo", "English").toString();
-
     if(language.toLower().contains("spanish")) {
         return "Spanish";
     } else {
