@@ -53,4 +53,5 @@ macx:QMAKE_INFO_PLIST = Info.plist
 linux:QMAKE_CXXFLAGS += -D_FORTIFY_SOURCE=2
 
 RESOURCES += packetsender.qrc \
+    $$PWD/translations.qrc \
     qdarkstyle/style.qrc

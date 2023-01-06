@@ -10,7 +10,8 @@ TARGET = packetsender
 TEMPLATE = app
 DEFINES += GUI_BUILD
 
-
+TRANSLATIONS += languages/packetsender_en.ts \
+                languages/packetsender_es.ts
 
 SOURCES += mainwindow.cpp \
     panel.cpp \

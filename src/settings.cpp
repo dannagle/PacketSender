@@ -69,6 +69,18 @@ Settings::Settings(QWidget *parent) :
     loadCredentialTable();
     on_genAuthCheck_clicked(false);
 
+    QString language = Settings::language().toLower();
+
+    int location = ui->languageCombo->findText("nglish", Qt::MatchContains);
+    ui->languageCombo->setCurrentIndex(location);
+
+    if(language.contains("spanish")) {
+        location = ui->languageCombo->findText("panish", Qt::MatchContains);
+        ui->languageCombo->setCurrentIndex(location);
+    }
+
+
+
 
     //smart responses...
     ui->smartResponseEnableCheck->setChecked(settings.value("smartResponseEnableCheck", false).toBool());
@@ -230,6 +242,19 @@ Settings::~Settings()
 
 
 
+QString Settings::language()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString language = settings.value("languageCombo", "English").toString();
+
+    if(language.toLower().contains("spanish")) {
+        return "Spanish";
+    } else {
+        return "English";
+    }
+}
+
+
 void Settings::statusBarMessage(QString msg)
 {
     Q_UNUSED(msg);
@@ -326,6 +351,15 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
+
+    if(ui->languageCombo->currentText().toLower().contains("english")) {
+        settings.setValue("languageCombo", "English");
+    }
+
+
+    if(ui->languageCombo->currentText().toLower().contains("spanish")) {
+        settings.setValue("languageCombo", "Spanish");
+    }
 
 
     settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());

@@ -13,6 +13,8 @@
 #ifndef CONSOLE_BUILD
     #include <QtWidgets/QApplication>
     #include <QDesktopServices>
+    #include <QTranslator>
+    #include "settings.h"
 #endif
 #include <QDir>
 #include <QCommandLineParser>
@@ -164,8 +166,6 @@ int main(int argc, char *argv[])
         QDEBUGVAR(args);
 
         qRegisterMetaType<Packet>();
-
-
 
         QDEBUG() << "Running command line mode.";
 
@@ -1021,18 +1021,42 @@ int main(int argc, char *argv[])
 
 #ifndef CONSOLE_BUILD
 
+
         QApplication a(argc, argv);
 
         QDEBUGVAR(args);
 
         qRegisterMetaType<Packet>();
 
+        QTranslator translator;
 
-        //Use default OS styling for non-Windows. Too many theme variants.
+        /*
+        bool loaded = translator.load("D:/github/PacketSender/src/languages/packetsender_es.qm");
+        auto done = QApplication::installTranslator(&translator);
+        if(loaded && done) {
+            QDEBUG() << "Spanish Translation Loaded" << done;
+        } else {
+            return -1;
+        }
+        */
 
+        QString language = Settings::language();
+        if(language == "Spanish") {
+            bool loaded = translator.load(":/languages/packetsender_es.qm");
+            if(!loaded) {
+                QDEBUG() << "Could not load translation";
+            } else {
+                auto done = QApplication::installTranslator(&translator);
+                QDEBUG() << "Spanish Translation Loaded" << done;
+            }
+        } else {
+            QDEBUG() << "Loading Default English";
+        }
 
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
+
+        //Use default OS styling for non-Windows. Too many theme variants.
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool useDark = settings.value("darkModeCheck", true).toBool();
