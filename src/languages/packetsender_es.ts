@@ -138,32 +138,32 @@
     <message>
         <location filename="../cloudui.ui" line="307"/>
         <source>Save / Share</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Guardar / Compartir</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="313"/>
         <source>You are sharing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Estás compartiendo.</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="322"/>
         <source>Packet Set Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Nombre del conjunto de paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="336"/>
         <source>Public Path</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Ruta pública</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="359"/>
         <source>Make Public</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Hacer público</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="401"/>
         <source>Save to Packet Sender Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Guardar en la nube del remitente de paquetes</translation>
     </message>
 </context>
 <context>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../mainwindow.ui" line="93"/>
         <source>ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">ASCII</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="100"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../mainwindow.ui" line="128"/>
         <source>HEX</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">HEX</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="135"/>
@@ -264,37 +264,37 @@
     <message>
         <location filename="../mainwindow.ui" line="230"/>
         <source>TCP</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">TCP</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="239"/>
         <source>UDP</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">UDP</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="248"/>
         <source>SSL</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">SSL</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="257"/>
         <source>HTTP Get</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">HTTP Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="266"/>
         <source>HTTP Post</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">HTTP Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
         <source>HTTPS Get</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">HTTPS Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
         <source>HTTPS Post</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">HTTPS Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="296"/>
