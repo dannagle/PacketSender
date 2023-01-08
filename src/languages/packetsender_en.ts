@@ -502,6 +502,41 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>TIME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>From IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>From Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>To IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>To Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="2210"/>
         <source>Import JSON</source>
         <translation type="unfinished"></translation>
@@ -560,6 +595,25 @@
     <message>
         <location filename="../multicastsetup.ui" line="54"/>
         <source>Leave All Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PacketNetwork</name>
+    <message>
+        <location filename="../packetnetwork.cpp" line="250"/>
+        <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
+
+Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packetnetwork.cpp" line="251"/>
+        <source>Packet Sender attempted (and failed) to bind to port [PORT].
+
+ - Are you running multiple instances? 
+
+ - Trying to bind to a missing custom IP?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1180,6 +1234,7 @@
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
+        <location filename="../settings.cpp" line="23"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1192,6 +1247,7 @@
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
+        <location filename="../settings.cpp" line="33"/>
         <source>From IP</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1344,27 +1400,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="653"/>
+        <location filename="../settings.cpp" line="22"/>
+        <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="24"/>
+        <source>Resend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="25"/>
+        <source>To Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="26"/>
+        <source>To Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="27"/>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="30"/>
+        <source>Request Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="32"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="34"/>
+        <source>From Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="35"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="654"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="674"/>
+        <location filename="../settings.cpp" line="675"/>
         <source>Choose Cert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="674"/>
+        <location filename="../settings.cpp" line="675"/>
         <source>Certs (*.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="690"/>
+        <location filename="../settings.cpp" line="691"/>
         <source>Choose Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="690"/>
+        <location filename="../settings.cpp" line="691"/>
         <source>Keys (*.key, *.pem)</source>
         <translation type="unfinished"></translation>
     </message>

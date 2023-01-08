@@ -138,32 +138,32 @@
     <message>
         <location filename="../cloudui.ui" line="307"/>
         <source>Save / Share</source>
-        <translation type="finished">Guardar / Compartir</translation>
+        <translation>Guardar / Compartir</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="313"/>
         <source>You are sharing.</source>
-        <translation type="finished">Estás compartiendo.</translation>
+        <translation>Estás compartiendo.</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="322"/>
         <source>Packet Set Name</source>
-        <translation type="finished">Nombre del conjunto de paquetes</translation>
+        <translation>Nombre del conjunto de paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="336"/>
         <source>Public Path</source>
-        <translation type="finished">Ruta pública</translation>
+        <translation>Ruta pública</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="359"/>
         <source>Make Public</source>
-        <translation type="finished">Hacer público</translation>
+        <translation>Hacer público</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="401"/>
         <source>Save to Packet Sender Cloud</source>
-        <translation type="finished">Guardar en la nube del remitente de paquetes</translation>
+        <translation>Guardar en la nube del remitente de paquetes</translation>
     </message>
 </context>
 <context>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../mainwindow.ui" line="93"/>
         <source>ASCII</source>
-        <translation type="finished">ASCII</translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="100"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../mainwindow.ui" line="128"/>
         <source>HEX</source>
-        <translation type="finished">HEX</translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="135"/>
@@ -264,37 +264,37 @@
     <message>
         <location filename="../mainwindow.ui" line="230"/>
         <source>TCP</source>
-        <translation type="finished">TCP</translation>
+        <translation>TCP</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="239"/>
         <source>UDP</source>
-        <translation type="finished">UDP</translation>
+        <translation>UDP</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="248"/>
         <source>SSL</source>
-        <translation type="finished">SSL</translation>
+        <translation>SSL</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="257"/>
         <source>HTTP Get</source>
-        <translation type="finished">HTTP Get</translation>
+        <translation>HTTP Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="266"/>
         <source>HTTP Post</source>
-        <translation type="finished">HTTP Post</translation>
+        <translation>HTTP Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
         <source>HTTPS Get</source>
-        <translation type="finished">HTTPS Get</translation>
+        <translation>HTTPS Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
         <source>HTTPS Post</source>
-        <translation type="finished">HTTPS Post</translation>
+        <translation>HTTPS Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="296"/>
@@ -502,8 +502,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>TIME</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>From IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>From Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2055"/>
+        <source>To IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>To Port</source>
+        <translation>Va Puerto</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2056"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="2210"/>
-        <source>Import JSON</source>
+        <source>Import JSON</source>f
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -560,6 +595,25 @@
     <message>
         <location filename="../multicastsetup.ui" line="54"/>
         <source>Leave All Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PacketNetwork</name>
+    <message>
+        <location filename="../packetnetwork.cpp" line="250"/>
+        <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
+
+Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packetnetwork.cpp" line="251"/>
+        <source>Packet Sender attempted (and failed) to bind to port [PORT].
+
+ - Are you running multiple instances? 
+
+ - Trying to bind to a missing custom IP?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -810,7 +864,7 @@
     <message>
         <location filename="../persistentconnection.ui" line="71"/>
         <source>ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ASCII</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="84"/>
@@ -820,7 +874,7 @@
     <message>
         <location filename="../persistentconnection.ui" line="94"/>
         <source>Send</source>
-        <translation type="finished">Enviar</translation>
+        <translation>Enviar</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="104"/>
@@ -918,7 +972,7 @@
     <message>
         <location filename="../packet.cpp" line="266"/>
         <source>Send</source>
-        <translation type="finished">Enviar</translation>
+        <translation>Enviar</translation>
     </message>
     <message>
         <location filename="../packet.cpp" line="267"/>
@@ -1003,7 +1057,7 @@
     <message>
         <location filename="../settings.ui" line="155"/>
         <source>ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">ASCII</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="169"/>
@@ -1013,7 +1067,7 @@
         <location filename="../settings.ui" line="922"/>
         <location filename="../settings.ui" line="955"/>
         <source>HEX</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">HEX</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="197"/>
@@ -1180,6 +1234,7 @@
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
+        <location filename="../settings.cpp" line="23"/>
         <source>Name</source>
         <translation type="unfinished">Nombre</translation>
     </message>
@@ -1192,6 +1247,7 @@
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
+        <location filename="../settings.cpp" line="33"/>
         <source>From IP</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1344,27 +1400,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="653"/>
+        <location filename="../settings.cpp" line="22"/>
+        <source>Send</source>
+        <translation type="unfinished">Enviar</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="24"/>
+        <source>Resend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="25"/>
+        <source>To Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="26"/>
+        <source>To Port</source>
+        <translation>Va Puerto</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="27"/>
+        <source>Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="30"/>
+        <source>Request Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="32"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="34"/>
+        <source>From Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="35"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="654"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="674"/>
+        <location filename="../settings.cpp" line="675"/>
         <source>Choose Cert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="674"/>
+        <location filename="../settings.cpp" line="675"/>
         <source>Certs (*.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="690"/>
+        <location filename="../settings.cpp" line="691"/>
         <source>Choose Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="690"/>
+        <location filename="../settings.cpp" line="691"/>
         <source>Keys (*.key, *.pem)</source>
         <translation type="unfinished"></translation>
     </message>

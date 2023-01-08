@@ -2052,8 +2052,8 @@ void MainWindow::on_saveLogButton_clicked()
     QTextStream out;
     out.setString(&exportString);
 
-    out << "TIME" << delim << "From IP" << delim << "From Port" << delim << "To IP"
-        << delim << "To Port" << delim << "Method" << delim << "Error" << delim << "ASCII" << delim << "Hex\n";
+    out << tr("TIME") << delim << tr("From IP") << delim << tr("From Port") << delim << tr("To IP")
+        << delim << tr("To Port") << delim << tr("Method") << delim << tr("Error") << delim << "ASCII" << delim << "Hex\n";
 
 
     Packet tempPacket;
