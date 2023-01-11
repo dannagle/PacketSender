@@ -6,7 +6,7 @@
     <message>
         <location filename="../about.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../about.ui" line="47"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../brucethepoodle.ui" line="26"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../brucethepoodle.cpp" line="29"/>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../cloudui.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="28"/>
@@ -163,7 +163,7 @@
     <message>
         <location filename="../cloudui.ui" line="401"/>
         <source>Save to Packet Sender Cloud</source>
-        <translation>Guardar en la nube del remitente de paquetes</translation>
+        <translation>Guardar en la Packet Sender Cloud</translation>
     </message>
 </context>
 <context>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../irisandmarigold.ui" line="26"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
 </context>
 <context>
@@ -179,7 +179,7 @@
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Ventana principal</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="35"/>
@@ -445,12 +445,12 @@
     <message>
         <location filename="../mainwindow.ui" line="679"/>
         <source>Android App</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicación Android</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="688"/>
         <source>iOS App</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicación iOS</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="697"/>
@@ -490,17 +490,17 @@
     <message>
         <location filename="../mainwindow.cpp" line="1861"/>
         <source>Packet name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre del paquete:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2046"/>
         <source>Save Traffic Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar registro de tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2047"/>
         <source>log (*.log)</source>
-        <translation type="unfinished"></translation>
+        <translation>log (*.log)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2065"/>
@@ -540,40 +540,40 @@
     <message>
         <location filename="../mainwindow.cpp" line="2220"/>
         <source>Import JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>importar JSON</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2222"/>
         <location filename="../mainwindow.cpp" line="2289"/>
         <source>JSON db (*.json)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON db (*.json)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2288"/>
         <source>Save JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar JSON</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2364"/>
         <location filename="../mainwindow.cpp" line="2489"/>
         <source>Import File</source>
-        <translation type="unfinished"></translation>
+        <translation>Importar archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2366"/>
         <location filename="../mainwindow.cpp" line="2421"/>
         <source>INI db (*.ini)</source>
-        <translation type="unfinished"></translation>
+        <translation>INI db (*.ini)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2420"/>
         <source>Save File</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar el archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2491"/>
         <source>*.*</source>
-        <translation type="unfinished"></translation>
+        <translation>*.*</translation>
     </message>
 </context>
 <context>
@@ -581,22 +581,22 @@
     <message>
         <location filename="../multicastsetup.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../multicastsetup.ui" line="22"/>
         <source>IP Multicast Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección de multidifusión IP</translation>
     </message>
     <message>
         <location filename="../multicastsetup.ui" line="29"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrar</translation>
     </message>
     <message>
         <location filename="../multicastsetup.ui" line="54"/>
         <source>Leave All Groups</source>
-        <translation type="unfinished"></translation>
+        <translation>Salir de todos los grupos</translation>
     </message>
 </context>
 <context>
@@ -606,7 +606,9 @@
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender intentó (y falló) vincularse al puerto [PORT], que es inferior a 1024.
+
+Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel de administrador/raíz.</translation>
     </message>
     <message>
         <location filename="../packetnetwork.cpp" line="251"/>
@@ -615,7 +617,11 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
  - Are you running multiple instances? 
 
  - Trying to bind to a missing custom IP?</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender intentó (y falló) vincularse al puerto [PORT].
+
+- ¿Está ejecutando varias instancias?
+
+- ¿Intenta vincularse a una IP personalizada que falta?</translation>
     </message>
 </context>
 <context>
@@ -623,7 +629,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../panelgenerator.ui" line="20"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Ventana principal</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="56"/>
@@ -636,203 +642,203 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
         <location filename="../panelgenerator.ui" line="147"/>
         <location filename="../panelgenerator.ui" line="160"/>
         <source>PushButton</source>
-        <translation type="unfinished"></translation>
+        <translation>Presionar el botón</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="183"/>
         <source>&amp;File</source>
-        <translation type="unfinished">&amp;Archivo</translation>
+        <translation>&amp;Archivo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="192"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exportar</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="203"/>
         <source>&amp;Help</source>
-        <translation type="unfinished">A&amp;yudar</translation>
+        <translation>A&amp;yudar</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="209"/>
         <source>S&amp;ettings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ajustes</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="223"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Guardar</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="226"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="231"/>
         <source>Save &amp;As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Guard&amp;ar como</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="236"/>
         <source>&amp;Import Panels File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importar paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="239"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="244"/>
         <source>Portable &amp;Windows Package</source>
-        <translation type="unfinished"></translation>
+        <translation>Paquete de Windows portátil</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="247"/>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation>F5</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="252"/>
         <source>&amp;Documentation</source>
-        <translation type="unfinished">&amp;Documentación</translation>
+        <translation>&amp;Documentación</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="255"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="260"/>
         <source>Panel Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre del panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="265"/>
         <source>Panel ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificación del panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="273"/>
         <source>Starter Panel:</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel de inicio</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="278"/>
         <source>Delete Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="283"/>
         <source>&amp;Panels File</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo de paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="288"/>
         <source>Portable &amp;macOS Package</source>
-        <translation type="unfinished"></translation>
+        <translation>Paquete macOS portátil</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="293"/>
         <source>Portable Linux Package</source>
-        <translation type="unfinished"></translation>
+        <translation>Paquete de Linux portátil</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="298"/>
         <source>&amp;New Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel nuevo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="301"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="131"/>
         <source>URL or File</source>
-        <translation type="unfinished"></translation>
+        <translation>URL o archivo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="132"/>
         <source>URL or File:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL o archivo:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="151"/>
         <source>Link text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto del enlace</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="152"/>
         <source>Link text:</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto del enlace:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="901"/>
         <source>Change URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar URL</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="902"/>
         <source>URL:</source>
-        <translation type="unfinished"></translation>
+        <translation>URL:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="924"/>
         <source>Change Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar Texto</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="925"/>
         <source>text:</source>
-        <translation type="unfinished"></translation>
+        <translation>texto:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="986"/>
         <source>Panels File</source>
-        <translation type="unfinished"></translation>
+        <translation>Archivo de paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="988"/>
         <source>*.panels</source>
-        <translation type="unfinished"></translation>
+        <translation>*.panels</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1156"/>
         <source>Change Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar nombre</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1157"/>
         <location filename="../panelgenerator.cpp" line="1205"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1173"/>
         <source>Change ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar identificación</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1174"/>
         <source>ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>ID:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1204"/>
         <source>New Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuevo nombre</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1239"/>
         <source>Save PS Panels</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar paneles PS</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1240"/>
         <source>panels (*.panels)</source>
-        <translation type="unfinished"></translation>
+        <translation>panels (*.panels)</translation>
     </message>
 </context>
 <context>
@@ -840,37 +846,37 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../persistentconnection.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="26"/>
         <source>Waiting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperando...</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="40"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Carga</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="47"/>
         <source>Search Packets...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar paquetes...</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="61"/>
         <source>Raw</source>
-        <translation type="unfinished"></translation>
+        <translation>Raw</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="71"/>
         <source>ASCII</source>
-        <translation type="unfinished">ASCII</translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="84"/>
         <source>ASCII. Press Enter to Send.</source>
-        <translation type="unfinished"></translation>
+        <translation>ASCII. Presione Entrar para enviar.</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="94"/>
@@ -880,33 +886,33 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../persistentconnection.ui" line="104"/>
         <source>Append \r</source>
-        <translation type="unfinished"></translation>
+        <translation>Adjuntar \r</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="114"/>
         <location filename="../persistentconnection.cpp" line="468"/>
         <source>Send File</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar archivo</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="158"/>
         <source>Clear Log</source>
-        <translation type="unfinished">Borrar registro</translation>
+        <translation>Borrar registro</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="165"/>
         <source>To Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Al portapapeles</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="185"/>
         <source>Resending(1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Reenviar(1)</translation>
     </message>
     <message>
         <location filename="../persistentconnection.cpp" line="470"/>
         <source>*.*</source>
-        <translation type="unfinished"></translation>
+        <translation>*.*</translation>
     </message>
 </context>
 <context>
@@ -914,17 +920,17 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../persistenthttp.ui" line="26"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../persistenthttp.ui" line="44"/>
         <source>Copy Code</source>
-        <translation type="unfinished"></translation>
+        <translation>Copiar código</translation>
     </message>
     <message>
         <location filename="../persistenthttp.ui" line="64"/>
         <source>.html View/Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ver/edición</translation>
     </message>
 </context>
 <context>
@@ -932,27 +938,27 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../postdatagen.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../postdatagen.ui" line="22"/>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clave</translation>
     </message>
     <message>
         <location filename="../postdatagen.ui" line="32"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Valor</translation>
     </message>
     <message>
         <location filename="../postdatagen.ui" line="42"/>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../postdatagen.ui" line="51"/>
         <source>Params</source>
-        <translation type="unfinished"></translation>
+        <translation>Parámetros</translation>
     </message>
 </context>
 <context>
@@ -960,12 +966,12 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../mainwindow.cpp" line="2690"/>
         <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizar</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2691"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca</translation>
     </message>
 </context>
 <context>
@@ -986,79 +992,79 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../settings.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="24"/>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Red</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="30"/>
         <source>Basic</source>
-        <translation type="unfinished"></translation>
+        <translation>Básico</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="36"/>
         <source>Enable UDP Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar servidores UDP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="45"/>
         <source>UDP Server Ports (comma-separated, 0 for random)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puertos de servidor UDP (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="52"/>
         <location filename="../settings.ui" line="77"/>
         <location filename="../settings.ui" line="102"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="61"/>
         <source>Enable TCP Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar servidores TCP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="70"/>
         <source>TCP Server Port (comma-separated, 0 for random)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto del servidor TCP (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="86"/>
         <source>Enable SSL/TLS Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar servidores SSL/TLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="95"/>
         <source>SSL Server Port (comma-separated, 0 for random)</source>
-        <translation type="unfinished"></translation>
+        <translation>Puerto del servidor SSL (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="111"/>
         <source>Set the server ports to 0 if you want to run multiple Packet Sender instances.</source>
-        <translation type="unfinished"></translation>
+        <translation>Establezca los puertos del servidor en 0 si desea ejecutar varias instancias de Packet Sender.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="125"/>
         <source>Translate macros when sending</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducir macros al enviar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="132"/>
         <source>Send a basic response with macro support</source>
-        <translation type="unfinished"></translation>
+        <translation>Envía una respuesta básica con soporte de macros</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="141"/>
         <source>Response Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Datos de respuesta</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="155"/>
         <source>ASCII</source>
-        <translation type="unfinished">ASCII</translation>
+        <translation>ASCII</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="169"/>
@@ -1068,139 +1074,139 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
         <location filename="../settings.ui" line="922"/>
         <location filename="../settings.ui" line="955"/>
         <source>HEX</source>
-        <translation type="unfinished">HEX</translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="197"/>
         <source>Additional UDP/TCP/SSL Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuración adicional de UDP/TCP/SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="205"/>
         <source>IPv4 Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo IPv4</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="218"/>
         <source>IPv6 Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo IPv6</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="230"/>
         <source>Bind This:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vincular esto:</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="240"/>
         <source>Your IP</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu dirección IP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="253"/>
         <source>Multi-Send Delay (sec)</source>
-        <translation type="unfinished"></translation>
+        <translation>Retraso de envío múltiple (seg)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="260"/>
         <source>0.0 for off</source>
-        <translation type="unfinished"></translation>
+        <translation>0.0 para apagado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="271"/>
         <source>Cancel Resending after # packets</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancelar reenvío después de # paquetes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="278"/>
         <source>0 for off</source>
-        <translation type="unfinished"></translation>
+        <translation>0 para apagado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="287"/>
         <source>Attempt Receive Before Send</source>
-        <translation type="unfinished"></translation>
+        <translation>Intentar recibir antes de enviar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="294"/>
         <source>500 ms delay after connect (slow devices)</source>
-        <translation type="unfinished"></translation>
+        <translation>Retraso de 500 ms después de la conexión (dispositivos lentos)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="301"/>
         <source>Persistent TCP Connections</source>
-        <translation type="unfinished"></translation>
+        <translation>Conexiones TCP persistentes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="308"/>
         <source>Resolve DNS during input (old method)</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolver DNS durante la entrada (método antiguo)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="315"/>
         <source>Ignore SSL Errors (Wrong host, expired, self-signed, etc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorar errores de SSL (host incorrecto, caducado, autofirmado, etc.)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="328"/>
         <source>SSL Server may use an internal snake oil cert</source>
-        <translation type="unfinished"></translation>
+        <translation>El servidor SSL puede usar un certificado de aceite de serpiente interno</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="337"/>
         <source>SSL CA Certificates</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificados de CA SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="344"/>
         <source>Path from where to load the CA certificats (leave empty for defaults)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruta desde donde cargar los certificados de CA (déjelo en blanco para los valores predeterminados)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="351"/>
         <location filename="../settings.ui" line="376"/>
         <location filename="../settings.ui" line="401"/>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Navegar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="362"/>
         <source>SSL Local Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificado Local SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="369"/>
         <source>File path for the client side local certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruta de archivo para el certificado local del lado del cliente</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="387"/>
         <source>SSL Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clave privada SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="394"/>
         <source>File path for the client side private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruta de archivo para la clave privada del lado del cliente</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="430"/>
         <source>HTTP</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="436"/>
         <source>Automatically adjust ContentType when sending XML or JSON</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuste automáticamente el ContentType al enviar XML o JSON</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="458"/>
         <source>Generate Auth Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Generar encabezado de autenticación</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Anfitrión</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="479"/>
@@ -1476,7 +1482,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../subnetcalc.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="26"/>
@@ -1559,7 +1565,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../udpflooding.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Diálogo</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="24"/>
