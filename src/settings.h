@@ -41,10 +41,12 @@ public:
 
     static const QString ALLHTTPSHOSTS;
     static const QString HTTPHEADERINDEX;
+    static QString logHeaderTranslate(QString txt);
 
 
 private:
     static QPair<QString, QString> header2keyvalue(QString header);
+
 
 
 };
@@ -95,6 +97,8 @@ class Settings : public QDialog
 
         static bool detectJSON_XML();
         static QString language();
+        static QString logHeaderTranslate(QString txt);
+
 private slots:
         void on_buttonBox_accepted();
 
@@ -143,6 +147,7 @@ private:
         void deleteHTTPHeader(QString host, QString header);
         void clearHTTPHeaders(QString host);
         static QPair<QString, QString> header2keyvalue(QString header);
+
 };
 
 #endif

@@ -298,6 +298,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="296"/>
+        <location filename="../mainwindow.cpp" line="1711"/>
         <source>Send</source>
         <translation>Enviar</translation>
     </message>
@@ -482,95 +483,95 @@
         <translation>Proyecto de panel vacío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1850"/>
+        <location filename="../mainwindow.cpp" line="1860"/>
         <source>Save Packet</source>
         <translation>Guardar paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1851"/>
+        <location filename="../mainwindow.cpp" line="1861"/>
         <source>Packet name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2036"/>
+        <location filename="../mainwindow.cpp" line="2046"/>
         <source>Save Traffic Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2037"/>
+        <location filename="../mainwindow.cpp" line="2047"/>
         <source>log (*.log)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2055"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>TIME</source>
-        <translation type="unfinished"></translation>
+        <translation>TIEMPO</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2055"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>From IP</source>
-        <translation type="unfinished"></translation>
+        <translation>Desde IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2055"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>From Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Desde Puerto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2055"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>To IP</source>
-        <translation type="unfinished"></translation>
+        <translation>Va IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2056"/>
+        <location filename="../mainwindow.cpp" line="2066"/>
         <source>To Port</source>
         <translation>Va Puerto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2056"/>
+        <location filename="../mainwindow.cpp" line="2066"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation>Método</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2056"/>
+        <location filename="../mainwindow.cpp" line="2066"/>
         <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2220"/>
+        <source>Import JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2210"/>
-        <source>Import JSON</source>f
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="2212"/>
-        <location filename="../mainwindow.cpp" line="2279"/>
+        <location filename="../mainwindow.cpp" line="2222"/>
+        <location filename="../mainwindow.cpp" line="2289"/>
         <source>JSON db (*.json)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2278"/>
+        <location filename="../mainwindow.cpp" line="2288"/>
         <source>Save JSON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2354"/>
-        <location filename="../mainwindow.cpp" line="2479"/>
+        <location filename="../mainwindow.cpp" line="2364"/>
+        <location filename="../mainwindow.cpp" line="2489"/>
         <source>Import File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2356"/>
-        <location filename="../mainwindow.cpp" line="2411"/>
+        <location filename="../mainwindow.cpp" line="2366"/>
+        <location filename="../mainwindow.cpp" line="2421"/>
         <source>INI db (*.ini)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2410"/>
+        <location filename="../mainwindow.cpp" line="2420"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2481"/>
+        <location filename="../mainwindow.cpp" line="2491"/>
         <source>*.*</source>
         <translation type="unfinished"></translation>
     </message>
@@ -957,12 +958,12 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2680"/>
+        <location filename="../mainwindow.cpp" line="2690"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2681"/>
+        <location filename="../mainwindow.cpp" line="2691"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,7 +978,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../packet.cpp" line="267"/>
         <source>Send &lt;b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar &lt;b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1234,7 +1235,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
-        <location filename="../settings.cpp" line="23"/>
+        <location filename="../settings.cpp" line="45"/>
         <source>Name</source>
         <translation type="unfinished">Nombre</translation>
     </message>
@@ -1242,14 +1243,14 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
         <location filename="../settings.ui" line="560"/>
         <location filename="../settings.ui" line="588"/>
         <source>To IP</source>
-        <translation type="unfinished"></translation>
+        <translation>Va IP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
-        <location filename="../settings.cpp" line="33"/>
+        <location filename="../settings.cpp" line="66"/>
         <source>From IP</source>
-        <translation type="unfinished"></translation>
+        <translation>Desde IP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="576"/>
@@ -1400,72 +1401,72 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="22"/>
+        <location filename="../settings.cpp" line="42"/>
         <source>Send</source>
-        <translation type="unfinished">Enviar</translation>
+        <translation>Enviar</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="24"/>
+        <location filename="../settings.cpp" line="48"/>
         <source>Resend</source>
-        <translation type="unfinished"></translation>
+        <translation>Reenviar</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="25"/>
+        <location filename="../settings.cpp" line="51"/>
         <source>To Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Para Dirección</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="26"/>
+        <location filename="../settings.cpp" line="54"/>
         <source>To Port</source>
         <translation>Va Puerto</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="27"/>
+        <location filename="../settings.cpp" line="57"/>
         <source>Method</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Método</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="30"/>
+        <location filename="../settings.cpp" line="60"/>
         <source>Request Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="32"/>
+        <location filename="../settings.cpp" line="63"/>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tiempo</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="34"/>
+        <location filename="../settings.cpp" line="69"/>
         <source>From Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Desde Puerto</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="35"/>
+        <location filename="../settings.cpp" line="72"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="654"/>
+        <location filename="../settings.cpp" line="696"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="675"/>
+        <location filename="../settings.cpp" line="717"/>
         <source>Choose Cert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="675"/>
+        <location filename="../settings.cpp" line="717"/>
         <source>Certs (*.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="691"/>
+        <location filename="../settings.cpp" line="733"/>
         <source>Choose Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="691"/>
+        <location filename="../settings.cpp" line="733"/>
         <source>Keys (*.key, *.pem)</source>
         <translation type="unfinished"></translation>
     </message>

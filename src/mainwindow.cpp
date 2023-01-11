@@ -175,7 +175,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     packetTableHeaders  = Settings::defaultTrafficTableHeader();
     packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
-    packetsLogged.setTableHeaders(packetTableHeaders);
+    QStringList packetTableHeadersTranslated;
+    foreach (QString pktHeader, packetTableHeaders) {
+        packetTableHeadersTranslated.append(Settings::logHeaderTranslate(pktHeader));
+    }
+    packetsLogged.setTableHeaders(packetTableHeadersTranslated);
 
 
     proxyModel = new QSortFilterProxyModel(this);
@@ -859,7 +863,13 @@ void MainWindow::loadPacketsTable()
 
     ui->packetsTable->verticalHeader()->show();
     ui->packetsTable->horizontalHeader()->show();
-    ui->packetsTable->setHorizontalHeaderLabels(packetSavedTableHeaders);
+
+    QStringList packetTableHeadersTranslated;
+    foreach (QString pktHeader, packetSavedTableHeaders) {
+        packetTableHeadersTranslated.append(Settings::logHeaderTranslate(pktHeader));
+    }
+
+    ui->packetsTable->setHorizontalHeaderLabels(packetTableHeadersTranslated);
     if (packetsSavedFiltered.isEmpty()) {
         ui->packetsTable->setRowCount(0);
     } else {
@@ -1698,7 +1708,7 @@ void MainWindow::packetTable_checkMultiSelected()
        ui->generatePanelButton->show();
     }
 
-    ui->testPacketButton->setText("Send");
+    ui->testPacketButton->setText(tr("Send"));
     ui->testPacketButton->setStyleSheet("");
 
     ui->packetNameEdit->setEnabled(true);

@@ -36,6 +36,47 @@ const QString Settings::ERROR_STR = "Error";
 
 
 
+QString Settings::logHeaderTranslate(QString txt)
+{
+    if(txt == "Send") {
+        return tr("Send");
+    }
+    if(txt == "Name") {
+        return tr("Name");
+    }
+    if(txt == "Resend") {
+        return tr("Resend");
+    }
+    if(txt == "To Address") {
+        return tr("To Address");
+    }
+    if(txt == "To Port") {
+        return tr("To Port");
+    }
+    if(txt == "Method") {
+        return tr("Method");
+    }
+    if(txt == "Request Path") {
+        return tr("Request Path");
+    }
+    if(txt == "Time") {
+        return tr("Time");
+    }
+    if(txt == "From IP") {
+        return tr("From IP");
+    }
+    if(txt == "From Port") {
+        return tr("From Port");
+    }
+    if(txt == "Error") {
+        return tr("Error");
+    }
+
+    return txt;
+
+}
+
+
 const QString Settings::ALLHTTPSHOSTS = "HTTPHeaderHosts";
 const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
 
@@ -390,14 +431,14 @@ void Settings::on_buttonBox_accepted()
     QStringList packetSavedHeaderNow;
     packetSavedHeaderNow.clear();
     for (int i = 0; i < lw->count(); i++) {
-        packetSavedHeaderNow.append(lw->item(i)->text());
+        packetSavedHeaderNow.append(lw->item(i)->data(Qt::UserRole).toString());
     }
     settings.setValue("packetSavedTableHeaders", packetSavedHeaderNow);
 
 
     packetSavedHeaderNow.clear();
     for (int i = 0; i < lwTraffic->count(); i++) {
-        packetSavedHeaderNow.append(lwTraffic->item(i)->text());
+        packetSavedHeaderNow.append(lwTraffic->item(i)->data(Qt::UserRole).toString());
     }
     settings.setValue("packetTableHeaders", packetSavedHeaderNow);
 
@@ -586,7 +627,8 @@ void Settings::loadTableHeaders()
     ui->displayOrderListTraffic->clear();
 
     foreach (tempString, packetSavedTableHeaders) {
-        tItem = new QListWidgetItem(tempString);
+        tItem = new QListWidgetItem(logHeaderTranslate(tempString));
+        tItem->setData(Qt::UserRole, tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderList->addItem(tItem);
     }
@@ -594,7 +636,8 @@ void Settings::loadTableHeaders()
     ui->displayOrderList->setCursor(Qt::CrossCursor);
 
     foreach (tempString, packetTableHeaders) {
-        tItem = new QListWidgetItem(tempString);
+        tItem = new QListWidgetItem(logHeaderTranslate(tempString));
+        tItem->setData(Qt::UserRole, tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderListTraffic->addItem(tItem);
     }
@@ -606,7 +649,6 @@ void Settings::loadTableHeaders()
     ui->displayOrderListTraffic->setDragDropMode(QAbstractItemView::InternalMove);
     ui->displayOrderListTraffic->setAlternatingRowColors(true);
 }
-
 
 void Settings::on_responsePacketBox_currentIndexChanged(const QString &arg1)
 {
