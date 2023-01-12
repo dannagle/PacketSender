@@ -942,7 +942,7 @@ void Settings::loadCredentialTable()
         }
     }
 
-    QStringList tableHeaders = {"Host", "Key", "Value"};
+    QStringList tableHeaders = {tr("Host"), tr("Key"), tr("Value")};
     ui->httpCredentialTable->verticalHeader()->show();
     ui->httpCredentialTable->horizontalHeader()->show();
     ui->httpCredentialTable->setHorizontalHeaderLabels(tableHeaders);
@@ -1007,13 +1007,13 @@ void Settings::on_httpCredentialTable_itemChanged(QTableWidgetItem *item)
 void Settings::on_genAuthCheck_clicked(bool checked)
 {
     if(ui->genAuthCheck->isChecked()) {
-        ui->httpKeyLabel->setText("UN/ClientID");
-        ui->httpValueLabel->setText("PW/Access");
-        ui->addCredentialButton->setText("HTTP Auth Header");
+        ui->httpKeyLabel->setText(tr("UN/ClientID"));
+        ui->httpValueLabel->setText(tr("PW/Access"));
+        ui->addCredentialButton->setText(tr("HTTP Auth Header"));
     } else {
-        ui->httpKeyLabel->setText("Key");
-        ui->httpValueLabel->setText("Value");
-        ui->addCredentialButton->setText("HTTP Header");
+        ui->httpKeyLabel->setText(tr("Key"));
+        ui->httpValueLabel->setText(tr("Value"));
+        ui->addCredentialButton->setText(tr("HTTP Header"));
     }
 
 }

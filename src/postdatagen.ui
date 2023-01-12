@@ -17,7 +17,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="keyLabel">
        <property name="text">
         <string>Key</string>
        </property>
@@ -27,7 +27,7 @@
       <widget class="QLineEdit" name="paramNameEdit"/>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="valueLabel">
        <property name="text">
         <string>Value</string>
        </property>

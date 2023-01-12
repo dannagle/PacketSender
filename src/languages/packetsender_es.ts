@@ -11,7 +11,7 @@
     <message>
         <location filename="../about.ui" line="47"/>
         <source>Packet Sender</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender</translation>
     </message>
     <message>
         <location filename="../about.ui" line="136"/>
@@ -21,12 +21,24 @@
     <message>
         <location filename="../about.ui" line="165"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiqueta de texto</translation>
     </message>
     <message>
         <location filename="../about.ui" line="185"/>
         <source>PacketSender.com</source>
-        <translation type="unfinished"></translation>
+        <translation>PacketSender.com</translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="26"/>
+        <source>
+Commit Hash: </source>
+        <translation>
+Hash de confirmación: </translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="31"/>
+        <source>About Packet Sender</source>
+        <translation>Acerca del Packet Sender</translation>
     </message>
 </context>
 <context>
@@ -57,7 +69,7 @@
     <message>
         <location filename="../cloudui.ui" line="49"/>
         <source>Packet Sender Cloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender Cloud</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="73"/>
@@ -102,7 +114,7 @@
     <message>
         <location filename="../cloudui.ui" line="214"/>
         <source>cloud.packetsender.com/help</source>
-        <translation type="unfinished"></translation>
+        <translation>cloud.packetsender.com/help</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="228"/>
@@ -1205,45 +1217,47 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
+        <location filename="../settings.cpp" line="945"/>
         <source>Host</source>
         <translation>Anfitrión</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="479"/>
         <source>Username/ClientID</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de usuario/ID de cliente</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="489"/>
         <source>Password/AccessCode</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraseña/Código de acceso</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
+        <location filename="../settings.cpp" line="1016"/>
         <source>HTTP Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Encabezado HTTP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="530"/>
         <source>Delete Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar encabezado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="540"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="548"/>
         <source>Saved Packet Display Order (Drag and Drop)</source>
-        <translation type="unfinished"></translation>
+        <translation>Orden de visualización de paquetes guardados (arrastrar y soltar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
         <location filename="../settings.cpp" line="45"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="560"/>
@@ -1261,82 +1275,82 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="576"/>
         <source>Traffic Log Display Order (Drag and Drop)</source>
-        <translation type="unfinished"></translation>
+        <translation>Orden de visualización del registro de tráfico (arrastrar y soltar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="601"/>
         <source>Use Default Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar orden predeterminado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="626"/>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Misceláneos</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="632"/>
         <source>Use Dark Theme (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar tema oscuro (requiere reiniciar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="641"/>
         <source>Language (Requires Restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma (requiere reinicio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="649"/>
         <source>English</source>
-        <translation type="unfinished"></translation>
+        <translation>Inglés / English</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="654"/>
         <source>Spanish (Español)</source>
-        <translation type="unfinished"></translation>
+        <translation>Español / Spanish</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="664"/>
         <source>Copy to Clipboard button uses raw data</source>
-        <translation type="unfinished"></translation>
+        <translation>El botón Copiar al portapapeles usa datos sin procesar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="671"/>
         <source>Rolling 100-entry traffic log</source>
-        <translation type="unfinished"></translation>
+        <translation>Registro de tráfico continuo de 100 entradas</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="678"/>
         <source>Restore previous session</source>
-        <translation type="unfinished"></translation>
+        <translation>Restablecer sesión previa</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="685"/>
         <source>Periodically check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Comprobar periódicamente si hay actualizaciones</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="692"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
-        <translation type="unfinished"></translation>
+        <translation>Use puntos suspensivos [...] para entradas de datos largas (ayuda al rendimiento)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="699"/>
         <source>Auto-Launch Starter Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Panel de inicio de inicio automático</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="736"/>
         <source>Smart Responses</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuestas inteligentes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="744"/>
         <source>Send a Smart Response with Macro Support</source>
-        <translation type="unfinished"></translation>
+        <translation>Envíe una respuesta inteligente con compatibilidad con macros</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="772"/>
         <source>Response 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuesta 5</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="780"/>
@@ -1345,7 +1359,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../settings.ui" line="917"/>
         <location filename="../settings.ui" line="950"/>
         <source>Mixed ASCII</source>
-        <translation type="unfinished"></translation>
+        <translation>ASCII mixto</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="793"/>
@@ -1354,57 +1368,57 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../settings.ui" line="909"/>
         <location filename="../settings.ui" line="942"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="800"/>
         <source>Response 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuesta 4</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="807"/>
         <source>If Packet data equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Si los datos del paquete son iguales</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="814"/>
         <source>Reply with</source>
-        <translation type="unfinished"></translation>
+        <translation>Responder con</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="821"/>
         <source>Encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>Codificación</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="828"/>
         <source>Response 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuesta 1</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="868"/>
         <source>Response 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuesta 2</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="889"/>
         <source>Response 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Respuesta 3</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="977"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
-        <translation type="unfinished"></translation>
+        <translation>Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="984"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender intercambiará la macro con un valor real antes de enviar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="1015"/>
         <source>Online Documentation</source>
-        <translation type="unfinished"></translation>
+        <translation>Documentación en línea</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="42"/>
@@ -1429,12 +1443,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="57"/>
         <source>Method</source>
-        <translation type="unfinished">Método</translation>
+        <translation>Método</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="60"/>
         <source>Request Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Solicitud de ruta</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="63"/>
@@ -1454,27 +1468,54 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="696"/>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Directorio abierto</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="717"/>
         <source>Choose Cert</source>
-        <translation type="unfinished"></translation>
+        <translation>Elija certificado</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="717"/>
         <source>Certs (*.pem)</source>
-        <translation type="unfinished"></translation>
+        <translation>Certs (*.pem)</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="733"/>
         <source>Choose Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Elegir clave</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="733"/>
         <source>Keys (*.key, *.pem)</source>
-        <translation type="unfinished"></translation>
+        <translation>Keys (*.key, *.pem)</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="945"/>
+        <location filename="../settings.cpp" line="1014"/>
+        <source>Key</source>
+        <translation>Clave</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="945"/>
+        <location filename="../settings.cpp" line="1015"/>
+        <source>Value</source>
+        <translation>Valor</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1010"/>
+        <source>UN/ClientID</source>
+        <translation>Nombre de usuario/ID de cliente</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1011"/>
+        <source>PW/Access</source>
+        <translation>Contraseña/Código de acceso</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1012"/>
+        <source>HTTP Auth Header</source>
+        <translation>HTTP encabezado de autenticación</translation>
     </message>
 </context>
 <context>
@@ -1487,77 +1528,77 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../subnetcalc.ui" line="26"/>
         <source>IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="33"/>
         <source>IPv4 address</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección IPv4</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="44"/>
         <source>Subnet</source>
-        <translation type="unfinished"></translation>
+        <translation>subred</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="51"/>
         <source>Dotted or number of bits </source>
-        <translation type="unfinished"></translation>
+        <translation> Punteado o número de bits </translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="66"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Comenzar</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="76"/>
         <source>Calculated Start..</source>
-        <translation type="unfinished"></translation>
+        <translation>Inicio calculado..</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="87"/>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Fin</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="97"/>
         <source>Calculated End...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fin calculado...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="108"/>
         <source>Broadcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Transmisión</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="118"/>
         <source>Broadcast...</source>
-        <translation type="unfinished"></translation>
+        <translation>Transmisión...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="133"/>
         <source>Within subnet check</source>
-        <translation type="unfinished"></translation>
+        <translation>Dentro de la verificación de subred</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="140"/>
         <source>IP Address...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dirección IP...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="156"/>
         <source>Subnet Check Result...</source>
-        <translation type="unfinished"></translation>
+        <translation>Resultado de comprobación de subred...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="168"/>
         <source>Results log...</source>
-        <translation type="unfinished"></translation>
+        <translation>Registro de resultados...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="177"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar</translation>
     </message>
 </context>
 <context>
@@ -1570,47 +1611,47 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../udpflooding.ui" line="24"/>
         <source>IP</source>
-        <translation type="unfinished"></translation>
+        <translation>IP</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="38"/>
         <source>Port</source>
-        <translation type="unfinished">Puerto de red</translation>
+        <translation>Puerto de red</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="54"/>
         <source>Ascii</source>
-        <translation type="unfinished"></translation>
+        <translation>Ascii</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="76"/>
         <source>Delay (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Retardo (ms)</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="86"/>
         <source>Speed (MB/s)</source>
-        <translation type="unfinished"></translation>
+        <translation>Velocidad (MB/s)</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="101"/>
         <source>0 or blank is no delay or max speed</source>
-        <translation type="unfinished"></translation>
+        <translation>0 o en blanco no significa retraso ni velocidad máxima</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="110"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Comenzar</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="117"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Detener</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="139"/>
         <source>Waiting to send...</source>
-        <translation type="unfinished"></translation>
+        <translation>Esperando para enviar...</translation>
     </message>
 </context>
 </TS>

@@ -23,12 +23,12 @@ About::About(QWidget *parent) :
     }
 
 #ifdef GIT_CURRENT_SHA1
-    versionBuilder.append("\nCommit Hash: " + QString(GIT_CURRENT_SHA1));
+    versionBuilder.append(tr("\nCommit Hash: ") + QString(GIT_CURRENT_SHA1));
 #endif
     ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");
-    setWindowTitle("About Packet Sender");
+    setWindowTitle(tr("About Packet Sender"));
     setWindowIcon(mIcon);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

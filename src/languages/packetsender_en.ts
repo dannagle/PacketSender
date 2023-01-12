@@ -28,6 +28,17 @@
         <source>PacketSender.com</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../about.cpp" line="26"/>
+        <source>
+Commit Hash: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="31"/>
+        <source>About Packet Sender</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>BruceThePoodle</name>
@@ -1199,6 +1210,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
+        <location filename="../settings.cpp" line="945"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1214,6 +1226,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
+        <location filename="../settings.cpp" line="1016"/>
         <source>HTTP Header</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1468,6 +1481,33 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
     <message>
         <location filename="../settings.cpp" line="733"/>
         <source>Keys (*.key, *.pem)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="945"/>
+        <location filename="../settings.cpp" line="1014"/>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="945"/>
+        <location filename="../settings.cpp" line="1015"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1010"/>
+        <source>UN/ClientID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1011"/>
+        <source>PW/Access</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="1012"/>
+        <source>HTTP Auth Header</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
