@@ -12,7 +12,8 @@ DEFINES += GUI_BUILD
 
 TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_es.ts \
-                languages/packetsender_fr.ts
+                languages/packetsender_fr.ts \
+                languages/packetsender_de.ts
 
 SOURCES += mainwindow.cpp \
     panel.cpp \
