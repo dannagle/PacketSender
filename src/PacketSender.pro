@@ -11,7 +11,8 @@ TEMPLATE = app
 DEFINES += GUI_BUILD
 
 TRANSLATIONS += languages/packetsender_en.ts \
-                languages/packetsender_es.ts
+                languages/packetsender_es.ts \
+                languages/packetsender_fr.ts
 
 SOURCES += mainwindow.cpp \
     panel.cpp \
