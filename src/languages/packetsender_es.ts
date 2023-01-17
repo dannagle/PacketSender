@@ -21,7 +21,7 @@
     <message>
         <location filename="../about.ui" line="165"/>
         <source>TextLabel</source>
-        <translation>Etiqueta de texto</translation>
+        <translation>Etiqueta de Texto</translation>
     </message>
     <message>
         <location filename="../about.ui" line="185"/>
@@ -38,7 +38,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../about.cpp" line="31"/>
         <source>About Packet Sender</source>
-        <translation>Acerca del Packet Sender</translation>
+        <translation>Acerca de Packet Sender</translation>
     </message>
 </context>
 <context>
@@ -51,7 +51,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../brucethepoodle.cpp" line="29"/>
         <source>Bruce The Poodle!</source>
-        <translation>¡Bruce el caniche!</translation>
+        <translation>¡Bruce el Caniche!</translation> 
     </message>
 </context>
 <context>
@@ -69,7 +69,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="49"/>
         <source>Packet Sender Cloud</source>
-        <translation>Packet Sender Cloud</translation>
+        <translation>Packet Sender en la Nube</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="73"/>
@@ -79,7 +79,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="91"/>
         <source>Password</source>
-        <translation>Clave</translation>
+        <translation>Contraseña</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="112"/>
@@ -89,17 +89,17 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="131"/>
         <source>Remember Login</source>
-        <translation>Recordar Iniciar sesión</translation>
+        <translation>Recordar Sesión</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="140"/>
         <source>Login</source>
-        <translation>Acceso</translation>
+        <translation>Ingresar</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="150"/>
         <source>Create a new account.</source>
-        <translation>Crea una cuenta nueva.</translation>
+        <translation>Crear una cuenta nueva.</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="187"/>
@@ -109,7 +109,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="194"/>
         <source>Terms</source>
-        <translation>Términos de servicio</translation>
+        <translation>Términos</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="214"/>
@@ -124,7 +124,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="239"/>
         <source>Import From URL</source>
-        <translation>Importar desde URL</translation>
+        <translation>Importar desde una URL</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="248"/>
@@ -140,12 +140,12 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="283"/>
         <source>Delete Packet Set</source>
-        <translation>Eliminar conjunto de paquetes</translation>
+        <translation>Eliminar Conjunto de Paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="290"/>
         <source>Import Packet Set</source>
-        <translation>Importar conjunto de paquetes</translation>
+        <translation>Importar Conjunto de Paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="307"/>
@@ -160,22 +160,22 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../cloudui.ui" line="322"/>
         <source>Packet Set Name</source>
-        <translation>Nombre del conjunto de paquetes</translation>
+        <translation>Nombre del Conjunto de Paquetes</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="336"/>
         <source>Public Path</source>
-        <translation>Ruta pública</translation>
+        <translation>Ruta Pública</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="359"/>
         <source>Make Public</source>
-        <translation>Hacer público</translation>
+        <translation>Hacer Público</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="401"/>
         <source>Save to Packet Sender Cloud</source>
-        <translation>Guardar en la Packet Sender Cloud</translation>
+        <translation>Guardar en la Nube de Packet Sender</translation>
     </message>
 </context>
 <context>
@@ -191,7 +191,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation>Ventana principal</translation>
+        <translation>Ventana Principal</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="35"/>
@@ -201,17 +201,17 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="48"/>
         <source>Packet Name</source>
-        <translation>Nombre del paquete</translation>
+        <translation>Nombre del Paquete</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="72"/>
         <source>Request</source>
-        <translation>Solicitud de red</translation>
+        <translation>Solicitud</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="79"/>
         <source>URL path</source>
-        <translation>ruta URL</translation>
+        <translation>ruta de la URL</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="93"/>
@@ -221,7 +221,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="100"/>
         <source>Generate Data</source>
-        <translation>Generar datos</translation>
+        <translation>Generar Datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="107"/>
@@ -231,7 +231,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="117"/>
         <source>Load File</source>
-        <translation>Cargar archivo</translation>
+        <translation>Cargar Archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="128"/>
@@ -246,17 +246,17 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="151"/>
         <source>Address</source>
-        <translation>Dirección de red</translation>
+        <translation>Dirección</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="158"/>
         <source>IPv4, IPv6, DNS Lookup</source>
-        <translation>IPv4, IPv6, DNS Buscar</translation>
+        <translation>Buscar IPv4, IPv6, DNS</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="168"/>
         <source>Port</source>
-        <translation>Puerto de red</translation>
+        <translation>Puerto</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="184"/>
@@ -266,12 +266,12 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="194"/>
         <source>Resend Delay</source>
-        <translation>Reenviar retraso</translation>
+        <translation>Retraso de Reenvío</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="207"/>
         <source>0.0/blank off</source>
-        <translation>0.0/apar con</translation>
+        <translation>0.0/desactivar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="230"/>
@@ -322,47 +322,47 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="332"/>
         <source>Search Saved Packets...</source>
-        <translation>Buscar paquetes guardados</translation>
+        <translation>Buscando Paquetes Guardados...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="361"/>
         <source>Generate Panel!</source>
-        <translation>¡Generar panel!</translation>
+        <translation>¡Generar Panel!</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="384"/>
         <source>Delete Saved Packet</source>
-        <translation>Eliminar paquete guardado</translation>
+        <translation>Eliminar Paquete Guardado</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="391"/>
         <source>Persistent TCP</source>
-        <translation>TCP persistente</translation>
+        <translation>TCP Persistente</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="428"/>
         <source>Clear Log</source>
-        <translation>Borrar registro</translation>
+        <translation>Borrar Registro</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="448"/>
         <source>Log Traffic</source>
-        <translation>Registro de tráfico</translation>
+        <translation>Registrar Tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="458"/>
         <source>Save Log</source>
-        <translation>Guardar registro</translation>
+        <translation>Guardar Registro</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="465"/>
         <source>Save Traffic Packet</source>
-        <translation>Guardar paquete de tráfico</translation>
+        <translation>Guardar Paquete de Tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="472"/>
         <source>Copy to Clipboard</source>
-        <translation>Copiar al portapapeles</translation>
+        <translation>Copiar al Portapapeles</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="520"/>
@@ -372,7 +372,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="529"/>
         <source>&amp;Help</source>
-        <translation>A&amp;yudar</translation>
+        <translation>&amp;Ayuda</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="540"/>
@@ -387,7 +387,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="556"/>
         <source>Panels</source>
-        <translation>Paneles</translation>
+        <translation>Páneles</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="574"/>
@@ -397,32 +397,32 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>&amp;Settings</source>
-        <translation>Ajus&amp;tes</translation>
+        <translation>&amp;Ajustes</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="592"/>
         <source>&amp;About</source>
-        <translation>Sobre</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="601"/>
         <source>&amp;Import Database</source>
-        <translation>Importar base de datos</translation>
+        <translation>Importar Base de Datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="610"/>
         <source>&amp;Export Database</source>
-        <translation>Exportar base de datos</translation>
+        <translation>Exportar Base de Datos</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="615"/>
         <source>Persistent Connection</source>
-        <translation>Conexión persistente</translation>
+        <translation>Conexión Persistente</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="624"/>
         <source>&amp;Subnet Calculator</source>
-        <translation>Calculadora de subred</translation>
+        <translation>Calculadora de Subred</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="633"/>
@@ -442,12 +442,12 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="652"/>
         <source>Export To Cloud</source>
-        <translation>Exportar a la nube</translation>
+        <translation>Exportar a la Nube</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="661"/>
         <source>&amp;Cloud Save and Share</source>
-        <translation>Guardar y compartir en la nube</translation>
+        <translation>Guardar y Compartir en la Nube</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="670"/>
@@ -457,12 +457,12 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="679"/>
         <source>Android App</source>
-        <translation>Aplicación Android</translation>
+        <translation>Aplicación de Android</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="688"/>
         <source>iOS App</source>
-        <translation>Aplicación iOS</translation>
+        <translation>Aplicación de iOS</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="697"/>
@@ -477,7 +477,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="715"/>
         <source>Intense &amp;Traffic Generator</source>
-        <translation>Tráfico Intenso</translation>
+        <translation>Generador de Tráfico Intenso</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="724"/>
@@ -487,32 +487,32 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="729"/>
         <source>Load Starter Panel</source>
-        <translation>Panel de inicio de carga</translation>
+        <translation>Cargar Panel Inicial</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="734"/>
         <source>Empty Panel Project</source>
-        <translation>Proyecto de panel vacío</translation>
+        <translation>Vaciar Panel del Proyecto</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1860"/>
         <source>Save Packet</source>
-        <translation>Guardar paquete</translation>
+        <translation>Guardar Paquete</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1861"/>
         <source>Packet name:</source>
-        <translation>Nombre del paquete:</translation>
+        <translation>Nombre del Paquete:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2046"/>
         <source>Save Traffic Log</source>
-        <translation>Guardar registro de tráfico</translation>
+        <translation>Guardar Registro de Tráfico</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2047"/>
         <source>log (*.log)</source>
-        <translation>log (*.log)</translation>
+        <translation>Registro (*.log)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2065"/>
@@ -522,22 +522,22 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.cpp" line="2065"/>
         <source>From IP</source>
-        <translation>Desde IP</translation>
+        <translation>IP Inicial</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2065"/>
         <source>From Port</source>
-        <translation>Desde Puerto</translation>
+        <translation>Puerto Inicial</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2065"/>
         <source>To IP</source>
-        <translation>Va IP</translation>
+        <translation>IP Final</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2066"/>
         <source>To Port</source>
-        <translation>Va Puerto</translation>
+        <translation>Puerto Final</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2066"/>
@@ -558,7 +558,7 @@ Hash de confirmación: </translation>
         <location filename="../mainwindow.cpp" line="2222"/>
         <location filename="../mainwindow.cpp" line="2289"/>
         <source>JSON db (*.json)</source>
-        <translation>JSON db (*.json)</translation>
+        <translation>db JSON (*.json)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2288"/>
@@ -569,18 +569,18 @@ Hash de confirmación: </translation>
         <location filename="../mainwindow.cpp" line="2364"/>
         <location filename="../mainwindow.cpp" line="2489"/>
         <source>Import File</source>
-        <translation>Importar archivo</translation>
+        <translation>Importar Archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2366"/>
         <location filename="../mainwindow.cpp" line="2421"/>
         <source>INI db (*.ini)</source>
-        <translation>INI db (*.ini)</translation>
+        <translation>db INI (*.ini)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2420"/>
         <source>Save File</source>
-        <translation>Guardar el archivo</translation>
+        <translation>Guardar Archivo</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2491"/>
@@ -598,7 +598,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../multicastsetup.ui" line="22"/>
         <source>IP Multicast Address</source>
-        <translation>Dirección de multidifusión IP</translation>
+        <translation>Dirección de Multidifusión IP</translation>
     </message>
     <message>
         <location filename="../multicastsetup.ui" line="29"/>
@@ -608,7 +608,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../multicastsetup.ui" line="54"/>
         <source>Leave All Groups</source>
-        <translation>Salir de todos los grupos</translation>
+        <translation>Salir de Todos los Grupos</translation>
     </message>
 </context>
 <context>
@@ -620,7 +620,7 @@ Hash de confirmación: </translation>
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
         <translation>Packet Sender intentó (y falló) vincularse al puerto [PORT], que es inferior a 1024.
 
-Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel de administrador/raíz.</translation>
+Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel de administrador/root.</translation>
     </message>
     <message>
         <location filename="../packetnetwork.cpp" line="251"/>
@@ -633,7 +633,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
 
 - ¿Está ejecutando varias instancias?
 
-- ¿Intenta vincularse a una IP personalizada que falta?</translation>
+- ¿Intenta vincularse a una IP personalizada que no está disponible?</translation>
     </message>
 </context>
 <context>
@@ -654,7 +654,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../panelgenerator.ui" line="147"/>
         <location filename="../panelgenerator.ui" line="160"/>
         <source>PushButton</source>
-        <translation>Presionar el botón</translation>
+        <translation>Presionar el Botón</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="183"/>
@@ -669,7 +669,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.ui" line="203"/>
         <source>&amp;Help</source>
-        <translation>A&amp;yudar</translation>
+        <translation>&amp;Ayudar</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="209"/>
@@ -689,12 +689,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.ui" line="231"/>
         <source>Save &amp;As...</source>
-        <translation>Guard&amp;ar como</translation>
+        <translation>&amp;Guardarar como</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="236"/>
         <source>&amp;Import Panels File</source>
-        <translation>&amp;Importar paneles</translation>
+        <translation>&amp;Importar Archivo de Paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="239"/>
@@ -704,7 +704,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.ui" line="244"/>
         <source>Portable &amp;Windows Package</source>
-        <translation>Paquete de Windows portátil</translation>
+        <translation>Paquete Portátil de Windows</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="247"/>
@@ -724,42 +724,42 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.ui" line="260"/>
         <source>Panel Name</source>
-        <translation>Nombre del panel</translation>
+        <translation>Nombre del Panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="265"/>
         <source>Panel ID</source>
-        <translation>Identificación del panel</translation>
+        <translation>Identificación del Panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="273"/>
         <source>Starter Panel:</source>
-        <translation>Panel de inicio</translation>
+        <translation>Panel Inicial:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="278"/>
         <source>Delete Panel</source>
-        <translation>Eliminar panel</translation>
+        <translation>Eliminar Panel</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="283"/>
         <source>&amp;Panels File</source>
-        <translation>Archivo de paneles</translation>
+        <translation>Archivo de Paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="288"/>
         <source>Portable &amp;macOS Package</source>
-        <translation>Paquete macOS portátil</translation>
+        <translation>Paquete de macOS Portátil</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="293"/>
         <source>Portable Linux Package</source>
-        <translation>Paquete de Linux portátil</translation>
+        <translation>Paquete de Linux Portátil</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="298"/>
         <source>&amp;New Panel</source>
-        <translation>Panel nuevo</translation>
+        <translation>Panel Nuevo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="301"/>
@@ -769,22 +769,22 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.cpp" line="131"/>
         <source>URL or File</source>
-        <translation>URL o archivo</translation>
+        <translation>URL o Archivo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="132"/>
         <source>URL or File:</source>
-        <translation>URL o archivo:</translation>
+        <translation>URL o Archivo:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="151"/>
         <source>Link text</source>
-        <translation>Texto del enlace</translation>
+        <translation>Texto del Enlace</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="152"/>
         <source>Link text:</source>
-        <translation>Texto del enlace:</translation>
+        <translation>Texto del Enlace:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="901"/>
@@ -809,7 +809,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.cpp" line="986"/>
         <source>Panels File</source>
-        <translation>Archivo de paneles</translation>
+        <translation>Archivo de Paneles</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="988"/>
@@ -819,7 +819,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.cpp" line="1156"/>
         <source>Change Name</source>
-        <translation>Cambiar nombre</translation>
+        <translation>Cambiar Nombre</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1157"/>
@@ -830,27 +830,27 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../panelgenerator.cpp" line="1173"/>
         <source>Change ID</source>
-        <translation>Cambiar identificación</translation>
+        <translation>Cambiar Identificación</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1174"/>
         <source>ID:</source>
-        <translation>ID:</translation>
+        <translation>Identificación:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1204"/>
         <source>New Name</source>
-        <translation>Nuevo nombre</translation>
+        <translation>Nombre Nuevo</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1239"/>
         <source>Save PS Panels</source>
-        <translation>Guardar paneles PS</translation>
+        <translation>Guardar Paneles PS</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1240"/>
         <source>panels (*.panels)</source>
-        <translation>panels (*.panels)</translation>
+        <translation>Páneles (*.panels)</translation>
     </message>
 </context>
 <context>
@@ -873,7 +873,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../persistentconnection.ui" line="47"/>
         <source>Search Packets...</source>
-        <translation>Buscar paquetes...</translation>
+        <translation>Buscando Paquetes...</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="61"/>
@@ -904,22 +904,22 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../persistentconnection.ui" line="114"/>
         <location filename="../persistentconnection.cpp" line="468"/>
         <source>Send File</source>
-        <translation>Enviar archivo</translation>
+        <translation>Enviar Archivo</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="158"/>
         <source>Clear Log</source>
-        <translation>Borrar registro</translation>
+        <translation>Borrar Registro</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="165"/>
         <source>To Clipboard</source>
-        <translation>Al portapapeles</translation>
+        <translation>Al Portapapeles</translation>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="185"/>
         <source>Resending(1)</source>
-        <translation>Reenviar(1)</translation>
+        <translation>Reenviando(1)</translation>
     </message>
     <message>
         <location filename="../persistentconnection.cpp" line="470"/>
@@ -937,12 +937,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../persistenthttp.ui" line="44"/>
         <source>Copy Code</source>
-        <translation>Copiar código</translation>
+        <translation>Copiar Código</translation>
     </message>
     <message>
         <location filename="../persistenthttp.ui" line="64"/>
         <source>.html View/Edit</source>
-        <translation>Ver/edición</translation>
+        <translation>Ver/Editar</translation>
     </message>
 </context>
 <context>
@@ -983,7 +983,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../mainwindow.cpp" line="2691"/>
         <source>Close</source>
-        <translation>Cerca</translation>
+        <translation>Cerrar</translation>
     </message>
 </context>
 <context>
@@ -1019,12 +1019,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="36"/>
         <source>Enable UDP Servers</source>
-        <translation>Habilitar servidores UDP</translation>
+        <translation>Habilitar Servidores UDP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="45"/>
         <source>UDP Server Ports (comma-separated, 0 for random)</source>
-        <translation>Puertos de servidor UDP (separados por comas, 0 para aleatorio)</translation>
+        <translation>Puertos de Servidor UDP (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="52"/>
@@ -1036,22 +1036,22 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="61"/>
         <source>Enable TCP Servers</source>
-        <translation>Habilitar servidores TCP</translation>
+        <translation>Habilitar Servidores TCP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="70"/>
         <source>TCP Server Port (comma-separated, 0 for random)</source>
-        <translation>Puerto del servidor TCP (separados por comas, 0 para aleatorio)</translation>
+        <translation>Puerto del Servidor TCP (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="86"/>
         <source>Enable SSL/TLS Servers</source>
-        <translation>Habilitar servidores SSL/TLS</translation>
+        <translation>Habilitar Servidores SSL/TLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="95"/>
         <source>SSL Server Port (comma-separated, 0 for random)</source>
-        <translation>Puerto del servidor SSL (separados por comas, 0 para aleatorio)</translation>
+        <translation>Puerto del Servidor SSL (separados por comas, 0 para aleatorio)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="111"/>
@@ -1066,12 +1066,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="132"/>
         <source>Send a basic response with macro support</source>
-        <translation>Envía una respuesta básica con soporte de macros</translation>
+        <translation>Enviar una respuesta básica con soporte de macros</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="141"/>
         <source>Response Data</source>
-        <translation>Datos de respuesta</translation>
+        <translation>Datos de Respuesta</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="155"/>
@@ -1091,7 +1091,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="197"/>
         <source>Additional UDP/TCP/SSL Settings</source>
-        <translation>Configuración adicional de UDP/TCP/SSL</translation>
+        <translation>Configuración Adicional de UDP/TCP/SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="205"/>
@@ -1106,17 +1106,17 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="230"/>
         <source>Bind This:</source>
-        <translation>Vincular esto:</translation>
+        <translation>Vincular Esto:</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="240"/>
         <source>Your IP</source>
-        <translation>Tu dirección IP</translation>
+        <translation>Su dirección IP</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="253"/>
         <source>Multi-Send Delay (sec)</source>
-        <translation>Retraso de envío múltiple (seg)</translation>
+        <translation>Retraso de Envío múltiple (seg)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="260"/>
@@ -1126,7 +1126,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="271"/>
         <source>Cancel Resending after # packets</source>
-        <translation>Cancelar reenvío después de # paquetes</translation>
+        <translation>Cancelar Reenvío después de # paquetes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="278"/>
@@ -1146,7 +1146,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="301"/>
         <source>Persistent TCP Connections</source>
-        <translation>Conexiones TCP persistentes</translation>
+        <translation>Conexiones TCP Persistentes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="308"/>
@@ -1161,7 +1161,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="328"/>
         <source>SSL Server may use an internal snake oil cert</source>
-        <translation>El servidor SSL puede usar un certificado de aceite de serpiente interno</translation>
+        <translation>El servidor SSL puede usar un certificado falso interno</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="337"/>
@@ -1171,7 +1171,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="344"/>
         <source>Path from where to load the CA certificats (leave empty for defaults)</source>
-        <translation>Ruta desde donde cargar los certificados de CA (déjelo en blanco para los valores predeterminados)</translation>
+        <translation>Ruta desde donde cargar los certificados de CA (dejar en blanco para los valores predeterminados)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="351"/>
@@ -1193,12 +1193,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="387"/>
         <source>SSL Private Key</source>
-        <translation>Clave privada SSL</translation>
+        <translation>Clave Privada SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="394"/>
         <source>File path for the client side private key</source>
-        <translation>Ruta de archivo para la clave privada del lado del cliente</translation>
+        <translation>Ruta de Archivo para la clave privada del lado del cliente</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="430"/>
@@ -1208,12 +1208,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="436"/>
         <source>Automatically adjust ContentType when sending XML or JSON</source>
-        <translation>Ajuste automáticamente el ContentType al enviar XML o JSON</translation>
+        <translation>Ajustar automáticamente el Tipo de Contenido al enviar XML o JSON</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="458"/>
         <source>Generate Auth Header</source>
-        <translation>Generar encabezado de autenticación</translation>
+        <translation>Generar Encabezado de Autenticación</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
@@ -1224,12 +1224,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="479"/>
         <source>Username/ClientID</source>
-        <translation>Nombre de usuario/ID de cliente</translation>
+        <translation>Nombre de Usuario/ID de Cliente</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="489"/>
         <source>Password/AccessCode</source>
-        <translation>Contraseña/Código de acceso</translation>
+        <translation>Contraseña/Código de Acceso</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
@@ -1240,7 +1240,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="530"/>
         <source>Delete Header</source>
-        <translation>Eliminar encabezado</translation>
+        <translation>Eliminar Encabezado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="540"/>
@@ -1250,7 +1250,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="548"/>
         <source>Saved Packet Display Order (Drag and Drop)</source>
-        <translation>Orden de visualización de paquetes guardados (arrastrar y soltar)</translation>
+        <translation>Orden de Visualización de Paquetes Guardados (arrastrar y soltar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="555"/>
@@ -1263,24 +1263,24 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../settings.ui" line="560"/>
         <location filename="../settings.ui" line="588"/>
         <source>To IP</source>
-        <translation>Va IP</translation>
+        <translation>IP Final</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
         <location filename="../settings.cpp" line="66"/>
         <source>From IP</source>
-        <translation>Desde IP</translation>
+        <translation>IP Inicial</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="576"/>
         <source>Traffic Log Display Order (Drag and Drop)</source>
-        <translation>Orden de visualización del registro de tráfico (arrastrar y soltar)</translation>
+        <translation>Orden de Visualización del Registro de Tráfico (arrastrar y soltar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="601"/>
         <source>Use Default Order</source>
-        <translation>Usar orden predeterminado</translation>
+        <translation>Usar Orden Predeterminado</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="626"/>
@@ -1290,12 +1290,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="632"/>
         <source>Use Dark Theme (requires restart)</source>
-        <translation>Usar tema oscuro (requiere reiniciar)</translation>
+        <translation>Usar tema oscuro (Es necesario reiniciar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="641"/>
         <source>Language (Requires Restart)</source>
-        <translation>Idioma (requiere reinicio)</translation>
+        <translation>Idioma (Es necesario reiniciar)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="649"/>
@@ -1315,7 +1315,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="671"/>
         <source>Rolling 100-entry traffic log</source>
-        <translation>Registro de tráfico continuo de 100 entradas</translation>
+        <translation>Registro de Tráfico Continuo de 100 entradas</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="678"/>
@@ -1330,22 +1330,22 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="692"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
-        <translation>Use puntos suspensivos [...] para entradas de datos largas (ayuda al rendimiento)</translation>
+        <translation>usar puntos suspensivos [...] para entradas de datos largas (ayuda al rendimiento)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="699"/>
         <source>Auto-Launch Starter Panel</source>
-        <translation>Panel de inicio de inicio automático</translation>
+        <translation>Ejecutar Automáticamente el Panel Inicial</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="736"/>
         <source>Smart Responses</source>
-        <translation>Respuestas inteligentes</translation>
+        <translation>Respuestas Inteligentes</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="744"/>
         <source>Send a Smart Response with Macro Support</source>
-        <translation>Envíe una respuesta inteligente con compatibilidad con macros</translation>
+        <translation>Enviar una respuesta inteligente con compatibilidad con Macros</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="772"/>
@@ -1413,7 +1413,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.ui" line="984"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
-        <translation>Packet Sender intercambiará la macro con un valor real antes de enviar</translation>
+        <translation>Packet Sender intercambiará ek macro con un valor real antes de enviar</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="1015"/>
@@ -1433,12 +1433,12 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="51"/>
         <source>To Address</source>
-        <translation>Para Dirección</translation>
+        <translation>Para Final</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="54"/>
         <source>To Port</source>
-        <translation>Va Puerto</translation>
+        <translation>Puerto Final</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="57"/>
@@ -1448,7 +1448,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="60"/>
         <source>Request Path</source>
-        <translation>Solicitud de ruta</translation>
+        <translation>Solicitud de Ruta</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="63"/>
@@ -1458,7 +1458,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="69"/>
         <source>From Port</source>
-        <translation>Desde Puerto</translation>
+        <translation>Puerto Inicial</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="72"/>
@@ -1468,17 +1468,17 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="696"/>
         <source>Open Directory</source>
-        <translation>Directorio abierto</translation>
+        <translation>Abrir Directorio</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="717"/>
         <source>Choose Cert</source>
-        <translation>Elija certificado</translation>
+        <translation>Seleccionar Certificado</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="717"/>
         <source>Certs (*.pem)</source>
-        <translation>Certs (*.pem)</translation>
+        <translation>Certificados (*.pem)</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="733"/>
@@ -1488,7 +1488,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../settings.cpp" line="733"/>
         <source>Keys (*.key, *.pem)</source>
-        <translation>Keys (*.key, *.pem)</translation>
+        <translation>Claves (*.key, *.pem)</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="945"/>
@@ -1553,7 +1553,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../subnetcalc.ui" line="76"/>
         <source>Calculated Start..</source>
-        <translation>Inicio calculado..</translation>
+        <translation>Inicio Calculado..</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="87"/>
@@ -1593,7 +1593,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../subnetcalc.ui" line="168"/>
         <source>Results log...</source>
-        <translation>Registro de resultados...</translation>
+        <translation>Registro de Resultados...</translation>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="177"/>
@@ -1616,7 +1616,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     <message>
         <location filename="../udpflooding.ui" line="38"/>
         <source>Port</source>
-        <translation>Puerto de red</translation>
+        <translation>Puerto</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="54"/>
