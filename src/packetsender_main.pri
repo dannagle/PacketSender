@@ -47,6 +47,7 @@ DEFINES += GIT_CURRENT_SHA1="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse
 
 
 macx:ICON = psicons.icns
+macx:QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
 
 macx:QMAKE_INFO_PLIST = Info.plist
 
