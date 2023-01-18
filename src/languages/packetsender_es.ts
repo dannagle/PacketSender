@@ -93,11 +93,13 @@ Hash de confirmación: </translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="140"/>
+        <location filename="../cloudui.cpp" line="466"/>
         <source>Login</source>
         <translation>Ingresar</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="150"/>
+        <location filename="../cloudui.cpp" line="465"/>
         <source>Create a new account.</source>
         <translation>Crear una cuenta nueva.</translation>
     </message>
@@ -176,6 +178,46 @@ Hash de confirmación: </translation>
         <location filename="../cloudui.ui" line="401"/>
         <source>Save to Packet Sender Cloud</source>
         <translation>Guardar en la Nube de Packet Sender</translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="83"/>
+        <source>Cloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="100"/>
+        <source>Saving </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="100"/>
+        <source> packet set to cloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="470"/>
+        <source>Login instead.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="471"/>
+        <source>Sign-up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="528"/>
+        <source>Delete Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="533"/>
+        <source>Delete the set </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.cpp" line="533"/>
+        <source> from cloud?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -496,6 +538,19 @@ Hash de confirmación: </translation>
         <translation>Vaciar Panel del Proyecto</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="576"/>
+        <location filename="../mainwindow.cpp" line="604"/>
+        <source>Updates.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="580"/>
+        <source>There is a new Packet Sender available.
+
+Download?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="608"/>
         <source>Let Packet Sender check for updates weekly?</source>
         <translation type="unfinished"></translation>
@@ -570,7 +625,9 @@ This could cause traffic flooding. Continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="216"/>
         <location filename="../mainwindow.cpp" line="1050"/>
+        <location filename="../mainwindow.cpp" line="1312"/>
         <location filename="../mainwindow.cpp" line="1918"/>
         <source>Resending</source>
         <translation type="unfinished"></translation>
@@ -623,6 +680,11 @@ Expected SSL:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="1227"/>
+        <source>IPv6?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="1231"/>
         <source>Enable IPv6 support?</source>
         <translation type="unfinished"></translation>
@@ -653,6 +715,16 @@ Uncheck persistent connection? (Recommended)</source>
     <message>
         <location filename="../mainwindow.cpp" line="1335"/>
         <source>Select a packet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1374"/>
+        <source>Invalid Address / DNS failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1397"/>
+        <source>Invalid Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -733,21 +805,25 @@ Uncheck persistent connection? (Recommended)</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2246"/>
+        <location filename="../mainwindow.cpp" line="2383"/>
         <source>Found </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2246"/>
+        <location filename="../mainwindow.cpp" line="2383"/>
         <source> packets!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2250"/>
+        <location filename="../mainwindow.cpp" line="2387"/>
         <source>Import </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2250"/>
+        <location filename="../mainwindow.cpp" line="2387"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -756,6 +832,8 @@ Packet Sender will overwrite packets with the same name.</source>
     <message>
         <location filename="../mainwindow.cpp" line="2253"/>
         <location filename="../mainwindow.cpp" line="2274"/>
+        <location filename="../mainwindow.cpp" line="2390"/>
+        <location filename="../mainwindow.cpp" line="2411"/>
         <source>Import Cancelled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -766,11 +844,13 @@ Packet Sender will overwrite packets with the same name.</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2267"/>
+        <location filename="../mainwindow.cpp" line="2404"/>
         <source>Not a database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2271"/>
+        <location filename="../mainwindow.cpp" line="2408"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation type="unfinished"></translation>
     </message>
@@ -778,6 +858,22 @@ Packet Sender will overwrite packets with the same name.</source>
         <location filename="../mainwindow.cpp" line="2288"/>
         <source>Save JSON</source>
         <translation>Guardar JSON</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2310"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <source>Export: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2314"/>
+        <source>Could not save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2318"/>
+        <source>Could not open </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2364"/>
@@ -800,6 +896,26 @@ Packet Sender will overwrite packets with the same name.</source>
         <location filename="../mainwindow.cpp" line="2491"/>
         <source>*.*</source>
         <translation>*.*</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2515"/>
+        <source>Max size exceeded!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2519"/>
+        <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2525"/>
+        <source>Loading </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="2525"/>
+        <source> bytes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -824,9 +940,56 @@ Packet Sender will overwrite packets with the same name.</source>
         <source>Leave All Groups</source>
         <translation>Salir de Todos los Grupos</translation>
     </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="15"/>
+        <source>IPv4 Multicast Setup (Experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="31"/>
+        <source>There are no bound UDP ports</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="34"/>
+        <source>UDP socket bound to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="36"/>
+        <source> will join the multicast group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="59"/>
+        <source>Not Multicast.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="63"/>
+        <source>IP must be an IPv4 multicast address.
+(224.0.0.0 to 239.255.255.255)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="74"/>
+        <source>IPv4-only.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="78"/>
+        <source>Packet Sender supports multicast when binded to IPv4. 
+Turn off IPv6 and switch to IPv4 mode?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PacketNetwork</name>
+    <message>
+        <location filename="../packetnetwork.cpp" line="246"/>
+        <source>Port bind error.</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../packetnetwork.cpp" line="250"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
@@ -952,6 +1115,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="278"/>
+        <location filename="../panelgenerator.cpp" line="47"/>
         <source>Delete Panel</source>
         <translation>Eliminar Panel</translation>
     </message>
@@ -981,6 +1145,22 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <translation>Ctrl+N</translation>
     </message>
     <message>
+        <location filename="../panelgenerator.cpp" line="39"/>
+        <source>Panels</source>
+        <translation type="unfinished">Páneles</translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="46"/>
+        <source>Load Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="52"/>
+        <location filename="../panelgenerator.cpp" line="360"/>
+        <source>Viewing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../panelgenerator.cpp" line="131"/>
         <source>URL or File</source>
         <translation>URL o Archivo</translation>
@@ -1001,6 +1181,133 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <translation>Texto del Enlace:</translation>
     </message>
     <message>
+        <location filename="../panelgenerator.cpp" line="317"/>
+        <source>Confirm delete.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="321"/>
+        <source>Delete </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="327"/>
+        <source>Deleting </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="335"/>
+        <source>Panel </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="337"/>
+        <source>Set Panel Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="338"/>
+        <source>Set Panel ID: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="342"/>
+        <source>Packet Sender Panel: New Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="343"/>
+        <source>Set Panel Name: New Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="344"/>
+        <source>Set Panel ID: New Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="350"/>
+        <source>Starter Panel: Yes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="352"/>
+        <source>Starter Panel: No</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="355"/>
+        <source>Editing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="432"/>
+        <source>Button </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="439"/>
+        <source>(Button will be deleted)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="449"/>
+        <source>Test</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="456"/>
+        <source>Script is empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="518"/>
+        <location filename="../panelgenerator.cpp" line="523"/>
+        <source>New Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="688"/>
+        <source>Nothing to do...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="690"/>
+        <source>Executing </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="695"/>
+        <source>Unknown Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="765"/>
+        <source>Transition Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="769"/>
+        <source>Tranisition to Panel &quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="769"/>
+        <source>&quot;?
+This panel has not been saved. You may lose changes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="781"/>
+        <source>Not loading panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="785"/>
+        <source>Not loading panel in edit mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../panelgenerator.cpp" line="901"/>
         <source>Change URL</source>
         <translation>Cambiar URL</translation>
@@ -1009,6 +1316,17 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../panelgenerator.cpp" line="902"/>
         <source>URL:</source>
         <translation>URL:</translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="909"/>
+        <source>Delete link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="913"/>
+        <source>Delete URL link?
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="924"/>
@@ -1029,6 +1347,41 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../panelgenerator.cpp" line="988"/>
         <source>*.panels</source>
         <translation>*.panels</translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1025"/>
+        <source>Unknown File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1028"/>
+        <source>This does not seem to be a valid PS Panels file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1042"/>
+        <location filename="../panelgenerator.cpp" line="1067"/>
+        <source>Found </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1042"/>
+        <source> packets. Saving overwrites duplicate names.
+
+Continue packet import?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1067"/>
+        <source> panels. Ovewrite dpulicated IDs?
+
+Selecting No will generate new IDs and append.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="1139"/>
+        <source>Coming soon.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1156"/>
@@ -1136,9 +1489,25 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <translation>Reenviando(1)</translation>
     </message>
     <message>
+        <location filename="../persistentconnection.cpp" line="154"/>
+        <location filename="../persistentconnection.cpp" line="156"/>
+        <source>You:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../persistentconnection.cpp" line="470"/>
         <source>*.*</source>
         <translation>*.*</translation>
+    </message>
+    <message>
+        <location filename="../persistentconnection.cpp" line="511"/>
+        <source>Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../persistentconnection.cpp" line="512"/>
+        <source>Output sent to your clipboard</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1186,9 +1555,19 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <source>Params</source>
         <translation>Parámetros</translation>
     </message>
+    <message>
+        <location filename="../postdatagen.cpp" line="30"/>
+        <source>Data Generator</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreviewFilter</name>
+    <message>
+        <location filename="../mainwindow.cpp" line="2684"/>
+        <source>Multi-line editor</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../mainwindow.cpp" line="2690"/>
         <source>Update</source>
@@ -1680,6 +2059,31 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <translation>Error</translation>
     </message>
     <message>
+        <location filename="../settings.cpp" line="101"/>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="322"/>
+        <source>Bad IP.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="326"/>
+        <source>Packet Sender cannot bind invalid IP </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="340"/>
+        <source>TCP and SSL non-zero port conflict.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="344"/>
+        <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../settings.cpp" line="696"/>
         <source>Open Directory</source>
         <translation>Abrir Directorio</translation>
@@ -1814,6 +2218,28 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <source>Clear</source>
         <translation>Borrar</translation>
     </message>
+    <message>
+        <location filename="../subnetcalc.cpp" line="24"/>
+        <source>IPv4 Subnet Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../subnetcalc.cpp" line="26"/>
+        <source>Your non-loopback addresses: 
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../subnetcalc.cpp" line="263"/>
+        <source>Within </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../subnetcalc.cpp" line="273"/>
+        <source>No entries in subnet.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>UDPFlooding</name>
@@ -1866,6 +2292,17 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../udpflooding.ui" line="139"/>
         <source>Waiting to send...</source>
         <translation>Esperando para enviar...</translation>
+    </message>
+    <message>
+        <location filename="../udpflooding.cpp" line="25"/>
+        <source>UDP Traffic Generator (Experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../udpflooding.cpp" line="76"/>
+        <location filename="../udpflooding.cpp" line="81"/>
+        <source>Invalid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -36,20 +36,20 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setWindowTitle("Packet Sender Panels");
+    setWindowTitle("Packet Sender "+ tr("Panels"));
     QIcon mIcon("://pslogo.png");
     setWindowIcon(mIcon);
 
     clearLayout();
     panel.buttonList.clear();
 
-    loadPanelMenu = new QMenu("Load Panel");
-    deletePanelMenu = new QMenu("Delete Panel");
+    loadPanelMenu = new QMenu(tr("Load Panel"));
+    deletePanelMenu = new QMenu(tr("Delete Panel"));
     ui->menuLoad->addMenu(loadPanelMenu);
     ui->menuSettings->addMenu(deletePanelMenu);
 
 
-    editToggleButton = new QPushButton("Viewing");
+    editToggleButton = new QPushButton(tr("Viewing"));
     themeTheButton(editToggleButton);
     editToggleButton->setIcon(QIcon(PSLOGO));
 
@@ -314,17 +314,17 @@ void PanelGenerator::setHeaders()
                     if(p.id == panelID) {
                         QMessageBox msgBox;
                         msgBox.setWindowIcon(QIcon(":pslogo.png"));
-                        msgBox.setWindowTitle("Confirm delete.");
+                        msgBox.setWindowTitle(tr("Confirm delete."));
                         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                         msgBox.setDefaultButton(QMessageBox::Yes);
                         msgBox.setIcon(QMessageBox::Information);
-                        msgBox.setText("Delete " + p.name + ", ID:" + QString::number(p.id));
+                        msgBox.setText(tr("Delete ") + p.name + ", ID:" + QString::number(p.id));
                         int yesno = msgBox.exec();
                         if (yesno == QMessageBox::Yes) {
                             QDEBUG() << "Delete";
                             p.deleteFromDB();
                             setHeaders();
-                            statusBar()->showMessage("Deleting " + p.name, 2000);
+                            statusBar()->showMessage(tr("Deleting ") + p.name, 2000);
                         }
                     }
 
@@ -332,32 +332,32 @@ void PanelGenerator::setHeaders()
             });
         }
 
-        setWindowTitle("Panel " + QString::number(panel.id) + ": " + panel.name + " ("+panel.lastmodfied+")");
+        setWindowTitle(tr("Panel ") + QString::number(panel.id) + ": " + panel.name + " ("+panel.lastmodfied+")");
 
-        ui->actionPanel_Name->setText("Set Panel Name: "+panel.name);
-        ui->actionPanel_ID->setText("Set Panel ID: "+QString::number(panel.id));
+        ui->actionPanel_Name->setText(tr("Set Panel Name: ")+panel.name);
+        ui->actionPanel_ID->setText(tr("Set Panel ID: ")+QString::number(panel.id));
         ui->actionDelete_Panel->setEnabled(true);
 
         if(panel.id == 0) {
-            setWindowTitle("Packet Sender Panel: New Panel");
-            ui->actionPanel_Name->setText("Set Panel Name: New Panel");
-            ui->actionPanel_ID->setText("Set Panel ID: New Panel");
+            setWindowTitle(tr("Packet Sender Panel: New Panel"));
+            ui->actionPanel_Name->setText(tr("Set Panel Name: New Panel"));
+            ui->actionPanel_ID->setText(tr("Set Panel ID: New Panel"));
             ui->actionDelete_Panel->setEnabled(false);
         }
 
 
         if(panel.isLaunchPanel()) {
-            ui->actionLaunch_Panel->setText("Starter Panel: Yes");
+            ui->actionLaunch_Panel->setText(tr("Starter Panel: Yes"));
         } else {
-            ui->actionLaunch_Panel->setText("Starter Panel: No");
+            ui->actionLaunch_Panel->setText(tr("Starter Panel: No"));
         }
         ui->menubar->show();
-        editToggleButton->setText("Editing");
+        editToggleButton->setText(tr("Editing"));
 
     } else {
         setWindowTitle(panel.name);
         ui->menubar->hide();
-        editToggleButton->setText("Viewing");
+        editToggleButton->setText(tr("Viewing"));
     }
 
 }
@@ -429,14 +429,14 @@ ____________
     foreach(pb, panel.buttonList) {
 
         auto groupBox = new QGroupBox;
-        groupBox->setTitle("Button "+ QString::number(pb.id));
+        groupBox->setTitle(tr("Button ")+ QString::number(pb.id));
 
 
         auto hbox = new QHBoxLayout;
         auto vbox = new QVBoxLayout;
 
         auto title = new QLineEdit(pb.title);
-        title->setPlaceholderText("(Button will be deleted)");
+        title->setPlaceholderText(tr("(Button will be deleted)"));
         QChar thickX = QChar(0x2716);
         auto xButton = new QPushButton(thickX);
 
@@ -446,14 +446,14 @@ ____________
             QDEBUG() << "testButton connection false";
         }
 
-        auto testButton = new QPushButton("Test");
+        auto testButton = new QPushButton(tr("Test"));
 
         xButton->setFixedSize(24, 24);
         hbox->addWidget(title);
         hbox->addWidget(xButton);
 
         QTextEdit *  textEdit = new QTextEdit;
-        textEdit->setPlaceholderText("Script is empty");
+        textEdit->setPlaceholderText(tr("Script is empty"));
         if(!pb.script.isEmpty()) {
             textEdit->setText(pb.script.trimmed()+"\r\n");
         }
@@ -515,12 +515,12 @@ ____________
 
     i++;
     //add new item button.
-    auto newButton = new QPushButton("New Button");
+    auto newButton = new QPushButton(tr("New Button"));
 
     connect(newButton, &QPushButton::clicked, this, [this]{
        PanelButton pb;
        pb.id = 1;
-       pb.title = "New Button";
+       pb.title = tr("New Button");
        if(!panel.buttonList.isEmpty()) {
            pb.id = panel.buttonList.last().id + 1;
        }
@@ -685,14 +685,14 @@ void PanelGenerator::executeScript(QString script)
     }
 
     if(lines.isEmpty()) {
-        statusBar()->showMessage("Nothing to do...", 2000);
+        statusBar()->showMessage(tr("Nothing to do..."), 2000);
     } else {
-        statusBar()->showMessage("Executing ", 2000);
+        statusBar()->showMessage(tr("Executing "), 2000);
     }
 
     if(!errorMessages.isEmpty()) {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Unknown Command");
+        msgBox.setWindowTitle(tr("Unknown Command"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(errorMessages.trimmed());
@@ -762,11 +762,11 @@ void PanelGenerator::executeScript(QString script)
 
                        if(panel.isNew()) {
                            QDEBUGVAR(panel.id);
-                           msgBox.setWindowTitle("Transition Panel");
+                           msgBox.setWindowTitle(tr("Transition Panel"));
                            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                            msgBox.setDefaultButton(QMessageBox::No);
                            msgBox.setIcon(QMessageBox::Warning);
-                           msgBox.setText("Tranisition to Panel \""+p.name + "\"?\nThis panel has not been saved. You may lose changes.");
+                           msgBox.setText(tr("Tranisition to Panel \"")+p.name + tr("\"?\nThis panel has not been saved. You may lose changes."));
                            int yesno = msgBox.exec();
                            if (yesno == QMessageBox::No) {
                                 loadPanel = false;
@@ -778,11 +778,11 @@ void PanelGenerator::executeScript(QString script)
                            this->panel.copy(p);
                            this->renderViewMode();
                        } else {
-                           statusBar()->showMessage("Not loading panel", 4000);
+                           statusBar()->showMessage(tr("Not loading panel"), 4000);
                        }
 
                    } else {
-                       statusBar()->showMessage("Not loading panel in edit mode", 4000);
+                       statusBar()->showMessage(tr("Not loading panel in edit mode"), 4000);
                    }
                }
            }
@@ -906,11 +906,11 @@ void PanelGenerator::statusbar_clicked()
         } else {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Delete link");
+            msgBox.setWindowTitle(tr("Delete link"));
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Delete URL link?\n"+urltext + "->" + url);
+            msgBox.setText(tr("Delete URL link?\n")+urltext + "->" + url);
             int yesno = msgBox.exec();
 
             if (yesno == QMessageBox::Yes) {
@@ -1022,10 +1022,10 @@ void PanelGenerator::on_actionImport_File_triggered()
     if(packetsjson.isEmpty() || panelsjson.isEmpty()) {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Unknown File");
+        msgBox.setWindowTitle(tr("Unknown File"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("This does not seem to be a valid PS Panels file");
+        msgBox.setText(tr("This does not seem to be a valid PS Panels file"));
         msgBox.exec();
         return;
 
@@ -1039,7 +1039,7 @@ void PanelGenerator::on_actionImport_File_triggered()
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Found " + QString::number(pList.size()) + " packets. Saving overwrites duplicate names.\n\nContinue packet import?");
+        msgBox.setText(tr("Found ") + QString::number(pList.size()) + tr(" packets. Saving overwrites duplicate names.\n\nContinue packet import?"));
         int yesno = msgBox.exec();
 
         if (yesno == QMessageBox::Cancel) {
@@ -1064,7 +1064,7 @@ void PanelGenerator::on_actionImport_File_triggered()
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Found " + QString::number(importList.size()) + " panels. Ovewrite dpulicated IDs?\n\nSelecting No will generate new IDs and append.");
+        msgBox.setText(tr("Found ") + QString::number(importList.size()) + tr(" panels. Ovewrite dpulicated IDs?\n\nSelecting No will generate new IDs and append."));
         int yesno = msgBox.exec();
 
         foreach(Panel p, savedList) {
@@ -1136,7 +1136,7 @@ void PanelGenerator::buildPackage(bool isMac)
 {
 
     QMessageBox msgBox(this);
-    msgBox.setText("Coming soon.");
+    msgBox.setText(tr("Coming soon."));
     msgBox.exec();
 
 }

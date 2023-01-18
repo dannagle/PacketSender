@@ -98,7 +98,7 @@ Settings::Settings(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QIcon mIcon(":pslogo.png");
-    setWindowTitle("Packet Sender Settings");
+    setWindowTitle("Packet Sender "+tr("Settings"));
     setWindowIcon(mIcon);
 
     //this is no longer working thanks to faster traffic log
@@ -319,11 +319,11 @@ void Settings::on_buttonBox_accepted()
         } else {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Bad IP.");
+            msgBox.setWindowTitle(tr("Bad IP."));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Packet Sender cannot bind invalid IP "+ ui->bindIPAddress->text());
+            msgBox.setText(tr("Packet Sender cannot bind invalid IP ")+ ui->bindIPAddress->text());
             msgBox.exec();
             return;
         }
@@ -337,11 +337,11 @@ void Settings::on_buttonBox_accepted()
 
             if(t == s) {
                 QMessageBox msgBox;
-                msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
+                msgBox.setWindowTitle(tr("TCP and SSL non-zero port conflict."));
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
+                msgBox.setText(tr("Packet Sender cannot bind TCP and SSL to the same port."));
                 msgBox.exec();
                 return;
             }

@@ -27,7 +27,7 @@ PostDataGen::PostDataGen(QWidget *parent, QString query) :
     ui->setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    setWindowTitle("Data Generator");
+    setWindowTitle(tr("Data Generator"));
 
     QUrlQuery qUrl = QUrlQuery(query);
 

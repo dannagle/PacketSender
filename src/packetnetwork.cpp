@@ -243,7 +243,7 @@ void PacketNetwork::init()
     QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
     QMessageBox msgBoxBindError;
-    msgBoxBindError.setWindowTitle("Port bind error.");
+    msgBoxBindError.setWindowTitle(tr("Port bind error."));
     msgBoxBindError.setStandardButtons(QMessageBox::Ok);
     msgBoxBindError.setDefaultButton(QMessageBox::Ok);
     msgBoxBindError.setIcon(QMessageBox::Warning);

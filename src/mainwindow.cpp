@@ -213,7 +213,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QDEBUG() << "hexPreviewFilter connection false";
     }
 
-    stopResendingButton = new QPushButton("Resending");
+    stopResendingButton = new QPushButton(tr("Resending"));
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     themeTheButton(stopResendingButton);
     stopResendingButton->setIcon(QIcon(PSLOGO));
@@ -573,11 +573,11 @@ void MainWindow::updateManager(QByteArray response)
                 QDEBUG() << "Update is needed";
                 QMessageBox msgBox;
                 msgBox.setWindowIcon(QIcon(":pslogo.png"));
-                msgBox.setWindowTitle("Updates.");
+                msgBox.setWindowTitle(tr("Updates."));
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::Yes);
                 msgBox.setIcon(QMessageBox::Information);
-                msgBox.setText("There is a new Packet Sender available.\n\nDownload?");
+                msgBox.setText(tr("There is a new Packet Sender available.\n\nDownload?"));
                 int yesno = msgBox.exec();
                 if (yesno == QMessageBox::Yes) {
                     QDesktopServices::openUrl(QUrl("https://packetsender.com/download"));
@@ -601,7 +601,7 @@ void MainWindow::updateManager(QByteArray response)
         settings.setValue("SW_VERSION", SW_VERSION); // first run. Save the current version.
         QMessageBox msgBox;
         msgBox.setWindowIcon(QIcon(":pslogo.png"));
-        msgBox.setWindowTitle("Updates.");
+        msgBox.setWindowTitle(tr("Updates."));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::Yes);
         msgBox.setIcon(QMessageBox::Warning);
@@ -1224,7 +1224,7 @@ void MainWindow::on_testPacketButton_clicked()
     if(isIPv6 && (!packetNetwork.IPv6Enabled())) {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("IPv6?");
+        msgBox.setWindowTitle(tr("IPv6?"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Warning);
@@ -1309,7 +1309,7 @@ void MainWindow::on_testPacketButton_clicked()
 
         stopResendingButton->setStyleSheet("QPushButton { color: green; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
         packetsRepeat.append(testPacket);
-        stopResendingButton->setText("Resending (" + QString::number(packetsRepeat.size()) + ")");
+        stopResendingButton->setText(tr("Resending") +" (" + QString::number(packetsRepeat.size()) + ")");
         stopResending = 0;
     }
 
@@ -1371,7 +1371,7 @@ void MainWindow::on_packetIPEdit_lostFocus()
         QHostInfo info = QHostInfo::fromName(ipPacket);
         if (info.error() != QHostInfo::NoError) {
             ui->packetIPEdit->setText("");
-            ui->packetIPEdit->setPlaceholderText("Invalid Address / DNS failed");
+            ui->packetIPEdit->setPlaceholderText(tr("Invalid Address / DNS failed"));
         } else {
 
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1394,7 +1394,7 @@ void MainWindow::on_packetPortEdit_lostFocus()
     QDEBUGVAR(port);
     if (port <= 0) {
         ui->packetPortEdit->setText("");
-        ui->packetPortEdit->setPlaceholderText("Invalid Port");
+        ui->packetPortEdit->setPlaceholderText(tr("Invalid Port"));
     } else {
         ui->packetPortEdit->setText(QString::number(port));
     }
@@ -2307,15 +2307,15 @@ void MainWindow::on_actionExport_Packets_JSON_triggered()
     if (jsonFile.open(QFile::WriteOnly)) {
         jsonFile.write(Packet::ExportJSON(Packet::fetchAllfromDB("")));
         jsonFile.close();
-        statusBarMessage("Export: " + fileName);
+        statusBarMessage(tr("Export: ") + fileName);
     } else {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Could not save");
+        msgBox.setWindowTitle(tr("Could not save"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Could not open " + fileName + " for saving.");
+        msgBox.setText(tr("Could not open ") + fileName + (" for saving."));
         msgBox.exec();
         return;
 
@@ -2380,14 +2380,14 @@ void MainWindow::on_actionImport_Packets_triggered()
 
     if (!importList.isEmpty()) {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
+        msgBox.setWindowTitle(tr("Found ") + QString::number(importList.size()) + tr(" packets!"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
+        msgBox.setText(tr("Import ") + QString::number(importList.size()) + tr(" packets?\n\nPacket Sender will overwrite packets with the same name."));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::No) {
-            statusBarMessage("Import Cancelled");
+            statusBarMessage(tr("Import Cancelled"));
             return;
         } else {
             foreach (importPacket, importList) {
@@ -2401,14 +2401,14 @@ void MainWindow::on_actionImport_Packets_triggered()
 
     } else {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Not a database");
+        msgBox.setWindowTitle(tr("Not a database"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
+        msgBox.setText(tr("Found no packets in this file. It may not be a Packet Sender export"));
         msgBox.exec();
         return;
-        statusBarMessage("Import Cancelled");
+        statusBarMessage(tr("Import Cancelled"));
     }
 }
 
@@ -2440,7 +2440,7 @@ void MainWindow::on_actionExport_Packets_triggered()
     }
 
     QDEBUG() << QFile::copy(PACKETSFILE, fileName);
-    statusBarMessage("Export: " + fileName);
+    statusBarMessage(tr("Export: ") + fileName);
 }
 
 void MainWindow::on_persistentTCPCheck_clicked(bool checked)
@@ -2512,17 +2512,17 @@ void MainWindow::on_loadFileButton_clicked()
             if (showWarning) {
                 showWarning = false;
                 QMessageBox msgBox;
-                msgBox.setWindowTitle("Max size exceeded!");
+                msgBox.setWindowTitle(tr("Max size exceeded!"));
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("The hex field supports up to 10,922 bytes. The data has been truncated.");
+                msgBox.setText(tr("The HEX field supports up to 10,922 bytes. The data has been truncated."));
                 msgBox.exec();
 
             }
 
         }
-        statusBarMessage("Loading " + QString::number(data.size()) + " bytes");
+        statusBarMessage(tr("Loading ") + QString::number(data.size()) + tr(" bytes"));
         ui->packetHexEdit->setText(Packet::byteArrayToHex(data));
         on_packetHexEdit_lostFocus();
         on_packetASCIIEdit_lostFocus();
@@ -2681,7 +2681,7 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 
         QDialog previewDlg;
         previewDlg.setWindowFlags(previewDlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-        previewDlg.setWindowTitle("Multi-line editor");
+        previewDlg.setWindowTitle(tr("Multi-line editor"));
         QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
         QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
         QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());

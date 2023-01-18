@@ -21,9 +21,9 @@ SubnetCalc::SubnetCalc(QWidget *parent) :
     QList<QNetworkInterface> allInterfaces = QNetworkInterface::allInterfaces();
     QNetworkInterface eth;
 
-    setWindowTitle("IPv4 Subnet Calculator");
+    setWindowTitle(tr("IPv4 Subnet Calculator"));
 
-    QString startLog = "Your non-loopback addresses: \n\n";
+    QString startLog = tr("Your non-loopback addresses: \n\n");
     QTextStream out(&startLog);
 
 
@@ -260,7 +260,7 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
 
 
             if (found) {
-                QString resultText = "Within ";
+                QString resultText = tr("Within ");
                 resultText.append(entry.ip().toString());
                 resultText.append(" / ");
                 resultText.append(entry.netmask().toString());
@@ -270,7 +270,7 @@ void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
         }
 
         if (!found) {
-            ui->checkSubnetResultEdit->setText("No entries in subnet.");
+            ui->checkSubnetResultEdit->setText(tr("No entries in subnet."));
         }
     }
 
