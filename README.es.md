@@ -1,257 +1,257 @@
-# Introduction
+# Introducción
 
-![Packet Sender Logo](screenshots/packetsender_banner.png)
+![Logotipo de Packet Sender](screenshots/packetsender_banner.png)
 
-[![Downloads](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
+[![Descargas](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
 
-Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets as well as HTTP/HTTPS requests and panel generation. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use. If you find the app useful, please consider donating/sponsoring so development may continue.
+Packet Sender es una utilidad de código abierto que permite enviar y recibir paquetes TCP, UDP y SSL (TCP encriptado), así como peticiones HTTP/HTTPS y generación de paneles. La rama mainline soporta oficialmente Windows, Mac y Linux de escritorio (con Qt). Otros lugares pueden recompilar y redistribuir Packet Sender. Packet Sender es gratuito y tiene licencia GPL v2 o posterior. Puede utilizarse tanto para uso comercial como personal. Si encuentra útil la aplicación, por favor considere donar/patrocinar para que el desarrollo pueda continuar.
 
 
 
-# Table Of Contents
-* [Sponsors](#sponsors)
-  * Visit [IWL.com](https://www.iwl.com/)
-  * Visit [NagleCode.com](https://dannagle.com/)
+# Índice
+* [Patrocinadores](#sponsors)
+  * Visite [IWL.com](https://www.iwl.com/)
+  * Visite [NagleCode.com](https://dannagle.com/)
 
-* [GUI](#gui)
-* [Intense Traffic Generator (GUI)](#udptraffic)
-* [Network](#network)
-* [Downloads](#downloads)
-* [Support](#support)
-* [IPv4 Subnet Calculator](#subnetcalculator)
-* [Packet Sender Cloud](#cloud)
-* [Portable Mode](#portable)
-* [Macros and Smart Responses](#smartresponses)
-* [Persistent TCP and SSL](#persistent)
-* [HTTP/HTTPS Requests](#http)
-* [Panel Generator](#panelgen)
-* [Command Line Interface](#cli)
-* [Intense Traffic Generator (CLI)](#cliintensetraffic)
-* [Building Packet Sender](#building)
+* [Interfaz de Usuario](#gui)
+* [Generador de tráfico intenso (GUI)](#udptraffic)
+* [Red](#red)
+* [Descargas](#descargas)
+* [Soporte](#support)
+* [Calculadora de Subredes IPv4](#subnetcalculator)
+* [Packet Sender en la Nube](#cloud)
+* [Modo portátil](#portable)
+* [Macros y respuestas inteligentes](#smartresponses)
+* [TCP y SSL persistentes](#persistent)
+* [Solicitudes HTTP/HTTPS](#http)
+* [Generador de paneles](#panelgen)
+* [Interfaz de línea de comandos](#cli)
+* [Generador de tráfico intenso (CLI)](#cliintensetraffic)
+* [Generador de paquetes](#building)
 
 
 
 
 <a id="sponsors"></a>
-## Sponsors
+## Patrocinadores
 
-Packet Sender would like to thank the following sponsors.
+Packet Sender quiere dar las gracias a los siguientes patrocinadores.
 
 [![IWL](screenshots/iwl_logo.png)](https://www.iwl.com/)
-<br>IWL is a California company creating computer networking products.
+<br>IWL es una empresa californiana que crea productos para redes informáticas.
 <br><br><br>
 
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
-<br>NagleCode is a software publisher and development studio. 
+<br>NagleCode es un editor de software y estudio de desarrollo. 
 <br><br><br>
 
 
-[Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
+[¿Desea que su nombre/logo aparezca aquí?](https://github.com/sponsors/dannagle)
 
 
 
 <a id="support"></a>
-## Support
+## Soporte
 
 * Twitter: [@NagleCode](http://twitter.com/NagleCode)
-* Forums are at: [GitHub Discussions](https://github.com/dannagle/PacketSender/discussions).
-* Email: [Packet Sender Contact](https://packetsender.com/contact)
-* Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
+* Los foros están en: [Discusiones en GitHub](https://github.com/dannagle/PacketSender/discussions).
+* Correo electrónico: [Contacto de Packet Sender](https://packetsender.com/contact)
+* Contácteme en [LinkedIn](https://www.linkedin.com/in/dannagle/)
 
-*NOTE:* Try (temporarily) disabling your firewall if having problems in Windows.
+*NOTA:* Pruebe a desactivar (temporalmente) su cortafuegos si tiene problemas en Windows.
 
 <a id="downloads"></a>
-# Downloads
+# Descargas
 
-## Desktop Download
-Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/download). Some places redistribute Packet Sender.
+## Descarga de Escritorio
+Las versiones oficiales de Packet Sender pueden descargarse en [PacketSender.com](http://packetsender.com/download). Algunos sitios redistribuyen Packet Sender.
 
-![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
+![Logo de Windows](screenshots/winlogo150.png) ![Logo de Mac](screenshots/maclogo150.png) ![Logo de Linux](screenshots/Tux150.png)
 
 
 <!--
-Not sure when this will be back.
+No estoy seguro de cuándo volverá esto.
 
-## Mobile Apps
-The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
+## Aplicaciones móviles
+Las ediciones móviles de Packet Sender son totalmente nativas, contienen los permisos mínimos y no recopilan datos. Este es un software que le respeta. Gracias por apoyar este esfuerzo.
 
 
-### Android Mobile App
-![Android Logo](screenshots/android_logo.png)
+### Aplicación Móvil para Android
+![Logotipo de Android](screenshots/android_logo.png)
 
-The Android version is located [on Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) or [on Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
+La versión para Android se encuentra [en Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) o [en Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
-[![Packet Sender Android](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
+[![Packet Sender para Android](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
 
 -->
 
 
 <!--
-Not sure when this will be back.
+No estoy seguro de cuándo estará de vuelta.
 
-## iOS Mobile App
+## Aplicación móvil para iOS
 
-![Packet Sender logo](screenshots/ios_logo.png)
+Logotipo de Packet Sender](screenshots/ios_logo.png)
 
-The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
+La versión iOS se encuentra [en la Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
-[![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
+[![Packet Sender para iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 -->
 <a id="gui"></a>
-# GUI 
+# INTERFAZ DE USUARIO 
 
-Packet Sender is identical for all the desktop versions. The only difference is its theme to match the operating system.
+Packet Sender es idéntico para todas las versiones de escritorio. La única diferencia es su diseño para que coincida con el sistema operativo.
 
-![Packet Sender screenshot](screenshots/ps_GUI.png)
+![Captura de pantalla de Packet Sender](screenshots/ps_GUI.png)
 
-1. A packet has a name, destination address (domain names are default resolved just before sending), port, and data associated with it.
-2. In the table, there is a list of saved packets. You can double-click to directly edit fields in this table.
-3. In the bottom right, there are UDP, TCP, and SSL server status and port(s). Clicking on these will activate or deactivate the protocol. Packet Sender supports binding to any number of ports.
-4. There is also a IP toggle button. Clicking this changes it to IPv4 (default), IPv6, or custom IP
+1. Un paquete tiene asociado un nombre, una dirección de destino (los nombres de dominio se resuelven por defecto justo antes del envío), un puerto y datos.
+2. En la tabla, hay una lista de los paquetes guardados. Puede hacer doble clic para editar directamente los campos de esta tabla.
+3. En la parte inferior derecha, aparecen los estados y puertos de los servidores UDP, TCP y SSL. Haciendo clic sobre ellos activará o desactivará el protocolo. Packet Sender admite la vinculación a cualquier número de puertos.
+4. También hay un botón de alternancia IP. Al hacer clic en él se cambia a IPv4 (por defecto), IPv6 o IP personalizada.
 
-### General Notes
-* A resend value of "0" means it is a single-shot packet.
-* During packet resending, there will be a button to cancel all resends.
-* Please check your firewall. Windows aggressively blocks TCP-based servers. Packet Sender will still work if the firewall blocks it, but it can't receive unsolicited TCP-based packets.
-* An optional response can be sent. The same response is used for TCP,  UDP, and SSL.
-* For IPv6 sending, you will also need the scope ID.
-* Packet Sender supports mixed ASCII and HEX notation:
-  * Double-click either field to bring up the multi-line editor
-  * \XX gets translated to XX in hex
-  * \n, \r, \t will get translated to 0A, 0D, and 09
-  * HEX numbers are space delimited
-    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct. It is very fault-tolerent.
-    * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
-  * Example ASCII: hello world\r
-  * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
-  * You may save a packet directly from the traffic log. You will be prompted for a name, and the source address and port will be switched for your convenience.
-  * You may also load a file directly in to the HEX field. The HEX field supports sending up to 10,922 bytes. The theoretical limit for sending via the command line is 200 MB.
+### Notas generales
+* Un valor de reenvío de "0" significa que es un paquete de un solo envío.
+* Durante el reenvío de paquetes, habrá un botón para cancelar todos los reenvíos.
+* Por favor, compruebe su cortafuegos. Windows bloquea agresivamente los servidores basados en TCP. Packet Sender seguirá funcionando si el cortafuegos lo bloquea, pero no podrá recibir paquetes no solicitados basados en TCP.
+* Se puede enviar una respuesta opcional. Se utiliza la misma respuesta para TCP, UDP y SSL.
+* Para el envío IPv6, también necesitará el ID de ámbito.
+* Packet Sender admite notación mixta ASCII y HEX:
+  * Haga doble clic en cualquiera de los campos para que aparezca el editor multilínea.
+  * \XX se traduce a XX en hexadecimal
+  * \n, \r, \t se traducirán a 0A, 0D y 09
+  * Los números HEX están delimitados por espacios
+    * El campo HEX intentará interpretar otros delimitadores comunes (como comas, dos puntos (Wireshark), punto y coma, " 0x", etc) y autocorregirse. Es muy tolerante a fallos.
+    * También admite un único flujo HEX. Si el número de bytes es impar, Packet Sender asumirá que el byte frontal necesita un cero y entonces auto-corregirá.
+  * Ejemplo ASCII: hola mundo\r
+  * Ejemplo HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
+  * Puede guardar un paquete directamente desde el registro de tráfico. Se le pedirá un nombre, y la dirección de origen y el puerto se cambiarán para su comodidad.
+  * También puede cargar un archivo directamente en el campo HEX. El campo HEX admite el envío de hasta 10.922 bytes. El límite teórico para el envío a través de la línea de comandos es de 200 MB.
 
 
-## Hotkeys/Keyboard Shortcuts
+## Teclas de acceso rápido/accesos directos del teclado
 
-The fields at the top can be navigated using CTRL+1, CTRL+2, etc, up to CTRL+8 (send button). On Mac, the shortcut key is Command.
+Puede navegar por los campos de la parte superior utilizando CTRL+1, CTRL+2, etc, hasta CTRL+8 (botón de envío). En Mac, la tecla de acceso directo es Comando.
 
-The hotkeys and fields are:
-* CTRL + 1 = Name
+Las teclas de acceso directo y los campos son:
+* CTRL + 1 = Nombre
 * CTRL + 2 = ASCII
-* CTRL + 3 = HEX
-* CTRL + 4 = Address
-* CTRL + 5 = Port
-* CTRL + 6 = Resend Delay
-* CTRL + 7 = Protocol Selection
-* CTRL + 8 = Send (executes)
+* CTRL + 3 = HEXADECIMAL
+* CTRL + 4 = Dirección
+* CTRL + 5 = Puerto
+* CTRL + 6 = Retardo de reenvío
+* CTRL + 7 = Selección de protocolo
+* CTRL + 8 = Enviar (ejecuta)
 
 
-Some notes:
-* The fields are linked to the corresponding hotkey regardless of protocol selection.
-* When you navigate to the TCP/UDP/SSL option, you may use up/down or t/u/s/h characters to make a selection.
-* If you are going to automate with hotkeys (using tools such at [AutoHotKey](https://www.autohotkey.com/)), you may want to turn off "Restore previous session".
+Algunas notas:
+* Los campos están vinculados a la tecla de acceso directo correspondiente independientemente de la selección de protocolo.
+* Cuando navegue a la opción TCP/UDP/SSL, puede utilizar los caracteres arriba/abajo o t/u/s/h para realizar una selección.
+* Si va a automatizar con teclas de acceso rápido (utilizando herramientas como [AutoHotKey](https://www.autohotkey.com/)), puede que desee desactivar "Restaurar sesión anterior".
 
 
 
 <a id="network"></a>
-# Network Features
+# Funciones de red
 
-## IPv4, IPv6, Custom IP
+## IPv4, IPv6, IP personalizada
 
-Packet Sender's built-in servers are configured to support either IPv4 or IPv6 but not both at the same time. For clients, Packet Sender GUI and CLI will seamlessly switch between the two modes upon sending (scope ID may be needed for IPv6). Click the IPv4 / IPv6 toggle on the bottom right to switch between the two.
+Los servidores incorporados de Packet Sender están configurados para soportar IPv4 o IPv6 pero no ambos al mismo tiempo. Para los clientes, la GUI y CLI de Packet Sender cambiarán sin problemas entre los dos modos en el momento del envío (el scope ID puede ser necesario para IPv6). Pulse el switch IPv4 / IPv6 en la parte inferior derecha para cambiar entre los dos.
 
-Inside the settings, you may also force Packet Sender's servers to bind to a custom IP address. This can be very useful for systems with multiple NICs or complicated IP setups. Packet Sender will trigger an error if told to bind to an address that does not exist.
+Dentro de la configuración, también puede forzar a los servidores de Packet Sender a enlazarse a una dirección IP personalizada. Esto puede ser muy útil para sistemas con múltiples NICs o configuraciones IP complicadas. Packet Sender provocará un error si se le indica que se vincule a una dirección que no existe.
 
-![IP Specific binding](screenshots/ip-specific-binding.png)
+![Enlace específico de IP](screenshots/ip-specific-binding.png)
 
 
 <a id="subnetcalculator"></a>
-## IPv4 Subnet Calculator
+## Calculadora de subredes IPv4
 
-Packet Sender has a built-in subnet calculator. It is under the Tools menu.
-![Packet Sender Subnet Calc](screenshots/packetsender_subnetcalc.PNG)
+Packet Sender tiene una calculadora de subredes incorporada. Se encuentra en el menú Herramientas.
+![Calculadora de Subredes de Packet Sender](screenshots/packetsender_subnetcalc.PNG)
 
-* The log window (bottom section) will display non-loopback IPv4 and IPv6 addresses found on your computer.
-* On the left side, input the IPv4 address in the IP field. 
-* On the left side, input the subnet in either X.X.X. or /XX notation
-* The results of the calculation are on the right.
-* The field below is a quick check to see if an IPv4 is within one of your subnets.
+* La ventana de registro (sección inferior) mostrará las direcciones IPv4 e IPv6 sin loopback encontradas en su ordenador.
+* En el lado izquierdo, introduzca la dirección IPv4 en el campo IP. 
+* En el lado izquierdo, introduzca la subred en notación X.X.X. o /XX.
+* Los resultados del cálculo aparecen a la derecha.
+* El campo de abajo es una comprobación rápida para ver si una IPv4 está dentro de una de sus subredes.
 
-## SSL Client and Server
+## Cliente y servidor SSL
 
-Packet Sender supports establishing encrypted connections over SSL.
-This is supported in the GUI and on the command line.
+Packet Sender soporta el establecimiento de conexiones encriptadas sobre SSL.
+Esto es soportado en la GUI y en la línea de comandos.
 
-Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
+Packet Sender incluye OpenSSL para su uso en Windows. En Mac y Linux, Packet Sender utilizará las librerías SSL nativas.
 
-_This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)_
+_Este producto incluye software desarrollado por el Proyecto OpenSSL para su uso en el OpenSSL Toolkit. (http://www.openssl.org/)_
 
-![Packet Sender Direct TCP](screenshots/packetsender_ssl.PNG)
+![Direct TCL de Packet Sender](screenshots/packetsender_ssl.PNG)
 
-SSL Notes:
-* The certificate negotiation is handled immediately during connection.
-* By default, Packet Sender ignores all SSL errors (expired cert, wrong host name, self-signed, etc).
-* Packet Sender outputs the cert negotiation progress in to the traffic log.
-* Packet Sender outputs the encryption algorithm used in the traffic log (such as AES 128).
+Notas sobre SSL:
+* La negociación del certificado se gestiona inmediatamente durante la conexión.
+* Por defecto, Packet Sender ignora todos los errores SSL (cert caducado, nombre de host incorrecto, autofirmado, etc).
+* Packet Sender muestra el progreso de la negociación del certificado en el registro de tráfico.
+* Packet Sender emite el algoritmo de encriptación utilizado en el registro de tráfico (como AES 128).
 
-Packet Sender bundles an internal "Snake Oil" certificate for use as a server for Windows. The certificate and key is in the same place as packet and settings.
+Packet Sender incluye un certificado interno "Snake Oil" para su uso como servidor para Windows. El certificado y la clave se encuentran en el mismo lugar que el paquete y la configuración.
 
-_Note: Overriding the cert locations in Settings also overrides the snake-oil certificate._
+_Nota: Anular las ubicaciones del certitifcado en Ajustes también anula el certificado Snake-Oil._
 
-If there is an SSL error, Packet Sender will output it to the traffic log. If the setting is to continue anyway (default), it will continue to negotiate encryption. Otherwise, the connection ends with failure to connect.
+Si se produce un error SSL, Packet Sender lo mostrará en el registro de tráfico. Si la configuración es continuar de todas formas (por defecto), continuará negociando la encriptación. En caso contrario, la conexión finalizará con un fallo de conexión.
 
 ![Packet Sender Direct TCP Expired](screenshots/packetsender_expired_ssl.png)
 
-## Multicast (Experimental)
+## Multidifusión (Experimental)
 
-Packet Sender's multicast support is triggered by attempting to send to a IPv4 multicast address or from the mulitcast submenu. The feature is currently experimental and has these known problems.
+El soporte multidifusión de Packet Sender se activa al intentar enviar a una dirección multidifusión IPv4 o desde el submenú multidifusión. La característica es actualmente experimental y tiene estos problemas conocidos.
 
-* Packet Sender abandons IPv6 support when joining multicast.
-* And stays abandoned until you revisit settings or attempt to send to IPv6
-* On wifi, it sometimes takes 20 seconds for multicast join to actually take effect.
-* Packet Sender has no logic to rejoin a mulitcast group if the switch reboots or some other common error.
+* Packet Sender abandona el soporte IPv6 cuando se une a una multidifusión.
+* Y permanece abandonado hasta que se revisa la configuración o intenta rrealizar un envío a IPv6
+* En wifi, a veces tarda 20 segundos para que la unión a multidifusión surta efecto.
+* Paclket Sender no tiene lógica para volver a unirse a un grupo multidifusión si el router se reinicia o se produce algún otro error común.
 
-There is no IPv6 multicast support, though it is on the roadmap. Sponsors wanting IPv6 multicast support are welcome to contact me.
+No hay soporte para multidifusión IPv6, aunque está en la hoja de ruta. Los patrocinadores que deseen soporte para multidifusión IPv6 pueden contactarme.
 
 <a id="udptraffic"></a>
 
-## UDP Traffic Generator (Experimental)
+## Generador de tráfico UDP (Experimental)
 
-For when the normal send system is not enough, you can hammer a target IP with packets to see if your device can handle it. This can be found in the GUI toolbar at _Tools -> Intense Traffic Generator_
+Para cuando el sistema de envío normal no es suficiente, puede martillear una IP objetivo con paquetes para ver si su dispositivo puede manejarlo. Puede encontrarlo en la barra de herramientas de la GUI en _Herramientas -> Generador de tráfico intenso_.
 
-Please note that this feature is experimental and the metrics displayed have not been fully tested. For a more accurate test, you may want to look at the CLI version of this tool.
+Tenga en cuenta que esta función es experimental y que las métricas mostradas no se han probado completamente. Para una prueba más precisa, puede que desee consultar la versión CLI de esta herramienta.
 
-![IP Specific binding](screenshots/udp-traffic-sending.PNG)
+![Enlace específico IP](screenshots/udp-traffic-sending.PNG)
 
-# Packet Sender Features
+# Características del Packet Sender
 
 
 <a id="cloud"></a>
-## Packet Sender Cloud
+## Nube del Packet Sender
 
-Packet sets can be quickly saved/retrieved/shared using the free [Packet Sender Cloud](https://cloud.packetsender.com/) service. The cloud may also be used to publicly display and distribute your packets (via an URL) for collaboration, tutorials, end users, etc. Packet Sender may import public packet sets with public URL.
+Los conjuntos de paquetes pueden guardarse/recuperarse/compartirse rápidamente utilizando el servicio gratuito [Packet Sender Cloud](https://cloud.packetsender.com/). La nube también puede utilizarse para mostrar y distribuir públicamente sus paquetes (a través de una URL) para colaboración, tutoriales, usuarios finales, etc. Packet Sender puede importar conjuntos de paquetes públicos con una URL pública.
 
-There are various reasons to do this:
+Hay varias razones para hacer esto:
 
-* Keeping all your packets ready so you can quickly retrieve them when installing a fresh Packet Sender
-* Quickly swapping between packet sets when working on different projects.
-* Sharing a login (it is allowed) for collaborative packet set generation
-* Having a public page of your packet sets so others can quickly find and import
+* Mantener todos sus paquetes listos para poder recuperarlos rápidamente al instalar un Packet Sender nuevo.
+* Intercambiar rápidamente entre conjuntos de paquetes cuando trabaje en diferentes proyectos.
+* Compartir un inicio de sesión (está permitido) para la generación colaborativa de conjuntos de paquetes.
+* Tener una página pública de sus conjuntos de paquetes para que otros puedan encontrarlos e importarlos rápidamente
 
-![Packet Sender Cloud Import](screenshots/cloud-import.png)
+![Importación en la nube de Packet Sender](screenshots/cloud-import.png)
 
-If you are publishing a network API, maintaining a public cloud page is significantly easier than painfully detailing (IP, port, type, etc) the packets to your users. Plus, updating that page is easy.
+Si está publicando una API de red, mantener una página pública de la nube es significativamente más fácil que detallar penosamente (IP, puerto, tipo, etc.) los paquetes a sus usuarios. Además, actualizar esa página es fácil.
 
-More information about it can be found at
+Encontrará más información al respecto en
 https://cloud.packetsender.com/help
 
 
 <a id="portable"></a>
-## Portable Mode
+## Modo portátil
 
-Packet Sender has a "portable" mode. At launch, it will look for `portablemode.txt` and populate any missing settings files in that run-time directory. These files are  `packets.ini`, `ps_settings.ini`, `ps.key`, and `ps.pem`.
-You may also have some files portable and the other in their standard location by removing portablemode.txt.
+Packet Sender tiene un modo "portable". Al iniciarse, buscará `portablemode.txt` y rellenará los archivos de configuración que falten en ese directorio de ejecución. Estos archivos son `packets.ini`, `ps_settings.ini`, `ps.key`, y `ps.pem`.
+También puede tener algunos archivos portables y los demás en su ubicación estándar eliminando portablemode.txt.
 
-### DDLs that can be removed in Console-only portable Mode
-If you do not require the GUI, you may remove these DDLs
+### DDLs que pueden eliminarse en Modo portable sólo por consola
+Si no necesita la GUI, puede eliminar estos DDLs
 - Qt5Svg.dll
 - libEGL.dll
 - libGLESv2.dll
@@ -259,283 +259,282 @@ If you do not require the GUI, you may remove these DDLs
 - Qt5Gui.dll
 - opengl32sw.dll
 - D3Dcompiler_47.dll
-- iconengines directory
-- imageformats directory
-- styles directory
+- directorio iconengines
+- directorio imageformats
+- directorio styles
 
-### DDLs that can be removed if you do not need secure connections
-If you do not require SSL, you may remove these DDLs
+### DDLs que pueden eliminarse si no necesita conexiones seguras
+Si no necesita SSL, puede eliminar estas DDL
 - libcrypto-1_1-x64.dll
 - libssl-1_1-x64.dll
 
 
-The run-time directory Windows users is the same place as the .exe.
+El directorio de tiempo de ejecución usuarios de Windows es el mismo lugar que el .exe.
 
-For MAC users, this run-time directory is at `PacketSender.app/Contents/MacOS`.
-If INI files are found, it will use them instead of `%APPDATA%` or `Library/Application Support`.
+Para los usuarios de MAC, este directorio de tiempo de ejecución está en `PacketSender.app/Contents/MacOS`.
+Si se encuentran archivos INI, los utilizará en lugar de `%APPDATA%` o `Library/Application Support`.
 
 
 <a id="smartresponses"></a>
-## Smart Responses
+## Respuestas inteligentes
 
-Packet Sender supports up to 5 smart responses. 
+Packet Sender soporta hasta 5 respuestas inteligentes. 
 
-To enable this feature, go to _File -> Settings_ at the GUI toolbar. Go to the _Smart Responses_ tab and enable the **Send a Smart Response** checkbox.  
+Para activar esta función, vaya a _Archivo -> Configuración_ en la barra de herramientas de la GUI. Vaya a la pestaña _Respuestas inteligentes_ y active la casilla **Enviar una respuesta inteligente**.  
 
-![Packet Sender Direct TCP](screenshots/packetsender_smartreply.PNG)
+![Packet Sender - TCP Directo](screenshots/packetsender_smartreply.PNG)
 
-* Packet Sender will compare the packet within the encoding you choose.
-* Packet Sender translates the encoding before sending out the reply.
-* The available encodings are:
-  * Mixed ASCII -- The standard Packet Sender way of encoding ASCII along with non-printable characters
-  * HEX -- Packet Sender's normal HEX encoding
+* Packet Sender comparará el paquete dentro de la codificación que usted elija.
+* Packet Sender traduce la codificación antes de enviar la respuesta.
+* Las codificaciones disponibles son:
+  * ASCII mixto -- La forma estándar de Packet Sender de codificar ASCII junto con caracteres no imprimibles.
+  * HEX -- La codificación HEX normal de Packet Sender
 
 
 ## Macros
 
-Packet Sender supports these macros when sending responses:
+Packet Sender soporta estas macros cuando envía respuestas:
 
-* {{DATE}} -- Sends the current date in "yyy-mm-dd" format.
-* {{TIME}} -- Sends the current time in "hh:mm:ss ap" format.
-* {{UNIXTIME}} -- Sends the current epoch time stamp.
-* {{RANDOM}} -- Sends a random number ranging from either 0 to 32767 or 2147483647, depending on 32-bit or 64-bit (default installer for Windows is 32-bit. Mac is 64-bit).
-* {{UNIQUE}} -- Sends a random string. Uses an internal UUID to generate it.
-Packet Sender will swap the macro with real values before sending.
+* {{DATE}} -- Envía la fecha actual en formato "aaa-mm-dd".
+* {{TIME}} -- ENVÍA LA HORA ACTUAL EN FORMATO "AAAA-MM-DD". -- Envía la hora actual en formato "hh:mm:ss ap".
+* {{UNIXTIME}} -- Envía la marca de tiempo del momento actual.
+* {{RANDOM}} -- Envía un número aleatorio que oscila entre 0 y 32767 o 2147483647, según sea de 32 o 64 bits (el instalador por defecto para Windows es de 32 bits. Mac es de 64 bits).
+* {{UNIQUE}} -- Envía una cadena aleatoria. Utiliza un UUID interno para generarla.
+El Packet Sender intercambiará la macro con valores reales antes de enviarla.
 
 
 <a id="persistent"></a>
-## Persistent TCP and SSL
+## TCP y SSL persistentes
 
-Packet Sender supports persistent TCP and SSL connections via a separate GUI window. It is enabled by a checkbox on the main window or through the Settings window.
+Packet Sender soporta conexiones TCP y SSL persistentes a través de una ventana GUI separada. Se activa mediante una casilla de verificación en la ventana principal o a través de la ventana de Configuración.
 
-![Packet Sender Direct TCP and SSL](screenshots/packetsender_direct_tcp.PNG)
+![Packet Sender TCP directo y SSL](screenshots/packetsender_direct_tcp.PNG)
 
-### Notes on Persistent TCP and SSL:
-* Any number of persistent connections can be created.
-* Previously saved packets can be loaded in the drop-down.
-* There is a "Raw" view and "ASCII" view. The ASCII view is useful to troubleshoot data that is not printed by the raw view.
-* Traffic is also saved in the main window traffic log.
-* A file may be uploaded to the persistent connection. You may wish to turn off logging if you use this.
-* The timer in the bottom left starts as soon as a valid data packet is sent/received. It stops when the connection is closed.
-* You may optionally append a carriage return when you quick-send by hitting the return key. This is useful for command-prompt menus over TCP  / SSL connections. Packet Sender remembers previous state of \r checkbox.
-* Incoming persistent connections to the server will launch the separate GUI window.
-* During resend, the persistent connection packet is carried over to the new GUI window. Clicking "Resending(1)" will cancel it.
+### Notas sobre TCP y SSL persistentes:
+* Se puede crear cualquier número de conexiones persistentes.
+* Se pueden cargar paquetes previamente guardados en el desplegable.
+* Hay una vista "Raw" y una vista "ASCII". La vista ASCII es útil para solucionar problemas con los datos que no imprime la vista en Raw.
+* El tráfico también se guarda en el registro de tráfico de la ventana principal.
+* Se puede cargar un archivo en la conexión persistente. Es posible que desee desactivar el registro si utiliza esta opción.
+* El temporizador de la parte inferior izquierda se inicia en cuanto se envía/recibe un paquete de datos válido. Se detiene cuando se cierra la conexión.
+* Puede añadir opcionalmente un retorno de carro cuando realice un envío rápido pulsando la tecla de retorno. Esto es útil para los menús de solicitud de comandos a través de conexiones TCP / SSL. El Packet Sender recuerda el estado anterior de la casilla \r.
+* Las conexiones persistentes entrantes al servidor lanzarán la ventana GUI separada.
+* Durante el reenvío, el paquete de conexión persistente se traslada a la nueva ventana GUI. Al hacer clic en "Reenviar(1)" se cancelará.
 
-Persistent connections are not supported via the command line.
+Las conexiones persistentes no son compatibles a través de la línea de comandos.
 
 
 <a id="http"></a>
-# HTTP/HTTPS POST & GET
-Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
-Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
+# HTTP/HTTPS POST y GET
+Packet Sender admite el envío de solicitudes POST/GET a través de HTTP y HTTPS. 
+El desplegable de protocolo incluye las siguientes opciones: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. Al seleccionar HTTP(S), los campos de entrada udpatearán a: Nombre, Solicitud, Dirección, Datos (cuando se selecciona POST), Botón Generar Datos (cuando se selecciona POST), Cargar Fichero (cuando se selecciona POST). 
 
-## Sending HTTP/HTTPS GET/POST Requests
+## Envío de solicitudes HTTP/HTTPS GET/POST
 ![](/screenshots/ps_http_getfields.PNG)
-* Select HTTP(S) GET or POST from the protocol dropdown
-* In *Address* field input the domain or IP
-* In *Request* field add the URL path, if needed
-* In *Port* field, the default for HTTP is 80 and HTTPS is 443
-* Check *Persistent TCP* to see the server data more clearly (HTTP headers are removed automatically). 
+* Seleccione HTTP(S) GET o POST en el desplegable de protocolo
+* En el campo *Address* introduzca el dominio o la IP
+* En el campo *Request* añada la ruta URL, si es necesario
+* En el campo *Port*, el valor por defecto para HTTP es 80 y HTTPS es 443
+* Marque *Persistent TCP* para ver los datos del servidor con mayor claridad (las cabeceras HTTP se eliminan automáticamente). 
 
-**You may also paste a complete URL in the Request field and Packet Sender will parse and auto-populate the other fields.**
+**También puede pegar una URL completa en el campo Solicitud y Packet Sender analizará y rellenará automáticamente los demás campos.**
 
-### For POST Requests:
-* You can manually add in the data into the *Data* field.
-	* Format would go: key=value
-	* For multiple paramaters: key=value&key=value&key=value
-* Or you can click on the *Generate Data* button
+### Para solicitudes POST:
+* Puede añadir manualmente los datos en el campo *Data*.
+	* El formato sería: clave=valor
+	* Para múltiples parametros: clave=valor&clave=valor&clave=valor
+* O puede hacer clic en el botón *Generar datos
 
 <img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
 
-* To add data, input the Key and Value parameters. Click the **+** button. 
-* Can add multiple parameters with the + button. 
-* Remove parameters by clicking the X button next to the parameter
-* Once parameters are added, click Ok and data will be generated in the Data field. 
+* Para añadir datos, introduzca los parámetros Clave y Valor. Haga clic en el botón **+**. 
+* Puede añadir múltiples parámetros con el botón +. 
+* Elimine parámetros haciendo clic en el botón X situado junto al parámetro.
+* Una vez añadidos los parámetros, pulse Ok y los datos se generarán en el campo Datos. 
 
-### To add Authentication credentials:
+### Para añadir credenciales de autenticación:
 
 <img src="/screenshots/ps_http_authgenerator.PNG" width="800" height="339">
 
-* Go to File -> Settings -> HTTP
-* Check *Generate Auth Header*
-* Input the *Host*, *UN/Client ID*, and *PW/Access*
-* Click on *HTTP Auth Header* to generate the authentication header
+* Vaya a Archivo -> Configuración -> HTTP
+* Marque *Generar cabecera de autenticación*
+*Introduzca el *Host*, *UN/ID de Cliente*, y *PW/Acceso*.
+* Pulse en *Cabecera de Autenticación HTTP* para generar la cabecera de autenticación
 
 <a id="panelgen"></a>
-# Panel Generator
-Packet Sender supports generating control panels. Panels consist of buttons with scripts (packets) assigned to them. Clicking the button will execute the packet(s) referenced on that button. 
+# Generador de paneles
+Packet Sender soporta la generación de paneles de control. Los paneles consisten en botones con scripts (paquetes) asignados a ellos. Al hacer clic en el botón se ejecutará el paquete o paquetes referenciados en ese botón. 
 
 <img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
 
-## Loading a Panel
-Panels can be created one of two ways:
-* Clicking **Panels** on the toolbar and selecting either Load Starter Panel or Empty Panel Project
-	* Load Starter Panel will load the Panel assigned as starter. If no panel is set as the starter, an empty panel project will open. 
-* Highlighting 2 or more saved packets and clicking on the **Generate Panel** button (Generate Panel button only appears when multiple packets are selected) 
+## Cargar un panel
+Los paneles pueden crearse de dos maneras:
+* Haciendo clic en **Paneles** en la barra de herramientas y seleccionando Cargar Panel de Inicio o Proyecto de Panel Vacío
+	* Cargar panel de inicio cargará el panel asignado como inicio. Si no hay ningún panel asignado como iniciador, se abrirá un proyecto de panel vacío. 
+* Resaltar 2 o más paquetes guardados y hacer clic en el botón **Generar Panel** (el botón Generar Panel sólo aparece cuando se seleccionan varios paquetes) 
 
 ![](/screenshots/ps_panel_generate.PNG)
 
 
-## Scripting a Panel
-To begin scripting the buttons on your panel, you will need to open a panel and go to the Editing screen. Once a panel project is opened, check the button in the bottom right corner. If this button says "Viewing", you are on the Viewing screen. Click the button to move the panel to the Editing screen. 
+## Creando un Script para un Panel
+Para empezar a scriptear los botones de su panel, necesitará abrir un panel e ir a la pantalla de Edición. Una vez abierto el proyecto de un panel, compruebe el botón de la esquina inferior derecha. Si este botón dice "Visualización", se encuentra en la pantalla Visualización. Pulse el botón para pasar el panel a la pantalla de Edición. 
 
-Once at the Editing screen, buttons and scripts can be added to the panel. 
+Una vez en la pantalla de Edición, se pueden añadir botones y scripts al panel. 
 
-### Button Scripting
-Button scripts will contain the name of the packet to be sent. 
+### Scripts de botones
+Los scripts de los botones contendrán el nombre del paquete a enviar. 
 
 <img src="/screenshots/ps_panel_2.PNG" width="400" height="360">
 
-Multiple packets can be set to a button by adding each name on a new line.
+Se pueden asignar varios paquetes a un botón añadiendo cada nombre en una nueva línea.
 
 <img src="/screenshots/ps_panel_5.PNG" width="400" height="358">
 
-Panel Generator supports adding a delay between multiple packets by adding "delay:_# of seconds_" in between packets.
+El generador de paneles permite añadir un retardo entre varios paquetes añadiendo "retardo:_# de segundos_" entre paquete y paquete.
 
 <img src="/screenshots/ps_panel_4.PNG" width="400" height="359">
 
-Panel Generator supports adding a script to load a new panel by adding "panel:_panel id #_". Once all previous scripts on the button are executed, the Panel will transition to the next panel. 
+El generador de paneles admite la adición de un script para cargar un nuevo panel añadiendo "panel:_panel id #_". Una vez ejecutados todos los scripts anteriores del botón, el Panel pasará al siguiente panel. 
 
 <img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
 
 
-### Adding Files/URLs
-Panel Generator supports adding buttons that link to locally-stored files or URLs. 
-File/URL buttons can be added while in the Editing screen by clicking the *+* in the bottom right corner. 
-* For files: Go to the file on the PC, right click on the file and select Copy. Paste this into the _URL or File_ textbox in Packet Sender
-* For URLs: Copy the URL into the _URL or File_ textbox in Packet Sender
-	* URLs must begin with http:// or https://
+### Añadir archivos/URLs
+El Generador de paneles admite la adición de botones que enlazan con archivos o URL almacenados localmente. 
+Los botones de archivo/URL pueden añadirse mientras se está en la pantalla de edición haciendo clic en el *+* de la esquina inferior derecha. 
+* Para archivos: Vaya al archivo en el PC, haga clic con el botón derecho en el archivo y seleccione Copiar. Péguelo en el cuadro de texto _URL o Archivo_ en Packet Sender
+* Para URLs: Copie la URL en el cuadro de texto _URL o Archivo_ en Packet Sender
+	* Las URL deben empezar por http:// o https://
 
 
 ![](/screenshots/ps_panel_7.PNG) 
 
-Once the file or URL is copied, you will be prompted to input a name for the button. Buttons will populate at the bottom of the panel. 
+Una vez copiado el archivo o la URL, se le pedirá que introduzca un nombre para el botón. Los botones aparecerán en la parte inferior del panel. 
 
-While on the Editing screen, clicking these buttons will allow you to edit the file/URL link and the name of the button. You can also delete the button by clicking the **X** on the popup. 
+Mientras se encuentre en la pantalla de edición, al hacer clic en estos botones podrá editar el enlace del archivo/URL y el nombre del botón. También puede eliminar el botón haciendo clic en la **X** de la ventana emergente. 
 
 ![](/screenshots/ps_http_changeURL.PNG)
 
-When on the Viewing screen, clicking these buttons will launch the URL in the default browser or open the file (with the default program for the file type). 
+En la pantalla de visualización, al hacer clic en estos botones se iniciará la URL en el navegador predeterminado o se abrirá el archivo (con el programa predeterminado para el tipo de archivo). 
 
 
 ![](/screenshots/ps_panel_6.PNG) 
 
-### Panel Editing/Saving
-While in the Editing screen of a Panel, there will be a toolbar with menus File, Export, Settings, Help. You can save, export, import, load panel projects, and edit the current panel project from this toolbar. 
+### Edición/Guardado de Paneles
+Mientras esté en la pantalla de edición de un Panel, habrá una barra de herramientas con los menús Archivo, Exportar, Configuración, Ayuda. Desde esta barra de herramientas puede guardar, exportar, importar, cargar proyectos de paneles y editar el proyecto del panel actual. 
 
-From Settings, you can do the following:
-* Set Panel Name - select this to rename the current panel project
-* Set Panel ID - select this to change the ID associated with the current panel project
-_Note: Setting an ID in use will replace that panel_
-* Starter Panel - select this to set the current panel project as the starter panel. 
-* Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
+Desde Ajustes, puede hacer lo siguiente:
+* Establecer nombre de panel - seleccione esto para renombrar el proyecto de panel actual.
+* Establecer ID del panel - seleccione esto para cambiar el ID asociado con el proyecto de panel actual
+_Nota: Ajustar un ID en uso reemplazará ese panel_.
+* Panel de inicio - seleccione esto para establecer el proyecto de panel actual como panel de inicio. 
+* Borrar Panel - Esto mostrará un menú de los proyectos de panel actuales. Seleccione un proyecto de panel para eliminarlo. _Nota: Los botones y scripts se mantendrán en la pantalla de edición hasta que se cierre el panel_.
 
 
 
 <a id="cli"></a>
-# Command Line
-Packet Sender can be used from the command line on your computer. 
+# Línea de comandos
+Packet Sender puede utilizarse desde la línea de comandos de su ordenador. 
 
-For Windows, use the extension .com (`packetsender.com`) to use the command line interface. Optionally, you can also use `packetsender` without an extension. Using the extension .exe will launch the GUI. 
+Para Windows, utilice la extensión .com (`packetsender.com`) para utilizar la interfaz de la línea de comandos. Opcionalmente, también puede utilizar `packetsender` sin extensión. Si utiliza la extensión .exe iniciará la interfaz gráfica de usuario. 
 
 
-![Packet Sender CLI screenshot](screenshots/packetsender_command_line.png)
+![Captura de pantalla de CLI de Packet Sender](screenshots/packetsender_command_line.png)
 
-For Linux, the command line system in Packet Sender follows the same pattern as other Linux utilities. It has a long name (such as --version) and a short name (such as -v). These options can be arranged in any order and Packet Sender will parse them correctly. The last 3 options are positional and must appear last. They are IP, port, and data. These last options are optional if using a stored packet.
+Para Linux, el sistema de línea de comandos de Packet Sender sigue el mismo patrón que otras utilidades de Linux. Tiene un nombre largo (como --version) y un nombre corto (como -v). Estas opciones pueden disponerse en cualquier orden y Packet Sender las analizará correctamente. Las 3 últimas opciones son posicionales y deben aparecer en último lugar. Son IP, puerto y datos. Estas últimas opciones son opcionales si se utiliza un paquete almacenado.
 
 ```
 packetsender --help
-Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
-See https://PacketSender.com/ for more information.
+Packet Sender es una utilidad de prueba de red UDP/TCP/SSL/HTTP de NagleCode.
+Consulte https://PacketSender.com/ para más información.
 
-Options:
-  -?, -h, --help            Displays help on commandline options.
-  --help-all                Displays help including Qt specific options.
-  -v, --version             Displays version information.
-  -q, --quiet               Quiet mode. Only output received data.
-  -x, --hex                 Parse data-to-send as hex (default for
+Opciones:
+  -?, -h, --help            Muestra ayuda sobre las opciones de la línea de comandos.
+  --help-all                Muestra la ayuda incluyendo opciones específicas de Qt.
+  -v, --version             Muestra información sobre la versión.
+  -q, --quiet               Modo silencioso. Sólo muestra los datos recibidos.
+  -x, --hex                 Analiza los datos a enviar como hexadecimales (por defecto para
                             TCP/UDP/SSL).
-  -a, --ascii               Parse data-to-send as mixed-ascii (default for http
-                            and GUI).
-  -A, --ASCII               Parse data-to-send as pure ascii (no \xx
-                            translation).
-  -w, --wait <ms>           Wait up to <milliseconds> for a response after
-                            sending. Zero means do not wait (Default).
-  -f, --file <path>         Send contents of specified path. Max 10 MiB for
-                            UDP, 100 MiB for TCP/SSL.
-  -b, --bind <port>         Bind port. Default is 0 (dynamic).
-  -6, --ipv6                Force IPv6. Same as -B "::". Default is IP:Any.
-  -4, --ipv4                Force IPv4.  Same as -B "0.0.0.0". Default is
-                            IP:Any.
-  -B, --bindip <IP>         Bind custom IP. Default is IP:Any.
-  -t, --tcp                 Send TCP (default).
-  -s, --ssl                 Send SSL and ignore errors.
-  -S, --SSL                 Send SSL and stop for errors.
-  -u, --udp                 Send UDP.
-  --http <http>             Send HTTP. Allowed values are GET (default) and
+  -a, --ascii               Analiza los datos a enviar en formato mixto-ascii (por defecto para http
+                            y GUI).
+  -A, --ASCII               Analiza los datos a enviar como ascii puro (sin
+                            traducción \xx).
+  -w, --wait <ms>           Se esperará hasta <millisegundos> para una respuesta después del
+                            envío. Un valor de cero significa sn espera (Por defecto).
+  -f, --file <path>         Enviar el contenido de la ruta especificada. Máximo 10 MiB para
+                            UDP, 100 MiB para TCP/SSL.
+  -b, --bind <port>         Vincular puerto. Por defecto es 0 (dinámico).
+  -6, --ipv6                Forzar IPv6. Igual que -B "::". Por defecto es IP:Any.
+  -4, --ipv4                Forzar IPv4.  Igual que -B "0.0.0.0". Por defecto es IP:Any.                  
+  -B, --bindip <IP>         Enlazar IP personalizada. Por defecto es IP:Any.
+  -t, --tcp                 Enviar TCP (por defecto).
+  -s, --ssl                 Enviar SSL e ignorar errores.
+  -S, --SSL                 Enviar SSL y parar por errores.
+  -u, --udp                 Enviar UDP.
+  --http <http>             Enviar HTTP. Los valores permitidos son GET (por defecto) y
                             POST
-  -n, --name <name>         Send previously saved packet named <name>. Other
-                            options overrides saved packet parameters.
-  --bps <bps>               Intense traffic. Calculate rate based on value of
-                            bits per second.
-  --num <number>            Intense traffic. Number of packets to send. Default
-                            unlimited.
-  --rate <Hertz>            Intense traffic. Rate. Ignored in bps option.
-  --usdelay <microseconds>  Intense traffic. Resend delay. Used if rate is 0.
-                            Ignored in bps option.
+  -n, --name <name>         Enviar el paquete previamente guardado llamado <name>. Otras
+                            opciones anulan los parámetros del paquete guardado.
+  --bps <bps>               Tráfico intenso. Calcula la tasa basándose en el valor de
+                            bits por segundo.
+  --num <number>            Tráfico intenso. Número de paquetes a enviar. Por defecto
+                            ilimitado.
+  --rate <Hertz>            Tráfico intenso. Tasa. Se ignora en la opción bps.
+  --usdelay <microseconds>  Tráfico intenso. Retardo de reenvío. Utilizado si la tasa es 0.
+                            Ignorado en la opción bps.
 
-Arguments:
-  address                   Destination address/URL. Optional for saved packet.
-  port                      Destination port/POST data. Optional for saved
-                            packet.
-  data                      Data to send. Optional for saved packet.
+Argumentos:
+  address                   Dirección/URL de destino. Opcional para paquete guardado.
+  port                      Puerto de destino/datos POST. Opcional para el paquete
+                            guardado
+  data                      Datos a enviar. Opcional para el paquete guardado.
 ```
-## Example CLI
-The CLI follows the same format between Windows, Linux, and MAC. 
+## Ejemplo de CLI
+El CLI sigue el mismo formato entre Windows, Linux y MAC. 
 
-The format is: `packetsender [options] address port data`
+El formato es `packetsender [options] puerto de dirección de datos`
 
 ```
-packetsender -taw 500 mirrors.xmission.com 21 "USER anonymous\r\nPASS chrome@example.com\r\n"
+packetsender -taw 500 mirrors.xmission.com 21 "USER anonimo\nPASS chrome@example.com\r\n"
 TCP (65505)://mirrors.xmission.com:21 55 53 45 52 20 61 6e 6f 6e 79 6d 6f 75 73 0d 0a 50 41 53 53 20 63 68 72 6f 6d 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 0d 0a
-Response Time:5:51:37.042 pm
-Response HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
-Response ASCII:220-Welcome to XMission Internet...
+Tiempo de respuesta:5:51:37.042 pm
+Respuesta HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
+Respuesta ASCII:220-Bienvenido a XMission Internet...
 ```
 
-## Examples binding to port and custom IP, IPv4, or IPv6
+## Ejemplos de vinculación a puerto e IP personalizada, IPv4 o IPv6
 
-Packet Sender command line can bind to custom ports to force IPv4/6 modes or multiple NIC using the -B option.
+La línea de comandos de Packet Sender puede vincularse a puertos personalizados para forzar modos IPv4/6 o múltiples NIC utilizando la opción -B.
 ```
-packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hola\r"
 packetsender -taw 3000 192.168.0.201 5005 "Hello\r"
-packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hello\r"
-packetsender -B fe80::a437:399a:3091:266a%ethernet_32769 -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
-packetsender -B fe80::a437:399a:3091:266a -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
+packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hola\r"
+packetsender -B fe80::a437:399a:3091:266a%ethernet_32769 -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hola\r"
+packetsender -B fe80::a437:399a:3091:266a -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hola\r"
 ```
 
-## Example CLI using SSL and ignoring errors
+## Ejemplo de CLI utilizando SSL e ignorando errores
 
-The command line has the option to ignore or abandon on SSL errors. The default is to ignore.
+La línea de comandos tiene la opción de ignorar o abandonar en los errores SSL. El valor por defecto es ignorar.
 
-* Use -s option to send SSL and ignore errors.
-* Use -S option to send SSL and stop for errors
+* Utilice la opción -s para enviar SSL e ignorar errores.
+* Utilice la opción -S para enviar SSL y abandonar en caso de errores
 
 ```
 packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
-SSL Error: The certificate has expired
+Error SSL: El certificado ha caducado
 SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
-Cipher: Encrypted with AES(128)
+Cifrado: Cifrado con AES(128)
 
-Response Time:3:24:55.695 pm
-Response HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
-Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
+Tiempo de respuesta:3:24:55.695 pm
+Respuesta HEX:48 54 54 50 2f 31 2e 31 20 34 32 31 20 0d 0a 53 65 72 76 65 72 3a 20 6e 67 69 6e 78 2f 31 2e 31 30 2e 30 20 28 55 62 75 6e 74 75 29 0d
+Respuesta ASCII:HTTP/1.1 421 \r\nServidor: nginx/1.10.0 (Ubuntu)\r
 ```
 
-## Example CLI using HTTP
-Note this uses the built-in default packets.
+## Ejemplo CLI usando HTTP
+Tenga en cuenta que esto utiliza los paquetes incorporados por defecto.
 ```
-packetsender --name "HTTPS POST Params"
+packetsender --name "Parámetros POST HTTPS"
 packetsender --http GET "https://httpbin.org/get"
 packetsender --http POST "https://httpbin.org/post" "{}"
 ```
@@ -544,77 +543,76 @@ packetsender --http POST "https://httpbin.org/post" "{}"
 
 <a id="cliintensetraffic"></a>
 
-## Example using CLI Intense Traffic Generator
-The command intense traffic generator works much the same way as the GUI version but it is a bit more accurate, with more control options, (and more intensity!).
+## Ejemplo utilizando el Generador de Tráfico Intenso CLI
+El generador de tráfico intenso por comandos funciona de forma muy parecida a la versión GUI, pero es un poco más preciso, con más opciones de control, (¡y más intensidad!).
 
-See below for examples how to use it. Note that these calculations are "Best Effort". It does OK, but processor spikes or various network hiccups can throw it off. The threading is not real-time, and is not super-smart with its attempts to compensate.
+Vea a continuación ejemplos de cómo utilizarlo. Tenga en cuenta que estos cálculos son "Best Effort". Lo hace bien, pero los picos del procesador o diversos contratiempos de la red pueden echarlo a perder. El threading  no es en tiempo real, y no es superinteligente con sus intentos de compensar.
 
-* Resend "My Awesome Packet" at a rate of 20 Hz
-* Resend "My Awesome Packet" at a bps of 2000 baud
-* Resend "My Awesome Packet" as fast as possible
-* Resend "My Awesome Packet" with 2000000 microsecond delay between each packet
+* Reenviar "Mi Impresionante Paquete" a una velocidad de 20 Hz
+* Reenviar "Mi Impresionante Paquete" a una velocidad de 2000 baudios
+* Reenviar "Mi Impresionante Paquete" lo más rápido posible
+* Reenviar "Mi Impresionante Paquete" con un retardo de 2000000 microsegundos entre cada paquete
 
-**Note: For Windows, use the ".com" build, so each example would be packetsender.com**
+**Nota: Para Windows, use la construcción ".com", así que cada ejemplo sería packetsender.com**
 
 ```
-packetsender --rate 20 --name "My Awesome Packet"
-packetsender --bps 2000 --name "My Awesome Packet"
-packetsender --rate 0 --name "My Awesome Packet"
-packetsender --usdelay 2000000 --name "My Awesome Packet"
+packetsender --rate 20 --name "Mi impresionante paquete"
+packetsender --bps 2000 --name "Mi impresionante paquete"
+packetsender --rate 0 --name "Mi impresionante paquete"
+packetsender --usdelay 2000000 --name "Mi impresionante paquete"
 ```
 
 
 <a id="building"></a>
-# Building Packet Sender
-The only dependency is Qt SDK
+# Activando Packet Sender
+La única dependencia es Qt SDK
 
-## Building Packet Sender for Windows/MAC
-1. Download the Qt installer from http://www.qt.io/download-open-source/
-1. Let it install MingGW if you don't have a compiler.
-1. Open the project PacketSender.pro
-1. Build! 
+## Activando Packet Sender para Windows/MAC
+1. Descargue el instalador de Qt desde http://www.qt.io/download-open-source/
+1. Deje que instale MingGW si no tiene un compilador.
+1. Abra el proyecto PacketSender.pro
+1. Active. 
 
-The Windows and Mac versions were built using Qt 5.12. Packet Sender does support Qt 6, however it does not
-support cmake.
+Las versiones para Windows y Mac fueron creadas usando Qt 5.12. Packet Sender soporta Qt 6, sin embargo no soporta cmake.
 
-## Building Packet Sender for Linux
-Here is the sequence of commands for Ubuntu 16.04. Please adapt to your Linux platform. Packet Sender requires no additional libraries beyond the stock Qt SDK. I have been told there are build issues with stock Fedora. If a Fedora wizard has insight, please let me know, and I'll add your instructions.
+## Activando Packet Sender para Linux
+Esta es la secuencia de comandos para Ubuntu 16.04. Por favor, adáptela a su plataforma Linux. Packet Sender no requiere librerías adicionales más allá del Qt SDK de stock. Me han dicho que hay problemas de compilación con Fedora stock. Si un asistente de Fedora tiene alguna idea, por favor hágamelo saber y añadiré sus instrucciones.
 
-If you are feeling adventurous, feel free to build from the master branch. It contains the latest stable build. The development branch should probably be avoided.
+Si se siente aventurero, siéntase libre de realizar la instalación de la Ramificación Maestra. Contiene la última compilación estable. Probablemente debería evitar la rama de desarrollo.
 
 ```bash
 sudo apt-get update
 sudo apt-get install qt5-default build-essential
-wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
-tar -xzvf (Version).tar.gz
-cd PacketSender-(Version)/src
+wget https://github.com/dannagle/PacketSender/archive/(Versión).tar.gz
+tar -xzvf (Versión).tar.gz
+cd PacketSender-(Versión)/src
 qmake PacketSender.pro
 make
 ```
 
-To run use:
+Para ejecutarlo utilice
 ```
 ./PacketSender
 ```
 
-If it doesn't run, you may need to set it executable
+Si no se ejecuta, puede que tenga que configurarlo como ejecutable
 ```
 chmod a+x PacketSender
 ```
 
 
-# Enhancements/Requests
+# Mejoras/Solicitudes
 
-Missing a feature? You can [hire me to add it to Packet Sender](https://packetsender.com/enhancements).
+¿Echa en falta alguna característica? Puede [contratarme para que la añada a Packet Sender](https://packetsender.com/enhancements).
 
-# Legal / Compliance
+# Legal / Cumplimiento
 
-License is GPL v2 or Later. [Contact me](https://packetsender.com/contact) if you require a different license.
-Some distributions of Packet Sender may use [OpenSSL](https://www.openssl.org/).
-The most current VPAT [may be found](vpat_2.4_packetsender.pdf) in this repo.
+La licencia es GPL v2 o posterior. [Póngase en contacto conmigo](https://packetsender.com/contact) si necesita una licencia diferente.
+Algunas distribuciones de Packet Sender pueden utilizar [OpenSSL](https://www.openssl.org/).
+El VPAT más actual [puede encontrarse](vpat_2.4_packetsender.pdf) en este repo.
 
 
-# Copyright
+# Derechos de autor
 
-Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://packetsender.com)
+Packet Sender fue escrito por [Dan Nagle](https://dannagle.com/) y es publicado por &copy; NagleCode, LLC - [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://packetsender.com)
 
