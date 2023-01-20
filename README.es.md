@@ -446,7 +446,7 @@ Para Windows, utilice la extensión .com (`packetsender.com`) para utilizar la i
 
 Para Linux, el sistema de línea de comandos de Packet Sender sigue el mismo patrón que otras utilidades de Linux. Tiene un nombre largo (como --version) y un nombre corto (como -v). Estas opciones pueden disponerse en cualquier orden y Packet Sender las analizará correctamente. Las 3 últimas opciones son posicionales y deben aparecer en último lugar. Son IP, puerto y datos. Estas últimas opciones son opcionales si se utiliza un paquete almacenado.
 
-```
+```text
 packetsender --help
 Packet Sender es una utilidad de prueba de red UDP/TCP/SSL/HTTP de NagleCode.
 Consulte https://PacketSender.com/ para más información.
@@ -491,13 +491,13 @@ Argumentos:
   port                      Puerto de destino/datos POST. Opcional para el paquete
                             guardado
   data                      Datos a enviar. Opcional para el paquete guardado.
-```
+```text
 ## Ejemplo de CLI
 El CLI sigue el mismo formato entre Windows, Linux y MAC. 
 
 El formato es `packetsender [options] puerto de dirección de datos`
 
-```
+```text
 packetsender -taw 500 mirrors.xmission.com 21 "USER anonimo\nPASS chrome@example.com\r\n"
 TCP (65505)://mirrors.xmission.com:21 55 53 45 52 20 61 6e 6f 6e 79 6d 6f 75 73 0d 0a 50 41 53 53 20 63 68 72 6f 6d 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 0d 0a
 Tiempo de respuesta:5:51:37.042 pm
@@ -508,7 +508,7 @@ Respuesta ASCII:220-Bienvenido a XMission Internet...
 ## Ejemplos de vinculación a puerto e IP personalizada, IPv4 o IPv6
 
 La línea de comandos de Packet Sender puede vincularse a puertos personalizados para forzar modos IPv4/6 o múltiples NIC utilizando la opción -B.
-```
+```text
 packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hola\r"
 packetsender -taw 3000 192.168.0.201 5005 "Hello\r"
 packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hola\r"
@@ -523,7 +523,7 @@ La línea de comandos tiene la opción de ignorar o abandonar en los errores SSL
 * Utilice la opción -s para enviar SSL e ignorar errores.
 * Utilice la opción -S para enviar SSL y abandonar en caso de errores
 
-```
+```text
 packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
 Error SSL: El certificado ha caducado
 SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
@@ -536,7 +536,7 @@ Respuesta ASCII:HTTP/1.1 421 \r\nServidor: nginx/1.10.0 (Ubuntu)\r
 
 ## Ejemplo CLI usando HTTP
 Tenga en cuenta que esto utiliza los paquetes incorporados por defecto.
-```
+```text
 packetsender --name "Parámetros POST HTTPS"
 packetsender --http GET "https://httpbin.org/get"
 packetsender --http POST "https://httpbin.org/post" "{}"
@@ -558,7 +558,7 @@ Vea a continuación ejemplos de cómo utilizarlo. Tenga en cuenta que estos cál
 
 **Nota: Para Windows, use la construcción ".com", así que cada ejemplo sería packetsender.com**
 
-```
+```text
 packetsender --rate 20 --name "Mi impresionante paquete"
 packetsender --bps 2000 --name "Mi impresionante paquete"
 packetsender --rate 0 --name "Mi impresionante paquete"
@@ -594,12 +594,12 @@ make
 ```
 
 Para ejecutarlo utilice
-```
+```text
 ./PacketSender
 ```
 
 Si no se ejecuta, puede que tenga que configurarlo como ejecutable
-```
+```text
 chmod a+x PacketSender
 ```
 
