@@ -491,7 +491,7 @@ Argumentos:
   port                      Puerto de destino/datos POST. Opcional para el paquete
                             guardado
   data                      Datos a enviar. Opcional para el paquete guardado.
-```text
+```
 ## Ejemplo de CLI
 El CLI sigue el mismo formato entre Windows, Linux y MAC. 
 
