@@ -2,6 +2,9 @@
 
 ![Logotipo de Packet Sender](screenshots/packetsender_banner.png)
 
+*Lea esto en otros idiomas: [English](README.md), [Español](README.es.md).*
+
+
 [![Descargas](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
 
 Packet Sender es una utilidad de código abierto que permite enviar y recibir paquetes TCP, UDP y SSL (TCP encriptado), así como peticiones HTTP/HTTPS y generación de paneles. La rama mainline soporta oficialmente Windows, Mac y Linux de escritorio (con Qt). Otros lugares pueden recompilar y redistribuir Packet Sender. Packet Sender es gratuito y tiene licencia GPL v2 o posterior. Puede utilizarse tanto para uso comercial como personal. Si encuentra útil la aplicación, por favor considere donar/patrocinar para que el desarrollo pueda continuar.
@@ -15,8 +18,8 @@ Packet Sender es una utilidad de código abierto que permite enviar y recibir pa
 
 * [Interfaz de Usuario](#gui)
 * [Generador de tráfico intenso (GUI)](#udptraffic)
-* [Red](#red)
-* [Descargas](#descargas)
+* [Red](#network)
+* [Descargas](#downloads)
 * [Soporte](#support)
 * [Calculadora de Subredes IPv4](#subnetcalculator)
 * [Packet Sender en la Nube](#cloud)
