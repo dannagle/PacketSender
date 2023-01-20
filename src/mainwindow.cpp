@@ -33,6 +33,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSortFilterProxyModel>
+
 
 #include <QStringList>
 
@@ -54,6 +56,7 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
+#include "languagechooser.h"
 
 
 int hexToInt(QChar hex);
@@ -89,6 +92,10 @@ MainWindow::MainWindow(QWidget *parent) :
     if (settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
     }
+
+    // Disabled for now.
+    //LanguageChooser lang;
+    //lang.exec();
 
 
     ui->generatePanelButton->hide();
@@ -173,13 +180,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     packetTableHeaders  = Settings::defaultTrafficTableHeader();
     packetTableHeaders = settings.value("packetTableHeaders", packetTableHeaders).toStringList();
-    packetsLogged.setTableHeaders(packetTableHeaders);
+    QStringList packetTableHeadersTranslated;
+    foreach (QString pktHeader, packetTableHeaders) {
+        packetTableHeadersTranslated.append(Settings::logHeaderTranslate(pktHeader));
+    }
+    packetsLogged.setTableHeaders(packetTableHeadersTranslated);
 
-    ui->trafficLogTable->setModel(&packetsLogged);
+
+    proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(&packetsLogged);
+    ui->trafficLogTable->setModel(proxyModel);
 
 
     ui->trafficLogTable->verticalHeader()->show();
     ui->trafficLogTable->horizontalHeader()->show();
+
+    ui->trafficLogTable->setSortingEnabled(true);
+
 
     loadPacketsTable();
 
@@ -201,7 +218,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QDEBUG() << "hexPreviewFilter connection false";
     }
 
-    stopResendingButton = new QPushButton("Resending");
+    stopResendingButton = new QPushButton(tr("Resending"));
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
     themeTheButton(stopResendingButton);
     stopResendingButton->setIcon(QIcon(PSLOGO));
@@ -561,11 +578,11 @@ void MainWindow::updateManager(QByteArray response)
                 QDEBUG() << "Update is needed";
                 QMessageBox msgBox;
                 msgBox.setWindowIcon(QIcon(":pslogo.png"));
-                msgBox.setWindowTitle("Updates.");
+                msgBox.setWindowTitle(tr("Updates."));
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::Yes);
                 msgBox.setIcon(QMessageBox::Information);
-                msgBox.setText("There is a new Packet Sender available.\n\nDownload?");
+                msgBox.setText(tr("There is a new Packet Sender available.\n\nDownload?"));
                 int yesno = msgBox.exec();
                 if (yesno == QMessageBox::Yes) {
                     QDesktopServices::openUrl(QUrl("https://packetsender.com/download"));
@@ -589,11 +606,11 @@ void MainWindow::updateManager(QByteArray response)
         settings.setValue("SW_VERSION", SW_VERSION); // first run. Save the current version.
         QMessageBox msgBox;
         msgBox.setWindowIcon(QIcon(":pslogo.png"));
-        msgBox.setWindowTitle("Updates.");
+        msgBox.setWindowTitle(tr("Updates."));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::Yes);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Let Packet Sender check for updates weekly?");
+        msgBox.setText(tr("Let Packet Sender check for updates weekly?"));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::Yes) {
             QDEBUG() << "Will check for updates";
@@ -637,11 +654,11 @@ void MainWindow::updateManager(QByteArray response)
             settings.setValue("SW_VERSION", swCheck);
             QMessageBox msgBox;
             msgBox.setWindowIcon(QIcon(":pslogo.png"));
-            msgBox.setWindowTitle("Packet Sender Updated!");
+            msgBox.setWindowTitle(tr("Packet Sender Updated!"));
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Updated to " + swCheck + "!\n\nWould you like to read the release notes?");
+            msgBox.setText(tr("Updated to ") + swCheck + tr("!\n\nWould you like to read the release notes?"));
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
                 QDesktopServices::openUrl(QUrl("https://github.com/dannagle/PacketSender/releases/latest"));
@@ -702,7 +719,7 @@ void MainWindow::toTrafficLog(Packet logPacket)
     }
 
     int trafficlogsize = packetsLogged.size();
-    ui->trafficLogClearButton->setText("Clear Log ("+QString::number(trafficlogsize)+")");
+    ui->trafficLogClearButton->setText(tr("Clear Log ") +"("+QString::number(trafficlogsize)+")");
 
 
     if(!initialpackets) {
@@ -727,13 +744,13 @@ void MainWindow::UDPServerStatus()
         int portcount = packetNetwork.getUDPPortsBound().size();
         udpServerStatus->setToolTip(ports);
         if(portcount > 3) {
-            udpServerStatus->setText("UDP: " + QString::number(portcount) + " Ports");
+            udpServerStatus->setText("UDP: " + QString::number(portcount) + tr(" Ports"));
         } else {
             udpServerStatus->setText("UDP:" + ports);
         }
 
     } else {
-        udpServerStatus->setText("UDP Server Disabled");
+        udpServerStatus->setText(tr("UDP Server Disabled"));
 
     }
 
@@ -749,13 +766,13 @@ void MainWindow::SSLServerStatus()
         int portcount = packetNetwork.getSSLPortsBound().size();
         sslServerStatus->setToolTip(ports);
         if(portcount > 3) {
-            sslServerStatus->setText("SSL: " + QString::number(portcount) + " Ports");
+            sslServerStatus->setText("SSL: " + QString::number(portcount) + tr(" Ports"));
         } else {
             sslServerStatus->setText("SSL:" + ports);
         }
 
     } else {
-        sslServerStatus->setText("SSL Server Disabled");
+        sslServerStatus->setText(tr("SSL Server Disabled"));
 
     }
 
@@ -770,14 +787,14 @@ void MainWindow::TCPServerStatus()
         int portcount = packetNetwork.getTCPPortsBound().size();
         tcpServerStatus->setToolTip(ports);
         if(portcount > 3) {
-            tcpServerStatus->setText("TCP: " + QString::number(portcount) + " Ports");
+            tcpServerStatus->setText("TCP: " + QString::number(portcount) + tr(" Ports"));
         } else {
             tcpServerStatus->setText("TCP:" + ports);
         }
 
 
     } else {
-        tcpServerStatus->setText("TCP Server Disabled");
+        tcpServerStatus->setText(tr("TCP Server Disabled"));
 
     }
 
@@ -851,7 +868,13 @@ void MainWindow::loadPacketsTable()
 
     ui->packetsTable->verticalHeader()->show();
     ui->packetsTable->horizontalHeader()->show();
-    ui->packetsTable->setHorizontalHeaderLabels(packetSavedTableHeaders);
+
+    QStringList packetTableHeadersTranslated;
+    foreach (QString pktHeader, packetSavedTableHeaders) {
+        packetTableHeadersTranslated.append(Settings::logHeaderTranslate(pktHeader));
+    }
+
+    ui->packetsTable->setHorizontalHeaderLabels(packetTableHeadersTranslated);
     if (packetsSavedFiltered.isEmpty()) {
         ui->packetsTable->setRowCount(0);
     } else {
@@ -991,11 +1014,11 @@ void MainWindow::sendClick(QString packetName)
 
             if (PacketNetwork::isMulticast(toSend.toIP) && (!noMCastList.contains(toSend.toIP))) {
                 QMessageBox msgBox;
-                msgBox.setWindowTitle("Multicast detected.");
+                msgBox.setWindowTitle(tr("Multicast detected."));
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 msgBox.setDefaultButton(QMessageBox::No);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("Do you wish to join the multicast group?");
+                msgBox.setText(tr("Do you wish to join the multicast group?"));
                 int yesno = msgBox.exec();
                 if (yesno == QMessageBox::No) {
                     noMCastList.append(toSend.toIP);
@@ -1011,11 +1034,11 @@ void MainWindow::sendClick(QString packetName)
                 bool sendResponse = settings.value("sendReponse", false).toBool();
                 if (sendResponse) {
                     QMessageBox msgBox;
-                    msgBox.setWindowTitle("Broadcast with responses!");
+                    msgBox.setWindowTitle(tr("Broadcast with responses!"));
                     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                     msgBox.setDefaultButton(QMessageBox::No);
                     msgBox.setIcon(QMessageBox::Warning);
-                    msgBox.setText("You are sending a broadcast packet with responses enabled.\n\nThis could cause traffic flooding. Continue?");
+                    msgBox.setText(tr("You are sending a broadcast packet with responses enabled.\n\nThis could cause traffic flooding. Continue?"));
                     int yesno = msgBox.exec();
                     if (yesno == QMessageBox::No) {
                         return;
@@ -1029,13 +1052,13 @@ void MainWindow::sendClick(QString packetName)
 
                 stopResendingButton->setStyleSheet("QPushButton { color: green; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
                 packetsRepeat.append(toSend);
-                stopResendingButton->setText("Resending (" + QString::number(packetsRepeat.size()) + ")");
+                stopResendingButton->setText(tr("Resending") +" (" + QString::number(packetsRepeat.size()) + ")");
                 stopResending = 0;
             }
 
             lastSendPacket = toSend;
             QByteArray sendData = toSend.getByteArray();
-            statusBarMessage("Send: " + packetName + "  (" + QString::number(sendData.size()) + " bytes)");
+            statusBarMessage(tr("Send")+": " + packetName + "  (" + QString::number(sendData.size()) + " "+tr("bytes")+")");
             emit sendPacket(toSend);
         }
     }
@@ -1062,11 +1085,11 @@ void MainWindow::on_savePacketButton_clicked()
     if (testPacket.name.isEmpty()) {
 
         QMessageBox msgBox;
-        msgBox.setText("Name cannot be blank.");
+        msgBox.setText(tr("Name cannot be blank."));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setWindowTitle("Name is empty.");
+        msgBox.setWindowTitle(tr("Name is empty."));
         msgBox.exec();
         ui->packetNameEdit->setFocus();
         return;
@@ -1116,11 +1139,11 @@ void MainWindow::on_testPacketButton_clicked()
         if (!QSslSocket::supportsSsl()) {
 
             QMessageBox msgBox;
-            msgBox.setText("This computer does not support SSL.\n\nExpected SSL:" + QSslSocket::sslLibraryVersionString());
+            msgBox.setText(tr("This computer does not support SSL.\n\nExpected SSL:") + QSslSocket::sslLibraryVersionString());
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setWindowTitle("No SSL Library.");
+            msgBox.setWindowTitle(tr("No SSL Library."));
             msgBox.exec();
             ui->udptcpComboBox->setFocus();
             return;
@@ -1173,11 +1196,11 @@ void MainWindow::on_testPacketButton_clicked()
     if (testPacket.toIP.isEmpty()) {
 
         QMessageBox msgBox;
-        msgBox.setText("Address cannot be blank.");
+        msgBox.setText(tr("Address cannot be blank."));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setWindowTitle("Address is empty.");
+        msgBox.setWindowTitle(tr("Address is empty."));
         msgBox.exec();
         ui->packetIPEdit->setFocus();
         return;
@@ -1188,11 +1211,11 @@ void MainWindow::on_testPacketButton_clicked()
     if (testPacket.port == 0) {
 
         QMessageBox msgBox;
-        msgBox.setText("Port cannot be blank/zero.");
+        msgBox.setText(tr("Port cannot be blank/zero."));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setWindowTitle("Port is zero.");
+        msgBox.setWindowTitle(tr("Port is zero."));
         msgBox.exec();
         ui->packetPortEdit->setFocus();
         return;
@@ -1206,11 +1229,11 @@ void MainWindow::on_testPacketButton_clicked()
     if(isIPv6 && (!packetNetwork.IPv6Enabled())) {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("IPv6?");
+        msgBox.setWindowTitle(tr("IPv6?"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Enable IPv6 support?");
+        msgBox.setText(tr("Enable IPv6 support?"));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::Yes) {
             packetNetwork.setIPmode(8); //both 4 and 6
@@ -1229,11 +1252,11 @@ void MainWindow::on_testPacketButton_clicked()
         if(!packetNetwork.canSendMulticast(testPacket.toIP)) {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Multicast detected.");
+            msgBox.setWindowTitle(tr("Multicast detected."));
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Join UDP multicast group?");
+            msgBox.setText(tr("Join UDP multicast group?"));
 
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::Yes) {
@@ -1251,11 +1274,11 @@ void MainWindow::on_testPacketButton_clicked()
         if (sendResponse) {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Broadcast with responses!");
+            msgBox.setWindowTitle(tr("Broadcast with responses!"));
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::No);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("You are sending a broadcast packet with responses enabled.\n\nThis could cause traffic flooding. Continue?");
+            msgBox.setText(tr("You are sending a broadcast packet with responses enabled.\n\nThis could cause traffic flooding. Continue?"));
             int yesno = msgBox.exec();
             if (yesno == QMessageBox::No) {
                 return;
@@ -1271,11 +1294,11 @@ void MainWindow::on_testPacketButton_clicked()
         if((testPacket.isTCP() || (testPacket.isSSL()))  && ui->persistentTCPCheck->isChecked()) {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Resend TCP with persistent connections!");
+            msgBox.setWindowTitle(tr("Resend TCP with persistent connections!"));
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
             msgBox.setDefaultButton(QMessageBox::Yes);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! \n\nUncheck persistent connection? (Recommended)");
+            msgBox.setText(tr("You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! \n\nUncheck persistent connection? (Recommended)"));
             int yesno = msgBox.exec();
             if(yesno == QMessageBox::Yes) {
                 ui->persistentTCPCheck->setChecked(false);
@@ -1291,7 +1314,7 @@ void MainWindow::on_testPacketButton_clicked()
 
         stopResendingButton->setStyleSheet("QPushButton { color: green; background-color: #505F69; } QPushButton::hover { color: #BC810C; background-color: #505F69; } ");
         packetsRepeat.append(testPacket);
-        stopResendingButton->setText("Resending (" + QString::number(packetsRepeat.size()) + ")");
+        stopResendingButton->setText(tr("Resending") +" (" + QString::number(packetsRepeat.size()) + ")");
         stopResending = 0;
     }
 
@@ -1310,11 +1333,11 @@ void MainWindow::on_deletePacketButton_clicked()
     if (indexes.isEmpty()) {
 
         QMessageBox msgBox;
-        msgBox.setText("No packets selected.");
+        msgBox.setText(tr("No packets selected."));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setWindowTitle("Select a packet.");
+        msgBox.setWindowTitle(tr("Select a packet."));
         msgBox.exec();
         return;
     }
@@ -1353,7 +1376,7 @@ void MainWindow::on_packetIPEdit_lostFocus()
         QHostInfo info = QHostInfo::fromName(ipPacket);
         if (info.error() != QHostInfo::NoError) {
             ui->packetIPEdit->setText("");
-            ui->packetIPEdit->setPlaceholderText("Invalid Address / DNS failed");
+            ui->packetIPEdit->setPlaceholderText(tr("Invalid Address / DNS failed"));
         } else {
 
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1376,7 +1399,7 @@ void MainWindow::on_packetPortEdit_lostFocus()
     QDEBUGVAR(port);
     if (port <= 0) {
         ui->packetPortEdit->setText("");
-        ui->packetPortEdit->setPlaceholderText("Invalid Port");
+        ui->packetPortEdit->setPlaceholderText(tr("Invalid Port"));
     } else {
         ui->packetPortEdit->setText(QString::number(port));
     }
@@ -1690,7 +1713,7 @@ void MainWindow::packetTable_checkMultiSelected()
        ui->generatePanelButton->show();
     }
 
-    ui->testPacketButton->setText("Send");
+    ui->testPacketButton->setText(tr("Send"));
     ui->testPacketButton->setStyleSheet("");
 
     ui->packetNameEdit->setEnabled(true);
@@ -1820,7 +1843,7 @@ void MainWindow::on_trafficLogClearButton_clicked()
 {
     packetsLogged.clear();
     Packet tempPacket;
-    ui->trafficLogClearButton->setText("Clear Log (0)");
+    ui->trafficLogClearButton->setText(tr("Clear Log (0)"));
 }
 
 
@@ -1836,7 +1859,8 @@ void MainWindow::on_saveTrafficPacket_clicked()
     QString namePrompt;
     bool ok;
     foreach (index, indexes) {
-        Packet savePacket = packetsLogged.getPacket(index);
+        QModelIndex sourceIndex = proxyModel->mapToSource(index);
+        Packet savePacket = packetsLogged.getPacket(sourceIndex);
         QDEBUG() << "Saving" << savePacket.name;
         namePrompt = QInputDialog::getText(this, tr("Save Packet"),
                                            tr("Packet name:"), QLineEdit::Normal,
@@ -1896,7 +1920,7 @@ void MainWindow::applyNetworkSettings()
 void MainWindow::cancelResends()
 {
     stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
-    stopResendingButton->setText("Resending");
+    stopResendingButton->setText(tr("Resending"));
     stopResending = 1;
 }
 
@@ -1959,16 +1983,17 @@ void MainWindow::on_toClipboardButton_clicked()
     if (indexes.size() == 0) {
 
         QMessageBox msgBox;
-        msgBox.setText("No packets selected.");
+        msgBox.setText(tr("No packets selected."));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setWindowTitle("Clipboard unchanged.");
+        msgBox.setWindowTitle(tr("Clipboard unchanged."));
         msgBox.exec();
         return;
     }
     foreach (index, indexes) {
-        Packet savePacket = packetsLogged.getPacket(index);
+        QModelIndex sourceIndex = proxyModel->mapToSource(index);
+        Packet savePacket = packetsLogged.getPacket(sourceIndex);
         out << "Time: " << savePacket.timestamp.toString(DATETIMEFORMAT) << "\n";
         out << "TO: " << savePacket.toIP << ":" << savePacket.port << "\n";
         out << "From: " << savePacket.fromIP << ":" << savePacket.fromPort << "\n";
@@ -2042,8 +2067,8 @@ void MainWindow::on_saveLogButton_clicked()
     QTextStream out;
     out.setString(&exportString);
 
-    out << "TIME" << delim << "From IP" << delim << "From Port" << delim << "To IP"
-        << delim << "To Port" << delim << "Method" << delim << "Error" << delim << "ASCII" << delim << "Hex\n";
+    out << tr("TIME") << delim << tr("From IP") << delim << tr("From Port") << delim << tr("To IP")
+        << delim << tr("To Port") << delim << tr("Method") << delim << tr("Error") << delim << "ASCII" << delim << "Hex\n";
 
 
     Packet tempPacket;
@@ -2223,14 +2248,14 @@ void MainWindow::on_actionImport_Packets_JSON_triggered()
 
     if (!importList.isEmpty()) {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
+        msgBox.setWindowTitle(tr("Found ") + QString::number(importList.size()) + tr(" packets!"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
+        msgBox.setText(tr("Import ") + QString::number(importList.size()) + tr(" packets?\n\nPacket Sender will overwrite packets with the same name."));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::No) {
-            statusBarMessage("Import Cancelled");
+            statusBarMessage(tr("Import Cancelled"));
             return;
         } else {
             foreach (importPacket, importList) {
@@ -2238,20 +2263,20 @@ void MainWindow::on_actionImport_Packets_JSON_triggered()
 
             }
             packetsSaved = Packet::fetchAllfromDB("");
-            statusBarMessage("Import Finished");
+            statusBarMessage(tr("Import Finished"));
             loadPacketsTable();
         }
 
     } else {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Not a database");
+        msgBox.setWindowTitle(tr("Not a database"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
+        msgBox.setText(tr("Found no packets in this file. It may not be a Packet Sender export"));
         msgBox.exec();
         return;
-        statusBarMessage("Import Cancelled");
+        statusBarMessage(tr("Import Cancelled"));
     }
 
     return;
@@ -2287,15 +2312,15 @@ void MainWindow::on_actionExport_Packets_JSON_triggered()
     if (jsonFile.open(QFile::WriteOnly)) {
         jsonFile.write(Packet::ExportJSON(Packet::fetchAllfromDB("")));
         jsonFile.close();
-        statusBarMessage("Export: " + fileName);
+        statusBarMessage(tr("Export: ") + fileName);
     } else {
 
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Could not save");
+        msgBox.setWindowTitle(tr("Could not save"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Could not open " + fileName + " for saving.");
+        msgBox.setText(tr("Could not open ") + fileName + (" for saving."));
         msgBox.exec();
         return;
 
@@ -2360,14 +2385,14 @@ void MainWindow::on_actionImport_Packets_triggered()
 
     if (!importList.isEmpty()) {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Found " + QString::number(importList.size()) + " packets!");
+        msgBox.setWindowTitle(tr("Found ") + QString::number(importList.size()) + tr(" packets!"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Information);
-        msgBox.setText("Import " + QString::number(importList.size()) + " packets?\n\nPacket Sender will overwrite packets with the same name.");
+        msgBox.setText(tr("Import ") + QString::number(importList.size()) + tr(" packets?\n\nPacket Sender will overwrite packets with the same name."));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::No) {
-            statusBarMessage("Import Cancelled");
+            statusBarMessage(tr("Import Cancelled"));
             return;
         } else {
             foreach (importPacket, importList) {
@@ -2381,14 +2406,14 @@ void MainWindow::on_actionImport_Packets_triggered()
 
     } else {
         QMessageBox msgBox;
-        msgBox.setWindowTitle("Not a database");
+        msgBox.setWindowTitle(tr("Not a database"));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Found no packets in this file. It may not be a Packet Sender export");
+        msgBox.setText(tr("Found no packets in this file. It may not be a Packet Sender export"));
         msgBox.exec();
         return;
-        statusBarMessage("Import Cancelled");
+        statusBarMessage(tr("Import Cancelled"));
     }
 }
 
@@ -2420,7 +2445,7 @@ void MainWindow::on_actionExport_Packets_triggered()
     }
 
     QDEBUG() << QFile::copy(PACKETSFILE, fileName);
-    statusBarMessage("Export: " + fileName);
+    statusBarMessage(tr("Export: ") + fileName);
 }
 
 void MainWindow::on_persistentTCPCheck_clicked(bool checked)
@@ -2492,17 +2517,17 @@ void MainWindow::on_loadFileButton_clicked()
             if (showWarning) {
                 showWarning = false;
                 QMessageBox msgBox;
-                msgBox.setWindowTitle("Max size exceeded!");
+                msgBox.setWindowTitle(tr("Max size exceeded!"));
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("The hex field supports up to 10,922 bytes. The data has been truncated.");
+                msgBox.setText(tr("The HEX field supports up to 10,922 bytes. The data has been truncated."));
                 msgBox.exec();
 
             }
 
         }
-        statusBarMessage("Loading " + QString::number(data.size()) + " bytes");
+        statusBarMessage(tr("Loading ") + QString::number(data.size()) + tr(" bytes"));
         ui->packetHexEdit->setText(Packet::byteArrayToHex(data));
         on_packetHexEdit_lostFocus();
         on_packetASCIIEdit_lostFocus();
@@ -2661,7 +2686,7 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 
         QDialog previewDlg;
         previewDlg.setWindowFlags(previewDlg.windowFlags() & ~Qt::WindowContextHelpButtonHint);
-        previewDlg.setWindowTitle("Multi-line editor");
+        previewDlg.setWindowTitle(tr("Multi-line editor"));
         QVBoxLayout* layout = new QVBoxLayout{&previewDlg};
         QPlainTextEdit* editor = new QPlainTextEdit{&previewDlg};
         QLineEdit* _lineEdit = dynamic_cast<QLineEdit*>(parent());

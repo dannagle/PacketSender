@@ -13,6 +13,9 @@
 #ifndef CONSOLE_BUILD
     #include <QtWidgets/QApplication>
     #include <QDesktopServices>
+    #include <QTranslator>
+    #include <QLibraryInfo>
+    #include "settings.h"
 #endif
 #include <QDir>
 #include <QCommandLineParser>
@@ -165,8 +168,6 @@ int main(int argc, char *argv[])
 
         qRegisterMetaType<Packet>();
 
-
-
         QDEBUG() << "Running command line mode.";
 
         Packet sendPacket;
@@ -179,11 +180,16 @@ int main(int argc, char *argv[])
         QTextStream out(stdout);
 
         QCoreApplication::setApplicationName("Packet Sender");
-        QString versionBuilder = QString("version ") + SW_VERSION;
+        QString versionBuilder = QString("Version ") + SW_VERSION;
         if (QSslSocket::supportsSsl()) {
-            versionBuilder.append(" / SSL version:");
+            versionBuilder.append(" / SSL:");
             versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
         }
+
+        #ifdef GIT_CURRENT_SHA1
+            versionBuilder.append(" / Commit: " + QString(GIT_CURRENT_SHA1));
+        #endif
+
         QCoreApplication::setApplicationVersion(versionBuilder);
 
         QCommandLineParser parser;
@@ -1016,18 +1022,34 @@ int main(int argc, char *argv[])
 
 #ifndef CONSOLE_BUILD
 
+
         QApplication a(argc, argv);
 
         QDEBUGVAR(args);
 
         qRegisterMetaType<Packet>();
 
+        QTranslator translator, translator_qt, translator_qtbase;
 
-        //Use default OS styling for non-Windows. Too many theme variants.
+        // Locale translation...
+        QString locale = QLocale::system().name().section("", 0, 2);
+        QDEBUGVAR(locale);
 
+
+        QString language = Settings::language();
+        if(language == "Spanish") {
+            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_es.qm");
+            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
+        } else {
+            QDEBUG() << "Loading Default English";
+        }
 
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
+
+        //Use default OS styling for non-Windows. Too many theme variants.
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool useDark = settings.value("darkModeCheck", true).toBool();

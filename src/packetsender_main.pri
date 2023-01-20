@@ -43,12 +43,16 @@ win32:RC_FILE = psicon.rc
 # Enable before porting to Qt6
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x050F00
 
+DEFINES += GIT_CURRENT_SHA1="\\\"$(shell git -C \""$$_PRO_FILE_PWD_"\" rev-parse --short HEAD)\\\""
+
 
 macx:ICON = psicons.icns
+macx:QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
 
 macx:QMAKE_INFO_PLIST = Info.plist
 
 linux:QMAKE_CXXFLAGS += -D_FORTIFY_SOURCE=2
 
 RESOURCES += packetsender.qrc \
+    $$PWD/translations.qrc \
     qdarkstyle/style.qrc

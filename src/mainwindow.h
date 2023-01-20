@@ -21,6 +21,7 @@
 #include <QNetworkAccessManager>
 #include <QDebug>
 #include <QListWidget>
+#include <QSortFilterProxyModel>
 #include "globals.h"
 #include "packet.h"
 #include "packetnetwork.h"
@@ -228,6 +229,7 @@ class MainWindow : public QMainWindow
 
 private:
         Ui::MainWindow *ui;
+        QSortFilterProxyModel *proxyModel;
         PacketLogModel packetsLogged;
         QList<Packet> packetsSaved;
         QList<Packet> packetsRepeat;
@@ -243,8 +245,7 @@ private:
         QPushButton * stopResendingButton;
         QPushButton * IPmodeButton;
         PreviewFilter* asciiPreviewFilter;
-        PreviewFilter* hexPreviewFilter;
-
+        PreviewFilter* hexPreviewFilter;        
 
         QStringList packetTableHeaders;
         QStringList packetSavedTableHeaders;

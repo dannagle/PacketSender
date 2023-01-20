@@ -80,7 +80,7 @@ CloudUI::CloudUI(QWidget *parent) :
 
 
     QIcon mIcon("://icons/ic_cloud_done_black_24dp_2x.png");
-    setWindowTitle("Packet Sender Cloud");
+    setWindowTitle("Packet Sender "+tr("Cloud"));
     setWindowIcon(mIcon);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -97,7 +97,7 @@ CloudUI::CloudUI(QWidget *parent) :
 
     packets = Packet::fetchAllfromDB("");
 
-    ui->shareBlurbLabel->setText("Saving " + QString::number(packets.size()) + " packet set to cloud");
+    ui->shareBlurbLabel->setText(tr("Saving ") + QString::number(packets.size()) + tr(" packet set to cloud"));
 
 
     settings.setValue("cloudPassword", ui->passwordEdit->text());
@@ -462,13 +462,13 @@ void CloudUI::on_createAccountButton_clicked()
     if (ui->passwordConfirmEdit->isVisible()) {
         ui->passwordConfirmEdit->hide();
         ui->passwordConfirmLabel->hide();
-        ui->createAccountButton->setText("Create a new account.");
-        ui->loginButton->setText("Login");
+        ui->createAccountButton->setText(tr("Create a new account."));
+        ui->loginButton->setText(tr("Login"));
     } else {
         ui->passwordConfirmEdit->show();
         ui->passwordConfirmLabel->show();
-        ui->createAccountButton->setText("Login instead.");
-        ui->loginButton->setText("Sign-up");
+        ui->createAccountButton->setText(tr("Login instead."));
+        ui->loginButton->setText(tr("Sign-up"));
     }
 
 }
@@ -525,12 +525,12 @@ void CloudUI::on_deletePacketButton_clicked()
     postData.addQueryItem("deleteset", name);
 
     QMessageBox msgBox;
-    msgBox.setWindowTitle("Delete Set");
+    msgBox.setWindowTitle(tr("Delete Set"));
     msgBox.setWindowIcon(QIcon("://icons/ic_cloud_done_black_24dp_2x.png"));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("Delete the set " + name + " from cloud?");
+    msgBox.setText(tr("Delete the set ") + name + tr(" from cloud?"));
     int yesno = msgBox.exec();
     if (yesno == QMessageBox::Yes) {
         packetSets.removeAt(packetsetindex);

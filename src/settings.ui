@@ -634,6 +634,31 @@
            </widget>
           </item>
           <item>
+           <layout class="QHBoxLayout" name="LanguageHolderLayout">
+            <item>
+                <widget class="QLabel" name="languageLabel">
+                <property name="text">
+                <string>Language (Requires Restart)</string>
+                </property>
+                </widget>
+            </item>
+            <item>
+                <widget class="QComboBox" name="languageCombo">
+                <item>
+                <property name="text">
+                <string>English</string>
+                </property>
+                </item>
+                <item>
+                <property name="text">
+                <string>Spanish (Español)</string>
+                </property>
+                </item>
+                </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QCheckBox" name="copyUnformattedCheck">
             <property name="text">
              <string>Copy to Clipboard button uses raw data</string>

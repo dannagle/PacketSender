@@ -10,9 +10,14 @@ TARGET = packetsender
 TEMPLATE = app
 DEFINES += GUI_BUILD
 
-
+TRANSLATIONS += languages/packetsender_en.ts \
+                languages/packetsender_es.ts \
+                languages/packetsender_fr.ts \
+                languages/packetsender_de.ts \
+                languages/packetsender_hi.ts
 
 SOURCES += mainwindow.cpp \
+    languagechooser.cpp \
     panel.cpp \
     sendpacketbutton.cpp \
     brucethepoodle.cpp \
@@ -29,6 +34,7 @@ SOURCES += mainwindow.cpp \
     persistenthttp.cpp
 
 HEADERS  += mainwindow.h \
+    languagechooser.h \
     panel.h \
     sendpacketbutton.h \
     brucethepoodle.h \
@@ -49,6 +55,7 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     brucethepoodle.ui \
     irisandmarigold.ui \
+    languagechooser.ui \
     persistentconnection.ui \
     settings.ui \
     about.ui \

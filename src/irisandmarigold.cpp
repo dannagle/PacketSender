@@ -26,7 +26,7 @@ IrisAndMarigold::IrisAndMarigold(QWidget *parent) :
     setWindowFlags(flags);
 
     this->setFixedSize(this->width(), this->height());
-    setWindowTitle("Iris And Marigold");
+    setWindowTitle(("Iris And Marigold"));
 }
 
 IrisAndMarigold::~IrisAndMarigold()

@@ -21,10 +21,14 @@ About::About(QWidget *parent) :
         versionBuilder.append("\nSSL Version: ");
         versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
     }
+
+#ifdef GIT_CURRENT_SHA1
+    versionBuilder.append(tr("\nCommit Hash: ") + QString(GIT_CURRENT_SHA1));
+#endif
     ui->buidDateLabel->setText(versionBuilder);
 
     QIcon mIcon(":pslogo.png");
-    setWindowTitle("About Packet Sender");
+    setWindowTitle(tr("About Packet Sender"));
     setWindowIcon(mIcon);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);

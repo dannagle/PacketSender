@@ -22,7 +22,7 @@ UDPFlooding::UDPFlooding(QWidget *parent, QString target, quint16 port, QString 
     ui->setupUi(this);
 
 
-    setWindowTitle("UDP Traffic Generator (Experimental)");
+    setWindowTitle(tr("UDP Traffic Generator (Experimental)"));
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -73,12 +73,12 @@ void UDPFlooding::on_startButton_clicked()
 
 
     if (!ok1) {
-        ui->portEdit->setText("Invalid");
+        ui->portEdit->setText(tr("Invalid"));
         return;
     }
 
     if (!ok2) {
-        ui->delayEdit->setText("Invalid");
+        ui->delayEdit->setText(tr("Invalid"));
         return;
     }
 

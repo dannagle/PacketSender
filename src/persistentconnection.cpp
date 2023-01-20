@@ -151,9 +151,9 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
     thread = thethread;
 
     if (thread->isSecure) {
-        setWindowTitle("SSL://You:" + QString::number(portNum));
+        setWindowTitle("SSL://"+tr("You:") + QString::number(portNum));
     } else {
-        setWindowTitle("TCP://You:" + QString::number(portNum));
+        setWindowTitle("TCP://"+tr("You:") + QString::number(portNum));
     }
 
     QApplication::processEvents();
@@ -508,8 +508,8 @@ void PersistentConnection::on_clipboardButton_clicked()
 
     clipboard->setText(ui->trafficViewEdit->toPlainText());
     QMessageBox msgbox;
-    msgbox.setWindowTitle("Copied");
-    msgbox.setText("Output sent to your clipboard");
+    msgbox.setWindowTitle(tr("Copied"));
+    msgbox.setText(tr("Output sent to your clipboard"));
     msgbox.exec();
 
 }

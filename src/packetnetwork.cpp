@@ -243,12 +243,12 @@ void PacketNetwork::init()
     QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
     QMessageBox msgBoxBindError;
-    msgBoxBindError.setWindowTitle("Port bind error.");
+    msgBoxBindError.setWindowTitle(tr("Port bind error."));
     msgBoxBindError.setStandardButtons(QMessageBox::Ok);
     msgBoxBindError.setDefaultButton(QMessageBox::Ok);
     msgBoxBindError.setIcon(QMessageBox::Warning);
-    const QString lowPortText = "Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.";
-    const QString portConsumedText = "Packet Sender attempted (and failed) to bind to port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?";
+    const QString lowPortText = tr("Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
+    const QString portConsumedText = tr("Packet Sender attempted (and failed) to bind to port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?");
 
 #ifdef RENDER_ONLY
     tcpPortList.clear();

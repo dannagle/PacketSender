@@ -2,6 +2,10 @@
 
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
+
+*Read this in other languages: [English](README.md), [Español](README.es.md).*
+
+
 [![Downloads](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
 
 Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets as well as HTTP/HTTPS requests and panel generation. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use. If you find the app useful, please consider donating/sponsoring so development may continue.
@@ -443,7 +447,7 @@ For Windows, use the extension .com (`packetsender.com`) to use the command line
 
 For Linux, the command line system in Packet Sender follows the same pattern as other Linux utilities. It has a long name (such as --version) and a short name (such as -v). These options can be arranged in any order and Packet Sender will parse them correctly. The last 3 options are positional and must appear last. They are IP, port, and data. These last options are optional if using a stored packet.
 
-```
+```text
 packetsender --help
 Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
 See https://PacketSender.com/ for more information.
@@ -495,7 +499,7 @@ The CLI follows the same format between Windows, Linux, and MAC.
 
 The format is: `packetsender [options] address port data`
 
-```
+```text
 packetsender -taw 500 mirrors.xmission.com 21 "USER anonymous\r\nPASS chrome@example.com\r\n"
 TCP (65505)://mirrors.xmission.com:21 55 53 45 52 20 61 6e 6f 6e 79 6d 6f 75 73 0d 0a 50 41 53 53 20 63 68 72 6f 6d 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 0d 0a
 Response Time:5:51:37.042 pm
@@ -506,7 +510,7 @@ Response ASCII:220-Welcome to XMission Internet...
 ## Examples binding to port and custom IP, IPv4, or IPv6
 
 Packet Sender command line can bind to custom ports to force IPv4/6 modes or multiple NIC using the -B option.
-```
+```text
 packetsender -taw 3000 fe80::c07b:d517:e339:5a08 5005 "Hello\r"
 packetsender -taw 3000 192.168.0.201 5005 "Hello\r"
 packetsender -B 192.168.0.200 -taw 3000 192.168.0.201 5005 "Hello\r"
@@ -521,7 +525,7 @@ The command line has the option to ignore or abandon on SSL errors. The default 
 * Use -s option to send SSL and ignore errors.
 * Use -S option to send SSL and stop for errors
 
-```
+```text
 packetsender -saw 500 expired.packetsender.com 443 "GET / HTTP/1.0\r\n\r\n"
 SSL Error: The certificate has expired
 SSL (54202)://expired.packetsender.com:443 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 30 0d 0a 0d 0a
@@ -534,7 +538,7 @@ Response ASCII:HTTP/1.1 421 \r\nServer: nginx/1.10.0 (Ubuntu)\r
 
 ## Example CLI using HTTP
 Note this uses the built-in default packets.
-```
+```text
 packetsender --name "HTTPS POST Params"
 packetsender --http GET "https://httpbin.org/get"
 packetsender --http POST "https://httpbin.org/post" "{}"
@@ -556,7 +560,7 @@ See below for examples how to use it. Note that these calculations are "Best Eff
 
 **Note: For Windows, use the ".com" build, so each example would be packetsender.com**
 
-```
+```text
 packetsender --rate 20 --name "My Awesome Packet"
 packetsender --bps 2000 --name "My Awesome Packet"
 packetsender --rate 0 --name "My Awesome Packet"
@@ -593,12 +597,12 @@ make
 ```
 
 To run use:
-```
+```text
 ./PacketSender
 ```
 
 If it doesn't run, you may need to set it executable
-```
+```text
 chmod a+x PacketSender
 ```
 

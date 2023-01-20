@@ -11,7 +11,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
-
+#include <QStandardPaths>
 
 
 PersistentHTTP::PersistentHTTP(QWidget *parent) :
@@ -38,7 +38,7 @@ void PersistentHTTP::init(QByteArray thedata, QUrl url)
 
 
     // holds temporary files until window closes
-    QString dl = QDir::homePath() + "/Downloads";
+    QString dl  = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
     if(!QFile(dl).exists()) {
         dl = QDir::homePath();
     }

@@ -11,7 +11,6 @@
 #include <QHostAddress>
 #include <QStandardPaths>
 
-
 #ifndef CONSOLE_BUILD
 #include "ui_settings.h"
 
@@ -37,6 +36,47 @@ const QString Settings::ERROR_STR = "Error";
 
 
 
+QString Settings::logHeaderTranslate(QString txt)
+{
+    if(txt == "Send") {
+        return tr("Send");
+    }
+    if(txt == "Name") {
+        return tr("Name");
+    }
+    if(txt == "Resend") {
+        return tr("Resend");
+    }
+    if(txt == "To Address") {
+        return tr("To Address");
+    }
+    if(txt == "To Port") {
+        return tr("To Port");
+    }
+    if(txt == "Method") {
+        return tr("Method");
+    }
+    if(txt == "Request Path") {
+        return tr("Request Path");
+    }
+    if(txt == "Time") {
+        return tr("Time");
+    }
+    if(txt == "From IP") {
+        return tr("From IP");
+    }
+    if(txt == "From Port") {
+        return tr("From Port");
+    }
+    if(txt == "Error") {
+        return tr("Error");
+    }
+
+    return txt;
+
+}
+
+
 const QString Settings::ALLHTTPSHOSTS = "HTTPHeaderHosts";
 const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
 
@@ -58,7 +98,7 @@ Settings::Settings(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     QIcon mIcon(":pslogo.png");
-    setWindowTitle("Packet Sender Settings");
+    setWindowTitle("Packet Sender "+tr("Settings"));
     setWindowIcon(mIcon);
 
     //this is no longer working thanks to faster traffic log
@@ -68,6 +108,18 @@ Settings::Settings(QWidget *parent) :
 
     loadCredentialTable();
     on_genAuthCheck_clicked(false);
+
+    QString language = Settings::language().toLower();
+
+    int location = ui->languageCombo->findText("nglish", Qt::MatchContains);
+    ui->languageCombo->setCurrentIndex(location);
+
+    if(language.contains("spanish")) {
+        location = ui->languageCombo->findText("panish", Qt::MatchContains);
+        ui->languageCombo->setCurrentIndex(location);
+    }
+
+
 
 
     //smart responses...
@@ -230,6 +282,21 @@ Settings::~Settings()
 
 
 
+QString Settings::language()
+{
+
+    QString locale = QLocale::system().name().section("", 0, 2);
+    QDEBUGVAR(locale);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString language = settings.value("languageCombo", "English").toString();
+    if(language.toLower().contains("spanish")) {
+        return "Spanish";
+    } else {
+        return "English";
+    }
+}
+
+
 void Settings::statusBarMessage(QString msg)
 {
     Q_UNUSED(msg);
@@ -252,11 +319,11 @@ void Settings::on_buttonBox_accepted()
         } else {
 
             QMessageBox msgBox;
-            msgBox.setWindowTitle("Bad IP.");
+            msgBox.setWindowTitle(tr("Bad IP."));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText("Packet Sender cannot bind invalid IP "+ ui->bindIPAddress->text());
+            msgBox.setText(tr("Packet Sender cannot bind invalid IP ")+ ui->bindIPAddress->text());
             msgBox.exec();
             return;
         }
@@ -270,11 +337,11 @@ void Settings::on_buttonBox_accepted()
 
             if(t == s) {
                 QMessageBox msgBox;
-                msgBox.setWindowTitle("TCP and SSL non-zero port conflict.");
+                msgBox.setWindowTitle(tr("TCP and SSL non-zero port conflict."));
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.setDefaultButton(QMessageBox::Ok);
                 msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText("Packet Sender cannot bind TCP and SSL to the same port.");
+                msgBox.setText(tr("Packet Sender cannot bind TCP and SSL to the same port."));
                 msgBox.exec();
                 return;
             }
@@ -327,6 +394,15 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
+    if(ui->languageCombo->currentText().toLower().contains("english")) {
+        settings.setValue("languageCombo", "English");
+    }
+
+
+    if(ui->languageCombo->currentText().toLower().contains("spanish")) {
+        settings.setValue("languageCombo", "Spanish");
+    }
+
 
     settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());
     settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
@@ -355,14 +431,14 @@ void Settings::on_buttonBox_accepted()
     QStringList packetSavedHeaderNow;
     packetSavedHeaderNow.clear();
     for (int i = 0; i < lw->count(); i++) {
-        packetSavedHeaderNow.append(lw->item(i)->text());
+        packetSavedHeaderNow.append(lw->item(i)->data(Qt::UserRole).toString());
     }
     settings.setValue("packetSavedTableHeaders", packetSavedHeaderNow);
 
 
     packetSavedHeaderNow.clear();
     for (int i = 0; i < lwTraffic->count(); i++) {
-        packetSavedHeaderNow.append(lwTraffic->item(i)->text());
+        packetSavedHeaderNow.append(lwTraffic->item(i)->data(Qt::UserRole).toString());
     }
     settings.setValue("packetTableHeaders", packetSavedHeaderNow);
 
@@ -551,7 +627,8 @@ void Settings::loadTableHeaders()
     ui->displayOrderListTraffic->clear();
 
     foreach (tempString, packetSavedTableHeaders) {
-        tItem = new QListWidgetItem(tempString);
+        tItem = new QListWidgetItem(logHeaderTranslate(tempString));
+        tItem->setData(Qt::UserRole, tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderList->addItem(tItem);
     }
@@ -559,7 +636,8 @@ void Settings::loadTableHeaders()
     ui->displayOrderList->setCursor(Qt::CrossCursor);
 
     foreach (tempString, packetTableHeaders) {
-        tItem = new QListWidgetItem(tempString);
+        tItem = new QListWidgetItem(logHeaderTranslate(tempString));
+        tItem->setData(Qt::UserRole, tempString);
         tItem->setIcon(QIcon(UPDOWNICON));
         ui->displayOrderListTraffic->addItem(tItem);
     }
@@ -571,7 +649,6 @@ void Settings::loadTableHeaders()
     ui->displayOrderListTraffic->setDragDropMode(QAbstractItemView::InternalMove);
     ui->displayOrderListTraffic->setAlternatingRowColors(true);
 }
-
 
 void Settings::on_responsePacketBox_currentIndexChanged(const QString &arg1)
 {
@@ -865,7 +942,7 @@ void Settings::loadCredentialTable()
         }
     }
 
-    QStringList tableHeaders = {"Host", "Key", "Value"};
+    QStringList tableHeaders = {tr("Host"), tr("Key"), tr("Value")};
     ui->httpCredentialTable->verticalHeader()->show();
     ui->httpCredentialTable->horizontalHeader()->show();
     ui->httpCredentialTable->setHorizontalHeaderLabels(tableHeaders);
@@ -930,13 +1007,13 @@ void Settings::on_httpCredentialTable_itemChanged(QTableWidgetItem *item)
 void Settings::on_genAuthCheck_clicked(bool checked)
 {
     if(ui->genAuthCheck->isChecked()) {
-        ui->httpKeyLabel->setText("UN/ClientID");
-        ui->httpValueLabel->setText("PW/Access");
-        ui->addCredentialButton->setText("HTTP Auth Header");
+        ui->httpKeyLabel->setText(tr("UN/ClientID"));
+        ui->httpValueLabel->setText(tr("PW/Access"));
+        ui->addCredentialButton->setText(tr("HTTP Auth Header"));
     } else {
-        ui->httpKeyLabel->setText("Key");
-        ui->httpValueLabel->setText("Value");
-        ui->addCredentialButton->setText("HTTP Header");
+        ui->httpKeyLabel->setText(tr("Key"));
+        ui->httpValueLabel->setText(tr("Value"));
+        ui->addCredentialButton->setText(tr("HTTP Header"));
     }
 
 }

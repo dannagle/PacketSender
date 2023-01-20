@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>languages/packetsender_en.qm</file>
+        <file>languages/packetsender_es.qm</file>
+        <file>.astylerc</file>
+        <file>languages/english-flag.png</file>
+        <file>languages/french-flag.png</file>
+        <file>languages/german-flag.png</file>
+        <file>languages/hindi-flag.png</file>
+        <file>languages/spanish-flag.png</file>
+    </qresource>
+</RCC>
