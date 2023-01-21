@@ -16,6 +16,7 @@
     #include <QTranslator>
     #include <QLibraryInfo>
     #include "settings.h"
+    #include "languagechooser.h"
 #endif
 #include <QDir>
 #include <QCommandLineParser>
@@ -1034,6 +1035,12 @@ int main(int argc, char *argv[])
         // Locale translation...
         QString locale = QLocale::system().name().section("", 0, 2);
         QDEBUGVAR(locale);
+
+
+        if(Settings::needLanguage()) {
+            LanguageChooser lang;
+            lang.exec();
+        }
 
 
         QString language = Settings::language();

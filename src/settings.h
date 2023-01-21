@@ -97,6 +97,7 @@ class Settings : public QDialog
 
         static bool detectJSON_XML();
         static QString language();
+        static bool needLanguage();
         static QString logHeaderTranslate(QString txt);
 
 private slots:

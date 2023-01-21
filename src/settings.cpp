@@ -284,6 +284,14 @@ Settings::~Settings()
 }
 
 
+bool Settings::needLanguage()
+{
+    //Return true if language was never chosen
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString language = settings.value("languageCombo", "").toString().toLower();
+
+    return language.isEmpty();
+}
 
 QString Settings::language()
 {
