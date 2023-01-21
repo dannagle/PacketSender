@@ -2190,6 +2190,14 @@ void MainWindow::on_actionJoin_IPv4_triggered(QString address)
 void MainWindow::on_actionHelp_triggered()
 {
     //Open URL in browser
+
+    QString language = Settings::language().toLower();
+
+    if(language.contains("spanish")) {
+        QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation-es"));
+        return;
+    }
+
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
