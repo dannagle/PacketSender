@@ -119,7 +119,10 @@ Settings::Settings(QWidget *parent) :
         ui->languageCombo->setCurrentIndex(location);
     }
 
-
+    if(language.contains("german")) {
+        location = ui->languageCombo->findText("german", Qt::MatchContains);
+        ui->languageCombo->setCurrentIndex(location);
+    }
 
 
     //smart responses...
@@ -288,12 +291,17 @@ QString Settings::language()
     QString locale = QLocale::system().name().section("", 0, 2);
     QDEBUGVAR(locale);
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    QString language = settings.value("languageCombo", "English").toString();
-    if(language.toLower().contains("spanish")) {
+    QString language = settings.value("languageCombo", "English").toString().toLower();
+    if(language.contains("spanish")) {
         return "Spanish";
-    } else {
-        return "English";
     }
+
+    if(language.contains("german")) {
+        return "German";
+    }
+
+
+    return "English";
 }
 
 
@@ -401,6 +409,10 @@ void Settings::on_buttonBox_accepted()
 
     if(ui->languageCombo->currentText().toLower().contains("spanish")) {
         settings.setValue("languageCombo", "Spanish");
+    }
+
+    if(ui->languageCombo->currentText().toLower().contains("german")) {
+        settings.setValue("languageCombo", "German");
     }
 
 

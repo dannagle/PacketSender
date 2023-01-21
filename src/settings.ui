@@ -636,25 +636,30 @@
           <item>
            <layout class="QHBoxLayout" name="LanguageHolderLayout">
             <item>
-                <widget class="QLabel" name="languageLabel">
-                <property name="text">
-                <string>Language (Requires Restart)</string>
-                </property>
-                </widget>
+             <widget class="QLabel" name="languageLabel">
+              <property name="text">
+               <string>Language (Requires Restart)</string>
+              </property>
+             </widget>
             </item>
             <item>
-                <widget class="QComboBox" name="languageCombo">
-                <item>
-                <property name="text">
+             <widget class="QComboBox" name="languageCombo">
+              <item>
+               <property name="text">
                 <string>English</string>
-                </property>
-                </item>
-                <item>
-                <property name="text">
+               </property>
+              </item>
+              <item>
+               <property name="text">
                 <string>Spanish (Español)</string>
-                </property>
-                </item>
-                </widget>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>German (Deutsch)</string>
+               </property>
+              </item>
+             </widget>
             </item>
            </layout>
           </item>
