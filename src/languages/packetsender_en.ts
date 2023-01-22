@@ -1011,6 +1011,19 @@ Turn off IPv6 and switch to IPv4 mode?</source>
     </message>
 </context>
 <context>
+    <name>PacketLogModel</name>
+    <message>
+        <location filename="../packetlogmodel.cpp" line="83"/>
+        <source>Data portion is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packetlogmodel.cpp" line="83"/>
+        <source> bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PacketNetwork</name>
     <message>
         <location filename="../packetnetwork.cpp" line="246"/>
@@ -1694,11 +1707,11 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="169"/>
-        <location filename="../settings.ui" line="790"/>
-        <location filename="../settings.ui" line="852"/>
-        <location filename="../settings.ui" line="886"/>
-        <location filename="../settings.ui" line="927"/>
-        <location filename="../settings.ui" line="960"/>
+        <location filename="../settings.ui" line="771"/>
+        <location filename="../settings.ui" line="833"/>
+        <location filename="../settings.ui" line="867"/>
+        <location filename="../settings.ui" line="908"/>
+        <location filename="../settings.ui" line="941"/>
         <source>HEX</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1831,7 +1844,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="965"/>
+        <location filename="../settings.cpp" line="936"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1847,7 +1860,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1036"/>
+        <location filename="../settings.cpp" line="1007"/>
         <source>HTTP Header</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1869,7 +1882,7 @@ Selecting No will generate new IDs and append.</source>
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
-        <location filename="../settings.cpp" line="45"/>
+        <location filename="../settings.cpp" line="46"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1882,7 +1895,7 @@ Selecting No will generate new IDs and append.</source>
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
-        <location filename="../settings.cpp" line="66"/>
+        <location filename="../settings.cpp" line="67"/>
         <source>From IP</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1912,252 +1925,237 @@ Selecting No will generate new IDs and append.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="649"/>
-        <source>English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../settings.ui" line="654"/>
-        <source>Spanish (Español)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../settings.ui" line="659"/>
-        <source>German (Deutsch)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../settings.ui" line="669"/>
+        <location filename="../settings.ui" line="650"/>
         <source>Copy to Clipboard button uses raw data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="676"/>
+        <location filename="../settings.ui" line="657"/>
         <source>Rolling 100-entry traffic log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="683"/>
+        <location filename="../settings.ui" line="664"/>
         <source>Restore previous session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="690"/>
+        <location filename="../settings.ui" line="671"/>
         <source>Periodically check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="697"/>
+        <location filename="../settings.ui" line="678"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="704"/>
+        <location filename="../settings.ui" line="685"/>
         <source>Auto-Launch Starter Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="741"/>
+        <location filename="../settings.ui" line="722"/>
         <source>Smart Responses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="749"/>
+        <location filename="../settings.ui" line="730"/>
         <source>Send a Smart Response with Macro Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="777"/>
+        <location filename="../settings.ui" line="758"/>
         <source>Response 5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="785"/>
-        <location filename="../settings.ui" line="847"/>
-        <location filename="../settings.ui" line="881"/>
-        <location filename="../settings.ui" line="922"/>
-        <location filename="../settings.ui" line="955"/>
+        <location filename="../settings.ui" line="766"/>
+        <location filename="../settings.ui" line="828"/>
+        <location filename="../settings.ui" line="862"/>
+        <location filename="../settings.ui" line="903"/>
+        <location filename="../settings.ui" line="936"/>
         <source>Mixed ASCII</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="798"/>
-        <location filename="../settings.ui" line="863"/>
-        <location filename="../settings.ui" line="901"/>
-        <location filename="../settings.ui" line="914"/>
-        <location filename="../settings.ui" line="947"/>
+        <location filename="../settings.ui" line="779"/>
+        <location filename="../settings.ui" line="844"/>
+        <location filename="../settings.ui" line="882"/>
+        <location filename="../settings.ui" line="895"/>
+        <location filename="../settings.ui" line="928"/>
         <source>Enable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="805"/>
+        <location filename="../settings.ui" line="786"/>
         <source>Response 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="812"/>
+        <location filename="../settings.ui" line="793"/>
         <source>If Packet data equals</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="819"/>
+        <location filename="../settings.ui" line="800"/>
         <source>Reply with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="826"/>
+        <location filename="../settings.ui" line="807"/>
         <source>Encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="833"/>
+        <location filename="../settings.ui" line="814"/>
         <source>Response 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="873"/>
+        <location filename="../settings.ui" line="854"/>
         <source>Response 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="894"/>
+        <location filename="../settings.ui" line="875"/>
         <source>Response 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="982"/>
+        <location filename="../settings.ui" line="963"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="989"/>
+        <location filename="../settings.ui" line="970"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1020"/>
+        <location filename="../settings.ui" line="1001"/>
         <source>Online Documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="42"/>
+        <location filename="../settings.cpp" line="43"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="48"/>
+        <location filename="../settings.cpp" line="49"/>
         <source>Resend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="51"/>
+        <location filename="../settings.cpp" line="52"/>
         <source>To Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="54"/>
+        <location filename="../settings.cpp" line="55"/>
         <source>To Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="57"/>
+        <location filename="../settings.cpp" line="58"/>
         <source>Method</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="60"/>
+        <location filename="../settings.cpp" line="61"/>
         <source>Request Path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="63"/>
+        <location filename="../settings.cpp" line="64"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="69"/>
+        <location filename="../settings.cpp" line="70"/>
         <source>From Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="72"/>
+        <location filename="../settings.cpp" line="73"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="101"/>
+        <location filename="../settings.cpp" line="102"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="338"/>
+        <location filename="../settings.cpp" line="323"/>
         <source>Bad IP.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="342"/>
+        <location filename="../settings.cpp" line="327"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="356"/>
+        <location filename="../settings.cpp" line="341"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="360"/>
+        <location filename="../settings.cpp" line="345"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="716"/>
+        <location filename="../settings.cpp" line="687"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="737"/>
+        <location filename="../settings.cpp" line="708"/>
         <source>Choose Cert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="737"/>
+        <location filename="../settings.cpp" line="708"/>
         <source>Certs (*.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="753"/>
+        <location filename="../settings.cpp" line="724"/>
         <source>Choose Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="753"/>
+        <location filename="../settings.cpp" line="724"/>
         <source>Keys (*.key, *.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="965"/>
-        <location filename="../settings.cpp" line="1034"/>
+        <location filename="../settings.cpp" line="936"/>
+        <location filename="../settings.cpp" line="1005"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="965"/>
-        <location filename="../settings.cpp" line="1035"/>
+        <location filename="../settings.cpp" line="936"/>
+        <location filename="../settings.cpp" line="1006"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1030"/>
+        <location filename="../settings.cpp" line="1001"/>
         <source>UN/ClientID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1031"/>
+        <location filename="../settings.cpp" line="1002"/>
         <source>PW/Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1032"/>
+        <location filename="../settings.cpp" line="1003"/>
         <source>HTTP Auth Header</source>
         <translation type="unfinished"></translation>
     </message>

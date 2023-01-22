@@ -1027,6 +1027,19 @@ Schalten Sie IPv6 aus und wechseln Sie in den IPv4-Modus?</translation>
     </message>
 </context>
 <context>
+    <name>PacketLogModel</name>
+    <message>
+        <location filename="../packetlogmodel.cpp" line="83"/>
+        <source>Data portion is </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../packetlogmodel.cpp" line="83"/>
+        <source> bytes</source>
+        <translation> bytes</translation>
+    </message>
+</context>
+<context>
     <name>PacketNetwork</name>
     <message>
         <location filename="../packetnetwork.cpp" line="246"/>
@@ -1721,11 +1734,11 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="169"/>
-        <location filename="../settings.ui" line="790"/>
-        <location filename="../settings.ui" line="852"/>
-        <location filename="../settings.ui" line="886"/>
-        <location filename="../settings.ui" line="927"/>
-        <location filename="../settings.ui" line="960"/>
+        <location filename="../settings.ui" line="771"/>
+        <location filename="../settings.ui" line="833"/>
+        <location filename="../settings.ui" line="867"/>
+        <location filename="../settings.ui" line="908"/>
+        <location filename="../settings.ui" line="941"/>
         <source>HEX</source>
         <translation></translation>
     </message>
@@ -1858,7 +1871,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="965"/>
+        <location filename="../settings.cpp" line="936"/>
         <source>Host</source>
         <translation>Gastgeber</translation>
     </message>
@@ -1874,7 +1887,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1036"/>
+        <location filename="../settings.cpp" line="1007"/>
         <source>HTTP Header</source>
         <translation>HTTP-Kopfzeile</translation>
     </message>
@@ -1896,7 +1909,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
-        <location filename="../settings.cpp" line="45"/>
+        <location filename="../settings.cpp" line="46"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
@@ -1909,7 +1922,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
-        <location filename="../settings.cpp" line="66"/>
+        <location filename="../settings.cpp" line="67"/>
         <source>From IP</source>
         <translation>Von IP</translation>
     </message>
@@ -1939,252 +1952,249 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <translation>Sprache (Neustart erforderlich)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="649"/>
         <source>English</source>
-        <translation>English</translation>
+        <translation type="vanished">English</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="654"/>
         <source>Spanish (Español)</source>
-        <translation>Spanish (Español)</translation>
+        <translation type="vanished">Spanish (Español)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="659"/>
         <source>German (Deutsch)</source>
-        <translation>German (Deutsch)</translation>
+        <translation type="vanished">German (Deutsch)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="669"/>
+        <location filename="../settings.ui" line="650"/>
         <source>Copy to Clipboard button uses raw data</source>
         <translation>Schaltfläche In Zwischenablage kopieren verwendet Rohdaten</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="676"/>
+        <location filename="../settings.ui" line="657"/>
         <source>Rolling 100-entry traffic log</source>
         <translation>Rollendes Verkehrsprotokoll mit 100 Einträgen</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="683"/>
+        <location filename="../settings.ui" line="664"/>
         <source>Restore previous session</source>
         <translation>Vorherige Sitzung wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="690"/>
+        <location filename="../settings.ui" line="671"/>
         <source>Periodically check for updates</source>
         <translation>Überprüfen Sie regelmäßig, ob Updates verfügbar sind</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="697"/>
+        <location filename="../settings.ui" line="678"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
         <translation>Verwenden Sie die Ellipse [...] für lange Dateneingaben (verbessert die Leistung)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="704"/>
+        <location filename="../settings.ui" line="685"/>
         <source>Auto-Launch Starter Panel</source>
         <translation>Starterpanel für den automatischen Start</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="741"/>
+        <location filename="../settings.ui" line="722"/>
         <source>Smart Responses</source>
         <translation>Intelligente Antworten</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="749"/>
+        <location filename="../settings.ui" line="730"/>
         <source>Send a Smart Response with Macro Support</source>
         <translation>Senden Sie eine intelligente Antwort mit Makrounterstützung</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="777"/>
+        <location filename="../settings.ui" line="758"/>
         <source>Response 5</source>
         <translation>Antwort 5</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="785"/>
-        <location filename="../settings.ui" line="847"/>
-        <location filename="../settings.ui" line="881"/>
-        <location filename="../settings.ui" line="922"/>
-        <location filename="../settings.ui" line="955"/>
+        <location filename="../settings.ui" line="766"/>
+        <location filename="../settings.ui" line="828"/>
+        <location filename="../settings.ui" line="862"/>
+        <location filename="../settings.ui" line="903"/>
+        <location filename="../settings.ui" line="936"/>
         <source>Mixed ASCII</source>
         <translation>Gemischter ASCII</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="798"/>
-        <location filename="../settings.ui" line="863"/>
-        <location filename="../settings.ui" line="901"/>
-        <location filename="../settings.ui" line="914"/>
-        <location filename="../settings.ui" line="947"/>
+        <location filename="../settings.ui" line="779"/>
+        <location filename="../settings.ui" line="844"/>
+        <location filename="../settings.ui" line="882"/>
+        <location filename="../settings.ui" line="895"/>
+        <location filename="../settings.ui" line="928"/>
         <source>Enable</source>
         <translation>Aktiviere</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="805"/>
+        <location filename="../settings.ui" line="786"/>
         <source>Response 4</source>
         <translation>Antwort 4</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="812"/>
+        <location filename="../settings.ui" line="793"/>
         <source>If Packet data equals</source>
         <translation>Wenn Paketdaten gleich</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="819"/>
+        <location filename="../settings.ui" line="800"/>
         <source>Reply with</source>
         <translation>Antwort mit</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="826"/>
+        <location filename="../settings.ui" line="807"/>
         <source>Encoding</source>
         <translation>Kodierung</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="833"/>
+        <location filename="../settings.ui" line="814"/>
         <source>Response 1</source>
         <translation>Antwort 1</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="873"/>
+        <location filename="../settings.ui" line="854"/>
         <source>Response 2</source>
         <translation>Antwort 2</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="894"/>
+        <location filename="../settings.ui" line="875"/>
         <source>Response 3</source>
         <translation>Antwort 3</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="982"/>
+        <location filename="../settings.ui" line="963"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
         <translation>Verfügbare Makros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="989"/>
+        <location filename="../settings.ui" line="970"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
         <translation>Der Paketsender tauscht das Makro vor dem Senden mit einem echten Wert aus</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1020"/>
+        <location filename="../settings.ui" line="1001"/>
         <source>Online Documentation</source>
         <translation>Online Dokumentation</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="42"/>
+        <location filename="../settings.cpp" line="43"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="48"/>
+        <location filename="../settings.cpp" line="49"/>
         <source>Resend</source>
         <translation>Erneut senden</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="51"/>
+        <location filename="../settings.cpp" line="52"/>
         <source>To Address</source>
         <translation>Zur Adresse</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="54"/>
+        <location filename="../settings.cpp" line="55"/>
         <source>To Port</source>
         <translation>Zum Port</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="57"/>
+        <location filename="../settings.cpp" line="58"/>
         <source>Method</source>
         <translation>Methode</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="60"/>
+        <location filename="../settings.cpp" line="61"/>
         <source>Request Path</source>
         <translation>Pfad der Anfrage</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="63"/>
+        <location filename="../settings.cpp" line="64"/>
         <source>Time</source>
         <translation>Zeit</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="69"/>
+        <location filename="../settings.cpp" line="70"/>
         <source>From Port</source>
         <translation>Von Port</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="72"/>
+        <location filename="../settings.cpp" line="73"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="101"/>
+        <location filename="../settings.cpp" line="102"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="338"/>
+        <location filename="../settings.cpp" line="323"/>
         <source>Bad IP.</source>
         <translation>Schlechte IP.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="342"/>
+        <location filename="../settings.cpp" line="327"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Paketabsender kann ungültige IP nicht binden</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="356"/>
+        <location filename="../settings.cpp" line="341"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>TCP- und SSL-Portkonflikt ungleich Null.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="360"/>
+        <location filename="../settings.cpp" line="345"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Paketsender kann TCP und SSL nicht an denselben Port binden.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="716"/>
+        <location filename="../settings.cpp" line="687"/>
         <source>Open Directory</source>
         <translation>Verzeichnis öffnen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="737"/>
+        <location filename="../settings.cpp" line="708"/>
         <source>Choose Cert</source>
         <translation>Zertifikat wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="737"/>
+        <location filename="../settings.cpp" line="708"/>
         <source>Certs (*.pem)</source>
         <translation>Zertifikate (*.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="753"/>
+        <location filename="../settings.cpp" line="724"/>
         <source>Choose Key</source>
         <translation>Schlüssel wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="753"/>
+        <location filename="../settings.cpp" line="724"/>
         <source>Keys (*.key, *.pem)</source>
         <translation>Schlüssel (*.key, *.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="965"/>
-        <location filename="../settings.cpp" line="1034"/>
+        <location filename="../settings.cpp" line="936"/>
+        <location filename="../settings.cpp" line="1005"/>
         <source>Key</source>
         <translation>Schlüssel</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="965"/>
-        <location filename="../settings.cpp" line="1035"/>
+        <location filename="../settings.cpp" line="936"/>
+        <location filename="../settings.cpp" line="1006"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1030"/>
+        <location filename="../settings.cpp" line="1001"/>
         <source>UN/ClientID</source>
         <translation>UN/KundenID</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1031"/>
+        <location filename="../settings.cpp" line="1002"/>
         <source>PW/Access</source>
         <translation>PW/Zugang</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1032"/>
+        <location filename="../settings.cpp" line="1003"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP Authentifizierungsheader</translation>
     </message>
@@ -2281,7 +2291,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <source>Your non-loopback addresses: 
 
 </source>
-<translation>Ihre Nicht-Loopback-Adressen:
+        <translation>Ihre Nicht-Loopback-Adressen:
 
 </translation>
     </message>

@@ -13,6 +13,7 @@
 
 #ifndef CONSOLE_BUILD
 #include "ui_settings.h"
+#include "languagechooser.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -108,22 +109,6 @@ Settings::Settings(QWidget *parent) :
 
     loadCredentialTable();
     on_genAuthCheck_clicked(false);
-
-    QString language = Settings::language().toLower();
-
-    int location = ui->languageCombo->findText("nglish", Qt::MatchContains);
-    ui->languageCombo->setCurrentIndex(location);
-
-    if(language.contains("spanish")) {
-        location = ui->languageCombo->findText("panish", Qt::MatchContains);
-        ui->languageCombo->setCurrentIndex(location);
-    }
-
-    if(language.contains("german")) {
-        location = ui->languageCombo->findText("german", Qt::MatchContains);
-        ui->languageCombo->setCurrentIndex(location);
-    }
-
 
     //smart responses...
     ui->smartResponseEnableCheck->setChecked(settings.value("smartResponseEnableCheck", false).toBool());
@@ -409,20 +394,6 @@ void Settings::on_buttonBox_accepted()
 
     settings.setValue("persistentTCPCheck", ui->persistentTCPCheck->isChecked());
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
-
-    if(ui->languageCombo->currentText().toLower().contains("english")) {
-        settings.setValue("languageCombo", "English");
-    }
-
-
-    if(ui->languageCombo->currentText().toLower().contains("spanish")) {
-        settings.setValue("languageCombo", "Spanish");
-    }
-
-    if(ui->languageCombo->currentText().toLower().contains("german")) {
-        settings.setValue("languageCombo", "German");
-    }
-
 
     settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());
     settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
@@ -1038,3 +1009,15 @@ void Settings::on_genAuthCheck_clicked(bool checked)
 
 }
 #endif
+
+void Settings::on_chooseLanguageButton_clicked()
+{
+
+#ifndef CONSOLE_BUILD
+    LanguageChooser lang = LanguageChooser(this);
+    lang.exec();
+
+#endif
+
+}
+

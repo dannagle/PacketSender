@@ -132,6 +132,8 @@ private slots:
 
         void on_genAuthCheck_clicked(bool checked);
 
+        void on_chooseLanguageButton_clicked();
+
 private:
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
