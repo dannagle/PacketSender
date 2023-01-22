@@ -46,6 +46,17 @@ int PacketLogModel::columnCount(const QModelIndex &parent) const
 
 QVariant PacketLogModel::data(const QModelIndex &index, int role) const
 {
+    const static QString TIME_STR = Settings::logHeaderTranslate(Settings::TIME_STR);
+    const static QString FROMIP_STR = Settings::logHeaderTranslate(Settings::FROMIP_STR);
+    const static QString FROMPORT_STR = Settings::logHeaderTranslate(Settings::FROMPORT_STR);
+    const static QString TOADDRESS_STR = Settings::logHeaderTranslate(Settings::TOADDRESS_STR);
+    const static QString TOPORT_STR = Settings::logHeaderTranslate(Settings::TOPORT_STR);
+    const static QString METHOD_STR = Settings::logHeaderTranslate(Settings::METHOD_STR);
+    const static QString ERROR_STR = Settings::logHeaderTranslate(Settings::ERROR_STR);
+    const static QString ASCII_STR = Settings::logHeaderTranslate(Settings::ASCII_STR);
+    const static QString HEX_STR = Settings::logHeaderTranslate(Settings::HEX_STR);
+
+
     if (!index.isValid())
         return QVariant();
 
@@ -69,41 +80,41 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::ToolTipRole)
     {
-        return ("Data portion is " + QString::number(packet.getByteArray().size()) + " bytes");
+        return (tr("Data portion is ") + QString::number(packet.getByteArray().size()) + tr(" bytes"));
     }
 
     if ((role == Qt::DisplayRole) || (role == Qt::EditRole))
     {
-        if(index.column() == tableHeaders.indexOf(Settings::TIME_STR)) {
+        if(index.column() == tableHeaders.indexOf(TIME_STR)) {
             return packet.timestamp.toString(DATETIMEFORMAT);
         }
-        if(index.column() == tableHeaders.indexOf(Settings::FROMIP_STR)) {
+        if(index.column() == tableHeaders.indexOf(FROMIP_STR)) {
             return packet.fromIP;
         }
-        if(index.column() == tableHeaders.indexOf(Settings::FROMPORT_STR)) {
+        if(index.column() == tableHeaders.indexOf(FROMPORT_STR)) {
             if(packet.fromPort == 0) {
                 return QVariant();
             } else {
             return packet.fromPort;
             }
         }
-        if(index.column() == tableHeaders.indexOf(Settings::TOADDRESS_STR)) {
+        if(index.column() == tableHeaders.indexOf(TOADDRESS_STR)) {
             return packet.toIP;
         }
-        if(index.column() == tableHeaders.indexOf(Settings::TOPORT_STR)) {
+        if(index.column() == tableHeaders.indexOf(TOPORT_STR)) {
             if(packet.port == 0) {
                 return QVariant();
             } else {
             return packet.port;
             }
         }
-        if(index.column() == tableHeaders.indexOf(Settings::METHOD_STR)) {
+        if(index.column() == tableHeaders.indexOf(METHOD_STR)) {
             return packet.tcpOrUdp;
         }
-        if(index.column() == tableHeaders.indexOf(Settings::ERROR_STR)) {
+        if(index.column() == tableHeaders.indexOf(ERROR_STR)) {
             return packet.errorString;
         }
-        if(index.column() == tableHeaders.indexOf(Settings::ASCII_STR)) {
+        if(index.column() == tableHeaders.indexOf(ASCII_STR)) {
             QString ascii = packet.asciiString();
             if(packet.isHTTP()) {
                 ascii = packet.requestPath;
@@ -114,7 +125,7 @@ QVariant PacketLogModel::data(const QModelIndex &index, int role) const
             }
             return ascii;
         }
-        if(index.column() == tableHeaders.indexOf(Settings::HEX_STR)) {
+        if(index.column() == tableHeaders.indexOf(HEX_STR)) {
             QString hex = packet.hexString;
             if(packet.isHTTP()) {
                 hex = packet.asciiString();
