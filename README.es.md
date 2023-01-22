@@ -2,7 +2,7 @@
 
 ![Logotipo de Packet Sender](screenshots/packetsender_banner.png)
 
-*Lea esto en otros idiomas: [English](README.md), [Español](README.es.md).*
+*Lea esto en otros idiomas: [English](README.md), [Español](README.es.md), [Deutsch](README.de.md).*
 
 
 [![Descargas](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
