@@ -8,5 +8,6 @@
         <file>languages/german-flag.png</file>
         <file>languages/hindi-flag.png</file>
         <file>languages/spanish-flag.png</file>
+        <file>languages/packetsender_de.qm</file>
     </qresource>
 </RCC>

@@ -56,8 +56,6 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
-#include "languagechooser.h"
-
 
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
@@ -92,10 +90,6 @@ MainWindow::MainWindow(QWidget *parent) :
     if (settings.value("rolling500entryCheck", false).toBool()) {
         maxLogSize = 100;
     }
-
-    // Disabled for now.
-    //LanguageChooser lang;
-    //lang.exec();
 
 
     ui->generatePanelButton->hide();
@@ -2196,6 +2190,14 @@ void MainWindow::on_actionJoin_IPv4_triggered(QString address)
 void MainWindow::on_actionHelp_triggered()
 {
     //Open URL in browser
+
+    QString language = Settings::language().toLower();
+
+    if(language.contains("spanish")) {
+        QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation-es"));
+        return;
+    }
+
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 

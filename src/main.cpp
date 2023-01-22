@@ -16,6 +16,7 @@
     #include <QTranslator>
     #include <QLibraryInfo>
     #include "settings.h"
+    #include "languagechooser.h"
 #endif
 #include <QDir>
 #include <QCommandLineParser>
@@ -1036,14 +1037,25 @@ int main(int argc, char *argv[])
         QDEBUGVAR(locale);
 
 
+        if(Settings::needLanguage()) {
+            LanguageChooser lang;
+            lang.exec();
+        }
+
+
         QString language = Settings::language();
         if(language == "Spanish") {
             QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
             QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
             QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_es.qm");
             QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        } else {
-            QDEBUG() << "Loading Default English";
+        }
+
+        if(language == "German") {
+            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_de"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_de"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_de.qm");
+            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
         }
 
         QFile file_system(":/packetsender.css");

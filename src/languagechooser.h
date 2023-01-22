@@ -20,10 +20,13 @@ private slots:
 
     void on_spanishLabel_clicked();
 
+    void on_germanLabel_clicked();
+
+    void on_okButton_clicked();
+
 private:
     Ui::LanguageChooser *ui;
-    void englishClicked();
-    void spanishClicked();
+    void preClicked();
 };
 
 #endif // LANGUAGECHOOSER_H

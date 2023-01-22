@@ -97,6 +97,7 @@ class Settings : public QDialog
 
         static bool detectJSON_XML();
         static QString language();
+        static bool needLanguage();
         static QString logHeaderTranslate(QString txt);
 
 private slots:
@@ -130,6 +131,8 @@ private slots:
         void on_httpCredentialTable_itemChanged(QTableWidgetItem *item);
 
         void on_genAuthCheck_clicked(bool checked);
+
+        void on_chooseLanguageButton_clicked();
 
 private:
         Ui::Settings *ui;

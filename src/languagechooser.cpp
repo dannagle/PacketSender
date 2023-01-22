@@ -1,7 +1,12 @@
 
 #include <QPushButton>
 #include <QObject>
+#include <QStandardPaths>
+#include <QFile>
+#include <QDebug>
 #include "languagechooser.h"
+#include "settings.h"
+#include "globals.h"
 #include "ui_languagechooser.h"
 
 LanguageChooser::LanguageChooser(QWidget *parent) :
@@ -10,7 +15,21 @@ LanguageChooser::LanguageChooser(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    englishClicked();
+
+    QString language = Settings::language().toLower();
+
+    QDEBUGVAR(language);
+
+    on_englishLabel_clicked();
+
+    if(language.contains("spanish")) {
+        on_spanishLabel_clicked();
+    }
+
+    if(language.contains("german")) {
+        on_germanLabel_clicked();
+    }
+
 
 }
 
@@ -20,28 +39,57 @@ LanguageChooser::~LanguageChooser()
 }
 
 
-void LanguageChooser::englishClicked()
+void LanguageChooser::preClicked()
 {
-    ui->radioEnglish->setChecked(true);
     ui->radioSpanish->setChecked(false);
-
-}
-
-void LanguageChooser::spanishClicked()
-{
-    ui->radioEnglish->setChecked(false);
-    ui->radioSpanish->setChecked(true);
+    ui->radioEnglish->setChecked(true);
+    ui->radioGerman->setChecked(true);
 
 }
 
 void LanguageChooser::on_englishLabel_clicked()
 {
-    englishClicked();
+    preClicked();
+    ui->radioEnglish->setChecked(true);
+    ui->englishLabel->setFocus();
 }
 
 
 void LanguageChooser::on_spanishLabel_clicked()
 {
-    spanishClicked();
+    preClicked();
+    ui->radioSpanish->setChecked(true);
+    ui->spanishLabel->setFocus();
+}
+
+
+void LanguageChooser::on_germanLabel_clicked()
+{
+    preClicked();
+    ui->radioGerman->setChecked(true);
+    ui->germanLabel->setFocus();
+}
+
+
+void LanguageChooser::on_okButton_clicked()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+
+    // Default is English
+    settings.setValue("languageCombo", "English");
+
+
+    if(ui->radioSpanish->isChecked()) {
+        settings.setValue("languageCombo", "Spanish");
+    }
+
+    if(ui->radioGerman->isChecked()) {
+        settings.setValue("languageCombo", "German");
+    }
+
+
+    this->close();
+
 }
 
