@@ -11,7 +11,7 @@
     <message>
         <location filename="../about.ui" line="47"/>
         <source>Packet Sender</source>
-        <translation>Paket sender</translation>
+        <translation>Packet Sender</translation>
     </message>
     <message>
         <location filename="../about.ui" line="136"/>
@@ -187,12 +187,12 @@ Hash eintragen: </translation>
     <message>
         <location filename="../cloudui.cpp" line="100"/>
         <source>Saving </source>
-        <translation>Sparen</translation>
+        <translation>Sparen </translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="100"/>
         <source> packet set to cloud</source>
-        <translation>Paket auf Cloud gesetzt</translation>
+        <translation> paket auf Cloud gesetzt</translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="470"/>
@@ -333,22 +333,22 @@ Hash eintragen: </translation>
     <message>
         <location filename="../mainwindow.ui" line="257"/>
         <source>HTTP Get</source>
-        <translation>HTTP abrufen</translation>
+        <translation>HTTP Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="266"/>
         <source>HTTP Post</source>
-        <translation>HTTP Beitrag</translation>
+        <translation>HTTP Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
         <source>HTTPS Get</source>
-        <translation>HTTP abrufen</translation>
+        <translation>HTTPS Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
         <source>HTTPS Post</source>
-        <translation>HTTP Beitrag</translation>
+        <translation>HTTPS Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="296"/>
