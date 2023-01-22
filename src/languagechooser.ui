@@ -131,7 +131,7 @@
         <string notr="true">font: bold;font-size: 18px;</string>
        </property>
        <property name="text">
-        <string>OK / Acceptar</string>
+        <string>OK / Aceptar</string>
        </property>
       </widget>
      </item>

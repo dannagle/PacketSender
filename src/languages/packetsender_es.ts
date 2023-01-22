@@ -233,27 +233,27 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../languagechooser.ui" line="14"/>
         <source>Choose Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Elige lengua</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="46"/>
         <source>Español</source>
-        <translation type="unfinished"></translation>
+        <translation>Español</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="79"/>
         <source>English</source>
-        <translation type="unfinished">Inglés / English</translation>
+        <translation>English</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="115"/>
         <source>Deutsch</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="134"/>
-        <source>OK / Acceptar</source>
-        <translation type="unfinished"></translation>
+        <source>OK / Aceptar</source>
+        <translation>OK / Aceptar</translation>
     </message>
 </context>
 <context>
@@ -569,41 +569,45 @@ Hash de confirmación: </translation>
         <location filename="../mainwindow.cpp" line="575"/>
         <location filename="../mainwindow.cpp" line="603"/>
         <source>Updates.</source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizaciones.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="579"/>
         <source>There is a new Packet Sender available.
 
 Download?</source>
-        <translation type="unfinished"></translation>
+        <translation>Hay un nuevo Packet Sender disponible.
+
+¿Descargar?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="607"/>
         <source>Let Packet Sender check for updates weekly?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Permitir que Packet Sender busque actualizaciones semanalmente?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="651"/>
         <source>Packet Sender Updated!</source>
-        <translation type="unfinished"></translation>
+        <translation>¡Packet Sender actualizado!</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="655"/>
         <source>Updated to </source>
-        <translation type="unfinished"></translation>
+        <translation>Actualizado a </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="655"/>
         <source>!
 
 Would you like to read the release notes?</source>
-        <translation type="unfinished"></translation>
+        <translation>!
+
+¿Le gustaría leer las notas de la versión?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="716"/>
         <source>Clear Log </source>
-        <translation type="unfinished"></translation>
+        <translation>Borrar registro</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="741"/>
@@ -1930,14 +1934,6 @@ Selecting No will generate new IDs and append.</source>
         <location filename="../settings.ui" line="641"/>
         <source>Language (Requires Restart)</source>
         <translation>Idioma (Es necesario reiniciar)</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">Inglés / English</translation>
-    </message>
-    <message>
-        <source>Spanish (Español)</source>
-        <translation type="vanished">Español / Spanish</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="650"/>

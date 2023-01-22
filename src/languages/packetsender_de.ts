@@ -252,8 +252,12 @@ Hash eintragen: </translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="134"/>
+        <source>OK / Aceptar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>OK / Acceptar</source>
-        <translation>OK / Acceptar</translation>
+        <translation type="vanished">OK / Acceptar</translation>
     </message>
 </context>
 <context>

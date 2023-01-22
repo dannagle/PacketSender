@@ -251,7 +251,7 @@ Commit Hash: </source>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="134"/>
-        <source>OK / Acceptar</source>
+        <source>OK / Aceptar</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
