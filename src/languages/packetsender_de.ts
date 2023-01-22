@@ -233,27 +233,27 @@ Hash eintragen: </translation>
     <message>
         <location filename="../languagechooser.ui" line="14"/>
         <source>Choose Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache wählen</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="46"/>
         <source>Español</source>
-        <translation type="unfinished"></translation>
+        <translation>Español</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="79"/>
         <source>English</source>
-        <translation type="unfinished">English</translation>
+        <translation>English</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="115"/>
         <source>Deutsch</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="134"/>
         <source>OK / Acceptar</source>
-        <translation type="unfinished"></translation>
+        <translation>OK / Acceptar</translation>
     </message>
 </context>
 <context>
@@ -1031,7 +1031,7 @@ Schalten Sie IPv6 aus und wechseln Sie in den IPv4-Modus?</translation>
     <message>
         <location filename="../packetlogmodel.cpp" line="83"/>
         <source>Data portion is </source>
-        <translation type="unfinished"></translation>
+        <translation>Der Datenteil beträgt </translation>
     </message>
     <message>
         <location filename="../packetlogmodel.cpp" line="83"/>
