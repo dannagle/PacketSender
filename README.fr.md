@@ -370,7 +370,7 @@ La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POS
 # Générateur de panneaux
 Packet Sender prend en charge la génération de panneaux de contrôle. Les panneaux sont constitués de boutons auxquels sont affectés des scripts (paquets). Cliquez sur le bouton pour exécuter le(s) paquet(s) référencé(s) sur ce bouton.
 
-<img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
+<img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
 
 ## Chargement d’un panneau
 Les panneaux peuvent être créés de deux manières :
@@ -393,15 +393,15 @@ Les scripts de bouton contiendront le nom du paquet à envoyer.
 
 Plusieurs paquets peuvent être définis sur un bouton en ajoutant chaque nom sur une nouvelle ligne.
 
-<img src="/screenshots/ps_panel_5.PNG" width="400" height="358">
+<img src="/screenshots/ps_panel_5.PNG" width="400" height="358">
 
 Le Générateur de panneau supporte l'ajout d'un délai entre plusieurs paquets en ajoutant " délai:_# de secondes_ " entre les paquets.
 
-<img src="/screenshots/ps_panel_4.PNG" width="400" height="358">
+<img src="/screenshots/ps_panel_4.PNG" width="400" height="359">
 
 Le générateur de panneau prend en charge l'ajout d'un script pour charger un nouveau panneau en ajoutant " panneau:_ id du panneau #_ ". Une fois que tous les scripts précédents sur le bouton sont exécutés, le panneau passe au panneau suivant.
 
-<img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
+<img src="/screenshots/ps_panel_8.PNG" width="400" height="358">
 
 
 ### Ajout de fichiers/URL
