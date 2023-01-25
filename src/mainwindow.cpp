@@ -2198,6 +2198,19 @@ void MainWindow::on_actionHelp_triggered()
         return;
     }
 
+
+    if(language.contains("german")) {
+        QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation-de"));
+        return;
+    }
+
+
+    if(language.contains("french")) {
+        QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation-fr"));
+        return;
+    }
+
+
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
