@@ -6,7 +6,8 @@
 *Lire ceci dans d’autres langues : [English](README.md), [Español](README.es.md), [Deutsch](README.de.md), [Français](README.fr.md).*
 
 
-[![Téléchargements] (https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)] (https://packetsender.com/download)
+[![Téléchargements](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
+
 
 Packet Sender est un utilitaire open source permettant d’envoyer et de recevoir des paquets TCP, UDP et SSL (TCP cryptés) ainsi que des requêtes HTTP / HTTPS et la génération de panneaux. La branche principale supporte officiellement Windows, Mac et Desktop Linux (avec Qt). D’autres endroits peuvent recompiler et redistribuer Packet Sender. Packet Sender est gratuit et sous licence GPL v2 ou ultérieure. Il peut être utilisé à des fins commerciales et personnelles. Si vous trouvez l’application utile, veuillez envisager de faire un don / parrainer afin que le développement puisse continuer.
 
@@ -21,10 +22,10 @@ Packet Sender est un utilitaire open source permettant d’envoyer et de recevoi
 * [Générateur de trafic intense (GUI)](#udptraffic)
 * [Réseau](#network)
 * [Téléchargements](#downloads)
-* [Support](#support)
+* [Soutien](#support)
 * [Calculateur de sous-réseau IPv4](#subnetcalculator)
 * [Packet Sender Cloud](#cloud)
-* [Mode portable] (#portable)
+* [Mode portable](#portable)
 * [Macros et réponses intelligentes](#smartresponses)
 * [TCP et SSL persistants](#persistent)
 * [Requêtes HTTP/HTTPS](#http)
@@ -37,7 +38,7 @@ Packet Sender est un utilitaire open source permettant d’envoyer et de recevoi
 
 
 <a id="sponsors"></a>
-##Sponsors
+## Auteurs
 
 Packet Sender tient à remercier les sponsors suivants.
 
@@ -50,16 +51,16 @@ Packet Sender tient à remercier les sponsors suivants.
 <br><br><br>
 
 
-[Voulez-vous que votre nom / logo figure ici?] (https://github.com/sponsors/dannagle)
+[Voulez-vous que votre nom / logo figure ici?](https://github.com/sponsors/dannagle)
 
 
 
 <a id="support"></a>
-## Support
+## Soutien
 
 * Twitter: [@NagleCode](http://twitter.com/NagleCode)
 * Les forums sont à : [GitHub Discussions](https://github.com/dannagle/PacketSender/discussions).
-* Email:[Contact expéditeur du paquet] (https://packetsender.com/contact)
+* Email:[Contact expéditeur du paquet](https://packetsender.com/contact)
 * Connectez-vous avec moi sur [LinkedIn](https://www.linkedin.com/in/dannagle/)
 
 *REMARQUE:* Essayez (temporairement) de désactiver votre pare-feu si vous rencontrez des problèmes dans Windows.
@@ -70,7 +71,7 @@ Packet Sender tient à remercier les sponsors suivants.
 ## Téléchargement du Version Bureau
 Les versions officielles de Packet Sender peuvent être téléchargées à l’adresse [PacketSender.com](http://packetsender.com/download). Certains endroits redistribuent Packet Sender.
 
-! [Logo Windows] (captures d’écran/winlogo150.png) ! [Logo Mac] (captures d’écran/maclogo150.png) ! [Logo Linux] (captures d’écran/Tux150.png)
+![Logo Windows](captures d’écran/winlogo150.png) ![Logo Mac](captures d’écran/maclogo150.png) ![Logo Linux](captures d’écran/Tux150.png)
 
 
 <!--
@@ -85,7 +86,7 @@ Les éditions mobiles de Packet Sender sont entièrement natives, contiennent de
 
 La version Androïde se trouve [sur Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) ou [sur Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
-[! [Packet Sender Androïde] (captures d’écran/packetsender_android_screenshot.png)] (https://play.google.com/store/apps/details?id=com.packetsender.compose
+[![Packet Sender Androïde](captures d’écran/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
 
 -->
 
@@ -99,7 +100,7 @@ Je ne sais pas quand cela reviendra.
 
 La version iOS se trouve [sur l’App Store d’Apple](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
-[! [Packet Sender iOS] (captures d’écran/packetsender-ios-traffic-log-ascii.png)] (https://apps.apple.com/app/id1558236648#?platform=iphone)
+[![Packet Sender iOS](captures d’écran/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 -->
 <a id="gui"></a>
@@ -164,14 +165,14 @@ Les serveurs intégrés de Packet Sender sont configurés pour prendre en charge
 
 Dans les paramètres, vous pouvez également forcer les serveurs de Packet Sender à se lier à une adresse IP personnalisée. Cela peut être très utile pour les systèmes avec plusieurs cartes réseau ou des configurations IP compliquées. Packet Sender déclenchera une erreur s’il lui est demandé de se lier à une adresse qui n’existe pas.
 
-! [Liaison spécifique à l’IP] (captures d’écran/ip-specific-binding.png)
+![Liaison spécifique à l’IP](captures d’écran/ip-specific-binding.png)
 
 
 <a id="subnetcalculator"></a>
 ## Calculateur de sous-réseau IPv4
 
 Packet Sender dispose d’un calculateur de sous-réseau intégré. C’est sous le menu Outils.
-! [Calculateur du sous-réseau de Packet Sender] (captures d’écran/packetsender_subnetcalc.PNG)
+![Calculateur du sous-réseau de Packet Sender](captures d’écran/packetsender_subnetcalc.PNG)
 
 * La fenêtre de journal (section inférieure) affichera les adresses IPv4 et IPv6 sans bouclage trouvées sur votre ordinateur.
 * Sur le côté gauche, entrez l’adresse IPv4 dans le domaine IP. 
@@ -188,7 +189,7 @@ Packet Sender regroupe OpenSSL pour une utilisation dans Windows. Sur Mac et Lin
 
 _Ce produit contient un logiciel développé par le projet OpenSSL pour être utilisé dans la boîte à outils OpenSSL. (http://www.openssl.org/)_
 
-! [TCP direct de Packet Sender] (captures d’écran/packetsender_ssl.PNG)
+![TCP direct de Packet Sender](captures d’écran/packetsender_ssl.PNG)
 
 Notes SSL :
 * La négociation du certificat est traitée immédiatement lors de la connexion.
@@ -202,7 +203,7 @@ _Note: Le remplacement des emplacements de certificat dans Paramètres remplace 
 
 S’il y a une erreur SSL, Packet Sender la transmettra dans le journal de trafic. Si le paramètre est de continuer de toute façon (par défaut), il continuera à négocier le cryptage. Sinon, la connexion se termine par l’échec de la connexion.
 
-! [TCP direct de Packet Sender a expiré] (captures d’écran/packetsender_expired_ssl.png)
+![TCP direct de Packet Sender a expiré](captures d’écran/packetsender_expired_ssl.png)
 
 ## Multicast(expérimentale)
 
@@ -223,7 +224,7 @@ Pour quand le système d’envoi normal ne suffit pas, vous pouvez marteler une 
 
 Veuillez noter que cette fonctionnalité est expérimentale et que les métriques affichées n’ont pas été entièrement testées. Pour un test plus précis, vous pouvez consulter la version CLI de cet outil.
 
-! [Liaison spécifique à l’IP] (captures d’écran/udp-traffic-sending.PNG)
+![Liaison spécifique à l’IP](captures d’écran/udp-traffic-sending.PNG)
 
 # Fonctionnalités de l’expéditeur de paquets
 
@@ -286,7 +287,7 @@ Packet Sender prend en charge jusqu’à 5 réponses intelligentes.
 
 Pour activer cette fonctionnalité, accédez à _File -> Settings_ dans la barre d’outils de l’interface graphique. Accédez à l’onglet _Smart Responses_ et activez la case à cocher **Envoyer une réponse intelligente**.  
 
-! [TCP direct de Packet Sender] (captures d’écran/packetsender_smartreply.PNG)
+![TCP direct de Packet Sender](captures d’écran/packetsender_smartreply.PNG)
 
 * Packet Sender comparera le paquet dans l’encodage que vous choisissez.
 * Packet Sender traduit l’encodage avant d’envoyer la réponse.
@@ -312,7 +313,7 @@ Packet Sender échangera la macro avec des valeurs réelles avant l’envoi.
 
 Packet Sender prend en charge les connexions TCP et SSL persistantes via une fenêtre GUI distincte. Il est activé par une case à cocher dans la fenêtre principale ou via la fenêtre Paramètres.
 
-! [TCP direct de Packet Sender et SSL] (captures d’écran/packetsender_direct_tcp.PNG)
+![TCP direct de Packet Sender et SSL](captures d’écran/packetsender_direct_tcp.PNG)
 
 ### Remarques sur TCP et SSL persistants :
 * N’importe quel nombre de connexions persistantes peut être créé.
@@ -443,7 +444,7 @@ Packet Sender peut être utilisé à partir de la ligne de commande sur votre or
 Pour Windows, utilisez l’extension .com ('packetsender.com') pour utiliser l’interface de ligne de commande. En option, vous pouvez également utiliser 'packetsender' sans extension. En utilisant l’extension, .exe lancerez l’interface graphique. 
 
 
-! [Capture d’écran de l’interface de ligne de commande de Packet Sender] (captures d’écran/packetsender_command_line.png)
+![Capture d’écran de l’interface de ligne de commande de Packet Sender](captures d’écran/packetsender_command_line.png)
 
 Pour Linux, le système de ligne de commande dans Packet Sender suit le même modèle que les autres utilitaires Linux. Il a un nom long (tel que --version) et un nom court (tel que -v). Ces options peuvent être organisées dans n’importe quel ordre et Packet Sender les analysera correctement. Les 3 dernières options sont positionnelles et doivent apparaître en dernier. Il s’agit de l’adresse IP, du port et des données. Ces dernières options sont facultatives si vous utilisez un paquet stocké.
 
@@ -613,7 +614,7 @@ Il vous manque une fonctionnalité ? Vous pouvez [m’engager pour l’ajouter �
 
 # Droit / Conformité
 
-La licence est GPL v2 ou ultérieure. [Contactez-moi] (https://packetsender.com/contact) si vous avez besoin d’une licence différente.
+La licence est GPL v2 ou ultérieure. [Contactez-moi](https://packetsender.com/contact) si vous avez besoin d’une licence différente.
 Certaines distributions de Packet Sender peuvent utiliser [OpenSSL](https://www.openssl.org/).
 Le VPAT le plus récent [peut être trouvé](vpat_2.4_packetsender.pdf) dans ce référentiel.
 
