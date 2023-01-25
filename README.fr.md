@@ -370,7 +370,7 @@ La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POS
 # Générateur de panneaux
 Packet Sender prend en charge la génération de panneaux de contrôle. Les panneaux sont constitués de boutons auxquels sont affectés des scripts (paquets). Cliquez sur le bouton pour exécuter le(s) paquet(s) référencé(s) sur ce bouton.
 
-<img src="/screenshots/ps_panel_1.PNG » width="400 » height="358">
+<img src="/screenshots/ps_panel_1.PNG" width="400" height="358">
 
 ## Chargement d’un panneau
 Les panneaux peuvent être créés de deux manières :
