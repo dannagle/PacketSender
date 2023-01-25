@@ -3,7 +3,7 @@
 ![Packet Sender Logo](screenshots/packetsender_banner.png)
 
 
-*Read this in other languages: [English](README.md), [Español](README.es.md), [Deutsch](README.de.md).*
+*Read this in other languages: [English](README.md), [Español](README.es.md), [Deutsch](README.de.md), [Français](README.fr.md).*
 
 
 [![Downloads](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
