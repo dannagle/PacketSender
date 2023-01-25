@@ -15,7 +15,7 @@ Packet Sender est un utilitaire open source permettant d’envoyer et de recevoi
 
 # Table des matières
 * [Auteurs](#sponsors)
-  * Visitez [IWL.com](https://www.iwl.com/)
+  * Visitez [IWL.com](https://www.iwl.com/)v
   * Visite [NagleCode.com](https://dannagle.com/)
 
 * [GUI](#gui)
@@ -47,7 +47,7 @@ Packet Sender tient à remercier les sponsors suivants.
 <br><br><br>
 
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
-<br>NagleCode est un éditeur de logiciels et un studio de développement. 
+<br>NagleCode est un éditeur de logiciels et un studio de développement.
 <br><br><br>
 
 
@@ -71,7 +71,7 @@ Packet Sender tient à remercier les sponsors suivants.
 ## Téléchargement du Version Bureau
 Les versions officielles de Packet Sender peuvent être téléchargées à l’adresse [PacketSender.com](http://packetsender.com/download). Certains endroits redistribuent Packet Sender.
 
-![Logo Windows](captures d’écran/winlogo150.png) ![Logo Mac](captures d’écran/maclogo150.png) ![Logo Linux](captures d’écran/Tux150.png)
+![Logo Windows](screenshots/winlogo150.png) ![Logo Mac](screenshots/maclogo150.png) ![Logo Linux](screenshots/Tux150.png)
 
 
 <!--
@@ -86,7 +86,7 @@ Les éditions mobiles de Packet Sender sont entièrement natives, contiennent de
 
 La version Androïde se trouve [sur Google Play](https://play.google.com/store/apps/details?id=com.packetsender.compose) ou [sur Amazon Appstore](https://www.amazon.com/dp/B08RXM6KM2/)
 
-[![Packet Sender Androïde](captures d’écran/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
+[![Packet Sender Androïde](screenshots/packetsender_android_screenshot.png)](https://play.google.com/store/apps/details?id=com.packetsender.compose
 
 -->
 
@@ -100,11 +100,11 @@ Je ne sais pas quand cela reviendra.
 
 La version iOS se trouve [sur l’App Store d’Apple](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
-[![Packet Sender iOS](captures d’écran/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
+[![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 -->
 <a id="gui"></a>
-# GUI 
+# GUI
 
 Packet Sender est identique pour toutes les versions de bureau. La seule différence est son thème pour correspondre au système d’exploitation.
 
@@ -165,17 +165,17 @@ Les serveurs intégrés de Packet Sender sont configurés pour prendre en charge
 
 Dans les paramètres, vous pouvez également forcer les serveurs de Packet Sender à se lier à une adresse IP personnalisée. Cela peut être très utile pour les systèmes avec plusieurs cartes réseau ou des configurations IP compliquées. Packet Sender déclenchera une erreur s’il lui est demandé de se lier à une adresse qui n’existe pas.
 
-![Liaison spécifique à l’IP](captures d’écran/ip-specific-binding.png)
+![Liaison spécifique à l’IP](screenshots/ip-specific-binding.png)
 
 
 <a id="subnetcalculator"></a>
 ## Calculateur de sous-réseau IPv4
 
 Packet Sender dispose d’un calculateur de sous-réseau intégré. C’est sous le menu Outils.
-![Calculateur du sous-réseau de Packet Sender](captures d’écran/packetsender_subnetcalc.PNG)
+![Calculateur du sous-réseau de Packet Sender](screenshots/packetsender_subnetcalc.PNG)
 
 * La fenêtre de journal (section inférieure) affichera les adresses IPv4 et IPv6 sans bouclage trouvées sur votre ordinateur.
-* Sur le côté gauche, entrez l’adresse IPv4 dans le domaine IP. 
+* Sur le côté gauche, entrez l’adresse IPv4 dans le domaine IP.
 * Sur le côté gauche, entrez le sous-réseau en notation X.X.X. ou /XX
 * Les résultats du calcul sont à droite.
 * Le champ ci-dessous est une vérification rapide pour voir si un IPv4 se trouve dans l’un de vos sous-réseaux.
@@ -189,7 +189,7 @@ Packet Sender regroupe OpenSSL pour une utilisation dans Windows. Sur Mac et Lin
 
 _Ce produit contient un logiciel développé par le projet OpenSSL pour être utilisé dans la boîte à outils OpenSSL. (http://www.openssl.org/)_
 
-![TCP direct de Packet Sender](captures d’écran/packetsender_ssl.PNG)
+![TCP direct de Packet Sender](screenshots/packetsender_ssl.PNG)
 
 Notes SSL :
 * La négociation du certificat est traitée immédiatement lors de la connexion.
@@ -203,7 +203,7 @@ _Note: Le remplacement des emplacements de certificat dans Paramètres remplace 
 
 S’il y a une erreur SSL, Packet Sender la transmettra dans le journal de trafic. Si le paramètre est de continuer de toute façon (par défaut), il continuera à négocier le cryptage. Sinon, la connexion se termine par l’échec de la connexion.
 
-![TCP direct de Packet Sender a expiré](captures d’écran/packetsender_expired_ssl.png)
+![TCP direct de Packet Sender a expiré](screenshots/packetsender_expired_ssl.png)
 
 ## Multicast(expérimentale)
 
@@ -224,7 +224,7 @@ Pour quand le système d’envoi normal ne suffit pas, vous pouvez marteler une 
 
 Veuillez noter que cette fonctionnalité est expérimentale et que les métriques affichées n’ont pas été entièrement testées. Pour un test plus précis, vous pouvez consulter la version CLI de cet outil.
 
-![Liaison spécifique à l’IP](captures d’écran/udp-traffic-sending.PNG)
+![Liaison spécifique à l’IP](screenshots/udp-traffic-sending.PNG)
 
 # Fonctionnalités de l’expéditeur de paquets
 
@@ -283,11 +283,11 @@ Si des fichiers INI sont trouvés, il les utilisera à la place de '%APPDATA%' o
 <a id="smartresponses"></a>
 ## Réponses intelligentes
 
-Packet Sender prend en charge jusqu’à 5 réponses intelligentes. 
+Packet Sender prend en charge jusqu’à 5 réponses intelligentes.
 
-Pour activer cette fonctionnalité, accédez à _File -> Settings_ dans la barre d’outils de l’interface graphique. Accédez à l’onglet _Smart Responses_ et activez la case à cocher **Envoyer une réponse intelligente**.  
+Pour activer cette fonctionnalité, accédez à _File -> Settings_ dans la barre d’outils de l’interface graphique. Accédez à l’onglet _Smart Responses_ et activez la case à cocher **Envoyer une réponse intelligente**.
 
-![TCP direct de Packet Sender](captures d’écran/packetsender_smartreply.PNG)
+![TCP direct de Packet Sender](screenshots/packetsender_smartreply.PNG)
 
 * Packet Sender comparera le paquet dans l’encodage que vous choisissez.
 * Packet Sender traduit l’encodage avant d’envoyer la réponse.
@@ -313,7 +313,7 @@ Packet Sender échangera la macro avec des valeurs réelles avant l’envoi.
 
 Packet Sender prend en charge les connexions TCP et SSL persistantes via une fenêtre GUI distincte. Il est activé par une case à cocher dans la fenêtre principale ou via la fenêtre Paramètres.
 
-![TCP direct de Packet Sender et SSL](captures d’écran/packetsender_direct_tcp.PNG)
+![TCP direct de Packet Sender et SSL](screenshots/packetsender_direct_tcp.PNG)
 
 ### Remarques sur TCP et SSL persistants :
 * N’importe quel nombre de connexions persistantes peut être créé.
@@ -331,8 +331,8 @@ Les connexions permanentes ne sont pas prises en charge via la ligne de commande
 
 <a id="http"></a>
 # HTTP / HTTPS POST & GET
-Packet Sender prend en charge l’envoi de requêtes POST/GET via HTTP et HTTPS. 
-La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. Lors de la sélection de HTTP(S), les champs de saisie seront orientés vers : Nom, Demande, Adresse, Données (lorsque l’option POST est sélectionnée), bouton Générer des données (lorsque l’option POST est sélectionnée), Charger le fichier (lorsque l’option POST est sélectionnée). 
+Packet Sender prend en charge l’envoi de requêtes POST/GET via HTTP et HTTPS.
+La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. Lors de la sélection de HTTP(S), les champs de saisie seront orientés vers : Nom, Demande, Adresse, Données (lorsque l’option POST est sélectionnée), bouton Générer des données (lorsque l’option POST est sélectionnée), Charger le fichier (lorsque l’option POST est sélectionnée).
 
 ## Envoi de requêtes HTTP/HTTPS GET/POST
 ![](/screenshots/ps_http_getfields.PNG)
@@ -340,7 +340,7 @@ La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POS
 * Dans le champ *Adresse*, entrez le domaine ou l’adresse IP
 * Dans le champ *Demande*, ajoutez le chemin de l’URL, si nécessaire
 * Dans le champ *Port*, la valeur par défaut pour HTTP est 80 et HTTPS est 443
-* Cochez *TCP persistant* pour voir plus clairement les données du serveur (les en-têtes HTTP sont supprimés automatiquement). 
+* Cochez *TCP persistant* pour voir plus clairement les données du serveur (les en-têtes HTTP sont supprimés automatiquement).
 
 **Vous pouvez également coller une URL complète dans le champ Demande et Packet Sender analysera et remplira automatiquement les autres champs.**
 
@@ -352,10 +352,10 @@ La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POS
 
 <img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
 
-* * Pour ajouter des données, saisissez les paramètres Clé et Valeur. Cliquez sur le bouton **+**. 
-* Peut ajouter plusieurs paramètres avec le bouton +. 
+* * Pour ajouter des données, saisissez les paramètres Clé et Valeur. Cliquez sur le bouton **+**.
+* Peut ajouter plusieurs paramètres avec le bouton +.
 * Supprimez les paramètres en cliquant sur le bouton X à côté du paramètre
-* Une fois les paramètres ajoutés, cliquez sur OK et les données seront générées dans le champ Données. 
+* Une fois les paramètres ajoutés, cliquez sur OK et les données seront générées dans le champ Données.
 
 ### Pour ajouter des informations d’authentification :
 
@@ -368,26 +368,26 @@ La liste déroulante Protocole inclut les options suivantes : HTTP GET, HTTP POS
 
 <a id="panelgen"></a>
 # Générateur de panneaux
-Packet Sender prend en charge la génération de panneaux de contrôle. Les panneaux sont constitués de boutons auxquels sont affectés des scripts (paquets). Cliquez sur le bouton pour exécuter le(s) paquet(s) référencé(s) sur ce bouton. 
+Packet Sender prend en charge la génération de panneaux de contrôle. Les panneaux sont constitués de boutons auxquels sont affectés des scripts (paquets). Cliquez sur le bouton pour exécuter le(s) paquet(s) référencé(s) sur ce bouton.
 
 <img src="/screenshots/ps_panel_1.PNG » width="400 » height="358">
 
 ## Chargement d’un panneau
 Les panneaux peuvent être créés de deux manières :
 * Cliquez sur **Panneaux** dans la barre d’outils et sélectionnez Charger le panneau de démarrage ou Vider le projet de panneau
-	* Le panneau de démarrage chargera le panneau assigné comme démarreur. Si aucun panneau n'est défini comme point de départ, un projet de panneau vide est alors ouvert. 
-* Mettez en surbrillance 2 paquets enregistrés ou plus et cliquez sur le bouton **Générer le panneau** (le bouton Générer le panneau n’apparaît que lorsque plusieurs paquets sont sélectionnés) 
+	* Le panneau de démarrage chargera le panneau assigné comme démarreur. Si aucun panneau n'est défini comme point de départ, un projet de panneau vide est alors ouvert.
+* Mettez en surbrillance 2 paquets enregistrés ou plus et cliquez sur le bouton **Générer le panneau** (le bouton Générer le panneau n’apparaît que lorsque plusieurs paquets sont sélectionnés)
 
 ![](/screenshots/ps_panel_generate.PNG)
 
 
 ## Création de scripts pour un panneau
-Pour commencer à écrire des scripts sur les boutons de votre panneau, vous devrez ouvrir un panneau et accéder à l’écran Édition. Une fois qu’un projet de panneau est ouvert, cochez le bouton dans le coin inférieur droit. Si ce bouton indique « Affichage », vous êtes sur l’écran Affichage. Cliquez sur le bouton pour déplacer le panneau vers l’écran Édition. 
+Pour commencer à écrire des scripts sur les boutons de votre panneau, vous devrez ouvrir un panneau et accéder à l’écran Édition. Une fois qu’un projet de panneau est ouvert, cochez le bouton dans le coin inférieur droit. Si ce bouton indique « Affichage », vous êtes sur l’écran Affichage. Cliquez sur le bouton pour déplacer le panneau vers l’écran Édition.
 
-Une fois sur l’écran d’édition, des boutons et des scripts peuvent être ajoutés au panneau. 
+Une fois sur l’écran d’édition, des boutons et des scripts peuvent être ajoutés au panneau.
 
 ### Bouton de scripting
-Les scripts de bouton contiendront le nom du paquet à envoyer. 
+Les scripts de bouton contiendront le nom du paquet à envoyer.
 
 <img src="/screenshots/ps_panel_2.PNG" width="400" height="360">
 
@@ -399,52 +399,52 @@ Le Générateur de panneau supporte l'ajout d'un délai entre plusieurs paquets 
 
 <img src="/screenshots/ps_panel_4.PNG » width="400 » height="359">
 
-Le générateur de panneau prend en charge l'ajout d'un script pour charger un nouveau panneau en ajoutant " panneau:_ id du panneau #_ ". Une fois que tous les scripts précédents sur le bouton sont exécutés, le panneau passe au panneau suivant. 
+Le générateur de panneau prend en charge l'ajout d'un script pour charger un nouveau panneau en ajoutant " panneau:_ id du panneau #_ ". Une fois que tous les scripts précédents sur le bouton sont exécutés, le panneau passe au panneau suivant.
 
 <img src="/screenshots/ps_panel_8.PNG » width="400 » height="358">
 
 
 ### Ajout de fichiers/URL
-Le générateur de panneau prend en charge l’ajout de boutons liés à des fichiers ou des URL stockés localement. 
-Les boutons Fichier/URL peuvent être ajoutés dans l’écran Édition en cliquant sur le bouton *+* dans le coin inférieur droit. 
+Le générateur de panneau prend en charge l’ajout de boutons liés à des fichiers ou des URL stockés localement.
+Les boutons Fichier/URL peuvent être ajoutés dans l’écran Édition en cliquant sur le bouton *+* dans le coin inférieur droit.
 * Pour les fichiers : Accédez au fichier sur le PC, faites un clic droit sur le fichier et sélectionnez Copier. Collez-le dans la zone de texte _URL ou Ficher_ de Packet Sender
 * Pour les URL : Copiez l’URL dans la zone de texte _URL ou Ficher_ de Packet Sender
 	* Les URL doivent commencer par http:// ou https://
 
 
-![](/screenshots/ps_panel_7.PNG) 
+![](/screenshots/ps_panel_7.PNG)
 
-Une fois le fichier ou l’URL copié, vous serez invité à entrer un nom pour le bouton. Les boutons seront remplis au bas du panneau. 
+Une fois le fichier ou l’URL copié, vous serez invité à entrer un nom pour le bouton. Les boutons seront remplis au bas du panneau.
 
-Sur l’écran Édition, cliquer sur ces boutons vous permettra de modifier le lien fichier/URL et le nom du bouton. Vous pouvez également supprimer le bouton en cliquant sur **X** dans la fenêtre contextuelle. 
+Sur l’écran Édition, cliquer sur ces boutons vous permettra de modifier le lien fichier/URL et le nom du bouton. Vous pouvez également supprimer le bouton en cliquant sur **X** dans la fenêtre contextuelle.
 
 ![](/screenshots/ps_http_changeURL.PNG)
 
-Lorsque vous êtes sur l’écran d’affichage, cliquez sur ces boutons pour lancer l’URL dans le navigateur par défaut ou ouvrir le fichier (avec le programme par défaut pour le type de fichier). 
+Lorsque vous êtes sur l’écran d’affichage, cliquez sur ces boutons pour lancer l’URL dans le navigateur par défaut ou ouvrir le fichier (avec le programme par défaut pour le type de fichier).
 
 
-![](/screenshots/ps_panel_6.PNG) 
+![](/screenshots/ps_panel_6.PNG)
 
 ### Édition/Enregistrement du panneau
-Alors que dans l’écran d’édition d’un panneau, il y aura une barre d’outils avec les menus Fichier, Exporter, Paramètres, Aide. Vous pouvez enregistrer, exporter, importer, charger des projets de panneau et modifier le projet de panneau actuel à partir de cette barre d’outils. 
+Alors que dans l’écran d’édition d’un panneau, il y aura une barre d’outils avec les menus Fichier, Exporter, Paramètres, Aide. Vous pouvez enregistrer, exporter, importer, charger des projets de panneau et modifier le projet de panneau actuel à partir de cette barre d’outils.
 
 Dans Paramètres, vous pouvez effectuer les opérations suivantes :
 * Définir le nom du panneau - sélectionnez cette option pour renommer le projet de panneau actuel
 * Définir l’ID du panneau - sélectionnez cette option pour modifier l’ID associé au projet de panneau en cours
 _Note: La définition d’un ID en cours d’utilisation remplacera cette panneau_
-* Panneau de démarrage - sélectionnez cette option pour définir le projet de panneau actuel comme panneau de démarrage. 
+* Panneau de démarrage - sélectionnez cette option pour définir le projet de panneau actuel comme panneau de démarrage.
 * Supprimer le panneau - Cela fera apparaître un menu des projets de panneau en cours. Sélectionnez un projet de panneau pour le supprimer. _Note: Les boutons et les scripts seront conservés sur l’écran Modification jusqu’à ce que le panneau soit closed_
 
 
 
 <a id="cli"></a>
 # Ligne de commande
-Packet Sender peut être utilisé à partir de la ligne de commande sur votre ordinateur. 
+Packet Sender peut être utilisé à partir de la ligne de commande sur votre ordinateur.
 
-Pour Windows, utilisez l’extension .com ('packetsender.com') pour utiliser l’interface de ligne de commande. En option, vous pouvez également utiliser 'packetsender' sans extension. En utilisant l’extension, .exe lancerez l’interface graphique. 
+Pour Windows, utilisez l’extension .com ('packetsender.com') pour utiliser l’interface de ligne de commande. En option, vous pouvez également utiliser 'packetsender' sans extension. En utilisant l’extension, .exe lancerez l’interface graphique.
 
 
-![Capture d’écran de l’interface de ligne de commande de Packet Sender](captures d’écran/packetsender_command_line.png)
+![Capture d’écran de l’interface de ligne de commande de Packet Sender](screenshots/packetsender_command_line.png)
 
 Pour Linux, le système de ligne de commande dans Packet Sender suit le même modèle que les autres utilitaires Linux. Il a un nom long (tel que --version) et un nom court (tel que -v). Ces options peuvent être organisées dans n’importe quel ordre et Packet Sender les analysera correctement. Les 3 dernières options sont positionnelles et doivent apparaître en dernier. Il s’agit de l’adresse IP, du port et des données. Ces dernières options sont facultatives si vous utilisez un paquet stocké.
 
@@ -496,7 +496,7 @@ Arguments:
   données Données à envoyer. Facultatif pour le paquet enregistré.
 ```
 ## Exemple d’interface de ligne de commande
-L’interface de ligne de commande suit le même format entre Windows, Linux et MAC. 
+L’interface de ligne de commande suit le même format entre Windows, Linux et MAC.
 
 Le format est : 'packetsender [options]adresse données port'
 
@@ -577,7 +577,7 @@ La seule dépendance est Qt SDK
 1. Téléchargez le programme d’installation de Qt depuis http://www.qt.io/download-open-source/
 1. Laissez-le installer MingGW si vous n’avez pas de compilateur.
 1. Ouvrir le projet PacketSender.pro
-1. créer! 
+1. créer!
 
 Les versions Windows et Mac ont été créer en utilisant Qt 5.12. Packet Sender prend en charge Qt 6, mais il ne le fait pas
 Soutenez CMAKE.
