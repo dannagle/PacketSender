@@ -32,7 +32,8 @@
         <location filename="../about.cpp" line="26"/>
         <source>
 Commit Hash: </source>
-        <translation>Engagez le Hash: </translation>
+        <translation>
+Engagez le Hash: </translation>
     </message>
     <message>
         <location filename="../about.cpp" line="31"/>
@@ -237,22 +238,22 @@ Commit Hash: </source>
     <message>
         <location filename="../languagechooser.ui" line="46"/>
         <source>Español</source>
-        <translation>espagne</translation>
+        <translation>Español</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="79"/>
         <source>English</source>
-        <translation>Anglais</translation>
+        <translation>English</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="115"/>
         <source>Deutsch</source>
-        <translation>Allemand</translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="134"/>
         <source>OK / Aceptar</source>
-        <translation>OK / Accepter</translation>
+        <source>OK / Aceptar</source>
     </message>
 </context>
 <context>
@@ -599,7 +600,9 @@ Télécharger?</translation>
         <source>!
 
 Would you like to read the release notes?</source>
-        <translation>Voulez-vous lire les notes de lancement?</translation>
+        <translation>!
+
+Voulez-vous lire les notes de lancement?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="716"/>
@@ -611,7 +614,7 @@ Would you like to read the release notes?</source>
         <location filename="../mainwindow.cpp" line="763"/>
         <location filename="../mainwindow.cpp" line="784"/>
         <source> Ports</source>
-        <translation>Ports</translation>
+        <translation> Ports</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="747"/>
@@ -854,7 +857,7 @@ Désactivez la connexion persistante ? (Recommandé)</translation>
         <location filename="../mainwindow.cpp" line="2257"/>
         <location filename="../mainwindow.cpp" line="2394"/>
         <source>Import </source>
-        <translation>Importer</translation>
+        <translation>Importer </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2257"/>
@@ -952,7 +955,7 @@ Le Packet Sender écrasera les paquets portant le même nom.</translation>
     <message>
         <location filename="../mainwindow.cpp" line="2532"/>
         <source> bytes</source>
-        <translation>octets</translation>
+        <translation> octets</translation>
     </message>
 </context>
 <context>
@@ -1230,7 +1233,7 @@ Les ports privilégiés nécessitent l'exécution de Packet Sender avec des auto
     <message>
         <location filename="../panelgenerator.cpp" line="152"/>
         <source>Link text:</source>
-        <translation>Lier le texte</translation>
+        <translation>Lier le texte:</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="317"/>
@@ -1260,7 +1263,7 @@ Les ports privilégiés nécessitent l'exécution de Packet Sender avec des auto
     <message>
         <location filename="../panelgenerator.cpp" line="338"/>
         <source>Set Panel ID: </source>
-        <translation>Définir l'ID du panneau : </translation>
+        <translation>Définir l'ID du panneau: </translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="342"/>
@@ -1379,7 +1382,8 @@ Ce panneau n'a pas été sauvegardé. Vous risquez de perdre les modifications.<
         <location filename="../panelgenerator.cpp" line="913"/>
         <source>Delete URL link?
 </source>
-        <translation>Supprimer le lien URL?</translation>
+        <translation>Supprimer le lien URL?
+</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="924"/>
@@ -1399,7 +1403,7 @@ Ce panneau n'a pas été sauvegardé. Vous risquez de perdre les modifications.<
     <message>
         <location filename="../panelgenerator.cpp" line="988"/>
         <source>*.panels</source>
-        <translation>*.panneaux</translation>
+        <translation>*.panels</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="1025"/>
@@ -2048,7 +2052,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.ui" line="963"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
-        <translation>Macros disponibles : {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
+        <translation>Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="970"/>
@@ -2275,7 +2279,8 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
         <source>Your non-loopback addresses:
 
 </source>
-        <translation>Vos adresses non-loopback :
+        <translation>Vos adresses non-loopback:
+
 </translation>
     </message>
     <message>
