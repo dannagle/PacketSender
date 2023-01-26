@@ -22,6 +22,7 @@ set(
   postdatagen.h
   settings.h
   udpflooding.h
+  languagechooser.h
 )
 
 set(
@@ -39,6 +40,7 @@ set(
   settings.ui
   subnetcalc.ui
   udpflooding.ui
+  languagechooser.ui
 )
 
 set(
@@ -65,11 +67,14 @@ set(
   tcpthread.cpp
   threadedtcpserver.cpp
   udpflooding.cpp
+  languagechooser.cpp
 )
 
 set(
   PACKETSENDER_QRC
   packetsender.qrc
+  qdarkstyle/style.qrc
+  translations.qrc
 )
 
 QT5_ADD_RESOURCES(srcs_qrc ${PACKETSENDER_QRC})
