@@ -264,7 +264,7 @@ Wenn Sie die grafische Benutzeroberfläche nicht benötigen, können Sie diese D
 - opengl32sw.dll
 - D3Dcompiler_47.dll
 - iconengines-Verzeichnis
-- Verzeichnis der Bildformate
+- Verzeichnis der imageformats
 - Stilverzeichnis
 
 ### DDLs, die entfernt werden können, wenn Sie keine sicheren Verbindungen benötigen
@@ -561,10 +561,10 @@ Im Folgenden finden Sie Beispiele für die Verwendung dieser Funktion. Beachten 
 **Anmerkung: Für Windows verwenden Sie die ".com"-Erstellung, d. h. jedes Beispiel wäre packetsender.com**
 
 ```text
-paketsender --rate 20 --name "Mein Wahnsinns-Paket"
-paketsender --bps 2000 --name "Mein Wahnsinns-Paket"
-paketsender --rate 0 --name "Mein Wahnsinns-Paket"
-paketsender --usdelay 2000000 --name "Mein Wahnsinns-Paket"
+packetsender --rate 20 --name "Mein Wahnsinns-Paket"
+packetsender --bps 2000 --name "Mein Wahnsinns-Paket"
+packetsender --rate 0 --name "Mein Wahnsinns-Paket"
+packetsender --usdelay 2000000 --name "Mein Wahnsinns-Paket"
 ```
 
 
@@ -593,7 +593,7 @@ wget https://github.com/dannagle/PacketSender/archive/(Version).tar.gz
 tar -xzvf (Version).tar.gz
 cd PacketSender-(Version)/src
 qmake PacketSender.pro
-machen.
+make
 ```
 
 Zum Ausführen verwenden:
