@@ -26,6 +26,8 @@ parts:
       - libgl1-mesa-dev
       
     command: usr/local/bin/packetsender
+    extensions:
+      - kde-neon
     desktop: usr/share/applications/packetsender.desktop
     plugs:
       - unity7
