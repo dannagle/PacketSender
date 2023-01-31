@@ -9,6 +9,7 @@ description: |
 
 grade: stable
 confinement: strict
+base: core20
 architectures: [amd64]
 
 parts:
@@ -23,4 +24,13 @@ parts:
     stage-packages:
       - libgl1-mesa-glx
       - libgl1-mesa-dev
+      
+    command: usr/local/bin/packetsender
+    desktop: usr/share/applications/packetsender.desktop
+    plugs:
+      - unity7
+      - home
+      - network
+      - network-bind
+      - network-manager
 
