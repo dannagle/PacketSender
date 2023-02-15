@@ -120,6 +120,7 @@ int main(int argc, char *argv[])
 
     bool gatekeeper = false;
 
+    bool force_gui = false;
 
     //Upon first launch, Apple will assign a psn number and
     //pass it as a command line argument.
@@ -147,6 +148,8 @@ int main(int argc, char *argv[])
         if (arg2.contains("version")) {
             gatekeeper = false;
         }
+
+        force_gui = arg2.contains("--gui");
 
     }
 
@@ -1013,9 +1016,13 @@ int main(int argc, char *argv[])
 
         //Workaround linux check for those that support xrandr. Does not work for snaps
         //Note that this bug is actually within Qt.
-        if (!isGuiApp()) {
-            printf("\nCannot open display. Try --help to access console app.\n");
-            return -1;
+        if(!force_gui) {
+            if (!isGuiApp()) {
+                printf("\nCannot open display. Try --help to access console app. Try --gui to bypass this check.\n");
+                return -1;
+            }
+        } else {
+            QDEBUG() << "Bypassing GUI check";
         }
 #endif
 #endif
