@@ -1,33 +1,26 @@
 name: packetsender
 version: 8.1.2
-summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
+summary: Packet Sender - Free TCP/UDP/SSL Utility
 icon: src/pslogo128.png
-
 description: |
   Packet Sender - Free utility to for sending / receiving of network
-  packets and HTTP. TCP, UDP, SSL.
+  packets. TCP, UDP, SSL.
+
+# sudo snap install packetsender*.snap --dangerous
 
 grade: stable
-confinement: strict
 base: core20
+confinement: strict
 architectures: [amd64]
 
-parts:
+apps:
   packetsender:
-    plugin: qmake
-    project-files: ["src/PacketSenderSnap.pro"]
-    source: https://github.com/dannagle/PacketSender.git
-    source-branch: master
-    qmake-parameters: CONFIG+=qtquickcompiler
-    build-packages:
-      - qt5-default
-    stage-packages:
-      - libgl1-mesa-glx
-      - libgl1-mesa-dev
-      
-    command: usr/local/bin/packetsender
+    environment:
+      # Set theme fix on gnome/gtk
+      QT_QPA_PLATFORMTHEME: gtk3
     extensions:
       - kde-neon
+    command: usr/local/bin/packetsender
     desktop: usr/share/applications/packetsender.desktop
     plugs:
       - unity7
@@ -35,4 +28,66 @@ parts:
       - network
       - network-bind
       - network-manager
+
+parts:
+  desktop-qt5:
+    build-snaps:
+      - kde-frameworks-5-qt-5-15-core20-sdk
+    build-packages:
+    - build-essential
+    - qtbase5-dev
+    - dpkg-dev
+    make-parameters:
+    - FLAVOR=qt5
+    plugin: make
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: qt
+    stage-packages:
+    - libxkbcommon0
+    - ttf-ubuntu-font-family
+    - dmz-cursor-theme
+    - light-themes
+    - adwaita-icon-theme
+    - gnome-themes-standard
+    - shared-mime-info
+    - libqt5gui5
+    - libgdk-pixbuf2.0-0
+    - libqt5svg5
+    - libgtk2.0-0
+
+    - try:
+      - appmenu-qt5
+    - locales-all
+    - xdg-user-dirs
+    - fcitx-frontend-qt5
+
+
+
+  packetsender:
+    plugin: qmake
+    qt-version: qt5
+    project-files: ["src/PacketSenderSnap.pro"]
+    source: https://github.com/dannagle/PacketSender.git
+    source-branch: master
+    stage-packages:
+      - libxkbcommon0
+      - ttf-ubuntu-font-family
+      - dmz-cursor-theme
+      - light-themes
+      - shared-mime-info
+      - libqt5gui5
+      - libqt5network5
+      - libssl-dev
+      - libgdk-pixbuf2.0-0
+      - libqt5svg5 # for loading icon themes which are svg
+      - locales-all
+
+    build-packages:
+      - qtbase5-dev
+      - g++
+      - gcc
+
+
+    after:
+      - desktop-qt5
 
