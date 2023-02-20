@@ -1017,8 +1017,8 @@ void Settings::on_chooseLanguageButton_clicked()
 {
 
 #ifndef CONSOLE_BUILD
-    LanguageChooser lang = LanguageChooser(this);
-    lang.exec();
+    LanguageChooser * lang = new LanguageChooser(this);
+    lang->exec();
 
 #endif
 
