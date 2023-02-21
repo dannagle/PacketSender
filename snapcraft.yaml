@@ -65,10 +65,9 @@ parts:
 
   packetsender:
     plugin: qmake
-    qt-version: qt5
-    project-files: ["src/PacketSenderSnap.pro"]
     source: https://github.com/dannagle/PacketSender.git
     source-branch: master
+    qmake-project-file: src/PacketSenderSnap.pro
     stage-packages:
       - libxkbcommon0
       - ttf-ubuntu-font-family
