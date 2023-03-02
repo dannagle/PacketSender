@@ -51,5 +51,6 @@
         <file>starter_set.json</file>
         <file>packetsender.css</file>
         <file>iris_and_marigold.jpg</file>
+        <file>ps_panels.json</file>
     </qresource>
 </RCC>

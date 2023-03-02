@@ -1,0 +1,77 @@
+[
+    {
+        "buttonlist": [
+            {
+                "id": "1",
+                "script": "panel:1",
+                "title": "to panel 1"
+            }
+        ],
+        "id": "4",
+        "lastmodfied": "2021-11-13 21:15:38",
+        "launch": "0",
+        "linkURLs": [
+        ],
+        "name": "panel 2 panel"
+    },
+    {
+        "buttonlist": [
+            {
+                "id": "1",
+                "script": "panel:2",
+                "title": "To panel 2"
+            }
+        ],
+        "id": "3",
+        "lastmodfied": "2021-11-13 21:10:22",
+        "launch": "0",
+        "linkURLs": [
+        ],
+        "name": "demo panel transition"
+    },
+    {
+        "buttonlist": [
+            {
+                "id": "1",
+                "script": "panel:1",
+                "title": "Go to next panel"
+            }
+        ],
+        "id": "2",
+        "lastmodfied": "2023-03-02 11:05:51",
+        "launch": "1",
+        "linkURLs": [
+            {
+                "index": "0",
+                "text": "Example Link",
+                "url": "https://packetsender.com"
+            }
+        ],
+        "name": "Example Panel"
+    },
+    {
+        "buttonlist": [
+            {
+                "id": "2",
+                "script": "FTP debian.org",
+                "title": "Send"
+            },
+            {
+                "id": "1",
+                "script": "DNS dannagle.com\npanel:2",
+                "title": "Send and transition"
+            }
+        ],
+        "id": "1",
+        "lastmodfied": "2023-03-02 11:06:21",
+        "launch": "0",
+        "linkURLs": [
+            {
+                "index": "0",
+                "text": "Example Link",
+                "url": "https://packetsender.com"
+            }
+        ],
+        "name": "Example sub-panel"
+    }
+]

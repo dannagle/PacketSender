@@ -170,6 +170,24 @@ MainWindow::MainWindow(QWidget *parent) :
         packetsSaved = Packet::fetchAllfromDB("");
     }
 
+
+    QFile starterPanelOut(PANELSFILE);
+
+    if( !starterPanelOut.exists()) {
+        // PS Panels file does not exist. Load starter panel.
+        QFile starterPanel(":/ps_panels.json");
+        if (starterPanel.open(QFile::ReadOnly)) {
+            if(starterPanelOut.open(QFile::WriteOnly)) {
+                starterPanelOut.write(starterPanel.readAll());
+                starterPanelOut.close();
+            }
+            starterPanel.close();
+        }
+
+    } else {
+        packetsSaved = Packet::fetchAllfromDB("");
+    }
+
     QDEBUGVAR(packetsSaved.size());
 
     packetTableHeaders  = Settings::defaultTrafficTableHeader();
