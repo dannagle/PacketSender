@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
         }
 
         force_gui = arg2.contains("--gui");
-        panels_only = arg2.contains("--panels_only");
+        panels_only = arg2.contains("--starterpanel");
 
     }
 
