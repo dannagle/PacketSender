@@ -251,13 +251,14 @@ Hash eintragen: </translation>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="../languagechooser.ui" line="134"/>
-        <source>OK / Aceptar</source>
-        <translation type="unfinished"></translation>
+        <location filename="../languagechooser.ui" line="151"/>
+        <source>Français</source>
+        <translation>Français</translation>
     </message>
     <message>
-        <source>OK / Acceptar</source>
-        <translation type="vanished">OK / Acceptar</translation>
+        <location filename="../languagechooser.ui" line="170"/>
+        <source>OK / Aceptar</source>
+        <translation>OK / Aceptar</translation>
     </message>
 </context>
 <context>
@@ -836,37 +837,37 @@ Persistente Verbindung deaktivieren? (Empfohlen)</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2227"/>
+        <location filename="../mainwindow.cpp" line="2240"/>
         <source>Import JSON</source>
         <translation>JSON importieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2229"/>
-        <location filename="../mainwindow.cpp" line="2296"/>
+        <location filename="../mainwindow.cpp" line="2242"/>
+        <location filename="../mainwindow.cpp" line="2309"/>
         <source>JSON db (*.json)</source>
         <translation>JSON db (*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2253"/>
-        <location filename="../mainwindow.cpp" line="2390"/>
+        <location filename="../mainwindow.cpp" line="2266"/>
+        <location filename="../mainwindow.cpp" line="2403"/>
         <source>Found </source>
         <translation>Gefunden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2253"/>
-        <location filename="../mainwindow.cpp" line="2390"/>
+        <location filename="../mainwindow.cpp" line="2266"/>
+        <location filename="../mainwindow.cpp" line="2403"/>
         <source> packets!</source>
         <translation> Pakete!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2257"/>
-        <location filename="../mainwindow.cpp" line="2394"/>
+        <location filename="../mainwindow.cpp" line="2270"/>
+        <location filename="../mainwindow.cpp" line="2407"/>
         <source>Import </source>
         <translation>Importieren </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2257"/>
-        <location filename="../mainwindow.cpp" line="2394"/>
+        <location filename="../mainwindow.cpp" line="2270"/>
+        <location filename="../mainwindow.cpp" line="2407"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -875,90 +876,90 @@ Packet Sender will overwrite packets with the same name.</source>
 Paketsender überschreibt Pakete mit demselben Namen.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2260"/>
-        <location filename="../mainwindow.cpp" line="2281"/>
-        <location filename="../mainwindow.cpp" line="2397"/>
-        <location filename="../mainwindow.cpp" line="2418"/>
+        <location filename="../mainwindow.cpp" line="2273"/>
+        <location filename="../mainwindow.cpp" line="2294"/>
+        <location filename="../mainwindow.cpp" line="2410"/>
+        <location filename="../mainwindow.cpp" line="2431"/>
         <source>Import Cancelled</source>
         <translation>Import abgebrochen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2268"/>
+        <location filename="../mainwindow.cpp" line="2281"/>
         <source>Import Finished</source>
         <translation>Importiert Abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2274"/>
-        <location filename="../mainwindow.cpp" line="2411"/>
+        <location filename="../mainwindow.cpp" line="2287"/>
+        <location filename="../mainwindow.cpp" line="2424"/>
         <source>Not a database</source>
         <translation>Nicht eine Datenbank</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2278"/>
-        <location filename="../mainwindow.cpp" line="2415"/>
+        <location filename="../mainwindow.cpp" line="2291"/>
+        <location filename="../mainwindow.cpp" line="2428"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>Es wurden keine Pakete in dieser Datei gefunden. Es handelt sich möglicherweise nicht um einen Paketsender exportieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2295"/>
+        <location filename="../mainwindow.cpp" line="2308"/>
         <source>Save JSON</source>
         <translation>JSON speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2317"/>
-        <location filename="../mainwindow.cpp" line="2450"/>
+        <location filename="../mainwindow.cpp" line="2330"/>
+        <location filename="../mainwindow.cpp" line="2463"/>
         <source>Export: </source>
         <translation>Exportieren:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2321"/>
+        <location filename="../mainwindow.cpp" line="2334"/>
         <source>Could not save</source>
         <translation>Konnte nicht speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2325"/>
+        <location filename="../mainwindow.cpp" line="2338"/>
         <source>Could not open </source>
         <translation>Konnte nicht geöffnet werden </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2371"/>
-        <location filename="../mainwindow.cpp" line="2496"/>
+        <location filename="../mainwindow.cpp" line="2384"/>
+        <location filename="../mainwindow.cpp" line="2509"/>
         <source>Import File</source>
         <translation>Datei importieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2428"/>
+        <location filename="../mainwindow.cpp" line="2386"/>
+        <location filename="../mainwindow.cpp" line="2441"/>
         <source>INI db (*.ini)</source>
         <translation>INI db (*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2427"/>
+        <location filename="../mainwindow.cpp" line="2440"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2498"/>
+        <location filename="../mainwindow.cpp" line="2511"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2522"/>
+        <location filename="../mainwindow.cpp" line="2535"/>
         <source>Max size exceeded!</source>
         <translation>Die maximale Größe wurde überschritten!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2526"/>
+        <location filename="../mainwindow.cpp" line="2539"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>Das HEX-Feld unterstützt bis zu 10.922 Bytes. Die Daten wurden abgeschnitten.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2532"/>
+        <location filename="../mainwindow.cpp" line="2545"/>
         <source>Loading </source>
         <translation>Wird geladen </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2532"/>
+        <location filename="../mainwindow.cpp" line="2545"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
@@ -1175,7 +1176,7 @@ Privilegierte Ports erfordern die Ausführung von Packet Sender mit Administrato
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="278"/>
-        <location filename="../panelgenerator.cpp" line="47"/>
+        <location filename="../panelgenerator.cpp" line="48"/>
         <source>Delete Panel</source>
         <translation>Panel löschen</translation>
     </message>
@@ -1205,228 +1206,228 @@ Privilegierte Ports erfordern die Ausführung von Packet Sender mit Administrato
         <translation>Strg+N</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="39"/>
+        <location filename="../panelgenerator.cpp" line="40"/>
         <source>Panels</source>
         <translation>Panels</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="46"/>
+        <location filename="../panelgenerator.cpp" line="47"/>
         <source>Load Panel</source>
         <translation>Panel laden</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="52"/>
-        <location filename="../panelgenerator.cpp" line="360"/>
+        <location filename="../panelgenerator.cpp" line="364"/>
         <source>Viewing</source>
         <translation>Ansehen</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="131"/>
+        <location filename="../panelgenerator.cpp" line="135"/>
         <source>URL or File</source>
         <translation>URL oder Datei</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="132"/>
+        <location filename="../panelgenerator.cpp" line="136"/>
         <source>URL or File:</source>
         <translation>URL oder Datei:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="151"/>
+        <location filename="../panelgenerator.cpp" line="155"/>
         <source>Link text</source>
         <translation>Text verlinken</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="152"/>
+        <location filename="../panelgenerator.cpp" line="156"/>
         <source>Link text:</source>
         <translation>Text verlinken:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="317"/>
+        <location filename="../panelgenerator.cpp" line="321"/>
         <source>Confirm delete.</source>
         <translation>Bestätigen Sie das Löschen.</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="321"/>
+        <location filename="../panelgenerator.cpp" line="325"/>
         <source>Delete </source>
         <translation>Löschen </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="327"/>
+        <location filename="../panelgenerator.cpp" line="331"/>
         <source>Deleting </source>
         <translation>Löschen </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="335"/>
+        <location filename="../panelgenerator.cpp" line="339"/>
         <source>Panel </source>
         <translation>Panel </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="337"/>
+        <location filename="../panelgenerator.cpp" line="341"/>
         <source>Set Panel Name: </source>
         <translation>Panel-Name festlegen:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="338"/>
+        <location filename="../panelgenerator.cpp" line="342"/>
         <source>Set Panel ID: </source>
         <translation>Panel ID festlegen: </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="342"/>
+        <location filename="../panelgenerator.cpp" line="346"/>
         <source>Packet Sender Panel: New Panel</source>
         <translation>Paket Sender Panel: Neues Panel</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="343"/>
+        <location filename="../panelgenerator.cpp" line="347"/>
         <source>Set Panel Name: New Panel</source>
         <translation>Panel Name festlegen: Neues Panel</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="344"/>
+        <location filename="../panelgenerator.cpp" line="348"/>
         <source>Set Panel ID: New Panel</source>
         <translation>Panel ID festlegen: Neues Panel</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="350"/>
+        <location filename="../panelgenerator.cpp" line="354"/>
         <source>Starter Panel: Yes</source>
         <translation>StarterPanel: Ja</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="352"/>
+        <location filename="../panelgenerator.cpp" line="356"/>
         <source>Starter Panel: No</source>
         <translation>StarterPanel: Nein</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="355"/>
+        <location filename="../panelgenerator.cpp" line="359"/>
         <source>Editing</source>
         <translation>Bearbeitung</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="432"/>
+        <location filename="../panelgenerator.cpp" line="436"/>
         <source>Button </source>
         <translation>Schaltfläche </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="439"/>
+        <location filename="../panelgenerator.cpp" line="443"/>
         <source>(Button will be deleted)</source>
         <translation>(Die Schaltfläche wird gelöscht)</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="449"/>
+        <location filename="../panelgenerator.cpp" line="453"/>
         <source>Test</source>
         <translation>Testen</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="456"/>
+        <location filename="../panelgenerator.cpp" line="460"/>
         <source>Script is empty</source>
         <translation>Das Skript ist leer</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="518"/>
-        <location filename="../panelgenerator.cpp" line="523"/>
+        <location filename="../panelgenerator.cpp" line="522"/>
+        <location filename="../panelgenerator.cpp" line="527"/>
         <source>New Button</source>
         <translation>Neue Schaltfläche</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="688"/>
+        <location filename="../panelgenerator.cpp" line="692"/>
         <source>Nothing to do...</source>
         <translation>Nichts zu tun...</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="690"/>
+        <location filename="../panelgenerator.cpp" line="694"/>
         <source>Executing </source>
         <translation>Ausführen </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="695"/>
+        <location filename="../panelgenerator.cpp" line="699"/>
         <source>Unknown Command</source>
         <translation>Unbekannter Befehl</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="765"/>
+        <location filename="../panelgenerator.cpp" line="769"/>
         <source>Transition Panel</source>
         <translation>Übergang zu Panel</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="769"/>
+        <location filename="../panelgenerator.cpp" line="773"/>
         <source>Tranisition to Panel &quot;</source>
         <translation>Übergang zu Panel &quot;</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="769"/>
+        <location filename="../panelgenerator.cpp" line="773"/>
         <source>&quot;?
 This panel has not been saved. You may lose changes.</source>
         <translation>&quot;?
 Dieses Panel wurde noch nicht gespeichert. Sie können Änderungen verlieren.</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="781"/>
+        <location filename="../panelgenerator.cpp" line="785"/>
         <source>Not loading panel</source>
         <translation>Panel wird nicht geladen</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="785"/>
+        <location filename="../panelgenerator.cpp" line="789"/>
         <source>Not loading panel in edit mode</source>
         <translation>Das Panel wird im Bearbeitungsmodus nicht geladen</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="901"/>
+        <location filename="../panelgenerator.cpp" line="905"/>
         <source>Change URL</source>
         <translation>URL ändern</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="902"/>
+        <location filename="../panelgenerator.cpp" line="906"/>
         <source>URL:</source>
         <translation>URL:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="909"/>
+        <location filename="../panelgenerator.cpp" line="913"/>
         <source>Delete link</source>
         <translation>Link löschen</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="913"/>
+        <location filename="../panelgenerator.cpp" line="917"/>
         <source>Delete URL link?
 </source>
         <translation>URL-Link löschen?</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="924"/>
+        <location filename="../panelgenerator.cpp" line="928"/>
         <source>Change Text</source>
         <translation>Text ändern</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="925"/>
+        <location filename="../panelgenerator.cpp" line="929"/>
         <source>text:</source>
         <translation>Text:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="986"/>
+        <location filename="../panelgenerator.cpp" line="990"/>
         <source>Panels File</source>
         <translation>Panels Datei</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="988"/>
+        <location filename="../panelgenerator.cpp" line="992"/>
         <source>*.panels</source>
         <translation>*.panels</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1025"/>
+        <location filename="../panelgenerator.cpp" line="1029"/>
         <source>Unknown File</source>
         <translation>Unbekannte Datei</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1028"/>
+        <location filename="../panelgenerator.cpp" line="1032"/>
         <source>This does not seem to be a valid PS Panels file</source>
         <translation>Dies scheint keine gültige PS Panels-Datei zu sein</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1042"/>
-        <location filename="../panelgenerator.cpp" line="1067"/>
+        <location filename="../panelgenerator.cpp" line="1046"/>
+        <location filename="../panelgenerator.cpp" line="1071"/>
         <source>Found </source>
         <translation>Gefunden </translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1042"/>
+        <location filename="../panelgenerator.cpp" line="1046"/>
         <source> packets. Saving overwrites duplicate names.
 
 Continue packet import?</source>
@@ -1435,7 +1436,7 @@ Continue packet import?</source>
 Import von Paketen fortsetzen?</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1067"/>
+        <location filename="../panelgenerator.cpp" line="1071"/>
         <source> panels. Ovewrite dpulicated IDs?
 
 Selecting No will generate new IDs and append.</source>
@@ -1444,43 +1445,43 @@ Selecting No will generate new IDs and append.</source>
 Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1139"/>
+        <location filename="../panelgenerator.cpp" line="1143"/>
         <source>Coming soon.</source>
         <translation>Kommt bald</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1156"/>
+        <location filename="../panelgenerator.cpp" line="1160"/>
         <source>Change Name</source>
         <translation>Name ändern</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1157"/>
-        <location filename="../panelgenerator.cpp" line="1205"/>
+        <location filename="../panelgenerator.cpp" line="1161"/>
+        <location filename="../panelgenerator.cpp" line="1209"/>
         <source>Name:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1173"/>
+        <location filename="../panelgenerator.cpp" line="1177"/>
         <source>Change ID</source>
         <translation>ID ändern</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1174"/>
+        <location filename="../panelgenerator.cpp" line="1178"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1204"/>
+        <location filename="../panelgenerator.cpp" line="1208"/>
         <source>New Name</source>
         <translation>Neuer Name</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1239"/>
+        <location filename="../panelgenerator.cpp" line="1243"/>
         <source>Save PS Panels</source>
         <translation>PS-Panels speichern</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="1240"/>
+        <location filename="../panelgenerator.cpp" line="1244"/>
         <source>panels (*.panels)</source>
         <translation>panels (*.panels)</translation>
     </message>
@@ -1629,17 +1630,17 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2691"/>
+        <location filename="../mainwindow.cpp" line="2704"/>
         <source>Multi-line editor</source>
         <translation>Mehrzeiliger Editor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2697"/>
+        <location filename="../mainwindow.cpp" line="2710"/>
         <source>Update</source>
         <translation>Aktualisierung</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2698"/>
+        <location filename="../mainwindow.cpp" line="2711"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>
@@ -1875,7 +1876,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="936"/>
+        <location filename="../settings.cpp" line="939"/>
         <source>Host</source>
         <translation>Gastgeber</translation>
     </message>
@@ -1891,7 +1892,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1007"/>
+        <location filename="../settings.cpp" line="1010"/>
         <source>HTTP Header</source>
         <translation>HTTP-Kopfzeile</translation>
     </message>
@@ -1954,18 +1955,6 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <location filename="../settings.ui" line="641"/>
         <source>Language (Requires Restart)</source>
         <translation>Sprache (Neustart erforderlich)</translation>
-    </message>
-    <message>
-        <source>English</source>
-        <translation type="vanished">English</translation>
-    </message>
-    <message>
-        <source>Spanish (Español)</source>
-        <translation type="vanished">Spanish (Español)</translation>
-    </message>
-    <message>
-        <source>German (Deutsch)</source>
-        <translation type="vanished">German (Deutsch)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="650"/>
@@ -2131,74 +2120,74 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="323"/>
+        <location filename="../settings.cpp" line="326"/>
         <source>Bad IP.</source>
         <translation>Schlechte IP.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="327"/>
+        <location filename="../settings.cpp" line="330"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Paketabsender kann ungültige IP nicht binden</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="341"/>
+        <location filename="../settings.cpp" line="344"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>TCP- und SSL-Portkonflikt ungleich Null.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="345"/>
+        <location filename="../settings.cpp" line="348"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Paketsender kann TCP und SSL nicht an denselben Port binden.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="687"/>
+        <location filename="../settings.cpp" line="690"/>
         <source>Open Directory</source>
         <translation>Verzeichnis öffnen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="708"/>
+        <location filename="../settings.cpp" line="711"/>
         <source>Choose Cert</source>
         <translation>Zertifikat wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="708"/>
+        <location filename="../settings.cpp" line="711"/>
         <source>Certs (*.pem)</source>
         <translation>Zertifikate (*.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="724"/>
+        <location filename="../settings.cpp" line="727"/>
         <source>Choose Key</source>
         <translation>Schlüssel wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="724"/>
+        <location filename="../settings.cpp" line="727"/>
         <source>Keys (*.key, *.pem)</source>
         <translation>Schlüssel (*.key, *.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="936"/>
-        <location filename="../settings.cpp" line="1005"/>
+        <location filename="../settings.cpp" line="939"/>
+        <location filename="../settings.cpp" line="1008"/>
         <source>Key</source>
         <translation>Schlüssel</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="936"/>
-        <location filename="../settings.cpp" line="1006"/>
+        <location filename="../settings.cpp" line="939"/>
+        <location filename="../settings.cpp" line="1009"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1001"/>
+        <location filename="../settings.cpp" line="1004"/>
         <source>UN/ClientID</source>
         <translation>UN/KundenID</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1002"/>
+        <location filename="../settings.cpp" line="1005"/>
         <source>PW/Access</source>
         <translation>PW/Zugang</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1003"/>
+        <location filename="../settings.cpp" line="1006"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP Authentifizierungsheader</translation>
     </message>

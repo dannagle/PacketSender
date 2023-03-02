@@ -148,7 +148,7 @@
           <string notr="true">font: bold;font-size: 18px;</string>
          </property>
          <property name="text">
-          <string>French</string>
+          <string>Français</string>
          </property>
          <property name="checked">
           <bool>false</bool>
