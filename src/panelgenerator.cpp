@@ -29,6 +29,7 @@
 extern void themeTheButton(QPushButton * button);
 
 bool PanelGenerator::darkMode = false;
+bool PanelGenerator::renderOnly = false;
 
 PanelGenerator::PanelGenerator(QWidget *parent) :
     QMainWindow(parent),
@@ -48,10 +49,13 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     ui->menuLoad->addMenu(loadPanelMenu);
     ui->menuSettings->addMenu(deletePanelMenu);
 
-
     editToggleButton = new QPushButton(tr("Viewing"));
     themeTheButton(editToggleButton);
     editToggleButton->setIcon(QIcon(PSLOGO));
+
+    if(PanelGenerator::renderOnly) {
+        editToggleButton->hide();
+    }
 
     packetNetwork = nullptr;
 

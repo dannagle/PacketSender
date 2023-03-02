@@ -23,6 +23,7 @@ class PanelGenerator : public QMainWindow
 public:
     explicit PanelGenerator(QWidget *parent = nullptr);
     static bool darkMode;
+    static bool renderOnly;
     ~PanelGenerator();
 
     void init(QList<Packet> packets);

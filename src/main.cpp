@@ -32,6 +32,8 @@
 #include "mainpacketreceiver.h"
 
 #ifndef CONSOLE_BUILD
+    #include "panelgenerator.h"
+    #include "packetnetwork.h"
     #include "mainwindow.h"
 #endif
 #define DEBUGMODE 0
@@ -121,6 +123,7 @@ int main(int argc, char *argv[])
     bool gatekeeper = false;
 
     bool force_gui = false;
+    bool panels_only = false;
 
     //Upon first launch, Apple will assign a psn number and
     //pass it as a command line argument.
@@ -150,6 +153,7 @@ int main(int argc, char *argv[])
         }
 
         force_gui = arg2.contains("--gui");
+        panels_only = arg2.contains("--panels_only");
 
     }
 
@@ -1078,28 +1082,54 @@ int main(int argc, char *argv[])
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool useDark = settings.value("darkModeCheck", true).toBool();
-
+        QString styleSheet = "";
         if(useDark) {
             if (file_dark.open(QFile::ReadOnly)) {
-                QString StyleSheet = QLatin1String(file_dark.readAll());
-                a.setStyleSheet(StyleSheet);
+                styleSheet = QLatin1String(file_dark.readAll());
+                a.setStyleSheet(styleSheet);
                 file_dark.close();
             }
         } else {
             if (file_system.open(QFile::ReadOnly)) {
-                QString StyleSheet = QLatin1String(file_system.readAll());
-                a.setStyleSheet(StyleSheet);
+                styleSheet = QLatin1String(file_system.readAll());
+                a.setStyleSheet(styleSheet);
                 file_system.close();
             }
         }
 
+        //panels_only = true;
+        if(panels_only) {
 
-        MainWindow w;
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+            bool darkMode = settings.value("darkModeCheck", true).toBool();
+            PanelGenerator::darkMode = darkMode;
+            PanelGenerator::renderOnly = panels_only;
 
 
-        w.show();
+            PacketNetwork packetNetwork;
+            packetNetwork.init();
+            PanelGenerator * gpanel = new PanelGenerator();
+            if(!styleSheet.isEmpty()) {
+                gpanel->setStyleSheet(styleSheet);
+            }
 
-        return a.exec();
+            QDEBUG() << " packet send connect attempt:" << QObject::connect(gpanel, SIGNAL(sendPacket(Packet)),
+                     &packetNetwork, SLOT(packetToSend(Packet)));
+
+            gpanel->initAutoLaunchOrEditMode();
+            gpanel->show();
+            return a.exec();
+
+        } else {
+
+            MainWindow w;
+            w.show();
+            return a.exec();
+
+        }
+
+
 
 #endif
 

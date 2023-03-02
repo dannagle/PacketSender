@@ -388,7 +388,7 @@ void TCPThread::run()
 
     if (sendFlag) {
         QDEBUG() << "We are threaded sending!";
-        clientConnection = new QSslSocket(this);
+        clientConnection = new QSslSocket(nullptr);
 
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
