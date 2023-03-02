@@ -377,6 +377,8 @@ Panels can be created one of two ways:
 	* Load Starter Panel will load the Panel assigned as starter. If no panel is set as the starter, an empty panel project will open. 
 * Highlighting 2 or more saved packets and clicking on the **Generate Panel** button (Generate Panel button only appears when multiple packets are selected) 
 
+Packet Sender supports launching in panel-only mode with the starter panel using the command line option `--starterpanel`
+
 ![](/screenshots/ps_panel_generate.PNG)
 
 

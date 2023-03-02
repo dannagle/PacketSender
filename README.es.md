@@ -376,6 +376,8 @@ Los paneles pueden crearse de dos maneras:
 	* Cargar panel de inicio cargará el panel asignado como inicio. Si no hay ningún panel asignado como iniciador, se abrirá un proyecto de panel vacío. 
 * Resaltar 2 o más paquetes guardados y hacer clic en el botón **Generar Panel** (el botón Generar Panel sólo aparece cuando se seleccionan varios paquetes) 
 
+Packet Sender admite el inicio en modo solo panel con el panel de inicio usando la opción de línea de comando `--starterpanel`
+
 ![](/screenshots/ps_panel_generate.PNG)
 
 

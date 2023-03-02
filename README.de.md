@@ -377,6 +377,9 @@ Panels können auf zwei Arten erstellt werden:
 	* Starter-Panel laden lädt das als Starter zugewiesene Panel. Wenn kein Panel als Startpunkt festgelegt ist, wird ein leeres Panel-Projekt geöffnet. 
 * Markieren von 2 oder mehr gespeicherten Paketen und Klicken auf die Schaltfläche **Panel generieren** (Die Schaltfläche "Panel generieren" erscheint nur, wenn mehrere Pakete markiert sind) 
 
+Packet Sender unterstützt das Starten im Nur-Panel-Modus mit dem Starter-Panel unter Verwendung der Befehlszeilenoption `--starterpanel`.
+
+
 ![](/screenshots/ps_panel_generate.PNG)
 
 

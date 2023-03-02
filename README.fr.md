@@ -378,6 +378,8 @@ Les panneaux peuvent être créés de deux manières :
 	* Le panneau de démarrage chargera le panneau assigné comme démarreur. Si aucun panneau n'est défini comme point de départ, un projet de panneau vide est alors ouvert.
 * Mettez en surbrillance 2 paquets enregistrés ou plus et cliquez sur le bouton **Générer le panneau** (le bouton Générer le panneau n’apparaît que lorsque plusieurs paquets sont sélectionnés)
 
+Packet Sender prend en charge le lancement en mode panneau uniquement avec le panneau de démarrage à l'aide de l'option de ligne de commande `--starterpanel`
+
 ![](/screenshots/ps_panel_generate.PNG)
 
 
