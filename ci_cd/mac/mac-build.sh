@@ -46,7 +46,7 @@ sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.pli
 "/Users/dannagle/Qt/5.15.2/clang_64/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
 make
 # /Users/dannagle/Qt/6.4.1/macos/bin/macdeployqt packetsender.app -appstore-compliant
-/Users/dannagle/Qt/5.15.2/macos/bin/macdeployqt packetsender.app -appstore-compliant
+/Users/dannagle/Qt/5.15.2/clang_64/bin/macdeployqt packetsender.app -appstore-compliant
 
 /usr/bin/codesign --option runtime --deep --force --sign  38E41C6C66CCA827750A10E26539E038F033E933 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
