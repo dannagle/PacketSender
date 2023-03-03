@@ -163,6 +163,34 @@ Settings::Settings(QWidget *parent) :
     ui->sslLocalCertificatePath->setText(settings.value("sslLocalCertificatePath", "").toString());
     ui->sslPrivateKeyPath->setText(settings.value("sslPrivateKeyPath", "").toString());
 
+    ui->dateFormat->setText(settings.value("dateFormat", "yyyy-MM-dd").toString());
+    ui->timeFormat->setText(settings.value("timeFormat", "hh:mm:ss ap").toString());
+
+    QDateTime now = QDateTime::currentDateTime();
+    QString dateFormat = ui->dateFormat->text();
+    QString timeFormat = ui->timeFormat->text();
+
+    ui->dateFormatExample->setText(now.toString(dateFormat));
+    ui->timeFormatExample->setText(now.toString(timeFormat));
+
+
+    connect(ui->dateFormat, &QLineEdit::textChanged, this, [=](QString val) {
+        // use action as you wish
+        QDateTime now = QDateTime::currentDateTime();
+        QString dateFormat = ui->dateFormat->text();
+        ui->dateFormatExample->setText(now.toString(dateFormat));
+    });
+
+
+    connect(ui->timeFormat, &QLineEdit::textChanged, this, [=](QString val) {
+        // use action as you wish
+        QDateTime now = QDateTime::currentDateTime();
+        QString timeFormat = ui->timeFormat->text();
+        ui->timeFormatExample->setText(now.toString(timeFormat));
+    });
+
+
+
     ui->restoreSessionCheck->setChecked(settings.value("restoreSessionCheck", true).toBool());
     ui->checkforUpdates->setChecked(settings.value("checkforUpdates", true).toBool());
 
@@ -388,6 +416,9 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("restoreSessionCheck", ui->restoreSessionCheck->isChecked());
 
     settings.setValue("checkforUpdates", ui->checkforUpdates->isChecked());
+
+    settings.setValue("dateFormat", ui->dateFormat->text());
+    settings.setValue("timeFormat", ui->timeFormat->text());
 
 
     settings.setValue("copyUnformattedCheck", ui->copyUnformattedCheck->isChecked());

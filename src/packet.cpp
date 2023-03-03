@@ -796,13 +796,29 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
 
 QString Packet::macroSwap(QString data)
 {
+    static QString dateFormat = "";
+    static QString timeFormat = "";
+    if(dateFormat.isEmpty()) {
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        dateFormat = settings.value("dateFormat", "yyyy-MM-dd").toString();
+    }
 
+    if(timeFormat.isEmpty()) {
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        timeFormat = settings.value("timeFormat", "hh:mm:ss ap").toString();
+    }
+
+
+    /*
+    Date... 02032023 /  ddMMyyyy
+    Time... 133711 / hhmmss
+    */
 
     if (data.contains("{{TIME}}") || data.contains("{{DATE}}") || data.contains("{{UNIXTIME}}")) {
         QDateTime now = QDateTime::currentDateTime();
         //now = QDateTime::fromSecsSinceEpoch(1609895308);
-        data = data.replace("{{TIME}}", now.toString("hh:mm:ss ap"));
-        data = data.replace("{{DATE}}", now.toString("yyyy-MM-dd"));
+        data = data.replace("{{TIME}}", now.toString(timeFormat));
+        data = data.replace("{{DATE}}", now.toString(dateFormat));
         data = data.replace("{{UNIXTIME}}", QString::number(now.toMSecsSinceEpoch() / 1000));
     }
 
