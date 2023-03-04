@@ -742,7 +742,7 @@ SSL Esperado:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1313"/>
-        <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows!
+        <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
         <translation>Se trata de reenviar un paquete TCP con conexiones persistentes. La interfaz podría generar numerosas ventanas.
@@ -850,7 +850,7 @@ Uncheck persistent connection? (Recommended)</source>
         <location filename="../mainwindow.cpp" line="2284"/>
         <location filename="../mainwindow.cpp" line="2421"/>
         <source>Found </source>
-        <translation type=Encontrado></translation>
+        <translation>Encontrado </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="2284"/>
@@ -1024,7 +1024,7 @@ Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="78"/>
-        <source>Packet Sender supports multicast when binded to IPv4.
+        <source>Packet Sender supports multicast when binded to IPv4. 
 Turn off IPv6 and switch to IPv4 mode?</source>
         <translation>Packet Sender admite difusión múltiple cuando está vinculado a IPv4.
 ¿Desactivar IPv6 y cambiar al modo IPv4?</translation>
@@ -1052,7 +1052,7 @@ Turn off IPv6 and switch to IPv4 mode?</source>
     </message>
     <message>
         <location filename="../packetnetwork.cpp" line="250"/>
-        <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024.
+        <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
         <translation>Packet Sender intentó (y falló) vincularse al puerto [PORT], que es inferior a 1024.
@@ -1063,7 +1063,7 @@ Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel
         <location filename="../packetnetwork.cpp" line="251"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT].
 
- - Are you running multiple instances?
+ - Are you running multiple instances? 
 
  - Trying to bind to a missing custom IP?</source>
         <translation>Packet Sender intentó (y falló) vincularse al puerto [PORT].
@@ -2297,7 +2297,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../subnetcalc.cpp" line="26"/>
-        <source>Your non-loopback addresses:
+        <source>Your non-loopback addresses: 
 
 </source>
         <translation>Sus direcciones no loopback:
