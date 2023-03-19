@@ -46,6 +46,7 @@ public:
 
 private:
     static QPair<QString, QString> header2keyvalue(QString header);
+    void on_chooseLanguageButton_clicked();
 
 
 

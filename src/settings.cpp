@@ -11,6 +11,7 @@
 #include <QHostAddress>
 #include <QStandardPaths>
 
+
 #ifndef CONSOLE_BUILD
 #include "ui_settings.h"
 #include "languagechooser.h"
@@ -40,37 +41,37 @@ const QString Settings::ERROR_STR = "Error";
 QString Settings::logHeaderTranslate(QString txt)
 {
     if(txt == "Send") {
-        return tr("Send");
+        return QObject::tr("Send");
     }
     if(txt == "Name") {
-        return tr("Name");
+        return QObject::tr("Name");
     }
     if(txt == "Resend") {
-        return tr("Resend");
+        return QObject::tr("Resend");
     }
     if(txt == "To Address") {
-        return tr("To Address");
+        return QObject::tr("To Address");
     }
     if(txt == "To Port") {
-        return tr("To Port");
+        return QObject::tr("To Port");
     }
     if(txt == "Method") {
-        return tr("Method");
+        return QObject::tr("Method");
     }
     if(txt == "Request Path") {
-        return tr("Request Path");
+        return QObject::tr("Request Path");
     }
     if(txt == "Time") {
-        return tr("Time");
+        return QObject::tr("Time");
     }
     if(txt == "From IP") {
-        return tr("From IP");
+        return QObject::tr("From IP");
     }
     if(txt == "From Port") {
-        return tr("From Port");
+        return QObject::tr("From Port");
     }
     if(txt == "Error") {
-        return tr("Error");
+        return QObject::tr("Error");
     }
 
     return txt;

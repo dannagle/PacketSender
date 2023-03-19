@@ -1,5 +1,5 @@
 echo Making exe
-SET PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin
+SET PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin;C:\Qt\6.4.1\mingw_64\bin
 C:\Qt\6.4.1\mingw_64\bin\qmake.exe -o Makefile src/PacketSender.pro -spec win32-g++
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe -f Makefile.Release -j8
 echo Signing exe
