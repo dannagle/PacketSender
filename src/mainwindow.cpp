@@ -1246,12 +1246,15 @@ void MainWindow::on_testPacketButton_clicked()
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Enable IPv6 support?"));
+        // Packet Sender now auto-switches
+        /*
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::Yes) {
             packetNetwork.setIPmode(6);
             packetNetwork.kill();
             packetNetwork.init();
         }
+        */
     }
 
 
