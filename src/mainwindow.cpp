@@ -1248,7 +1248,7 @@ void MainWindow::on_testPacketButton_clicked()
         msgBox.setText(tr("Enable IPv6 support?"));
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::Yes) {
-            packetNetwork.setIPmode(8); //both 4 and 6
+            packetNetwork.setIPmode(6);
             packetNetwork.kill();
             packetNetwork.init();
         }
