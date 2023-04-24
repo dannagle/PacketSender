@@ -3,16 +3,11 @@ name: Bug report
 about: Create a report to help us improve
 title: "[BUG]"
 labels: ''
-assignees: ''
+assignees: 'dannagle'
 
 ---
 
-#### What OS?
+#### What OS and Version?
 
-- [ ] Windows
-- [ ] Mac
-- [ ] Linux (Which distro?)
-- [ ] iOS (phone or ipad?)
-- [ ] Android (phone or tablet?)
 
 #### Description of issue
