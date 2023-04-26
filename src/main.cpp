@@ -118,6 +118,7 @@ int main(int argc, char *argv[])
     QStringList args;
     QDEBUGVAR(RAND_MAX);
 
+    QDEBUGVAR(QThread::idealThreadCount());
 
 
     bool gatekeeper = false;
@@ -284,6 +285,8 @@ int main(int argc, char *argv[])
         parser.addOption(rateOption);
         QCommandLineOption usdelayOption(QStringList() << "usdelay", "Intense traffic. Resend delay. Used if rate is 0. Ignored in bps option.", "microseconds");
         parser.addOption(usdelayOption);
+        QCommandLineOption maxOption(QStringList() << "max", "Intense traffic. Run as fast as possible.");
+        parser.addOption(maxOption);
 
 
 
@@ -324,16 +327,23 @@ int main(int argc, char *argv[])
 
         bool okbps = false;
         bool okrate = false;
-        bool intense = parser.isSet(bpsOption) || parser.isSet(numOption)|| parser.isSet(rateOption) || parser.isSet(usdelayOption);
+        bool maxrate = parser.isSet(maxOption);
+        bool intense = parser.isSet(bpsOption) || parser.isSet(numOption)|| parser.isSet(rateOption) || parser.isSet(usdelayOption) || maxrate;
         double bps = parser.value(bpsOption).toDouble(&okbps);
         qint64 stopnum = parser.value(numOption).toULongLong();
         double rate = parser.value(rateOption).toDouble(&okrate);
         qint64 usdelay = parser.value(usdelayOption).toULongLong();
         if(intense) {
-            if (!okrate && !okbps) {
-                OUTIF() << "Warning: Invalid rate and/or bps. Intense traffic will free-run.";
+            if (maxrate) {
+                OUTIF() << "Maximum sending. Calculated " << QThread::idealThreadCount() << " send threads are supported.";
                 bps = 0;
                 rate = 0;
+            } else {
+                if (!okrate && !okbps) {
+                    OUTIF() << "Warning: Invalid rate and/or bps. Intense traffic will free-run.";
+                    bps = 0;
+                    rate = 0;
+                }
             }
         }
 
@@ -641,6 +651,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(rate);
         QDEBUGVAR(usdelay);
         QDEBUGVAR(translateMacroSend);
+        QDEBUGVAR(maxrate);
 
 
         //NOW LETS DO THIS!
@@ -948,8 +959,39 @@ int main(int argc, char *argv[])
                 OUTIF() << "Starting Intense Traffic Generator";
                 OUTPUT();
 
-                int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
-                return done;
+                if(maxrate) {
+                    OUTIF() << "Max rate traffic generator will use separate sockets per thread";
+                    QList<QThread *> threadedTraffic;
+                    int max_threads = QThread::idealThreadCount();
+                    for(int thread_i = 0; thread_i < max_threads; thread_i++ ) {
+
+
+                        QThread *thread = QThread::create([addy, port, dataString, bps, rate, stopnum, usdelay]{
+                            QUdpSocket sock;
+                            QTextStream out(stdout);
+                            intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
+                        });
+
+                        threadedTraffic.append(thread);
+                    }
+
+
+                    int threadcount = 0;
+                    foreach(QThread *thread, threadedTraffic) {
+                        out << "Starting thread" << threadcount;
+                        thread->start();
+                    }
+
+                    while(!threadedTraffic.isEmpty()) {
+                        QThread::sleep(1);
+                    }
+
+                } else {
+                    int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
+                    return done;
+
+                }
+
 
             }
 
