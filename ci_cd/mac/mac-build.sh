@@ -43,8 +43,11 @@ echo "Replacing Info.plist with $BUILD_VERSION"
 sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
 
 # "/Users/dannagle/Qt/6.5.2/macos/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler
-"/Users/dannagle/Qt/6.5.2/macos/bin//qmake" PacketSender.pro -spec macx-clang CONFIG+=x86_64
-make
+"/Users/dannagle/Qt/6.5.2/macos/bin//qmake" PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+
+# /Users/dannagle/Qt/6.5.2/macos/bin/qmake /Users/dannagle/github/PacketSender/src/PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" && /usr/bin/make qmake_all
+
+make qmake_all
 # /Users/dannagle/Qt/6.5.2/macos/bin/macdeployqt packetsender.app -appstore-compliant
 /Users/dannagle/Qt/6.5.2/macos/bin//macdeployqt packetsender.app -appstore-compliant
 
