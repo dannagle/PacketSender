@@ -386,7 +386,7 @@ Hash eintragen: </translation>
     <message>
         <location filename="../mainwindow.ui" line="296"/>
         <location filename="../mainwindow.cpp" line="1073"/>
-        <location filename="../mainwindow.cpp" line="1728"/>
+        <location filename="../mainwindow.cpp" line="1731"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
@@ -639,7 +639,7 @@ Möchten Sie die Versionshinweise lesen?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1029"/>
-        <location filename="../mainwindow.cpp" line="1267"/>
+        <location filename="../mainwindow.cpp" line="1270"/>
         <source>Multicast detected.</source>
         <translation>Multicast erkannt.</translation>
     </message>
@@ -650,13 +650,13 @@ Möchten Sie die Versionshinweise lesen?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1049"/>
-        <location filename="../mainwindow.cpp" line="1289"/>
+        <location filename="../mainwindow.cpp" line="1292"/>
         <source>Broadcast with responses!</source>
         <translation>Sendung mit Antworten!</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1053"/>
-        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1296"/>
         <source>You are sending a broadcast packet with responses enabled.
 
 This could cause traffic flooding. Continue?</source>
@@ -667,8 +667,8 @@ Dies könnte zu Verkehrsüberflutungen führen.Fortfahren?</translation>
     <message>
         <location filename="../mainwindow.cpp" line="233"/>
         <location filename="../mainwindow.cpp" line="1067"/>
-        <location filename="../mainwindow.cpp" line="1329"/>
-        <location filename="../mainwindow.cpp" line="1935"/>
+        <location filename="../mainwindow.cpp" line="1332"/>
+        <location filename="../mainwindow.cpp" line="1938"/>
         <source>Resending</source>
         <translation>Erneut senden</translation>
     </message>
@@ -732,17 +732,17 @@ Erwartetes SSL:</translation>
         <translation>IPv6-Unterstützung aktivieren?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1271"/>
+        <location filename="../mainwindow.cpp" line="1274"/>
         <source>Join UDP multicast group?</source>
         <translation>UDP-Multicast-Gruppe beitreten?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1309"/>
+        <location filename="../mainwindow.cpp" line="1312"/>
         <source>Resend TCP with persistent connections!</source>
         <translation>TCP mit persistenten Verbindungen neu senden!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1313"/>
+        <location filename="../mainwindow.cpp" line="1316"/>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
@@ -751,123 +751,123 @@ Uncheck persistent connection? (Recommended)</source>
 Persistente Verbindung deaktivieren? (Empfohlen)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1348"/>
-        <location filename="../mainwindow.cpp" line="1998"/>
+        <location filename="../mainwindow.cpp" line="1351"/>
+        <location filename="../mainwindow.cpp" line="2001"/>
         <source>No packets selected.</source>
         <translation>Keine Pakete ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1352"/>
+        <location filename="../mainwindow.cpp" line="1355"/>
         <source>Select a packet.</source>
         <translation>Wählen Sie ein Paket aus.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1391"/>
+        <location filename="../mainwindow.cpp" line="1394"/>
         <source>Invalid Address / DNS failed</source>
         <translation>Ungültige Adresse / DNS fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1414"/>
+        <location filename="../mainwindow.cpp" line="1417"/>
         <source>Invalid Port</source>
         <translation>Ungültiger port</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1858"/>
+        <location filename="../mainwindow.cpp" line="1861"/>
         <source>Clear Log (0)</source>
         <translation>Log löschen (0)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1877"/>
+        <location filename="../mainwindow.cpp" line="1880"/>
         <source>Save Packet</source>
         <translation>Packet speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1878"/>
+        <location filename="../mainwindow.cpp" line="1881"/>
         <source>Packet name:</source>
         <translation>Name des Pakets:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2002"/>
+        <location filename="../mainwindow.cpp" line="2005"/>
         <source>Clipboard unchanged.</source>
         <translation>Zwischenablage unverändert.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2063"/>
+        <location filename="../mainwindow.cpp" line="2066"/>
         <source>Save Traffic Log</source>
         <translation>Verkehrslog speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2064"/>
+        <location filename="../mainwindow.cpp" line="2067"/>
         <source>log (*.log)</source>
         <translation>log (*.log)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2085"/>
         <source>TIME</source>
         <translation>ZEIT</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2085"/>
         <source>From IP</source>
         <translation>Von IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2085"/>
         <source>From Port</source>
         <translation>Von Port</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="2085"/>
         <source>To IP</source>
         <translation>Zu IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2086"/>
         <source>To Port</source>
         <translation>Zum Port</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2086"/>
         <source>Method</source>
         <translation>Methode</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2083"/>
+        <location filename="../mainwindow.cpp" line="2086"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2258"/>
+        <location filename="../mainwindow.cpp" line="2261"/>
         <source>Import JSON</source>
         <translation>JSON importieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2260"/>
-        <location filename="../mainwindow.cpp" line="2327"/>
+        <location filename="../mainwindow.cpp" line="2263"/>
+        <location filename="../mainwindow.cpp" line="2330"/>
         <source>JSON db (*.json)</source>
         <translation>JSON db (*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2284"/>
-        <location filename="../mainwindow.cpp" line="2421"/>
+        <location filename="../mainwindow.cpp" line="2287"/>
+        <location filename="../mainwindow.cpp" line="2424"/>
         <source>Found </source>
         <translation>Gefunden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2284"/>
-        <location filename="../mainwindow.cpp" line="2421"/>
+        <location filename="../mainwindow.cpp" line="2287"/>
+        <location filename="../mainwindow.cpp" line="2424"/>
         <source> packets!</source>
         <translation> Pakete!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2288"/>
-        <location filename="../mainwindow.cpp" line="2425"/>
+        <location filename="../mainwindow.cpp" line="2291"/>
+        <location filename="../mainwindow.cpp" line="2428"/>
         <source>Import </source>
         <translation>Importieren </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2288"/>
-        <location filename="../mainwindow.cpp" line="2425"/>
+        <location filename="../mainwindow.cpp" line="2291"/>
+        <location filename="../mainwindow.cpp" line="2428"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -876,90 +876,90 @@ Packet Sender will overwrite packets with the same name.</source>
 Paketsender überschreibt Pakete mit demselben Namen.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2291"/>
-        <location filename="../mainwindow.cpp" line="2312"/>
-        <location filename="../mainwindow.cpp" line="2428"/>
-        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2294"/>
+        <location filename="../mainwindow.cpp" line="2315"/>
+        <location filename="../mainwindow.cpp" line="2431"/>
+        <location filename="../mainwindow.cpp" line="2452"/>
         <source>Import Cancelled</source>
         <translation>Import abgebrochen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2299"/>
+        <location filename="../mainwindow.cpp" line="2302"/>
         <source>Import Finished</source>
         <translation>Importiert Abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2305"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
+        <location filename="../mainwindow.cpp" line="2308"/>
+        <location filename="../mainwindow.cpp" line="2445"/>
         <source>Not a database</source>
         <translation>Nicht eine Datenbank</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2309"/>
-        <location filename="../mainwindow.cpp" line="2446"/>
+        <location filename="../mainwindow.cpp" line="2312"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>Es wurden keine Pakete in dieser Datei gefunden. Es handelt sich möglicherweise nicht um einen Paketsender exportieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2326"/>
+        <location filename="../mainwindow.cpp" line="2329"/>
         <source>Save JSON</source>
         <translation>JSON speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2348"/>
-        <location filename="../mainwindow.cpp" line="2481"/>
+        <location filename="../mainwindow.cpp" line="2351"/>
+        <location filename="../mainwindow.cpp" line="2484"/>
         <source>Export: </source>
         <translation>Exportieren:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2352"/>
+        <location filename="../mainwindow.cpp" line="2355"/>
         <source>Could not save</source>
         <translation>Konnte nicht speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2356"/>
+        <location filename="../mainwindow.cpp" line="2359"/>
         <source>Could not open </source>
         <translation>Konnte nicht geöffnet werden </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2402"/>
-        <location filename="../mainwindow.cpp" line="2527"/>
+        <location filename="../mainwindow.cpp" line="2405"/>
+        <location filename="../mainwindow.cpp" line="2530"/>
         <source>Import File</source>
         <translation>Datei importieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2404"/>
-        <location filename="../mainwindow.cpp" line="2459"/>
+        <location filename="../mainwindow.cpp" line="2407"/>
+        <location filename="../mainwindow.cpp" line="2462"/>
         <source>INI db (*.ini)</source>
         <translation>INI db (*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2458"/>
+        <location filename="../mainwindow.cpp" line="2461"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2529"/>
+        <location filename="../mainwindow.cpp" line="2532"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2553"/>
+        <location filename="../mainwindow.cpp" line="2556"/>
         <source>Max size exceeded!</source>
         <translation>Die maximale Größe wurde überschritten!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2557"/>
+        <location filename="../mainwindow.cpp" line="2560"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>Das HEX-Feld unterstützt bis zu 10.922 Bytes. Die Daten wurden abgeschnitten.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2563"/>
+        <location filename="../mainwindow.cpp" line="2566"/>
         <source>Loading </source>
         <translation>Wird geladen </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2563"/>
+        <location filename="../mainwindow.cpp" line="2566"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
@@ -1630,17 +1630,17 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2722"/>
+        <location filename="../mainwindow.cpp" line="2725"/>
         <source>Multi-line editor</source>
         <translation>Mehrzeiliger Editor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2728"/>
+        <location filename="../mainwindow.cpp" line="2731"/>
         <source>Update</source>
         <translation>Aktualisierung</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2729"/>
+        <location filename="../mainwindow.cpp" line="2732"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>
@@ -1649,6 +1649,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <name>QObject</name>
     <message>
         <location filename="../packet.cpp" line="266"/>
+        <location filename="../settings.cpp" line="44"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
@@ -1656,6 +1657,56 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <location filename="../packet.cpp" line="267"/>
         <source>Send &lt;b&gt;</source>
         <translation>Senden &lt;b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="47"/>
+        <source>Name</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="50"/>
+        <source>Resend</source>
+        <translation>Erneut senden</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="53"/>
+        <source>To Address</source>
+        <translation>Zur Adresse</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="56"/>
+        <source>To Port</source>
+        <translation>Zum Port</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="59"/>
+        <source>Method</source>
+        <translation>Methode</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="62"/>
+        <source>Request Path</source>
+        <translation>Pfad der Anfrage</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="65"/>
+        <source>Time</source>
+        <translation>Zeit</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="68"/>
+        <source>From IP</source>
+        <translation>Von IP</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="71"/>
+        <source>From Port</source>
+        <translation>Von Port</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="74"/>
+        <source>Error</source>
+        <translation>Fehler</translation>
     </message>
 </context>
 <context>
@@ -1876,7 +1927,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="970"/>
+        <location filename="../settings.cpp" line="971"/>
         <source>Host</source>
         <translation>Gastgeber</translation>
     </message>
@@ -1892,7 +1943,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1041"/>
+        <location filename="../settings.cpp" line="1042"/>
         <source>HTTP Header</source>
         <translation>HTTP-Kopfzeile</translation>
     </message>
@@ -1914,7 +1965,6 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <message>
         <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
-        <location filename="../settings.cpp" line="46"/>
         <source>Name</source>
         <translation>Name</translation>
     </message>
@@ -1927,7 +1977,6 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <message>
         <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
-        <location filename="../settings.cpp" line="67"/>
         <source>From IP</source>
         <translation>Von IP</translation>
     </message>
@@ -2086,124 +2135,79 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <translation>Online Dokumentation</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="43"/>
-        <source>Send</source>
-        <translation>Senden</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="49"/>
-        <source>Resend</source>
-        <translation>Erneut senden</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="52"/>
-        <source>To Address</source>
-        <translation>Zur Adresse</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="55"/>
-        <source>To Port</source>
-        <translation>Zum Port</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="58"/>
-        <source>Method</source>
-        <translation>Methode</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="61"/>
-        <source>Request Path</source>
-        <translation>Pfad der Anfrage</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="64"/>
-        <source>Time</source>
-        <translation>Zeit</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="70"/>
-        <source>From Port</source>
-        <translation>Von Port</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="73"/>
-        <source>Error</source>
-        <translation>Fehler</translation>
-    </message>
-    <message>
-        <location filename="../settings.cpp" line="102"/>
+        <location filename="../settings.cpp" line="103"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="354"/>
+        <location filename="../settings.cpp" line="355"/>
         <source>Bad IP.</source>
         <translation>Schlechte IP.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="358"/>
+        <location filename="../settings.cpp" line="359"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Paketabsender kann ungültige IP nicht binden</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="372"/>
+        <location filename="../settings.cpp" line="373"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>TCP- und SSL-Portkonflikt ungleich Null.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="376"/>
+        <location filename="../settings.cpp" line="377"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Paketsender kann TCP und SSL nicht an denselben Port binden.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="721"/>
+        <location filename="../settings.cpp" line="722"/>
         <source>Open Directory</source>
         <translation>Verzeichnis öffnen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="742"/>
+        <location filename="../settings.cpp" line="743"/>
         <source>Choose Cert</source>
         <translation>Zertifikat wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="742"/>
+        <location filename="../settings.cpp" line="743"/>
         <source>Certs (*.pem)</source>
         <translation>Zertifikate (*.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="758"/>
+        <location filename="../settings.cpp" line="759"/>
         <source>Choose Key</source>
         <translation>Schlüssel wählen</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="758"/>
+        <location filename="../settings.cpp" line="759"/>
         <source>Keys (*.key, *.pem)</source>
         <translation>Schlüssel (*.key, *.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="970"/>
-        <location filename="../settings.cpp" line="1039"/>
+        <location filename="../settings.cpp" line="971"/>
+        <location filename="../settings.cpp" line="1040"/>
         <source>Key</source>
         <translation>Schlüssel</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="970"/>
-        <location filename="../settings.cpp" line="1040"/>
+        <location filename="../settings.cpp" line="971"/>
+        <location filename="../settings.cpp" line="1041"/>
         <source>Value</source>
         <translation>Wert</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1035"/>
+        <location filename="../settings.cpp" line="1036"/>
         <source>UN/ClientID</source>
         <translation>UN/KundenID</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1036"/>
+        <location filename="../settings.cpp" line="1037"/>
         <source>PW/Access</source>
         <translation>PW/Zugang</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1037"/>
+        <location filename="../settings.cpp" line="1038"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP Authentifizierungsheader</translation>
     </message>
