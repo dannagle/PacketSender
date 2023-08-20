@@ -961,6 +961,15 @@ int main(int argc, char *argv[])
 
                 if(maxrate) {
                     OUTIF() << "Max rate traffic generator will use separate sockets per thread";
+
+
+// Threaded traffic generator requires at least Qt 5.10 (which the AppImage does not use yet)
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+                    QUdpSocket sock;
+                    QTextStream out(stdout);
+                    intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
+#else
+
                     QList<QThread *> threadedTraffic;
                     int max_threads = QThread::idealThreadCount();
                     for(int thread_i = 0; thread_i < max_threads; thread_i++ ) {
@@ -985,6 +994,9 @@ int main(int argc, char *argv[])
                     while(!threadedTraffic.isEmpty()) {
                         QThread::sleep(1);
                     }
+
+
+#endif
 
                 } else {
                     int done = intenseTrafficGenerator(out, sock, addy, port, dataString, bps, rate, stopnum, usdelay);
