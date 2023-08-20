@@ -14,5 +14,5 @@ POPD
 GOTO End1
 
 :No1
-  ECHO Need build version param (such as 8.0.3)
+  ECHO Need build version param (such as 8.4.3)
 :End1
