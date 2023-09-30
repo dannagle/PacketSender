@@ -34,6 +34,9 @@ LanguageChooser::LanguageChooser(QWidget *parent) :
         on_frenchLabel_clicked();
     }
 
+    if(language.contains("italian")) {
+        on_italianLabel_clicked();
+    }
 }
 
 LanguageChooser::~LanguageChooser()
@@ -48,6 +51,7 @@ void LanguageChooser::preClicked()
     ui->radioEnglish->setChecked(true);
     ui->radioGerman->setChecked(true);
     ui->radioFrench->setChecked(true);
+    ui->radioItalian->setChecked(true);
 
 }
 
@@ -96,6 +100,10 @@ void LanguageChooser::on_okButton_clicked()
     if(ui->radioFrench->isChecked()) {
         settings.setValue("languageCombo", "French");
     }
+	
+    if(ui->radioItalian->isChecked()) {
+        settings.setValue("languageCombo", "Italian");
+    }
 
     this->close();
 
@@ -110,3 +118,10 @@ void LanguageChooser::on_frenchLabel_clicked()
     ui->frenchLabel->setFocus();
 }
 
+void LanguageChooser::on_italianLabel_clicked()
+{
+
+    preClicked();
+    ui->radioItalian->setChecked(true);
+    ui->italianLabel->setFocus();
+}

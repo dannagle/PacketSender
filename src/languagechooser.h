@@ -26,6 +26,8 @@ private slots:
 
     void on_frenchLabel_clicked();
 
+    void on_italianLabel_clicked();
+
 private:
     Ui::LanguageChooser *ui;
     void preClicked();
