@@ -326,6 +326,10 @@ QString Settings::language()
         return "French";
     }
 
+    if(language.contains("italian")) {
+        return "Italian";
+    }
+
     return "English";
 }
 

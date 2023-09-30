@@ -1129,6 +1129,15 @@ int main(int argc, char *argv[])
             QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_fr.qm");
             QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
         }
+
+
+        if(language == "Italian") {
+            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_it"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_it"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_it.qm");
+            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
+        }
+
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
 

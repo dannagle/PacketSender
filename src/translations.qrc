@@ -10,5 +10,7 @@
         <file>languages/spanish-flag.png</file>
         <file>languages/packetsender_de.qm</file>
         <file>languages/packetsender_fr.qm</file>
+        <file>languages/italian-flag.png</file>
+        <file>languages/packetsender_it.qm</file>
     </qresource>
 </RCC>
