@@ -256,7 +256,12 @@ Engagez le Hash: </translation>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../languagechooser.ui" line="170"/>
+        <location filename="../languagechooser.ui" line="187"/>
+        <source>Italiano</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../languagechooser.ui" line="206"/>
         <source>OK / Aceptar</source>
         <translation>OK / Aceptar</translation>
     </message>

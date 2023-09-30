@@ -14,7 +14,8 @@ TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_es.ts \
                 languages/packetsender_fr.ts \
                 languages/packetsender_de.ts \
-                languages/packetsender_hi.ts
+                languages/packetsender_hi.ts \
+                languages/packetsender_it.ts
 
 SOURCES += mainwindow.cpp \
     languagechooser.cpp \

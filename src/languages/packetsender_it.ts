@@ -1,6 +1,6 @@
-<?xml Version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS Version="2.1" language="it_IT">
+<TS version="2.1" language="it_IT">
 <context>
     <name>About</name>
     <message>
@@ -131,8 +131,17 @@ Commit Hash: </translation>
     <message>
         <location filename="../cloudui.ui" line="248"/>
         <location filename="../cloudui.ui" line="372"/>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cloudui.ui" line="283"/>
+        <source>Delete Packet Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>description</source>
-        <translation>descrizione</translation>
+        <translation type="vanished">descrizione</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="268"/>
@@ -140,9 +149,8 @@ Commit Hash: </translation>
         <translation>Ver URL</translation>
     </message>
     <message>
-        <location filename="../cloudui.ui" line="283"/>
         <source>delete Packet Set</source>
-        <translation>Elimina set di dati</translation>
+        <translation type="vanished">Elimina set di dati</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="290"/>
@@ -206,13 +214,21 @@ Commit Hash: </translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="528"/>
-        <source>delete Set</source>
-        <translation>Elimina Set</translation>
+        <source>Delete Set</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="533"/>
+        <source>Delete the set </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>delete Set</source>
+        <translation type="vanished">Elimina Set</translation>
+    </message>
+    <message>
         <source>delete the set </source>
-        <translation>Elimina il set </translation>
+        <translation type="vanished">Elimina il set </translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="533"/>
@@ -247,8 +263,22 @@ Commit Hash: </translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="115"/>
+        <source>Deutsch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../languagechooser.ui" line="187"/>
+        <source>Italiano</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../languagechooser.ui" line="206"/>
+        <source>OK / Aceptar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>deutsch</source>
-        <translation>deutsch</translation>
+        <translation type="vanished">deutsch</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="151"/>
@@ -256,9 +286,8 @@ Commit Hash: </translation>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../languagechooser.ui" line="170"/>
         <source>OK / Accetta</source>
-        <translation>OK / Accetta</translation>
+        <translation type="vanished">OK / Accetta</translation>
     </message>
 </context>
 <context>
@@ -339,9 +368,8 @@ Commit Hash: </translation>
         <translation>1 a 65535</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="194"/>
         <source>Resend delay</source>
-        <translation>Ritardo di reinvio</translation>
+        <translation type="vanished">Ritardo di reinvio</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="207"/>
@@ -406,9 +434,18 @@ Commit Hash: </translation>
         <translation>Genera Pannello!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="384"/>
         <source>delete Saved Packet</source>
-        <translation>Elimina Pacchetto Salvato</translation>
+        <translation type="vanished">Elimina Pacchetto Salvato</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="194"/>
+        <source>Resend Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="384"/>
+        <source>Delete Saved Packet</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="391"/>
@@ -581,7 +618,7 @@ Commit Hash: </translation>
         <source>There is a new Packet Sender available.
 
 Download?</source>
-        <translation>C'è una nuova versione di Packet Sender.
+        <translation>C&apos;è una nuova versione di Packet Sender.
 
 Scarica?</translation>
     </message>
@@ -622,9 +659,8 @@ Vuoi vedere le note di rilascio?</translation>
         <translation>Porte</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="765"/>
         <source>UDP SerVer Disabled</source>
-        <translation>Server UDP disabilitato</translation>
+        <translation type="vanished">Server UDP disabilitato</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="787"/>
@@ -672,6 +708,11 @@ Questo può causare un intasamento di traffico dati. Continua?</translation>
         <translation>Reinviando</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="765"/>
+        <source>UDP Server Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="1073"/>
         <source>bytes</source>
         <translation>bytes</translation>
@@ -703,12 +744,12 @@ SSL richiesto:</translation>
     <message>
         <location filename="../mainwindow.cpp" line="1211"/>
         <source>Address cannot be blank.</source>
-        <translation>L'indirizzo non può essere vuoto</translation>
+        <translation>L&apos;indirizzo non può essere vuoto</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1215"/>
         <source>Address is empty.</source>
-        <translation>L'indirizzo è vuoto</translation>
+        <translation>L&apos;indirizzo è vuoto</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1226"/>
@@ -745,7 +786,7 @@ SSL richiesto:</translation>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
-        <translation>Stai reinviando un Pacchetto TCP con connessione persistente. L'interfaccia potrebbe aprire numerose finestre.
+        <translation>Stai reinviando un Pacchetto TCP con connessione persistente. L&apos;interfaccia potrebbe aprire numerose finestre.
 
 Disabilitare la Connessione persistente? (Raccomandato)</translation>
     </message>
@@ -986,9 +1027,13 @@ Packet Sender sovrascriverà i Pacchetti con lo stesso Nome</translation>
         <translation>Esci da tutti i gruppi</translation>
     </message>
     <message>
-        <location filename="../multicastsetup.cpp" line="15"/>
         <source>IPv4 Multicast Setup (Sperimentale)</source>
-        <translation>Configurazione Multicast IPv4 (Sperimentale)</translation>
+        <translation type="vanished">Configurazione Multicast IPv4 (Sperimentale)</translation>
+    </message>
+    <message>
+        <location filename="../multicastsetup.cpp" line="15"/>
+        <source>IPv4 Multicast Setup (Experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="31"/>
@@ -1014,7 +1059,7 @@ Packet Sender sovrascriverà i Pacchetti con lo stesso Nome</translation>
         <location filename="../multicastsetup.cpp" line="63"/>
         <source>IP must be an IPv4 multicast address.
 (224.0.0.0 to 239.255.255.255)</source>
-        <translation>IP dev'essere un Indirizzo IPv4 Multicast.
+        <translation>IP dev&apos;essere un Indirizzo IPv4 Multicast.
 (224.0.0.0 a 239.255.255.255)</translation>
     </message>
     <message>
@@ -1057,7 +1102,7 @@ disattivare IPv6 e Cambiae la modalità a IPv4?</translation>
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
         <translation>Packet Sender ha tentato (e ha fallito) di vincolarsi alla Porta [PORT], che è inferiore a 1024.
 
-Le Porte privilegiate richieste richiedono l'esecuzione di Packet Sender con permessi di amministratore/root.</translation>
+Le Porte privilegiate richieste richiedono l&apos;esecuzione di Packet Sender con permessi di amministratore/root.</translation>
     </message>
     <message>
         <location filename="../packetnetwork.cpp" line="251"/>
@@ -1065,8 +1110,16 @@ Le Porte privilegiate richieste richiedono l'esecuzione di Packet Sender con per
 
  - Are you running multiple instances? 
 
+ - Trying to bind to a missing custom IP?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Packet Sender attempted (and failed) to bind to port [PORT].
+
+ - Are you running multiple instances? 
+
  - Trying to bind to a missenzag custom IP?</source>
-        <translation>Packet Sender ha tentato (e ha fallito) di vincolarsi alla Porta [PORT].
+        <translation type="vanished">Packet Sender ha tentato (e ha fallito) di vincolarsi alla Porta [PORT].
 
 - Stai eseguendo più istanze?
 
@@ -1176,8 +1229,12 @@ Le Porte privilegiate richieste richiedono l'esecuzione di Packet Sender con per
     <message>
         <location filename="../panelgenerator.ui" line="278"/>
         <location filename="../panelgenerator.cpp" line="48"/>
+        <source>Delete Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>delete Panel</source>
-        <translation>Elimina Pannello</translation>
+        <translation type="vanished">Elimina Pannello</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="283"/>
@@ -1246,14 +1303,22 @@ Le Porte privilegiate richieste richiedono l'esecuzione di Packet Sender con per
         <translation>Conferma Eliminazione</translation>
     </message>
     <message>
-        <location filename="../panelgenerator.cpp" line="325"/>
         <source>delete </source>
-        <translation>Elimina </translation>
+        <translation type="vanished">Elimina </translation>
+    </message>
+    <message>
+        <source>deleting </source>
+        <translation type="vanished">Eliminando </translation>
+    </message>
+    <message>
+        <location filename="../panelgenerator.cpp" line="325"/>
+        <source>Delete </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="331"/>
-        <source>deleting </source>
-        <translation>Eliminando </translation>
+        <source>Deleting </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="339"/>
@@ -1380,14 +1445,23 @@ Pannello non Salvato. Potresti perdere i cambiamenti.</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="913"/>
-        <source>delete link</source>
-        <translation>Elimina collegamento</translation>
+        <source>Delete link</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="917"/>
+        <source>Delete URL link?
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>delete link</source>
+        <translation type="vanished">Elimina collegamento</translation>
+    </message>
+    <message>
         <source>delete URL link?
 </source>
-        <translation>Elimina collegamento URL?
+        <translation type="vanished">Elimina collegamento URL?
 </translation>
     </message>
     <message>
@@ -1824,9 +1898,8 @@ Selecting No will generate new IDs and append.</source>
         <translation>Tuo indirizzo IP</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="253"/>
         <source>Multi-Send delay (sec)</source>
-        <translation>Ritardo di invio multiplo (sec)</translation>
+        <translation type="vanished">Ritardo di invio multiplo (sec)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="260"/>
@@ -1948,9 +2021,8 @@ Selecting No will generate new IDs and append.</source>
         <translation>Header HTTP</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="530"/>
         <source>delete Header</source>
-        <translation>Elimina Header</translation>
+        <translation type="vanished">Elimina Header</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="540"/>
@@ -1986,9 +2058,23 @@ Selecting No will generate new IDs and append.</source>
         <translation>Ordine di visualizzazione del Log di Traffico (drag and drop)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="601"/>
         <source>Use default Order</source>
-        <translation>Usa ordine di default</translation>
+        <translation type="vanished">Usa ordine di default</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="253"/>
+        <source>Multi-Send Delay (sec)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="530"/>
+        <source>Delete Header</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="601"/>
+        <source>Use Default Order</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../settings.ui" line="626"/>
@@ -2111,7 +2197,7 @@ Selecting No will generate new IDs and append.</source>
     <message>
         <location filename="../settings.ui" line="970"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
-        <translation>Packet Sender sostituirà le macro con i dati reali prima dell'invio</translation>
+        <translation>Packet Sender sostituirà le macro con i dati reali prima dell&apos;invio</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="981"/>
@@ -2342,9 +2428,13 @@ Selecting No will generate new IDs and append.</source>
         <translation>Ascii</translation>
     </message>
     <message>
-        <location filename="../udpflooding.ui" line="76"/>
         <source>delay (ms)</source>
-        <translation>Ritardo (ms)</translation>
+        <translation type="vanished">Ritardo (ms)</translation>
+    </message>
+    <message>
+        <location filename="../udpflooding.ui" line="76"/>
+        <source>Delay (ms)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="86"/>
@@ -2372,9 +2462,13 @@ Selecting No will generate new IDs and append.</source>
         <translation>Attendi ad inviare...</translation>
     </message>
     <message>
-        <location filename="../udpflooding.cpp" line="25"/>
         <source>UDP Traffic Generator (Sperimentale)</source>
-        <translation>Generatore di Traffico UDP (Sperimentale)</translation>
+        <translation type="vanished">Generatore di Traffico UDP (Sperimentale)</translation>
+    </message>
+    <message>
+        <location filename="../udpflooding.cpp" line="25"/>
+        <source>UDP Traffic Generator (Experimental)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../udpflooding.cpp" line="76"/>
