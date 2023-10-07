@@ -1905,7 +1905,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="971"/>
+        <location filename="../settings.cpp" line="975"/>
         <source>Host</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1921,7 +1921,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1042"/>
+        <location filename="../settings.cpp" line="1046"/>
         <source>HTTP Header</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2118,74 +2118,74 @@ Selecting No will generate new IDs and append.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="355"/>
+        <location filename="../settings.cpp" line="359"/>
         <source>Bad IP.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="359"/>
+        <location filename="../settings.cpp" line="363"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="373"/>
+        <location filename="../settings.cpp" line="377"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="377"/>
+        <location filename="../settings.cpp" line="381"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="722"/>
+        <location filename="../settings.cpp" line="726"/>
         <source>Open Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="743"/>
+        <location filename="../settings.cpp" line="747"/>
         <source>Choose Cert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="743"/>
+        <location filename="../settings.cpp" line="747"/>
         <source>Certs (*.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="759"/>
+        <location filename="../settings.cpp" line="763"/>
         <source>Choose Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="759"/>
+        <location filename="../settings.cpp" line="763"/>
         <source>Keys (*.key, *.pem)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="971"/>
-        <location filename="../settings.cpp" line="1040"/>
+        <location filename="../settings.cpp" line="975"/>
+        <location filename="../settings.cpp" line="1044"/>
         <source>Key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="971"/>
-        <location filename="../settings.cpp" line="1041"/>
+        <location filename="../settings.cpp" line="975"/>
+        <location filename="../settings.cpp" line="1045"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1036"/>
+        <location filename="../settings.cpp" line="1040"/>
         <source>UN/ClientID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1037"/>
+        <location filename="../settings.cpp" line="1041"/>
         <source>PW/Access</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1038"/>
+        <location filename="../settings.cpp" line="1042"/>
         <source>HTTP Auth Header</source>
         <translation type="unfinished"></translation>
     </message>

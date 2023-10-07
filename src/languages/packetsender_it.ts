@@ -132,25 +132,17 @@ Commit Hash: </translation>
         <location filename="../cloudui.ui" line="248"/>
         <location filename="../cloudui.ui" line="372"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="283"/>
         <source>Delete Packet Set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>description</source>
-        <translation type="vanished">descrizione</translation>
+        <translation>Elimina set di dati</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="268"/>
         <source>View URL</source>
         <translation>Ver URL</translation>
-    </message>
-    <message>
-        <source>delete Packet Set</source>
-        <translation type="vanished">Elimina set di dati</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="290"/>
@@ -215,20 +207,12 @@ Commit Hash: </translation>
     <message>
         <location filename="../cloudui.cpp" line="528"/>
         <source>Delete Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina Set</translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="533"/>
         <source>Delete the set </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>delete Set</source>
-        <translation type="vanished">Elimina Set</translation>
-    </message>
-    <message>
-        <source>delete the set </source>
-        <translation type="vanished">Elimina il set </translation>
+        <translation>Elimina il set </translation>
     </message>
     <message>
         <location filename="../cloudui.cpp" line="533"/>
@@ -264,30 +248,22 @@ Commit Hash: </translation>
     <message>
         <location filename="../languagechooser.ui" line="115"/>
         <source>Deutsch</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="187"/>
         <source>Italiano</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="206"/>
         <source>OK / Aceptar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>deutsch</source>
-        <translation type="vanished">deutsch</translation>
+        <translation>OK / Aceptar / Accetta</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="151"/>
         <source>Français</source>
         <translation>Français</translation>
-    </message>
-    <message>
-        <source>OK / Accetta</source>
-        <translation type="vanished">OK / Accetta</translation>
     </message>
 </context>
 <context>
@@ -368,10 +344,6 @@ Commit Hash: </translation>
         <translation>1 a 65535</translation>
     </message>
     <message>
-        <source>Resend delay</source>
-        <translation type="vanished">Ritardo di reinvio</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="207"/>
         <source>0.0/blank off</source>
         <translation>0.0/disattivare</translation>
@@ -434,18 +406,14 @@ Commit Hash: </translation>
         <translation>Genera Pannello!</translation>
     </message>
     <message>
-        <source>delete Saved Packet</source>
-        <translation type="vanished">Elimina Pacchetto Salvato</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="194"/>
         <source>Resend Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardo di reinvio</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="384"/>
         <source>Delete Saved Packet</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina Pacchetto Salvato</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="391"/>
@@ -659,10 +627,6 @@ Vuoi vedere le note di rilascio?</translation>
         <translation>Porte</translation>
     </message>
     <message>
-        <source>UDP SerVer Disabled</source>
-        <translation type="vanished">Server UDP disabilitato</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.cpp" line="787"/>
         <source>SSL Server Disabled</source>
         <translation>Server SSL disabilitato</translation>
@@ -710,7 +674,7 @@ Questo può causare un intasamento di traffico dati. Continua?</translation>
     <message>
         <location filename="../mainwindow.cpp" line="765"/>
         <source>UDP Server Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Server UDP disabilitato</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1073"/>
@@ -1027,13 +991,9 @@ Packet Sender sovrascriverà i Pacchetti con lo stesso Nome</translation>
         <translation>Esci da tutti i gruppi</translation>
     </message>
     <message>
-        <source>IPv4 Multicast Setup (Sperimentale)</source>
-        <translation type="vanished">Configurazione Multicast IPv4 (Sperimentale)</translation>
-    </message>
-    <message>
         <location filename="../multicastsetup.cpp" line="15"/>
         <source>IPv4 Multicast Setup (Experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurazione Multicast IPv4 (Sperimentale)</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="31"/>
@@ -1111,15 +1071,7 @@ Le Porte privilegiate richieste richiedono l&apos;esecuzione di Packet Sender co
  - Are you running multiple instances? 
 
  - Trying to bind to a missing custom IP?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Packet Sender attempted (and failed) to bind to port [PORT].
-
- - Are you running multiple instances? 
-
- - Trying to bind to a missenzag custom IP?</source>
-        <translation type="vanished">Packet Sender ha tentato (e ha fallito) di vincolarsi alla Porta [PORT].
+        <translation>Packet Sender ha tentato (e ha fallito) di vincolarsi alla Porta [PORT].
 
 - Stai eseguendo più istanze?
 
@@ -1230,11 +1182,7 @@ Le Porte privilegiate richieste richiedono l&apos;esecuzione di Packet Sender co
         <location filename="../panelgenerator.ui" line="278"/>
         <location filename="../panelgenerator.cpp" line="48"/>
         <source>Delete Panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>delete Panel</source>
-        <translation type="vanished">Elimina Pannello</translation>
+        <translation>Elimina Pannello</translation>
     </message>
     <message>
         <location filename="../panelgenerator.ui" line="283"/>
@@ -1303,22 +1251,14 @@ Le Porte privilegiate richieste richiedono l&apos;esecuzione di Packet Sender co
         <translation>Conferma Eliminazione</translation>
     </message>
     <message>
-        <source>delete </source>
-        <translation type="vanished">Elimina </translation>
-    </message>
-    <message>
-        <source>deleting </source>
-        <translation type="vanished">Eliminando </translation>
-    </message>
-    <message>
         <location filename="../panelgenerator.cpp" line="325"/>
         <source>Delete </source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina </translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="331"/>
         <source>Deleting </source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminando </translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="339"/>
@@ -1446,22 +1386,13 @@ Pannello non Salvato. Potresti perdere i cambiamenti.</translation>
     <message>
         <location filename="../panelgenerator.cpp" line="913"/>
         <source>Delete link</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina collegamento</translation>
     </message>
     <message>
         <location filename="../panelgenerator.cpp" line="917"/>
         <source>Delete URL link?
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>delete link</source>
-        <translation type="vanished">Elimina collegamento</translation>
-    </message>
-    <message>
-        <source>delete URL link?
-</source>
-        <translation type="vanished">Elimina collegamento URL?
+        <translation>Elimina collegamento URL?
 </translation>
     </message>
     <message>
@@ -1898,10 +1829,6 @@ Selecting No will generate new IDs and append.</source>
         <translation>Tuo indirizzo IP</translation>
     </message>
     <message>
-        <source>Multi-Send delay (sec)</source>
-        <translation type="vanished">Ritardo di invio multiplo (sec)</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="260"/>
         <source>0.0 for off</source>
         <translation>0.0 per disabilitare</translation>
@@ -2000,7 +1927,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="971"/>
+        <location filename="../settings.cpp" line="975"/>
         <source>Host</source>
         <translation>Host</translation>
     </message>
@@ -2016,13 +1943,9 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1042"/>
+        <location filename="../settings.cpp" line="1046"/>
         <source>HTTP Header</source>
         <translation>Header HTTP</translation>
-    </message>
-    <message>
-        <source>delete Header</source>
-        <translation type="vanished">Elimina Header</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="540"/>
@@ -2058,23 +1981,19 @@ Selecting No will generate new IDs and append.</source>
         <translation>Ordine di visualizzazione del Log di Traffico (drag and drop)</translation>
     </message>
     <message>
-        <source>Use default Order</source>
-        <translation type="vanished">Usa ordine di default</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="253"/>
         <source>Multi-Send Delay (sec)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardo di invio multiplo (sec)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="530"/>
         <source>Delete Header</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina Header</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="601"/>
         <source>Use Default Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa ordine di default</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="626"/>
@@ -2226,74 +2145,74 @@ Selecting No will generate new IDs and append.</source>
         <translation>Impostazioni</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="355"/>
+        <location filename="../settings.cpp" line="359"/>
         <source>Bad IP.</source>
         <translation>IP non valido</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="359"/>
+        <location filename="../settings.cpp" line="363"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Packet Sender non può vincolarsi a un IP non valido</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="373"/>
+        <location filename="../settings.cpp" line="377"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>Conflitto di Porte TCP e SSL diverse da zero.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="377"/>
+        <location filename="../settings.cpp" line="381"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Packet Sender non può vincolare TCP e SSL alla stessa porta.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="722"/>
+        <location filename="../settings.cpp" line="726"/>
         <source>Open Directory</source>
         <translation>Apri cartella</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="743"/>
+        <location filename="../settings.cpp" line="747"/>
         <source>Choose Cert</source>
         <translation>Seleziona Certificato</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="743"/>
+        <location filename="../settings.cpp" line="747"/>
         <source>Certs (*.pem)</source>
         <translation>Certificati (*.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="759"/>
+        <location filename="../settings.cpp" line="763"/>
         <source>Choose Key</source>
         <translation>Scegli chiave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="759"/>
+        <location filename="../settings.cpp" line="763"/>
         <source>Keys (*.key, *.pem)</source>
         <translation>chiavi (*.key, *.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="971"/>
-        <location filename="../settings.cpp" line="1040"/>
+        <location filename="../settings.cpp" line="975"/>
+        <location filename="../settings.cpp" line="1044"/>
         <source>Key</source>
         <translation>chiave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="971"/>
-        <location filename="../settings.cpp" line="1041"/>
+        <location filename="../settings.cpp" line="975"/>
+        <location filename="../settings.cpp" line="1045"/>
         <source>Value</source>
         <translation>Valore</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1036"/>
+        <location filename="../settings.cpp" line="1040"/>
         <source>UN/ClientID</source>
         <translation>Nome utente/ID cliente</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1037"/>
+        <location filename="../settings.cpp" line="1041"/>
         <source>PW/Access</source>
         <translation>Password/Codice di acceso</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1038"/>
+        <location filename="../settings.cpp" line="1042"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP Header di autenticazione</translation>
     </message>
@@ -2428,13 +2347,9 @@ Selecting No will generate new IDs and append.</source>
         <translation>Ascii</translation>
     </message>
     <message>
-        <source>delay (ms)</source>
-        <translation type="vanished">Ritardo (ms)</translation>
-    </message>
-    <message>
         <location filename="../udpflooding.ui" line="76"/>
         <source>Delay (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritardo (ms)</translation>
     </message>
     <message>
         <location filename="../udpflooding.ui" line="86"/>
@@ -2462,13 +2377,9 @@ Selecting No will generate new IDs and append.</source>
         <translation>Attendi ad inviare...</translation>
     </message>
     <message>
-        <source>UDP Traffic Generator (Sperimentale)</source>
-        <translation type="vanished">Generatore di Traffico UDP (Sperimentale)</translation>
-    </message>
-    <message>
         <location filename="../udpflooding.cpp" line="25"/>
         <source>UDP Traffic Generator (Experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Generatore di Traffico UDP (Sperimentale)</translation>
     </message>
     <message>
         <location filename="../udpflooding.cpp" line="76"/>
