@@ -227,7 +227,9 @@ class MainWindow : public QMainWindow
 
         void on_testPacketButton_pressed();
 
-private:
+        void on_udptcpComboBox_currentIndexChanged(int index);
+
+    private:
         Ui::MainWindow *ui;
         QSortFilterProxyModel *proxyModel;
         PacketLogModel packetsLogged;

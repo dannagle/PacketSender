@@ -2778,3 +2778,9 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 
     return QObject::eventFilter(watched, event);
 }
+
+void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
+{
+    on_udptcpComboBox_currentIndexChanged("");
+}
+
