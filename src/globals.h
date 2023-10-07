@@ -7,15 +7,14 @@
  * Copyright NagleCode, LLC
  *
  */
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#pragma once
 
 //BEGIN SW VERSION
-#define SW_VERSION "8.4.3"
+#define SW_VERSION "8.5.2"
 //END SW VERSION
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 8,4,3,0
+#define VER_FILEVERSION 8,5,2,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
@@ -75,5 +74,3 @@
 //used when binding
 #define IPV4_OR_IPV6 Packet::IPV4_IPV6_ANY(ipMode)
 
-
-#endif // GLOBALS_H
