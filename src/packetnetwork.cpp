@@ -854,6 +854,45 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
     }
+
+    if (sendpacket.isDTLS()) {
+        QUdpSocket * sendUDP;
+        bool oneoff = false;
+        if(!udpServers.isEmpty()) {
+            sendUDP = udpServers.first();
+        }   else {
+            QDEBUG() << "No server. Create a one-off";
+            sendUDP = new QUdpSocket(this);
+            sendUDP->bind(0);
+            oneoff = true;
+        }
+
+        if(sendUDP->state() == QAbstractSocket::BoundState) {
+
+            sendpacket.fromPort = sendUDP->localPort();
+            QDEBUG() << "Sending data to :" << sendpacket.toIP << ":" << sendpacket.port;
+
+            QHostAddress resolved = resolveDNS(sendpacket.toIP);
+
+            QDtls clientDtls(QSslSocket::SslClientMode);
+            clientDtls.setPeer(resolved, sendpacket.port, sendpacket.toIP);
+            clientDtls.doHandshake(sendUDP);
+
+            QDEBUG() << "result:" << sendUDP->writeDatagram(sendpacket.getByteArray(), resolved, sendpacket.port);
+            emit packetSent(sendpacket);
+
+        }
+
+        if(oneoff) {
+            sendUDP->waitForBytesWritten();
+            sendUDP->close();
+            sendUDP->deleteLater();
+        }
+
+
+    }
+
+
     if (sendpacket.isHTTP()) {
         QDEBUG() << "http request" << sendpacket.requestPath;
 

@@ -264,6 +264,9 @@ int main(int argc, char *argv[])
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
 
+        QCommandLineOption dtlsOption(QStringList() << "dtls", "Send DTLS.");
+        parser.addOption(dtlsOption);
+
         // A single option with a value
         QCommandLineOption httpOption(QStringList() << "http", "Send HTTP. Allowed values are GET (default) and POST", "http");
         parser.addOption(httpOption);

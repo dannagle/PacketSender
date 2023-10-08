@@ -254,6 +254,15 @@
              </item>
              <item>
               <property name="text">
+               <string>DTLS</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_dtls.png</normaloff>:/icons/tx_dtls.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTP Get</string>
               </property>
               <property name="icon">
@@ -353,7 +362,6 @@
            <widget class="QPushButton" name="generatePanelButton">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -512,7 +520,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>43</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

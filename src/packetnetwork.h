@@ -14,6 +14,7 @@
 #include <QUdpSocket>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <QDtls>
 #include <QStringList>
 #include <QTime>
 #include <QThread>

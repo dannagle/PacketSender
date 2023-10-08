@@ -70,6 +70,12 @@ bool Packet::isUDP()
     return ((tcpOrUdp.trimmed().toLower() == "udp"));
 }
 
+bool Packet::isDTLS()
+{
+    return ((tcpOrUdp.trimmed().toLower() == "dtls"));
+}
+
+
 bool Packet::isHTTP()
 {
     return ((tcpOrUdp.trimmed().toLower().contains("http")));

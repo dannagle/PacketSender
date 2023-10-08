@@ -65,6 +65,7 @@ class Packet
         bool isTCP();
         bool isSSL();
         bool isUDP();
+        bool isDTLS();
         bool isHTTP();
         bool isHTTPS();
         bool isPOST();

@@ -1488,7 +1488,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
         updatePacket.repeat = repeat;
     }
     if (datatype == Settings::METHOD_STR) {
-        if ((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL")) {
+        if ((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL") || (newText.trimmed().toUpper() == "DTLS") ) {
             updatePacket.tcpOrUdp = newText.trimmed().toUpper();
         }
         auto isHTTP = newText.trimmed().toUpper().contains("HTTP") || newText.trimmed().toUpper().contains("GET") || newText.trimmed().toUpper().contains("POST");

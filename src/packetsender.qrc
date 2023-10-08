@@ -52,5 +52,9 @@
         <file>packetsender.css</file>
         <file>iris_and_marigold.jpg</file>
         <file>ps_panels.json</file>
+        <file>icons/rx_232.png</file>
+        <file>icons/rx_dtls.png</file>
+        <file>icons/tx_232.png</file>
+        <file>icons/tx_dtls.png</file>
     </qresource>
 </RCC>
