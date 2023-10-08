@@ -327,6 +327,7 @@ int main(int argc, char *argv[])
         bool ipv6  = parser.isSet(bindIPv6Option);
         bool ipv4  = parser.isSet(bindIPv4Option);
         bool http  = parser.isSet(httpOption);
+        bool dtls = parser.isSet(dtlsOption);
 
         bool okbps = false;
         bool okrate = false;
@@ -644,6 +645,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(udp);
         QDEBUGVAR(ssl);
         QDEBUGVAR(http);
+        QDEBUGVAR(dtls);
         QDEBUGVAR(sslNoError);
         QDEBUGVAR(name);
         QDEBUGVAR(data);
@@ -659,7 +661,7 @@ int main(int argc, char *argv[])
 
         //NOW LETS DO THIS!
 
-        if (ssl && !QSslSocket::supportsSsl()) {
+        if ((ssl || dtls) && !QSslSocket::supportsSsl()) {
             OUTIF() << "Error: This computer does not have a native SSL library.";
             OUTIF() << "The expected SSL version is " << QSslSocket::sslLibraryBuildVersionString();
             OUTPUT();
@@ -803,6 +805,45 @@ int main(int argc, char *argv[])
         QByteArray recvData;
         recvData.clear();
         int bytesWriten = 0;
+
+        if(dtls) {
+            OUTIF() << "Attempting DTLS";
+
+            bool implemented = QSslSocket::isClassImplemented(QSsl::ImplementedClass::Dtls);
+            QDEBUGVAR(implemented);
+            if(!implemented) {
+                OUTIF() << "The SSL backend \"" << QSslSocket::sslLibraryBuildVersionString() << "\" does not support DTLS";
+                OUTPUT();
+                return -1;
+            }
+
+
+
+            QDtls a(QSslSocket::SslClientMode);
+            QUdpSocket b;
+            a.setPeer(theAddress, port);
+            auto config = QSslConfiguration::defaultDtlsConfiguration();
+            config.setDtlsCookieVerificationEnabled(false);
+            a.setDtlsConfiguration(config);
+            b.connectToHost(theAddress, port);
+
+            bool v = a.doHandshake(&b);
+            OUTIF() << v;
+
+            b.waitForReadyRead(-1);
+            quint16 port;
+            QHostAddress address;
+            QByteArray server_hello(b.pendingDatagramSize(), Qt::Uninitialized);
+            b.readDatagram(server_hello.data(), server_hello.size(), &address, &port);
+            OUTIF() << b.errorString();
+            bool k = a.doHandshake(&b, server_hello);
+            OUTIF() << k;
+
+
+            OUTPUT();
+            return 0;
+
+        }
 
         if (tcp || ssl) {
             QSslSocket sock;
