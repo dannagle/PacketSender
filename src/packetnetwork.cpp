@@ -822,6 +822,41 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.timestamp = QDateTime::currentDateTime();
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
+    if(sendpacket.isDTLS()){
+        //        QUdpSocket * sendUDP;
+        //        sendUDP = new QUdpSocket(this);
+        //        sendUDP->bind(sendpacket.port);
+        //        QHostAddress resolved = resolveDNS(sendpacket.toIP);
+        //        sendUDP->writeDatagram(sendpacket.getByteArray().append("333333"), resolved, sendpacket.port);
+        //        emit packetSent(sendpacket);
+        // Replace "your_executable.exe" with the actual path to the executable file
+
+        //const char* executablePath = "C:/OpenSSL/bin/openssl.exe";
+        //const char* arguments = "s_client -dtls1_2 -connect localhost:12345 -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
+        //HINSTANCE hInstance = ShellExecuteA(NULL, "open", executablePath, arguments, NULL, SW_SHOWNORMAL);
+
+        // Specify the command with arguments
+        //const char* command = "cmd openssl s_client -dtls1_2 -connect localhost:12345 -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
+
+        // Use the system function to run the command
+        //"your_command_here \"C:\\Users\\YourUsername\\YourFile.txt\"";
+        //command && echo input | command
+        QByteArray data = sendpacket.getByteArray();
+        const char* opensslPath;
+        int isSessionOpen= 0;
+        if (!isSessionOpen){
+            isSessionOpen = 1;
+            system("type nul > session.pem");
+            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem";
+            system(opensslPath);
+        } else{
+            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
+            system(opensslPath);
+        }
+
+        emit packetSent(sendpacket);
+    }
+
     if (sendpacket.isUDP()) {
         QUdpSocket * sendUDP;
         bool oneoff = false;

@@ -60,6 +60,12 @@ void Packet::clear()
     init();
 }
 
+bool Packet::isDTLS()
+{
+    return ((tcpOrUdp.trimmed().toLower() == "dtls"));
+}
+
+
 bool Packet::isSSL()
 {
     return (tcpOrUdp.trimmed().toLower().contains("ssl"));
