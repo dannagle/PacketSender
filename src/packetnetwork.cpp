@@ -843,9 +843,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //command && echo input | command
         QByteArray data = sendpacket.getByteArray();
         const char* opensslPath;
-        int isSessionOpen= 0;
+        static int isSessionOpen = false;
         if (!isSessionOpen){
-            isSessionOpen = 1;
+            isSessionOpen = true;
             system("type nul > session.pem");
             opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem";
             system(opensslPath);
