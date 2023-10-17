@@ -68,7 +68,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
+        ui->pathToKeyLineEdit->hide();
+    }
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
@@ -2587,6 +2589,14 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     QString selectedText = ui->udptcpComboBox->currentText().toLower();
     auto isHttp = selectedText.contains("http");
     auto isPost = selectedText.contains("post") && isHttp;
+
+    /////////////////////////////////dtls add line edit for adding path for cert
+
+    if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
+        ui->pathToKeyLineEdit->show();  // Enable when "dtls" is selected
+    } else {
+        ui->pathToKeyLineEdit->hide();   // Disable for other options
+    }
 
     if(isHttp) {
         ui->asciiLabel->setText("Data");

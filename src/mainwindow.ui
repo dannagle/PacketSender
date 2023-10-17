@@ -313,6 +313,9 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QLineEdit" name="pathToKeyLineEdit"/>
+       </item>
       </layout>
      </widget>
     </item>
