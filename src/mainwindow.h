@@ -77,7 +77,8 @@ class MainWindow : public QMainWindow
 
         void loadPacketsTable();
 
-
+        QPushButton *loadKeyButton;
+        QPushButton *loadCertButton;
         QPushButton *generatePSLink();
         QPushButton *generateDNLink();
         void populateTableRow(int rowCounter, Packet tempPacket);
@@ -209,6 +210,10 @@ class MainWindow : public QMainWindow
         void on_resendEdit_editingFinished();
 
         void on_loadFileButton_clicked();
+
+        void on_loadKeyButton_clicked();
+
+        void on_loadCertButton_clicked();
 
         void on_actionDonate_Thank_You_triggered();
 

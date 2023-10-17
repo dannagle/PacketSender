@@ -37,6 +37,8 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
+        QByteArray keyPath;
+        QByteArray certPath;
         explicit PacketNetwork(QObject *parent = nullptr);
         void init();
 

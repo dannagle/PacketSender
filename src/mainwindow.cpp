@@ -29,6 +29,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QPlainTextEdit>
+#include <QMessageBox>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -67,10 +68,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
+
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
-        ui->pathToKeyLineEdit->hide();
+        ui->loadKeyButton->hide();
+        ui->loadCertButton->hide();
     }
+
+    connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
+    connect(loadCertButton, &QPushButton::clicked, this, &MainWindow::on_loadCertButton_clicked);
+
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
@@ -2576,6 +2584,60 @@ void MainWindow::on_loadFileButton_clicked()
 
 }
 
+void MainWindow::on_loadKeyButton_clicked()
+{
+    static QString fileName;
+    static bool showWarning = true;
+
+    if (fileName.isEmpty()) {
+        fileName = QDir::homePath();
+    }
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                            fileName,
+                                            tr("*.*"));
+
+    QDEBUGVAR(fileName);
+
+    if (fileName.isEmpty()) {
+        QMessageBox::critical(this, "Error", "The uploaded file is empty.");
+        return;
+        //
+    }
+
+    packetNetwork.keyPath = fileName.toUtf8();
+
+    //QByteArray data = filename;
+
+}
+
+void MainWindow::on_loadCertButton_clicked()
+{
+    static QString fileName;
+    static bool showWarning = true;
+
+    if (fileName.isEmpty()) {
+        fileName = QDir::homePath();
+    }
+
+    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                            fileName,
+                                            tr("*.*"));
+
+    QDEBUGVAR(fileName);
+
+    if (fileName.isEmpty()) {
+        QMessageBox::critical(this, "Error", "The uploaded file is empty.");
+        return;
+        //
+    }
+
+    packetNetwork.certPath = fileName.toUtf8();
+
+    //QByteArray data = filename;
+
+}
+
 void MainWindow::on_actionDonate_Thank_You_triggered()
 {
 
@@ -2593,10 +2655,13 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     /////////////////////////////////dtls add line edit for adding path for cert
 
     if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
-        ui->pathToKeyLineEdit->show();  // Enable when "dtls" is selected
+        ui->loadKeyButton->show();  // Enable when "dtls" is selected
+        ui->loadCertButton->show();
     } else {
-        ui->pathToKeyLineEdit->hide();   // Disable for other options
+        ui->loadKeyButton->hide();   // Disable for other options
+        ui->loadCertButton->hide();   // Disable for other options
     }
+
 
     if(isHttp) {
         ui->asciiLabel->setText("Data");

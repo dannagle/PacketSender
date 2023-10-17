@@ -314,7 +314,51 @@
         </layout>
        </item>
        <item>
-        <widget class="QLineEdit" name="pathToKeyLineEdit"/>
+        <widget class="QWidget" name="widget" native="true">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <widget class="QPushButton" name="loadCertButton">
+          <property name="geometry">
+           <rect>
+            <x>90</x>
+            <y>0</y>
+            <width>111</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Load Certificate File</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="loadKeyButton">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>80</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Load Key File</string>
+          </property>
+         </widget>
+         <zorder>loadKeyButton</zorder>
+         <zorder>loadCertButton</zorder>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -512,6 +556,8 @@
      </widget>
     </item>
    </layout>
+   <zorder>packetSetupGroup</zorder>
+   <zorder>splitter</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

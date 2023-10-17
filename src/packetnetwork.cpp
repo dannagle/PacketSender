@@ -847,7 +847,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         if (!isSessionOpen){
             isSessionOpen = true;
             system("type nul > session.pem");
-            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem";
+            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath;
             system(opensslPath);
         } else{
             opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
