@@ -842,16 +842,21 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //"your_command_here \"C:\\Users\\YourUsername\\YourFile.txt\"";
         //command && echo input | command
         QByteArray data = sendpacket.getByteArray();
-        const char* opensslPath;
+        QByteArray opensslPath;
         static int isSessionOpen = false;
         if (!isSessionOpen){
             isSessionOpen = true;
             system("type nul > session.pem");
             opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath;
-            system(opensslPath);
+            const char* charArray = opensslPath.data();
+            int status = system(charArray);
+            if (status!=0){//if the connection doesn't established
+                isSessionOpen = false;
+            }
         } else{
             opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
-            system(opensslPath);
+            const char* charArray2=opensslPath.data();
+            system(charArray2);
         }
 
         emit packetSent(sendpacket);
