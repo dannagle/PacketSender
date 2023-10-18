@@ -899,6 +899,29 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
             }
         }
+//        QByteArray opensslPath="cmd.exe /c echo " + data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath;
+//        QString qstr = QString::fromUtf8(opensslPath);
+//        std::wstring wstr = qstr.toStdWString();
+//        LPWSTR lpwstr = &wstr[0];
+//        STARTUPINFO si;
+//        PROCESS_INFORMATION pi;
+
+//        ZeroMemory(&si, sizeof(si));
+//        si.cb = sizeof(si);
+//        ZeroMemory(&pi, sizeof(pi));
+
+//            // Create the process in hidden mode
+//            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+//                WaitForSingleObject(pi.hProcess, 5000);
+//                CloseHandle(pi.hProcess);
+//                CloseHandle(pi.hThread);
+//            } else {
+//                // Handle an error if CreateProcess fails
+//                DWORD error = GetLastError();
+//                int errnum = GetLastError();
+//                printf("CreateProcess failed (%d)\n", GetLastError());
+
+//            }
         emit packetSent(sendpacket);
     }
 
