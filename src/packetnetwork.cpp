@@ -21,6 +21,7 @@
 #include <QtGlobal>
 #include <QUrlQuery>
 #include <QStandardPaths>
+#include <windows.h>
 #ifdef CONSOLE_BUILD
 class QMessageBox {
 public:
@@ -842,23 +843,62 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //"your_command_here \"C:\\Users\\YourUsername\\YourFile.txt\"";
         //command && echo input | command
         QByteArray data = sendpacket.getByteArray();
+        DWORD status;
+
         QByteArray opensslPath;
         static int isSessionOpen = false;
         if (!isSessionOpen){
             isSessionOpen = true;
-            system("type nul > session.pem");
-            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath;
-            const char* charArray = opensslPath.data();
-            int status = system(charArray);
+            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ data + " | openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath +")";
+            QString qstr = QString::fromUtf8(opensslPath);
+            std::wstring wstr = qstr.toStdWString();
+            LPWSTR lpwstr = &wstr[0];
+            STARTUPINFO si;
+            PROCESS_INFORMATION pi;
+
+            ZeroMemory(&si, sizeof(si));
+            si.cb = sizeof(si);
+            ZeroMemory(&pi, sizeof(pi));
+
+            // Create the process in hidden mode
+            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+                WaitForSingleObject(pi.hProcess, 10000);
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+            } else {
+                // Handle an error if CreateProcess fails
+                DWORD error = GetLastError();
+                printf("CreateProcess failed (%d)\n", GetLastError());
+
+            }
+            GetExitCodeProcess(pi.hProcess, &status);
             if (status!=0){//if the connection doesn't established
                 isSessionOpen = false;
             }
         } else{
-            opensslPath ="echo "+ data +" |openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
-            const char* charArray2=opensslPath.data();
-            system(charArray2);
-        }
+            opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
+            QString qstr = QString::fromUtf8(opensslPath);
+            std::wstring wstr = qstr.toStdWString();
+            LPWSTR lpwstr = &wstr[0];
+            STARTUPINFO si;
+            PROCESS_INFORMATION pi;
 
+            ZeroMemory(&si, sizeof(si));
+            si.cb = sizeof(si);
+            ZeroMemory(&pi, sizeof(pi));
+
+            // Create the process in hidden mode
+            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+                WaitForSingleObject(pi.hProcess, 10000);
+                CloseHandle(pi.hProcess);
+                CloseHandle(pi.hThread);
+            } else {
+                // Handle an error if CreateProcess fails
+                DWORD error = GetLastError();
+                printf("CreateProcess failed (%d)\n", GetLastError());
+
+            }
+        }
         emit packetSent(sendpacket);
     }
 
