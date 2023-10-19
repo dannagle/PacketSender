@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
         ui->loadKeyButton->hide();
         ui->loadCertButton->hide();
+        ui->noteServer->hide();
     }
 
     connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
@@ -2607,7 +2608,12 @@ void MainWindow::on_loadKeyButton_clicked()
 
     packetNetwork.keyPath = fileName.toUtf8();
 
-    //QByteArray data = filename;
+    // Extract the file name from the full path
+    QFileInfo fileInfo(fileName);
+    QString fileNameOnly = fileInfo.fileName();
+
+    // Set the extracted file name as the text on the button
+    ui->loadKeyButton->setText(fileNameOnly);
 
 }
 
@@ -2634,7 +2640,12 @@ void MainWindow::on_loadCertButton_clicked()
 
     packetNetwork.certPath = fileName.toUtf8();
 
-    //QByteArray data = filename;
+    // Extract the file name from the full path
+    QFileInfo fileInfo(fileName);
+    QString fileNameOnly = fileInfo.fileName();
+
+    // Set the extracted file name as the text on the button
+    ui->loadCertButton->setText(fileNameOnly);
 
 }
 
@@ -2657,9 +2668,11 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
         ui->loadKeyButton->show();  // Enable when "dtls" is selected
         ui->loadCertButton->show();
+        ui->noteServer->show();
     } else {
         ui->loadKeyButton->hide();   // Disable for other options
         ui->loadCertButton->hide();   // Disable for other options
+        ui->noteServer->hide();
     }
 
 

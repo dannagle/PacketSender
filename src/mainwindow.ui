@@ -247,6 +247,10 @@
               <property name="text">
                <string>DTLS</string>
               </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../../../tx_dtls.png</normaloff>../../../tx_dtls.png</iconset>
+              </property>
              </item>
              <item>
               <property name="text">
@@ -356,8 +360,22 @@
            <string>Load Key File</string>
           </property>
          </widget>
+         <widget class="QLabel" name="noteServer">
+          <property name="geometry">
+           <rect>
+            <x>210</x>
+            <y>0</y>
+            <width>161</width>
+            <height>21</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>*Only if needed by the server</string>
+          </property>
+         </widget>
          <zorder>loadKeyButton</zorder>
          <zorder>loadCertButton</zorder>
+         <zorder>noteServer</zorder>
         </widget>
        </item>
       </layout>
@@ -556,8 +574,6 @@
      </widget>
     </item>
    </layout>
-   <zorder>packetSetupGroup</zorder>
-   <zorder>splitter</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

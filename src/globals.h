@@ -49,7 +49,7 @@
 #define PANELSFILE ((QFile::exists("ps_panels.json") || QFile::exists("portablemode.txt") ) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
 
 #define NAMEINIKEY "NAMES"
-
+#define DTLSSENDICON ":icons/tx_dtls.png"
 #define UDPSENDICON ":icons/tx_udp.png"
 #define TCPSENDICON ":icons/tx_tcp.png"
 #define UDPRXICON ":icons/rx_udp.png"
