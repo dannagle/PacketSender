@@ -2606,7 +2606,7 @@ void MainWindow::on_loadKeyButton_clicked()
         //
     }
 
-    packetNetwork.keyPath = fileName.toUtf8();
+    packetNetwork.keyPath = fileName;
 
     // Extract the file name from the full path
     QFileInfo fileInfo(fileName);
@@ -2638,7 +2638,7 @@ void MainWindow::on_loadCertButton_clicked()
         //
     }
 
-    packetNetwork.certPath = fileName.toUtf8();
+    packetNetwork.certPath = fileName;
 
     // Extract the file name from the full path
     QFileInfo fileInfo(fileName);

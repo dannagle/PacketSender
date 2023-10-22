@@ -11,6 +11,7 @@
 #include "packetnetwork.h"
 #include "globals.h"
 #include "settings.h"
+#include<qstring.h>
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
@@ -833,27 +834,62 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         // Replace "your_executable.exe" with the actual path to the executable file
 
         //const char* executablePath = "C:/OpenSSL/bin/openssl.exe";
-        //const char* arguments = "s_client -dtls1_2 -connect localhost:12345 -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
+        //const char* arguments = "s_client -dtls1_2 -connect sendpacket.TO_IP:12345 -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
         //HINSTANCE hInstance = ShellExecuteA(NULL, "open", executablePath, arguments, NULL, SW_SHOWNORMAL);
 
         // Specify the command with arguments
-        //const char* command = "cmd openssl s_client -dtls1_2 -connect localhost:12345 -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
+        //const char* command = "cmd openssl s_client -dtls1_2 -connect sendpacket.TO_IP:sendpacket.TO_PORT -key C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-key.pem -cert C:/Users/ISRAELS4/Desktop/new openssl certificate/11.9.23-dtls/client-signed-cert.pem";
 
         // Use the system function to run the command
         //"your_command_here \"C:\\Users\\YourUsername\\YourFile.txt\"";
         //command && echo input | command
-        QByteArray data = sendpacket.getByteArray();
-        DWORD status;
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        //get the pathes for verification from the settings file
+        QString sslCaPath = settings.value("sslCaPath", "default").toString();
+        QString sslLocalCertificatePath = settings.value("sslLocalCertificatePath", "default").toString();
+        QString sslPrivateKeyPath = settings.value("sslPrivateKeyPath", "default").toString();
+        //get the full path to to ca-signed-cert.pem file
+        QDir dir(sslCaPath);
+        if (dir.exists()) {
+            QStringList nameFilters;
+            nameFilters << "*.pem";  // Filter for .txt files
 
-        QByteArray opensslPath;
+            dir.setNameFilters(nameFilters);
+            QStringList fileList = dir.entryList();
+
+            if (!fileList.isEmpty()) {
+                // Select the first file that matches the filter
+                QString sslCaFullPath = dir.filePath(fileList.first());
+                qDebug() << "Selected file: " << sslCaFullPath;
+            } else {
+                qDebug() << "No matching files found.";
+            }
+        } else {
+            qDebug() << "Directory does not exist.";
+        }
+        //get the data of the packet
+        QByteArray data = sendpacket.getByteArray();
+        QString dataStr = QString::fromUtf8(sendpacket.getByteArray());
+        DWORD status;
+        //execute the openssl s_client commands depends if the session is open or close
+        QString opensslPath;
         static int isSessionOpen = false;
         if (!isSessionOpen){
             isSessionOpen = true;
-            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ data + " | openssl s_client -dtls1_2 -connect localhost:12345 -sess_out session.pem -key " + keyPath + " -cert " + certPath +")";
-            QString qstr = QString::fromUtf8(opensslPath);
-            std::wstring wstr = qstr.toStdWString();
+            //opensslPath = "cmd.exe /c (type nul > session.pem) & (cd C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption) & (echo uvuhvv | openssl s_client -dtls1_2 -connect 127.0.0.1:12345 -sess_out session.pem -key client-key.pem -cert client-signed-cert.pem -CAfile ./ca-signed-cert/signed-cert.pem -verify 2 -cipher AES256-GCM-SHA384)";
+            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -sess_out session.pem -key " + sslPrivateKeyPath + " -cert " + sslLocalCertificatePath +" -CAfile " + sslCaPath + " -verify 2 -cipher AES256-GCM-SHA384)";
+
+            //const wchar_t* cmdCommandWide = opensslPath.toStdWString().c_str();
+//            int length = opensslPath.length() + 1;
+//            LPWSTR lpwstr = new WCHAR[length];
+//            opensslPath.toWCharArray(lpwstr);
+//            lpwstr[length - 1] = L'\0';  // Null-terminate the wide string
+            const wchar_t* wideCmd = opensslPath.toStdWString().c_str();
+            std::wstring wstr = opensslPath.toStdWString();
             LPWSTR lpwstr = &wstr[0];
+
             STARTUPINFO si;
+            si.lpTitle = NULL;
             PROCESS_INFORMATION pi;
 
             ZeroMemory(&si, sizeof(si));
@@ -861,7 +897,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             ZeroMemory(&pi, sizeof(pi));
 
             // Create the process in hidden mode
-            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+            if (CreateProcess(NULL, const_cast<wchar_t*>(wideCmd), NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
                 WaitForSingleObject(pi.hProcess, 10000);
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
@@ -877,8 +913,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             }
         } else{
             opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect localhost:12345 -sess_in session.pem";
-            QString qstr = QString::fromUtf8(opensslPath);
-            std::wstring wstr = qstr.toStdWString();
+            std::wstring wstr = opensslPath.toStdWString();
             LPWSTR lpwstr = &wstr[0];
             STARTUPINFO si;
             PROCESS_INFORMATION pi;

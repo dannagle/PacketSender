@@ -744,7 +744,7 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                       tr("Choose Cert"), home, tr("Certs (*.pem)"));
+                       tr("Choose Cert"), home, tr("*.*"));
 
     if (QFile::exists(fileName)) {
         ui->sslLocalCertificatePath->setText(fileName);
@@ -760,7 +760,7 @@ void Settings::on_sslPrivateKeyPathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                       tr("Choose Key"), home, tr("Keys (*.key, *.pem)"));
+                       tr("Choose Key"), home, tr("*.*"));
 
     if (QFile::exists(fileName)) {
         ui->sslPrivateKeyPath->setText(fileName);
