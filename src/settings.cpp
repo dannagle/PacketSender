@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QHostAddress>
 #include <QStandardPaths>
+#include <QObject>
 
 
 #ifndef CONSOLE_BUILD
@@ -95,9 +96,10 @@ Settings::Settings(QWidget *parent) :
     //not working yet...
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
-
+    //connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("leaveSessionOpen", "false");
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("Packet Sender "+tr("Settings"));
@@ -106,7 +108,6 @@ Settings::Settings(QWidget *parent) :
     //this is no longer working thanks to faster traffic log
     ui->displayOrderListTraffic->hide();
     ui->displayGroupBoxTraffic->setTitle("");
-
 
     loadCredentialTable();
     on_genAuthCheck_clicked(false);
@@ -174,6 +175,8 @@ Settings::Settings(QWidget *parent) :
     ui->dateFormatExample->setText(now.toString(dateFormat));
     ui->timeFormatExample->setText(now.toString(timeFormat));
 
+    leaveSessionOpen = ui->leaveSessionOpen;
+    connect(leaveSessionOpen, &QCheckBox::toggled, this, &Settings::on_leaveSessionOpen_StateChanged);
 
     connect(ui->dateFormat, &QLineEdit::textChanged, this, [=](QString val) {
         // use action as you wish
@@ -337,6 +340,18 @@ QString Settings::language()
 void Settings::statusBarMessage(QString msg)
 {
     Q_UNUSED(msg);
+
+}
+
+void Settings::on_leaveSessionOpen_StateChanged(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString leaveSessionOpen = settings.value("leaveSessionOpen", "false").toString();
+    if(leaveSessionOpen == "false"){
+        settings.setValue("leaveSessionOpen", "true");
+    }
+    else{
+        settings.setValue("leaveSessionOpen", "false");
+    }
 
 }
 

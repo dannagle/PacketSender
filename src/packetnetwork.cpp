@@ -828,6 +828,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     if(sendpacket.isDTLS()){
         //open settings file in order to get the ssl valuse of the packet
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        QStringList allKeys = settings.allKeys();
         //get the pathes for verification from the settings file
         QString sslCaPath = settings.value("sslCaPath", "default").toString();
         QString sslLocalCertificatePath = settings.value("sslLocalCertificatePath", "default").toString();
@@ -859,11 +860,65 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         DWORD status;
         //opensslPath stored the openssl s_client commands depends if the session is open or close
         QString opensslPath;
-        static int isSessionOpen = false;
-        if (!isSessionOpen){
-            //if the session is closed, create session key and save it:
-            isSessionOpen = true;
-            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -sess_out session.pem -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+        QString valueOfLeaveSessOpen = settings.value("leaveSessionOpen").toString();
+        //if the user want to leave the session open
+        if(settings.value("leaveSessionOpen").toString() == "true"){
+            static int isSessionOpen = false;
+            if (!isSessionOpen){
+                //if the session is closed, create session key and save it:
+                isSessionOpen = true;
+                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -sess_out session.pem -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+                //adjust the opensslPath to be the input for CreateProcess function
+                std::wstring wstr = opensslPath.toStdWString();
+                //initiate the proccess's parameters
+                LPWSTR lpwstr = &wstr[0];
+                STARTUPINFO si;
+                si.lpTitle = NULL;
+                PROCESS_INFORMATION pi;
+                ZeroMemory(&si, sizeof(si));
+                si.cb = sizeof(si);
+                ZeroMemory(&pi, sizeof(pi));
+                // Create the process in hidden mode
+                if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+                    WaitForSingleObject(pi.hProcess, 10000);
+                    CloseHandle(pi.hProcess);
+                    CloseHandle(pi.hThread);
+                } else {
+                    // Handle an error if CreateProcess fails
+                    qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+
+                }
+                //if the connection doesn't established change modify the session to close session
+                GetExitCodeProcess(pi.hProcess, &status);
+                if (status!=0){
+                    isSessionOpen = false;
+                }
+            } else{
+                //if the session is open, use the session key that has been saved:
+                opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
+                //initiate the proccess's parameters
+                std::wstring wstr = opensslPath.toStdWString();
+                LPWSTR lpwstr = &wstr[0];
+                STARTUPINFO si;
+                PROCESS_INFORMATION pi;
+                ZeroMemory(&si, sizeof(si));
+                si.cb = sizeof(si);
+                ZeroMemory(&pi, sizeof(pi));
+                // Create the process in hidden mode
+                if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+                    WaitForSingleObject(pi.hProcess, 10000);
+                    CloseHandle(pi.hProcess);
+                    CloseHandle(pi.hThread);
+                } else {
+                    // Handle an error if CreateProcess fails
+                    qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+
+                }
+            }
+        }
+        //if the user doesn't want to leave the session open
+        else{
+            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
             //adjust the opensslPath to be the input for CreateProcess function
             std::wstring wstr = opensslPath.toStdWString();
             //initiate the proccess's parameters
@@ -876,32 +931,6 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             ZeroMemory(&pi, sizeof(pi));
             // Create the process in hidden mode
             if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-                WaitForSingleObject(pi.hProcess, 10000);
-                CloseHandle(pi.hProcess);
-                CloseHandle(pi.hThread);
-            } else {
-                // Handle an error if CreateProcess fails
-                qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
-
-            }
-            //if the connection doesn't established change modify the session to close session
-            GetExitCodeProcess(pi.hProcess, &status);
-            if (status!=0){
-                isSessionOpen = false;
-            }
-        } else{
-            //if the session is open, use the session key that has been saved:
-            opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
-            //initiate the proccess's parameters
-            std::wstring wstr = opensslPath.toStdWString();
-            LPWSTR lpwstr = &wstr[0];
-            STARTUPINFO si;
-            PROCESS_INFORMATION pi;
-            ZeroMemory(&si, sizeof(si));
-            si.cb = sizeof(si);
-            ZeroMemory(&pi, sizeof(pi));
-            // Create the process in hidden mode
-            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
                 WaitForSingleObject(pi.hProcess, 10000);
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);

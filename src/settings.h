@@ -9,6 +9,7 @@
 #endif
 #include <QSettings>
 #include <QList>
+#include <QCheckBox>
 
 
 #ifdef CONSOLE_BUILD
@@ -67,6 +68,7 @@ class Settings : public QDialog
         explicit Settings(QWidget *parent = nullptr);
         ~Settings();
 
+        QCheckBox* leaveSessionOpen;
         static QStringList defaultPacketTableHeader();
         static QStringList defaultTrafficTableHeader();
 
@@ -100,8 +102,12 @@ class Settings : public QDialog
         static QString language();
         static bool needLanguage();
         static QString logHeaderTranslate(QString txt);
+public slots:
+        void on_leaveSessionOpen_StateChanged();
 
 private slots:
+
+
         void on_buttonBox_accepted();
 
         void on_asciiResponseEdit_textEdited(const QString &arg1);
