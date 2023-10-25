@@ -92,6 +92,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
 {
     ui->setupUi(this);
 
+
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     //not working yet...
@@ -100,7 +101,11 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     //connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    //settings.setValue("leaveSessionOpen", "false");
+    if(settings.value("leaveSessionOpen").toString() == "false"){
+        ui->leaveSessionOpen->setChecked(false);
+    } else {
+        ui->leaveSessionOpen->setChecked(true);
+    }
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("Packet Sender "+tr("Settings"));
