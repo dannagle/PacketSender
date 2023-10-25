@@ -863,10 +863,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         QString valueOfLeaveSessOpen = settings.value("leaveSessionOpen").toString();
         //if the user want to leave the session open
         if(settings.value("leaveSessionOpen").toString() == "true"){
-            static int isSessionOpen = false;
-            if (!isSessionOpen){
+
+            if (!MainWindow::isSessionOpen){
                 //if the session is closed, create session key and save it:
-                isSessionOpen = true;
+                MainWindow::isSessionOpen = true;
                 opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -sess_out session.pem -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
                 //adjust the opensslPath to be the input for CreateProcess function
                 std::wstring wstr = opensslPath.toStdWString();
@@ -885,13 +885,14 @@ void PacketNetwork::packetToSend(Packet sendpacket)
                     CloseHandle(pi.hThread);
                 } else {
                     // Handle an error if CreateProcess fails
-                    qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+                    //DWORD errorCode=GetLastError();
+                    //qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
 
                 }
                 //if the connection doesn't established change modify the session to close session
                 GetExitCodeProcess(pi.hProcess, &status);
                 if (status!=0){
-                    isSessionOpen = false;
+                    MainWindow::isSessionOpen = false;
                 }
             } else{
                 //if the session is open, use the session key that has been saved:

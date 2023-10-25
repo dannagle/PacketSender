@@ -69,6 +69,7 @@ class MainWindow : public QMainWindow
         Q_OBJECT
 
     public:
+        static int isSessionOpen;
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
@@ -95,11 +96,10 @@ class MainWindow : public QMainWindow
         void sendPacket(Packet sendpacket);
 
     public slots:
+        void on_leaveSessionOpen_StateChanged();
         void toTrafficLog(Packet logPacket);
         void cancelResends();
         void applyNetworkSettings();
-
-
         void toggleUDPServer();
         void toggleTCPServer();
         void toggleSSLServer();

@@ -95,6 +95,8 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 
 int main(int argc, char *argv[])
 {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("leaveSessionOpen", "false");
     int debugMode = DEBUGMODE;
 
     if (QFile::exists("DEBUGMODE")) {

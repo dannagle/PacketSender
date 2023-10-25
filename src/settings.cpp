@@ -85,8 +85,9 @@ const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
 
 #ifndef CONSOLE_BUILD
 
-Settings::Settings(QWidget *parent) :
+Settings::Settings(QWidget *parent, MainWindow* mw) :
     QDialog(parent),
+    rmw(mw),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
@@ -99,7 +100,7 @@ Settings::Settings(QWidget *parent) :
     //connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.setValue("leaveSessionOpen", "false");
+    //settings.setValue("leaveSessionOpen", "false");
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("Packet Sender "+tr("Settings"));
@@ -176,7 +177,7 @@ Settings::Settings(QWidget *parent) :
     ui->timeFormatExample->setText(now.toString(timeFormat));
 
     leaveSessionOpen = ui->leaveSessionOpen;
-    connect(leaveSessionOpen, &QCheckBox::toggled, this, &Settings::on_leaveSessionOpen_StateChanged);
+    connect(leaveSessionOpen, &QCheckBox::toggled, dynamic_cast<MainWindow*>(parent), &MainWindow::on_leaveSessionOpen_StateChanged);
 
     connect(ui->dateFormat, &QLineEdit::textChanged, this, [=](QString val) {
         // use action as you wish
@@ -343,17 +344,6 @@ void Settings::statusBarMessage(QString msg)
 
 }
 
-void Settings::on_leaveSessionOpen_StateChanged(){
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    QString leaveSessionOpen = settings.value("leaveSessionOpen", "false").toString();
-    if(leaveSessionOpen == "false"){
-        settings.setValue("leaveSessionOpen", "true");
-    }
-    else{
-        settings.setValue("leaveSessionOpen", "false");
-    }
-
-}
 
 void Settings::on_buttonBox_accepted()
 {

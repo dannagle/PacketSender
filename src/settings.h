@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include "globals.h"
+#include "mainwindow.h"
 
 #ifndef CONSOLE_BUILD
 #include <QDialog>
@@ -65,7 +66,9 @@ class Settings : public QDialog
         Q_OBJECT
 
     public:
-        explicit Settings(QWidget *parent = nullptr);
+        MainWindow* rmw;
+
+        explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();
 
         QCheckBox* leaveSessionOpen;
@@ -102,8 +105,6 @@ class Settings : public QDialog
         static QString language();
         static bool needLanguage();
         static QString logHeaderTranslate(QString txt);
-public slots:
-        void on_leaveSessionOpen_StateChanged();
 
 private slots:
 
@@ -142,6 +143,7 @@ private slots:
         void on_chooseLanguageButton_clicked();
 
 private:
+        QWidget *parentWidget;
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
         QStringList packetTableHeaders;

@@ -58,6 +58,7 @@
 #include "postdatagen.h"
 #include "panelgenerator.h"
 
+int MainWindow::isSessionOpen = false;
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
 extern void themeTheButton(QPushButton * button);
@@ -82,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
+    //settings.setValue("leaveSessionOpen", "false");
     QIcon mIcon(":pslogo.png");
 
 
@@ -2246,9 +2247,22 @@ void MainWindow::on_actionHelp_triggered()
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
+void MainWindow::on_leaveSessionOpen_StateChanged(){
+    //ui.checkBox->setChecked(checkBoxState);
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString leaveSessionOpen = settings.value("leaveSessionOpen", "false").toString();
+    if(leaveSessionOpen == "false"){
+        settings.setValue("leaveSessionOpen", "true");
+    }
+    else{
+        settings.setValue("leaveSessionOpen", "false");
+    }
+}
+
 void MainWindow::on_actionSettings_triggered()
 {
-    Settings settings;
+    Settings settings(this);
     int accepted = settings.exec();
     if (accepted) {
         setIPMode();
