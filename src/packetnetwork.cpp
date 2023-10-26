@@ -919,7 +919,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         }
         //if the user doesn't want to leave the session open
         else{
-            opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+            MainWindow::isSessionOpen = false;
+            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+            //opensslPath = "cmd.exe /c where filename.ext";
+
             //adjust the opensslPath to be the input for CreateProcess function
             std::wstring wstr = opensslPath.toStdWString();
             //initiate the proccess's parameters
