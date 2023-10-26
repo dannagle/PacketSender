@@ -826,15 +826,20 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
     if(sendpacket.isDTLS()){
+        //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+        QString cmdComponents[6];
+        //get the data of the packet
+        cmdComponents[0] = QString::fromUtf8(sendpacket.getByteArray());
+        cmdComponents[1] = sendpacket.toIP;
+        cmdComponents[2] = QString::number(sendpacket.port);
         //open settings file in order to get the ssl valuse of the packet
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        QStringList allKeys = settings.allKeys();
-        //get the pathes for verification from the settings file
+        //get the pathes for verification from the settings
+        cmdComponents[3] = settings.value("sslPrivateKeyPath", "default").toString();
+        cmdComponents[4] = settings.value("sslLocalCertificatePath", "default").toString();
         QString sslCaPath = settings.value("sslCaPath", "default").toString();
-        QString sslLocalCertificatePath = settings.value("sslLocalCertificatePath", "default").toString();
-        QString sslPrivateKeyPath = settings.value("sslPrivateKeyPath", "default").toString();
+
         //get the full path to to ca-signed-cert.pem file
-        QString sslCaFullPath;
         QDir dir(sslCaPath);
         if (dir.exists()) {
             QStringList nameFilters;
@@ -845,104 +850,41 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
             if (!fileList.isEmpty()) {
                 // Select the first file that matches the filter
-                sslCaFullPath = dir.filePath(fileList.first());
-                qDebug() << "Selected file: " << sslCaFullPath;
+                cmdComponents[5] = dir.filePath(fileList.first());
             } else {
                 qDebug() << "No matching files found.";
             }
         } else {
             qDebug() << "Directory does not exist.";
         }
-        //get the data of the packet
-        QByteArray data = sendpacket.getByteArray();
-        QString dataStr = QString::fromUtf8(sendpacket.getByteArray());
+
         //status is determine if the connection established or doesn't
-        DWORD status;
+        DWORD status = 0;
+        DWORD& statusRef = status;
         //opensslPath stored the openssl s_client commands depends if the session is open or close
         QString opensslPath;
-        QString valueOfLeaveSessOpen = settings.value("leaveSessionOpen").toString();
         //if the user want to leave the session open
         if(settings.value("leaveSessionOpen").toString() == "true"){
 
             if (!MainWindow::isSessionOpen){
                 //if the session is closed, create session key and save it:
                 MainWindow::isSessionOpen = true;
-                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -sess_out session.pem -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
-                //adjust the opensslPath to be the input for CreateProcess function
-                std::wstring wstr = opensslPath.toStdWString();
-                //initiate the proccess's parameters
-                LPWSTR lpwstr = &wstr[0];
-                STARTUPINFO si;
-                si.lpTitle = NULL;
-                PROCESS_INFORMATION pi;
-                ZeroMemory(&si, sizeof(si));
-                si.cb = sizeof(si);
-                ZeroMemory(&pi, sizeof(pi));
-                // Create the process in hidden mode
-                if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-                    WaitForSingleObject(pi.hProcess, 10000);
-                    CloseHandle(pi.hProcess);
-                    CloseHandle(pi.hThread);
-                } else {
-                    // Handle an error if CreateProcess fails
-                    //DWORD errorCode=GetLastError();
-                    //qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -sess_out session.pem -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+                execCmd(opensslPath, statusRef);
 
-                }
-                //if the connection doesn't established change modify the session to close session
-                GetExitCodeProcess(pi.hProcess, &status);
-                if (status!=0){
-                    MainWindow::isSessionOpen = false;
-                }
+
             } else{
                 //if the session is open, use the session key that has been saved:
-                opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
-                //initiate the proccess's parameters
-                std::wstring wstr = opensslPath.toStdWString();
-                LPWSTR lpwstr = &wstr[0];
-                STARTUPINFO si;
-                PROCESS_INFORMATION pi;
-                ZeroMemory(&si, sizeof(si));
-                si.cb = sizeof(si);
-                ZeroMemory(&pi, sizeof(pi));
-                // Create the process in hidden mode
-                if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
-                    WaitForSingleObject(pi.hProcess, 10000);
-                    CloseHandle(pi.hProcess);
-                    CloseHandle(pi.hThread);
-                } else {
-                    // Handle an error if CreateProcess fails
-                    qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
-
-                }
+                //opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
+                opensslPath ="cmd.exe /c echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] +" -sess_in session.pem";
+                execCmd(opensslPath, statusRef);
             }
         }
         //if the user doesn't want to leave the session open
         else{
             MainWindow::isSessionOpen = false;
-            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ dataStr + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port) + " -key \"" + sslPrivateKeyPath + "\" -cert \"" + sslLocalCertificatePath +"\" -CAfile \"" + sslCaFullPath + "\" -verify 2 -cipher AES256-GCM-SHA384)";
-            //opensslPath = "cmd.exe /c where filename.ext";
-
-            //adjust the opensslPath to be the input for CreateProcess function
-            std::wstring wstr = opensslPath.toStdWString();
-            //initiate the proccess's parameters
-            LPWSTR lpwstr = &wstr[0];
-            STARTUPINFO si;
-            si.lpTitle = NULL;
-            PROCESS_INFORMATION pi;
-            ZeroMemory(&si, sizeof(si));
-            si.cb = sizeof(si);
-            ZeroMemory(&pi, sizeof(pi));
-            // Create the process in hidden mode
-            if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
-                WaitForSingleObject(pi.hProcess, 10000);
-                CloseHandle(pi.hProcess);
-                CloseHandle(pi.hThread);
-            } else {
-                // Handle an error if CreateProcess fails
-                qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
-
-            }
+            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher AES256-GCM-SHA384)";
+            execCmd(opensslPath, statusRef);
         }
         emit packetSent(sendpacket);
     }
@@ -1065,8 +1007,36 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
     }
 
+}
 
 
+//isDTLS function
+void PacketNetwork::execCmd(QString opensslPath, DWORD& statusRef){
+    //adjust the opensslPath to be the input for CreateProcess function
+    std::wstring wstr = opensslPath.toStdWString();
+    //initiate the proccess's parameters
+    LPWSTR lpwstr = &wstr[0];
+    STARTUPINFO si;
+    si.lpTitle = NULL;
+    PROCESS_INFORMATION pi;
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+    // Create the process in hidden mode
+    if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
+        WaitForSingleObject(pi.hProcess, 10000);
+        //if the connection doesn't established change modify the session to close session
+        GetExitCodeProcess(pi.hProcess, &statusRef);
+        if (statusRef!=0){
+            MainWindow::isSessionOpen = false;
+        }
+        CloseHandle(pi.hProcess);
+        CloseHandle(pi.hThread);
+    } else {
+        // Handle an error if CreateProcess fails
+        //DWORD errorCode=GetLastError();
+        //qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+    }
 }
 
 void PacketNetwork::httpError(QNetworkRequest* pReply)

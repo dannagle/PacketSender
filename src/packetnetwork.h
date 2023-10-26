@@ -30,6 +30,8 @@
 #include "persistentconnection.h"
 #endif
 #include <threadedtcpserver.h>
+#include <Windows.h>
+
 
 
 
@@ -41,6 +43,9 @@ class PacketNetwork : public QObject
         QString certPath;
         explicit PacketNetwork(QObject *parent = nullptr);
         void init();
+
+        //isDTLS function
+        void execCmd(QString opensslPath, DWORD& statusRef);
 
         QString debugQByteArray(QByteArray debugArray);
 
