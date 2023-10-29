@@ -2788,12 +2788,34 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_actionWake_On_LAN_Magic_Packet_triggered()
 {
+    static QString previousMAC = "";
+    static int previousPortIndex = 0;
     WakeOnLAN wol = WakeOnLAN();
+    wol.setTarget(previousMAC, previousPortIndex);
     wol.setModal(true);
     wol.exec();
+    if(!wol.generatedPacket.errorString.isEmpty()) {
+
+        QMessageBox msgBox;
+        msgBox.setWindowIcon(QIcon(":pslogo.png"));
+        msgBox.setWindowTitle(tr("Invalid MAC Address."));
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setText(wol.generatedPacket.errorString);
+        msgBox.setModal(true);
+        msgBox.exec();
+
+        on_actionWake_On_LAN_Magic_Packet_triggered();
+        return;
+    }
+
     if(wol.generatedPacket.toIP.isEmpty()) {
         return;
     }
+
+    previousMAC = wol.mac;
+    previousPortIndex = wol.portIndex;
 
     ui->packetIPEdit->setText(wol.generatedPacket.toIP);
     ui->packetPortEdit->setText(QString::number(wol.generatedPacket.port));
@@ -2802,7 +2824,12 @@ void MainWindow::on_actionWake_On_LAN_Magic_Packet_triggered()
         ui->udptcpComboBox->setCurrentIndex(findtext);
     }
     ui->packetHexEdit->setText(wol.generatedPacket.hexString);
+    on_packetHexEdit_editingFinished();
     on_udptcpComboBox_currentIndexChanged("");
+
+    if(ui->packetNameEdit->text().isEmpty()) {
+        ui->packetNameEdit->setFocus();
+    }
 
 }
 

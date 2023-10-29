@@ -16,7 +16,10 @@ class WakeOnLAN : public QDialog
 public:
     explicit WakeOnLAN(QWidget *parent = nullptr);
     ~WakeOnLAN();
+    void setTarget(QString mac, int portIndex);
     Packet generatedPacket;
+    QString mac;
+    int portIndex;
 
 private slots:
     void on_buttonBox_accepted();

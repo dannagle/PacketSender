@@ -596,7 +596,7 @@ void Packet::saveToDB()
 
 }
 
-Packet Packet::generateWakeOnLAN(QString mac, int port)
+Packet Packet::generateWakeOnLAN(QString &mac, int port)
 {
     /*
      * The Wake-On-LAN / Magic Packet format is as follows:
@@ -620,8 +620,22 @@ Packet Packet::generateWakeOnLAN(QString mac, int port)
     }
 
     QByteArray macBytes = HEXtoByteArray(mac);
-    macBytes.truncate(6);
-    wakeBytes.append(macBytes);
+
+    if(macBytes.size() != 6) {
+        QDEBUG() << "Received an invalid MAC address" << mac;
+        wakeOnLAN.init();
+        wakeOnLAN.errorString = "Received an invalid MAC address";
+        return wakeOnLAN;
+    }
+
+    // Corrected mac format
+    QString correctedMAC = Packet::byteArrayToHex(macBytes).trimmed();
+    correctedMAC.replace(" ", ":");
+    mac = correctedMAC;
+
+    for(int i=0; i<16; i++) {
+        wakeBytes.append(macBytes);
+    }
 
     wakeOnLAN.hexString = byteArrayToHex(wakeBytes);
 

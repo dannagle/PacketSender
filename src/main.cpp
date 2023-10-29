@@ -274,8 +274,8 @@ int main(int argc, char *argv[])
                                       "name");
         parser.addOption(nameOption);
 
-        QCommandLineOption wakeOption(QStringList() << "wake" << "Send Wake-On-LAN / Magic Packet to <mac> and <optional port>.");
-        parser.addOption(wakeOption);
+        QCommandLineOption wolOption(QStringList() << "wol", "Send Wake-On-LAN / Magic Packet to <mac> and (optional) <port>.", "mac");
+        parser.addOption(wolOption);
 
 
 
@@ -328,7 +328,7 @@ int main(int argc, char *argv[])
         bool ipv4  = parser.isSet(bindIPv4Option);
         bool http  = parser.isSet(httpOption);
 
-        bool wake = parser.isSet(wakeOption);
+        bool wol = parser.isSet(wolOption);
 
         bool okbps = false;
         bool okrate = false;
@@ -372,22 +372,32 @@ int main(int argc, char *argv[])
         QString data, dataString;
         data.clear();
         dataString.clear();
-        if (argssize >= 1) {
-            address = args[0];
-        }
-
-        if(wake) {
-            if (argssize >= 2) {
-                port = QString(args[1]).toUInt();
+        if(wol) {
+            QString targetMAC = parser.value(wolOption).trimmed().toUpper();
+            if (argssize >= 1) {
+                port = QString(args[0]).toUInt();
             }
             if(port < 1) {
                 port = 7;
             }
 
-            Packet wakePkt = Packet::generateWakeOnLAN(address, port);
-            OUTIF() << wakePkt.asciiString();
-            OUTPUT()
-            return 0;
+            Packet wolPkt = Packet::generateWakeOnLAN(targetMAC, port);
+
+            if(wolPkt.errorString.isEmpty()) {
+                OUTIF() << "Sending broadcast Wake-On-LAN to target: " + targetMAC + " on port " + QString::number(port);
+                udp = true;
+                tcp = false;
+                ssl = false;
+                http = false;
+                address = wolPkt.toIP;
+                data = wolPkt.hexString;
+
+            } else {
+                OUTIF() << "Error generating Wake-On-LAN: " + wolPkt.errorString;
+                OUTPUT();
+                return -1;
+            }
+
         }
 
 

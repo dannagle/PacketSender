@@ -85,7 +85,7 @@ class Packet
 
         void saveToDB();
 
-        static Packet generateWakeOnLAN(QString mac, int port);
+        static Packet generateWakeOnLAN(QString &mac, int port);
 
         static Packet fetchFromDB(QString thename);
         static QList<Packet> fetchAllfromDB(QString importFile);
