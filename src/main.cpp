@@ -274,6 +274,9 @@ int main(int argc, char *argv[])
                                       "name");
         parser.addOption(nameOption);
 
+        QCommandLineOption wakeOption(QStringList() << "wake" << "Send Wake-On-LAN / Magic Packet to <mac> and <optional port>.");
+        parser.addOption(wakeOption);
+
 
 
         // Intense Traffic Generator
@@ -325,6 +328,8 @@ int main(int argc, char *argv[])
         bool ipv4  = parser.isSet(bindIPv4Option);
         bool http  = parser.isSet(httpOption);
 
+        bool wake = parser.isSet(wakeOption);
+
         bool okbps = false;
         bool okrate = false;
         bool maxrate = parser.isSet(maxOption);
@@ -370,6 +375,22 @@ int main(int argc, char *argv[])
         if (argssize >= 1) {
             address = args[0];
         }
+
+        if(wake) {
+            if (argssize >= 2) {
+                port = QString(args[1]).toUInt();
+            }
+            if(port < 1) {
+                port = 7;
+            }
+
+            Packet wakePkt = Packet::generateWakeOnLAN(address, port);
+            OUTIF() << wakePkt.asciiString();
+            OUTPUT()
+            return 0;
+        }
+
+
         if(http) {
             if(parser.isSet(httpOption)) {
                 if(httpMethod != "GET" && httpMethod != "POST") {

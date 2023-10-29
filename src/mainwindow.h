@@ -229,6 +229,8 @@ class MainWindow : public QMainWindow
 
         void on_udptcpComboBox_currentIndexChanged(int index);
 
+        void on_actionWake_On_LAN_Magic_Packet_triggered();
+
     private:
         Ui::MainWindow *ui;
         QSortFilterProxyModel *proxyModel;

@@ -56,6 +56,7 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
+#include "wakeonlan.h"
 
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
@@ -2782,5 +2783,13 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 {
     on_udptcpComboBox_currentIndexChanged("");
+}
+
+
+void MainWindow::on_actionWake_On_LAN_Magic_Packet_triggered()
+{
+    WakeOnLAN wol = WakeOnLAN();
+    wol.exec();
+
 }
 
