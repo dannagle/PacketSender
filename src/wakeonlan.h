@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "packet.h"
+
 namespace Ui {
 class WakeOnLAN;
 }
@@ -14,6 +16,10 @@ class WakeOnLAN : public QDialog
 public:
     explicit WakeOnLAN(QWidget *parent = nullptr);
     ~WakeOnLAN();
+    Packet generatedPacket;
+
+private slots:
+    void on_buttonBox_accepted();
 
 private:
     Ui::WakeOnLAN *ui;

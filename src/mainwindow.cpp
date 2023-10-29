@@ -2789,7 +2789,20 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 void MainWindow::on_actionWake_On_LAN_Magic_Packet_triggered()
 {
     WakeOnLAN wol = WakeOnLAN();
+    wol.setModal(true);
     wol.exec();
+    if(wol.generatedPacket.toIP.isEmpty()) {
+        return;
+    }
+
+    ui->packetIPEdit->setText(wol.generatedPacket.toIP);
+    ui->packetPortEdit->setText(QString::number(wol.generatedPacket.port));
+    int findtext = ui->udptcpComboBox->findText(wol.generatedPacket.tcpOrUdp);
+    if (findtext > -1) {
+        ui->udptcpComboBox->setCurrentIndex(findtext);
+    }
+    ui->packetHexEdit->setText(wol.generatedPacket.hexString);
+    on_udptcpComboBox_currentIndexChanged("");
 
 }
 
