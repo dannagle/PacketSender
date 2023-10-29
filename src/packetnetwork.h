@@ -31,7 +31,7 @@
 #endif
 #include <threadedtcpserver.h>
 #include <Windows.h>
-
+#include <QSettings>
 
 
 
@@ -45,7 +45,8 @@ class PacketNetwork : public QObject
         void init();
 
         //isDTLS function
-        void execCmd(QString opensslPath, DWORD& statusRef);
+        void execCmd(QString opensslPath, DWORD& statusRef, Packet& sendpacket);
+        std::vector<QString> getCmdInput(Packet sendpacket, QSettings &settings);
 
         QString debugQByteArray(QByteArray debugArray);
 

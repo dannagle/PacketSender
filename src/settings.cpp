@@ -92,7 +92,6 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
 {
     ui->setupUi(this);
 
-
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     //not working yet...

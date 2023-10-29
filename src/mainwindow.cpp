@@ -72,12 +72,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    cipherCb = ui->cipherCb;
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
         ui->loadKeyButton->hide();
         ui->loadCertButton->hide();
         ui->noteServer->hide();
+        cipherCb->hide();
+        ui->CipherLable->hide();
     }
 
+    connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
     connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
     connect(loadCertButton, &QPushButton::clicked, this, &MainWindow::on_loadCertButton_clicked);
 
@@ -2683,10 +2687,15 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         ui->loadKeyButton->show();  // Enable when "dtls" is selected
         ui->loadCertButton->show();
         ui->noteServer->show();
+        cipherCb->show();
+        ui->CipherLable->show();
     } else {
         ui->loadKeyButton->hide();   // Disable for other options
         ui->loadCertButton->hide();   // Disable for other options
         ui->noteServer->hide();
+        cipherCb->hide();
+        ui->CipherLable->hide();
+
     }
 
 
@@ -2720,6 +2729,15 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 
     ui->genPostDataButton->setVisible(isPost);
 }
+
+void MainWindow::on_cipherCb_currentIndexChanged(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("cipher", cipherCb->currentText());
+    //create new session even if the leave open session checkbox is pushed create new session, because the cipher has been changed
+    isSessionOpen = false;
+
+}
+
 
 void MainWindow::on_genPostDataButton_clicked()
 {

@@ -249,7 +249,7 @@
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../../../tx_dtls.png</normaloff>../../../tx_dtls.png</iconset>
+                <normaloff>../../../עבודה/dtls_logo/tx_dtls.png</normaloff>../../../עבודה/dtls_logo/tx_dtls.png</iconset>
               </property>
              </item>
              <item>
@@ -373,9 +373,129 @@
            <string>*Only if needed by the server</string>
           </property>
          </widget>
+         <widget class="QComboBox" name="cipherCb">
+          <property name="geometry">
+           <rect>
+            <x>650</x>
+            <y>0</y>
+            <width>191</width>
+            <height>24</height>
+           </rect>
+          </property>
+          <item>
+           <property name="text">
+            <string>AES256-GCM-SHA384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES128-GCM-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES256-GCM-SHA384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES128-GCM-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES128-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES256-SHA384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES128-SHA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>AES256-SHA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>CHACHA20-POLY1305-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>RC4-MD5</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>RC4-SHA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>CAMELLIA128-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>CAMELLIA256-SHA</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ECDHE-RSA-AES128-GCM-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ECDHE-RSA-AES256-GCM-SHA384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ECDHE-ECDSA-AES128-GCM-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>ECDHE-ECDSA-AES256-GCM-SHA384</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>DHE-RSA-AES128-GCM-SHA256</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>DHE-RSA-AES256-GCM-SHA384</string>
+           </property>
+          </item>
+         </widget>
+         <widget class="QLabel" name="CipherLable">
+          <property name="geometry">
+           <rect>
+            <x>560</x>
+            <y>0</y>
+            <width>81</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Cipher Suites:</string>
+          </property>
+         </widget>
          <zorder>loadKeyButton</zorder>
          <zorder>loadCertButton</zorder>
          <zorder>noteServer</zorder>
+         <zorder>cipherCb</zorder>
+         <zorder>CipherLable</zorder>
         </widget>
        </item>
       </layout>

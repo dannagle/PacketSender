@@ -826,38 +826,13 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
     if(sendpacket.isDTLS()){
-        //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
-        QString cmdComponents[6];
-        //get the data of the packet
-        cmdComponents[0] = QString::fromUtf8(sendpacket.getByteArray());
-        cmdComponents[1] = sendpacket.toIP;
-        cmdComponents[2] = QString::number(sendpacket.port);
         //open settings file in order to get the ssl valuse of the packet
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        //get the pathes for verification from the settings
-        cmdComponents[3] = settings.value("sslPrivateKeyPath", "default").toString();
-        cmdComponents[4] = settings.value("sslLocalCertificatePath", "default").toString();
-        QString sslCaPath = settings.value("sslCaPath", "default").toString();
-
-        //get the full path to to ca-signed-cert.pem file
-        QDir dir(sslCaPath);
-        if (dir.exists()) {
-            QStringList nameFilters;
-            nameFilters << "*.pem";  // Filter for .txt files
-
-            dir.setNameFilters(nameFilters);
-            QStringList fileList = dir.entryList();
-
-            if (!fileList.isEmpty()) {
-                // Select the first file that matches the filter
-                cmdComponents[5] = dir.filePath(fileList.first());
-            } else {
-                qDebug() << "No matching files found.";
-            }
-        } else {
-            qDebug() << "Directory does not exist.";
+        if (settings.status() != QSettings::NoError) {
+            sendpacket.errorString ="Can't open settings file.";
         }
-
+        //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+        std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
         //status is determine if the connection established or doesn't
         DWORD status = 0;
         DWORD& statusRef = status;
@@ -865,26 +840,23 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         QString opensslPath;
         //if the user want to leave the session open
         if(settings.value("leaveSessionOpen").toString() == "true"){
-
+            //if the session is closed, create session key and save it:
             if (!MainWindow::isSessionOpen){
-                //if the session is closed, create session key and save it:
                 MainWindow::isSessionOpen = true;
-                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -sess_out session.pem -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher AES256-GCM-SHA384)";
-                execCmd(opensslPath, statusRef);
-
-
+                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -sess_out session.pem -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher " + cmdComponents[6] +")";
+                execCmd(opensslPath, statusRef, sendpacket);
+            //if the session is open, use the session key that has been saved:
             } else{
-                //if the session is open, use the session key that has been saved:
                 //opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
                 opensslPath ="cmd.exe /c echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] +" -sess_in session.pem";
-                execCmd(opensslPath, statusRef);
+                execCmd(opensslPath, statusRef, sendpacket);
             }
         }
         //if the user doesn't want to leave the session open
         else{
             MainWindow::isSessionOpen = false;
-            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher AES256-GCM-SHA384)";
-            execCmd(opensslPath, statusRef);
+            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher " + cmdComponents[6] +")";
+            execCmd(opensslPath, statusRef, sendpacket);
         }
         emit packetSent(sendpacket);
     }
@@ -1011,7 +983,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
 //isDTLS function
-void PacketNetwork::execCmd(QString opensslPath, DWORD& statusRef){
+void PacketNetwork::execCmd(QString opensslPath, DWORD& statusRef, Packet& sendpacket){
     //adjust the opensslPath to be the input for CreateProcess function
     std::wstring wstr = opensslPath.toStdWString();
     //initiate the proccess's parameters
@@ -1027,17 +999,55 @@ void PacketNetwork::execCmd(QString opensslPath, DWORD& statusRef){
         WaitForSingleObject(pi.hProcess, 10000);
         //if the connection doesn't established change modify the session to close session
         GetExitCodeProcess(pi.hProcess, &statusRef);
+        //connection error
         if (statusRef!=0){
             MainWindow::isSessionOpen = false;
+            sendpacket.errorString = "Connection error, openssl error code is: " + QString::number(static_cast<quint32>(statusRef));
         }
         CloseHandle(pi.hProcess);
         CloseHandle(pi.hThread);
     } else {
-        // Handle an error if CreateProcess fails
-        //DWORD errorCode=GetLastError();
-        //qDebug() << "CreateProcess failed (%d)\n" + GetLastError();
+        // error with the process creation
+        sendpacket.errorString = "process creation was faild";
     }
 }
+
+std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& settings){
+    //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+    std::vector<QString> cmdComponents;
+
+    //get the data of the packet
+    cmdComponents.push_back(QString::fromUtf8(sendpacket.getByteArray()));
+    cmdComponents.push_back(sendpacket.toIP);
+    cmdComponents.push_back(QString::number(sendpacket.port));
+
+    //get the pathes for verification from the settings
+    cmdComponents.push_back(settings.value("sslPrivateKeyPath", "default").toString());
+    cmdComponents.push_back(settings.value("sslLocalCertificatePath", "default").toString());
+    QString sslCaPath = settings.value("sslCaPath", "default").toString();
+
+    //get the full path to to ca-signed-cert.pem file
+    QDir dir(sslCaPath);
+    if (dir.exists()) {
+        QStringList nameFilters;
+        nameFilters << "*.pem";  // Filter for .txt files
+
+        dir.setNameFilters(nameFilters);
+        QStringList fileList = dir.entryList();
+
+        if (!fileList.isEmpty()) {
+            // Select the first file that matches the filter
+            cmdComponents.push_back(dir.filePath(fileList.first()));
+        } else {
+            qDebug() << "No matching files found.";
+        }
+    } else {
+        qDebug() << "Directory does not exist.";
+    }
+    cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
+    return cmdComponents;
+}
+
 
 void PacketNetwork::httpError(QNetworkRequest* pReply)
 {

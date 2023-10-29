@@ -10,6 +10,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QComboBox>
 #include <QMainWindow>
 #include <QSettings>
 #include <QModelIndex>
@@ -78,6 +79,7 @@ class MainWindow : public QMainWindow
 
         void loadPacketsTable();
 
+        QComboBox* cipherCb;
         QPushButton *loadKeyButton;
         QPushButton *loadCertButton;
         QPushButton *generatePSLink();
@@ -219,6 +221,8 @@ class MainWindow : public QMainWindow
 
 
         void on_udptcpComboBox_currentIndexChanged(const QString &arg1);
+
+        void on_cipherCb_currentIndexChanged();
 
         void on_requestPathEdit_editingFinished();
 
