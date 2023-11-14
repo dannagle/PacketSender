@@ -835,32 +835,15 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         }
         //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
         std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
-        //status is determine if the connection established or doesn't
-        DWORD status = 0;
-        DWORD& statusRef = status;
-        //opensslPath stored the openssl s_client commands depends if the session is open or close
-        QString opensslPath;
-        //if the user want to leave the session open
-        if(settings.value("leaveSessionOpen").toString() == "true"){
-            //if the session is closed, create session key and save it:
-            if (!MainWindow::isSessionOpen){
-                MainWindow::isSessionOpen = true;
-                opensslPath ="cmd.exe /c (type nul > session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -sess_out session.pem -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher " + cmdComponents[6] +")";
-                execCmd(opensslPath, statusRef, sendpacket);
-            //if the session is open, use the session key that has been saved:
-            } else{
-                //opensslPath ="cmd.exe /c echo "+ data + " | openssl s_client -dtls1_2 -connect " + sendpacket.toIP + ":" + QString::number(sendpacket.port)+" -sess_in session.pem";
-                opensslPath ="cmd.exe /c echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] +" -sess_in session.pem";
-                execCmd(opensslPath, statusRef, sendpacket);
-            }
-        }
-        //if the user doesn't want to leave the session open
-        else{
-            MainWindow::isSessionOpen = false;
-            opensslPath ="cmd.exe /c (del session.pem) & (echo "+ cmdComponents[0] + " | openssl s_client -dtls1_2 -connect " + cmdComponents[1] + ":" + cmdComponents[2] + " -key \"" + cmdComponents[3] + "\" -cert \"" + cmdComponents[4] +"\" -CAfile \"" + cmdComponents[5] + "\" -verify 2 -cipher " + cmdComponents[6] +")";
-            execCmd(opensslPath, statusRef, sendpacket);
-        }
-        emit packetSent(sendpacket);
+        //qdtls
+        const QString ipAddress = "127.0.0.1";
+        QHostAddress ipAddressHost;
+        ipAddressHost.setAddress(ipAddress);
+        quint16 port = 22334;
+        QString connName = "clientDtls";
+        DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, connName);
+        dtlsAssociation->startHandshake();
+        //dtlsAssociation.readyRead();
     }
 
     if (sendpacket.isUDP()) {
