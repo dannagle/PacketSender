@@ -24,6 +24,8 @@
 #include <QStandardPaths>
 #include <windows.h>
 #include <iostream>
+#include "association.h"
+
 #ifdef CONSOLE_BUILD
 class QMessageBox {
 public:

@@ -18,6 +18,7 @@ TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_it.ts
 
 SOURCES += mainwindow.cpp \
+    association.cpp \
     languagechooser.cpp \
     panel.cpp \
     sendpacketbutton.cpp \
@@ -35,6 +36,7 @@ SOURCES += mainwindow.cpp \
     persistenthttp.cpp
 
 HEADERS  += mainwindow.h \
+    association.h \
     languagechooser.h \
     panel.h \
     sendpacketbutton.h \
