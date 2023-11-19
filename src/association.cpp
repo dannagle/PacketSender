@@ -9,10 +9,39 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     crypto(QSslSocket::SslClientMode)
 {
     //! [1]
+    //auto configuration = QSslConfiguration::defaultDtlsConfiguration();
+
+    //////////////////////
+    QFile certFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-signed-cert.pem");
+    if(!certFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslCertificate certificate(&certFile, QSsl::Pem);
+
+    QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-key.pem");
+    if(!keyFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
+
+    QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
+    if(!caCertFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
+
     auto configuration = QSslConfiguration::defaultDtlsConfiguration();
+    configuration.setCiphers("AES256-GCM-SHA384");
+
+    configuration.setLocalCertificate(certificate);
+    configuration.setPrivateKey(privateKey);
+    configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
+    //////////////////////
+
     configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
     crypto.setPeer(address, port);
     crypto.setDtlsConfiguration(configuration);
+
     //! [1]
 
     //! [2]
