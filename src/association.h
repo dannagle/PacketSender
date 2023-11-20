@@ -25,7 +25,7 @@ signals:
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
     void serverResponse(const QString &clientInfo, const QByteArray &datagraam,
-                        const QByteArray &plainText);
+                        const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort);
 
 private slots:
     void udpSocketConnected();

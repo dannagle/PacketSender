@@ -110,11 +110,14 @@ public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
+        void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort);
+
 
 private slots:
         void httpFinished(QNetworkReply* pReply);
         void httpError(QNetworkRequest* pReply);
         void sslErrorsSlot(QNetworkReply *reply, const QList<QSslError> &errors);
+
 
 private:
         //mapping of joined multicast groups

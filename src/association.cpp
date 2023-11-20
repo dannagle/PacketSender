@@ -111,7 +111,7 @@ void DtlsAssociation::readyRead()
     if (crypto.isConnectionEncrypted()) {
         const QByteArray plainText = crypto.decryptDatagram(&socket, dgram);
         if (plainText.size()) {
-            emit serverResponse(name, dgram, plainText);
+            emit serverResponse(name, dgram, plainText, crypto.peerAddress(), crypto.peerPort());
             return;
         }
 

@@ -842,10 +842,13 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         quint16 port = cmdComponents[2].toUShort();
         QString connName = "clientDtls";
         DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, connName);
+        connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &PacketNetwork::addServerResponse);
         dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
         dtlsAssociation->setCipher(cmdComponents[6]);
         dtlsAssociation->startHandshake();
         //dtlsAssociation.readyRead();
+        emit packetSent(sendpacket);
+        //emit packetReceivedECHO(sendpacket);
     }
 
     if (sendpacket.isUDP()) {
@@ -1154,3 +1157,36 @@ QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
     return theServers;
 }
 
+void PacketNetwork::addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort)
+{
+    Packet recPacket;
+    recPacket.init();
+    recPacket.fromIP = peerAddress.toString();
+    QString string = QString::fromUtf8(plainText);
+    recPacket.hexString = string;
+    recPacket.toIP = QString::number(peerPort);
+    recPacket.errorString = "none";
+    recPacket.tcpOrUdp = "DTLS";
+
+    emit packetReceived(recPacket);
+
+
+//    FROMDB_STRING(toIP);
+//    FROMDB_UINT(port);
+//    FROMDB_FLOAT(repeat);
+//    FROMDB_UINT(fromPort);
+//    FROMDB_STRING(tcpOrUdp);
+//    FROMDB_STRING(hexString);
+//    FROMDB_STRING(requestPath);
+//    packets.append(packet);
+//    static const QString messageColor = QStringLiteral("DarkMagenta");
+//    static const QString formatter = QStringLiteral("<br>---------------"
+//                                                    "<br>%1 received a DTLS datagram:<br> %2"
+//                                                    "<br>As plain text:<br> %3");
+
+//    const QString html = formatter.arg(clientInfo, QString::fromUtf8(datagram.toHex(' ')),
+//                                       QString::fromUtf8(plainText));
+//    ui->serverMessages->insertHtml(colorizer.arg(messageColor, html));
+    //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
+    //        this, SLOT(toTrafficLog(Packet)));
+}

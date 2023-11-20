@@ -174,6 +174,9 @@ MainWindow::MainWindow(QWidget *parent) :
              connect(&packetNetwork, SIGNAL(packetSent(Packet)),
                      this, SLOT(toTrafficLog(Packet)));
 
+             connect(&packetNetwork, SIGNAL(packetReceived(Packet)), this, SLOT(toTrafficLog(Packet)));
+
+
     if( !QFile::exists(PACKETSFILE)) {
         // Packets file does not exist. Load starter set.
         QFile starterfile(":/starter_set.json");
