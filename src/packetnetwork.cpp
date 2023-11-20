@@ -833,15 +833,17 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         if (settings.status() != QSettings::NoError) {
             sendpacket.errorString ="Can't open settings file.";
         }
-        //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+        //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
         std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
         //qdtls
-        const QString ipAddress = "127.0.0.1";
+        const QString ipAddress = cmdComponents[1];
         QHostAddress ipAddressHost;
         ipAddressHost.setAddress(ipAddress);
-        quint16 port = 22334;
+        quint16 port = cmdComponents[2].toUShort();
         QString connName = "clientDtls";
         DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, connName);
+        dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
+        dtlsAssociation->setCipher(cmdComponents[6]);
         dtlsAssociation->startHandshake();
         //dtlsAssociation.readyRead();
     }

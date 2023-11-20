@@ -16,6 +16,8 @@ public:
                     const QString &connectionName);
     ~DtlsAssociation();
     void startHandshake();
+    void setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath);
+    void setCipher(QString chosenCipher);
     QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
 
 signals:
