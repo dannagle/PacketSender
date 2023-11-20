@@ -16,6 +16,7 @@ public:
                     const QString &connectionName);
     ~DtlsAssociation();
     void startHandshake();
+    QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
 
 signals:
     void errorMessage(const QString &message);

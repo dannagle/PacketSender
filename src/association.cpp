@@ -30,7 +30,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     }
     QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
 
-    auto configuration = QSslConfiguration::defaultDtlsConfiguration();
+    //auto configuration = QSslConfiguration::defaultDtlsConfiguration();
     configuration.setCiphers("AES256-GCM-SHA384");
 
     configuration.setLocalCertificate(certificate);
