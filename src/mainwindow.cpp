@@ -38,6 +38,8 @@
 
 
 #include <QStringList>
+#include <QSslCipher>
+
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 
@@ -73,6 +75,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     cipherCb = ui->cipherCb;
+    //add the combobox the correct cipher suites
+    QList<QSslCipher> ciphers = QSslConfiguration::supportedCiphers();
+    for (const QSslCipher &cipher : ciphers) {
+        cipherCb->addItem(cipher.name());
+    }
+
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
         ui->loadKeyButton->hide();
         ui->loadCertButton->hide();
