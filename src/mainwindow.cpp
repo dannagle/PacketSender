@@ -262,6 +262,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stopResendingButton->hide();
 
+    dtlsServerStatus = new QPushButton("DTLS:" + packetNetwork.getDTLSPortString());
+    themeTheButton(dtlsServerStatus);
+    dtlsServerStatus->setIcon(QIcon(UDPRXICON));
+
+    connect(dtlsServerStatus, SIGNAL(clicked()),
+            this, SLOT(toggleDTLSServer()));
+
+
+    statusBar()->insertPermanentWidget(2, dtlsServerStatus);
+
     udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
     themeTheButton(udpServerStatus);
     udpServerStatus->setIcon(QIcon(UDPRXICON));
@@ -270,7 +280,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleUDPServer()));
 
 
-    statusBar()->insertPermanentWidget(2, udpServerStatus);
+    statusBar()->insertPermanentWidget(3, udpServerStatus);
 
 
     //updatewidget
@@ -290,15 +300,17 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleSSLServer()));
 
 
-    statusBar()->insertPermanentWidget(3, tcpServerStatus);
+    statusBar()->insertPermanentWidget(4, tcpServerStatus);
 
 
-    statusBar()->insertPermanentWidget(4, sslServerStatus);
+    statusBar()->insertPermanentWidget(5, sslServerStatus);
+
+
 
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
     themeTheButton(IPmodeButton);
-    statusBar()->insertPermanentWidget(5, IPmodeButton);
+    statusBar()->insertPermanentWidget(6, IPmodeButton);
 
     setIPMode();
 
@@ -496,6 +508,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
+
+void MainWindow::toggleDTLSServer()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("dtlsServerEnable", !settings.value("dtlsServerEnable", true).toBool());
+    applyNetworkSettings();
+}
 
 void MainWindow::toggleUDPServer()
 {
@@ -766,6 +785,28 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
 }
 
+void MainWindow::DTLSServerStatus()
+{
+
+    if (packetNetwork.DTLSListening()) {
+        QString ports = packetNetwork.getUDPPortString();
+        int portcount = packetNetwork.getUDPPortsBound().size();
+        dtlsServerStatus->setToolTip(ports);
+        if(portcount > 3) {
+            dtlsServerStatus->setText("DTLS: " + QString::number(portcount) + tr(" Ports"));
+        } else {
+            dtlsServerStatus->setText("DTLS:" + ports);
+        }
+
+    } else {
+        dtlsServerStatus->setText(tr("DTLS Server Disabled"));
+
+    }
+
+    //updatewidget
+
+
+}
 
 void MainWindow::UDPServerStatus()
 {
@@ -1945,6 +1986,7 @@ void MainWindow::applyNetworkSettings()
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
     on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
 
+    DTLSServerStatus();
     UDPServerStatus();
     TCPServerStatus();
     SSLServerStatus();

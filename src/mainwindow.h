@@ -86,6 +86,7 @@ class MainWindow : public QMainWindow
         QPushButton *generateDNLink();
         void populateTableRow(int rowCounter, Packet tempPacket);
         void removePacketfromMemory(Packet thepacket);
+        void DTLSServerStatus();
         void UDPServerStatus();
         void TCPServerStatus();
         int findColumnIndex(QListWidget *lw, QString search);
@@ -102,6 +103,7 @@ class MainWindow : public QMainWindow
         void toTrafficLog(Packet logPacket);
         void cancelResends();
         void applyNetworkSettings();
+        void toggleDTLSServer();
         void toggleUDPServer();
         void toggleTCPServer();
         void toggleSSLServer();
@@ -250,6 +252,7 @@ class MainWindow : public QMainWindow
         QTimer refreshTimer;
         QTimer slowRefreshTimer;
         bool tableActive;
+        QPushButton * dtlsServerStatus;
         QPushButton * udpServerStatus;
         QPushButton * tcpServerStatus;
         QPushButton * sslServerStatus;

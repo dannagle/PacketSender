@@ -150,6 +150,20 @@ QString PacketNetwork::getIPmode()
     return ipMode;
 }
 
+bool PacketNetwork::DTLSListening()
+{
+    QUdpSocket * dtls;
+    QDEBUGVAR(dtlsServers.size());
+    foreach(dtls, dtlsServers) {
+        QDEBUGVAR(dtls->state());
+        if(dtls->state() == QAbstractSocket::BoundState) {
+            //if(udp->state() == QAbstractSocket::ConnectedState) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool PacketNetwork::UDPListening()
 {
     QUdpSocket * udp;
@@ -224,7 +238,7 @@ void PacketNetwork::init()
 
     static bool erroronce = false;
 
-
+    dtlsServers.clear();
     tcpServers.clear();
     udpServers.clear();
     sslServers.clear();
@@ -236,11 +250,14 @@ void PacketNetwork::init()
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    QList<int> udpPortList, tcpPortList, sslPortList;
+    QList<int> udpPortList, tcpPortList, sslPortList, dtlsPortList;
+    int dtlsPort = 0;
     int udpPort = 0;
     int tcpPort = 0;
     int sslPort = 0;
 
+    settings.setValue("dtlsPort", "12346");
+    dtlsPortList = Settings::portsToIntList(settings.value("dtlsPort", "0").toString());
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
@@ -261,8 +278,47 @@ void PacketNetwork::init()
 #endif
 
 
-    QUdpSocket *udpSocket;
+    QUdpSocket *udpSocket, *dtlsSocket;
     ThreadedTCPServer *ssl, *tcp;
+    foreach (dtlsPort, dtlsPortList) {
+
+
+        dtlsSocket = new QUdpSocket(this);
+
+        bool bindResult = dtlsSocket->bind(
+            IPV4_OR_IPV6
+            , dtlsPort);
+
+        dtlsSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+
+        if ((!bindResult) && (!erroronce)) {
+            QDEBUGVAR(dtlsPort);
+            erroronce = true;
+            if ((dtlsPort < 1024) && (dtlsPort > 0)) {
+                QString msgText = lowPortText;
+                msgText.replace("[PORT]", QString::number(dtlsPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+
+            } else {
+                QString msgText = portConsumedText;
+                msgText.replace("[PORT]", QString::number(dtlsPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+
+            }
+            dtlsSocket->close();
+            dtlsSocket->deleteLater();
+
+        }
+
+        if(bindResult) {
+            dtlsServers.append(dtlsSocket);
+        }
+
+    }
+    reJoinMulticast();
+
 
     foreach (udpPort, udpPortList) {
 
@@ -278,7 +334,7 @@ void PacketNetwork::init()
         if ((!bindResult) && (!erroronce)) {
             QDEBUGVAR(udpPort);
             erroronce = true;
-            if (udpPort < 1024 && udpPort > 0) {
+            if ((udpPort < 1024) && (udpPort > 0)) {
                 QString msgText = lowPortText;
                 msgText.replace("[PORT]", QString::number(udpPort));
                 msgBoxBindError.setText(msgText);
@@ -353,6 +409,7 @@ void PacketNetwork::init()
 
     sendResponse = settings.value("sendReponse", false).toBool();
     responseData = (settings.value("responseHex", "")).toString();
+    activateDTLS = settings.value("dtlsServerEnable", true).toBool();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     activateSSL = settings.value("sslServerEnable", true).toBool();
@@ -420,6 +477,28 @@ void PacketNetwork::init()
 
 //TODO add timed event feature?
 
+QList<int> PacketNetwork::getDTLSPortsBound()
+{
+    QList<int> pList;
+    pList.clear();
+    QUdpSocket * dtls;
+    foreach (dtls, dtlsServers) {
+        if(dtls->BoundState == QAbstractSocket::BoundState) {
+            if(dtls->localAddress().isMulticast()) {
+                QDEBUG() << "This udp address is multicast";
+            }
+            pList.append(dtls->localPort());
+        }
+    }
+    return pList;
+
+}
+
+QString PacketNetwork::getDTLSPortString()
+{
+
+    return Settings::intListToPorts(getDTLSPortsBound());
+}
 
 QList<int> PacketNetwork::getUDPPortsBound()
 {
@@ -828,6 +907,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
     if(sendpacket.isDTLS()){
+        //QUdpSocket * sendUDP
         //open settings file in order to get the ssl valuse of the packet
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         if (settings.status() != QSettings::NoError) {
@@ -842,11 +922,15 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         quint16 port = cmdComponents[2].toUShort();
         QString connName = "clientDtls";
         DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, connName);
+        dtlsAssociation->socket;
+        sendpacket.fromPort = dtlsAssociation->socket.localPort();
+
         connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &PacketNetwork::addServerResponse);
         dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
         dtlsAssociation->setCipher(cmdComponents[6]);
         dtlsAssociation->startHandshake();
         //dtlsAssociation.readyRead();
+        //sendpacket.port = cmdComponents[2];
         emit packetSent(sendpacket);
         //emit packetReceivedECHO(sendpacket);
     }
@@ -1162,31 +1246,12 @@ void PacketNetwork::addServerResponse(const QString &clientInfo, const QByteArra
     Packet recPacket;
     recPacket.init();
     recPacket.fromIP = peerAddress.toString();
+    recPacket.fromPort = peerPort;
     QString string = QString::fromUtf8(plainText);
     recPacket.hexString = string;
-    recPacket.toIP = QString::number(peerPort);
+    //recPacket.toIP = ;
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
     emit packetReceived(recPacket);
-
-
-//    FROMDB_STRING(toIP);
-//    FROMDB_UINT(port);
-//    FROMDB_FLOAT(repeat);
-//    FROMDB_UINT(fromPort);
-//    FROMDB_STRING(tcpOrUdp);
-//    FROMDB_STRING(hexString);
-//    FROMDB_STRING(requestPath);
-//    packets.append(packet);
-//    static const QString messageColor = QStringLiteral("DarkMagenta");
-//    static const QString formatter = QStringLiteral("<br>---------------"
-//                                                    "<br>%1 received a DTLS datagram:<br> %2"
-//                                                    "<br>As plain text:<br> %3");
-
-//    const QString html = formatter.arg(clientInfo, QString::fromUtf8(datagram.toHex(' ')),
-//                                       QString::fromUtf8(plainText));
-//    ui->serverMessages->insertHtml(colorizer.arg(messageColor, html));
-    //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
-    //        this, SLOT(toTrafficLog(Packet)));
 }

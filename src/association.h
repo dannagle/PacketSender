@@ -12,6 +12,8 @@ class DtlsAssociation : public QObject
     Q_OBJECT
 
 public:
+    QUdpSocket socket;
+
     DtlsAssociation(const QHostAddress &address, quint16 port,
                     const QString &connectionName);
     ~DtlsAssociation();
@@ -36,7 +38,6 @@ private slots:
 
 private:
     QString name;
-    QUdpSocket socket;
     QDtls crypto;
 
     QTimer pingTimer;

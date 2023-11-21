@@ -398,7 +398,7 @@ void Settings::on_buttonBox_accepted()
     }
 
 
-
+    //settings.setValue("dtlsPort", intListToPorts(dtlsList));
     settings.setValue("udpPort", intListToPorts(udpList));
     settings.setValue("tcpPort", intListToPorts(tcpList));
     settings.setValue("sslPort", intListToPorts(sslList));
@@ -407,6 +407,7 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
     settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
 
+    //settings.setValue("dtlsServerEnable", ui->dtlsServerEnableCheck->isChecked());
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
     settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());

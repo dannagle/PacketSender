@@ -50,10 +50,12 @@ class PacketNetwork : public QObject
 
         QString debugQByteArray(QByteArray debugArray);
 
+        QString getDTLSPortString();
         QString getUDPPortString();
         QString getTCPPortString();
         QString getSSLPortString();
 
+        QList<int> getDTLSPortsBound();
         QList<int> getUDPPortsBound();
         QList<int> getTCPPortsBound();
         QList<int> getSSLPortsBound();
@@ -66,6 +68,7 @@ class PacketNetwork : public QObject
         QString responseData;
         bool sendResponse;
         bool sendSmartResponse;
+        bool activateDTLS;
         bool activateUDP;
         bool activateTCP;
         bool activateSSL;
@@ -77,6 +80,7 @@ class PacketNetwork : public QObject
         void setIPmode(int mode);
         static QString getIPmode();
 
+        bool DTLSListening();
         bool UDPListening();
         bool TCPListening();
         bool SSLListening();
@@ -138,6 +142,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
+        QList<QUdpSocket *> dtlsServers;
 
 };
 
