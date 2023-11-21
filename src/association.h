@@ -13,6 +13,7 @@ class DtlsAssociation : public QObject
 
 public:
     QUdpSocket socket;
+    QString name;
 
     DtlsAssociation(const QHostAddress &address, quint16 port,
                     const QString &connectionName);
@@ -27,7 +28,7 @@ signals:
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
     void serverResponse(const QString &clientInfo, const QByteArray &datagraam,
-                        const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort);
+                        const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort, quint16 clientPort);
 
 private slots:
     void udpSocketConnected();
@@ -37,7 +38,7 @@ private slots:
     void pingTimeout();
 
 private:
-    QString name;
+
     QDtls crypto;
 
     QTimer pingTimer;

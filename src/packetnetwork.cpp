@@ -25,6 +25,8 @@
 #include <windows.h>
 #include <iostream>
 #include "association.h"
+#include <QStringList>
+
 
 #ifdef CONSOLE_BUILD
 class QMessageBox {
@@ -907,6 +909,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
     if(sendpacket.isDTLS()){
+        //sendpacket.fromPort = sendUDP->localPort();
         //QUdpSocket * sendUDP
         //open settings file in order to get the ssl valuse of the packet
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -920,8 +923,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         QHostAddress ipAddressHost;
         ipAddressHost.setAddress(ipAddress);
         quint16 port = cmdComponents[2].toUShort();
-        QString connName = "clientDtls";
-        DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, connName);
+        //+QString::number(sendpacket.fromPort);
+        //QString test = QString::number(sendpacket.fromPort);
+        DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP);
         dtlsAssociation->socket;
         sendpacket.fromPort = dtlsAssociation->socket.localPort();
 
@@ -1241,15 +1245,20 @@ QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
     return theServers;
 }
 
-void PacketNetwork::addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort)
+void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
 {
+    //ned to fix the "to port" field
+    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
+    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
+
     Packet recPacket;
     recPacket.init();
-    recPacket.fromIP = peerAddress.toString();
-    recPacket.fromPort = peerPort;
-    QString string = QString::fromUtf8(plainText);
-    recPacket.hexString = string;
-    //recPacket.toIP = ;
+    recPacket.fromIP = serverAddress.toString();
+    recPacket.fromPort = serverPort;
+    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
+    recPacket.hexString = massageFromTheOtherPeer;
+    recPacket.toIP = clientAddress;
+    recPacket.port = userPort;
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
