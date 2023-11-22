@@ -32,6 +32,7 @@
 #include <threadedtcpserver.h>
 #include <Windows.h>
 #include <QSettings>
+#include "dtlsthread.h"
 
 
 
@@ -132,6 +133,7 @@ private:
         QList<ThreadedTCPServer *> allTCPServers();
 
         QList<QNetworkAccessManager *> httpList;
+        QList<Dtlsthread *> dtlsthreadList;
 
         QList<TCPThread *> tcpthreadList;
 #ifdef CONSOLE_BUILD

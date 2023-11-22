@@ -26,6 +26,8 @@
 #include <iostream>
 #include "association.h"
 #include <QStringList>
+#include "dtlsthread.h"
+
 
 
 #ifdef CONSOLE_BUILD
@@ -908,39 +910,79 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.timestamp = QDateTime::currentDateTime();
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
+
     if(sendpacket.isDTLS()){
-        //sendpacket.fromPort = sendUDP->localPort();
-        //QUdpSocket * sendUDP
-        //open settings file in order to get the ssl valuse of the packet
-        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        if (settings.status() != QSettings::NoError) {
-            sendpacket.errorString ="Can't open settings file.";
+        if (sendpacket.persistent){                //spawn a window.
+            PersistentConnection * pcWindow = new PersistentConnection();
+            Dtlsthread * thread = new Dtlsthread(sendpacket, this);
+            pcWindow->sendPacket = sendpacket;
+            pcWindow->init();
+            pcWindow->dthread = thread;
+
+
+            QDEBUG() << ": thread Connection attempt " <<
+                connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)));
+//                     << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+//                     << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+//                     << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+
+
+//            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+//                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+//                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+
+            //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
+            //        this, SLOT(toTrafficLog(Packet)));
+
+            pcWindow->show();
+            thread->start();
+
+
+            //Network manager will manage this thread so the UI window doesn't need to.
+            dtlsthreadList.append(thread);
+
+            return;
+        }else{
+            //sendpacket.fromPort = sendUDP->localPort();
+            //QUdpSocket * sendUDP
+            //open settings file in order to get the ssl valuse of the packet
+            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+            if (settings.status() != QSettings::NoError) {
+                sendpacket.errorString ="Can't open settings file.";
+            }
+            //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
+            std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
+            //qdtls
+
+            const QString ipAddress = cmdComponents[1];
+            QHostAddress ipAddressHost;
+            ipAddressHost.setAddress(ipAddress);
+            quint16 port = cmdComponents[2].toUShort();
+            //+QString::number(sendpacket.fromPort);
+            //QString test = QString::number(sendpacket.fromPort);
+            DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP);
+            dtlsAssociation->newMassageToSend = true;
+            dtlsAssociation->massageToSend = cmdComponents[0];
+            dtlsAssociation->socket;
+            sendpacket.fromPort = dtlsAssociation->socket.localPort();
+
+            connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &PacketNetwork::addServerResponse);
+            dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
+            dtlsAssociation->setCipher(cmdComponents[6]);
+            dtlsAssociation->startHandshake();
+            //Sleep(10000);
+//            if(dtlsAssociation->crypto.isConnectionEncrypted()){
+//                dtlsAssociation->pingTimeout();
+
+//            }
+            //sendpacket.port = cmdComponents[2];
+            emit packetSent(sendpacket);
+            //emit packetReceivedECHO(sendpacket);
         }
-        //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
-        std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
-        //qdtls
 
-        const QString ipAddress = cmdComponents[1];
-        QHostAddress ipAddressHost;
-        ipAddressHost.setAddress(ipAddress);
-        quint16 port = cmdComponents[2].toUShort();
-        //+QString::number(sendpacket.fromPort);
-        //QString test = QString::number(sendpacket.fromPort);
-        DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP);
-        dtlsAssociation->newMassageToSend = true;
-        dtlsAssociation->massageToSend = cmdComponents[0];
-        dtlsAssociation->socket;
-        sendpacket.fromPort = dtlsAssociation->socket.localPort();
-
-        connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &PacketNetwork::addServerResponse);
-        dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
-        dtlsAssociation->setCipher(cmdComponents[6]);
-        dtlsAssociation->startHandshake();
-        //dtlsAssociation.readyRead();
-        //sendpacket.port = cmdComponents[2];
-        emit packetSent(sendpacket);
-        //emit packetReceivedECHO(sendpacket);
     }
+
 
     if (sendpacket.isUDP()) {
         QUdpSocket * sendUDP;

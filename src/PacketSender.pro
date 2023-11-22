@@ -19,6 +19,7 @@ TRANSLATIONS += languages/packetsender_en.ts \
 
 SOURCES += mainwindow.cpp \
     association.cpp \
+    dtlsthread.cpp \
     languagechooser.cpp \
     panel.cpp \
     sendpacketbutton.cpp \
@@ -37,6 +38,7 @@ SOURCES += mainwindow.cpp \
 
 HEADERS  += mainwindow.h \
     association.h \
+    dtlsthread.h \
     languagechooser.h \
     panel.h \
     sendpacketbutton.h \

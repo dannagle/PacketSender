@@ -7,6 +7,7 @@
 
 #include "packet.h"
 #include "tcpthread.h"
+#include "dtlsthread.h"
 
 namespace Ui
 {
@@ -26,6 +27,7 @@ class PersistentConnection : public QDialog
         Packet sendPacket;
         Packet reSendPacket;
         TCPThread *thread;
+        Dtlsthread *dthread;
 
         static const QString RESEND_BUTTON_STYLE;
 

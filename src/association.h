@@ -16,6 +16,8 @@ public:
     QString massageToSend;
     QUdpSocket socket;
     QString name;
+    QDtls crypto;
+
 
     DtlsAssociation(const QHostAddress &address, quint16 port,
                     const QString &connectionName);
@@ -32,16 +34,17 @@ signals:
     void serverResponse(const QString &clientInfo, const QByteArray &datagraam,
                         const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort, quint16 clientPort);
 
+public slots:
+    void pingTimeout();
 private slots:
     void udpSocketConnected();
     void readyRead();
     void handshakeTimeout();
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
-    void pingTimeout();
+
 
 private:
 
-    QDtls crypto;
 
     QTimer pingTimer;
     unsigned ping = 0;
