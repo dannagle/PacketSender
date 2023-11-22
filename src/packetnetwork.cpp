@@ -919,6 +919,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
         std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
         //qdtls
+
         const QString ipAddress = cmdComponents[1];
         QHostAddress ipAddressHost;
         ipAddressHost.setAddress(ipAddress);
@@ -926,6 +927,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         //+QString::number(sendpacket.fromPort);
         //QString test = QString::number(sendpacket.fromPort);
         DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP);
+        dtlsAssociation->newMassageToSend = true;
+        dtlsAssociation->massageToSend = cmdComponents[0];
         dtlsAssociation->socket;
         sendpacket.fromPort = dtlsAssociation->socket.localPort();
 

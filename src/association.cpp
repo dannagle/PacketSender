@@ -167,15 +167,18 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 //! [10]
 void DtlsAssociation::pingTimeout()
 {
-    static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
-    const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
-    if (written <= 0) {
-        emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
-        pingTimer.stop();
-        return;
+    //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
+    //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
+    if(this->newMassageToSend){
+        const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
+        if (written <= 0) {
+            emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
+            pingTimer.stop();
+            return;
+        }
+        this->newMassageToSend = false;
+        ++ping;
     }
-
-    ++ping;
 }
 //! [10]
 void DtlsAssociation::setCipher(QString chosenCipher) {

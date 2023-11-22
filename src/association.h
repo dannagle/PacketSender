@@ -12,6 +12,8 @@ class DtlsAssociation : public QObject
     Q_OBJECT
 
 public:
+    bool newMassageToSend = false;
+    QString massageToSend;
     QUdpSocket socket;
     QString name;
 
