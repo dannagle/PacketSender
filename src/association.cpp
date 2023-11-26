@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 #include "association.h"
+#include "packet.h"
 
 DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
-                                 const QString &connectionName)
+                                 const QString &connectionName, Packet packetToSend)
     : name(connectionName),
     crypto(QSslSocket::SslClientMode)
 {
@@ -56,7 +57,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     //! [13]
     //! [4]
     pingTimer.setInterval(5000);
-    connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
+    //connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
     //! [4]
 }
 
@@ -135,8 +136,8 @@ void DtlsAssociation::readyRead()
         //! [9]
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));
-            pingTimer.start();
-            pingTimeout();
+            //writeMassage();
+            emit handShakeComplited(packetToSend, this);
         } else {
             //! [9]
             emit infoMessage(tr("%1: continuing with handshake ...").arg(name));
@@ -165,11 +166,16 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 //! [14]
 
 //! [10]
+//!
+//!
+//! only for ping massage
 void DtlsAssociation::pingTimeout()
 {
+
     //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
     //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
     if(this->newMassageToSend){
+        emit handShakeComplited(packetToSend, this);
         const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
         if (written <= 0) {
             emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
@@ -181,6 +187,9 @@ void DtlsAssociation::pingTimeout()
     }
 }
 //! [10]
+
+
+
 void DtlsAssociation::setCipher(QString chosenCipher) {
     configuration.setCiphers(chosenCipher);
     crypto.setDtlsConfiguration(configuration);

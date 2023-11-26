@@ -32,8 +32,8 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
     QDEBUG();
     sendPacket.clear();
-    QDEBUG() << ": refreshTimer Connection attempt " <<
-             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))
+    QDEBUG() /*<< ": refreshTimer Connection attempt " <<
+             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))*/
              << connect(this, SIGNAL(rejected()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(dialogIsClosing()), this, SLOT(aboutToClose()));

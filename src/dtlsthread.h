@@ -3,6 +3,8 @@
 
 #include <QThread>
 #include "packet.h"
+#include "QSettings"
+#include "association.h"
 
 class Dtlsthread : public QThread
 {
@@ -12,9 +14,16 @@ class Dtlsthread : public QThread
 public:
     Dtlsthread(Packet sendPacket, QObject *parent);
     virtual ~Dtlsthread();
-    Packet sendPacket;
+    std::vector<DtlsAssociation*> dtlsAssociations;
+
+    Packet sendpacket;
     void run() override; // Pure virtual function making this class abstract
     void sendPersistant();
+    std::vector<QString> getCmdInput(Packet sendpacket, QSettings& settings);
+public slots:
+    void writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation);
+    void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort);
+
 
 
 
