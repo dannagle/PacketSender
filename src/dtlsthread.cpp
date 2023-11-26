@@ -21,6 +21,7 @@ void Dtlsthread::run()
     if (settings.status() != QSettings::NoError) {
         sendpacket.errorString ="Can't open settings file.";
     }
+
     //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
     std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
     //qdtls
@@ -32,6 +33,8 @@ void Dtlsthread::run()
     //+QString::number(sendpacket.fromPort);
     //QString test = QString::number(sendpacket.fromPort);
     DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, sendpacket);
+    //dtlsAssociation->setProtocol(QSsl::DtlsV1_2);
+
     dtlsAssociation->newMassageToSend = true;
     dtlsAssociation->massageToSend = cmdComponents[0];
     dtlsAssociation->socket;
@@ -41,7 +44,11 @@ void Dtlsthread::run()
     dtlsAssociation->setCipher(cmdComponents[6]);
     //dtlsAssociation->startHandshake();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
+    //QEventLoop loop;
     dtlsAssociation->startHandshake();
+    //loop.exec();
+
+    //dtlsAssociation->crypto.doHandshake(&(dtlsAssociation->socket));
 }
 
 

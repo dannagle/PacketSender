@@ -51,9 +51,14 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
     socket.connectToHost(address.toString(), port);
+    socket.waitForConnected();
     //! [3]
     //! [13]
+    //QEventLoop loop;
     connect(&socket, &QUdpSocket::readyRead, this, &DtlsAssociation::readyRead);
+    //loop.exec();
+
+
     //! [13]
     //! [4]
     pingTimer.setInterval(5000);
@@ -80,8 +85,11 @@ void DtlsAssociation::startHandshake()
 
     if (!crypto.doHandshake(&socket))
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
-    else
+    else{
+        socket.waitForReadyRead();
         emit infoMessage(tr("%1: starting a handshake").arg(name));
+    }
+
 }
 //! [5]
 
@@ -91,8 +99,10 @@ void DtlsAssociation::udpSocketConnected()
     startHandshake();
 }
 
+
 void DtlsAssociation::readyRead()
 {
+    //QEventLoop loop;
     if (socket.pendingDatagramSize() <= 0) {
         emit warningMessage(tr("%1: spurious read notification?").arg(name));
         return;
@@ -140,10 +150,17 @@ void DtlsAssociation::readyRead()
             emit handShakeComplited(packetToSend, this);
         } else {
             //! [9]
+            //socket.waitForReadyRead(10000);
+
             emit infoMessage(tr("%1: continuing with handshake ...").arg(name));
         }
+        //socket.waitForReadyRead(10000);
+
     }
+    //loop.exec();
+
 }
+
 
 //! [11]
 void DtlsAssociation::handshakeTimeout()
@@ -192,6 +209,7 @@ void DtlsAssociation::pingTimeout()
 
 void DtlsAssociation::setCipher(QString chosenCipher) {
     configuration.setCiphers(chosenCipher);
+    //configuration.setProtocol(QSsl::DtlsV1_2);
     crypto.setDtlsConfiguration(configuration);
 }
 
