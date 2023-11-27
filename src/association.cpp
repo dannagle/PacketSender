@@ -46,7 +46,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     //! [1]
 
     //! [2]
-    connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
+    //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
     //! [2]
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
