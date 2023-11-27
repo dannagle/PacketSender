@@ -87,7 +87,12 @@ void DtlsAssociation::startHandshake()
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
     else{
         //socket.waitForBytesWritten();
-        socket.waitForReadyRead();
+        while(true){
+            socket.waitForReadyRead();
+            if(crypto.handshakeState() == QDtls::HandshakeComplete){
+                break;
+            }
+        }
         //crypto.doHandshake(&socket);
         emit infoMessage(tr("%1: starting a handshake").arg(name));
     }
@@ -105,7 +110,7 @@ void DtlsAssociation::udpSocketConnected()
 void DtlsAssociation::readyRead()
 {
     //QEventLoop loop;
-    QThread::sleep(2);
+    //QThread::sleep(2);
     if (socket.pendingDatagramSize() <= 0) {
         emit warningMessage(tr("%1: spurious read notification?").arg(name));
         return;
@@ -146,7 +151,8 @@ void DtlsAssociation::readyRead()
             return;
         }
         //! [8]
-        socket.waitForReadyRead();
+
+        //socket.waitForReadyRead();
         crypto.doHandshake(&socket, dgram);
         //! [9]
         if (crypto.isConnectionEncrypted()) {
