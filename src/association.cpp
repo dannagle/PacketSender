@@ -39,7 +39,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
     //////////////////////
 
-    configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
+    configuration.setPeerVerifyMode(QSslSocket::VerifyPeer);
     crypto.setPeer(address, port);
     crypto.setDtlsConfiguration(configuration);
 
@@ -86,7 +86,9 @@ void DtlsAssociation::startHandshake()
     if (!crypto.doHandshake(&socket))
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
     else{
+        //socket.waitForBytesWritten();
         socket.waitForReadyRead();
+        //crypto.doHandshake(&socket);
         emit infoMessage(tr("%1: starting a handshake").arg(name));
     }
 
@@ -103,6 +105,7 @@ void DtlsAssociation::udpSocketConnected()
 void DtlsAssociation::readyRead()
 {
     //QEventLoop loop;
+    QThread::sleep(2);
     if (socket.pendingDatagramSize() <= 0) {
         emit warningMessage(tr("%1: spurious read notification?").arg(name));
         return;
@@ -137,12 +140,14 @@ void DtlsAssociation::readyRead()
     } else {
         //! [7]
         //! [8]
+
         if (!crypto.doHandshake(&socket, dgram)) {
             emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
             return;
         }
         //! [8]
-
+        socket.waitForReadyRead();
+        crypto.doHandshake(&socket, dgram);
         //! [9]
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));
@@ -151,7 +156,6 @@ void DtlsAssociation::readyRead()
         } else {
             //! [9]
             //socket.waitForReadyRead(10000);
-
             emit infoMessage(tr("%1: continuing with handshake ...").arg(name));
         }
         //socket.waitForReadyRead(10000);

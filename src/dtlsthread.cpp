@@ -40,12 +40,13 @@ void Dtlsthread::run()
     dtlsAssociation->socket;
     sendpacket.fromPort = dtlsAssociation->socket.localPort();
     connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
-    dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
+    //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
     dtlsAssociation->setCipher(cmdComponents[6]);
     //dtlsAssociation->startHandshake();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
     //QEventLoop loop;
     dtlsAssociation->startHandshake();
+    //dtlsAssociation->crypto.resumeHandshake(&(dtlsAssociation->socket));
     //loop.exec();
 
     //dtlsAssociation->crypto.doHandshake(&(dtlsAssociation->socket));
