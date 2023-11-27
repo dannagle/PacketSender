@@ -39,7 +39,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
     //////////////////////
 
-    configuration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
     crypto.setPeer(address, port);
     crypto.setDtlsConfiguration(configuration);
 
@@ -62,7 +62,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     //! [13]
     //! [4]
     pingTimer.setInterval(5000);
-    //connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
+    connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
     //! [4]
 }
 
@@ -89,7 +89,7 @@ void DtlsAssociation::startHandshake()
         //socket.waitForBytesWritten();
         while(true){
             socket.waitForReadyRead();
-            if(crypto.handshakeState() == QDtls::HandshakeComplete){
+            if(crypto.isConnectionEncrypted()){
                 break;
             }
         }

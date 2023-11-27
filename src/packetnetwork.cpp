@@ -936,7 +936,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         pcWindow->show();
         thread->start();
-        thread->wait();
+
 
 
         //Network manager will manage this thread so the UI window doesn't need to.
