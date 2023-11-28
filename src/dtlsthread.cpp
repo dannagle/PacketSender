@@ -17,6 +17,7 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
+    handShakeDone = false;
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     if (settings.status() != QSettings::NoError) {
         sendpacket.errorString ="Can't open settings file.";
@@ -43,9 +44,19 @@ void Dtlsthread::run()
     //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
     dtlsAssociation->setCipher(cmdComponents[6]);
     //dtlsAssociation->startHandshake();
-    connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
+    //connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
+    connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
+
     //QEventLoop loop;
     dtlsAssociation->startHandshake();
+    while(!handShakeDone){
+        continue;
+    }
+    connectStatus("Connected");
+    writeMassage(sendpacket, dtlsAssociation);
+    emit packetSent(sendpacket);
+
+    //dtlsAssociation->socket.waitForReadyRead();
     //dtlsAssociation->crypto.resumeHandshake(&(dtlsAssociation->socket));
     //loop.exec();
 
@@ -109,6 +120,11 @@ void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArra
     ///emit packetReceived(recPacket);
 }
 
+
+void Dtlsthread::handShakeComplited(){
+    handShakeDone = true;
+}
+
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
 
     //emit handShakeComplited(packetToSend, this);
@@ -117,6 +133,9 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         return;
     }
+    dtlsAssociation->socket.waitForReadyRead();
+    //addServerResponse()
 }
+
 
 

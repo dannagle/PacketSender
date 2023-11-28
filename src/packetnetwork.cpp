@@ -921,9 +921,15 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         QDEBUG() /*<< ": thread Connection attempt " <<
             connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)));*/
+            //connects from tcp thread///////////////////
                  << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
                  << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
                  << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+        //connects from packetNetwork in isDtls condition
+        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+        QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
 
 //            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))

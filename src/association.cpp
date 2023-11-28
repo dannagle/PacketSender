@@ -158,7 +158,7 @@ void DtlsAssociation::readyRead()
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));
             //writeMassage();
-            emit handShakeComplited(packetToSend, this);
+            emit handShakeComplited();
         } else {
             //! [9]
             //socket.waitForReadyRead(10000);
@@ -202,7 +202,7 @@ void DtlsAssociation::pingTimeout()
     //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
     //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
     if(this->newMassageToSend){
-        emit handShakeComplited(packetToSend, this);
+        emit handShakeComplited();
         const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
         if (written <= 0) {
             emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));

@@ -15,15 +15,19 @@ public:
     Dtlsthread(Packet sendPacket, QObject *parent);
     virtual ~Dtlsthread();
     std::vector<DtlsAssociation*> dtlsAssociations;
+    bool handShakeDone;
 
     Packet sendpacket;
     void run() override; // Pure virtual function making this class abstract
     void sendPersistant();
     std::vector<QString> getCmdInput(Packet sendpacket, QSettings& settings);
-public slots:
     void writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation);
+public slots:
+    void handShakeComplited();
     void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort);
-
+signals:
+    void connectStatus(QString);
+    void packetSent(Packet);
 
 
 

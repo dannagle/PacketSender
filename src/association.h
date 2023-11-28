@@ -29,7 +29,7 @@ public:
     QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
 
 signals:
-    void handShakeComplited(Packet packetToSend, DtlsAssociation* dtlsAssociation);
+    void handShakeComplited();
     void errorMessage(const QString &message);
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
