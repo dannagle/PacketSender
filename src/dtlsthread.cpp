@@ -33,27 +33,30 @@ void Dtlsthread::run()
     quint16 port = cmdComponents[2].toUShort();
     //+QString::number(sendpacket.fromPort);
     //QString test = QString::number(sendpacket.fromPort);
-    DtlsAssociation *dtlsAssociation = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, sendpacket);
+    DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, sendpacket);
     //dtlsAssociation->setProtocol(QSsl::DtlsV1_2);
 
-    dtlsAssociation->newMassageToSend = true;
-    dtlsAssociation->massageToSend = cmdComponents[0];
-    dtlsAssociation->socket;
-    sendpacket.fromPort = dtlsAssociation->socket.localPort();
-    connect(dtlsAssociation, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
+    dtlsAssociationP->newMassageToSend = true;
+    dtlsAssociationP->massageToSend = cmdComponents[0];
+    dtlsAssociationP->socket;
+    sendpacket.fromPort = dtlsAssociationP->socket.localPort();
+    connect(dtlsAssociationP, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
     //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
-    dtlsAssociation->setCipher(cmdComponents[6]);
+    dtlsAssociationP->setCipher(cmdComponents[6]);
+    dtlsAssociation = dtlsAssociationP;
     //dtlsAssociation->startHandshake();
     //connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
 
     //QEventLoop loop;
     dtlsAssociation->startHandshake();
-    while(!handShakeDone){
-        continue;
-    }
-    connectStatus("Connected");
+//    while(!handShakeDone){
+//        continue;
+//    }
     writeMassage(sendpacket, dtlsAssociation);
+
+    persistentConnectionLoop();
+    connectStatus("Connected");
     emit packetSent(sendpacket);
 
     //dtlsAssociation->socket.waitForReadyRead();
@@ -117,7 +120,7 @@ void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArra
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
-    ///emit packetReceived(recPacket);
+    //emit packetReceived(recPacket);
 }
 
 
@@ -133,9 +136,178 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         return;
     }
+    emit packetSent(packetToSend);
     dtlsAssociation->socket.waitForReadyRead();
     //addServerResponse()
 }
 
 
 
+void Dtlsthread::persistentConnectionLoop()
+{
+    QUdpSocket* clientConnection = &(dtlsAssociation->socket);
+    QDEBUG() << "Entering the forever loop";
+    int ipMode = 4;
+    QHostAddress theAddress(sendpacket.toIP);
+    if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
+        ipMode = 6;
+    }
+
+    int count = 0;
+    while (clientConnection->state() == QAbstractSocket::ConnectedState) {
+        insidePersistent = true;
+
+
+        if (sendpacket.hexString.isEmpty() /*&& sendpacket.persistent */ && (clientConnection->bytesAvailable() == 0)) {
+            count++;
+            if (count % 10 == 0) {
+                //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
+                emit connectStatus("Connected and idle.");
+            }
+            clientConnection->waitForReadyRead(200);
+            continue;
+        }
+
+        if (clientConnection->state() != QAbstractSocket::ConnectedState /*&& sendPacket.persistent*/) {
+            QDEBUG() << "Connection broken.";
+            emit connectStatus("Connection broken");
+
+            break;
+        }
+
+        if (sendpacket.receiveBeforeSend) {
+            QDEBUG() << "Wait for data before sending...";
+            emit connectStatus("Waiting for data");
+            clientConnection->waitForReadyRead(500);
+
+            Packet tcpRCVPacket;
+            tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
+            if (!tcpRCVPacket.hexString.trimmed().isEmpty()) {
+                QDEBUG() << "Received: " << tcpRCVPacket.hexString;
+                emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
+
+                tcpRCVPacket.timestamp = QDateTime::currentDateTime();
+                tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+                tcpRCVPacket.tcpOrUdp = "DTLS";
+
+                if (ipMode < 6) {
+                    tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                } else {
+                    tcpRCVPacket.fromIP = (clientConnection->peerAddress()).toString();
+                }
+
+
+                QDEBUGVAR(tcpRCVPacket.fromIP);
+                tcpRCVPacket.toIP = "You";
+                tcpRCVPacket.port = sendpacket.fromPort;
+                tcpRCVPacket.fromPort =    clientConnection->peerPort();
+                if (tcpRCVPacket.hexString.size() > 0) {
+                    emit packetSent(tcpRCVPacket);
+
+                    // Do I need to reply?
+                    writeMassage(tcpRCVPacket, dtlsAssociation);
+
+                }
+
+            } else {
+                QDEBUG() << "No pre-emptive receive data";
+            }
+
+        } // end receive before send
+
+
+        //sendPacket.fromPort = clientConnection->localPort();
+        if(sendpacket.getByteArray().size() > 0) {
+            emit connectStatus("Sending data:" + sendpacket.asciiString());
+            QDEBUG() << "Attempting write data";
+            //clientConnection->write(sendpacket.getByteArray());
+            //emit packetSent(sendpacket);
+        }
+
+        Packet tcpPacket;
+        tcpPacket.timestamp = QDateTime::currentDateTime();
+        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        tcpPacket.tcpOrUdp = "TCP";
+        if (handShakeDone) {
+            tcpPacket.tcpOrUdp = "DTLS";
+        }
+
+        if (ipMode < 6) {
+            tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+
+        } else {
+            tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
+
+        }
+        QDEBUGVAR(tcpPacket.fromIP);
+
+        tcpPacket.toIP = "You";
+        tcpPacket.port = sendpacket.fromPort;
+        tcpPacket.fromPort =    clientConnection->peerPort();
+
+        clientConnection->waitForReadyRead(500);
+        emit connectStatus("Waiting to receive");
+        tcpPacket.hexString.clear();
+
+        while (clientConnection->bytesAvailable()) {
+            tcpPacket.hexString.append(" ");
+            tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
+            tcpPacket.hexString = tcpPacket.hexString.simplified();
+            clientConnection->waitForReadyRead(100);
+        }
+
+
+        //        if (!sendpacket.persistent) {
+        //            emit connectStatus("Disconnecting");
+        //            clientConnection->disconnectFromHost();
+        //        }
+
+        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
+
+        if (sendpacket.receiveBeforeSend) {
+            if (!tcpPacket.hexString.isEmpty()) {
+                emit packetSent(tcpPacket);
+            }
+        } else {
+            emit packetSent(tcpPacket);
+        }
+
+        // Do I need to reply?
+        //writeResponse(clientConnection, tcpPacket);
+        //writeMassage(tcpPacket, dtlsAssociation);
+
+
+
+        emit connectStatus("Reading response");
+        tcpPacket.hexString  = clientConnection->readAll();
+
+        tcpPacket.timestamp = QDateTime::currentDateTime();
+        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+
+
+        if (tcpPacket.hexString.size() > 0) {
+            emit packetSent(tcpPacket);
+
+            // Do I need to reply?
+            writeMassage(tcpPacket, dtlsAssociation);
+
+        }
+
+
+
+        //        if (!sendPacket.persistent) {
+        //            break;
+        //        } else {
+        //            sendPacket.clear();
+        //            sendPacket.persistent = true;
+        //            QDEBUG() << "Persistent connection. Loop and wait.";
+        //            continue;
+        //        }
+    } // end while connected
+
+    //    if (closeRequest) {
+    //        clientConnection->close();
+    //        clientConnection->waitForDisconnected(100);
+    //    }
+
+}

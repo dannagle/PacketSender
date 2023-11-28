@@ -16,6 +16,11 @@ public:
     virtual ~Dtlsthread();
     std::vector<DtlsAssociation*> dtlsAssociations;
     bool handShakeDone;
+    void persistentConnectionLoop();
+    DtlsAssociation* dtlsAssociation;
+    bool insidePersistent;
+
+
 
     Packet sendpacket;
     void run() override; // Pure virtual function making this class abstract
