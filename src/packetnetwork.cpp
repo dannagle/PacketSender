@@ -919,9 +919,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         pcWindow->dthread = thread;
 
 
-        QDEBUG() /*<< ": thread Connection attempt " <<
-            connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)));*/
-            //connects from tcp thread///////////////////
+        QDEBUG() << ": thread Connection attempt "
+                 << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
                  << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
                  << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
                  << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));

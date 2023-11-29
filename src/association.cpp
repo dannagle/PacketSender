@@ -130,7 +130,8 @@ void DtlsAssociation::readyRead()
     if (crypto.isConnectionEncrypted()) {
         const QByteArray plainText = crypto.decryptDatagram(&socket, dgram);
         if (plainText.size()) {
-            emit serverResponse(name, dgram, plainText, crypto.peerAddress(), crypto.peerPort(), socket.localPort());
+            //emit serverResponse(name, dgram, plainText, crypto.peerAddress(), crypto.peerPort(), socket.localPort());
+            emit receivedDatagram(plainText);
             return;
         }
 

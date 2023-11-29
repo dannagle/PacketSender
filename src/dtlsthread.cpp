@@ -40,7 +40,11 @@ void Dtlsthread::run()
     dtlsAssociationP->massageToSend = cmdComponents[0];
     dtlsAssociationP->socket;
     sendpacket.fromPort = dtlsAssociationP->socket.localPort();
-    connect(dtlsAssociationP, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
+    //connect(dtlsAssociationP, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
+    //connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
+    connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
+    PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
+    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
     //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
     dtlsAssociationP->setCipher(cmdComponents[6]);
     dtlsAssociation = dtlsAssociationP;
@@ -56,6 +60,7 @@ void Dtlsthread::run()
     writeMassage(sendpacket, dtlsAssociation);
 
     persistentConnectionLoop();
+
     connectStatus("Connected");
     emit packetSent(sendpacket);
 
@@ -269,7 +274,7 @@ void Dtlsthread::persistentConnectionLoop()
                 emit packetSent(tcpPacket);
             }
         } else {
-            emit packetSent(tcpPacket);
+            //emit packetSent(tcpPacket);
         }
 
         // Do I need to reply?
@@ -279,18 +284,25 @@ void Dtlsthread::persistentConnectionLoop()
 
 
         emit connectStatus("Reading response");
-        tcpPacket.hexString  = clientConnection->readAll();
+        //tcpPacket.hexString  = clientConnection->readAll();
+        tcpPacket.hexString = recievedMassage;
 
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
 
 
         if (tcpPacket.hexString.size() > 0) {
-            emit packetSent(tcpPacket);
+
+            //emit packetSent(tcpPacket);
 
             // Do I need to reply?
-            writeMassage(tcpPacket, dtlsAssociation);
-
+            //writeMassage(tcpPacket, dtlsAssociation);
+            //here we find out if there is new massage from server
+            emit packetReceived(tcpPacket);
+            //emit connectStatus("last sent massage: " + recievedMassage);
+            tcpPacket.hexString = "";
+            recievedMassage = "";
+            sendpacket.hexString = "";
         }
 
 
@@ -310,4 +322,37 @@ void Dtlsthread::persistentConnectionLoop()
     //        clientConnection->waitForDisconnected(100);
     //    }
 
+}
+void Dtlsthread::receivedDatagram(QByteArray plainText){
+    recievedMassage = QString::fromUtf8(plainText);
+}
+
+
+void Dtlsthread::sendPersistant(Packet sendpacket)
+{
+    QUdpSocket* clientConnection = &(dtlsAssociation->socket);
+
+    if ((!sendpacket.hexString.isEmpty()) && (clientConnection->state() == QAbstractSocket::ConnectedState)) {
+        QDEBUGVAR(sendpacket.hexString);
+
+        writeMassage(sendpacket,dtlsAssociation);
+
+        sendpacket.fromIP = "You";
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        int ipMode = settings.value("ipMode", 4).toInt();
+
+
+        if (ipMode < 6) {
+            sendpacket.toIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+        } else {
+            sendpacket.toIP = (clientConnection->peerAddress()).toString();
+        }
+
+        sendpacket.port = clientConnection->peerPort();
+        sendpacket.fromPort = clientConnection->localPort();
+        sendpacket.tcpOrUdp = "DTLS";
+
+        emit packetSent(sendpacket);
+    }
 }
