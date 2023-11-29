@@ -37,14 +37,15 @@ void Dtlsthread::run()
     //dtlsAssociation->setProtocol(QSsl::DtlsV1_2);
 
     dtlsAssociationP->newMassageToSend = true;
-    dtlsAssociationP->massageToSend = cmdComponents[0];
+    //dtlsAssociationP->massageToSend = cmdComponents[0];
     dtlsAssociationP->socket;
     sendpacket.fromPort = dtlsAssociationP->socket.localPort();
     //connect(dtlsAssociationP, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
-    //connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
+    connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
     connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
+    //connect(this, SIGNAL(packetReceived(Packet)), this,  SLOT(addServerResponse(Packet)));
     //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
     dtlsAssociationP->setCipher(cmdComponents[6]);
     dtlsAssociation = dtlsAssociationP;
@@ -62,7 +63,7 @@ void Dtlsthread::run()
     persistentConnectionLoop();
 
     connectStatus("Connected");
-    emit packetSent(sendpacket);
+    //emit packetSent(sendpacket);
 
     //dtlsAssociation->socket.waitForReadyRead();
     //dtlsAssociation->crypto.resumeHandshake(&(dtlsAssociation->socket));
@@ -136,13 +137,13 @@ void Dtlsthread::handShakeComplited(){
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
 
     //emit handShakeComplited(packetToSend, this);
-    const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), dtlsAssociation->massageToSend.toLatin1());
+    const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         return;
     }
     emit packetSent(packetToSend);
-    dtlsAssociation->socket.waitForReadyRead();
+    //dtlsAssociation->socket.waitForReadyRead();
     //addServerResponse()
 }
 
@@ -353,6 +354,6 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
         sendpacket.fromPort = clientConnection->localPort();
         sendpacket.tcpOrUdp = "DTLS";
 
-        emit packetSent(sendpacket);
+        //emit packetSent(sendpacket);
     }
 }

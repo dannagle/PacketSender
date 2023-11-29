@@ -267,7 +267,6 @@ void PersistentConnection::refreshTimerTimeout()
 
 
 
-
 //    QDEBUG() <<"Diff:" << diff;
 
 
@@ -351,6 +350,8 @@ void PersistentConnection::socketDisconnected()
 {
     statusReceiver("not connected");
 }
+
+//connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
 
 void PersistentConnection::on_asciiSendButton_clicked()
 {
