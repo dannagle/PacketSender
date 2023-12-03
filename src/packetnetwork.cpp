@@ -912,45 +912,78 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
     if(sendpacket.isDTLS()){
-        PersistentConnection * pcWindow = new PersistentConnection();
-        Dtlsthread * thread = new Dtlsthread(sendpacket, this);
-        pcWindow->sendPacket = sendpacket;
-        pcWindow->init();
-        pcWindow->dthread = thread;
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        if(settings.value("leaveSessionOpen").toString() == "true"){
+            PersistentConnection * pcWindow = new PersistentConnection();
+            Dtlsthread * thread = new Dtlsthread(sendpacket, this);
+            pcWindow->sendPacket = sendpacket;
+            pcWindow->init();
+            pcWindow->dthread = thread;
 
 
-        QDEBUG() << ": thread Connection attempt "
-                 << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
-                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
-                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
-        //connects from packetNetwork in isDtls condition
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
+            QDEBUG() << ": thread Connection attempt "
+                     << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+                     << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+                     << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+            //connects from packetNetwork in isDtls condition
+            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+            QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
 
-//            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-//                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-//                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+            //            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+            //                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+            //                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
 
 
-        //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
-        //        this, SLOT(toTrafficLog(Packet)));
+            //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
+            //        this, SLOT(toTrafficLog(Packet)));
 
-        pcWindow->show();
-        thread->start();
+            pcWindow->show();
+            thread->start();
+
+        }
+        else{
+            //        PersistentConnection * pcWindow = new PersistentConnection();
+            Dtlsthread * thread = new Dtlsthread(sendpacket, this);
+            //        pcWindow->sendPacket = sendpacket;
+            //        pcWindow->init();
+            //        pcWindow->dthread = thread;
 
 
+            //        QDEBUG() << ": thread Connection attempt "
+            //                 << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+            //                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+            //                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+            //                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+            //connects from packetNetwork in isDtls condition
+            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+            QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
-        //Network manager will manage this thread so the UI window doesn't need to.
-        dtlsthreadList.append(thread);
 
-        QTimer* timer = new QTimer(this);
-        thread->timer = timer;
-        connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
-        timer->start(1000);
+            //            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+            //                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+            //                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+
+            //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
+            //        this, SLOT(toTrafficLog(Packet)));
+
+            //        pcWindow->show();
+            thread->start();
+            //Network manager will manage this thread so the UI window doesn't need to.
+            dtlsthreadList.append(thread);
+
+            QTimer* timer = new QTimer(this);
+            thread->timer = timer;
+            connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
+            timer->start(1000);
+
+        }
 
     }
 
