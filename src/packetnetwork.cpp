@@ -946,6 +946,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         //Network manager will manage this thread so the UI window doesn't need to.
         dtlsthreadList.append(thread);
+        QTimer* timer = new QTimer(this);
+        connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
+        timer->start(1000);
 
     }
 
@@ -1275,3 +1278,4 @@ void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteA
 
     emit packetReceived(recPacket);
 }
+

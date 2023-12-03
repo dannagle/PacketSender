@@ -12,6 +12,7 @@ class Dtlsthread : public QThread
 
 
 public:
+    bool closeRequest;
     Dtlsthread(Packet sendPacket, QObject *parent);
     virtual ~Dtlsthread();
     std::vector<DtlsAssociation*> dtlsAssociations;
@@ -29,6 +30,7 @@ public:
     std::vector<QString> getCmdInput(Packet sendpacket, QSettings& settings);
     void writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation);
 public slots:
+    void onTimeout();
     void sendPersistant(Packet sendpacket);
     void handShakeComplited();
     void receivedDatagram(QByteArray plainText);

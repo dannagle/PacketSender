@@ -17,6 +17,8 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
+    closeRequest = false;
+
     handShakeDone = false;
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     if (settings.status() != QSettings::NoError) {
@@ -161,7 +163,7 @@ void Dtlsthread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while (clientConnection->state() == QAbstractSocket::ConnectedState) {
+    while (clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
         insidePersistent = true;
 
 
@@ -318,10 +320,10 @@ void Dtlsthread::persistentConnectionLoop()
         //        }
     } // end while connected
 
-    //    if (closeRequest) {
-    //        clientConnection->close();
-    //        clientConnection->waitForDisconnected(100);
-    //    }
+    if (closeRequest) {
+        clientConnection->close();
+        clientConnection->waitForDisconnected(100);
+    }
 
 }
 void Dtlsthread::receivedDatagram(QByteArray plainText){
@@ -368,4 +370,11 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 
         //emit packetSent(sendpacket);
     }
+}
+
+void Dtlsthread::onTimeout(){
+//    dtlsAssociation->socket.disconnectFromHost();
+//    dtlsAssociation->socket.close();
+//    //this->terminate();
+    closeRequest = true;
 }
