@@ -64,25 +64,7 @@ std::vector<QString> Dtlsthread::getCmdInput(Packet sendpacket, QSettings& setti
     return cmdComponents;
 }
 
-void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
-{
-    //ned to fix the "to port" field
-    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
-    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
 
-    Packet recPacket;
-    recPacket.init();
-    recPacket.fromIP = serverAddress.toString();
-    recPacket.fromPort = serverPort;
-    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-    recPacket.hexString = massageFromTheOtherPeer;
-    recPacket.toIP = clientAddress;
-    recPacket.port = userPort;
-    recPacket.errorString = "none";
-    recPacket.tcpOrUdp = "DTLS";
-
-    //emit packetReceived(recPacket);
-}
 
 
 void Dtlsthread::handShakeComplited(){
@@ -338,10 +320,30 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     quint16 port = cmdComponents[2].toUShort();
     DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, cmdComponents);
     sendpacket.fromPort = dtlsAssociationP->socket.localPort();
-    connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
     connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
     dtlsAssociationP->setCipher(cmdComponents[6]);
     return dtlsAssociationP;
 }
+
+/////////////////////////backups///////////////////
+//void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
+//{
+//    //ned to fix the "to port" field
+//    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
+//    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
+
+//    Packet recPacket;
+//    recPacket.init();
+//    recPacket.fromIP = serverAddress.toString();
+//    recPacket.fromPort = serverPort;
+//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
+//    recPacket.hexString = massageFromTheOtherPeer;
+//    recPacket.toIP = clientAddress;
+//    recPacket.port = userPort;
+//    recPacket.errorString = "none";
+//    recPacket.tcpOrUdp = "DTLS";
+
+//    //emit packetReceived(recPacket);
+//}

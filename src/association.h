@@ -13,36 +13,30 @@ class DtlsAssociation : public QObject
     Q_OBJECT
 
 public:
+    DtlsAssociation(const QHostAddress &address, quint16 port,
+                    const QString &connectionName, std::vector<QString> cmdComponents);
+    ~DtlsAssociation();
+    void startHandshake();
+    void setCipher(QString chosenCipher);
+
+    QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
     QDtls crypto;
     QUdpSocket socket;
     QString name;
     Packet packetToSend;
 
-    DtlsAssociation(const QHostAddress &address, quint16 port,
-                    const QString &connectionName, std::vector<QString> cmdComponents);
-    ~DtlsAssociation();
-    void startHandshake();
-    //void setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath);
-    void setCipher(QString chosenCipher);
-    QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
-
 signals:
-    void handShakeComplited();
     void errorMessage(const QString &message);
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
-    void serverResponse(const QString &clientInfo, const QByteArray &datagraam,
-                        const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort, quint16 clientPort);
+    void handShakeComplited();
     void receivedDatagram(QByteArray plainText);
 
 private slots:
     void udpSocketConnected();
     void readyRead();
-    void handshakeTimeout();
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
-    //void pingTimeout();
-    //void writeMassage();
-
+    void handshakeTimeout();
 
 private:
 
@@ -52,6 +46,6 @@ private:
 
     Q_DISABLE_COPY(DtlsAssociation)
 };
-//! [0]
+
 
 #endif // ASSOCIATION_H

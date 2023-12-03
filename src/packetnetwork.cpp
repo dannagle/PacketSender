@@ -1068,73 +1068,6 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 }
 
 
-//isDTLS function
-void PacketNetwork::execCmd(QString opensslPath, DWORD& statusRef, Packet& sendpacket){
-    //adjust the opensslPath to be the input for CreateProcess function
-    std::wstring wstr = opensslPath.toStdWString();
-    //initiate the proccess's parameters
-    LPWSTR lpwstr = &wstr[0];
-    STARTUPINFO si;
-    si.lpTitle = NULL;
-    PROCESS_INFORMATION pi;
-    ZeroMemory(&si, sizeof(si));
-    si.cb = sizeof(si);
-    ZeroMemory(&pi, sizeof(pi));
-    // Create the process in hidden mode
-    if (CreateProcess(NULL, lpwstr, NULL, NULL, FALSE, CREATE_NO_WINDOW, NULL, NULL, &si, &pi)) {
-        WaitForSingleObject(pi.hProcess, 10000);
-        //if the connection doesn't established change modify the session to close session
-        GetExitCodeProcess(pi.hProcess, &statusRef);
-        //connection error
-        if (statusRef!=0){
-            MainWindow::isSessionOpen = false;
-            sendpacket.errorString = "Connection error, openssl error code is: " + QString::number(static_cast<quint32>(statusRef));
-        }
-        CloseHandle(pi.hProcess);
-        CloseHandle(pi.hThread);
-    } else {
-        // error with the process creation
-        sendpacket.errorString = "process creation was faild";
-    }
-}
-
-std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& settings){
-    //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
-    std::vector<QString> cmdComponents;
-
-    //get the data of the packet
-    cmdComponents.push_back(QString::fromUtf8(sendpacket.getByteArray()));
-    cmdComponents.push_back(sendpacket.toIP);
-    cmdComponents.push_back(QString::number(sendpacket.port));
-
-    //get the pathes for verification from the settings
-    cmdComponents.push_back(settings.value("sslPrivateKeyPath", "default").toString());
-    cmdComponents.push_back(settings.value("sslLocalCertificatePath", "default").toString());
-    QString sslCaPath = settings.value("sslCaPath", "default").toString();
-
-    //get the full path to to ca-signed-cert.pem file
-    QDir dir(sslCaPath);
-    if (dir.exists()) {
-        QStringList nameFilters;
-        nameFilters << "*.pem";  // Filter for .txt files
-
-        dir.setNameFilters(nameFilters);
-        QStringList fileList = dir.entryList();
-
-        if (!fileList.isEmpty()) {
-            // Select the first file that matches the filter
-            cmdComponents.push_back(dir.filePath(fileList.first()));
-        } else {
-            qDebug() << "No matching files found.";
-        }
-    } else {
-        qDebug() << "Directory does not exist.";
-    }
-    cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
-    return cmdComponents;
-}
-
-
 void PacketNetwork::httpError(QNetworkRequest* pReply)
 {
     QDEBUGVAR(pReply);
@@ -1251,6 +1184,42 @@ QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
     }
 
     return theServers;
+}
+
+std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& settings){
+    //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+    std::vector<QString> cmdComponents;
+
+    //get the data of the packet
+    cmdComponents.push_back(QString::fromUtf8(sendpacket.getByteArray()));
+    cmdComponents.push_back(sendpacket.toIP);
+    cmdComponents.push_back(QString::number(sendpacket.port));
+
+    //get the pathes for verification from the settings
+    cmdComponents.push_back(settings.value("sslPrivateKeyPath", "default").toString());
+    cmdComponents.push_back(settings.value("sslLocalCertificatePath", "default").toString());
+    QString sslCaPath = settings.value("sslCaPath", "default").toString();
+
+    //get the full path to to ca-signed-cert.pem file
+    QDir dir(sslCaPath);
+    if (dir.exists()) {
+        QStringList nameFilters;
+        nameFilters << "*.pem";  // Filter for .txt files
+
+        dir.setNameFilters(nameFilters);
+        QStringList fileList = dir.entryList();
+
+        if (!fileList.isEmpty()) {
+            // Select the first file that matches the filter
+            cmdComponents.push_back(dir.filePath(fileList.first()));
+        } else {
+            qDebug() << "No matching files found.";
+        }
+    } else {
+        qDebug() << "Directory does not exist.";
+    }
+    cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
+    return cmdComponents;
 }
 
 void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)

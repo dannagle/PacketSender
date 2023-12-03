@@ -45,8 +45,6 @@ class PacketNetwork : public QObject
         explicit PacketNetwork(QObject *parent = nullptr);
         void init();
 
-        //isDTLS function
-        void execCmd(QString opensslPath, DWORD& statusRef, Packet& sendpacket);
         std::vector<QString> getCmdInput(Packet sendpacket, QSettings &settings);
 
         QString debugQByteArray(QByteArray debugArray);
@@ -115,7 +113,6 @@ public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
-        //void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress peerAddress, quint16 peerPort);
         void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort);
 
 

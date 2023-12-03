@@ -165,7 +165,6 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 
 void DtlsAssociation::setCipher(QString chosenCipher) {
     configuration.setCiphers(chosenCipher);
-    //configuration.setProtocol(QSsl::DtlsV1_2);
     crypto.setDtlsConfiguration(configuration);
 }
 
