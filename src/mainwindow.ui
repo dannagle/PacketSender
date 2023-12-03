@@ -337,7 +337,7 @@
          <widget class="QComboBox" name="cipherCb">
           <property name="geometry">
            <rect>
-            <x>670</x>
+            <x>660</x>
             <y>0</y>
             <width>191</width>
             <height>24</height>
@@ -442,7 +442,7 @@
          <widget class="QLabel" name="CipherLable">
           <property name="geometry">
            <rect>
-            <x>590</x>
+            <x>570</x>
             <y>0</y>
             <width>81</width>
             <height>20</height>
