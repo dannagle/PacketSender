@@ -5,6 +5,7 @@
 #include "packet.h"
 #include "QSettings"
 #include "association.h"
+//#include "QTimer"
 
 class Dtlsthread : public QThread
 {
@@ -12,6 +13,7 @@ class Dtlsthread : public QThread
 
 
 public:
+    QTimer* timer;
     bool closeRequest;
     Dtlsthread(Packet sendPacket, QObject *parent);
     virtual ~Dtlsthread();

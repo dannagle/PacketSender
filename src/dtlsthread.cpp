@@ -377,4 +377,5 @@ void Dtlsthread::onTimeout(){
 //    dtlsAssociation->socket.close();
 //    //this->terminate();
     closeRequest = true;
+    timer->stop();
 }
