@@ -9,10 +9,7 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     : name(connectionName),
     crypto(QSslSocket::SslClientMode)
 {
-    //! [1]
-    //auto configuration = QSslConfiguration::defaultDtlsConfiguration();
 
-    //////////////////////
     QFile certFile(cmdComponents[4]);//4
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
@@ -31,39 +28,22 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     }
     QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
 
-    //auto configuration = QSslConfiguration::defaultDtlsConfiguration();
-    //configuration.setCiphers("AES256-GCM-SHA384");
-
     configuration.setLocalCertificate(certificate);
     configuration.setPrivateKey(privateKey);
     configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
-    //////////////////////
 
     configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
     crypto.setPeer(address, port);
     crypto.setDtlsConfiguration(configuration);
-
-    //! [1]
-
-    //! [2]
-    //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
-    //! [2]
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
     socket.connectToHost(address.toString(), port);
     socket.waitForConnected();
     //! [3]
     //! [13]
-    //QEventLoop loop;
     connect(&socket, &QUdpSocket::readyRead, this, &DtlsAssociation::readyRead);
-    //loop.exec();
-
-
     //! [13]
-    //! [4]
-    //pingTimer.setInterval(5000);
-    //connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
-    //! [4]
+
 }
 
 //! [12]
@@ -86,14 +66,12 @@ void DtlsAssociation::startHandshake()
     if (!crypto.doHandshake(&socket))
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
     else{
-        //socket.waitForBytesWritten();
         while(true){
             socket.waitForReadyRead();
             if(crypto.isConnectionEncrypted()){
                 break;
             }
         }
-        //crypto.doHandshake(&socket);
         emit infoMessage(tr("%1: starting a handshake").arg(name));
     }
 
@@ -109,8 +87,7 @@ void DtlsAssociation::udpSocketConnected()
 
 void DtlsAssociation::readyRead()
 {
-    //QEventLoop loop;
-    //QThread::sleep(2);
+
     if (socket.pendingDatagramSize() <= 0) {
         emit warningMessage(tr("%1: spurious read notification?").arg(name));
         return;
@@ -130,7 +107,6 @@ void DtlsAssociation::readyRead()
     if (crypto.isConnectionEncrypted()) {
         const QByteArray plainText = crypto.decryptDatagram(&socket, dgram);
         if (plainText.size()) {
-            //emit serverResponse(name, dgram, plainText, crypto.peerAddress(), crypto.peerPort(), socket.localPort());
             emit receivedDatagram(plainText);
             return;
         }
@@ -146,29 +122,23 @@ void DtlsAssociation::readyRead()
     } else {
         //! [7]
         //! [8]
-
         if (!crypto.doHandshake(&socket, dgram)) {
             emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
             return;
         }
         //! [8]
-
-        //socket.waitForReadyRead();
         crypto.doHandshake(&socket, dgram);
         //! [9]
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));
-            //writeMassage();
             emit handShakeComplited();
         } else {
             //! [9]
-            //socket.waitForReadyRead(10000);
             emit infoMessage(tr("%1: continuing with handshake ...").arg(name));
         }
-        //socket.waitForReadyRead(10000);
 
     }
-    //loop.exec();
+
 
 }
 
@@ -191,6 +161,15 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
     auth->setIdentity(name.toLatin1());
     auth->setPreSharedKey(QByteArrayLiteral("\x1a\x2b\x3c\x4d\x5e\x6f"));
 }
+
+
+void DtlsAssociation::setCipher(QString chosenCipher) {
+    configuration.setCiphers(chosenCipher);
+    //configuration.setProtocol(QSsl::DtlsV1_2);
+    crypto.setDtlsConfiguration(configuration);
+}
+
+///////////////////////////////////////////////////backups//////////////////////////////////
 //! [14]
 
 //! [10]
@@ -218,11 +197,6 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 
 
 
-void DtlsAssociation::setCipher(QString chosenCipher) {
-    configuration.setCiphers(chosenCipher);
-    //configuration.setProtocol(QSsl::DtlsV1_2);
-    crypto.setDtlsConfiguration(configuration);
-}
 
 //void DtlsAssociation::setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath) {
 //    QFile keyFile(keyPath);

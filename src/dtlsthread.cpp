@@ -18,37 +18,12 @@ Dtlsthread::~Dtlsthread() {
 void Dtlsthread::run()
 {
     closeRequest = false;
-
     handShakeDone = false;
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    if (settings.status() != QSettings::NoError) {
-        sendpacket.errorString ="Can't open settings file.";
-    }
-
-    //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
-    std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
-    //qdtls
-
-    const QString ipAddress = cmdComponents[1];
-    QHostAddress ipAddressHost;
-    ipAddressHost.setAddress(ipAddress);
-    quint16 port = cmdComponents[2].toUShort();
-    DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, cmdComponents);
-    dtlsAssociationP->socket;
-    sendpacket.fromPort = dtlsAssociationP->socket.localPort();
-    connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
-    connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
-    PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
-    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
-    dtlsAssociationP->setCipher(cmdComponents[6]);
-    dtlsAssociation = dtlsAssociationP;
+    dtlsAssociation = initDtlsAssociation();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
     dtlsAssociation->startHandshake();
-
     writeMassage(sendpacket, dtlsAssociation);
-
     persistentConnectionLoop();
-
     connectStatus("Connected");
 }
 
@@ -115,17 +90,12 @@ void Dtlsthread::handShakeComplited(){
 }
 
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
-
-    //emit handShakeComplited(packetToSend, this);
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         return;
     }
     emit packetSent(packetToSend);
-    //packetToSend.hexString = "";
-    //dtlsAssociation->socket.waitForReadyRead();
-    //addServerResponse()
 }
 
 
@@ -351,9 +321,27 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 }
 
 void Dtlsthread::onTimeout(){
-//    dtlsAssociation->socket.disconnectFromHost();
-//    dtlsAssociation->socket.close();
-//    //this->terminate();
     closeRequest = true;
     timer->stop();
+}
+
+DtlsAssociation* Dtlsthread::initDtlsAssociation(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    if (settings.status() != QSettings::NoError) {
+        sendpacket.errorString ="Can't open settings file.";
+    }
+    //the vector of cmdComponents contains: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath, chosen cipher
+    std::vector<QString> cmdComponents = getCmdInput(sendpacket, settings);
+    const QString ipAddress = cmdComponents[1];
+    QHostAddress ipAddressHost;
+    ipAddressHost.setAddress(ipAddress);
+    quint16 port = cmdComponents[2].toUShort();
+    DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, cmdComponents);
+    sendpacket.fromPort = dtlsAssociationP->socket.localPort();
+    connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
+    connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
+    PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
+    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
+    dtlsAssociationP->setCipher(cmdComponents[6]);
+    return dtlsAssociationP;
 }

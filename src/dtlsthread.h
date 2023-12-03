@@ -16,6 +16,7 @@ public:
     QTimer* timer;
     bool closeRequest;
     Dtlsthread(Packet sendPacket, QObject *parent);
+    DtlsAssociation* initDtlsAssociation();
     virtual ~Dtlsthread();
     std::vector<DtlsAssociation*> dtlsAssociations;
     bool handShakeDone;
