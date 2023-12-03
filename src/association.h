@@ -14,17 +14,15 @@ class DtlsAssociation : public QObject
 
 public:
     QDtls crypto;
-    bool newMassageToSend = false;
-    QString massageToSend;
     QUdpSocket socket;
     QString name;
     Packet packetToSend;
 
     DtlsAssociation(const QHostAddress &address, quint16 port,
-                    const QString &connectionName, Packet packetToSend);
+                    const QString &connectionName, std::vector<QString> cmdComponents);
     ~DtlsAssociation();
     void startHandshake();
-    void setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath);
+    //void setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath);
     void setCipher(QString chosenCipher);
     QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
 
@@ -42,7 +40,7 @@ private slots:
     void readyRead();
     void handshakeTimeout();
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
-    void pingTimeout();
+    //void pingTimeout();
     //void writeMassage();
 
 

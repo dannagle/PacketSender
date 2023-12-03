@@ -5,7 +5,7 @@
 #include "packet.h"
 
 DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
-                                 const QString &connectionName, Packet packetToSend)
+                                 const QString &connectionName, std::vector<QString> cmdComponents)
     : name(connectionName),
     crypto(QSslSocket::SslClientMode)
 {
@@ -13,19 +13,19 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     //auto configuration = QSslConfiguration::defaultDtlsConfiguration();
 
     //////////////////////
-    QFile certFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-signed-cert.pem");
+    QFile certFile(cmdComponents[4]);//4
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
     }
     QSslCertificate certificate(&certFile, QSsl::Pem);
 
-    QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-key.pem");
+    QFile keyFile(cmdComponents[3]);//3
     if(!keyFile.open(QIODevice::ReadOnly)){
         return;
     }
     QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
 
-    QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
+    QFile caCertFile(cmdComponents[5]);//5
     if(!caCertFile.open(QIODevice::ReadOnly)){
         return;
     }
@@ -61,8 +61,8 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
 
     //! [13]
     //! [4]
-    pingTimer.setInterval(5000);
-    connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
+    //pingTimer.setInterval(5000);
+    //connect(&pingTimer, &QTimer::timeout, this, &DtlsAssociation::pingTimeout);
     //! [4]
 }
 
@@ -197,23 +197,23 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 //!
 //!
 //! only for ping massage
-void DtlsAssociation::pingTimeout()
-{
+//void DtlsAssociation::pingTimeout()
+//{
 
-    //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
-    //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
-    if(this->newMassageToSend){
-        emit handShakeComplited();
-        const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
-        if (written <= 0) {
-            emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
-            pingTimer.stop();
-            return;
-        }
-        this->newMassageToSend = false;
-        ++ping;
-    }
-}
+//    //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
+//    //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
+//    if(this->newMassageToSend){
+//        emit handShakeComplited();
+//        const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
+//        if (written <= 0) {
+//            emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
+//            pingTimer.stop();
+//            return;
+//        }
+//        this->newMassageToSend = false;
+//        ++ping;
+//    }
+//}
 //! [10]
 
 
@@ -224,25 +224,25 @@ void DtlsAssociation::setCipher(QString chosenCipher) {
     crypto.setDtlsConfiguration(configuration);
 }
 
-void DtlsAssociation::setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath) {
-    QFile keyFile(keyPath);
-    QFile certFile(certPath);
-    QFile caFile(caPath);
-    if (certFile.open(QIODevice::ReadOnly) && keyFile.open(QIODevice::ReadOnly) && caFile.open(QIODevice::ReadOnly)) {
-        QSslKey privateKey(&keyFile, QSsl::Rsa, QSsl::Pem);
-        QSslCertificate certificate(&certFile, QSsl::Pem);
-        QSslCertificate caCertificate(&caFile, QSsl::Pem);
+//void DtlsAssociation::setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath) {
+//    QFile keyFile(keyPath);
+//    QFile certFile(certPath);
+//    QFile caFile(caPath);
+//    if (certFile.open(QIODevice::ReadOnly) && keyFile.open(QIODevice::ReadOnly) && caFile.open(QIODevice::ReadOnly)) {
+//        QSslKey privateKey(&keyFile, QSsl::Rsa, QSsl::Pem);
+//        QSslCertificate certificate(&certFile, QSsl::Pem);
+//        QSslCertificate caCertificate(&caFile, QSsl::Pem);
 
-        configuration.setPrivateKey(privateKey);
-        configuration.setLocalCertificate(certificate);
-        configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
+//        configuration.setPrivateKey(privateKey);
+//        configuration.setLocalCertificate(certificate);
+//        configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
 
-        crypto.setDtlsConfiguration(configuration);
-    }
-    else {
-        //QDebug("Error loading certs or key");
-    }
-}
+//        crypto.setDtlsConfiguration(configuration);
+//    }
+//    else {
+//        //QDebug("Error loading certs or key");
+//    }
+//}
 ////////////////////////
 //QFile certFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-signed-cert.pem");
 //if(!certFile.open(QIODevice::ReadOnly)){

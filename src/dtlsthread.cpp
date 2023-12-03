@@ -33,45 +33,23 @@ void Dtlsthread::run()
     QHostAddress ipAddressHost;
     ipAddressHost.setAddress(ipAddress);
     quint16 port = cmdComponents[2].toUShort();
-    //+QString::number(sendpacket.fromPort);
-    //QString test = QString::number(sendpacket.fromPort);
-    DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, sendpacket);
-    //dtlsAssociation->setProtocol(QSsl::DtlsV1_2);
-
-    dtlsAssociationP->newMassageToSend = true;
-    //dtlsAssociationP->massageToSend = cmdComponents[0];
+    DtlsAssociation *dtlsAssociationP = new DtlsAssociation(ipAddressHost, port, sendpacket.fromIP, cmdComponents);
     dtlsAssociationP->socket;
     sendpacket.fromPort = dtlsAssociationP->socket.localPort();
-    //connect(dtlsAssociationP, &DtlsAssociation::serverResponse, this, &Dtlsthread::addServerResponse);
     connect(this, &Dtlsthread::serverResponse, this, &Dtlsthread::addServerResponse);
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
     connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
-    //connect(this, SIGNAL(packetReceived(Packet)), this,  SLOT(addServerResponse(Packet)));
-    //dtlsAssociation->setKeyCertAndCaCert(cmdComponents[3],cmdComponents[4], cmdComponents[5]);
     dtlsAssociationP->setCipher(cmdComponents[6]);
     dtlsAssociation = dtlsAssociationP;
-    //dtlsAssociation->startHandshake();
-    //connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::writeMassage);
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
-
-    //QEventLoop loop;
     dtlsAssociation->startHandshake();
-//    while(!handShakeDone){
-//        continue;
-//    }
+
     writeMassage(sendpacket, dtlsAssociation);
 
     persistentConnectionLoop();
 
     connectStatus("Connected");
-    //emit packetSent(sendpacket);
-
-    //dtlsAssociation->socket.waitForReadyRead();
-    //dtlsAssociation->crypto.resumeHandshake(&(dtlsAssociation->socket));
-    //loop.exec();
-
-    //dtlsAssociation->crypto.doHandshake(&(dtlsAssociation->socket));
 }
 
 
