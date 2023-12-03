@@ -41,6 +41,8 @@ class PreviewFilter : public QObject
     Q_OBJECT
 
 public:
+    QCheckBox* leaveSessionOpen;
+
     explicit PreviewFilter(QObject * parent, QLineEdit * asciiEdit, QLineEdit * hexEdit)
         : QObject{parent}, asciiEdit{asciiEdit}, hexEdit{hexEdit}
     {
@@ -70,18 +72,12 @@ class MainWindow : public QMainWindow
         Q_OBJECT
 
     public:
-        static int isSessionOpen;
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
         QString ASCIITohex(QString &ascii);
         QString hexToASCII(QString &hex);
-
-        void loadPacketsTable();
-
-        QComboBox* cipherCb;
-        QPushButton *loadKeyButton;
-        QPushButton *loadCertButton;
+        void loadPacketsTable();       
         QPushButton *generatePSLink();
         QPushButton *generateDNLink();
         void populateTableRow(int rowCounter, Packet tempPacket);
@@ -92,8 +88,10 @@ class MainWindow : public QMainWindow
         int findColumnIndex(QListWidget *lw, QString search);
         void packetTable_checkMultiSelected();
         void generateConnectionMenu();
-
         void updateManager(QByteArray response);
+
+        QComboBox* cipherCb;
+        static int isSessionOpen;
 
     signals:
         void sendPacket(Packet sendpacket);
@@ -215,9 +213,6 @@ class MainWindow : public QMainWindow
 
         void on_loadFileButton_clicked();
 
-        void on_loadKeyButton_clicked();
-
-        void on_loadCertButton_clicked();
 
         void on_actionDonate_Thank_You_triggered();
 

@@ -330,13 +330,6 @@
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="leaveSessionOpen">
-               <property name="text">
-                <string>Leave the session open</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
                <item>
                 <widget class="QLabel" name="label_17">

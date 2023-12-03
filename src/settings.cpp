@@ -93,18 +93,15 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->setupUi(this);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
 
     //not working yet...
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
     //connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    if(settings.value("leaveSessionOpen").toString() == "false"){
-        ui->leaveSessionOpen->setChecked(false);
-    } else {
-        ui->leaveSessionOpen->setChecked(true);
-    }
+
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("Packet Sender "+tr("Settings"));
@@ -180,8 +177,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->dateFormatExample->setText(now.toString(dateFormat));
     ui->timeFormatExample->setText(now.toString(timeFormat));
 
-    leaveSessionOpen = ui->leaveSessionOpen;
-    connect(leaveSessionOpen, &QCheckBox::toggled, dynamic_cast<MainWindow*>(parent), &MainWindow::on_leaveSessionOpen_StateChanged);
+
 
     connect(ui->dateFormat, &QLineEdit::textChanged, this, [=](QString val) {
         // use action as you wish

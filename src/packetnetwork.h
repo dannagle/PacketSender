@@ -113,7 +113,6 @@ public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
-        void addServerResponse(const QString &clientInfo, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort);
 
 
 private slots:

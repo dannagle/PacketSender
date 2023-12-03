@@ -71,7 +71,6 @@ class Settings : public QDialog
         explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();
 
-        QCheckBox* leaveSessionOpen;
         static QStringList defaultPacketTableHeader();
         static QStringList defaultTrafficTableHeader();
 

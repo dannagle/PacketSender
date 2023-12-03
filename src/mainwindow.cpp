@@ -73,6 +73,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
+    QCheckBox* leaveSessionOpen;
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    if(settings.value("leaveSessionOpen").toString() == "false"){
+        ui->leaveSessionOpen->setChecked(false);
+    } else {
+        ui->leaveSessionOpen->setChecked(true);
+    }
+
+    leaveSessionOpen = ui->leaveSessionOpen;
+    connect(leaveSessionOpen, &QCheckBox::toggled, this, &MainWindow::on_leaveSessionOpen_StateChanged);
 
     cipherCb = ui->cipherCb;
     //add the combobox the correct cipher suites
@@ -82,20 +94,13 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
-        ui->loadKeyButton->hide();
-        ui->loadCertButton->hide();
-        ui->noteServer->hide();
+        ui->leaveSessionOpen->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
     }
 
     connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
-    connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
-    connect(loadCertButton, &QPushButton::clicked, this, &MainWindow::on_loadCertButton_clicked);
 
-
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    //settings.setValue("leaveSessionOpen", "false");
     QIcon mIcon(":pslogo.png");
 
 
@@ -2656,69 +2661,6 @@ void MainWindow::on_loadFileButton_clicked()
 
 }
 
-void MainWindow::on_loadKeyButton_clicked()
-{
-    static QString fileName;
-    static bool showWarning = true;
-
-    if (fileName.isEmpty()) {
-        fileName = QDir::homePath();
-    }
-
-    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
-                                            fileName,
-                                            tr("*.*"));
-
-    QDEBUGVAR(fileName);
-
-    if (fileName.isEmpty()) {
-        QMessageBox::critical(this, "Error", "The uploaded file is empty.");
-        return;
-        //
-    }
-
-    packetNetwork.keyPath = fileName;
-
-    // Extract the file name from the full path
-    QFileInfo fileInfo(fileName);
-    QString fileNameOnly = fileInfo.fileName();
-
-    // Set the extracted file name as the text on the button
-    ui->loadKeyButton->setText(fileNameOnly);
-
-}
-
-void MainWindow::on_loadCertButton_clicked()
-{
-    static QString fileName;
-    static bool showWarning = true;
-
-    if (fileName.isEmpty()) {
-        fileName = QDir::homePath();
-    }
-
-    fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
-                                            fileName,
-                                            tr("*.*"));
-
-    QDEBUGVAR(fileName);
-
-    if (fileName.isEmpty()) {
-        QMessageBox::critical(this, "Error", "The uploaded file is empty.");
-        return;
-        //
-    }
-
-    packetNetwork.certPath = fileName;
-
-    // Extract the file name from the full path
-    QFileInfo fileInfo(fileName);
-    QString fileNameOnly = fileInfo.fileName();
-
-    // Set the extracted file name as the text on the button
-    ui->loadCertButton->setText(fileNameOnly);
-
-}
 
 void MainWindow::on_actionDonate_Thank_You_triggered()
 {
@@ -2737,15 +2679,11 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     /////////////////////////////////dtls add line edit for adding path for cert
 
     if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
-        ui->loadKeyButton->show();  // Enable when "dtls" is selected
-        ui->loadCertButton->show();
-        ui->noteServer->show();
+        ui->leaveSessionOpen->show();
         cipherCb->show();
         ui->CipherLable->show();
     } else {
-        ui->loadKeyButton->hide();   // Disable for other options
-        ui->loadCertButton->hide();   // Disable for other options
-        ui->noteServer->hide();
+        ui->leaveSessionOpen->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
 

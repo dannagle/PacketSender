@@ -334,49 +334,10 @@
            <height>16777215</height>
           </size>
          </property>
-         <widget class="QPushButton" name="loadCertButton">
-          <property name="geometry">
-           <rect>
-            <x>90</x>
-            <y>0</y>
-            <width>111</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Load Certificate File</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="loadKeyButton">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>80</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Load Key File</string>
-          </property>
-         </widget>
-         <widget class="QLabel" name="noteServer">
-          <property name="geometry">
-           <rect>
-            <x>210</x>
-            <y>0</y>
-            <width>161</width>
-            <height>21</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>*Only if needed by the server</string>
-          </property>
-         </widget>
          <widget class="QComboBox" name="cipherCb">
           <property name="geometry">
            <rect>
-            <x>650</x>
+            <x>670</x>
             <y>0</y>
             <width>191</width>
             <height>24</height>
@@ -481,7 +442,7 @@
          <widget class="QLabel" name="CipherLable">
           <property name="geometry">
            <rect>
-            <x>560</x>
+            <x>590</x>
             <y>0</y>
             <width>81</width>
             <height>20</height>
@@ -491,11 +452,19 @@
            <string>Cipher Suites:</string>
           </property>
          </widget>
-         <zorder>loadKeyButton</zorder>
-         <zorder>loadCertButton</zorder>
-         <zorder>noteServer</zorder>
-         <zorder>cipherCb</zorder>
-         <zorder>CipherLable</zorder>
+         <widget class="QCheckBox" name="leaveSessionOpen">
+          <property name="geometry">
+           <rect>
+            <x>430</x>
+            <y>0</y>
+            <width>111</width>
+            <height>22</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Persistent DTLS</string>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>

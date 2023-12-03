@@ -1222,23 +1222,23 @@ std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& se
     return cmdComponents;
 }
 
-void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
-{
-    //ned to fix the "to port" field
-    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
-    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
+//void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
+//{
+//    //ned to fix the "to port" field
+//    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
+//    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
 
-    Packet recPacket;
-    recPacket.init();
-    recPacket.fromIP = serverAddress.toString();
-    recPacket.fromPort = serverPort;
-    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-    recPacket.hexString = massageFromTheOtherPeer;
-    recPacket.toIP = clientAddress;
-    recPacket.port = userPort;
-    recPacket.errorString = "none";
-    recPacket.tcpOrUdp = "DTLS";
+//    Packet recPacket;
+//    recPacket.init();
+//    recPacket.fromIP = serverAddress.toString();
+//    recPacket.fromPort = serverPort;
+//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
+//    recPacket.hexString = massageFromTheOtherPeer;
+//    recPacket.toIP = clientAddress;
+//    recPacket.port = userPort;
+//    recPacket.errorString = "none";
+//    recPacket.tcpOrUdp = "DTLS";
 
-    emit packetReceived(recPacket);
-}
+//    emit packetReceived(recPacket);
+//}
 
