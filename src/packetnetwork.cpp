@@ -292,6 +292,9 @@ void PacketNetwork::init()
     foreach (dtlsPort, dtlsPortList) {
         /////////////////////////////////after adding the DtlsServer class//////////////////
         bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
+        connect(&dtlsServer, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)));
+        connect(&dtlsServer,&DtlsServer::datagramReceived,&dtlsServer,&DtlsServer::receivedDatagram);
+
         dtlsSocket = &(dtlsServer.serverSocket);
 //        dtlsSocket = new QUdpSocket(this);
 

@@ -243,3 +243,23 @@ void DtlsServer::shutdown()
     serverSocket.close();
 }
 //! [14]
+
+//this function using for creation packet that can be sent to packetReceivedECHO
+//    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
+//    void receivedDatagram(QString & peerInfo, QByteArray &clientMessage, QByteArray dgram);
+
+void DtlsServer::receivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
+    //recievedMassage = QString::fromUtf8(plainText);
+    Packet recPacket;
+//    recPacket.init();
+//    recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
+//    recPacket.fromPort = dtlsAssociation->crypto.peerPort();
+//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
+//    recPacket.hexString = massageFromTheOtherPeer;
+//    recPacket.toIP = peerInfo;
+//    recPacket.port = peerInfo;
+//    recPacket.errorString = "none";
+//    recPacket.tcpOrUdp = "DTLS";
+
+    emit packetReceived(recPacket);
+}

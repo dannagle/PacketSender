@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <memory>
+#include "packet.h"
 
 //! [0]
 class DtlsServer : public QObject
@@ -27,16 +28,19 @@ public:
 
 
 signals:
+    void packetReceived(Packet);
     void errorMessage(const QString &message);
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
 
-    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText,
-                          const QByteArray &plainText);
+    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
 
 private slots:
     void readyRead();
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
+
+public slots:
+    void receivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram);
 
 private:
     void handleNewConnection(const QHostAddress &peerAddress, quint16 peerPort,
