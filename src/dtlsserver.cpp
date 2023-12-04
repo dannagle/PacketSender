@@ -251,6 +251,18 @@ void DtlsServer::shutdown()
 void DtlsServer::receivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
     //recievedMassage = QString::fromUtf8(plainText);
     Packet recPacket;
+    recPacket.init();
+    recPacket.fromIP = "You";
+    recPacket.fromPort = serverSocket.localPort();
+    QStringList info = peerInfo.split(":");
+    recPacket.toIP = info[0].remove(0, 1);
+    recPacket.port = info[1].toUInt();
+    QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
+    recPacket.hexString = massageFromTheOtherPeer;
+    recPacket.errorString = "none";
+    recPacket.tcpOrUdp = "DTLS";
+
+
 //    recPacket.init();
 //    recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
 //    recPacket.fromPort = dtlsAssociation->crypto.peerPort();
