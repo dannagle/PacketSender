@@ -332,7 +332,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPmodeButton, SIGNAL(clicked()),
             this, SLOT(toggleIPv4_IPv6()));
 
-
+    DTLSServerStatus();
     UDPServerStatus();
     TCPServerStatus();
     SSLServerStatus();

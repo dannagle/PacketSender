@@ -33,6 +33,8 @@
 #include <Windows.h>
 #include <QSettings>
 #include "dtlsthread.h"
+#include "dtlsserver.h"
+
 
 
 
@@ -40,6 +42,8 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
+        QList<QUdpSocket *> dtlsServers;
+        DtlsServer dtlsServer;
         QString keyPath;
         QString certPath;
         explicit PacketNetwork(QObject *parent = nullptr);
@@ -141,7 +145,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
-        QList<QUdpSocket *> dtlsServers;
+
 
 };
 

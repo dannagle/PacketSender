@@ -27,6 +27,8 @@
 #include "association.h"
 #include <QStringList>
 #include "dtlsthread.h"
+#include "dtlsserver.h"
+
 
 
 
@@ -260,7 +262,6 @@ void PacketNetwork::init()
     int tcpPort = 0;
     int sslPort = 0;
 
-    //settings.setValue("dtlsPort", "12346");
     dtlsPortList = Settings::portsToIntList(settings.value("dtlsPort", "0").toString());
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
@@ -284,16 +285,19 @@ void PacketNetwork::init()
 
     QUdpSocket *udpSocket, *dtlsSocket;
     ThreadedTCPServer *ssl, *tcp;
+
+
+
+
     foreach (dtlsPort, dtlsPortList) {
         /////////////////////////////////after adding the DtlsServer class//////////////////
-        //DtlsServer dtlsServer;
-        //bool bindResult = dtlsServer.serverSocket.listen(IPV4_OR_IPV6, dtlsPort);
+        bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
+        dtlsSocket = &(dtlsServer.serverSocket);
+//        dtlsSocket = new QUdpSocket(this);
 
-        dtlsSocket = new QUdpSocket(this);
-
-        bool bindResult = dtlsSocket->bind(
-            IPV4_OR_IPV6
-            , dtlsPort);
+//        bool bindResult = dtlsSocket->bind(
+//            IPV4_OR_IPV6
+//            , dtlsPort);
 
         dtlsSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
@@ -319,10 +323,11 @@ void PacketNetwork::init()
         }
 
         if(bindResult) {
-            dtlsServers.append(dtlsSocket);
+//            dtlsServers.append(dtlsSocket);
 ////////////////////////////////////////after adding the DtlsServer class//////////////////
-
-            //dtlsServers.append(dtlsServer.serverSocket);
+//            QUdpSocket dtlsSocket = dtlsServer.serverSocket;
+//            dtlsServers.append(&dtlsSocket);
+            dtlsServers.append(dtlsSocket);
         }
 
     }
@@ -447,12 +452,12 @@ void PacketNetwork::init()
     if (activateDTLS) {
         foreach (dtlsSocket, dtlsServers) {
 /////////////////////////////////after adding the DtlsServer class//////////////////
-//
-//            connect(&server, &DtlsServer::errorMessage, this, &MainWindow::addErrorMessage);
-//            connect(&server, &DtlsServer::warningMessage, this, &MainWindow::addWarningMessage);
-//            connect(&server, &DtlsServer::infoMessage, this, &MainWindow::addInfoMessage);
-//            connect(&server, &DtlsServer::datagramReceived, this, &MainWindow::addClientMessage);
-//
+
+//            connect(&dtlsSocket, &DtlsServer::errorMessage, this, &MainWindow::addErrorMessage);
+//            connect(&dtlsSocket, &DtlsServer::warningMessage, this, &MainWindow::addWarningMessage);
+//            connect(&dtlsSocket, &DtlsServer::infoMessage, this, &MainWindow::addInfoMessage);
+//            connect(&dtlsSocket, &DtlsServer::datagramReceived, this, &MainWindow::addClientMessage);
+
             QDEBUG() << "signal/slot datagram connect: " << connect(dtlsSocket, SIGNAL(readyRead()),
                                                                     this, SLOT(readPendingDatagrams()));
         }
@@ -514,13 +519,17 @@ QList<int> PacketNetwork::getDTLSPortsBound()
 {
     QList<int> pList;
     pList.clear();
-    QUdpSocket * dtls;
-    foreach (dtls, dtlsServers) {
-        if(dtls->BoundState == QAbstractSocket::BoundState) {
-            if(dtls->localAddress().isMulticast()) {
-                QDEBUG() << "This udp address is multicast";
+    //DtlsServer dtlsServer;
+    QUdpSocket * dtlsServer;
+    //= &(dtlsServer.serverSocket);
+    foreach (dtlsServer, dtlsServers) {
+        if(dtlsServer->BoundState == QAbstractSocket::BoundState) {
+//            if(dtls->localAddress().isMulticast()) {
+//                QDEBUG() << "This udp address is multicast";
+//            }
+            if(dtlsServer){
+                pList.append(dtlsServer->localPort());
             }
-            pList.append(dtls->localPort());
         }
     }
     return pList;
