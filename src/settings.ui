@@ -106,7 +106,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkBox">
+           <widget class="QCheckBox" name="dtlsServerEnableCheck">
             <property name="text">
              <string>Enable DTLS Servers</string>
             </property>
@@ -128,7 +128,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit">
+             <widget class="QLineEdit" name="dtlsServerPortEdit">
               <property name="layoutDirection">
                <enum>Qt::LeftToRight</enum>
               </property>

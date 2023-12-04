@@ -260,7 +260,7 @@ void PacketNetwork::init()
     int tcpPort = 0;
     int sslPort = 0;
 
-    settings.setValue("dtlsPort", "12346");
+    //settings.setValue("dtlsPort", "12346");
     dtlsPortList = Settings::portsToIntList(settings.value("dtlsPort", "0").toString());
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
@@ -285,7 +285,9 @@ void PacketNetwork::init()
     QUdpSocket *udpSocket, *dtlsSocket;
     ThreadedTCPServer *ssl, *tcp;
     foreach (dtlsPort, dtlsPortList) {
-
+        /////////////////////////////////after adding the DtlsServer class//////////////////
+        //DtlsServer dtlsServer;
+        //bool bindResult = dtlsServer.serverSocket.listen(IPV4_OR_IPV6, dtlsPort);
 
         dtlsSocket = new QUdpSocket(this);
 
@@ -318,6 +320,9 @@ void PacketNetwork::init()
 
         if(bindResult) {
             dtlsServers.append(dtlsSocket);
+////////////////////////////////////////after adding the DtlsServer class//////////////////
+
+            //dtlsServers.append(dtlsServer.serverSocket);
         }
 
     }
@@ -438,6 +443,30 @@ void PacketNetwork::init()
     if (settings.value("delayAfterConnectCheck", false).toBool()) {
         delayAfterConnect = 500;
     }
+
+    if (activateDTLS) {
+        foreach (dtlsSocket, dtlsServers) {
+/////////////////////////////////after adding the DtlsServer class//////////////////
+//
+//            connect(&server, &DtlsServer::errorMessage, this, &MainWindow::addErrorMessage);
+//            connect(&server, &DtlsServer::warningMessage, this, &MainWindow::addWarningMessage);
+//            connect(&server, &DtlsServer::infoMessage, this, &MainWindow::addInfoMessage);
+//            connect(&server, &DtlsServer::datagramReceived, this, &MainWindow::addClientMessage);
+//
+            QDEBUG() << "signal/slot datagram connect: " << connect(dtlsSocket, SIGNAL(readyRead()),
+                                                                    this, SLOT(readPendingDatagrams()));
+        }
+
+    } else {
+        QDEBUG() << "udp server disable";
+        foreach (udpSocket, udpServers) {
+            udpSocket->close();
+        }
+        udpServers.clear();
+
+    }
+
+
 
     if (activateUDP) {
         foreach (udpSocket, udpServers) {

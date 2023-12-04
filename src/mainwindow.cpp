@@ -802,8 +802,8 @@ void MainWindow::DTLSServerStatus()
 {
 
     if (packetNetwork.DTLSListening()) {
-        QString ports = packetNetwork.getUDPPortString();
-        int portcount = packetNetwork.getUDPPortsBound().size();
+        QString ports = packetNetwork.getDTLSPortString();
+        int portcount = packetNetwork.getDTLSPortsBound().size();
         dtlsServerStatus->setToolTip(ports);
         if(portcount > 3) {
             dtlsServerStatus->setText("DTLS: " + QString::number(portcount) + tr(" Ports"));

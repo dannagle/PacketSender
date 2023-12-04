@@ -201,6 +201,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
 
     ui->resolveDNSOnInputCheck->setChecked(settings.value("resolveDNSOnInputCheck", false).toBool());
 
+    QList<int> dtlsList = portsToIntList(settings.value("dtlsPort", "0").toString());
     QList<int> udpList = portsToIntList(settings.value("udpPort", "0").toString());
     QList<int> tcpList = portsToIntList(settings.value("tcpPort", "0").toString());
     QList<int> sslList = portsToIntList(settings.value("sslPort", "0").toString());
@@ -208,11 +209,15 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->udpServerPortEdit->setText(intListToPorts(udpList));
     ui->tcpServerPortEdit->setText(intListToPorts(tcpList));
     ui->sslServerPortEdit->setText(intListToPorts(sslList));
+    ui->dtlsServerPortEdit->setText(intListToPorts(dtlsList));
+
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
     ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+    ui->dtlsServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+
 
     ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
 
@@ -352,6 +357,8 @@ void Settings::on_buttonBox_accepted()
     QList<int> udpList = Settings::portsToIntList(ui->udpServerPortEdit->text());
     QList<int> tcpList = Settings::portsToIntList(ui->tcpServerPortEdit->text());
     QList<int> sslList = Settings::portsToIntList(ui->sslServerPortEdit->text());
+    QList<int> dtlsList = Settings::portsToIntList(ui->dtlsServerPortEdit->text());
+
 
     if(ui->ipSpecificRadio->isChecked()) {
         QHostAddress address(ui->bindIPAddress->text());
@@ -394,7 +401,7 @@ void Settings::on_buttonBox_accepted()
     }
 
 
-    //settings.setValue("dtlsPort", intListToPorts(dtlsList));
+    settings.setValue("dtlsPort", intListToPorts(dtlsList));
     settings.setValue("udpPort", intListToPorts(udpList));
     settings.setValue("tcpPort", intListToPorts(tcpList));
     settings.setValue("sslPort", intListToPorts(sslList));
@@ -407,6 +414,8 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
     settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());
+    settings.setValue("dtlsServerEnable", ui->dtlsServerEnableCheck->isChecked());
+
 
     settings.setValue("serverSnakeOilCheck", ui->serverSnakeOilCheck->isChecked());
 
