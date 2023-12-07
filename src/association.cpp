@@ -35,6 +35,8 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
     crypto.setPeer(address, port);
     crypto.setDtlsConfiguration(configuration);
+    //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
+
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
     socket.connectToHost(address.toString(), port);

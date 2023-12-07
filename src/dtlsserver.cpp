@@ -224,8 +224,14 @@ void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMess
     const QString peerInfo = peer_info(connection->peerAddress(), connection->peerPort());
     const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
     if (dgram.size()) {
-        emit datagramReceived(peerInfo, clientMessage, dgram);
-        connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1());
+        //if(QAbstractSocket::)
+        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
+            //if (connection->sslMode() == QSslSocket::SslServerMode) {
+            emit serverDatagramReceived(peerInfo, clientMessage, dgram);
+            //serverSocket.waitForReadyRead();
+            //}
+
+        }
     } else if (connection->dtlsError() == QDtlsError::NoError) {
         emit warningMessage(peerInfo + ": " + tr("0 byte dgram, could be a re-connect attempt?"));
     } else {
@@ -248,7 +254,7 @@ void DtlsServer::shutdown()
 //    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
 //    void receivedDatagram(QString & peerInfo, QByteArray &clientMessage, QByteArray dgram);
 
-void DtlsServer::receivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
+void DtlsServer::serverReceivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
     //recievedMassage = QString::fromUtf8(plainText);
     Packet recPacket;
     recPacket.init();
@@ -273,5 +279,12 @@ void DtlsServer::receivedDatagram(const QString& peerInfo, const QByteArray &cli
 //    recPacket.errorString = "none";
 //    recPacket.tcpOrUdp = "DTLS";
 
-    emit packetReceived(recPacket);
+    emit serverPacketReceived(recPacket);
+
+        //emit packetSent
+
+    //if (dtlsObject.handshakeState() == QDtls::HandshakeComplete) {
+
+    //emit serverPacketReceived(recPacket);
+
 }

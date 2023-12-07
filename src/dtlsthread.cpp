@@ -21,6 +21,7 @@ void Dtlsthread::run()
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
+
     dtlsAssociation->startHandshake();
     writeMassage(sendpacket, dtlsAssociation);
     persistentConnectionLoop();
@@ -248,12 +249,15 @@ void Dtlsthread::persistentConnectionLoop()
         //            QDEBUG() << "Persistent connection. Loop and wait.";
         //            continue;
         //        }
-    } // end while connected
 
+    } // end while connected
     if (closeRequest) {
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
+        //quit();
     }
+
+    insidePersistent = false;
 
 }
 void Dtlsthread::receivedDatagram(QByteArray plainText){
@@ -305,6 +309,11 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 void Dtlsthread::onTimeout(){
     closeRequest = true;
     timer->stop();
+    //dtlsAssociation->crypto.abortHandshake(&(dtlsAssociation->socket));
+    dtlsAssociation->socket.close();
+    dtlsAssociation->socket.waitForDisconnected(100);
+    //quit();
+
 }
 
 DtlsAssociation* Dtlsthread::initDtlsAssociation(){

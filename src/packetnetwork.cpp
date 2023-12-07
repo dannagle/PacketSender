@@ -288,12 +288,12 @@ void PacketNetwork::init()
 
 
 
-
+//    connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
+//    connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
     foreach (dtlsPort, dtlsPortList) {
         /////////////////////////////////after adding the DtlsServer class//////////////////
         bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
-        connect(&dtlsServer, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)));
-        connect(&dtlsServer,&DtlsServer::datagramReceived,&dtlsServer,&DtlsServer::receivedDatagram);
+
 
         dtlsSocket = &(dtlsServer.serverSocket);
 //        dtlsSocket = new QUdpSocket(this);
@@ -454,6 +454,21 @@ void PacketNetwork::init()
 
     if (activateDTLS) {
         foreach (dtlsSocket, dtlsServers) {
+            connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
+            connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
+//            QUdpSocket *udpSocket, *dtlsSocket;
+//            ThreadedTCPServer *ssl, *tcp;
+
+
+
+//            connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)));
+//            connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram);
+//            foreach (dtlsPort, dtlsPortList) {
+//                /////////////////////////////////after adding the DtlsServer class//////////////////
+//                bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
+
+
+//                dtlsSocket = &(dtlsServer.serverSocket);
 /////////////////////////////////after adding the DtlsServer class//////////////////
 
 //            connect(&dtlsSocket, &DtlsServer::errorMessage, this, &MainWindow::addErrorMessage);
@@ -461,26 +476,29 @@ void PacketNetwork::init()
 //            connect(&dtlsSocket, &DtlsServer::infoMessage, this, &MainWindow::addInfoMessage);
 //            connect(&dtlsSocket, &DtlsServer::datagramReceived, this, &MainWindow::addClientMessage);
 
-            QDEBUG() << "signal/slot datagram connect: " << connect(dtlsSocket, SIGNAL(readyRead()),
-                                                                    this, SLOT(readPendingDatagrams()));
+//            QDEBUG() << "signal/slot datagram connect: " << connect(dtlsSocket, SIGNAL(readyRead()),
+//                                                                    this, SLOT(readPendingDatagrams()));
+
         }
 
     } else {
         QDEBUG() << "udp server disable";
-        foreach (udpSocket, udpServers) {
-            udpSocket->close();
+        foreach (dtlsSocket, udpServers) {
+            dtlsSocket->close();
         }
-        udpServers.clear();
+        dtlsServers.clear();
 
     }
 
 
 
     if (activateUDP) {
+
         foreach (udpSocket, udpServers) {
             QDEBUG() << "signal/slot datagram connect: " << connect(udpSocket, SIGNAL(readyRead()),
                      this, SLOT(readPendingDatagrams()));
         }
+
 
     } else {
         QDEBUG() << "udp server disable";
@@ -806,6 +824,7 @@ void PacketNetwork::readPendingDatagrams()
 }
 
 
+
 QString PacketNetwork::debugQByteArray(QByteArray debugArray)
 {
     QString outString = "";
@@ -982,7 +1001,10 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             QTimer* timer = new QTimer(this);
             thread->timer = timer;
             connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
-            timer->start(1000);
+            timer->start(500);
+        }
+        if(thread->isFinished()){
+            return;
         }
         dtlsthreadList.append(thread);
     }
