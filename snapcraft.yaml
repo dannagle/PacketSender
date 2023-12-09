@@ -33,10 +33,15 @@ apps:
       
 parts:
   packetsender:
-    plugin: qmake
+    plugin: cmake
     source: https://github.com/dannagle/PacketSender.git
     source-branch: master
     qmake-project-file: src/PacketSenderSnap.pro
+    cmake-generator: Ninja
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DWITHOUT_CLI=ON
     build-packages:
       - build-essential
       - qt6-base-dev
