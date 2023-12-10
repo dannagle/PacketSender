@@ -26,6 +26,7 @@ public:
     QString recievedMassage;
     Packet sendpacket;
 
+
     bool closeRequest;
     bool handShakeDone;
     bool insidePersistent;

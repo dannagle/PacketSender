@@ -1003,9 +1003,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
             timer->start(500);
         }
-        if(thread->isFinished()){
-            return;
-        }
+//        if(thread->isFinished()){
+//            return;
+//        }
         dtlsthreadList.append(thread);
     }
 

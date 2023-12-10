@@ -10,6 +10,10 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     crypto(QSslSocket::SslClientMode)
 {
 
+
+
+
+
     QFile certFile(cmdComponents[4]);//4
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
@@ -70,8 +74,10 @@ void DtlsAssociation::startHandshake()
     else{
         while(true){
             socket.waitForReadyRead();
-            if(crypto.isConnectionEncrypted()){
+            if(crypto.isConnectionEncrypted() || closeRequest){
+
                 break;
+
             }
         }
         emit infoMessage(tr("%1: starting a handshake").arg(name));

@@ -25,6 +25,8 @@ public:
     QString name;
     Packet packetToSend;
 
+    bool closeRequest;
+
 signals:
     void errorMessage(const QString &message);
     void warningMessage(const QString &message);

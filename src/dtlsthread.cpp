@@ -17,9 +17,12 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
+
     closeRequest = false;
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
+    dtlsAssociation->closeRequest = false;
+    //dtlsAssociation->deleteLater();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
 
     dtlsAssociation->startHandshake();
@@ -307,11 +310,14 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 }
 
 void Dtlsthread::onTimeout(){
+    dtlsAssociation->closeRequest = true;
     closeRequest = true;
     timer->stop();
     //dtlsAssociation->crypto.abortHandshake(&(dtlsAssociation->socket));
-    dtlsAssociation->socket.close();
-    dtlsAssociation->socket.waitForDisconnected(100);
+    //dtlsAssociation->socket.close();
+    //dtlsAssociation->deleteLater();
+
+    //dtlsAssociation->socket.waitForDisconnected(100);
     //quit();
 
 }
