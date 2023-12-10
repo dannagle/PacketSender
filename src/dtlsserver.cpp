@@ -259,32 +259,26 @@ void DtlsServer::serverReceivedDatagram(const QString& peerInfo, const QByteArra
     Packet recPacket;
     recPacket.init();
     recPacket.fromIP = "You";
-    recPacket.fromPort = serverSocket.localPort();
     QStringList info = peerInfo.split(":");
     recPacket.toIP = info[0].remove(0, 1);
-    recPacket.port = info[1].toUInt();
+    recPacket.fromPort = info[1].remove(info[1].length() - 1, 1).toUInt();
+    recPacket.port = serverSocket.localPort();
     QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
     recPacket.hexString = massageFromTheOtherPeer;
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
 
-//    recPacket.init();
-//    recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
-//    recPacket.fromPort = dtlsAssociation->crypto.peerPort();
-//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-//    recPacket.hexString = massageFromTheOtherPeer;
-//    recPacket.toIP = peerInfo;
-//    recPacket.port = peerInfo;
-//    recPacket.errorString = "none";
-//    recPacket.tcpOrUdp = "DTLS";
+    //    recPacket.init();
+    //    recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
+    //    recPacket.fromPort = dtlsAssociation->crypto.peerPort();
+    //    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
+    //    recPacket.hexString = massageFromTheOtherPeer;
+    //    recPacket.toIP = peerInfo;
+    //    recPacket.port = peerInfo;
+    //    recPacket.errorString = "none";
+    //    recPacket.tcpOrUdp = "DTLS";
 
     emit serverPacketReceived(recPacket);
-
-        //emit packetSent
-
-    //if (dtlsObject.handshakeState() == QDtls::HandshakeComplete) {
-
-    //emit serverPacketReceived(recPacket);
 
 }
