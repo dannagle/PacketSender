@@ -485,7 +485,7 @@ void PacketNetwork::init()
 
     } else {
         QDEBUG() << "udp server disable";
-        foreach (dtlsSocket, udpServers) {
+        foreach (dtlsSocket, dtlsServers) {
             dtlsSocket->close();
         }
         dtlsServers.clear();

@@ -18,7 +18,7 @@ Dtlsthread::~Dtlsthread() {
 void Dtlsthread::run()
 {
 
-    closeRequest = false;
+    //closeRequest = false;
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
     dtlsAssociation->closeRequest = false;
@@ -97,7 +97,7 @@ void Dtlsthread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while (clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+    while (clientConnection->state() == QAbstractSocket::ConnectedState && !(dtlsAssociation->closeRequest)) {
         insidePersistent = true;
 
 
@@ -222,7 +222,9 @@ void Dtlsthread::persistentConnectionLoop()
 
         emit connectStatus("Reading response");
         //tcpPacket.hexString  = clientConnection->readAll();
+
         tcpPacket.hexString = recievedMassage;
+        //tcpPacket.hexString = tcpPacket.ASCIITohex(recievedMassage);
 
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
@@ -254,7 +256,7 @@ void Dtlsthread::persistentConnectionLoop()
         //        }
 
     } // end while connected
-    if (closeRequest) {
+    if (dtlsAssociation->closeRequest) {
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
         //quit();
@@ -270,7 +272,10 @@ void Dtlsthread::receivedDatagram(QByteArray plainText){
     recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
     recPacket.fromPort = dtlsAssociation->crypto.peerPort();
     QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-    recPacket.hexString = massageFromTheOtherPeer;
+
+    recPacket.hexString = recPacket.ASCIITohex(massageFromTheOtherPeer);
+
+    //recPacket.hexString = massageFromTheOtherPeer;
     recPacket.toIP = dtlsAssociation->socket.localAddress().toString();
     recPacket.port = dtlsAssociation->socket.localPort();
     recPacket.errorString = "none";
@@ -311,7 +316,7 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 
 void Dtlsthread::onTimeout(){
     dtlsAssociation->closeRequest = true;
-    closeRequest = true;
+    //closeRequest = true;
     timer->stop();
     //dtlsAssociation->crypto.abortHandshake(&(dtlsAssociation->socket));
     //dtlsAssociation->socket.close();

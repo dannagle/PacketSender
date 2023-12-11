@@ -216,7 +216,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
     ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
-    ui->dtlsServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+    ui->dtlsServerEnableCheck->setChecked(settings.value("dtlsServerEnable", true).toBool());
 
 
     ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
@@ -410,7 +410,6 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
     settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
 
-    //settings.setValue("dtlsServerEnable", ui->dtlsServerEnableCheck->isChecked());
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
     settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());

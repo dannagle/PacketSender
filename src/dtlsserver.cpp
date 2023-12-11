@@ -257,9 +257,6 @@ void DtlsServer::shutdown()
 //! [14]
 
 //this function using for creation packet that can be sent to packetReceivedECHO
-//    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
-//    void receivedDatagram(QString & peerInfo, QByteArray &clientMessage, QByteArray dgram);
-
 Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram){
 
     Packet recPacket;
@@ -269,7 +266,7 @@ Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QB
     recPacket.toIP = packetInfo[2];
     recPacket.port = packetInfo[3].toUInt();
     QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
-    recPacket.hexString = massageFromTheOtherPeer;
+    recPacket.hexString = recPacket.ASCIITohex(massageFromTheOtherPeer);
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
