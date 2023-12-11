@@ -232,7 +232,8 @@ void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMess
         Packet recivedPacket = createPacket(recievedPacketInfo, clientMessage, dgram);
         emit serverPacketReceived(recivedPacket);
 
-        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
+        //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
+        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: %2").arg(peerInfo, QString::fromUtf8(dgram)).toLatin1())){
             std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
             Packet sentPacket = createPacket(sentPacketInfo, clientMessage, dgram);
             emit serverPacketSent(sentPacket);
