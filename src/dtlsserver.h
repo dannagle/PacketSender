@@ -68,7 +68,7 @@ private:
                              const QByteArray &clientHello);
 
     void doHandshake(QDtls *newConnection, const QByteArray &clientHello);
-    void decryptDatagram(QDtls *connection, const QByteArray &clientMessage);
+    void sendAck(QDtls *connection, const QByteArray &clientMessage);
     void shutdown();
 
     bool listening = false;

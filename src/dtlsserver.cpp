@@ -142,14 +142,25 @@ void DtlsServer::readyRead()
 
     //! [6]
     if ((*client)->isConnectionEncrypted()) {
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
         //TODO: split into two function, one for decryption and one for writting
-        decryptDatagram(client->get(), dgram);
+        QDtls * dtlsServer = client->get();
+        dgram = dtlsServer->decryptDatagram(&serverSocket, dgram);
+
+//        bool sendSimpleAck = settings.value("sendSimpleAck", false).toBool();
+//        if(sendSimpleAck){
+//            sendAck(dtlsServer, dgram);
+//        }
+
+        sendAck(dtlsServer, dgram);
+
         ///////////////////////////////////////////////////manage send response option//////////////////////////////////////////////////////////////
 
 
 
 
-        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        //QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool sendResponse = settings.value("sendReponse", false).toBool();
         bool sendSmartResponse = settings.value("sendReponse", false).toBool();
 
@@ -251,27 +262,27 @@ void DtlsServer::doHandshake(QDtls *newConnection, const QByteArray &clientHello
 //! [11]
 
 //! [12]
-void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMessage)
+void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
 {
     Q_ASSERT(connection->isConnectionEncrypted());
 
     const QString peerInfo = peer_info(connection->peerAddress(), connection->peerPort());
     const QString serverInfo = peer_info(serverSocket.localAddress(), serverSocket.localPort());
 
-    const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
+    //const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
 
-    if (dgram.size()) {
+    if (clientMessage.size()) {
         //the vector content: createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort)
         //TODO: insert the vector error massage
         std::vector<QString> recievedPacketInfo = createInfoVect(connection->peerAddress(), connection->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
-        Packet recivedPacket = createPacket(recievedPacketInfo, clientMessage, dgram);
+        Packet recivedPacket = createPacket(recievedPacketInfo, clientMessage, clientMessage);
         emit serverPacketReceived(recivedPacket);
 
         //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
-        if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(dgram)).toLatin1())){
+        if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
             std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
-            Packet sentPacket = createPacket(sentPacketInfo, clientMessage, dgram);
-            QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(dgram);
+            Packet sentPacket = createPacket(sentPacketInfo, clientMessage, clientMessage);
+            QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
             sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
             emit serverPacketSent(sentPacket);
         }
@@ -362,8 +373,8 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
     }
 
     QHostAddress resolved = resolveDNS(responsePacket.toIP);
-
-    if(serverSocket.writeDatagram(responsePacket.getByteArray(), resolved, dtlsServer->peerPort())){
+    serverSocket.waitForBytesWritten();
+    if(dtlsServer->writeDatagramEncrypted(&serverSocket,responsePacket.getByteArray())){
         emit serverPacketSent(responsePacket);
         return true;
     }
