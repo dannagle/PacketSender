@@ -142,7 +142,40 @@ void DtlsServer::readyRead()
 
     //! [6]
     if ((*client)->isConnectionEncrypted()) {
+        //TODO: split into two function, one for decryption and one for writting
         decryptDatagram(client->get(), dgram);
+        ///////////////////////////////////////////////////manage send response option//////////////////////////////////////////////////////////////
+
+
+
+
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        bool sendResponse = settings.value("sendReponse", false).toBool();
+        bool sendSmartResponse = settings.value("sendReponse", false).toBool();
+
+
+        smartData.clear();
+
+        if (sendSmartResponse) {
+            QList<SmartResponseConfig> smartList;
+            smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
+            smartList.append(Packet::fetchSmartConfig(2, SETTINGSFILE));
+            smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
+            smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
+            smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
+
+            smartData = Packet::smartResponseMatch(smartList, dgram);
+        }
+
+        if (sendResponse || !smartData.isEmpty()) {
+            if(serverResonse(client->get())){
+                //TODO: handle if the response faild
+            }
+
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         if ((*client)->dtlsError() == QDtlsError::RemoteClosedConnectionError)
             knownClients.erase(client);
         return;
@@ -223,6 +256,8 @@ void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMess
     Q_ASSERT(connection->isConnectionEncrypted());
 
     const QString peerInfo = peer_info(connection->peerAddress(), connection->peerPort());
+    const QString serverInfo = peer_info(serverSocket.localAddress(), serverSocket.localPort());
+
     const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
 
     if (dgram.size()) {
@@ -233,9 +268,11 @@ void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMess
         emit serverPacketReceived(recivedPacket);
 
         //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
-        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: %2").arg(peerInfo, QString::fromUtf8(dgram)).toLatin1())){
+        if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(dgram)).toLatin1())){
             std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
             Packet sentPacket = createPacket(sentPacketInfo, clientMessage, dgram);
+            QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(dgram);
+            sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
             emit serverPacketSent(sentPacket);
         }
     } else if (connection->dtlsError() == QDtlsError::NoError) {
@@ -290,6 +327,103 @@ std::vector<QString> DtlsServer::createInfoVect(const QHostAddress &fromAddress,
     infoVect.push_back(QString::number(toPort));
     return infoVect;
 
+}
+
+bool DtlsServer::serverResonse(QDtls* dtlsServer){
+
+    Packet responsePacket;
+    responsePacket.init();
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    //QString ipMode = settings.value("ipMode", "4").toString();
+    QString responseData = (settings.value("responseHex", "")).toString();
+
+    //dtlsServer->peerAddress(), dtlsServer->peerPort())
+
+    responsePacket.timestamp = QDateTime::currentDateTime();
+    responsePacket.name = responsePacket.timestamp.toString(DATETIMEFORMAT);
+    responsePacket.tcpOrUdp = "DTLS";
+    responsePacket.fromIP = "You (Response)";
+    bool isIPv6  = IPv6Enabled();
+    if (isIPv6) {
+        responsePacket.toIP = Packet::removeIPv6Mapping(dtlsServer->peerAddress());
+
+    } else {
+        responsePacket.toIP = (dtlsServer->peerAddress()).toString();
+    }
+    responsePacket.port = dtlsServer->peerPort();
+    responsePacket.fromPort = serverSocket.localPort();
+    responsePacket.hexString = responseData;
+    QString testMacro = Packet::macroSwap(responsePacket.asciiString());
+    responsePacket.hexString = Packet::ASCIITohex(testMacro);
+
+    if (!smartData.isEmpty()) {
+        responsePacket.hexString = Packet::byteArrayToHex(smartData);
+    }
+
+    QHostAddress resolved = resolveDNS(responsePacket.toIP);
+
+    if(serverSocket.writeDatagram(responsePacket.getByteArray(), resolved, dtlsServer->peerPort())){
+        emit serverPacketSent(responsePacket);
+        return true;
+    }
+
+    return false;
+
+}
+
+
+
+bool DtlsServer::IPv6Enabled()
+{
+    return !IPv4Enabled();
+}
+
+bool DtlsServer::IPv4Enabled()
+{
+    QString ipMode = getIPmode();
+    if(ipMode == "4") {
+        return true;
+    }
+    return (ipMode.contains("v4") || ipMode.contains("."));
+}
+
+QString DtlsServer::getIPmode()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString ipMode = settings.value("ipMode", "4").toString();
+
+    QHostAddress iph = Packet::IPV4_IPV6_ANY(ipMode);
+
+    if(iph == QHostAddress::AnyIPv4) {
+        return "IPv4 Mode";
+    }
+    if(iph == QHostAddress::AnyIPv6) {
+        return "IPv6 Mode";
+    }
+
+    return ipMode;
+}
+
+QHostAddress DtlsServer::resolveDNS(QString hostname)
+{
+
+    QHostAddress address(hostname);
+    if (QAbstractSocket::IPv4Protocol == address.protocol()) {
+        return address;
+    }
+
+    if (QAbstractSocket::IPv6Protocol == address.protocol()) {
+        return address;
+    }
+
+    QHostInfo info = QHostInfo::fromName(hostname);
+    if (info.error() != QHostInfo::NoError) {
+        return QHostAddress();
+    } else {
+
+        return info.addresses().at(0);
+    }
 }
 
 //void DtlsServer::serverSentDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){

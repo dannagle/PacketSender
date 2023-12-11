@@ -27,9 +27,22 @@ public:
     void close();
     Packet createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram);
     std::vector<QString> createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort);
+    bool serverResonse(QDtls* dtlsServer);
+
+    QString getIPmode();
+    bool IPv4Enabled();
+    bool IPv6Enabled();
+    QHostAddress resolveDNS(QString hostname);
+
+
+
+
+
+
 
 
     QUdpSocket serverSocket;
+    QByteArray smartData;
 
 
 signals:

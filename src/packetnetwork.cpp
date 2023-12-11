@@ -1003,11 +1003,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             QTimer* timer = new QTimer(this);
             thread->timer = timer;
             connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
-            timer->start(500);
+            timer->start(10000);
         }
-//        if(thread->isFinished()){
-//            return;
-//        }
+
         dtlsthreadList.append(thread);
     }
 

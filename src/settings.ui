@@ -355,7 +355,7 @@
                <item>
                 <widget class="QLabel" name="label_17">
                  <property name="text">
-                  <string>SSL CA Certificates</string>
+                  <string>SSL/DTLS CA Certificates</string>
                  </property>
                 </widget>
                </item>
@@ -380,7 +380,7 @@
                <item>
                 <widget class="QLabel" name="label_18">
                  <property name="text">
-                  <string>SSL Local Certificate</string>
+                  <string>SSL/DTLS Local Certificate</string>
                  </property>
                 </widget>
                </item>
@@ -405,7 +405,7 @@
                <item>
                 <widget class="QLabel" name="label_19">
                  <property name="text">
-                  <string>SSL Private Key</string>
+                  <string>SSL/DTLS Private Key</string>
                  </property>
                 </widget>
                </item>
