@@ -13,6 +13,7 @@ QString peer_info(const QHostAddress &address, quint16 port)
     return info.arg(address.toString()).arg(port);
 }
 
+
 QString connection_info(QDtls *connection)
 {
     QString info(DtlsServer::tr("Session cipher: "));
@@ -223,14 +224,18 @@ void DtlsServer::decryptDatagram(QDtls *connection, const QByteArray &clientMess
 
     const QString peerInfo = peer_info(connection->peerAddress(), connection->peerPort());
     const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
-    if (dgram.size()) {
-        //if(QAbstractSocket::)
-        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
-            //if (connection->sslMode() == QSslSocket::SslServerMode) {
-            emit serverDatagramReceived(peerInfo, clientMessage, dgram);
-            //serverSocket.waitForReadyRead();
-            //}
 
+    if (dgram.size()) {
+        //the vector content: createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort)
+        //TODO: insert the vector error massage
+        std::vector<QString> recievedPacketInfo = createInfoVect(connection->peerAddress(), connection->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
+        Packet recivedPacket = createPacket(recievedPacketInfo, clientMessage, dgram);
+        emit serverPacketReceived(recivedPacket);
+
+        if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
+            std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
+            Packet sentPacket = createPacket(sentPacketInfo, clientMessage, dgram);
+            emit serverPacketSent(sentPacket);
         }
     } else if (connection->dtlsError() == QDtlsError::NoError) {
         emit warningMessage(peerInfo + ": " + tr("0 byte dgram, could be a re-connect attempt?"));
@@ -254,31 +259,59 @@ void DtlsServer::shutdown()
 //    void datagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
 //    void receivedDatagram(QString & peerInfo, QByteArray &clientMessage, QByteArray dgram);
 
-void DtlsServer::serverReceivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
-    //recievedMassage = QString::fromUtf8(plainText);
+Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram){
+
     Packet recPacket;
     recPacket.init();
-    recPacket.fromIP = "You";
-    QStringList info = peerInfo.split(":");
-    recPacket.toIP = info[0].remove(0, 1);
-    recPacket.fromPort = info[1].remove(info[1].length() - 1, 1).toUInt();
-    recPacket.port = serverSocket.localPort();
+    recPacket.fromIP = packetInfo[0];
+    recPacket.fromPort = packetInfo[1].toUInt();
+    recPacket.toIP = packetInfo[2];
+    recPacket.port = packetInfo[3].toUInt();
     QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
     recPacket.hexString = massageFromTheOtherPeer;
     recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
+    if((packetInfo[0] == "0.0.0.0") || (packetInfo[0] == "127.0.0.1")){
+        recPacket.fromIP = "You";
+    }
+    if((packetInfo[2] == "0.0.0.0") || (packetInfo[2] == "127.0.0.1")){
+        recPacket.toIP = "You";
+    }
 
-    //    recPacket.init();
-    //    recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
-    //    recPacket.fromPort = dtlsAssociation->crypto.peerPort();
-    //    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-    //    recPacket.hexString = massageFromTheOtherPeer;
-    //    recPacket.toIP = peerInfo;
-    //    recPacket.port = peerInfo;
-    //    recPacket.errorString = "none";
-    //    recPacket.tcpOrUdp = "DTLS";
+    return recPacket;
 
-    emit serverPacketReceived(recPacket);
 
 }
+
+std::vector<QString> DtlsServer::createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort){
+    std::vector<QString> infoVect;
+    infoVect.push_back(fromAddress.toString());
+    infoVect.push_back(QString::number(fromPort));
+    infoVect.push_back(toAddress.toString());
+    infoVect.push_back(QString::number(toPort));
+    return infoVect;
+
+}
+
+//void DtlsServer::serverSentDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
+//    Packet recPacket;
+//    recPacket.init();
+//    recPacket.fromIP = "You";
+//    QStringList info = peerInfo.split(":");
+//    recPacket.toIP = info[0].remove(0, 1);
+//    recPacket.fromPort = info[1].remove(info[1].length() - 1, 1).toUInt();
+//    recPacket.port = serverSocket.localPort();
+//    QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
+//    recPacket.hexString = massageFromTheOtherPeer;
+//    recPacket.errorString = "none";
+//    recPacket.tcpOrUdp = "DTLS";
+
+//    emit serverPacketSent(recPacket);
+
+//}
+
+//std::vector<QString> getPacketInfo(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort){
+//    std::vector<QString> infoVect;
+//    infoVect.push_back();
+//}

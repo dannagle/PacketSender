@@ -455,7 +455,9 @@ void PacketNetwork::init()
     if (activateDTLS) {
         foreach (dtlsSocket, dtlsServers) {
             connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
-            connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
+            connect(&dtlsServer, SIGNAL(serverPacketSent(Packet)), this, SLOT(packetSentECHO(Packet)),Qt::UniqueConnection);
+
+            //connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
 //            QUdpSocket *udpSocket, *dtlsSocket;
 //            ThreadedTCPServer *ssl, *tcp;
 

@@ -25,24 +25,30 @@ public:
     bool listen(const QHostAddress &address, quint16 port);
     bool isListening() const;
     void close();
+    Packet createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram);
+    std::vector<QString> createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort);
+
 
     QUdpSocket serverSocket;
 
 
 signals:
     void serverPacketReceived(Packet);
+    void serverPacketSent(Packet);
+
+
     void errorMessage(const QString &message);
     void warningMessage(const QString &message);
     void infoMessage(const QString &message);
 
-    void serverDatagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
+    //void serverDatagramReceived(const QString &peerInfo, const QByteArray &cipherText, const QByteArray &plainText);
 
 private slots:
     void readyRead();
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
 
 public slots:
-    void serverReceivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram);
+    //void serverReceivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram);
 
 private:
     void handleNewConnection(const QHostAddress &peerAddress, quint16 peerPort,
