@@ -25,7 +25,7 @@ public:
     bool listen(const QHostAddress &address, quint16 port);
     bool isListening() const;
     void close();
-    Packet createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram);
+    Packet createPacket(const std::vector<QString>& packetInfo, const QByteArray& dgram);
     std::vector<QString> createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort);
     bool serverResonse(QDtls* dtlsServer);
 

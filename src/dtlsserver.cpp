@@ -153,6 +153,12 @@ void DtlsServer::readyRead()
 //            sendAck(dtlsServer, dgram);
 //        }
 
+        //the vector content: createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort)
+        //TODO: insert the vector error massage
+        std::vector<QString> recievedPacketInfo = createInfoVect(dtlsServer->peerAddress(), dtlsServer->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
+        Packet recivedPacket = createPacket(recievedPacketInfo, dgram);
+        emit serverPacketReceived(recivedPacket);
+
         if(settings.value("sendSimpleAck").toString() == "true"){
             sendAck(dtlsServer, dgram);
         }
@@ -274,16 +280,12 @@ void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
     //const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
 
     if (clientMessage.size()) {
-        //the vector content: createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort)
-        //TODO: insert the vector error massage
-        std::vector<QString> recievedPacketInfo = createInfoVect(connection->peerAddress(), connection->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
-        Packet recivedPacket = createPacket(recievedPacketInfo, clientMessage, clientMessage);
-        emit serverPacketReceived(recivedPacket);
+
 
         //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
         if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
             std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
-            Packet sentPacket = createPacket(sentPacketInfo, clientMessage, clientMessage);
+            Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
             QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
             sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
             emit serverPacketSent(sentPacket);
@@ -307,7 +309,7 @@ void DtlsServer::shutdown()
 //! [14]
 
 //this function using for creation packet that can be sent to packetReceivedECHO
-Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QByteArray &clientMessage, const QByteArray& dgram){
+Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QByteArray& dgram){
 
     Packet recPacket;
     recPacket.init();

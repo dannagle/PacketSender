@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1013</width>
-    <height>583</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,16 +161,16 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="sendResponseSettingsCheck">
+           <widget class="QCheckBox" name="sendSimpleAck">
             <property name="text">
-             <string>Send a basic response with macro support</string>
+             <string>Send simple Acknowledge (for DTLS server only)</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="sendSimpleAck">
+           <widget class="QCheckBox" name="sendResponseSettingsCheck">
             <property name="text">
-             <string>Send simple Acknowledge (for DTLS server only)</string>
+             <string>Send a basic response with macro support</string>
             </property>
            </widget>
           </item>
