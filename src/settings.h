@@ -67,6 +67,7 @@ class Settings : public QDialog
 
     public:
         MainWindow* rmw;
+        QCheckBox* sendSimpleAck;
 
         explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();

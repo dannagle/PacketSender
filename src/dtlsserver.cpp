@@ -153,7 +153,9 @@ void DtlsServer::readyRead()
 //            sendAck(dtlsServer, dgram);
 //        }
 
-        sendAck(dtlsServer, dgram);
+        if(settings.value("sendSimpleAck").toString() == "true"){
+            sendAck(dtlsServer, dgram);
+        }
 
         ///////////////////////////////////////////////////manage send response option//////////////////////////////////////////////////////////////
 

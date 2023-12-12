@@ -99,8 +99,21 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     //not working yet...
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
-    //connect(loadKeyButton, &QPushButton::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
+    //connect(sendSimpleAck, &QCheckBox::clicked, this, &MainWindow::on_loadKeyButton_clicked);
+
+    if(settings.value("sendSimpleAck").toString() == "false"){
+        ui->sendSimpleAck->setChecked(false);
+    } else {
+        ui->sendSimpleAck->setChecked(true);
+    }
+
+    sendSimpleAck = ui->sendSimpleAck;
+    //MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
+    connect(sendSimpleAck, &QCheckBox::toggled, dynamic_cast<MainWindow*>(parent), &MainWindow::on_sendSimpleAck_StateChanged);
+
+//    PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
+//    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
 
 
     QIcon mIcon(":pslogo.png");

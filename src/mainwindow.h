@@ -97,6 +97,7 @@ class MainWindow : public QMainWindow
         void sendPacket(Packet sendpacket);
 
     public slots:
+        void on_sendSimpleAck_StateChanged();
         void on_leaveSessionOpen_StateChanged();
         void toTrafficLog(Packet logPacket);
         void cancelResends();

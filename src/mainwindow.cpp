@@ -2322,6 +2322,19 @@ void MainWindow::on_leaveSessionOpen_StateChanged(){
     }
 }
 
+void MainWindow::on_sendSimpleAck_StateChanged(){
+    //ui.checkBox->setChecked(checkBoxState);
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString sendSimpleAck = settings.value("sendSimpleAck", "false").toString();
+    if(sendSimpleAck == "false"){
+        settings.setValue("sendSimpleAck", "true");
+    }
+    else{
+        settings.setValue("sendSimpleAck", "false");
+    }
+}
+
 void MainWindow::on_actionSettings_triggered()
 {
     Settings settings(this);
