@@ -38,6 +38,7 @@ public slots:
     void receivedDatagram(QByteArray plainText);
 
 signals:
+    void toStatusBar(const QString & message, int timeout = 0, bool override = false);
     void connectStatus(QString);
     void packetSent(Packet);
     void packetReceived(Packet);

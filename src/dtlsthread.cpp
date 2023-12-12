@@ -78,7 +78,11 @@ void Dtlsthread::handShakeComplited(){
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
+        packetToSend.errorString = "Failed to send";
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
+        if(dtlsAssociation->crypto.isConnectionEncrypted()){
+            emit packetSent(packetToSend);
+        }
         return;
     }
     emit packetSent(packetToSend);
@@ -88,6 +92,7 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
 
 void Dtlsthread::persistentConnectionLoop()
 {
+
     QUdpSocket* clientConnection = &(dtlsAssociation->socket);
     QDEBUG() << "Entering the forever loop";
     int ipMode = 4;
@@ -318,6 +323,18 @@ void Dtlsthread::onTimeout(){
     dtlsAssociation->closeRequest = true;
     //closeRequest = true;
     timer->stop();
+    if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
+        sendpacket.errorString = "Could not connect";
+        emit packetSent(sendpacket);
+    }
+
+
+//    if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
+//        createErrorPacket(){
+
+//        }
+//    }
+
     //dtlsAssociation->crypto.abortHandshake(&(dtlsAssociation->socket));
     //dtlsAssociation->socket.close();
     //dtlsAssociation->deleteLater();
@@ -346,6 +363,8 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     dtlsAssociationP->setCipher(cmdComponents[6]);
     return dtlsAssociationP;
 }
+
+
 
 /////////////////////////backups///////////////////
 //void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)

@@ -283,11 +283,14 @@ void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
 
 
         //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
+        std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
+        Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
         if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
-            std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
-            Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
             QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
             sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
+            emit serverPacketSent(sentPacket);
+        }else{
+            sentPacket.errorString = "Could not send response";
             emit serverPacketSent(sentPacket);
         }
     } else if (connection->dtlsError() == QDtlsError::NoError) {
@@ -376,14 +379,18 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
         responsePacket.hexString = Packet::byteArrayToHex(smartData);
     }
 
-    QHostAddress resolved = resolveDNS(responsePacket.toIP);
+    //QHostAddress resolved = resolveDNS(responsePacket.toIP);
     serverSocket.waitForBytesWritten();
     if(dtlsServer->writeDatagramEncrypted(&serverSocket,responsePacket.getByteArray())){
         emit serverPacketSent(responsePacket);
         return true;
+    }else{
+        responsePacket.errorString = "Could not send response";
+        emit serverPacketSent(responsePacket);
+        return false;
+
     }
 
-    return false;
 
 }
 
