@@ -322,14 +322,20 @@ Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QB
     recPacket.port = packetInfo[3].toUInt();
     QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
     recPacket.hexString = recPacket.ASCIITohex(massageFromTheOtherPeer);
-    recPacket.errorString = "none";
+    //recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
-    if((packetInfo[0] == "0.0.0.0") || (packetInfo[0] == "127.0.0.1")){
-        recPacket.fromIP = "You";
+//    if((packetInfo[0] == "0.0.0.0") || (packetInfo[0] == "127.0.0.1")){
+//        recPacket.fromIP = "You";
+//    }
+//    if((packetInfo[2] == "0.0.0.0") || (packetInfo[2] == "127.0.0.1")){
+//        recPacket.toIP = "You";
+//    }
+    if(packetInfo[0] == "0.0.0.0"){
+        recPacket.fromIP = "you";
     }
-    if((packetInfo[2] == "0.0.0.0") || (packetInfo[2] == "127.0.0.1")){
-        recPacket.toIP = "You";
+    if(packetInfo[2] == "0.0.0.0"){
+        recPacket.toIP = "127.0.0.1";
     }
 
     return recPacket;
@@ -361,7 +367,7 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
     responsePacket.timestamp = QDateTime::currentDateTime();
     responsePacket.name = responsePacket.timestamp.toString(DATETIMEFORMAT);
     responsePacket.tcpOrUdp = "DTLS";
-    responsePacket.fromIP = "You (Response)";
+    responsePacket.fromIP = "You";
     bool isIPv6  = IPv6Enabled();
     if (isIPv6) {
         responsePacket.toIP = Packet::removeIPv6Mapping(dtlsServer->peerAddress());

@@ -283,7 +283,7 @@ void Dtlsthread::receivedDatagram(QByteArray plainText){
     //recPacket.hexString = massageFromTheOtherPeer;
     recPacket.toIP = dtlsAssociation->socket.localAddress().toString();
     recPacket.port = dtlsAssociation->socket.localPort();
-    recPacket.errorString = "none";
+    //recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
     emit packetReceived(recPacket);

@@ -301,6 +301,17 @@ QIcon Packet::getIcon()
 
     }
 
+    if (isDTLS()) {
+        if (fromIP.toUpper().contains("YOU")) {
+            QIcon myIcon(UDPSENDICON);
+            return myIcon;
+        } else {
+            QIcon myIcon(UDPRXICON);
+            return myIcon;
+        }
+
+    }
+
 
     if (isTCP()) {
 
