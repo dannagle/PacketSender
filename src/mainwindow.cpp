@@ -277,7 +277,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dtlsServerStatus = new QPushButton("DTLS:" + packetNetwork.getDTLSPortString());
     themeTheButton(dtlsServerStatus);
-    dtlsServerStatus->setIcon(QIcon(UDPRXICON));
+    dtlsServerStatus->setIcon(QIcon(DTLSRXICON));
 
     connect(dtlsServerStatus, SIGNAL(clicked()),
             this, SLOT(toggleDTLSServer()));

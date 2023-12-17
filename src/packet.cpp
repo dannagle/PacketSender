@@ -303,10 +303,10 @@ QIcon Packet::getIcon()
 
     if (isDTLS()) {
         if (fromIP.toUpper().contains("YOU")) {
-            QIcon myIcon(UDPSENDICON);
+            QIcon myIcon(DTLSSENDICON);
             return myIcon;
         } else {
-            QIcon myIcon(UDPRXICON);
+            QIcon myIcon(DTLSRXICON);
             return myIcon;
         }
 

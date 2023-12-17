@@ -248,8 +248,8 @@
                <string>DTLS</string>
               </property>
               <property name="icon">
-               <iconset>
-                <normaloff>../../../עבודה/dtls_logo/tx_dtls.png</normaloff>../../../עבודה/dtls_logo/tx_dtls.png</iconset>
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_dtls.png</normaloff>:/icons/tx_dtls.png</iconset>
               </property>
              </item>
              <item>

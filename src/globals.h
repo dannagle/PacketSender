@@ -50,6 +50,7 @@
 
 #define NAMEINIKEY "NAMES"
 #define DTLSSENDICON ":icons/tx_dtls.png"
+#define DTLSRXICON ":icons/rx_dtls.png"
 #define UDPSENDICON ":icons/tx_udp.png"
 #define TCPSENDICON ":icons/tx_tcp.png"
 #define UDPRXICON ":icons/rx_udp.png"
