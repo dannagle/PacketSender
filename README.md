@@ -158,6 +158,19 @@ Some notes:
 <a id="network"></a>
 # Network Features
 
+## Basic Settings
+By default, Packet Sender launches with UDP, TCP, and SSL servers enabled on random ports (shown as buttons on the bottom right). You may bind to any number of ports (if the OS allows it), using comma-separated port numbers. For example, `0, 1000, 2000` will bind to "random" and ports 1000, 2000.
+
+![Basic Network Settings](screenshots/basic_network_settings.png)
+
+The UDP button now shows 3 ports bound. 1 of them is random.
+
+![Bound UDP Example](screenshots/bound_udp_example.png)
+
+The other setting is to respond to all requests with a reply. You may also have this request be a macro. There is a field to type the reply (or load a saved packet).
+
+
+
 ## IPv4, IPv6, Custom IP
 
 Packet Sender's built-in servers are configured to support either IPv4 or IPv6 but not both at the same time. For clients, Packet Sender GUI and CLI will seamlessly switch between the two modes upon sending (scope ID may be needed for IPv6). Click the IPv4 / IPv6 toggle on the bottom right to switch between the two.
