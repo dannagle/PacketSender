@@ -224,6 +224,20 @@
         "toip": "pool.ntp.org"
     },
     {
+        "asciistring": "XGY3XGUzXDAxXDAwXDAwXDAxXDAwXDAwXDAwXDAwXDAwXDAwXDA4ZGFubmFnbGVcMDNjb21cMDBcMDBcMDFcMDBcMDE=",
+        "errorstring": "",
+        "fromip": "",
+        "fromport": "3450581280",
+        "hexstring": "f7 e3 01 00 00 01 00 00 00 00 00 00 08 64 61 6e 6e 61 67 6c 65 03 63 6f 6d 00 00 01 00 01",
+        "name": "IBM DNS over HTTPS / DoH",
+        "port": "5053",
+        "repeat": 0,
+        "requestpath": "/dns-query?name=quad9.net",
+        "sendresponse": "0",
+        "tcporudp": "HTTPS Get",
+        "toip": "dns.quad9.net"
+    },
+    {
         "asciistring": "cT1wYWNrZXQlMjBzZW5kZXImYj0=",
         "errorstring": "",
         "fromip": "",
@@ -320,6 +334,20 @@
         "sendresponse": "0",
         "tcporudp": "HTTP Get",
         "toip": "neverssl.com"
+    },
+    {
+        "asciistring": "XGY3XGUzXDAxXDAwXDAwXDAxXDAwXDAwXDAwXDAwXDAwXDAwXDA4ZGFubmFnbGVcMDNjb21cMDBcMDBcMDFcMDBcMDE=",
+        "errorstring": "",
+        "fromip": "",
+        "fromport": "3450581280",
+        "hexstring": "f7 e3 01 00 00 01 00 00 00 00 00 00 08 64 61 6e 6e 61 67 6c 65 03 63 6f 6d 00 00 01 00 01",
+        "name": "Google DNS over HTTPS / DoH",
+        "port": "443",
+        "repeat": 0,
+        "requestpath": "/resolve?name=packetsender.com",
+        "sendresponse": "0",
+        "tcporudp": "HTTPS Get",
+        "toip": "dns.google"
     },
     {
         "asciistring": "XHJcblVTRVIgYW5vbnltb3VzXHJcblBBU1MgYW5vbnltb3VzXHJcbnF1aXRcclxu",
