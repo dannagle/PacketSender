@@ -23,6 +23,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Downloads](#downloads)
 * [Support](#support)
 * [IPv4 Subnet Calculator](#subnetcalculator)
+* [Wake-On-LAN / Magic Packet](#wakeonlan)
 * [Packet Sender Cloud](#cloud)
 * [Portable Mode](#portable)
 * [Macros and Smart Responses](#smartresponses)
@@ -170,6 +171,16 @@ The UDP button now shows 3 ports bound. 1 of them is random.
 The other setting is to respond to all requests with a reply. You may also have this request be a macro. There is a field to type the reply (or load a saved packet).
 
 
+## Additional UDP/TCP/SSL Settings
+By default, Packet Sender binds to any IPv4 address. In this area of the settings, you may have it bind to any IPv6 instead, or to a specific IP address. 
+
+Binding to a specific address is very helpful when there are multiple NICs and you want to force communication (like broadcast packets) out a specific one.
+
+![Bound UDP Example](screenshots/additional_network_settings.png)
+
+Some protocols expect the server to send data before the client sends (such as many telnet services). This workflow can be enabled with the "Receive Before Send".
+
+If you have a slow device (such an embedded server with a weak processor), you may wish to enable "500 ms delay after connect". This will allow the slow server time to launch its handler.
 
 ## IPv4, IPv6, Custom IP
 
@@ -191,6 +202,22 @@ Packet Sender has a built-in subnet calculator. It is under the Tools menu.
 * On the left side, input the subnet in either X.X.X. or /XX notation
 * The results of the calculation are on the right.
 * The field below is a quick check to see if an IPv4 is within one of your subnets.
+
+
+<a id="wakeonlan"></a>
+## Wake-On-LAN / Magic Packet
+
+Wake-On-LAN (or WOL) is a protocol that tells computers to wake up from sleep. It is triggered by a broadcast packet with special data based on the target's MAC address. For more information, [take a look at Wikipedia](https://en.wikipedia.org/wiki/Wake-on-LAN).
+
+Packet Sender has a built-in WOL generator. It is under the Tools menu.
+
+![WOL Tool](screenshots/wake_on_lan_screenshot.png)
+
+Fill out the options, and the main GUI will be filled with the correct data for the WOL format. 
+
+![WOL results](screenshots/wake_on_lan_results_screenshot.png)
+
+There are also CLI options to help generate and send WOL packets
 
 ## SSL Client and Server
 
@@ -464,6 +491,7 @@ For Linux, the command line system in Packet Sender follows the same pattern as 
 
 ```text
 packetsender --help
+Usage: C:\Program Files\PacketSender\packetsender.com [options] address port data
 Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
 See https://PacketSender.com/ for more information.
 
@@ -495,6 +523,8 @@ Options:
                             POST
   -n, --name <name>         Send previously saved packet named <name>. Other
                             options overrides saved packet parameters.
+  --wol <mac>               Send Wake-On-LAN / Magic Packet to <mac> and
+                            (optional) <port>.
   --bps <bps>               Intense traffic. Calculate rate based on value of
                             bits per second.
   --num <number>            Intense traffic. Number of packets to send. Default
@@ -502,6 +532,7 @@ Options:
   --rate <Hertz>            Intense traffic. Rate. Ignored in bps option.
   --usdelay <microseconds>  Intense traffic. Resend delay. Used if rate is 0.
                             Ignored in bps option.
+  --max                     Intense traffic. Run as fast as possible.
 
 Arguments:
   address                   Destination address/URL. Optional for saved packet.
