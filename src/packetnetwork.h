@@ -117,6 +117,7 @@ public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
+        void on_twoVerify_StateChanged();
 
 
 private slots:

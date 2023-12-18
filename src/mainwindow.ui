@@ -323,7 +323,7 @@
           <bool>true</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -334,136 +334,169 @@
            <height>16777215</height>
           </size>
          </property>
-         <widget class="QComboBox" name="cipherCb">
+         <widget class="QWidget" name="horizontalLayoutWidget">
           <property name="geometry">
            <rect>
-            <x>660</x>
+            <x>0</x>
             <y>0</y>
-            <width>191</width>
-            <height>24</height>
+            <width>701</width>
+            <height>31</height>
            </rect>
           </property>
-          <item>
-           <property name="text">
-            <string>AES256-GCM-SHA384</string>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinAndMaxSize</enum>
            </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES128-GCM-SHA256</string>
+           <property name="bottomMargin">
+            <number>0</number>
            </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES256-GCM-SHA384</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES128-GCM-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES128-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES256-SHA384</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES128-SHA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>AES256-SHA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>CHACHA20-POLY1305-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RC4-MD5</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>RC4-SHA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>CAMELLIA128-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>CAMELLIA256-SHA</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ECDHE-RSA-AES128-GCM-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ECDHE-RSA-AES256-GCM-SHA384</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ECDHE-ECDSA-AES128-GCM-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>ECDHE-ECDSA-AES256-GCM-SHA384</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DHE-RSA-AES128-GCM-SHA256</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>DHE-RSA-AES256-GCM-SHA384</string>
-           </property>
-          </item>
-         </widget>
-         <widget class="QLabel" name="CipherLable">
-          <property name="geometry">
-           <rect>
-            <x>570</x>
-            <y>0</y>
-            <width>81</width>
-            <height>20</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Cipher Suites:</string>
-          </property>
-         </widget>
-         <widget class="QCheckBox" name="leaveSessionOpen">
-          <property name="geometry">
-           <rect>
-            <x>430</x>
-            <y>0</y>
-            <width>111</width>
-            <height>22</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Persistent DTLS</string>
-          </property>
+           <item>
+            <widget class="QLabel" name="CipherLable">
+             <property name="text">
+              <string>Cipher Suites:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cipherCb">
+             <item>
+              <property name="text">
+               <string>AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CHACHA20-POLY1305-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RC4-MD5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RC4-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CAMELLIA128-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CAMELLIA256-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-RSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-RSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-ECDSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-ECDSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DHE-RSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DHE-RSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="leaveSessionOpen">
+             <property name="text">
+              <string>Persistent DTLS</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="twoVerify">
+             <property name="text">
+              <string>Two Sides Of Verification</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>

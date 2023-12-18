@@ -17,6 +17,7 @@ class DtlsServer : public QObject
     Q_OBJECT
 
 public:
+    QSslConfiguration serverConfiguration;
     DtlsServer();
     ~DtlsServer();
 
@@ -73,7 +74,6 @@ private:
 
     bool listening = false;
 
-    QSslConfiguration serverConfiguration;
     QDtlsClientVerifier cookieSender;
     std::vector<std::unique_ptr<QDtls>> knownClients;
 

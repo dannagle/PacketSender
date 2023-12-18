@@ -73,10 +73,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     ui->setupUi(this);
+
+
     QCheckBox* leaveSessionOpen;
+    QCheckBox* twoVerify;
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
+    //leaveSessionOpen
     if(settings.value("leaveSessionOpen").toString() == "false"){
         ui->leaveSessionOpen->setChecked(false);
     } else {
@@ -85,6 +88,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     leaveSessionOpen = ui->leaveSessionOpen;
     connect(leaveSessionOpen, &QCheckBox::toggled, this, &MainWindow::on_leaveSessionOpen_StateChanged);
+
+    //twoVerify
+    if(settings.value("twoVerify").toString() == "false"){
+        ui->twoVerify->setChecked(false);
+    } else {
+        ui->twoVerify->setChecked(true);
+    }
+
+    twoVerify = ui->twoVerify;
+    connect(twoVerify, &QCheckBox::toggled, &packetNetwork , &PacketNetwork::on_twoVerify_StateChanged);
 
     cipherCb = ui->cipherCb;
     //add the combobox the correct cipher suites
@@ -95,6 +108,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
         ui->leaveSessionOpen->hide();
+        ui->twoVerify->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
     }
@@ -2309,6 +2323,8 @@ void MainWindow::on_actionHelp_triggered()
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
+
+
 void MainWindow::on_leaveSessionOpen_StateChanged(){
     //ui.checkBox->setChecked(checkBoxState);
 
@@ -2695,10 +2711,14 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         ui->leaveSessionOpen->show();
         cipherCb->show();
         ui->CipherLable->show();
+        ui->twoVerify->show();
+
     } else {
         ui->leaveSessionOpen->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
+        ui->twoVerify->hide();
+
 
     }
 

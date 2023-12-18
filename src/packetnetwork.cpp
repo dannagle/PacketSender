@@ -1003,7 +1003,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             QTimer* timer = new QTimer(this);
             thread->timer = timer;
             connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
-            timer->start(500);
+            timer->start(2000);
         }
 
         dtlsthreadList.append(thread);
@@ -1283,6 +1283,25 @@ std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& se
     }
     cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
     return cmdComponents;
+}
+
+
+
+
+void PacketNetwork::on_twoVerify_StateChanged(){
+    //ui.checkBox->setChecked(checkBoxState);
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString twoVerify = settings.value("twoVerify", "false").toString();
+    if(twoVerify == "false"){
+        settings.setValue("twoVerify", "true");
+        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    }
+    else{
+        settings.setValue("twoVerify", "false");
+        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+
+    }
 }
 
 //void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)

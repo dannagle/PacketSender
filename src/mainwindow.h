@@ -41,7 +41,7 @@ class PreviewFilter : public QObject
     Q_OBJECT
 
 public:
-    QCheckBox* leaveSessionOpen;
+
 
     explicit PreviewFilter(QObject * parent, QLineEdit * asciiEdit, QLineEdit * hexEdit)
         : QObject{parent}, asciiEdit{asciiEdit}, hexEdit{hexEdit}
@@ -97,6 +97,7 @@ class MainWindow : public QMainWindow
         void sendPacket(Packet sendpacket);
 
     public slots:
+        //void on_twoVerify_StateChanged();
         void on_sendSimpleAck_StateChanged();
         void on_leaveSessionOpen_StateChanged();
         void toTrafficLog(Packet logPacket);
