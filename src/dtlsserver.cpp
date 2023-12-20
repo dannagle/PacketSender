@@ -36,52 +36,15 @@ QString connection_info(QDtls *connection)
 //! [1]
 DtlsServer::DtlsServer()
 {
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     //    QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
     //    QFile keyFile("C:/rsa_encryption/server-key.pem");
     //    QFile certFile("C:/rsa_encryption/server-signed-cert.pem");
     connect(&serverSocket, &QAbstractSocket::readyRead, this, &DtlsServer::readyRead);
-    /////////////////////////////////////////////////////
-    QFile certFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/server-signed-cert.pem");
-    //QFile certFile("C:/rsa_encryption/server-signed-cert.pem");
 
-    if(!certFile.open(QIODevice::ReadOnly)){
-        return;
-    }
-    QSslCertificate certificate(&certFile, QSsl::Pem);
+    loadKeyLocalCertCaCert();
 
-    QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/server-key.pem");
-    //QFile keyFile("C:/rsa_encryption/server-key.pem");
 
-    if(!keyFile.open(QIODevice::ReadOnly)){
-        return;
-    }
-    QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
 
-    QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
-    //QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
-
-    if(!caCertFile.open(QIODevice::ReadOnly)){
-        return;
-    }
-    QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
-
-    serverConfiguration = QSslConfiguration::defaultDtlsConfiguration();
-    serverConfiguration.setLocalCertificate(certificate);
-    serverConfiguration.setPrivateKey(privateKey);
-    serverConfiguration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
-    if(settings.value("twoVerify").toString() == "true"){
-        serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
-    } else{
-        serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
-    }
-
-    ///////////////////////////////////////////////////////////////////
-
-    //serverConfiguration = QSslConfiguration::defaultDtlsConfiguration();
-    //serverConfiguration.setPreSharedKeyIdentityHint("Qt DTLS example server");
-    //serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
-    //cookieSender.setDtlsConfiguration(dtlsConfiguration);
 }
 //! [1]
 
@@ -118,6 +81,7 @@ void DtlsServer::close()
 
 void DtlsServer::readyRead()
 {
+
     //! [3]
     const qint64 bytesToRead = serverSocket.pendingDatagramSize();
     if (bytesToRead <= 0) {
@@ -158,6 +122,7 @@ void DtlsServer::readyRead()
     //! [6]
     if ((*client)->isConnectionEncrypted()) {
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
 
         //TODO: split into two function, one for decryption and one for writting
         QDtls * dtlsServer = client->get();
@@ -490,3 +455,75 @@ QHostAddress DtlsServer::resolveDNS(QString hostname)
 //    std::vector<QString> infoVect;
 //    infoVect.push_back();
 //}
+
+void DtlsServer::loadKeyLocalCertCaCert(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.value("sslCaPath", SETTINGSPATH + "cert.pem");
+    //settings.value("sslLocalCertificatePath", SETTINGSPATH + "cert.pem");
+    //settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem");
+
+    QString localCertPath = settings.value("sslLocalCertificatePath", SETTINGSPATH + "cert.pem").toString();
+    QFile certFile(localCertPath);
+
+    if(!certFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslCertificate currentCertificate(&certFile, QSsl::Pem);
+    certificate = currentCertificate;
+
+    QString keyPath = settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem").toString();
+    QFile keyFile(keyPath);
+
+    //QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/server-key.pem");
+    //QFile keyFile("C:/rsa_encryption/server-key.pem");
+
+    if(!keyFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
+    privateKey = currentPrivateKey;
+
+    //get the full path to to ca-signed-cert.pem file
+    QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
+    QString fullCaCertPath;
+    QDir dir(caCertFolder);
+    if (dir.exists()) {
+        QStringList nameFilters;
+        nameFilters << "*.pem";  // Filter for .txt files
+
+        dir.setNameFilters(nameFilters);
+        QStringList fileList = dir.entryList();
+
+        if (!fileList.isEmpty()) {
+            // Select the first file that matches the filter
+            fullCaCertPath = dir.filePath(fileList.first());
+        } else {
+            qDebug() << "No matching files found.";
+        }
+    } else {
+        qDebug() << "Directory does not exist.";
+    }
+    QFile caCertFile(fullCaCertPath);
+    //QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
+    //QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
+
+    if(!caCertFile.open(QIODevice::ReadOnly)){
+        return;
+    }
+    QSslCertificate currentCaCertificate(&caCertFile, QSsl::Pem);
+    caCertificate = currentCaCertificate;
+    setConfiguration();
+}
+
+void DtlsServer::setConfiguration(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    serverConfiguration = QSslConfiguration::defaultDtlsConfiguration();
+    serverConfiguration.setLocalCertificate(certificate);
+    serverConfiguration.setPrivateKey(privateKey);
+    serverConfiguration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
+    if(settings.value("twoVerify").toString() == "true"){
+        serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    } else{
+        serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+    }
+}

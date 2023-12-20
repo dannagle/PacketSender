@@ -17,6 +17,10 @@ class DtlsServer : public QObject
     Q_OBJECT
 
 public:
+    QSslCertificate certificate;
+    QSslKey privateKey;
+    QSslCertificate caCertificate;
+
     QSslConfiguration serverConfiguration;
     DtlsServer();
     ~DtlsServer();
@@ -29,6 +33,8 @@ public:
     Packet createPacket(const std::vector<QString>& packetInfo, const QByteArray& dgram);
     std::vector<QString> createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort);
     bool serverResonse(QDtls* dtlsServer);
+    void loadKeyLocalCertCaCert();
+    void setConfiguration();
 
     QString getIPmode();
     bool IPv4Enabled();

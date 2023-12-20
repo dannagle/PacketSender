@@ -492,7 +492,7 @@
            <item>
             <widget class="QCheckBox" name="twoVerify">
              <property name="text">
-              <string>Two Sides Of Verification</string>
+              <string>Add Server Verification of The Client</string>
              </property>
             </widget>
            </item>
