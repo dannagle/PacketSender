@@ -1674,6 +1674,11 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
         <translation>Envoyer &lt;b&gt;</translation>
     </message>
     <message>
+        <location filename="../packet.cpp" line="627"/>
+        <source>Received an invalid MAC address</source>
+        <translation>Reçu une adresse MAC invalide</translation>
+    </message>
+    <message>
         <location filename="../settings.cpp" line="47"/>
         <source>Name</source>
         <translation>Nom</translation>

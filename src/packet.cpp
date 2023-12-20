@@ -624,7 +624,7 @@ Packet Packet::generateWakeOnLAN(QString &mac, int port)
     if(macBytes.size() != 6) {
         QDEBUG() << "Received an invalid MAC address" << mac;
         wakeOnLAN.init();
-        wakeOnLAN.errorString = "Received an invalid MAC address";
+        wakeOnLAN.errorString = QObject::tr("Received an invalid MAC address");
         return wakeOnLAN;
     }
 

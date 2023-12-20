@@ -1674,6 +1674,11 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <translation>Senden &lt;b&gt;</translation>
     </message>
     <message>
+        <location filename="../packet.cpp" line="627"/>
+        <source>Received an invalid MAC address</source>
+        <translation>Es wurde eine ungültige MAC-Adresse empfangen</translation>
+    </message>
+    <message>
         <location filename="../settings.cpp" line="47"/>
         <source>Name</source>
         <translation>Name</translation>

@@ -1674,6 +1674,11 @@ Selecting No will generate new IDs and append.</source>
         <translation>Enviar &lt;b&gt;</translation>
     </message>
     <message>
+        <location filename="../packet.cpp" line="627"/>
+        <source>Received an invalid MAC address</source>
+        <translation>Recibí una dirección MAC no válida</translation>
+    </message>
+    <message>
         <location filename="../settings.cpp" line="47"/>
         <source>Name</source>
         <translation>Nombre</translation>
