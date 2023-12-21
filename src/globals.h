@@ -10,11 +10,11 @@
 #pragma once
 
 //BEGIN SW VERSION
-#define SW_VERSION "8.5.2"
+#define SW_VERSION "8.6.3"
 //END SW VERSION
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 8,5,2,0
+#define VER_FILEVERSION 8,6,3,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
