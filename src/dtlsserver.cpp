@@ -527,3 +527,7 @@ void DtlsServer::setConfiguration(){
         serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
     }
 }
+
+void DtlsServer::on_signedCert_textChanged(){
+    loadKeyLocalCertCaCert();
+}

@@ -68,6 +68,10 @@ class Settings : public QDialog
     public:
         MainWindow* rmw;
         QCheckBox* sendSimpleAck;
+        QLineEdit* sslLocalCertificatePath;
+        QString initialSslLocalCertificatePath;
+        QString initialSslCaPath;
+        QString initialSslPrivateKeyPath;
 
         explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();
@@ -159,7 +163,8 @@ private:
         void deleteHTTPHeader(QString host, QString header);
         void clearHTTPHeaders(QString host);
         static QPair<QString, QString> header2keyvalue(QString header);
-
+    signals:
+        void loadingCertsAgain();
 };
 
 #endif

@@ -75,6 +75,7 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
+        PacketNetwork packetNetwork;
         QString ASCIITohex(QString &ascii);
         QString hexToASCII(QString &hex);
         void loadPacketsTable();       
@@ -244,7 +245,6 @@ class MainWindow : public QMainWindow
         QList<Packet> packetsSaved;
         QList<Packet> packetsRepeat;
         int stopResending;
-        PacketNetwork packetNetwork;
         QNetworkAccessManager  * http;
         QTimer refreshTimer;
         QTimer slowRefreshTimer;

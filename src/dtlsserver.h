@@ -68,6 +68,7 @@ private slots:
     void pskRequired(QSslPreSharedKeyAuthenticator *auth);
 
 public slots:
+    void on_signedCert_textChanged();
     //void serverReceivedDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram);
 
 private:
