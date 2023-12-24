@@ -480,8 +480,22 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     if(!keyFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
-    privateKey = currentPrivateKey;
+//    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
+//    privateKey = currentPrivateKey;
+
+    QList<QSsl::KeyAlgorithm> keyTypes = { QSsl::Dh, QSsl::Dsa, QSsl::Ec, QSsl::Rsa };
+
+    foreach (QSsl::KeyAlgorithm type, keyTypes) {
+        QSslKey key(&keyFile, type);
+        if (!key.isNull()) {
+            privateKey = key;
+            break;
+        }
+        keyFile.reset();
+    }
+    if(privateKey.isNull()){
+        //TODO: handle error typed key
+    }
 
     //get the full path to to ca-signed-cert.pem file
     QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
@@ -489,7 +503,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     QDir dir(caCertFolder);
     if (dir.exists()) {
         QStringList nameFilters;
-        nameFilters << "*.pem";  // Filter for .txt files
+        nameFilters << "*.pem" << "*.der";  // Filter for .txt files
 
         dir.setNameFilters(nameFilters);
         QStringList fileList = dir.entryList();
