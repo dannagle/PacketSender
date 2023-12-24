@@ -77,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QCheckBox* leaveSessionOpen;
     QCheckBox* twoVerify;
+    QLineEdit* hostName = ui->hostName;
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     //leaveSessionOpen
@@ -99,6 +100,11 @@ MainWindow::MainWindow(QWidget *parent) :
     twoVerify = ui->twoVerify;
     connect(twoVerify, &QCheckBox::toggled, &packetNetwork , &PacketNetwork::on_twoVerify_StateChanged);
 
+    //hostName
+    connect(ui->hostName, QLineEdit::editingFinished, this, MainWindow::on_hostName_editingFinished);
+
+
+    //cipher comboBox
     cipherCb = ui->cipherCb;
     //add the combobox the correct cipher suites
     QList<QSslCipher> ciphers = QSslConfiguration::supportedCiphers();
@@ -2926,5 +2932,11 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 {
     on_udptcpComboBox_currentIndexChanged("");
+}
+
+void MainWindow::on_hostName_editingFinished(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("hostNameEdit", ui->hostName->text());
+
 }
 

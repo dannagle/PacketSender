@@ -18,6 +18,7 @@ Dtlsthread::~Dtlsthread() {
 void Dtlsthread::run()
 {
 
+
     //closeRequest = false;
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();

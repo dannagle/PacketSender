@@ -974,6 +974,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
     if(sendpacket.isDTLS()){
+        //QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        //settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
         Dtlsthread * thread = new Dtlsthread(sendpacket, this);
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))

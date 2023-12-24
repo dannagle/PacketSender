@@ -11,9 +11,6 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
 {
 
 
-
-
-
     QFile certFile(cmdComponents[4]);//4
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
@@ -32,13 +29,17 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     }
     QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString hostName = settings.value("hostNameEdit").toString();
+
+
     configuration.setLocalCertificate(certificate);
     configuration.setPrivateKey(privateKey);
     configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
 
-    configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
+    configuration.setPeerVerifyMode(QSslSocket::VerifyPeer);
     crypto.setPeer(address, port);
-    crypto.setPeerVerificationName("server");
+    crypto.setPeerVerificationName(hostName);
     crypto.setDtlsConfiguration(configuration);
     //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
 

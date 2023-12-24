@@ -98,6 +98,7 @@ class MainWindow : public QMainWindow
         void sendPacket(Packet sendpacket);
 
     public slots:
+        void on_hostName_editingFinished();
         //void on_twoVerify_StateChanged();
         void on_sendSimpleAck_StateChanged();
         void on_leaveSessionOpen_StateChanged();
