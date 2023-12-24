@@ -18,6 +18,9 @@ public:
     ~DtlsAssociation();
     void startHandshake();
     void setCipher(QString chosenCipher);
+    QSsl::EncodingFormat getCertFormat(QFile& certFile);
+    QSslKey getPrivateKey(QFile& keyFile);
+
 
     QSslConfiguration configuration = QSslConfiguration::defaultDtlsConfiguration();
     QDtls crypto;

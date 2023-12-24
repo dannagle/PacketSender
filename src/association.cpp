@@ -15,19 +15,35 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslCertificate certificate(&certFile, QSsl::Pem);
+    QSsl::EncodingFormat format = getCertFormat(certFile);
+    QSslCertificate certificate(&certFile, format);
+    if (certificate.isNull()) {
+        // TODO: Handle the error, e.g., certificate loading failed
+    }
+    //QSslCertificate certificate(&certFile, QSsl::Pem);
 
+    //key
     QFile keyFile(cmdComponents[3]);//3
     if(!keyFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
+
+    QSslKey privateKey = getPrivateKey(keyFile);
+
+
+    //QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
 
     QFile caCertFile(cmdComponents[5]);//5
     if(!caCertFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
+    //getCertFormat
+    QSsl::EncodingFormat formatCa = getCertFormat(caCertFile);
+    QSslCertificate caCertificate(&caCertFile, formatCa);
+    if (caCertificate.isNull()) {
+        // TODO: Handle the error, e.g., certificate loading failed
+    }
+    //QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString hostName = settings.value("hostNameEdit").toString();
@@ -176,6 +192,36 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 void DtlsAssociation::setCipher(QString chosenCipher) {
     configuration.setCiphers(chosenCipher);
     crypto.setDtlsConfiguration(configuration);
+}
+
+QSsl::EncodingFormat DtlsAssociation::getCertFormat(QFile& certFile){
+    QFileInfo fileInfo(certFile.fileName());
+    QString fileExtension = fileInfo.suffix().toLower();
+    QSsl::EncodingFormat format;
+
+    if (fileExtension == "pem") {
+        format = QSsl::Pem;
+    } else if (fileExtension == "der") {
+        format = QSsl::Der;
+    }
+    return format;
+}
+
+QSslKey DtlsAssociation::getPrivateKey(QFile& keyFile){
+    QList<QSsl::KeyAlgorithm> keyTypes = { QSsl::Dh, QSsl::Dsa, QSsl::Ec, QSsl::Rsa };
+    QSslKey privateKey;
+    foreach (QSsl::KeyAlgorithm type, keyTypes) {
+        QSslKey key(&keyFile, type);
+        if (!key.isNull()) {
+            privateKey = key;
+            break;
+        }
+        keyFile.reset();
+    }
+    if(privateKey.isNull()){
+        //TODO: handle error typed key
+    }
+    return privateKey;
 }
 
 ///////////////////////////////////////////////////backups//////////////////////////////////

@@ -468,8 +468,17 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     if(!certFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslCertificate currentCertificate(&certFile, QSsl::Pem);
+
+    //getCertFormat
+    QSsl::EncodingFormat format = getCertFormat(certFile);
+    QSslCertificate currentCertificate(&certFile, format);
     certificate = currentCertificate;
+    if (currentCertificate.isNull()) {
+        // TODO: Handle the error, e.g., certificate loading failed
+    }
+
+//    QSslCertificate currentCertificate(&certFile, QSsl::Pem);
+//    certificate = currentCertificate;
 
     QString keyPath = settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem").toString();
     QFile keyFile(keyPath);
@@ -483,19 +492,9 @@ void DtlsServer::loadKeyLocalCertCaCert(){
 //    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
 //    privateKey = currentPrivateKey;
 
-    QList<QSsl::KeyAlgorithm> keyTypes = { QSsl::Dh, QSsl::Dsa, QSsl::Ec, QSsl::Rsa };
+    privateKey = getPrivateKey(keyFile);
 
-    foreach (QSsl::KeyAlgorithm type, keyTypes) {
-        QSslKey key(&keyFile, type);
-        if (!key.isNull()) {
-            privateKey = key;
-            break;
-        }
-        keyFile.reset();
-    }
-    if(privateKey.isNull()){
-        //TODO: handle error typed key
-    }
+
 
     //get the full path to to ca-signed-cert.pem file
     QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
@@ -524,8 +523,20 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     if(!caCertFile.open(QIODevice::ReadOnly)){
         return;
     }
-    QSslCertificate currentCaCertificate(&caCertFile, QSsl::Pem);
+
+    //QFileInfo fileInfoCa(certFile.fileName());
+    //QString fileExtensionCa = fileInfoCa.suffix().toLower();
+    QSsl::EncodingFormat formatCa = getCertFormat(caCertFile);
+    QSslCertificate currentCaCertificate(&caCertFile, formatCa);
     caCertificate = currentCaCertificate;
+
+    if (currentCaCertificate.isNull()) {
+        // TODO: Handle the error, e.g., certificate loading failed
+    }
+
+
+//    QSslCertificate currentCaCertificate(&caCertFile, QSsl::Pem);
+//    caCertificate = currentCaCertificate;
     setConfiguration();
 }
 
@@ -545,3 +556,34 @@ void DtlsServer::setConfiguration(){
 void DtlsServer::on_signedCert_textChanged(){
     loadKeyLocalCertCaCert();
 }
+
+QSsl::EncodingFormat DtlsServer::getCertFormat(QFile& certFile){
+    QFileInfo fileInfo(certFile.fileName());
+    QString fileExtension = fileInfo.suffix().toLower();
+    QSsl::EncodingFormat format;
+
+    if (fileExtension == "pem") {
+        format = QSsl::Pem;
+    } else if (fileExtension == "der") {
+        format = QSsl::Der;
+    }
+    return format;
+}
+
+QSslKey DtlsServer::getPrivateKey(QFile& keyFile){
+    QList<QSsl::KeyAlgorithm> keyTypes = { QSsl::Dh, QSsl::Dsa, QSsl::Ec, QSsl::Rsa };
+    QSslKey privateKey;
+    foreach (QSsl::KeyAlgorithm type, keyTypes) {
+        QSslKey key(&keyFile, type);
+        if (!key.isNull()) {
+            privateKey = key;
+            break;
+        }
+        keyFile.reset();
+    }
+    if(privateKey.isNull()){
+        //TODO: handle error typed key
+    }
+    return privateKey;
+}
+

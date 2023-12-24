@@ -35,6 +35,9 @@ public:
     bool serverResonse(QDtls* dtlsServer);
     void loadKeyLocalCertCaCert();
     void setConfiguration();
+    QSsl::EncodingFormat getCertFormat(QFile& certFile);
+    QSslKey getPrivateKey(QFile& keyFile);
+
 
     QString getIPmode();
     bool IPv4Enabled();
