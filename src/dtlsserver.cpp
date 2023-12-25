@@ -497,25 +497,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
 
 
     //get the full path to to ca-signed-cert.pem file
-    QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
-    QString fullCaCertPath;
-    QDir dir(caCertFolder);
-    if (dir.exists()) {
-        QStringList nameFilters;
-        nameFilters << "*.pem" << "*.der";  // Filter for .txt files
-
-        dir.setNameFilters(nameFilters);
-        QStringList fileList = dir.entryList();
-
-        if (!fileList.isEmpty()) {
-            // Select the first file that matches the filter
-            fullCaCertPath = dir.filePath(fileList.first());
-        } else {
-            qDebug() << "No matching files found.";
-        }
-    } else {
-        qDebug() << "Directory does not exist.";
-    }
+    QString fullCaCertPath = getFullPathToCaCert();
     QFile caCertFile(fullCaCertPath);
     //QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
     //QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
@@ -587,3 +569,26 @@ QSslKey DtlsServer::getPrivateKey(QFile& keyFile){
     return privateKey;
 }
 
+QString DtlsServer::getFullPathToCaCert(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
+    QString fullCaCertPath;
+    QDir dir(caCertFolder);
+    if (dir.exists()) {
+        QStringList nameFilters;
+        nameFilters << "*.pem" << "*.der";  // Filter for .txt files
+
+        dir.setNameFilters(nameFilters);
+        QStringList fileList = dir.entryList();
+
+        if (!fileList.isEmpty()) {
+            // Select the first file that matches the filter
+            fullCaCertPath = dir.filePath(fileList.first());
+        } else {
+            qDebug() << "No matching files found.";
+        }
+    } else {
+        qDebug() << "Directory does not exist.";
+    }
+    return fullCaCertPath;
+}

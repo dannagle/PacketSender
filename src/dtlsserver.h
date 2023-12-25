@@ -37,6 +37,7 @@ public:
     void setConfiguration();
     QSsl::EncodingFormat getCertFormat(QFile& certFile);
     QSslKey getPrivateKey(QFile& keyFile);
+    QString getFullPathToCaCert();
 
 
     QString getIPmode();
