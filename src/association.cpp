@@ -18,7 +18,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     QSsl::EncodingFormat format = getCertFormat(certFile);
     QSslCertificate certificate(&certFile, format);
     if (certificate.isNull()) {
-        // TODO: Handle the error, e.g., certificate loading failed
+        packetToSend.errorString += "Your local certificate content isn't structured as any certificate format";
     }
     //QSslCertificate certificate(&certFile, QSsl::Pem);
 
@@ -41,7 +41,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     QSsl::EncodingFormat formatCa = getCertFormat(caCertFile);
     QSslCertificate caCertificate(&caCertFile, formatCa);
     if (caCertificate.isNull()) {
-        // TODO: Handle the error, e.g., certificate loading failed
+        packetToSend.errorString += "Your ca-certificate content isn't structured as any certificate format";
     }
     //QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
 
@@ -241,7 +241,7 @@ QSslKey DtlsAssociation::getPrivateKey(QFile& keyFile){
         keyFile.reset();
     }
     if(privateKey.isNull()){
-        //TODO: handle error typed key
+        packetToSend.errorString += "Your key isn't one of the known key's types: Dh, Dsa, Ec, Rsa";
     }
     return privateKey;
 }

@@ -79,7 +79,7 @@ void Dtlsthread::handShakeComplited(){
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
-        packetToSend.errorString = "Failed to send";
+        packetToSend.errorString.append(", Failed to send");
         //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         if(dtlsAssociation->crypto.isConnectionEncrypted()){
             emit packetSent(packetToSend);
@@ -325,7 +325,7 @@ void Dtlsthread::onTimeout(){
     //closeRequest = true;
     timer->stop();
     if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
-        sendpacket.errorString = "Could not connect";
+        sendpacket.errorString = "Could not connect: " + dtlsAssociation->packetToSend.errorString;
         emit packetSent(sendpacket);
     }
 
