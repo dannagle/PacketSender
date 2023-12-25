@@ -325,7 +325,9 @@ void Dtlsthread::onTimeout(){
     //closeRequest = true;
     timer->stop();
     if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
-        sendpacket.errorString = "Could not connect: " + dtlsAssociation->packetToSend.errorString;
+        QString  errors = dtlsAssociation->crypto.dtlsErrorString();
+        //QString sslErrorsString = errors.join(" ");
+        sendpacket.errorString = "Error " + dtlsAssociation->packetToSend.errorString + errors;
         emit packetSent(sendpacket);
     }
 
