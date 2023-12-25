@@ -4,7 +4,7 @@
 #include "association.h"
 #include "packet.h"
 
-DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
+DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
                                  const QString &connectionName, std::vector<QString> cmdComponents)
     : name(connectionName),
     crypto(QSslSocket::SslClientMode)
@@ -47,7 +47,28 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString hostName = settings.value("hostNameEdit").toString();
+    ////////////////////////try to resolve the hostName, inorder to get the address
 
+    if (hostName.isEmpty()){
+        QHostInfo host = QHostInfo::fromName(cmdComponents[1]);
+        // Check if the lookup was successful
+        if (host.error() != QHostInfo::NoError) {
+            qDebug() << "Lookup failed:" << host.errorString();
+        } else {
+            // Output the host name
+            foreach (const QHostAddress &resolvedAddress, host.addresses()) {
+                //if it is an ipv4 save it as addres and fill the hostName with the current hostName
+                if (resolvedAddress.protocol() == QAbstractSocket::IPv4Protocol){
+                    address = resolvedAddress;
+                    hostName = cmdComponents[1];
+                }
+
+            }
+            //qDebug() << "Host name:" << host.hostName();
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////
 
     configuration.setLocalCertificate(certificate);
     configuration.setPrivateKey(privateKey);
@@ -58,7 +79,8 @@ DtlsAssociation::DtlsAssociation(const QHostAddress &address, quint16 port,
     crypto.setPeerVerificationName(hostName);
     crypto.setDtlsConfiguration(configuration);
     //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
-
+    //earse host name inorder to enable address to fill with the resolved address
+    hostName = "";
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
     socket.connectToHost(address.toString(), port);

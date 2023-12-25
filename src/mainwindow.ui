@@ -339,7 +339,7 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>871</width>
+            <width>851</width>
             <height>31</height>
            </rect>
           </property>
@@ -512,7 +512,7 @@
            <item>
             <widget class="QCheckBox" name="twoVerify">
              <property name="text">
-              <string>Add Server Verification of The Client</string>
+              <string>Add Server Verification of The Client   </string>
              </property>
             </widget>
            </item>

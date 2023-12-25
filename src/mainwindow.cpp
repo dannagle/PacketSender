@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QCheckBox* leaveSessionOpen;
     QCheckBox* twoVerify;
-    QLineEdit* hostName = ui->hostName;
+    //QLineEdit* hostName = ui->hostName;
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     //leaveSessionOpen
@@ -117,6 +117,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->twoVerify->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
+        ui->hostName->hide();
+
     }
 
     connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
@@ -2718,12 +2720,16 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         cipherCb->show();
         ui->CipherLable->show();
         ui->twoVerify->show();
+        ui->hostName->show();
+
 
     } else {
         ui->leaveSessionOpen->hide();
         cipherCb->hide();
         ui->CipherLable->hide();
         ui->twoVerify->hide();
+        ui->hostName->hide();
+
 
 
     }

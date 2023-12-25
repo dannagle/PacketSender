@@ -13,7 +13,7 @@ class DtlsAssociation : public QObject
     Q_OBJECT
 
 public:
-    DtlsAssociation(const QHostAddress &address, quint16 port,
+    DtlsAssociation(QHostAddress &address, quint16 port,
                     const QString &connectionName, std::vector<QString> cmdComponents);
     ~DtlsAssociation();
     void startHandshake();
