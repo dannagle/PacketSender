@@ -163,7 +163,6 @@ bool PacketNetwork::DTLSListening()
     foreach(dtls, dtlsServers) {
         QDEBUGVAR(dtls->state());
         if(dtls->state() == QAbstractSocket::BoundState) {
-            //if(udp->state() == QAbstractSocket::ConnectedState) {
             return true;
         }
     }
@@ -177,7 +176,6 @@ bool PacketNetwork::UDPListening()
     foreach(udp, udpServers) {
         QDEBUGVAR(udp->state());
         if(udp->state() == QAbstractSocket::BoundState) {
-        //if(udp->state() == QAbstractSocket::ConnectedState) {
             return true;
         }
     }
@@ -288,19 +286,12 @@ void PacketNetwork::init()
 
 
 
-//    connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
-//    connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
+
     foreach (dtlsPort, dtlsPortList) {
-        /////////////////////////////////after adding the DtlsServer class//////////////////
         bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
 
 
         dtlsSocket = &(dtlsServer.serverSocket);
-//        dtlsSocket = new QUdpSocket(this);
-
-//        bool bindResult = dtlsSocket->bind(
-//            IPV4_OR_IPV6
-//            , dtlsPort);
 
         dtlsSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
@@ -326,10 +317,6 @@ void PacketNetwork::init()
         }
 
         if(bindResult) {
-//            dtlsServers.append(dtlsSocket);
-////////////////////////////////////////after adding the DtlsServer class//////////////////
-//            QUdpSocket dtlsSocket = dtlsServer.serverSocket;
-//            dtlsServers.append(&dtlsSocket);
             dtlsServers.append(dtlsSocket);
         }
 
@@ -456,31 +443,6 @@ void PacketNetwork::init()
         foreach (dtlsSocket, dtlsServers) {
             connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
             connect(&dtlsServer, SIGNAL(serverPacketSent(Packet)), this, SLOT(packetSentECHO(Packet)),Qt::UniqueConnection);
-
-            //connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram,Qt::UniqueConnection);
-//            QUdpSocket *udpSocket, *dtlsSocket;
-//            ThreadedTCPServer *ssl, *tcp;
-
-
-
-//            connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)));
-//            connect(&dtlsServer,&DtlsServer::serverDatagramReceived,&dtlsServer,&DtlsServer::serverReceivedDatagram);
-//            foreach (dtlsPort, dtlsPortList) {
-//                /////////////////////////////////after adding the DtlsServer class//////////////////
-//                bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
-
-
-//                dtlsSocket = &(dtlsServer.serverSocket);
-/////////////////////////////////after adding the DtlsServer class//////////////////
-
-//            connect(&dtlsSocket, &DtlsServer::errorMessage, this, &MainWindow::addErrorMessage);
-//            connect(&dtlsSocket, &DtlsServer::warningMessage, this, &MainWindow::addWarningMessage);
-//            connect(&dtlsSocket, &DtlsServer::infoMessage, this, &MainWindow::addInfoMessage);
-//            connect(&dtlsSocket, &DtlsServer::datagramReceived, this, &MainWindow::addClientMessage);
-
-//            QDEBUG() << "signal/slot datagram connect: " << connect(dtlsSocket, SIGNAL(readyRead()),
-//                                                                    this, SLOT(readPendingDatagrams()));
-
         }
 
     } else {
@@ -542,14 +504,9 @@ QList<int> PacketNetwork::getDTLSPortsBound()
 {
     QList<int> pList;
     pList.clear();
-    //DtlsServer dtlsServer;
     QUdpSocket * dtlsServer;
-    //= &(dtlsServer.serverSocket);
     foreach (dtlsServer, dtlsServers) {
         if(dtlsServer->BoundState == QAbstractSocket::BoundState) {
-//            if(dtls->localAddress().isMulticast()) {
-//                QDEBUG() << "This udp address is multicast";
-//            }
             if(dtlsServer){
                 pList.append(dtlsServer->localPort());
             }
@@ -751,7 +708,6 @@ void PacketNetwork::readPendingDatagrams()
             senderPort = theDatagram.senderPort();
 
             QDEBUG() << "data size is" << datagram.size();
-    //        QDEBUG() << debugQByteArray(datagram);
 
             Packet udpPacket;
             udpPacket.timestamp = QDateTime::currentDateTime();
@@ -974,8 +930,6 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
 
     if(sendpacket.isDTLS()){
-        //QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        //settings.setValue("packetIPEditSession", ui->packetIPEdit->text());
         Dtlsthread * thread = new Dtlsthread(sendpacket, this);
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
@@ -1291,8 +1245,6 @@ std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& se
 
 
 void PacketNetwork::on_twoVerify_StateChanged(){
-    //ui.checkBox->setChecked(checkBoxState);
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString twoVerify = settings.value("twoVerify", "false").toString();
     if(twoVerify == "false"){
@@ -1306,23 +1258,5 @@ void PacketNetwork::on_twoVerify_StateChanged(){
     }
 }
 
-//void PacketNetwork::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
-//{
-//    //ned to fix the "to port" field
-//    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
-//    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
 
-//    Packet recPacket;
-//    recPacket.init();
-//    recPacket.fromIP = serverAddress.toString();
-//    recPacket.fromPort = serverPort;
-//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-//    recPacket.hexString = massageFromTheOtherPeer;
-//    recPacket.toIP = clientAddress;
-//    recPacket.port = userPort;
-//    recPacket.errorString = "none";
-//    recPacket.tcpOrUdp = "DTLS";
-
-//    emit packetReceived(recPacket);
-//}
 

@@ -100,22 +100,14 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
 
-
-    ////////////////////////////////////////////////////////////////////////////set the initial value of the 3 pathes
     initialSslLocalCertificatePath = settings.value("sslLocalCertificatePath", "").toString();
     initialSslCaPath = settings.value("sslCaPath", "").toString();
     initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
 
-////////////////////////////////////////////////connect signal of "settins" to a slot of "mainwindow->packetnetwork->dtlsserver"///////////////////
-    //MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
     MainWindow *mainWindow = dynamic_cast<MainWindow*>(parent);
-    //DtlsServer dtlsServer = mainWindow->packetNetwork.dtlsServer;
     DtlsServer& dtlsServer = mainWindow->packetNetwork.dtlsServer;
 
     connect(this, &Settings::loadingCertsAgain, &dtlsServer, &DtlsServer::on_signedCert_textChanged);
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //connect(sendSimpleAck, &QCheckBox::clicked, this, &MainWindow::on_loadKeyButton_clicked);
 
     if(settings.value("sendSimpleAck").toString() == "false"){
         ui->sendSimpleAck->setChecked(false);
@@ -124,11 +116,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     }
 
     sendSimpleAck = ui->sendSimpleAck;
-    //MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
     connect(sendSimpleAck, &QCheckBox::toggled, dynamic_cast<MainWindow*>(parent), &MainWindow::on_sendSimpleAck_StateChanged);
-
-//    PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
-//    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
 
 
     QIcon mIcon(":pslogo.png");
@@ -551,11 +539,6 @@ void Settings::on_buttonBox_accepted()
     ENCODEMACROSAVE(3);
     ENCODEMACROSAVE(4);
     ENCODEMACROSAVE(5);
-    //////////////////////////////////////////////////////////////////////
-    ///
-//    initialSslLocalCertificatePath = settings.value("sslLocalCertificatePath", "").toString();
-//    initialSslCaPath = settings.value("sslCaPath", "").toString();
-//    initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
 
     if((initialSslLocalCertificatePath != settings.value("sslLocalCertificatePath", "").toString()) ||
         (initialSslCaPath != settings.value("sslCaPath", "").toString()) ||
@@ -566,19 +549,6 @@ void Settings::on_buttonBox_accepted()
         initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
         emit loadingCertsAgain();
     }
-
-
-
-
-//    ////////////////////////////////////////////////connect signal of "settins" to a slot of "mainwindow->packetnetwork->dtlsserver"///////////////////
-//    sslLocalCertificatePath = ui->sslLocalCertificatePath;
-//    //MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
-//    //MainWindow *mainWindow = dynamic_cast<MainWindow*>(parent);
-//    //DtlsServer dtlsServer = mainWindow->packetNetwork.dtlsServer;
-//    DtlsServer& dtlsServer = rmw->packetNetwork.dtlsServer;
-
-//    connect(sslLocalCertificatePath, &QLineEdit::textChanged, &dtlsServer, &DtlsServer::on_signedCert_textChanged);
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 }
@@ -819,16 +789,6 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
     if (QFile::exists(fileName)) {
         ui->sslLocalCertificatePath->setText(fileName);
     }
-
-//    ////////////////////////////////////////////////connect signal of "settins" to a slot of "mainwindow->packetnetwork->dtlsserver"///////////////////
-//    sslLocalCertificatePath = ui->sslLocalCertificatePath;
-//    //MainWindow *mainWindow = qobject_cast<MainWindow*>(parent);
-//    //MainWindow *mainWindow = dynamic_cast<MainWindow*>(parent);
-//    //DtlsServer dtlsServer = mainWindow->packetNetwork.dtlsServer;
-//    DtlsServer& dtlsServer = rmw->packetNetwork.dtlsServer;
-
-//    connect(sslLocalCertificatePath, &QLineEdit::textChanged, &dtlsServer, &DtlsServer::on_signedCert_textChanged);
-//    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

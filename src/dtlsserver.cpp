@@ -38,15 +38,8 @@ QString connection_info(QDtls *connection)
 //! [1]
 DtlsServer::DtlsServer()
 {
-    //    QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
-    //    QFile keyFile("C:/rsa_encryption/server-key.pem");
-    //    QFile certFile("C:/rsa_encryption/server-signed-cert.pem");
     connect(&serverSocket, &QAbstractSocket::readyRead, this, &DtlsServer::readyRead);
-
     loadKeyLocalCertCaCert();
-
-
-
 }
 //! [1]
 
@@ -126,17 +119,9 @@ void DtlsServer::readyRead()
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
 
-        //TODO: split into two function, one for decryption and one for writting
         QDtls * dtlsServer = client->get();
         dgram = dtlsServer->decryptDatagram(&serverSocket, dgram);
 
-//        bool sendSimpleAck = settings.value("sendSimpleAck", false).toBool();
-//        if(sendSimpleAck){
-//            sendAck(dtlsServer, dgram);
-//        }
-
-        //the vector content: createInfoVect(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort)
-        //TODO: insert the vector error massage
         std::vector<QString> recievedPacketInfo = createInfoVect(dtlsServer->peerAddress(), dtlsServer->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
         Packet recivedPacket = createPacket(recievedPacketInfo, dgram);
         emit serverPacketReceived(recivedPacket);
@@ -145,12 +130,6 @@ void DtlsServer::readyRead()
             sendAck(dtlsServer, dgram);
         }
 
-        ///////////////////////////////////////////////////manage send response option//////////////////////////////////////////////////////////////
-
-
-
-
-        //QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool sendResponse = settings.value("sendReponse", false).toBool();
         bool sendSmartResponse = settings.value("sendReponse", false).toBool();
 
@@ -170,12 +149,11 @@ void DtlsServer::readyRead()
 
         if (sendResponse || !smartData.isEmpty()) {
             if(serverResonse(client->get())){
-                //TODO: handle if the response faild
+                QMessageBox::critical(nullptr, "Connection Error", "server response can't be sent.");
             }
 
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if ((*client)->dtlsError() == QDtlsError::RemoteClosedConnectionError)
             knownClients.erase(client);
@@ -259,12 +237,7 @@ void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
     const QString peerInfo = peer_info(connection->peerAddress(), connection->peerPort());
     const QString serverInfo = peer_info(serverSocket.localAddress(), serverSocket.localPort());
 
-    //const QByteArray dgram = connection->decryptDatagram(&serverSocket, clientMessage);
-
     if (clientMessage.size()) {
-
-
-        //if(connection->writeDatagramEncrypted(&serverSocket, tr("to %1: ACK").arg(peerInfo).toLatin1())){
         std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
         Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
         if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
@@ -304,15 +277,8 @@ Packet DtlsServer::createPacket(const std::vector<QString>& packetInfo, const QB
     recPacket.port = packetInfo[3].toUInt();
     QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
     recPacket.hexString = recPacket.ASCIITohex(massageFromTheOtherPeer);
-    //recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
 
-//    if((packetInfo[0] == "0.0.0.0") || (packetInfo[0] == "127.0.0.1")){
-//        recPacket.fromIP = "You";
-//    }
-//    if((packetInfo[2] == "0.0.0.0") || (packetInfo[2] == "127.0.0.1")){
-//        recPacket.toIP = "You";
-//    }
     if(packetInfo[0] == "0.0.0.0"){
         recPacket.fromIP = "you";
     }
@@ -341,10 +307,7 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
     responsePacket.init();
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    //QString ipMode = settings.value("ipMode", "4").toString();
     QString responseData = (settings.value("responseHex", "")).toString();
-
-    //dtlsServer->peerAddress(), dtlsServer->peerPort())
 
     responsePacket.timestamp = QDateTime::currentDateTime();
     responsePacket.name = responsePacket.timestamp.toString(DATETIMEFORMAT);
@@ -367,7 +330,6 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
         responsePacket.hexString = Packet::byteArrayToHex(smartData);
     }
 
-    //QHostAddress resolved = resolveDNS(responsePacket.toIP);
     serverSocket.waitForBytesWritten();
     if(dtlsServer->writeDatagramEncrypted(&serverSocket,responsePacket.getByteArray())){
         emit serverPacketSent(responsePacket);
@@ -436,33 +398,9 @@ QHostAddress DtlsServer::resolveDNS(QString hostname)
     }
 }
 
-//void DtlsServer::serverSentDatagram(const QString& peerInfo, const QByteArray &clientMessage, const QByteArray& dgram){
-//    Packet recPacket;
-//    recPacket.init();
-//    recPacket.fromIP = "You";
-//    QStringList info = peerInfo.split(":");
-//    recPacket.toIP = info[0].remove(0, 1);
-//    recPacket.fromPort = info[1].remove(info[1].length() - 1, 1).toUInt();
-//    recPacket.port = serverSocket.localPort();
-//    QString massageFromTheOtherPeer = QString::fromUtf8(dgram);
-//    recPacket.hexString = massageFromTheOtherPeer;
-//    recPacket.errorString = "none";
-//    recPacket.tcpOrUdp = "DTLS";
-
-//    emit serverPacketSent(recPacket);
-
-//}
-
-//std::vector<QString> getPacketInfo(const QHostAddress &fromAddress, quint16 fromPort, const QHostAddress &toAddress, quint16 toPort){
-//    std::vector<QString> infoVect;
-//    infoVect.push_back();
-//}
-
 void DtlsServer::loadKeyLocalCertCaCert(){
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     settings.value("sslCaPath", SETTINGSPATH + "cert.pem");
-    //settings.value("sslLocalCertificatePath", SETTINGSPATH + "cert.pem");
-    //settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem");
 
     QString localCertPath = settings.value("sslLocalCertificatePath", SETTINGSPATH + "cert.pem").toString();
     QFile certFile(localCertPath);
@@ -481,21 +419,13 @@ void DtlsServer::loadKeyLocalCertCaCert(){
         return;
     }
 
-//    QSslCertificate currentCertificate(&certFile, QSsl::Pem);
-//    certificate = currentCertificate;
-
     QString keyPath = settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem").toString();
     QFile keyFile(keyPath);
-
-    //QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/server-key.pem");
-    //QFile keyFile("C:/rsa_encryption/server-key.pem");
 
     if(!keyFile.open(QIODevice::ReadOnly) && !(keyPath.isEmpty())){
         QMessageBox::critical(nullptr, "Key Error", "Key path can't opened.");
         return;
     }
-//    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
-//    privateKey = currentPrivateKey;
 
     privateKey = getPrivateKey(keyFile);
 
@@ -504,16 +434,12 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     //get the full path to to ca-signed-cert.pem file
     QString fullCaCertPath = getFullPathToCaCert();
     QFile caCertFile(fullCaCertPath);
-    //QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
-    //QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
 
     if(!caCertFile.open(QIODevice::ReadOnly) && !(fullCaCertPath.isEmpty())){
         QMessageBox::critical(nullptr, "Ca-Certificate Error", "Ca-Certificate path can't opened.");
         return;
     }
 
-    //QFileInfo fileInfoCa(certFile.fileName());
-    //QString fileExtensionCa = fileInfoCa.suffix().toLower();
     QSsl::EncodingFormat formatCa = getCertFormat(caCertFile);
     QSslCertificate currentCaCertificate(&caCertFile, formatCa);
     caCertificate = currentCaCertificate;
@@ -523,9 +449,6 @@ void DtlsServer::loadKeyLocalCertCaCert(){
         return;
     }
 
-
-//    QSslCertificate currentCaCertificate(&caCertFile, QSsl::Pem);
-//    caCertificate = currentCaCertificate;
     setConfiguration();
 }
 

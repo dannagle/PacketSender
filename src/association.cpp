@@ -20,19 +20,15 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     if (certificate.isNull()) {
         packetToSend.errorString += "Your local certificate content isn't structured as any certificate format";
     }
-    //QSslCertificate certificate(&certFile, QSsl::Pem);
 
     //key
     QFile keyFile(cmdComponents[3]);//3
     if(!keyFile.open(QIODevice::ReadOnly)){
         return;
     }
-
     QSslKey privateKey = getPrivateKey(keyFile);
 
-
-    //QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
-
+    //ca-cert
     QFile caCertFile(cmdComponents[5]);//5
     if(!caCertFile.open(QIODevice::ReadOnly)){
         return;
@@ -43,16 +39,15 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     if (caCertificate.isNull()) {
         packetToSend.errorString += "Your ca-certificate content isn't structured as any certificate format";
     }
-    //QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
-
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString hostName = settings.value("hostNameEdit").toString();
-    ////////////////////////try to resolve the hostName, inorder to get the address
 
+    //check if the address field contains a valid host name instead of implicite address
     if (hostName.isEmpty()){
         QHostInfo host = QHostInfo::fromName(cmdComponents[1]);
         // Check if the lookup was successful
         if (host.error() != QHostInfo::NoError) {
+            packetToSend.errorString += "Lookup failed:" + host.errorString();
             qDebug() << "Lookup failed:" << host.errorString();
         } else {
             // Output the host name
@@ -64,11 +59,8 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
                 }
 
             }
-            //qDebug() << "Host name:" << host.hostName();
         }
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////
 
     configuration.setLocalCertificate(certificate);
     configuration.setPrivateKey(privateKey);
@@ -78,8 +70,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     crypto.setPeer(address, port);
     crypto.setPeerVerificationName(hostName);
     crypto.setDtlsConfiguration(configuration);
-    //connect(&crypto, &QDtls::handshakeTimeout, this, &DtlsAssociation::handshakeTimeout);
-    //earse host name inorder to enable address to fill with the resolved address
+
     hostName = "";
     connect(&crypto, &QDtls::pskRequired, this, &DtlsAssociation::pskRequired);
     //! [3]
@@ -252,77 +243,6 @@ QSslKey DtlsAssociation::getPrivateKey(QFile& keyFile){
     return privateKey;
 }
 
-///////////////////////////////////////////////////backups//////////////////////////////////
-//! [14]
-
-//! [10]
-//!
-//!
-//! only for ping massage
-//void DtlsAssociation::pingTimeout()
-//{
-
-//    //static const QString message = QStringLiteral("I am %1, please, accept our ping %2");
-//    //const qint64 written = crypto.writeDatagramEncrypted(&socket, message.arg(name).arg(ping).toLatin1());
-//    if(this->newMassageToSend){
-//        emit handShakeComplited();
-//        const qint64 written = crypto.writeDatagramEncrypted(&socket, massageToSend.toLatin1());
-//        if (written <= 0) {
-//            emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
-//            pingTimer.stop();
-//            return;
-//        }
-//        this->newMassageToSend = false;
-//        ++ping;
-//    }
-//}
-//! [10]
 
 
 
-
-//void DtlsAssociation::setKeyCertAndCaCert(QString keyPath, QString certPath, QString caPath) {
-//    QFile keyFile(keyPath);
-//    QFile certFile(certPath);
-//    QFile caFile(caPath);
-//    if (certFile.open(QIODevice::ReadOnly) && keyFile.open(QIODevice::ReadOnly) && caFile.open(QIODevice::ReadOnly)) {
-//        QSslKey privateKey(&keyFile, QSsl::Rsa, QSsl::Pem);
-//        QSslCertificate certificate(&certFile, QSsl::Pem);
-//        QSslCertificate caCertificate(&caFile, QSsl::Pem);
-
-//        configuration.setPrivateKey(privateKey);
-//        configuration.setLocalCertificate(certificate);
-//        configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
-
-//        crypto.setDtlsConfiguration(configuration);
-//    }
-//    else {
-//        //QDebug("Error loading certs or key");
-//    }
-//}
-////////////////////////
-//QFile certFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-signed-cert.pem");
-//if(!certFile.open(QIODevice::ReadOnly)){
-//    return;
-//}
-//QSslCertificate certificate(&certFile, QSsl::Pem);
-
-//QFile keyFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/client-key.pem");
-//if(!keyFile.open(QIODevice::ReadOnly)){
-//    return;
-//}
-//QSslKey privateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
-
-//QFile caCertFile("C:/Users/israe/OneDrive - ort braude college of engineering/rsa_encryption/ca-signed-cert/signed-cert.pem");
-//if(!caCertFile.open(QIODevice::ReadOnly)){
-//    return;
-//}
-//QSslCertificate caCertificate(&caCertFile, QSsl::Pem);
-
-////auto configuration = QSslConfiguration::defaultDtlsConfiguration();
-//configuration.setCiphers("AES256-GCM-SHA384");
-
-//configuration.setLocalCertificate(certificate);
-//configuration.setPrivateKey(privateKey);
-//configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
-////////////////////////

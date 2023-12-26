@@ -17,13 +17,9 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
-
-
-    //closeRequest = false;
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
     dtlsAssociation->closeRequest = false;
-    //dtlsAssociation->deleteLater();
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
 
     dtlsAssociation->startHandshake();
@@ -80,7 +76,6 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
         packetToSend.errorString.append(", Failed to send");
-        //emit errorMessage(tr("%1: failed to send a ping - %2").arg(name, crypto.dtlsErrorString()));
         if(dtlsAssociation->crypto.isConnectionEncrypted()){
             emit packetSent(packetToSend);
         }
@@ -110,7 +105,6 @@ void Dtlsthread::persistentConnectionLoop()
         if (sendpacket.hexString.isEmpty() /*&& sendpacket.persistent */ && (clientConnection->bytesAvailable() == 0)) {
             count++;
             if (count % 10 == 0) {
-                //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
                 emit connectStatus("Connected and idle.");
             }
             clientConnection->waitForReadyRead(200);
@@ -164,14 +158,9 @@ void Dtlsthread::persistentConnectionLoop()
 
         } // end receive before send
 
-
-        //sendPacket.fromPort = clientConnection->localPort();
         if(sendpacket.getByteArray().size() > 0) {
             emit connectStatus("Sending data:" + sendpacket.asciiString());
             QDEBUG() << "Attempting write data";
-            //writeMassage(sendpacket, dtlsAssociation);
-            //clientConnection->write(sendpacket.getByteArray());
-            //emit packetSent(sendpacket);
         }
 
         Packet tcpPacket;
@@ -191,7 +180,7 @@ void Dtlsthread::persistentConnectionLoop()
 
         tcpPacket.toIP = "You";
         tcpPacket.port = dtlsAssociation->socket.localPort();
-        tcpPacket.fromPort = sendpacket.port;/////////////////////fromport
+        tcpPacket.fromPort = sendpacket.port;
 
         clientConnection->waitForReadyRead(500);
         emit connectStatus("Waiting to receive");
@@ -204,12 +193,6 @@ void Dtlsthread::persistentConnectionLoop()
             clientConnection->waitForReadyRead(100);
         }
 
-
-        //        if (!sendpacket.persistent) {
-        //            emit connectStatus("Disconnecting");
-        //            clientConnection->disconnectFromHost();
-        //        }
-
         QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
 
         if (sendpacket.receiveBeforeSend) {
@@ -220,46 +203,19 @@ void Dtlsthread::persistentConnectionLoop()
             //emit packetSent(tcpPacket);
         }
 
-        // Do I need to reply?
-        //writeResponse(clientConnection, tcpPacket);
-        //writeMassage(tcpPacket, dtlsAssociation);
-
-
-
         emit connectStatus("Reading response");
-        //tcpPacket.hexString  = clientConnection->readAll();
 
         tcpPacket.hexString = recievedMassage;
-        //tcpPacket.hexString = tcpPacket.ASCIITohex(recievedMassage);
 
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
 
 
         if (tcpPacket.hexString.size() > 0) {
-
-            //emit packetSent(tcpPacket);
-
-            // Do I need to reply?
-            //writeMassage(tcpPacket, dtlsAssociation);
-            //here we find out if there is new massage from server
-            //emit packetReceived(tcpPacket);
-            //emit connectStatus("last sent massage: " + recievedMassage);
             tcpPacket.hexString = "";
             recievedMassage = "";
             sendpacket.hexString = "";
         }
-
-
-
-        //        if (!sendPacket.persistent) {
-        //            break;
-        //        } else {
-        //            sendPacket.clear();
-        //            sendPacket.persistent = true;
-        //            QDEBUG() << "Persistent connection. Loop and wait.";
-        //            continue;
-        //        }
 
     } // end while connected
     if (dtlsAssociation->closeRequest) {
@@ -278,15 +234,10 @@ void Dtlsthread::receivedDatagram(QByteArray plainText){
     recPacket.fromIP = dtlsAssociation->crypto.peerAddress().toString();
     recPacket.fromPort = dtlsAssociation->crypto.peerPort();
     QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-
     recPacket.hexString = recPacket.ASCIITohex(massageFromTheOtherPeer);
-
-    //recPacket.hexString = massageFromTheOtherPeer;
     recPacket.toIP = dtlsAssociation->socket.localAddress().toString();
     recPacket.port = dtlsAssociation->socket.localPort();
-    //recPacket.errorString = "none";
     recPacket.tcpOrUdp = "DTLS";
-
     emit packetReceived(recPacket);
 }
 
@@ -316,35 +267,17 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
         sendpacket.fromPort = clientConnection->localPort();
         sendpacket.tcpOrUdp = "DTLS";
 
-        //emit packetSent(sendpacket);
     }
 }
 
 void Dtlsthread::onTimeout(){
     dtlsAssociation->closeRequest = true;
-    //closeRequest = true;
     timer->stop();
     if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
-        QString  errors = dtlsAssociation->crypto.dtlsErrorString();
-        //QString sslErrorsString = errors.join(" ");
+        //QString  errors = dtlsAssociation->crypto.dtlsErrorString();
         sendpacket.errorString = "Error " + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
         emit packetSent(sendpacket);
     }
-
-
-//    if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
-//        createErrorPacket(){
-
-//        }
-//    }
-
-    //dtlsAssociation->crypto.abortHandshake(&(dtlsAssociation->socket));
-    //dtlsAssociation->socket.close();
-    //dtlsAssociation->deleteLater();
-
-    //dtlsAssociation->socket.waitForDisconnected(100);
-    //quit();
-
 }
 
 DtlsAssociation* Dtlsthread::initDtlsAssociation(){
@@ -363,7 +296,6 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
     connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
-    //dtlsAssociationP->setCipher(cmdComponents[6]);
     dtlsAssociationP->setCipher(settings.value("cipher", "cipher suit doesn't found").toString());
 
     return dtlsAssociationP;
@@ -371,23 +303,4 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
 
 
 
-/////////////////////////backups///////////////////
-//void Dtlsthread::addServerResponse(const QString &clientAddress, const QByteArray &datagram, const QByteArray &plainText, QHostAddress serverAddress, quint16 serverPort, quint16 userPort)
-//{
-//    //ned to fix the "to port" field
-//    //find a way do reach the client data (maybe use the clientInfo) inorder to present the "ToAddress" and "To Port"  fields in the traffic log area
-//    //QStringList clientIpAndPort = clientInfo.split(':', Qt::KeepEmptyParts);
 
-//    Packet recPacket;
-//    recPacket.init();
-//    recPacket.fromIP = serverAddress.toString();
-//    recPacket.fromPort = serverPort;
-//    QString massageFromTheOtherPeer = QString::fromUtf8(plainText);
-//    recPacket.hexString = massageFromTheOtherPeer;
-//    recPacket.toIP = clientAddress;
-//    recPacket.port = userPort;
-//    recPacket.errorString = "none";
-//    recPacket.tcpOrUdp = "DTLS";
-
-//    //emit packetReceived(recPacket);
-//}
