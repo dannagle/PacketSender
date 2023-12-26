@@ -149,7 +149,7 @@ void DtlsServer::readyRead()
 
         if (sendResponse || !smartData.isEmpty()) {
             if(serverResonse(client->get())){
-                QMessageBox::critical(nullptr, "Connection Error", "server response can't be sent.");
+//                QMessageBox::critical(nullptr, "Connection Error", "server response can't be sent.");
             }
 
         }
