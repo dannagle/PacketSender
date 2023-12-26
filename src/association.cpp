@@ -109,8 +109,10 @@ void DtlsAssociation::startHandshake()
         return;
     }
 
-    if (!crypto.doHandshake(&socket))
+    if (!crypto.doHandshake(&socket)){
+        packetToSend.errorString += " Failed to start a handshake ";
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
+    }
     else{
         while(true){
             socket.waitForReadyRead();
@@ -160,6 +162,7 @@ void DtlsAssociation::readyRead()
         }
 
         if (crypto.dtlsError() == QDtlsError::RemoteClosedConnectionError) {
+            packetToSend.errorString += " Shutdown alert received";
             emit errorMessage(tr("%1: shutdown alert received").arg(name));
             socket.close();
             pingTimer.stop();
@@ -171,6 +174,7 @@ void DtlsAssociation::readyRead()
         //! [7]
         //! [8]
         if (!crypto.doHandshake(&socket, dgram)) {
+            packetToSend.errorString += " handshake error ";
             emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
             return;
         }
@@ -196,6 +200,8 @@ void DtlsAssociation::handshakeTimeout()
 {
     emit warningMessage(tr("%1: handshake timeout, trying to re-transmit").arg(name));
     if (!crypto.handleTimeout(&socket))
+        packetToSend.errorString += " Failed to re-transmit ";
+
         emit errorMessage(tr("%1: failed to re-transmit - %2").arg(name, crypto.dtlsErrorString()));
 }
 //! [11]

@@ -327,7 +327,7 @@ void Dtlsthread::onTimeout(){
     if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
         QString  errors = dtlsAssociation->crypto.dtlsErrorString();
         //QString sslErrorsString = errors.join(" ");
-        sendpacket.errorString = "Error " + dtlsAssociation->packetToSend.errorString + errors;
+        sendpacket.errorString = "Error " + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
         emit packetSent(sendpacket);
     }
 
@@ -363,7 +363,9 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
     connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
-    dtlsAssociationP->setCipher(cmdComponents[6]);
+    //dtlsAssociationP->setCipher(cmdComponents[6]);
+    dtlsAssociationP->setCipher(settings.value("cipher", "cipher suit doesn't found").toString());
+
     return dtlsAssociationP;
 }
 

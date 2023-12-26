@@ -468,7 +468,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     QFile certFile(localCertPath);
 
     if(!certFile.open(QIODevice::ReadOnly) && !(localCertPath.isEmpty())){
-        QMessageBox::critical(nullptr, "Certificate Error", "The server certificate path can't opened.");
+        QMessageBox::critical(nullptr, "Certificate Error", "Local certificate path can't opened.");
         return;
     }
 
@@ -477,7 +477,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     QSslCertificate currentCertificate(&certFile, format);
     certificate = currentCertificate;
     if (currentCertificate.isNull() && !(localCertPath.isEmpty())) {
-        QMessageBox::critical(nullptr, "Certificate Error", "The server certificate is not valid.");
+        QMessageBox::critical(nullptr, "Certificate Error", "Local certificate is not valid.");
         return;
     }
 
@@ -491,7 +491,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     //QFile keyFile("C:/rsa_encryption/server-key.pem");
 
     if(!keyFile.open(QIODevice::ReadOnly) && !(keyPath.isEmpty())){
-        QMessageBox::critical(nullptr, "Key Error", "The server key path can't opened.");
+        QMessageBox::critical(nullptr, "Key Error", "Key path can't opened.");
         return;
     }
 //    QSslKey currentPrivateKey(&keyFile, QSsl::Rsa); // Or QSsl::Ec if your key is ECDSA
@@ -508,7 +508,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     //QFile caCertFile("C:/rsa_encryption/ca-signed-cert/signed-cert.pem");
 
     if(!caCertFile.open(QIODevice::ReadOnly) && !(fullCaCertPath.isEmpty())){
-        QMessageBox::critical(nullptr, "Ca-Certificate Error", "The server Ca-Certificate path can't opened.");
+        QMessageBox::critical(nullptr, "Ca-Certificate Error", "Ca-Certificate path can't opened.");
         return;
     }
 
@@ -519,7 +519,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
     caCertificate = currentCaCertificate;
 
     if (currentCaCertificate.isNull() && !(fullCaCertPath.isEmpty())) {
-        QMessageBox::critical(nullptr, "Ca-Certificate Error", "The server Ca-Certificate is not valid.");
+        QMessageBox::critical(nullptr, "Ca-Certificate Error", "Ca-Certificate is not valid.");
         return;
     }
 
@@ -571,7 +571,7 @@ QSslKey DtlsServer::getPrivateKey(QFile& keyFile){
         keyFile.reset();
     }
     if(privateKey.isNull() && keyFile.isOpen()){
-        QMessageBox::critical(nullptr, "Key Error", "The server key is not valid.");
+        QMessageBox::critical(nullptr, "Key Error", "Key is not valid.");
         return QSslKey();
     }
     return privateKey;
