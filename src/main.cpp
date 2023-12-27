@@ -372,6 +372,10 @@ int main(int argc, char *argv[])
         QString data, dataString;
         data.clear();
         dataString.clear();
+        if (argssize >= 1) {
+            address = args[0];
+        }
+
         if(wol) {
             QString targetMAC = parser.value(wolOption).trimmed().toUpper();
             if (argssize >= 1) {
