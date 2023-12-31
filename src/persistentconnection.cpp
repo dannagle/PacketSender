@@ -32,8 +32,8 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
     QDEBUG();
     sendPacket.clear();
-    QDEBUG() /*<< ": refreshTimer Connection attempt " <<
-             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))*/
+    QDEBUG() << ": refreshTimer Connection attempt " <<
+             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))
              << connect(this, SIGNAL(rejected()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(dialogIsClosing()), this, SLOT(aboutToClose()));
@@ -218,7 +218,7 @@ void PersistentConnection::cancelResends()
 
 void PersistentConnection::refreshTimerTimeout()
 {
-//    QDEBUG();
+    //QDEBUG();
 
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
 
@@ -350,8 +350,6 @@ void PersistentConnection::socketDisconnected()
 {
     statusReceiver("not connected");
 }
-
-//connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
 
 void PersistentConnection::on_asciiSendButton_clicked()
 {
