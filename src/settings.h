@@ -2,6 +2,7 @@
 #define SETTINGS_H
 
 #include "globals.h"
+#include "mainwindow.h"
 
 #ifndef CONSOLE_BUILD
 #include <QDialog>
@@ -9,6 +10,7 @@
 #endif
 #include <QSettings>
 #include <QList>
+#include <QCheckBox>
 
 
 #ifdef CONSOLE_BUILD
@@ -64,7 +66,14 @@ class Settings : public QDialog
         Q_OBJECT
 
     public:
-        explicit Settings(QWidget *parent = nullptr);
+        MainWindow* rmw;
+        QCheckBox* sendSimpleAck;
+        QLineEdit* sslLocalCertificatePath;
+        QString initialSslLocalCertificatePath;
+        QString initialSslCaPath;
+        QString initialSslPrivateKeyPath;
+
+        explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();
 
         static QStringList defaultPacketTableHeader();
@@ -102,6 +111,8 @@ class Settings : public QDialog
         static QString logHeaderTranslate(QString txt);
 
 private slots:
+
+
         void on_buttonBox_accepted();
 
         void on_asciiResponseEdit_textEdited(const QString &arg1);
@@ -136,6 +147,7 @@ private slots:
         void on_chooseLanguageButton_clicked();
 
 private:
+        QWidget *parentWidget;
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
         QStringList packetTableHeaders;
@@ -151,7 +163,8 @@ private:
         void deleteHTTPHeader(QString host, QString header);
         void clearHTTPHeaders(QString host);
         static QPair<QString, QString> header2keyvalue(QString header);
-
+    signals:
+        void loadingCertsAgain();
 };
 
 #endif

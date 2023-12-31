@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1013</width>
-    <height>583</height>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -106,6 +106,40 @@
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="dtlsServerEnableCheck">
+            <property name="text">
+             <string>Enable DTLS Servers</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_24">
+            <item>
+             <widget class="QLabel" name="label_23">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>DTLS Server Port (comma-separated, 0 for random)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="dtlsServerPortEdit">
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
            <widget class="QLabel" name="label_15">
             <property name="text">
              <string>Set the server ports to 0 if you want to run multiple Packet Sender instances.</string>
@@ -123,6 +157,13 @@
            <widget class="QCheckBox" name="translateMacroSendCheck">
             <property name="text">
              <string>Translate macros when sending</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="sendSimpleAck">
+            <property name="text">
+             <string>Send simple Acknowledge (for DTLS server only)</string>
             </property>
            </widget>
           </item>
@@ -174,19 +215,6 @@
              <widget class="QLineEdit" name="hexResponseEdit"/>
             </item>
            </layout>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </widget>
@@ -334,7 +362,7 @@
                <item>
                 <widget class="QLabel" name="label_17">
                  <property name="text">
-                  <string>SSL CA Certificates</string>
+                  <string>SSL/DTLS CA Certificates</string>
                  </property>
                 </widget>
                </item>
@@ -359,7 +387,7 @@
                <item>
                 <widget class="QLabel" name="label_18">
                  <property name="text">
-                  <string>SSL Local Certificate</string>
+                  <string>SSL/DTLS Local Certificate</string>
                  </property>
                 </widget>
                </item>
@@ -384,7 +412,7 @@
                <item>
                 <widget class="QLabel" name="label_19">
                  <property name="text">
-                  <string>SSL Private Key</string>
+                  <string>SSL/DTLS Private Key</string>
                  </property>
                 </widget>
                </item>

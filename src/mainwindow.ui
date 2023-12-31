@@ -236,6 +236,24 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTPS Post</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DTLS</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_dtls.png</normaloff>:/icons/tx_dtls.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>UDP</string>
               </property>
               <property name="icon">
@@ -279,15 +297,6 @@
                 <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
               </property>
              </item>
-             <item>
-              <property name="text">
-               <string>HTTPS Post</string>
-              </property>
-              <property name="icon">
-               <iconset resource="packetsender.qrc">
-                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
-              </property>
-             </item>
             </widget>
            </item>
            <item>
@@ -307,6 +316,209 @@
           </layout>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget" native="true">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <widget class="QWidget" name="horizontalLayoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>851</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="sizeConstraint">
+            <enum>QLayout::SetMinAndMaxSize</enum>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="CipherLable">
+             <property name="text">
+              <string>Cipher Suites:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="cipherCb">
+             <item>
+              <property name="text">
+               <string>AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES128-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>AES256-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CHACHA20-POLY1305-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RC4-MD5</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>RC4-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CAMELLIA128-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CAMELLIA256-SHA</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-RSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-RSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-ECDSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>ECDHE-ECDSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DHE-RSA-AES128-GCM-SHA256</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DHE-RSA-AES256-GCM-SHA384</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="hostName">
+             <property name="placeholderText">
+              <string>Host Name (CN)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_6">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="leaveSessionOpen">
+             <property name="text">
+              <string>Persistent DTLS</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="twoVerify">
+             <property name="text">
+              <string>Add Server Verification of The Client   </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -353,7 +565,6 @@
            <widget class="QPushButton" name="generatePanelButton">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>

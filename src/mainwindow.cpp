@@ -29,6 +29,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QPlainTextEdit>
+#include <QMessageBox>
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -37,6 +38,8 @@
 
 
 #include <QStringList>
+#include <QSslCipher>
+
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 
@@ -57,6 +60,7 @@
 #include "postdatagen.h"
 #include "panelgenerator.h"
 
+int MainWindow::isSessionOpen = false;
 int hexToInt(QChar hex);
 void parserMajorMinorBuild(QString sw, unsigned int &major, unsigned int &minor, unsigned int &build);
 extern void themeTheButton(QPushButton * button);
@@ -67,10 +71,57 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
 
 
+    QCheckBox* leaveSessionOpen;
+    QCheckBox* twoVerify;
+    //QLineEdit* hostName = ui->hostName;
+
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    //leaveSessionOpen
+    if(settings.value("leaveSessionOpen").toString() == "false"){
+        ui->leaveSessionOpen->setChecked(false);
+    } else {
+        ui->leaveSessionOpen->setChecked(true);
+    }
+
+    leaveSessionOpen = ui->leaveSessionOpen;
+    connect(leaveSessionOpen, &QCheckBox::toggled, this, &MainWindow::on_leaveSessionOpen_StateChanged);
+
+    //twoVerify
+    if(settings.value("twoVerify").toString() == "false"){
+        ui->twoVerify->setChecked(false);
+    } else {
+        ui->twoVerify->setChecked(true);
+    }
+
+    twoVerify = ui->twoVerify;
+    connect(twoVerify, &QCheckBox::toggled, &packetNetwork , &PacketNetwork::on_twoVerify_StateChanged);
+
+    //hostName
+    connect(ui->hostName, QLineEdit::editingFinished, this, MainWindow::on_hostName_editingFinished);
+
+
+    //cipher comboBox
+    cipherCb = ui->cipherCb;
+    //add the combobox the correct cipher suites
+    QList<QSslCipher> ciphers = QSslConfiguration::supportedCiphers();
+    for (const QSslCipher &cipher : ciphers) {
+        cipherCb->addItem(cipher.name());
+    }
+
+    if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
+        ui->leaveSessionOpen->hide();
+        ui->twoVerify->hide();
+        cipherCb->hide();
+        ui->CipherLable->hide();
+        ui->hostName->hide();
+
+    }
+
+    connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
 
     QIcon mIcon(":pslogo.png");
 
@@ -158,6 +209,9 @@ MainWindow::MainWindow(QWidget *parent) :
              connect(&packetNetwork, SIGNAL(packetSent(Packet)),
                      this, SLOT(toTrafficLog(Packet)));
 
+             connect(&packetNetwork, SIGNAL(packetReceived(Packet)), this, SLOT(toTrafficLog(Packet)));
+
+
     if( !QFile::exists(PACKETSFILE)) {
         // Packets file does not exist. Load starter set.
         QFile starterfile(":/starter_set.json");
@@ -243,6 +297,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stopResendingButton->hide();
 
+    dtlsServerStatus = new QPushButton("DTLS:" + packetNetwork.getDTLSPortString());
+    themeTheButton(dtlsServerStatus);
+    dtlsServerStatus->setIcon(QIcon(DTLSRXICON));
+
+    connect(dtlsServerStatus, SIGNAL(clicked()),
+            this, SLOT(toggleDTLSServer()));
+
+
+    statusBar()->insertPermanentWidget(2, dtlsServerStatus);
+
     udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
     themeTheButton(udpServerStatus);
     udpServerStatus->setIcon(QIcon(UDPRXICON));
@@ -251,7 +315,7 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleUDPServer()));
 
 
-    statusBar()->insertPermanentWidget(2, udpServerStatus);
+    statusBar()->insertPermanentWidget(3, udpServerStatus);
 
 
     //updatewidget
@@ -271,15 +335,17 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleSSLServer()));
 
 
-    statusBar()->insertPermanentWidget(3, tcpServerStatus);
+    statusBar()->insertPermanentWidget(4, tcpServerStatus);
 
 
-    statusBar()->insertPermanentWidget(4, sslServerStatus);
+    statusBar()->insertPermanentWidget(5, sslServerStatus);
+
+
 
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
     themeTheButton(IPmodeButton);
-    statusBar()->insertPermanentWidget(5, IPmodeButton);
+    statusBar()->insertPermanentWidget(6, IPmodeButton);
 
     setIPMode();
 
@@ -288,7 +354,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(IPmodeButton, SIGNAL(clicked()),
             this, SLOT(toggleIPv4_IPv6()));
 
-
+    DTLSServerStatus();
     UDPServerStatus();
     TCPServerStatus();
     SSLServerStatus();
@@ -477,6 +543,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
+
+void MainWindow::toggleDTLSServer()
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("dtlsServerEnable", !settings.value("dtlsServerEnable", true).toBool());
+    applyNetworkSettings();
+}
 
 void MainWindow::toggleUDPServer()
 {
@@ -747,6 +820,28 @@ void MainWindow::toTrafficLog(Packet logPacket)
 
 }
 
+void MainWindow::DTLSServerStatus()
+{
+
+    if (packetNetwork.DTLSListening()) {
+        QString ports = packetNetwork.getDTLSPortString();
+        int portcount = packetNetwork.getDTLSPortsBound().size();
+        dtlsServerStatus->setToolTip(ports);
+        if(portcount > 3) {
+            dtlsServerStatus->setText("DTLS: " + QString::number(portcount) + tr(" Ports"));
+        } else {
+            dtlsServerStatus->setText("DTLS:" + ports);
+        }
+
+    } else {
+        dtlsServerStatus->setText(tr("DTLS Server Disabled"));
+
+    }
+
+    //updatewidget
+
+
+}
 
 void MainWindow::UDPServerStatus()
 {
@@ -1926,6 +2021,7 @@ void MainWindow::applyNetworkSettings()
     ui->persistentTCPCheck->setChecked(settings.value("persistentTCPCheck", false).toBool());
     on_persistentTCPCheck_clicked(ui->persistentTCPCheck->isChecked());
 
+    DTLSServerStatus();
     UDPServerStatus();
     TCPServerStatus();
     SSLServerStatus();
@@ -2235,9 +2331,37 @@ void MainWindow::on_actionHelp_triggered()
     QDesktopServices::openUrl(QUrl("https://packetsender.com/documentation"));
 }
 
+
+
+void MainWindow::on_leaveSessionOpen_StateChanged(){
+    //ui.checkBox->setChecked(checkBoxState);
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString leaveSessionOpen = settings.value("leaveSessionOpen", "false").toString();
+    if(leaveSessionOpen == "false"){
+        settings.setValue("leaveSessionOpen", "true");
+    }
+    else{
+        settings.setValue("leaveSessionOpen", "false");
+    }
+}
+
+void MainWindow::on_sendSimpleAck_StateChanged(){
+    //ui.checkBox->setChecked(checkBoxState);
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString sendSimpleAck = settings.value("sendSimpleAck", "false").toString();
+    if(sendSimpleAck == "false"){
+        settings.setValue("sendSimpleAck", "true");
+    }
+    else{
+        settings.setValue("sendSimpleAck", "false");
+    }
+}
+
 void MainWindow::on_actionSettings_triggered()
 {
-    Settings settings;
+    Settings settings(this);
     int accepted = settings.exec();
     if (accepted) {
         setIPMode();
@@ -2574,6 +2698,7 @@ void MainWindow::on_loadFileButton_clicked()
 
 }
 
+
 void MainWindow::on_actionDonate_Thank_You_triggered()
 {
 
@@ -2587,6 +2712,28 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     QString selectedText = ui->udptcpComboBox->currentText().toLower();
     auto isHttp = selectedText.contains("http");
     auto isPost = selectedText.contains("post") && isHttp;
+
+    /////////////////////////////////dtls add line edit for adding path for cert
+
+    if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
+        ui->leaveSessionOpen->show();
+        cipherCb->show();
+        ui->CipherLable->show();
+        ui->twoVerify->show();
+        ui->hostName->show();
+
+
+    } else {
+        ui->leaveSessionOpen->hide();
+        cipherCb->hide();
+        ui->CipherLable->hide();
+        ui->twoVerify->hide();
+        ui->hostName->hide();
+
+
+
+    }
+
 
     if(isHttp) {
         ui->asciiLabel->setText("Data");
@@ -2618,6 +2765,15 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 
     ui->genPostDataButton->setVisible(isPost);
 }
+
+void MainWindow::on_cipherCb_currentIndexChanged(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("cipher", cipherCb->currentText());
+    //create new session even if the leave open session checkbox is pushed create new session, because the cipher has been changed
+    isSessionOpen = false;
+
+}
+
 
 void MainWindow::on_genPostDataButton_clicked()
 {
@@ -2782,5 +2938,11 @@ bool PreviewFilter::eventFilter(QObject *watched, QEvent *event)
 void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 {
     on_udptcpComboBox_currentIndexChanged("");
+}
+
+void MainWindow::on_hostName_editingFinished(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    settings.setValue("hostNameEdit", ui->hostName->text());
+
 }
 

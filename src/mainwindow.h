@@ -10,6 +10,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QComboBox>
 #include <QMainWindow>
 #include <QSettings>
 #include <QModelIndex>
@@ -40,6 +41,8 @@ class PreviewFilter : public QObject
     Q_OBJECT
 
 public:
+
+
     explicit PreviewFilter(QObject * parent, QLineEdit * asciiEdit, QLineEdit * hexEdit)
         : QObject{parent}, asciiEdit{asciiEdit}, hexEdit{hexEdit}
     {
@@ -72,33 +75,37 @@ class MainWindow : public QMainWindow
         explicit MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
 
+        PacketNetwork packetNetwork;
         QString ASCIITohex(QString &ascii);
         QString hexToASCII(QString &hex);
-
-        void loadPacketsTable();
-
-
+        void loadPacketsTable();       
         QPushButton *generatePSLink();
         QPushButton *generateDNLink();
         void populateTableRow(int rowCounter, Packet tempPacket);
         void removePacketfromMemory(Packet thepacket);
+        void DTLSServerStatus();
         void UDPServerStatus();
         void TCPServerStatus();
         int findColumnIndex(QListWidget *lw, QString search);
         void packetTable_checkMultiSelected();
         void generateConnectionMenu();
-
         void updateManager(QByteArray response);
+
+        QComboBox* cipherCb;
+        static int isSessionOpen;
 
     signals:
         void sendPacket(Packet sendpacket);
 
     public slots:
+        void on_hostName_editingFinished();
+        //void on_twoVerify_StateChanged();
+        void on_sendSimpleAck_StateChanged();
+        void on_leaveSessionOpen_StateChanged();
         void toTrafficLog(Packet logPacket);
         void cancelResends();
         void applyNetworkSettings();
-
-
+        void toggleDTLSServer();
         void toggleUDPServer();
         void toggleTCPServer();
         void toggleSSLServer();
@@ -210,10 +217,13 @@ class MainWindow : public QMainWindow
 
         void on_loadFileButton_clicked();
 
+
         void on_actionDonate_Thank_You_triggered();
 
 
         void on_udptcpComboBox_currentIndexChanged(const QString &arg1);
+
+        void on_cipherCb_currentIndexChanged();
 
         void on_requestPathEdit_editingFinished();
 
@@ -236,11 +246,11 @@ class MainWindow : public QMainWindow
         QList<Packet> packetsSaved;
         QList<Packet> packetsRepeat;
         int stopResending;
-        PacketNetwork packetNetwork;
         QNetworkAccessManager  * http;
         QTimer refreshTimer;
         QTimer slowRefreshTimer;
         bool tableActive;
+        QPushButton * dtlsServerStatus;
         QPushButton * udpServerStatus;
         QPushButton * tcpServerStatus;
         QPushButton * sslServerStatus;

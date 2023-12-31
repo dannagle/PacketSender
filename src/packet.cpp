@@ -60,6 +60,12 @@ void Packet::clear()
     init();
 }
 
+bool Packet::isDTLS()
+{
+    return ((tcpOrUdp.trimmed().toLower() == "dtls"));
+}
+
+
 bool Packet::isSSL()
 {
     return (tcpOrUdp.trimmed().toLower().contains("ssl"));
@@ -290,6 +296,17 @@ QIcon Packet::getIcon()
             return myIcon;
         } else {
             QIcon myIcon(UDPRXICON);
+            return myIcon;
+        }
+
+    }
+
+    if (isDTLS()) {
+        if (fromIP.toUpper().contains("YOU")) {
+            QIcon myIcon(DTLSSENDICON);
+            return myIcon;
+        } else {
+            QIcon myIcon(DTLSRXICON);
             return myIcon;
         }
 

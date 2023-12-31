@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QHostAddress>
 #include <QStandardPaths>
+#include <QObject>
 
 
 #ifndef CONSOLE_BUILD
@@ -84,20 +85,39 @@ const QString Settings::HTTPHEADERINDEX = "HTTPHeader:";
 
 #ifndef CONSOLE_BUILD
 
-Settings::Settings(QWidget *parent) :
+Settings::Settings(QWidget *parent, MainWindow* mw) :
     QDialog(parent),
+    rmw(mw),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
 
     //not working yet...
     ui->multiSendDelayLabel->hide();
     ui->multiSendDelayEdit->hide();
 
+    initialSslLocalCertificatePath = settings.value("sslLocalCertificatePath", "").toString();
+    initialSslCaPath = settings.value("sslCaPath", "").toString();
+    initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
 
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    MainWindow *mainWindow = dynamic_cast<MainWindow*>(parent);
+    DtlsServer& dtlsServer = mainWindow->packetNetwork.dtlsServer;
+
+    connect(this, &Settings::loadingCertsAgain, &dtlsServer, &DtlsServer::on_signedCert_textChanged);
+
+    if(settings.value("sendSimpleAck").toString() == "false"){
+        ui->sendSimpleAck->setChecked(false);
+    } else {
+        ui->sendSimpleAck->setChecked(true);
+    }
+
+    sendSimpleAck = ui->sendSimpleAck;
+    connect(sendSimpleAck, &QCheckBox::toggled, dynamic_cast<MainWindow*>(parent), &MainWindow::on_sendSimpleAck_StateChanged);
+
 
     QIcon mIcon(":pslogo.png");
     setWindowTitle("Packet Sender "+tr("Settings"));
@@ -106,7 +126,6 @@ Settings::Settings(QWidget *parent) :
     //this is no longer working thanks to faster traffic log
     ui->displayOrderListTraffic->hide();
     ui->displayGroupBoxTraffic->setTitle("");
-
 
     loadCredentialTable();
     on_genAuthCheck_clicked(false);
@@ -175,6 +194,7 @@ Settings::Settings(QWidget *parent) :
     ui->timeFormatExample->setText(now.toString(timeFormat));
 
 
+
     connect(ui->dateFormat, &QLineEdit::textChanged, this, [=](QString val) {
         // use action as you wish
         QDateTime now = QDateTime::currentDateTime();
@@ -197,6 +217,7 @@ Settings::Settings(QWidget *parent) :
 
     ui->resolveDNSOnInputCheck->setChecked(settings.value("resolveDNSOnInputCheck", false).toBool());
 
+    QList<int> dtlsList = portsToIntList(settings.value("dtlsPort", "0").toString());
     QList<int> udpList = portsToIntList(settings.value("udpPort", "0").toString());
     QList<int> tcpList = portsToIntList(settings.value("tcpPort", "0").toString());
     QList<int> sslList = portsToIntList(settings.value("sslPort", "0").toString());
@@ -204,11 +225,15 @@ Settings::Settings(QWidget *parent) :
     ui->udpServerPortEdit->setText(intListToPorts(udpList));
     ui->tcpServerPortEdit->setText(intListToPorts(tcpList));
     ui->sslServerPortEdit->setText(intListToPorts(sslList));
+    ui->dtlsServerPortEdit->setText(intListToPorts(dtlsList));
+
 
 
     ui->udpServerEnableCheck->setChecked(settings.value("udpServerEnable", true).toBool());
     ui->tcpServerEnableCheck->setChecked(settings.value("tcpServerEnable", true).toBool());
     ui->sslServerEnableCheck->setChecked(settings.value("sslServerEnable", true).toBool());
+    ui->dtlsServerEnableCheck->setChecked(settings.value("dtlsServerEnable", true).toBool());
+
 
     ui->serverSnakeOilCheck->setChecked(settings.value("serverSnakeOilCheck", true).toBool());
 
@@ -340,6 +365,7 @@ void Settings::statusBarMessage(QString msg)
 
 }
 
+
 void Settings::on_buttonBox_accepted()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -347,6 +373,8 @@ void Settings::on_buttonBox_accepted()
     QList<int> udpList = Settings::portsToIntList(ui->udpServerPortEdit->text());
     QList<int> tcpList = Settings::portsToIntList(ui->tcpServerPortEdit->text());
     QList<int> sslList = Settings::portsToIntList(ui->sslServerPortEdit->text());
+    QList<int> dtlsList = Settings::portsToIntList(ui->dtlsServerPortEdit->text());
+
 
     if(ui->ipSpecificRadio->isChecked()) {
         QHostAddress address(ui->bindIPAddress->text());
@@ -389,7 +417,7 @@ void Settings::on_buttonBox_accepted()
     }
 
 
-
+    settings.setValue("dtlsPort", intListToPorts(dtlsList));
     settings.setValue("udpPort", intListToPorts(udpList));
     settings.setValue("tcpPort", intListToPorts(tcpList));
     settings.setValue("sslPort", intListToPorts(sslList));
@@ -401,6 +429,8 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("udpServerEnable", ui->udpServerEnableCheck->isChecked());
     settings.setValue("tcpServerEnable", ui->tcpServerEnableCheck->isChecked());
     settings.setValue("sslServerEnable", ui->sslServerEnableCheck->isChecked());
+    settings.setValue("dtlsServerEnable", ui->dtlsServerEnableCheck->isChecked());
+
 
     settings.setValue("serverSnakeOilCheck", ui->serverSnakeOilCheck->isChecked());
 
@@ -509,6 +539,16 @@ void Settings::on_buttonBox_accepted()
     ENCODEMACROSAVE(3);
     ENCODEMACROSAVE(4);
     ENCODEMACROSAVE(5);
+
+    if((initialSslLocalCertificatePath != settings.value("sslLocalCertificatePath", "").toString()) ||
+        (initialSslCaPath != settings.value("sslCaPath", "").toString()) ||
+        (initialSslPrivateKeyPath != settings.value("sslPrivateKeyPath", "").toString())){
+
+        initialSslLocalCertificatePath = settings.value("sslLocalCertificatePath", "").toString();
+        initialSslCaPath = settings.value("sslCaPath", "").toString();
+        initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
+        emit loadingCertsAgain();
+    }
 
 
 }
@@ -744,7 +784,7 @@ void Settings::on_sslLocalCertificatePathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                       tr("Choose Cert"), home, tr("Certs (*.pem)"));
+                       tr("Choose Cert"), home, tr("*.*"));
 
     if (QFile::exists(fileName)) {
         ui->sslLocalCertificatePath->setText(fileName);
@@ -760,7 +800,7 @@ void Settings::on_sslPrivateKeyPathBrowseButton_clicked()
     }
 
     QString fileName = QFileDialog::getOpenFileName(this,
-                       tr("Choose Key"), home, tr("Keys (*.key, *.pem)"));
+                       tr("Choose Key"), home, tr("*.*"));
 
     if (QFile::exists(fileName)) {
         ui->sslPrivateKeyPath->setText(fileName);

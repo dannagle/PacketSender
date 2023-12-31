@@ -18,6 +18,9 @@ TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_it.ts
 
 SOURCES += mainwindow.cpp \
+    association.cpp \
+    dtlsserver.cpp \
+    dtlsthread.cpp \
     languagechooser.cpp \
     panel.cpp \
     sendpacketbutton.cpp \
@@ -35,6 +38,9 @@ SOURCES += mainwindow.cpp \
     persistenthttp.cpp
 
 HEADERS  += mainwindow.h \
+    association.h \
+    dtlsserver.h \
+    dtlsthread.h \
     languagechooser.h \
     panel.h \
     sendpacketbutton.h \

@@ -11,6 +11,7 @@
 #include "packetnetwork.h"
 #include "globals.h"
 #include "settings.h"
+#include<qstring.h>
 #include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
@@ -21,6 +22,16 @@
 #include <QtGlobal>
 #include <QUrlQuery>
 #include <QStandardPaths>
+#include <windows.h>
+#include <iostream>
+#include "association.h"
+#include <QStringList>
+#include "dtlsthread.h"
+#include "dtlsserver.h"
+
+
+
+
 #ifdef CONSOLE_BUILD
 class QMessageBox {
 public:
@@ -145,6 +156,19 @@ QString PacketNetwork::getIPmode()
     return ipMode;
 }
 
+bool PacketNetwork::DTLSListening()
+{
+    QUdpSocket * dtls;
+    QDEBUGVAR(dtlsServers.size());
+    foreach(dtls, dtlsServers) {
+        QDEBUGVAR(dtls->state());
+        if(dtls->state() == QAbstractSocket::BoundState) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool PacketNetwork::UDPListening()
 {
     QUdpSocket * udp;
@@ -152,7 +176,6 @@ bool PacketNetwork::UDPListening()
     foreach(udp, udpServers) {
         QDEBUGVAR(udp->state());
         if(udp->state() == QAbstractSocket::BoundState) {
-        //if(udp->state() == QAbstractSocket::ConnectedState) {
             return true;
         }
     }
@@ -219,7 +242,7 @@ void PacketNetwork::init()
 
     static bool erroronce = false;
 
-
+    dtlsServers.clear();
     tcpServers.clear();
     udpServers.clear();
     sslServers.clear();
@@ -231,11 +254,13 @@ void PacketNetwork::init()
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-    QList<int> udpPortList, tcpPortList, sslPortList;
+    QList<int> udpPortList, tcpPortList, sslPortList, dtlsPortList;
+    int dtlsPort = 0;
     int udpPort = 0;
     int tcpPort = 0;
     int sslPort = 0;
 
+    dtlsPortList = Settings::portsToIntList(settings.value("dtlsPort", "0").toString());
     udpPortList = Settings::portsToIntList(settings.value("udpPort", "0").toString());
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
@@ -256,8 +281,48 @@ void PacketNetwork::init()
 #endif
 
 
-    QUdpSocket *udpSocket;
+    QUdpSocket *udpSocket, *dtlsSocket;
     ThreadedTCPServer *ssl, *tcp;
+
+
+
+
+    foreach (dtlsPort, dtlsPortList) {
+        bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
+
+
+        dtlsSocket = &(dtlsServer.serverSocket);
+
+        dtlsSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+
+        if ((!bindResult) && (!erroronce)) {
+            QDEBUGVAR(dtlsPort);
+            erroronce = true;
+            if ((dtlsPort < 1024) && (dtlsPort > 0)) {
+                QString msgText = lowPortText;
+                msgText.replace("[PORT]", QString::number(dtlsPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+
+            } else {
+                QString msgText = portConsumedText;
+                msgText.replace("[PORT]", QString::number(dtlsPort));
+                msgBoxBindError.setText(msgText);
+                msgBoxBindError.exec();
+
+            }
+            dtlsSocket->close();
+            dtlsSocket->deleteLater();
+
+        }
+
+        if(bindResult) {
+            dtlsServers.append(dtlsSocket);
+        }
+
+    }
+    reJoinMulticast();
+
 
     foreach (udpPort, udpPortList) {
 
@@ -273,7 +338,7 @@ void PacketNetwork::init()
         if ((!bindResult) && (!erroronce)) {
             QDEBUGVAR(udpPort);
             erroronce = true;
-            if (udpPort < 1024 && udpPort > 0) {
+            if ((udpPort < 1024) && (udpPort > 0)) {
                 QString msgText = lowPortText;
                 msgText.replace("[PORT]", QString::number(udpPort));
                 msgBoxBindError.setText(msgText);
@@ -348,6 +413,7 @@ void PacketNetwork::init()
 
     sendResponse = settings.value("sendReponse", false).toBool();
     responseData = (settings.value("responseHex", "")).toString();
+    activateDTLS = settings.value("dtlsServerEnable", true).toBool();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", true).toBool();
     activateSSL = settings.value("sslServerEnable", true).toBool();
@@ -373,11 +439,30 @@ void PacketNetwork::init()
         delayAfterConnect = 500;
     }
 
+    if (activateDTLS) {
+        foreach (dtlsSocket, dtlsServers) {
+            connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
+            connect(&dtlsServer, SIGNAL(serverPacketSent(Packet)), this, SLOT(packetSentECHO(Packet)),Qt::UniqueConnection);
+        }
+
+    } else {
+        QDEBUG() << "udp server disable";
+        foreach (dtlsSocket, dtlsServers) {
+            dtlsSocket->close();
+        }
+        dtlsServers.clear();
+
+    }
+
+
+
     if (activateUDP) {
+
         foreach (udpSocket, udpServers) {
             QDEBUG() << "signal/slot datagram connect: " << connect(udpSocket, SIGNAL(readyRead()),
                      this, SLOT(readPendingDatagrams()));
         }
+
 
     } else {
         QDEBUG() << "udp server disable";
@@ -415,6 +500,27 @@ void PacketNetwork::init()
 
 //TODO add timed event feature?
 
+QList<int> PacketNetwork::getDTLSPortsBound()
+{
+    QList<int> pList;
+    pList.clear();
+    QUdpSocket * dtlsServer;
+    foreach (dtlsServer, dtlsServers) {
+        if(dtlsServer->BoundState == QAbstractSocket::BoundState) {
+            if(dtlsServer){
+                pList.append(dtlsServer->localPort());
+            }
+        }
+    }
+    return pList;
+
+}
+
+QString PacketNetwork::getDTLSPortString()
+{
+
+    return Settings::intListToPorts(getDTLSPortsBound());
+}
 
 QList<int> PacketNetwork::getUDPPortsBound()
 {
@@ -602,7 +708,6 @@ void PacketNetwork::readPendingDatagrams()
             senderPort = theDatagram.senderPort();
 
             QDEBUG() << "data size is" << datagram.size();
-    //        QDEBUG() << debugQByteArray(datagram);
 
             Packet udpPacket;
             udpPacket.timestamp = QDateTime::currentDateTime();
@@ -675,6 +780,7 @@ void PacketNetwork::readPendingDatagrams()
     }
 
 }
+
 
 
 QString PacketNetwork::debugQByteArray(QByteArray debugArray)
@@ -822,6 +928,44 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.timestamp = QDateTime::currentDateTime();
     sendpacket.name = sendpacket.timestamp.toString(DATETIMEFORMAT);
 
+
+    if(sendpacket.isDTLS()){
+        Dtlsthread * thread = new Dtlsthread(sendpacket, this);
+        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)))
+                 << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
+
+        if(settings.value("leaveSessionOpen").toString() == "true"){
+            PersistentConnection * pcWindow = new PersistentConnection();
+
+            pcWindow->sendPacket = sendpacket;
+            pcWindow->init();
+            pcWindow->dthread = thread;
+
+            QDEBUG() << ": thread Connection attempt "
+                     << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
+                     << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
+                     << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
+
+            pcWindow->show();
+            thread->start();
+
+        }
+        else{
+            thread->start();
+            QTimer* timer = new QTimer(this);
+            thread->timer = timer;
+            connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
+            timer->start(2000);
+        }
+
+        dtlsthreadList.append(thread);
+    }
+
+
     if (sendpacket.isUDP()) {
         QUdpSocket * sendUDP;
         bool oneoff = false;
@@ -940,9 +1084,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
     }
 
-
-
 }
+
 
 void PacketNetwork::httpError(QNetworkRequest* pReply)
 {
@@ -1061,4 +1204,59 @@ QList<ThreadedTCPServer *> PacketNetwork::allTCPServers()
 
     return theServers;
 }
+
+std::vector<QString> PacketNetwork::getCmdInput(Packet sendpacket, QSettings& settings){
+    //the array of cmdComponents: dataStr, toIp, toPort, sslPrivateKeyPath, sslLocalCertificatePath, sslCaFullPath
+    std::vector<QString> cmdComponents;
+
+    //get the data of the packet
+    cmdComponents.push_back(QString::fromUtf8(sendpacket.getByteArray()));
+    cmdComponents.push_back(sendpacket.toIP);
+    cmdComponents.push_back(QString::number(sendpacket.port));
+
+    //get the pathes for verification from the settings
+    cmdComponents.push_back(settings.value("sslPrivateKeyPath", "default").toString());
+    cmdComponents.push_back(settings.value("sslLocalCertificatePath", "default").toString());
+    QString sslCaPath = settings.value("sslCaPath", "default").toString();
+
+    //get the full path to to ca-signed-cert.pem file
+    QDir dir(sslCaPath);
+    if (dir.exists()) {
+        QStringList nameFilters;
+        nameFilters << "*.pem";  // Filter for .txt files
+
+        dir.setNameFilters(nameFilters);
+        QStringList fileList = dir.entryList();
+
+        if (!fileList.isEmpty()) {
+            // Select the first file that matches the filter
+            cmdComponents.push_back(dir.filePath(fileList.first()));
+        } else {
+            qDebug() << "No matching files found.";
+        }
+    } else {
+        qDebug() << "Directory does not exist.";
+    }
+    cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
+    return cmdComponents;
+}
+
+
+
+
+void PacketNetwork::on_twoVerify_StateChanged(){
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString twoVerify = settings.value("twoVerify", "false").toString();
+    if(twoVerify == "false"){
+        settings.setValue("twoVerify", "true");
+        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    }
+    else{
+        settings.setValue("twoVerify", "false");
+        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+
+    }
+}
+
+
 

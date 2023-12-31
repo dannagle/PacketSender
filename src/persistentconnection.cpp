@@ -32,8 +32,8 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
 
     QDEBUG();
     sendPacket.clear();
-    QDEBUG() << ": refreshTimer Connection attempt " <<
-             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))
+    QDEBUG() /*<< ": refreshTimer Connection attempt " <<
+             connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))*/
              << connect(this, SIGNAL(rejected()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()))
              << connect(this, SIGNAL(dialogIsClosing()), this, SLOT(aboutToClose()));
@@ -172,6 +172,9 @@ void PersistentConnection::init()
     if (sendPacket.isSSL()) {
         tcpOrSSL = "SSL";
     }
+    if(sendPacket.isDTLS()){
+        tcpOrSSL = "DTLS";
+    }
     setWindowTitle(tcpOrSSL + "://" + sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
 
@@ -222,8 +225,14 @@ void PersistentConnection::refreshTimerTimeout()
     if (thread->isRunning() && !thread->closeRequest) {
         QString winTitle = windowTitle();
         if (winTitle.startsWith("TCP://") && thread->isEncrypted()) {
-            winTitle.replace("TCP://", "SSL://");
-            setWindowTitle(winTitle);
+            if(sendPacket.isDTLS()){
+                winTitle.replace("TCP://", "DTLS://");
+                setWindowTitle(winTitle);
+            }else{
+                winTitle.replace("TCP://", "SSL://");
+                setWindowTitle(winTitle);
+            }
+
         }
     }
 
@@ -251,7 +260,6 @@ void PersistentConnection::refreshTimerTimeout()
         }
 
     }
-
 
 
 
@@ -342,6 +350,8 @@ void PersistentConnection::socketDisconnected()
 {
     statusReceiver("not connected");
 }
+
+//connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
 
 void PersistentConnection::on_asciiSendButton_clicked()
 {

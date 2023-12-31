@@ -62,6 +62,7 @@ class Packet
         bool incoming;
         void init();
         void clear();
+        bool isDTLS();
         bool isTCP();
         bool isSSL();
         bool isUDP();

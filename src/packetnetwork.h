@@ -30,20 +30,35 @@
 #include "persistentconnection.h"
 #endif
 #include <threadedtcpserver.h>
+#include <Windows.h>
+#include <QSettings>
+#include "dtlsthread.h"
+#include "dtlsserver.h"
+
+
+
 
 class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
+        QList<QUdpSocket *> dtlsServers;
+        DtlsServer dtlsServer;
+        QString keyPath;
+        QString certPath;
         explicit PacketNetwork(QObject *parent = nullptr);
         void init();
 
+        std::vector<QString> getCmdInput(Packet sendpacket, QSettings &settings);
+
         QString debugQByteArray(QByteArray debugArray);
 
+        QString getDTLSPortString();
         QString getUDPPortString();
         QString getTCPPortString();
         QString getSSLPortString();
 
+        QList<int> getDTLSPortsBound();
         QList<int> getUDPPortsBound();
         QList<int> getTCPPortsBound();
         QList<int> getSSLPortsBound();
@@ -56,6 +71,7 @@ class PacketNetwork : public QObject
         QString responseData;
         bool sendResponse;
         bool sendSmartResponse;
+        bool activateDTLS;
         bool activateUDP;
         bool activateTCP;
         bool activateSSL;
@@ -67,6 +83,7 @@ class PacketNetwork : public QObject
         void setIPmode(int mode);
         static QString getIPmode();
 
+        bool DTLSListening();
         bool UDPListening();
         bool TCPListening();
         bool SSLListening();
@@ -100,11 +117,14 @@ public slots:
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
+        void on_twoVerify_StateChanged();
+
 
 private slots:
         void httpFinished(QNetworkReply* pReply);
         void httpError(QNetworkRequest* pReply);
         void sslErrorsSlot(QNetworkReply *reply, const QList<QSslError> &errors);
+
 
 private:
         //mapping of joined multicast groups
@@ -114,6 +134,7 @@ private:
         QList<ThreadedTCPServer *> allTCPServers();
 
         QList<QNetworkAccessManager *> httpList;
+        QList<Dtlsthread *> dtlsthreadList;
 
         QList<TCPThread *> tcpthreadList;
 #ifdef CONSOLE_BUILD
@@ -125,6 +146,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
+
 
 };
 
