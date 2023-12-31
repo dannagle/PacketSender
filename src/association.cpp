@@ -209,8 +209,15 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 
 
 void DtlsAssociation::setCipher(QString chosenCipher) {
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 00, 0)
     configuration.setCiphers(chosenCipher);
     crypto.setDtlsConfiguration(configuration);
+#else
+    //TODO support this with Qt5
+    QDEBUG() << "This is disabled for Qt5 (for now)";
+#endif
+
 }
 
 QSsl::EncodingFormat DtlsAssociation::getCertFormat(QFile& certFile){
