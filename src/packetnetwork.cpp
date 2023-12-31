@@ -22,7 +22,6 @@
 #include <QtGlobal>
 #include <QUrlQuery>
 #include <QStandardPaths>
-#include <windows.h>
 #include <iostream>
 #include "association.h"
 #include <QStringList>

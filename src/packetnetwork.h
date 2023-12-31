@@ -30,7 +30,6 @@
 #include "persistentconnection.h"
 #endif
 #include <threadedtcpserver.h>
-#include <Windows.h>
 #include <QSettings>
 #include "dtlsthread.h"
 #include "dtlsserver.h"
