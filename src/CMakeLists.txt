@@ -24,6 +24,9 @@ set(
   udpflooding.h
   languagechooser.h
   wakeonlan.h
+  association.h
+  dtlsserver.h
+  dtlsthread.h
 )
 
 set(
@@ -43,9 +46,6 @@ set(
   udpflooding.ui
   languagechooser.ui
   wakeonlan.ui
-  association.h
-  dtlsserver.h
-  dtlsthread.h
 )
 
 set(
