@@ -59,6 +59,7 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
+#include "wakeonlan.h"
 
 int MainWindow::isSessionOpen = false;
 int hexToInt(QChar hex);

@@ -613,6 +613,55 @@ void Packet::saveToDB()
 
 }
 
+Packet Packet::generateWakeOnLAN(QString &mac, int port)
+{
+    /*
+     * The Wake-On-LAN / Magic Packet format is as follows:
+     * https://en.wikipedia.org/wiki/Wake-on-LAN
+     *
+     * -  6 bytes of all 255
+     * - sixteen repetitions of the target computer's 48-bit MAC address
+     * - Sent to port 7 or 9
+     * - Typically Broadcast
+     *
+     */
+
+    Packet wakeOnLAN = Packet();
+    wakeOnLAN.toIP = "255.255.255.255";
+    wakeOnLAN.port = port;
+    wakeOnLAN.fromIP = "You";
+    wakeOnLAN.tcpOrUdp = "UDP";
+    QByteArray wakeBytes;
+    for(int i=0; i<6; i++) {
+        wakeBytes.append(char(255));
+    }
+
+    QByteArray macBytes = HEXtoByteArray(mac);
+
+    if(macBytes.size() != 6) {
+        QDEBUG() << "Received an invalid MAC address" << mac;
+        wakeOnLAN.init();
+        wakeOnLAN.errorString = QObject::tr("Received an invalid MAC address");
+        return wakeOnLAN;
+    }
+
+    // Corrected mac format
+    QString correctedMAC = Packet::byteArrayToHex(macBytes).trimmed();
+    correctedMAC.replace(" ", ":");
+    mac = correctedMAC;
+
+    for(int i=0; i<16; i++) {
+        wakeBytes.append(macBytes);
+    }
+
+    wakeOnLAN.hexString = byteArrayToHex(wakeBytes);
+
+    return wakeOnLAN;
+
+
+
+}
+
 
 Packet Packet::fetchFromList(QString thename, QList<Packet> packets)
 {

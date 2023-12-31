@@ -753,8 +753,7 @@
     <addaction name="actionCloud"/>
     <addaction name="actionSubnet_Calculator"/>
     <addaction name="actionIntense_Traffic_Generator"/>
-    <addaction name="actionAndroid_App"/>
-    <addaction name="actioniOS_App"/>
+    <addaction name="actionWake_On_LAN_Magic_Packet"/>
    </widget>
    <widget class="QMenu" name="menuMulitcast">
     <property name="title">
@@ -943,6 +942,15 @@
   <action name="actionNew_Panel">
    <property name="text">
     <string>Empty Panel Project</string>
+   </property>
+  </action>
+  <action name="actionWake_On_LAN_Magic_Packet">
+   <property name="icon">
+    <iconset resource="packetsender.qrc">
+     <normaloff>:/icons/outline_lightbulb_white_24dp.png</normaloff>:/icons/outline_lightbulb_white_24dp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wake-On-LAN / Magic Packet</string>
    </property>
   </action>
  </widget>

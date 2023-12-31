@@ -10,17 +10,17 @@
 #pragma once
 
 //BEGIN SW VERSION
-#define SW_VERSION "8.5.2"
+#define SW_VERSION "8.6.5"
 //END SW VERSION
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 8,5,2,0
+#define VER_FILEVERSION 8,6,5,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
 #define QDEBUGVAR(var)  QDEBUG() << # var <<  var
 
-#define DATETIMEFORMAT "hh:mm:ss.zzz"
+#define DATETIMEFORMAT "yyyy-MM-dd hh:mm:ss.zzz"
 #define FULLDATETIMEFORMAT "yyyy-MM-dd hh:mm:ss"
 
 #define UPDATE_URL_REMOTE  "https://packetsender.com/update"

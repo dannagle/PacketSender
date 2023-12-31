@@ -13,7 +13,8 @@ TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_es.ts \
                 languages/packetsender_fr.ts \
                 languages/packetsender_de.ts \
-                languages/packetsender_hi.ts
+                languages/packetsender_hi.ts \
+                languages/packetsender_it.ts
 
 SOURCES += mainwindow.cpp \
     languagechooser.cpp \
@@ -30,7 +31,8 @@ SOURCES += mainwindow.cpp \
     packetlogmodel.cpp \
     postdatagen.cpp \
     panelgenerator.cpp \
-    persistenthttp.cpp
+    persistenthttp.cpp \
+    wakeonlan.cpp
 
 HEADERS  += mainwindow.h \
     languagechooser.h \
@@ -47,7 +49,8 @@ HEADERS  += mainwindow.h \
     packetlogmodel.h \
     postdatagen.h\
     panelgenerator.h \
-    persistenthttp.h
+    persistenthttp.h \
+    wakeonlan.h
 
 
 
@@ -64,7 +67,8 @@ FORMS    += mainwindow.ui \
     udpflooding.ui \
         persistenthttp.ui \
         postdatagen.ui \
-    panelgenerator.ui
+    panelgenerator.ui \
+    wakeonlan.ui
 
 
 include(packetsender_main.pri)

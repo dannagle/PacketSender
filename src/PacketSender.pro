@@ -35,7 +35,8 @@ SOURCES += mainwindow.cpp \
     packetlogmodel.cpp \
     postdatagen.cpp \
     panelgenerator.cpp \
-    persistenthttp.cpp
+    persistenthttp.cpp \
+    wakeonlan.cpp
 
 HEADERS  += mainwindow.h \
     association.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     packetlogmodel.h \
     postdatagen.h\
     panelgenerator.h \
-    persistenthttp.h
+    persistenthttp.h \
+    wakeonlan.h
 
 
 
@@ -72,7 +74,8 @@ FORMS    += mainwindow.ui \
     udpflooding.ui \
         persistenthttp.ui \
         postdatagen.ui \
-    panelgenerator.ui
+    panelgenerator.ui \
+    wakeonlan.ui
 
 
 include(packetsender_main.pri)

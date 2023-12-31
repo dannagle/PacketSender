@@ -23,6 +23,7 @@ set(
   settings.h
   udpflooding.h
   languagechooser.h
+  wakeonlan.h
 )
 
 set(
@@ -41,6 +42,7 @@ set(
   subnetcalc.ui
   udpflooding.ui
   languagechooser.ui
+  wakeonlan.ui
 )
 
 set(
@@ -68,6 +70,7 @@ set(
   threadedtcpserver.cpp
   udpflooding.cpp
   languagechooser.cpp
+  wakeonlan.cpp
 )
 
 set(
