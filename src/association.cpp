@@ -210,7 +210,7 @@ void DtlsAssociation::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 
 void DtlsAssociation::setCipher(QString chosenCipher) {
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 00, 0)
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
     configuration.setCiphers(chosenCipher);
     crypto.setDtlsConfiguration(configuration);
 #else
