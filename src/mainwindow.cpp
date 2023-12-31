@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(twoVerify, &QCheckBox::toggled, &packetNetwork , &PacketNetwork::on_twoVerify_StateChanged);
 
     //hostName
-    connect(ui->hostName, QLineEdit::editingFinished, this, MainWindow::on_hostName_editingFinished);
+    connect(ui->hostName, &QLineEdit::editingFinished, this, &MainWindow::on_hostName_editingFinished);
 
 
     //cipher comboBox
