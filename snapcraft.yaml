@@ -17,7 +17,7 @@ environment:
 
 apps:
   packetsender:
-    command: usr/local/bin/packetsender
+    command: usr/local/bin/PacketSender
     desktop: usr/share/applications/packetsender.desktop
 
     plugs:
@@ -33,10 +33,13 @@ apps:
       
 parts:
   packetsender:
-    plugin: qmake
+    plugin: cmake
     source: https://github.com/dannagle/PacketSender.git
     source-branch: master
-    qmake-project-file: src/PacketSenderSnap.pro
+    cmake-parameters:
+      - /root/parts/packetsender/src/src
+      - -D SNAP=1
+    
     build-packages:
       - build-essential
       - qt6-base-dev
