@@ -37,10 +37,10 @@ parts:
     source: https://github.com/dannagle/PacketSender.git
     source-branch: master
     cmake-parameters:
-      - /root/parts/packetsender/src/src
+      - $SNAPCRAFT_PART_SRC/src
     override-pull: |
       craftctl default
-      cp /root/parts/packetsender/src/src/snap/CMakeLists.txt /root/parts/packetsender/src/src/CMakeLists.txt
+      cp $SNAPCRAFT_PART_SRC/src/snap/CMakeLists.txt $SNAPCRAFT_PART_SRC/src/CMakeLists.txt
     build-packages:
       - build-essential
       - qt6-base-dev
