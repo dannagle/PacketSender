@@ -95,7 +95,7 @@ qt_add_executable(packetsender
     ${SOURCES} ${HEADERS} ${FORMS} ${RESOURCES} ${CSS}
 )
 
-execute_process(COMMAND git -C  /root/parts/packetsender/src/src rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHA COMMAND_ERROR_IS_FATAL ANY OUTPUT_STRIP_TRAILING_WHITESPACE)
+execute_process(COMMAND git -C  $SNAPCRAFT_PART_SRC/src rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHA COMMAND_ERROR_IS_FATAL ANY OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 target_compile_definitions(packetsender PRIVATE
     GUI_BUILD
