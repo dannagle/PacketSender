@@ -468,7 +468,7 @@ Commit Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="554"/>
         <source>Panels</source>
-        <translation>Páneles</translation>
+        <translation>Pannelli</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="572"/>
