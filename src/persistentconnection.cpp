@@ -67,6 +67,16 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
+    this->darkMode = settings.value("darkModeCheck", true).toBool();
+
+
+    if(this->darkMode) {
+        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #19232d }");
+    } else {
+        ui->trafficViewEdit->setStyleSheet("QTextEdit { background-color: #ffffff }");
+    }
+
+
 }
 
 
