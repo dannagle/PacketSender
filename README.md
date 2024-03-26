@@ -16,6 +16,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Sponsors](#sponsors)
   * Visit [IWL.com](https://www.iwl.com/)
   * Visit [NagleCode.com](https://dannagle.com/)
+  * Visit [Eletiope.com](http://eletiope.com/)
 
 * [GUI](#gui)
 * [Intense Traffic Generator (GUI)](#udptraffic)
@@ -48,6 +49,10 @@ Packet Sender would like to thank the following sponsors.
 
 [![NagleCode](screenshots/naglecode-logo400.png)](https://dannagle.com)
 <br>NagleCode is a software publisher and development studio. 
+<br><br><br>
+
+[![Eletiope](screenshots/eletiope_logo400.png)](http://eletiope.com)
+<br>Eletiope installs lighting, audiovisuals and immersive rooms for exhibitions and museums, and for corporate showrooms. 
 <br><br><br>
 
 
