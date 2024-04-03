@@ -1,5 +1,5 @@
 name: packetsender
-version: 8.6.6
+version: 8.6.7
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
 icon: src/pslogo128.png
 description: |
