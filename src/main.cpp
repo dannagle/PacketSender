@@ -15,8 +15,11 @@
     #include <QDesktopServices>
     #include <QTranslator>
     #include <QLibraryInfo>
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
     #include <QGuiApplication>
     #include <QStyleHints>
+#endif
+
     #include "settings.h"
     #include "languagechooser.h"
 #endif
@@ -1202,6 +1205,8 @@ int main(int argc, char *argv[])
         bool useDark = settings.value("darkModeCheck", true).toBool();
         QString styleSheet = "";
 
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+
         QStyleHints * styleHints = QGuiApplication::styleHints();
 
         auto colorScheme = styleHints->colorScheme();
@@ -1213,7 +1218,7 @@ int main(int argc, char *argv[])
         if (colorScheme == Qt::ColorScheme::Light ) {
             QDEBUG() << "OS is set to light mode";
         }
-
+#endif
 
         if(useDark) {
             if (file_dark.open(QFile::ReadOnly)) {
