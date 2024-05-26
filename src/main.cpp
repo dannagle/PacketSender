@@ -15,6 +15,8 @@
     #include <QDesktopServices>
     #include <QTranslator>
     #include <QLibraryInfo>
+    #include <QGuiApplication>
+    #include <QStyleHints>
     #include "settings.h"
     #include "languagechooser.h"
 #endif
@@ -222,6 +224,10 @@ int main(int argc, char *argv[])
         parser.addOption(pureAsciiOption);
 
 
+        // Command line server mode
+        //QCommandLineOption serverOption(QStringList() << "l" << "listen", "Listen for incoming connections. Overrides most client options.");
+        //parser.addOption(serverOption);
+
 
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
@@ -297,7 +303,6 @@ int main(int argc, char *argv[])
         parser.addPositionalArgument("port", "Destination port/POST data. Optional for saved packet.");
         parser.addPositionalArgument("data", "Data to send. Optional for saved packet.");
 
-
         if (argc < 2) {
             parser.showHelp();
             return 0;
@@ -330,6 +335,8 @@ int main(int argc, char *argv[])
 
         bool wol = parser.isSet(wolOption);
 
+        bool server = false; //parser.isSet(serverOption);
+
         bool okbps = false;
         bool okrate = false;
         bool maxrate = parser.isSet(maxOption);
@@ -354,6 +361,17 @@ int main(int argc, char *argv[])
 
         if (sslNoError) ssl = true;
 
+
+        if(server) {
+            OUTIF() << "Listening for packets in server mode. ";
+            OUTPUT();
+            return 0;
+        }
+
+
+
+
+
         QString name = parser.value(nameOption);
 
         QString httpMethod = parser.value(httpOption).trimmed().toUpper();
@@ -375,6 +393,7 @@ int main(int argc, char *argv[])
         if (argssize >= 1) {
             address = args[0];
         }
+
 
         if(wol) {
             QString targetMAC = parser.value(wolOption).trimmed().toUpper();
@@ -1173,6 +1192,7 @@ int main(int argc, char *argv[])
             QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
         }
 
+
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
 
@@ -1181,6 +1201,20 @@ int main(int argc, char *argv[])
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool useDark = settings.value("darkModeCheck", true).toBool();
         QString styleSheet = "";
+
+        QStyleHints * styleHints = QGuiApplication::styleHints();
+
+        auto colorScheme = styleHints->colorScheme();
+
+        if (colorScheme == Qt::ColorScheme::Dark ) {
+            QDEBUG() << "OS is set to dark mode";
+        }
+
+        if (colorScheme == Qt::ColorScheme::Light ) {
+            QDEBUG() << "OS is set to light mode";
+        }
+
+
         if(useDark) {
             if (file_dark.open(QFile::ReadOnly)) {
                 styleSheet = QLatin1String(file_dark.readAll());
@@ -1194,6 +1228,7 @@ int main(int argc, char *argv[])
                 file_system.close();
             }
         }
+
 
         //panels_only = true;
         if(panels_only) {
