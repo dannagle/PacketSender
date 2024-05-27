@@ -17,9 +17,9 @@ class MainPacketReceiver : public QObject
 
         //This is only used in CLI Mode
         QUdpSocket * udpSocket;
-        QSslSocket * sslSocket;
-        void initUDP(QString host, int port);
-        void initSSL(QString host, int port);
+        ThreadedTCPServer * tcpServer;
+        bool initUDP(QString host, int port);
+        bool initSSL(QString host, int port);
 
     signals:
         void sendPacket(Packet packetToSend);

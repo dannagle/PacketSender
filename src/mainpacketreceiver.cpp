@@ -44,11 +44,23 @@ void MainPacketReceiver::httpFinished()
 
 void MainPacketReceiver::readPendingDatagrams()
 {
-    QDEBUG() << "got a packet";
+    while (udpSocket->hasPendingDatagrams()) {
+
+        QHostAddress sender;
+        int senderPort;
+
+        QNetworkDatagram theDatagram = udpSocket->receiveDatagram(10000000);
+        QByteArray datagram = theDatagram.data();
+        sender =  theDatagram.senderAddress();
+        senderPort = theDatagram.senderPort();
+
+        QDEBUG() << "data size is" << datagram.size() << sender << senderPort;
+
+    }
 
 }
 
-void MainPacketReceiver::initUDP(QString host, int port)
+bool MainPacketReceiver::initUDP(QString host, int port)
 {
 
     udpSocket = new QUdpSocket(this);
@@ -57,19 +69,18 @@ void MainPacketReceiver::initUDP(QString host, int port)
 
     connect(udpSocket, &QUdpSocket::readyRead,
             this, &MainPacketReceiver::readPendingDatagrams);
+
+    return udpSocket->state() == QAbstractSocket::BoundState;
 }
 
 
 
-void MainPacketReceiver::initSSL(QString host, int port)
+bool MainPacketReceiver::initSSL(QString host, int port)
 {
-    sslSocket = new QSslSocket(this);
-    QHostAddress addy(host);
-    sslSocket->bind(addy, port);
+    tcpServer = new ThreadedTCPServer(nullptr);
+    tcpServer->init(port, false, host);
 
-    connect(sslSocket, &QSslSocket::readyRead,
-            this, &MainPacketReceiver::readPendingDatagrams);
-
+    return tcpServer->isListening();
 }
 
 

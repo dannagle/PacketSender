@@ -592,12 +592,10 @@ int main(int argc, char *argv[])
                 QDEBUG() << "Listening for UDP packets in server mode. ";
                 QUdpSocket sock;
                 if(bindIPstr.isEmpty()) {
-                    receiver->initUDP("0.0.0.0", bind);
+                    bindResult = receiver->initUDP("0.0.0.0", bind);
                 } else {
-                    receiver->initUDP(bindIPstr, bind);
+                    bindResult = receiver->initUDP(bindIPstr, bind);
                 }
-
-                bindResult = true;
 
             } else {
                 if(tcp) {
@@ -629,6 +627,9 @@ int main(int argc, char *argv[])
             if(bindResult) {
                 QDEBUG() << "Starting event loop";
                 a.exec();
+            } else {
+                QDEBUG() << "Failed to bind";
+
             }
 
 
