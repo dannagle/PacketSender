@@ -154,6 +154,9 @@ int main(int argc, char *argv[])
         if (arg2.contains("-v")) {
             gatekeeper = false;
         }
+        if (arg2.contains("-l")) {
+            gatekeeper = false;
+        }
         if (arg2.contains("version")) {
             gatekeeper = false;
         }
@@ -228,8 +231,8 @@ int main(int argc, char *argv[])
 
 
         // Command line server mode
-        //QCommandLineOption serverOption(QStringList() << "l" << "listen", "Listen for incoming connections. Overrides most client options.");
-        //parser.addOption(serverOption);
+        QCommandLineOption serverOption(QStringList() << "l" << "listen", "Listen instead of send. Use bind options to specify port/IP. Otherwise, dynamic/All.");
+        parser.addOption(serverOption);
 
 
         // An option with a value
@@ -338,8 +341,7 @@ int main(int argc, char *argv[])
 
         bool wol = parser.isSet(wolOption);
 
-        bool server = false; //parser.isSet(serverOption);
-
+        bool server = parser.isSet(serverOption);
         bool okbps = false;
         bool okrate = false;
         bool maxrate = parser.isSet(maxOption);
@@ -363,16 +365,6 @@ int main(int argc, char *argv[])
         }
 
         if (sslNoError) ssl = true;
-
-
-        if(server) {
-            OUTIF() << "Listening for packets in server mode. ";
-            OUTPUT();
-            return 0;
-        }
-
-
-
 
 
         QString name = parser.value(nameOption);
@@ -561,7 +553,7 @@ int main(int argc, char *argv[])
         }
 
 
-        if (!port && name.isEmpty() && !http) {
+        if (!port && name.isEmpty() && !http && !server) {
             OUTIF() << "Warning: Sending to port zero.";
         }
 
@@ -591,6 +583,62 @@ int main(int argc, char *argv[])
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
+
+
+        if(server) {
+            bool bindResult = false;
+            MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+            if(udp) {
+                QDEBUG() << "Listening for UDP packets in server mode. ";
+                QUdpSocket sock;
+                if(bindIPstr.isEmpty()) {
+                    receiver->initUDP("0.0.0.0", bind);
+                } else {
+                    receiver->initUDP(bindIPstr, bind);
+                }
+
+                bindResult = true;
+
+            } else {
+                if(tcp) {
+                    QDEBUG() << "Listening for TCP packets in server mode. ";
+
+                }
+                if(ssl) {
+                    QDEBUG() << "Listening for SSL packets in server mode. ";
+                }
+                QSslSocket sock;
+                if(bindIPstr.isEmpty()) {
+                    bindResult = sock.bind(QHostAddress::Any, bind);
+                } else {
+                    QHostAddress addy (bindIPstr);
+                    bindResult = sock.bind(addy, bind);
+                }
+
+
+                QUdpSocket sockUDP;
+            }
+
+
+
+
+            QDEBUG() << "Binding to " << bind;
+            QDEBUG() << "Binding to " << bindIPstr;
+            QDEBUG() << "Bind result" << bindResult;
+            QDEBUG();
+            if(bindResult) {
+                QDEBUG() << "Starting event loop";
+                a.exec();
+            }
+
+
+
+            OUTIF() << "Done with server mode. ";
+
+            OUTPUT();
+            return 0;
+        }
+
 
 
         //Create the packet to send.

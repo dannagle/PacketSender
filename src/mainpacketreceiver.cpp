@@ -41,6 +41,39 @@ void MainPacketReceiver::httpFinished()
 
 }
 
+
+void MainPacketReceiver::readPendingDatagrams()
+{
+    QDEBUG() << "got a packet";
+
+}
+
+void MainPacketReceiver::initUDP(QString host, int port)
+{
+
+    udpSocket = new QUdpSocket(this);
+    QHostAddress addy(host);
+    udpSocket->bind(addy, port);
+
+    connect(udpSocket, &QUdpSocket::readyRead,
+            this, &MainPacketReceiver::readPendingDatagrams);
+}
+
+
+
+void MainPacketReceiver::initSSL(QString host, int port)
+{
+    sslSocket = new QSslSocket(this);
+    QHostAddress addy(host);
+    sslSocket->bind(addy, port);
+
+    connect(sslSocket, &QSslSocket::readyRead,
+            this, &MainPacketReceiver::readPendingDatagrams);
+
+}
+
+
+
 void MainPacketReceiver::send(Packet packetToSend) {
     QDEBUG();
 

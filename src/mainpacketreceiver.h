@@ -13,7 +13,13 @@ class MainPacketReceiver : public QObject
         void toTrafficLog(Packet sendpacket);
         void send(Packet packetToSend);
         Packet receivedPacket;
+        void readPendingDatagrams();
 
+        //This is only used in CLI Mode
+        QUdpSocket * udpSocket;
+        QSslSocket * sslSocket;
+        void initUDP(QString host, int port);
+        void initSSL(QString host, int port);
 
     signals:
         void sendPacket(Packet packetToSend);
