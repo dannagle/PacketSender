@@ -19,7 +19,7 @@ class MainPacketReceiver : public QObject
         QUdpSocket * udpSocket;
         ThreadedTCPServer * tcpServer;
         bool initUDP(QString host, int port);
-        bool initSSL(QString host, int port);
+        bool initSSL(QString host, int port, bool encrypted);
 
         static QString datagramOutput(QNetworkDatagram theDatagram, bool quiet = false);
     signals:

@@ -588,33 +588,24 @@ int main(int argc, char *argv[])
         if(server) {
             bool bindResult = false;
             MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+            QString bindIP = "any";
+            if(!bindIPstr.isEmpty()) {
+                bindIP = bindIPstr;
+
+            }
+
             if(udp) {
                 QDEBUG() << "Listening for UDP packets in server mode. ";
                 QUdpSocket sock;
-                if(bindIPstr.isEmpty()) {
-                    bindResult = receiver->initUDP("0.0.0.0", bind);
-                } else {
-                    bindResult = receiver->initUDP(bindIPstr, bind);
-                }
-
+                bindResult = receiver->initUDP(bindIP, bind);
             } else {
                 if(tcp) {
                     QDEBUG() << "Listening for TCP packets in server mode. ";
-
                 }
                 if(ssl) {
                     QDEBUG() << "Listening for SSL packets in server mode. ";
                 }
-                QSslSocket sock;
-                if(bindIPstr.isEmpty()) {
-                    bindResult = sock.bind(QHostAddress::Any, bind);
-                } else {
-                    QHostAddress addy (bindIPstr);
-                    bindResult = sock.bind(addy, bind);
-                }
-
-
-                QUdpSocket sockUDP;
+                bindResult = receiver->initSSL(bindIP, bind, ssl);
             }
 
 

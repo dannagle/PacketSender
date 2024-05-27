@@ -22,6 +22,7 @@ ThreadedTCPServer::ThreadedTCPServer(QObject *parent) :
 {
 
     threads.clear();
+    consoleMode = false;
 
 
 }
@@ -53,7 +54,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     QDEBUG() << "new tcp connection";
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool();
+    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool() && (!consoleMode);
 
     QDEBUGVAR(persistentConnectCheck);
 
@@ -99,9 +100,20 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+        if(consoleMode) {
+            QDEBUG() << "consoleout" << connect(thread, &TCPThread::packetReceived,
+                    this, &ThreadedTCPServer::outputTCPPacket);
+
+            QDEBUG() << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(outputTCPPacket(Packet)));
+
+
+        } else {
+            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+        }
 
         thread->start();
 
@@ -109,6 +121,30 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
 
 }
+
+
+void ThreadedTCPServer::outputTCPPacket(Packet receivePacket)
+{
+    QTextStream out(stdout);
+
+    bool quiet = false;
+
+    if (quiet) {
+        out << "\n" << receivePacket.hexString;
+    } else {
+        out << "\nFrom: " << receivePacket.fromIP << ", Port:" << receivePacket.fromPort;
+        out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        out << "\nResponse HEX:" << receivePacket.hexString;
+        out << "\nResponse ASCII:" << receivePacket.asciiString();
+    }
+
+    out << Qt::endl;
+
+    out.flush();
+
+
+}
+
 
 
 void ThreadedTCPServer::packetReceivedECHO(Packet sendpacket)

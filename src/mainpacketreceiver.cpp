@@ -60,7 +60,11 @@ bool MainPacketReceiver::initUDP(QString host, int port)
 {
     udpSocket = new QUdpSocket(this);
     QHostAddress addy(host);
-    udpSocket->bind(addy, port);
+    if(host == "any" || addy.isNull()) {
+        udpSocket->bind(QHostAddress::Any, port);
+    } else {
+        udpSocket->bind(addy, port);
+    }
 
     connect(udpSocket, &QUdpSocket::readyRead,
             this, &MainPacketReceiver::readPendingDatagrams);
@@ -70,10 +74,11 @@ bool MainPacketReceiver::initUDP(QString host, int port)
 
 
 
-bool MainPacketReceiver::initSSL(QString host, int port)
+bool MainPacketReceiver::initSSL(QString host, int port, bool encrypted)
 {
     tcpServer = new ThreadedTCPServer(nullptr);
-    tcpServer->init(port, false, host);
+    tcpServer->init(port, encrypted, host);
+    tcpServer->consoleMode = true;
 
     return tcpServer->isListening();
 }
