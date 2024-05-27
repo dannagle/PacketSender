@@ -89,6 +89,15 @@ void UDPFlooding::on_startButton_clicked()
     thread->port = static_cast<quint16>(ui->portEdit->text().toUInt(&ok1));
     thread->delay = ui->delayEdit->text().toInt(&ok2);
 
+
+    // do a swap test to see if it is used.
+    QString swapped = Packet::macroSwap(thread->ascii);
+    QString data = Packet::ASCIITohex(swapped);
+
+    // Note this can be a performance hit. Don't check if not used.
+    thread->hasMacros = swapped != thread->ascii;
+    QDEBUGVAR(thread->hasMacros);
+
     // Do it.
     thread->start();
 }
@@ -157,6 +166,13 @@ double ThreadSender::getRatekHz(QElapsedTimer eTimer, quint64 pkts)
 int ThreadSender::short_burst_of(int number, QUdpSocket *socket, QHostAddress *resolved)
 {
     for (int i = 0; i < number; i++) {
+
+        if(hasMacros) {
+            QString swapped = Packet::macroSwap(ascii);
+            QString data = Packet::ASCIITohex(swapped);
+            hex = Packet::HEXtoByteArray(data);
+        }
+
         qint64 byteSent = socket->writeDatagram(hex, *resolved, port);
         if (byteSent > 0) {
             packetssent++;

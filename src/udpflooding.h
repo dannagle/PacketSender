@@ -23,6 +23,7 @@ class ThreadSender : public QThread
         bool speedSendEnabled;
         QString ascii;
         QByteArray hex;
+        bool hasMacros;
         bool issending;
         bool stopsending;
         quint64 packetssent;
