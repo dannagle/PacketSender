@@ -46,15 +46,11 @@ void MainPacketReceiver::readPendingDatagrams()
 {
     while (udpSocket->hasPendingDatagrams()) {
 
-        QHostAddress sender;
-        int senderPort;
+        QString output = MainPacketReceiver::datagramOutput(udpSocket->receiveDatagram(10000000), false);
 
-        QNetworkDatagram theDatagram = udpSocket->receiveDatagram(10000000);
-        QByteArray datagram = theDatagram.data();
-        sender =  theDatagram.senderAddress();
-        senderPort = theDatagram.senderPort();
-
-        QDEBUG() << "data size is" << datagram.size() << sender << senderPort;
+        QTextStream out(stdout);
+        out << output << Qt::endl;
+        out.flush();
 
     }
 
@@ -62,7 +58,6 @@ void MainPacketReceiver::readPendingDatagrams()
 
 bool MainPacketReceiver::initUDP(QString host, int port)
 {
-
     udpSocket = new QUdpSocket(this);
     QHostAddress addy(host);
     udpSocket->bind(addy, port);
@@ -83,6 +78,30 @@ bool MainPacketReceiver::initSSL(QString host, int port)
     return tcpServer->isListening();
 }
 
+QString MainPacketReceiver::datagramOutput(QNetworkDatagram theDatagram, bool quiet)
+{
+    QString output;
+    QTextStream out(&output);
+
+    QHostAddress sender;
+    int senderPort;
+
+    QByteArray recvData = theDatagram.data();
+    sender =  theDatagram.senderAddress();
+    senderPort = theDatagram.senderPort();
+
+    QString hexString = Packet::byteArrayToHex(recvData);
+    if (quiet) {
+        out << "\n" << hexString;
+    } else {
+        out << "\nFrom: " << sender.toString() << ", Port:" << senderPort;
+        out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        out << "\nResponse HEX:" << hexString;
+        out << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
+    }
+
+    return output;
+}
 
 
 void MainPacketReceiver::send(Packet packetToSend) {

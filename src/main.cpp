@@ -1129,25 +1129,7 @@ int main(int argc, char *argv[])
 
                 if (sock.hasPendingDatagrams()) {
 
-
-                    QHostAddress sender;
-                    int senderPort;
-
-                    QNetworkDatagram theDatagram = sock.receiveDatagram(10000000);
-                    QByteArray recvData = theDatagram.data();
-                    sender =  theDatagram.senderAddress();
-                    senderPort = theDatagram.senderPort();
-
-                    QString hexString = Packet::byteArrayToHex(recvData);
-                    if (quiet) {
-                        out << "\n" << hexString;
-                    } else {
-                        out << "\nFrom: " << sender.toString() << ", Port:" << senderPort;
-                        out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                        out << "\nResponse HEX:" << hexString;
-                        out << "\nResponse ASCII:" << Packet::hexToASCII(hexString);
-                    }
-
+                    out << MainPacketReceiver::datagramOutput(sock.receiveDatagram(10000000), quiet);
                     out.flush();
                 }
             }

@@ -21,8 +21,10 @@ class MainPacketReceiver : public QObject
         bool initUDP(QString host, int port);
         bool initSSL(QString host, int port);
 
+        static QString datagramOutput(QNetworkDatagram theDatagram, bool quiet = false);
     signals:
         void sendPacket(Packet packetToSend);
+        //void receivedPacket(Packet packetReceived);
 
 
     private:
