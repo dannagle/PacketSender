@@ -7,8 +7,8 @@ cd release
 copy /Y C:\Users\danie\Desktop\code_sign_exe_com.bat .
 call code_sign_exe_com.bat
 echo Copying signed exe
-copy /Y packetsender.exe D:\github\naglecode-installers\packetsenderinstaller\qt6_5_2_mingw64\packetsender.exe
-copy /Y packetsender.exe D:\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\packetsender.exe
+copy /Y packetsender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\qt6_5_2_mingw64\packetsender.exe
+copy /Y packetsender.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\packetsender.exe
 cd ..
 
 echo Cleaning build
@@ -23,6 +23,6 @@ cd release
 copy /Y C:\Users\danie\Desktop\code_sign_exe_com.bat .
 call code_sign_exe_com.bat
 echo Copying command line exe
-copy /Y packetsendercli.exe D:\github\naglecode-installers\packetsenderinstaller\qt6_5_2_mingw64\packetsender.com
-copy /Y packetsendercli.exe D:\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\packetsender.com
+copy /Y packetsendercli.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\qt6_5_2_mingw64\packetsender.com
+copy /Y packetsendercli.exe C:\Users\danie\github\naglecode-installers\packetsenderinstaller\PacketSenderPortable\packetsender.com
 cd ..
