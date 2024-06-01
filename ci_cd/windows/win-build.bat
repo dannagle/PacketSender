@@ -1,6 +1,6 @@
 echo Making exe
-SET PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin;C:\Qt\6.5.2\mingw_64\bin
-C:\Qt\6.5.2\mingw_64\bin\qmake.exe -o Makefile src/PacketSender.pro -spec win32-g++
+SET PATH=%PATH%;C:\Qt\Tools\mingw1120_64\bin;C:\Qt\6.5.3\mingw_64\bin
+C:\Qt\6.5.3\mingw_64\bin\qmake.exe -o Makefile src/PacketSender.pro -spec win32-g++
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe -f Makefile.Release -j8
 echo Signing exe
 cd release
@@ -15,7 +15,7 @@ echo Cleaning build
 rd /s /q release
 
 echo Making command line exe
-C:\Qt\6.5.2\mingw_64\bin\qmake.exe -o Makefile src/PacketSenderCLI.pro -spec win32-g++
+C:\Qt\6.5.3\mingw_64\bin\qmake.exe -o Makefile src/PacketSenderCLI.pro -spec win32-g++
 C:\Qt\Tools\mingw1120_64\bin\mingw32-make.exe -f Makefile.Release -j8
 
 echo Signing command line exe
