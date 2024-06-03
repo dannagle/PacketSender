@@ -37,10 +37,6 @@ parts:
     source-branch: master
     cmake-parameters:
       - $SNAPCRAFT_PART_SRC/src
-    override-build: |
-      cp $SNAPCRAFT_PART_SRC/src/snap/CMakeLists.txt $SNAPCRAFT_PART_SRC/src/CMakeLists.txt
-      craftctl default
-
     build-packages:
       - build-essential
       - qt6-base-dev
