@@ -63,7 +63,7 @@ Packet Sender would like to thank the following sponsors.
 <a id="support"></a>
 ## Support
 
-* Twitter: [@NagleCode](http://twitter.com/NagleCode)
+* Twitter/X: [@NagleCode](https://x.com/NagleCode)
 * Forums are at: [GitHub Discussions](https://github.com/dannagle/PacketSender/discussions).
 * Email: [Packet Sender Contact](https://packetsender.com/contact)
 * Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
@@ -74,7 +74,7 @@ Packet Sender would like to thank the following sponsors.
 # Downloads
 
 ## Desktop Download
-Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/download). Some places redistribute Packet Sender.
+Official releases of Packet Sender can be downloaded at  [PacketSender.com](https://packetsender.com/download). Some places redistribute Packet Sender.
 
 ![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
 
@@ -224,14 +224,18 @@ Fill out the options, and the main GUI will be filled with the correct data for 
 
 There are also CLI options to help generate and send WOL packets
 
+```text
+packetsender --wol f8:23:66:30:e5:30
+Sending broadcast Wake-On-LAN to target: F8:23:66:30:E5:30 on port 7
+UDP (60360)://255.255.255.255:7 ff ff ff ff ff ff f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30
+```
+
 ## SSL Client and Server
 
 Packet Sender supports establishing encrypted connections over SSL.
 This is supported in the GUI and on the command line.
 
 Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
-
-_This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)_
 
 ![Packet Sender Direct TCP](screenshots/packetsender_ssl.PNG)
 
@@ -691,7 +695,7 @@ packetsender --usdelay 2000000 --name "My Awesome Packet"
 The only dependency is Qt SDK
 
 ## Building Packet Sender for Windows/MAC
-1. Download the Qt installer from http://www.qt.io/download-open-source/
+1. Download the Qt installer from https://www.qt.io/download-open-source/
 1. Let it install MingGW if you don't have a compiler.
 1. Open the project PacketSender.pro
 1. Build! 
@@ -738,5 +742,5 @@ The most current VPAT [may be found](vpat_2.4_packetsender.pdf) in this repo.
 
 # Copyright
 
-Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://packetsender.com)
+Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://x.com/NagleCode) - [PacketSender.com](https://packetsender.com)
 
