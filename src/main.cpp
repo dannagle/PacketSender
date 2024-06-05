@@ -93,7 +93,7 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 
 #define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
 #define OUTIF()  if(!quiet) o<< "\n"
-#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; outBuilder.clear();
+#define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; out.flush(); outBuilder.clear();
 
 
 
@@ -594,33 +594,37 @@ int main(int argc, char *argv[])
 
             }
 
+            QString bindmode = "";
             if(udp) {
-                QDEBUG() << "Listening for UDP packets in server mode. ";
+                bindmode = "UDP";
                 QUdpSocket sock;
                 bindResult = receiver->initUDP(bindIP, bind);
+                bind = receiver->udpSocket->localPort();
+                bindIP = receiver->udpSocket->localAddress().toString();
             } else {
                 if(tcp) {
-                    QDEBUG() << "Listening for TCP packets in server mode. ";
+                    bindmode = "TCP";
                 }
                 if(ssl) {
-                    QDEBUG() << "Listening for SSL packets in server mode. ";
+                    bindmode = "SSL";
                 }
                 bindResult = receiver->initSSL(bindIP, bind, ssl);
+                bind = receiver->tcpServer->serverPort();
+                bindIP = receiver->tcpServer->serverAddress().toString();
             }
 
-
-
-
-            QDEBUG() << "Binding to " << bind;
-            QDEBUG() << "Binding to " << bindIPstr;
-            QDEBUG() << "Bind result" << bindResult;
-            QDEBUG();
+            bindIP = bindIP.toUpper();
             if(bindResult) {
-                QDEBUG() << "Starting event loop";
+                OUTIF() << bindmode << " Server started on " << bindIP << ":" << bind;
+                OUTIF() << "Use ctrl+c to exit.";
+                OUTPUT();
                 a.exec();
             } else {
-                QDEBUG() << "Failed to bind";
-
+                OUTIF() << "Failed to bind " << bindmode << " " << bindIP << ":" << bind;
+                if(bind < 1024) {
+                    OUTIF() << "Note that lower port numbers may require admin/sudo";
+                }
+                OUTPUT();
             }
 
 

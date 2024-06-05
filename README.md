@@ -501,8 +501,7 @@ Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
 See https://PacketSender.com/ for more information.
 
 Options:
-  -?, -h, --help            Displays help on commandline options.
-  --help-all                Displays help including Qt specific options.
+  -h, --help                Displays help on commandline options.
   -v, --version             Displays version information.
   -q, --quiet               Quiet mode. Only output received data.
   -x, --hex                 Parse data-to-send as hex (default for
@@ -511,6 +510,8 @@ Options:
                             and GUI).
   -A, --ASCII               Parse data-to-send as pure ascii (no \xx
                             translation).
+  -l, --listen              Listen instead of send. Use bind options to specify
+                            port/IP. Otherwise, dynamic/All.
   -w, --wait <ms>           Wait up to <milliseconds> for a response after
                             sending. Zero means do not wait (Default).
   -f, --file <path>         Send contents of specified path. Max 10 MiB for
@@ -557,6 +558,72 @@ Response Time:5:51:37.042 pm
 Response HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
 Response ASCII:220-Welcome to XMission Internet...
 ```
+
+## Example CLI to listen for packets (Server Mode)
+Use the existing bind options to configure the server. 
+- -b for port
+- -B for iP
+- -t/-u/-s for TCP, UDP, or SSL
+
+Binding to dynamic port using TCP
+```text
+packetsender -l
+TCP Server started on 0.0.0.0:52567
+Use ctrl+c to exit server.
+
+From: 127.0.0.1, Port:52568
+Response Time:2024-06-04 19:01:53.198
+Response HEX:48 65 6C 6C 6F 
+Response ASCII:Hello
+
+From: 127.0.0.1, Port:52569
+Response Time:2024-06-04 19:02:24.063
+Response HEX:57 6F 72 6C 64 
+Response ASCII:World
+```
+
+Binding to port 8080 using UDP
+```text
+packetsender -l -u -b 8080
+UDP Server started on 0.0.0.0:8080
+Use ctrl+c to exit server.
+
+From: ::ffff:127.0.0.1, Port:49500
+Response Time:2024-06-04 19:04:28.890
+Response HEX:48 65 6C 6C 6F 20 55 44 50 20 50 61 63 6B 65 74 
+Response ASCII:Hello UDP Packet
+```
+
+Binding to IP 192.168.86.26, port 54321 using SSL
+```text
+packetsender -l -s -B 192.168.86.26 -b 54321 
+Binding to custom IP 192.168.86.26
+Listening for SSL packets in server mode. 
+SSL Server started on 192.168.86.26:54321
+Use ctrl+c to exit server.
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Encrypted with AESGCM(256)
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Authenticated with RSA
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Peer cert issued by 
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Our Cert issued by SnakeOil
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.747
+Response HEX:43 6F 6F 6C 20 53 53 4C 
+Response ASCII:Cool SSL
+```
+
 
 ## Examples binding to port and custom IP, IPv4, or IPv6
 
