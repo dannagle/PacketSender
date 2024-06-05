@@ -104,7 +104,7 @@ bool MainPacketReceiver::initSSL(QString host, int port, bool encrypted)
     tcpServer = new ThreadedTCPServer(nullptr);
     tcpServer->init(port, encrypted, host);
     tcpServer->consoleMode = true;
-
+    tcpServer->responsePacket(packetReply);
     return tcpServer->isListening();
 }
 

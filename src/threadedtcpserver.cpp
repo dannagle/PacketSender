@@ -23,6 +23,7 @@ ThreadedTCPServer::ThreadedTCPServer(QObject *parent) :
 
     threads.clear();
     consoleMode = false;
+    packetReply.clear();
 
 
 }
@@ -49,6 +50,12 @@ bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, QString ipMode)
 
 }
 
+void ThreadedTCPServer::responsePacket(Packet packetToSend)
+{
+    packetReply = packetToSend;
+
+}
+
 void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 {
     QDEBUG() << "new tcp connection";
@@ -60,6 +67,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
     TCPThread *thread = new TCPThread(socketDescriptor, this);
     thread->isSecure = encrypted;
+    thread->packetReply = packetReply;
     QDEBUGVAR(thread->isSecure);
     if (persistentConnectCheck) {
 #ifndef CONSOLE_BUILD

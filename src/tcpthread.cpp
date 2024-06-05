@@ -35,6 +35,7 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     sendPacket.clear();
     insidePersistent = false;
     isSecure = false;
+    packetReply.clear();
 
 
 }
@@ -160,6 +161,14 @@ void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket)
 
     if (sendSmartResponse) {
         smartData = Packet::smartResponseMatch(smartList, tcpPacket.getByteArray());
+    }
+
+    // This is pre-loaded from command line
+    if(!packetReply.hexString.isEmpty()) {
+
+        QString data = Packet::macroSwap(packetReply.asciiString());
+        QString hexString = Packet::ASCIITohex(data);
+        smartData = Packet::HEXtoByteArray(hexString);
     }
 
 

@@ -18,6 +18,8 @@ class ThreadedTCPServer : public QTcpServer
 
         bool init(quint16 port, bool isEncrypted, QString ipMode);
         bool consoleMode;
+        void responsePacket(Packet packetToSend);
+
     protected:
         void incomingConnection(qintptr socketDescriptor);
 
@@ -37,6 +39,8 @@ class ThreadedTCPServer : public QTcpServer
 
     private:
         QList<TCPThread *> threads;
+        Packet packetReply;
+
 
 
         QList<TCPThread *> tcpthreadList;

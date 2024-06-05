@@ -30,6 +30,7 @@ class TCPThread : public QThread
         bool closeRequest;
         bool isSecure;
         bool isEncrypted();
+        Packet packetReply;
 
     signals:
         void error(QSslSocket::SocketError socketError);
