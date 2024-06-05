@@ -234,6 +234,10 @@ int main(int argc, char *argv[])
         QCommandLineOption serverOption(QStringList() << "l" << "listen", "Listen instead of send. Use bind options to specify port/IP. Otherwise, dynamic/All.");
         parser.addOption(serverOption);
 
+        // Command line server response
+        QCommandLineOption responseOption(QStringList() << "r" << "response", "Server mode response data in mixed-ascii. Macro supported.", "ascii");
+        parser.addOption(responseOption);
+
 
         // An option with a value
         QCommandLineOption waitOption(QStringList() << "w" << "wait",
@@ -342,6 +346,8 @@ int main(int argc, char *argv[])
         bool wol = parser.isSet(wolOption);
 
         bool server = parser.isSet(serverOption);
+        QString response = parser.value(responseOption);
+        QDEBUGVAR(response);
         bool okbps = false;
         bool okrate = false;
         bool maxrate = parser.isSet(maxOption);
@@ -588,6 +594,16 @@ int main(int argc, char *argv[])
         if(server) {
             bool bindResult = false;
             MainPacketReceiver * receiver = new MainPacketReceiver(nullptr);
+            if(!response.isEmpty()) {
+                Packet replyPacket;
+                QDEBUGVAR(response);
+                replyPacket.hexString = Packet::ASCIITohex(response);
+                receiver->responsePacket(replyPacket);
+                if(!replyPacket.hexString.isEmpty()) {
+                    OUTIF() << "Loading response packet.";
+
+                }
+            }
             QString bindIP = "any";
             if(!bindIPstr.isEmpty()) {
                 bindIP = bindIPstr;
@@ -753,6 +769,9 @@ int main(int argc, char *argv[])
         QDEBUGVAR(usdelay);
         QDEBUGVAR(translateMacroSend);
         QDEBUGVAR(maxrate);
+        QDEBUGVAR(server);
+        QDEBUGVAR(response);
+
 
 
         //NOW LETS DO THIS!

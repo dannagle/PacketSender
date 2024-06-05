@@ -22,6 +22,7 @@ class MainPacketReceiver : public QObject
         bool initSSL(QString host, int port, bool encrypted);
 
         static QString datagramOutput(QNetworkDatagram theDatagram, bool quiet = false);
+        void responsePacket(Packet packetToSend);
     signals:
         void sendPacket(Packet packetToSend);
         //void receivedPacket(Packet packetReceived);
@@ -30,5 +31,6 @@ class MainPacketReceiver : public QObject
     private:
         PacketNetwork * packetNetwork;
         void httpFinished();
+        Packet packetReply;
 };
 

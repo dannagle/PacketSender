@@ -6,8 +6,8 @@ MainPacketReceiver::MainPacketReceiver(QObject *parent) :QObject(parent) {
     finished = false;
     packetNetwork = new PacketNetwork(parent);
     packetNetwork->consoleMode = true;
+    packetReply.clear();
 
-    QDEBUG();
 
 
     if (!connect(this->packetNetwork, &PacketNetwork::packetReceived, this, &MainPacketReceiver::toTrafficLog)) {
@@ -18,7 +18,6 @@ MainPacketReceiver::MainPacketReceiver(QObject *parent) :QObject(parent) {
     if (!connect(this->packetNetwork, &PacketNetwork::packetSent, this, &MainPacketReceiver::toTrafficLog)) {
         QDEBUG() << "packetNetwork packetReceived false";
     }
-    QDEBUG();
 
 
     if (!connect(this, &MainPacketReceiver::sendPacket, packetNetwork, &PacketNetwork::packetToSend)) {
@@ -42,14 +41,40 @@ void MainPacketReceiver::httpFinished()
 }
 
 
+
 void MainPacketReceiver::readPendingDatagrams()
 {
     while (udpSocket->hasPendingDatagrams()) {
 
-        QString output = MainPacketReceiver::datagramOutput(udpSocket->receiveDatagram(10000000), false);
+        QNetworkDatagram datagram = udpSocket->receiveDatagram(10000000);
+
 
         QTextStream out(stdout);
+        QString output = MainPacketReceiver::datagramOutput(datagram, false);
         out << output << Qt::endl;
+        out.flush();
+        output.clear();
+
+        if(!packetReply.hexString.isEmpty()) {
+
+            Packet sendit = packetReply;
+            sendit.tcpOrUdp = "UDP";
+            sendit.fromIP = "You (Response)";
+            sendit.toIP = datagram.senderAddress().toString();
+            sendit.port = datagram.senderPort();
+            QString data = Packet::macroSwap(packetReply.asciiString());
+            sendit.hexString = Packet::ASCIITohex(data);
+
+            emit sendPacket(sendit);
+
+            out << "\nFrom: " << sendit.fromIP << ", Port:" << sendit.port;
+            out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+            out << "\nResponse HEX:" << sendit.hexString;
+            out << "\nResponse ASCII:" << sendit.asciiString();
+            out << Qt::endl;
+
+        }
+
         out.flush();
 
     }
@@ -106,6 +131,12 @@ QString MainPacketReceiver::datagramOutput(QNetworkDatagram theDatagram, bool qu
     }
 
     return output;
+}
+
+void MainPacketReceiver::responsePacket(Packet packetToSend)
+{
+    packetReply = packetToSend;
+
 }
 
 
