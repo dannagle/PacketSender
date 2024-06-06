@@ -725,7 +725,13 @@ void MainWindow::toTrafficLog(Packet logPacket)
         if ((!logPacket.toIP.isEmpty() && !logPacket.fromIP.isEmpty())
                 || (!logPacket.errorString.isEmpty())
            ) {
-            packetsLogged.prepend(logPacket);
+
+            if(logPacket.isTCP() && logPacket.hexString.isEmpty() && logPacket.errorString.isEmpty()) {
+                QDEBUG() << "Discarded empty TCP packet";
+            } else {
+                packetsLogged.prepend(logPacket);
+            }
+
         } else {
             QDEBUG() << "Discarded packet";
         }

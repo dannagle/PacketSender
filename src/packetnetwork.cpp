@@ -601,7 +601,7 @@ void PacketNetwork::readPendingDatagrams()
             sender =  theDatagram.senderAddress();
             senderPort = theDatagram.senderPort();
 
-            QDEBUG() << "data size is" << datagram.size();
+            QDEBUG() << "data size is" << datagram.size() << "Sender is" << sender << ":" << senderPort;
     //        QDEBUG() << debugQByteArray(datagram);
 
             Packet udpPacket;

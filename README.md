@@ -506,6 +506,7 @@ See https://PacketSender.com/ for more information.
 
 Options:
   -h, --help                Displays help on commandline options.
+  --help-all                Displays help including Qt specific options.
   -v, --version             Displays version information.
   -q, --quiet               Quiet mode. Only output received data.
   -x, --hex                 Parse data-to-send as hex (default for
@@ -516,6 +517,8 @@ Options:
                             translation).
   -l, --listen              Listen instead of send. Use bind options to specify
                             port/IP. Otherwise, dynamic/All.
+  -r, --response <ascii>    Server mode response data in mixed-ascii. Macro
+                            supported.
   -w, --wait <ms>           Wait up to <milliseconds> for a response after
                             sending. Zero means do not wait (Default).
   -f, --file <path>         Send contents of specified path. Max 10 MiB for
@@ -568,6 +571,7 @@ Use the existing bind options to configure the server.
 - -b for port
 - -B for iP
 - -t/-u/-s for TCP, UDP, or SSL
+- -r to send an response (macro supported ASCII)
 
 Binding to dynamic port using TCP
 ```text
@@ -597,6 +601,25 @@ Response Time:2024-06-04 19:04:28.890
 Response HEX:48 65 6C 6C 6F 20 55 44 50 20 50 61 63 6B 65 74 
 Response ASCII:Hello UDP Packet
 ```
+
+Binding to port 8080 using UDP with current time response
+```text
+packetsender -l -u -b 8080 -r "{{TIME}}"
+Loading response packet.
+UDP Server started on 0.0.0.0:8080
+Use ctrl+c to exit.
+
+From: ::ffff:127.0.0.1, Port:59594
+Response Time:2024-06-05 20:48:18.180
+Response HEX:68 65 6C 6C 6F 20 70 61 63 6B 65 74 20 73 65 6E 64 65 72 
+Response ASCII:hello packet sender
+
+From: You (Response), Port:59594
+Response Time:2024-06-05 20:48:18.182
+Response HEX:30 38 3a 34 38 3a 31 38 20 70 6d 
+Response ASCII:08:48:18 pm
+```
+
 
 Binding to IP 192.168.86.26, port 54321 using SSL
 ```text

@@ -65,7 +65,10 @@ void MainPacketReceiver::readPendingDatagrams()
             QString data = Packet::macroSwap(packetReply.asciiString());
             sendit.hexString = Packet::ASCIITohex(data);
 
-            emit sendPacket(sendit);
+            QHostAddress resolved = PacketNetwork::resolveDNS(sendit.toIP);
+
+            udpSocket->writeDatagram(sendit.getByteArray(), resolved, sendit.port);
+
 
             out << "\nFrom: " << sendit.fromIP << ", Port:" << sendit.port;
             out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);

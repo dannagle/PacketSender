@@ -68,6 +68,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     TCPThread *thread = new TCPThread(socketDescriptor, this);
     thread->isSecure = encrypted;
     thread->packetReply = packetReply;
+    thread->consoleMode = consoleMode;
     QDEBUGVAR(thread->isSecure);
     if (persistentConnectCheck) {
 #ifndef CONSOLE_BUILD
