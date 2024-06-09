@@ -9,7 +9,7 @@ description: |
 # sudo snap install packetsender*.snap --dangerous
 
 grade: stable
-base: core22
+base: core24
 confinement: strict
 architectures: [amd64]
 environment:
@@ -32,8 +32,9 @@ apps:
       
 parts:
   packetsender:
-    plugin: cmake
-    source: https://github.com/dannagle/PacketSender.git
+    plugin: qmake
+    qt-version: qt6
+    source: https://github.com/dannagle/PacketSenderSnap.git
     source-branch: master
     cmake-parameters:
       - $SNAPCRAFT_PART_SRC/src
