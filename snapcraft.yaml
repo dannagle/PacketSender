@@ -36,8 +36,7 @@ parts:
     qt-version: qt6
     source: https://github.com/dannagle/PacketSenderSnap.git
     source-branch: master
-    cmake-parameters:
-      - $SNAPCRAFT_PART_SRC/src
+    qmake-project-file: src/PacketSenderSnap.pro
     build-packages:
       - build-essential
       - qt6-base-dev
