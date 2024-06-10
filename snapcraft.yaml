@@ -47,6 +47,11 @@ parts:
       - libgl1-mesa-dev
       - libglvnd-dev
       - libssl-dev
+      - libqt6core6
+      - libqt6gui6
+      - libqt6network6t64
+      - libqt6widgets6
+      - qt6-translations-l10n
 
     stage-packages:
       - libqt6core6
