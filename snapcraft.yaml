@@ -6,6 +6,11 @@ description: |
   Packet Sender - Free utility to for sending / receiving of network
   packets. TCP, UDP, SSL, and HTTP. https://packetsender.com/
 
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+
 # sudo snap install packetsender*.snap --dangerous
 
 grade: stable
@@ -33,7 +38,7 @@ parts:
     plugin: qmake
     source: src/
     source-branch: master
-    qmake-project-file: src/PacketSenderSnap.pro
+    qmake-project-file: PacketSenderSnap.pro
     build-packages:
       - build-essential
       - qt6-base-dev
@@ -55,31 +60,3 @@ parts:
       - qt6-qpa-plugins
       - qt6-wayland
       - cups-client
-    after: [desktop-qt6]
-      
-  desktop-qt6:
-      source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
-      source-subdir: qt
-      plugin: make
-      make-parameters: ["FLAVOR=qt6"]
-      build-packages:
-        - build-essential
-        - qt6-base-dev
-        - libqt6xml6t64
-        - libqt6network6t64
-        - dpkg-dev
-      stage-packages:
-        - libxkbcommon0
-        - ttf-ubuntu-font-family
-        - dmz-cursor-theme
-        - light-themes
-        - adwaita-icon-theme
-        - gnome-themes-standard
-        - shared-mime-info
-        - libqt6gui6
-        - libgdk-pixbuf2.0-0
-        - libqt6svg6
-        - appmenu-qt6
-        - locales-all
-        - xdg-user-dirs
-        - fcitx-frontend-qt6
