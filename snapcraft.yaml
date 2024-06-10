@@ -1,10 +1,10 @@
 name: packetsender
-version: 8.6.8
+version: 8.6.9
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
 icon: src/pslogo128.png
 description: |
   Packet Sender - Free utility to for sending / receiving of network
-  packets. TCP, UDP, SSL, and HTTP.
+  packets. TCP, UDP, SSL, and HTTP. https://packetsender.com/
 
 # sudo snap install packetsender*.snap --dangerous
 
@@ -28,19 +28,19 @@ apps:
       - removable-media
       - network
       - cups
-    extensions: [gnome]
       
 parts:
   packetsender:
     plugin: qmake
     qt-version: qt6
-    source: https://github.com/dannagle/PacketSenderSnap.git
+    source: src/
     source-branch: master
     qmake-project-file: src/PacketSenderSnap.pro
     build-packages:
       - build-essential
       - qt6-base-dev
       - libxkbcommon-dev
+      - qt6-declarative-dev
       - libgl1-mesa-dev
       - libglvnd-dev
       - libssl-dev
@@ -57,4 +57,29 @@ parts:
       - qt6-qpa-plugins
       - qt6-wayland
       - cups-client
+    after: [desktop-qt6]
       
+  desktop-qt6:
+      source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+      source-subdir: qt
+      plugin: make
+      make-parameters: ["FLAVOR=qt6"]
+      build-packages:
+        - build-essential
+        - qtbase6-dev
+        - dpkg-dev
+      stage-packages:
+        - libxkbcommon0
+        - ttf-ubuntu-font-family
+        - dmz-cursor-theme
+        - light-themes
+        - adwaita-icon-theme
+        - gnome-themes-standard
+        - shared-mime-info
+        - libqt6gui6
+        - libgdk-pixbuf2.0-0
+        - libqt6svg6
+        - appmenu-qt6
+        - locales-all
+        - xdg-user-dirs
+        - fcitx-frontend-qt6
