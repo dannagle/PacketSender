@@ -64,7 +64,9 @@ parts:
       make-parameters: ["FLAVOR=qt6"]
       build-packages:
         - build-essential
-        - qtbase6-dev
+        - qt6-base-dev
+        - libqt6xml6t64
+        - libqt6network6t64
         - dpkg-dev
       stage-packages:
         - libxkbcommon0
