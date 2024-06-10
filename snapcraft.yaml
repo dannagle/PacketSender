@@ -11,7 +11,6 @@ description: |
 grade: stable
 base: core24
 confinement: strict
-architectures: [amd64]
 environment:
   QT_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins"
 
@@ -32,7 +31,6 @@ apps:
 parts:
   packetsender:
     plugin: qmake
-    qt-version: qt6
     source: src/
     source-branch: master
     qmake-project-file: src/PacketSenderSnap.pro
