@@ -1250,7 +1250,7 @@ int main(int argc, char *argv[])
         bool useDark = settings.value("darkModeCheck", true).toBool();
         QString styleSheet = "";
 
-#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
 
         QStyleHints * styleHints = QGuiApplication::styleHints();
 
