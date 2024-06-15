@@ -879,7 +879,8 @@ QString Packet::macroSwap(QString data)
         data = data.replace("{{RANDOM}}", QString::number(rand()));
 #else
         QRandomGenerator * num = QRandomGenerator::global();
-        data = data.replace("{{RANDOM}}", QString::number(num->bounded(0, __INT_MAX__)));
+        quint64 bigRandom = num->generate64();
+        data = data.replace("{{RANDOM}}", QString::number(bigRandom));
 
 #endif
     }
