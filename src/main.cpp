@@ -201,6 +201,8 @@ int main(int argc, char *argv[])
         if (QSslSocket::supportsSsl()) {
             versionBuilder.append(" / SSL:");
             versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+        } else {
+            versionBuilder.append(" / SSL library not found");
         }
 
         #ifdef GIT_CURRENT_SHA1
