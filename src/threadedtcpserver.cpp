@@ -148,7 +148,7 @@ void ThreadedTCPServer::outputTCPPacket(Packet receivePacket)
         out << "\nResponse ASCII:" << receivePacket.asciiString();
     }
 
-    out << Qt::endl;
+    out << ENDL;
 
     out.flush();
 

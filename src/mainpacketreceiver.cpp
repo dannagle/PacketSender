@@ -51,7 +51,7 @@ void MainPacketReceiver::readPendingDatagrams()
 
         QTextStream out(stdout);
         QString output = MainPacketReceiver::datagramOutput(datagram, false);
-        out << output << Qt::endl;
+        out << output << ENDL;
         out.flush();
         output.clear();
 
@@ -74,7 +74,7 @@ void MainPacketReceiver::readPendingDatagrams()
             out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
             out << "\nResponse HEX:" << sendit.hexString;
             out << "\nResponse ASCII:" << sendit.asciiString();
-            out << Qt::endl;
+            out << ENDL;
 
         }
 
