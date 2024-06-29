@@ -20,6 +20,8 @@ About::About(QWidget *parent) :
     if (QSslSocket::supportsSsl()) {
         versionBuilder.append("\nSSL Version: ");
         versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+    } else {
+        versionBuilder.append("\nSSL library not found");
     }
 
 #ifdef GIT_CURRENT_SHA1

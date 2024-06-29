@@ -1550,7 +1550,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="114"/>
-        <location filename="../persistentconnection.cpp" line="468"/>
+        <location filename="../persistentconnection.cpp" line="478"/>
         <source>Send File</source>
         <translation>Envoyer le fichier</translation>
     </message>
@@ -1570,23 +1570,23 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
         <translation>Renvoyer(1)</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="154"/>
-        <location filename="../persistentconnection.cpp" line="156"/>
+        <location filename="../persistentconnection.cpp" line="164"/>
+        <location filename="../persistentconnection.cpp" line="166"/>
         <source>You:</source>
         <translation>Toi:</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="470"/>
+        <location filename="../persistentconnection.cpp" line="480"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="511"/>
+        <location filename="../persistentconnection.cpp" line="521"/>
         <source>Copied</source>
         <translation>Copié</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="512"/>
+        <location filename="../persistentconnection.cpp" line="522"/>
         <source>Output sent to your clipboard</source>
         <translation>Résultat envoyé à votre presse-papiers</translation>
     </message>

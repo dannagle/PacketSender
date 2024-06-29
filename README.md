@@ -16,6 +16,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Sponsors](#sponsors)
   * Visit [IWL.com](https://www.iwl.com/)
   * Visit [NagleCode.com](https://dannagle.com/)
+  * Visit [Eletiope.com](http://eletiope.com/)
 
 * [GUI](#gui)
 * [Intense Traffic Generator (GUI)](#udptraffic)
@@ -50,6 +51,10 @@ Packet Sender would like to thank the following sponsors.
 <br>NagleCode is a software publisher and development studio. 
 <br><br><br>
 
+[![Eletiope](screenshots/eletiope_logo400.png)](http://eletiope.com)
+<br>Eletiope installs lighting, audiovisuals and immersive rooms for exhibitions and museums, and for corporate showrooms. 
+<br><br><br>
+
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
@@ -58,7 +63,7 @@ Packet Sender would like to thank the following sponsors.
 <a id="support"></a>
 ## Support
 
-* Twitter: [@NagleCode](http://twitter.com/NagleCode)
+* Twitter/X: [@NagleCode](https://x.com/NagleCode)
 * Forums are at: [GitHub Discussions](https://github.com/dannagle/PacketSender/discussions).
 * Email: [Packet Sender Contact](https://packetsender.com/contact)
 * Connect with me on [LinkedIn](https://www.linkedin.com/in/dannagle/)
@@ -69,7 +74,7 @@ Packet Sender would like to thank the following sponsors.
 # Downloads
 
 ## Desktop Download
-Official releases of Packet Sender can be downloaded at  [PacketSender.com](http://packetsender.com/download). Some places redistribute Packet Sender.
+Official releases of Packet Sender can be downloaded at  [PacketSender.com](https://packetsender.com/download). Some places redistribute Packet Sender.
 
 ![Windows Logo](screenshots/winlogo150.png) ![Mac Logo](screenshots/maclogo150.png) ![Linux Logo](screenshots/Tux150.png)
 
@@ -219,14 +224,18 @@ Fill out the options, and the main GUI will be filled with the correct data for 
 
 There are also CLI options to help generate and send WOL packets
 
+```text
+packetsender --wol f8:23:66:30:e5:30
+Sending broadcast Wake-On-LAN to target: F8:23:66:30:E5:30 on port 7
+UDP (60360)://255.255.255.255:7 ff ff ff ff ff ff f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30 f8 23 66 30 e5 30
+```
+
 ## SSL Client and Server
 
 Packet Sender supports establishing encrypted connections over SSL.
 This is supported in the GUI and on the command line.
 
 Packet Sender bundles OpenSSL for use in Windows. On Mac and Linux, Packet Sender will use the native SSL libraries.
-
-_This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit. (http://www.openssl.org/)_
 
 ![Packet Sender Direct TCP](screenshots/packetsender_ssl.PNG)
 
@@ -296,16 +305,16 @@ You may also have some files portable and the other in their standard location b
 
 ### DDLs that can be removed in Console-only portable Mode
 If you do not require the GUI, you may remove these DDLs
-- Qt5Svg.dll
-- libEGL.dll
-- libGLESv2.dll
-- Qt5Widgets.dll
-- Qt5Gui.dll
+- Qt6Svg.dll
+- Qt6Widgets.dll
+- Qt6Gui.dll
 - opengl32sw.dll
 - D3Dcompiler_47.dll
 - iconengines directory
 - imageformats directory
 - styles directory
+
+Note that DLLs with `+` characters in their names that can cause problems with Windows command-line copy if you do not surround them with `"` .
 
 ### DDLs that can be removed if you do not need secure connections
 If you do not require SSL, you may remove these DDLs
@@ -496,7 +505,7 @@ Packet Sender is a Network UDP/TCP/SSL/HTTP Test Utility by NagleCode
 See https://PacketSender.com/ for more information.
 
 Options:
-  -?, -h, --help            Displays help on commandline options.
+  -h, --help                Displays help on commandline options.
   --help-all                Displays help including Qt specific options.
   -v, --version             Displays version information.
   -q, --quiet               Quiet mode. Only output received data.
@@ -506,6 +515,10 @@ Options:
                             and GUI).
   -A, --ASCII               Parse data-to-send as pure ascii (no \xx
                             translation).
+  -l, --listen              Listen instead of send. Use bind options to specify
+                            port/IP. Otherwise, dynamic/All.
+  -r, --response <ascii>    Server mode response data in mixed-ascii. Macro
+                            supported.
   -w, --wait <ms>           Wait up to <milliseconds> for a response after
                             sending. Zero means do not wait (Default).
   -f, --file <path>         Send contents of specified path. Max 10 MiB for
@@ -552,6 +565,92 @@ Response Time:5:51:37.042 pm
 Response HEX:32 32 30 2D 57 65 6C 63 6F 6D 65 20...
 Response ASCII:220-Welcome to XMission Internet...
 ```
+
+## Example CLI to listen for packets (Server Mode)
+Use the existing bind options to configure the server. 
+- -b for port
+- -B for iP
+- -t/-u/-s for TCP, UDP, or SSL
+- -r to send an response (macro supported ASCII)
+
+Binding to dynamic port using TCP
+```text
+packetsender -l
+TCP Server started on 0.0.0.0:52567
+Use ctrl+c to exit server.
+
+From: 127.0.0.1, Port:52568
+Response Time:2024-06-04 19:01:53.198
+Response HEX:48 65 6C 6C 6F 
+Response ASCII:Hello
+
+From: 127.0.0.1, Port:52569
+Response Time:2024-06-04 19:02:24.063
+Response HEX:57 6F 72 6C 64 
+Response ASCII:World
+```
+
+Binding to port 8080 using UDP
+```text
+packetsender -l -u -b 8080
+UDP Server started on 0.0.0.0:8080
+Use ctrl+c to exit server.
+
+From: ::ffff:127.0.0.1, Port:49500
+Response Time:2024-06-04 19:04:28.890
+Response HEX:48 65 6C 6C 6F 20 55 44 50 20 50 61 63 6B 65 74 
+Response ASCII:Hello UDP Packet
+```
+
+Binding to port 8080 using UDP with current time response
+```text
+packetsender -l -u -b 8080 -r "{{TIME}}"
+Loading response packet.
+UDP Server started on 0.0.0.0:8080
+Use ctrl+c to exit.
+
+From: ::ffff:127.0.0.1, Port:59594
+Response Time:2024-06-05 20:48:18.180
+Response HEX:68 65 6C 6C 6F 20 70 61 63 6B 65 74 20 73 65 6E 64 65 72 
+Response ASCII:hello packet sender
+
+From: You (Response), Port:59594
+Response Time:2024-06-05 20:48:18.182
+Response HEX:30 38 3a 34 38 3a 31 38 20 70 6d 
+Response ASCII:08:48:18 pm
+```
+
+
+Binding to IP 192.168.86.26, port 54321 using SSL
+```text
+packetsender -l -s -B 192.168.86.26 -b 54321 
+Binding to custom IP 192.168.86.26
+Listening for SSL packets in server mode. 
+SSL Server started on 192.168.86.26:54321
+Use ctrl+c to exit server.
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Encrypted with AESGCM(256)
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Authenticated with RSA
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Peer cert issued by 
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.726
+Error/Info:Our Cert issued by SnakeOil
+
+From: 192.168.86.26, Port:52588
+Response Time:2024-06-04 19:11:30.747
+Response HEX:43 6F 6F 6C 20 53 53 4C 
+Response ASCII:Cool SSL
+```
+
 
 ## Examples binding to port and custom IP, IPv4, or IPv6
 
@@ -619,7 +718,7 @@ packetsender --usdelay 2000000 --name "My Awesome Packet"
 The only dependency is Qt SDK
 
 ## Building Packet Sender for Windows/MAC
-1. Download the Qt installer from http://www.qt.io/download-open-source/
+1. Download the Qt installer from https://www.qt.io/download-open-source/
 1. Let it install MingGW if you don't have a compiler.
 1. Open the project PacketSender.pro
 1. Build! 
@@ -666,5 +765,5 @@ The most current VPAT [may be found](vpat_2.4_packetsender.pdf) in this repo.
 
 # Copyright
 
-Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://twitter.com/NagleCode) - [PacketSender.com](https://packetsender.com)
+Packet Sender was written by [Dan Nagle](https://dannagle.com/) and is published by &copy; NagleCode, LLC   -  [@NagleCode](https://x.com/NagleCode) - [PacketSender.com](https://packetsender.com)
 

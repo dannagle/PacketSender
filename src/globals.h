@@ -64,6 +64,13 @@
 #define UPDOWNICON ":icons/moveupdown.png"
 
 
+// Hard-coding EOL for linux since Qt distros vary widely
+#ifdef __linux__
+    #define ENDL "\n";
+#else
+    #define ENDL Qt::endl;
+#endif
+
 //Qt 5.10 changed the way sockets bind
 //It seems dual ipv4/ipv6 mode works better.
 

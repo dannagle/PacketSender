@@ -18,6 +18,7 @@ jobs:
            cp -a .github/workflows/debian .
     - name: install_dependencies
       run: |
+           sudo apt update
            sudo apt install cmake debhelper devscripts qttools5-dev
     - name: build
       run: |

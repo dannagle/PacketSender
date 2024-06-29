@@ -22,6 +22,8 @@ ThreadedTCPServer::ThreadedTCPServer(QObject *parent) :
 {
 
     threads.clear();
+    consoleMode = false;
+    packetReply.clear();
 
 
 }
@@ -48,17 +50,25 @@ bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, QString ipMode)
 
 }
 
+void ThreadedTCPServer::responsePacket(Packet packetToSend)
+{
+    packetReply = packetToSend;
+
+}
+
 void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 {
     QDEBUG() << "new tcp connection";
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool();
+    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool() && (!consoleMode);
 
     QDEBUGVAR(persistentConnectCheck);
 
     TCPThread *thread = new TCPThread(socketDescriptor, this);
     thread->isSecure = encrypted;
+    thread->packetReply = packetReply;
+    thread->consoleMode = consoleMode;
     QDEBUGVAR(thread->isSecure);
     if (persistentConnectCheck) {
 #ifndef CONSOLE_BUILD
@@ -99,9 +109,20 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
         connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
 
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+        if(consoleMode) {
+            QDEBUG() << "consoleout" << connect(thread, &TCPThread::packetReceived,
+                    this, &ThreadedTCPServer::outputTCPPacket);
+
+            QDEBUG() << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(outputTCPPacket(Packet)));
+
+
+        } else {
+            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
+                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
+                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
+
+        }
 
         thread->start();
 
@@ -109,6 +130,31 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 
 
 }
+
+
+void ThreadedTCPServer::outputTCPPacket(Packet receivePacket)
+{
+    QTextStream out(stdout);
+
+    out << "\nFrom: " << receivePacket.fromIP << ", Port:" << receivePacket.fromPort;
+    out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+
+    if(!receivePacket.errorString.isEmpty()) {
+        out << "\nError/Info:" << receivePacket.errorString;
+    }
+
+    if (!receivePacket.hexString.isEmpty()) {
+        out << "\nResponse HEX:" << receivePacket.hexString;
+        out << "\nResponse ASCII:" << receivePacket.asciiString();
+    }
+
+    out << ENDL;
+
+    out.flush();
+
+
+}
+
 
 
 void ThreadedTCPServer::packetReceivedECHO(Packet sendpacket)

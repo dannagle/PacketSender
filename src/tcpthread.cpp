@@ -35,6 +35,8 @@ TCPThread::TCPThread(int socketDescriptor, QObject *parent)
     sendPacket.clear();
     insidePersistent = false;
     isSecure = false;
+    packetReply.clear();
+    consoleMode =  false;
 
 
 }
@@ -46,6 +48,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     incomingPersistent = false;
     insidePersistent = false;
     isSecure = false;
+    consoleMode =  false;
 }
 
 void TCPThread::sendAnother(Packet sendPacket)
@@ -143,23 +146,38 @@ void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket)
     bool sendResponse = settings.value("sendReponse", false).toBool();
     bool sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
     QList<SmartResponseConfig> smartList;
+    QString responseData = (settings.value("responseHex", "")).toString();
+    int ipMode = settings.value("ipMode", 4).toInt();
     smartList.clear();
+
     smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
     smartList.append(Packet::fetchSmartConfig(2, SETTINGSFILE));
     smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
     smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
     smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
 
-
-
-    QString responseData = (settings.value("responseHex", "")).toString();
-    int ipMode = settings.value("ipMode", 4).toInt();
-
     QByteArray smartData;
     smartData.clear();
 
+
+    if(consoleMode) {
+        responseData.clear();
+        sendResponse = false;
+        sendSmartResponse = false;
+    }
+
+
     if (sendSmartResponse) {
         smartData = Packet::smartResponseMatch(smartList, tcpPacket.getByteArray());
+    }
+
+
+    // This is pre-loaded from command line
+    if(!packetReply.hexString.isEmpty()) {
+
+        QString data = Packet::macroSwap(packetReply.asciiString());
+        QString hexString = Packet::ASCIITohex(data);
+        smartData = Packet::HEXtoByteArray(hexString);
     }
 
 

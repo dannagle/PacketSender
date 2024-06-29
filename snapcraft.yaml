@@ -1,17 +1,21 @@
 name: packetsender
-version: 8.4.1
+version: 8.6.9
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
 icon: src/pslogo128.png
 description: |
   Packet Sender - Free utility to for sending / receiving of network
-  packets. TCP, UDP, SSL, and HTTP.
+  packets. TCP, UDP, SSL, and HTTP. https://packetsender.com/
+
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
 
 # sudo snap install packetsender*.snap --dangerous
 
 grade: stable
-base: core22
+base: core24
 confinement: strict
-architectures: [amd64]
 environment:
   QT_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins"
 
@@ -19,7 +23,6 @@ apps:
   packetsender:
     command: usr/local/bin/packetsender
     desktop: usr/share/applications/packetsender.desktop
-
     plugs:
       - desktop
       - desktop-legacy
@@ -29,23 +32,35 @@ apps:
       - removable-media
       - network
       - cups
-    extensions: [gnome]
       
 parts:
   packetsender:
     plugin: qmake
-    source: https://github.com/dannagle/PacketSender.git
+    source: src/
     source-branch: master
-    qmake-project-file: src/PacketSenderSnap.pro
+    qmake-project-file: PacketSenderSnap.pro
+    build-environment:
+      - QT_SELECT: qt6
     build-packages:
       - build-essential
       - qt6-base-dev
+      - libqt6gui6
+      - libqt6core6
+      - qtchooser
       - libxkbcommon-dev
+      - qt6-declarative-dev
       - libgl1-mesa-dev
       - libglvnd-dev
       - libssl-dev
+      - libqt6core6
+      - libqt6gui6
+      - libqt6network6t64
+      - libqt6widgets6
+      - qt6-translations-l10n
 
     stage-packages:
+      - qt6-base-dev
+      - qt6-declarative-dev
       - libqt6core6
       - libqt6gui6
       - libqt6widgets6
@@ -57,4 +72,3 @@ parts:
       - qt6-qpa-plugins
       - qt6-wayland
       - cups-client
-      
