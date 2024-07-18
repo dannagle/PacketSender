@@ -68,6 +68,7 @@ class Settings : public QDialog
     public:
         MainWindow* rmw;
         QCheckBox* sendSimpleAck;
+        QCheckBox* sendSmartResponse;
         QLineEdit* sslLocalCertificatePath;
         QString initialSslLocalCertificatePath;
         QString initialSslCaPath;

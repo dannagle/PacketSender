@@ -153,9 +153,9 @@ void DtlsAssociation::readyRead()
         }
 
         if (crypto.dtlsError() == QDtlsError::RemoteClosedConnectionError) {
-            packetToSend.errorString += " Shutdown alert received";
-            emit errorMessage(tr("%1: shutdown alert received").arg(name));
-            socket.close();
+//            packetToSend.errorString += " Shutdown alert received";
+//            emit errorMessage(tr("%1: shutdown alert received").arg(name));
+            //socket.close();
             pingTimer.stop();
             return;
         }
@@ -170,7 +170,7 @@ void DtlsAssociation::readyRead()
             return;
         }
         //! [8]
-        crypto.doHandshake(&socket, dgram);
+        //crypto.doHandshake(&socket, dgram);
         //! [9]
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));

@@ -131,6 +131,7 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     on_genAuthCheck_clicked(false);
 
     //smart responses...
+    sendSmartResponse = ui->smartResponseEnableCheck;
     ui->smartResponseEnableCheck->setChecked(settings.value("smartResponseEnableCheck", false).toBool());
 
 #define RESPONSEIF(NUM) ui->responseIfEdit##NUM->setText(settings.value("responseIfEdit" #NUM,"").toString())
@@ -423,6 +424,7 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("sslPort", intListToPorts(sslList));
 
     settings.setValue("sendReponse", ui->sendResponseSettingsCheck->isChecked());
+    settings.setValue("sendSmartResponse", ui->smartResponseEnableCheck->isChecked());
     settings.setValue("responseName", ui->responsePacketBox->currentText().trimmed());
     settings.setValue("responseHex", ui->hexResponseEdit->text().trimmed());
 

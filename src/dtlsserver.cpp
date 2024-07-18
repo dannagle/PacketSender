@@ -6,8 +6,10 @@
 #include <algorithm>
 #include <QMessageBox>
 
+bool DtlsServer::closeNotifyReceived = false;
 
 namespace {
+
 
 QString peer_info(const QHostAddress &address, quint16 port)
 {
@@ -34,6 +36,7 @@ QString connection_info(QDtls *connection)
 }
 
 } // unnamed namespace
+
 
 //! [1]
 DtlsServer::DtlsServer()
@@ -88,11 +91,14 @@ void DtlsServer::readyRead()
     QHostAddress peerAddress;
     quint16 peerPort = 0;
     const qint64 bytesRead = serverSocket.readDatagram(dgram.data(), dgram.size(),
-                                                       &peerAddress, &peerPort);
+                                         &peerAddress, &peerPort);
     if (bytesRead <= 0) {
         emit warningMessage(tr("Failed to read a datagram: ") + serverSocket.errorString());
         return;
     }
+//    if (dgram.contains("00")){
+//        int ret = 1;
+//    }
 
     dgram.resize(bytesRead);
     //! [3]
@@ -115,27 +121,45 @@ void DtlsServer::readyRead()
     //! [5]
 
     //! [6]
-    if ((*client)->isConnectionEncrypted()) {
+
+    QDtls * dtlsServer = client->get();
+
+    if (dtlsServer->isConnectionEncrypted()) {
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
+        bool sendResponse = settings.value("sendReponse", false).toBool();
+        bool sendSmartResponse = settings.value("sendSmartResponse", false).toBool();
 
-        QDtls * dtlsServer = client->get();
         dgram = dtlsServer->decryptDatagram(&serverSocket, dgram);
+        QByteArray closeNotify("close notify");
+
+
 
         std::vector<QString> recievedPacketInfo = createInfoVect(dtlsServer->peerAddress(), dtlsServer->peerPort(), serverSocket.localAddress(), serverSocket.localPort());
+        if (dtlsServer->dtlsError() == QDtlsError::RemoteClosedConnectionError){
+            dgram = closeNotify;
+            closeNotifyReceived = true;
+            //dtlsServer->shutdown(&serverSocket);
+            sendResponse = false;
+            knownClients.erase(client);
+
+        }
         Packet recivedPacket = createPacket(recievedPacketInfo, dgram);
         emit serverPacketReceived(recivedPacket);
 
-        if(settings.value("sendSimpleAck").toString() == "true"){
+        if(settings.value("sendSimpleAck").toString() == "true" && !dgram.contains("close notify")){
+        //if(settings.value("sendSimpleAck").toString() == "true" && closeNotifyReceived == false){
             sendAck(dtlsServer, dgram);
+            return;
+        } else {
+            errorMessage("close notify recieved");
         }
 
-        bool sendResponse = settings.value("sendReponse", false).toBool();
-        bool sendSmartResponse = settings.value("sendReponse", false).toBool();
+
 
 
         smartData.clear();
-
+        //sendSmartResponse = true;
         if (sendSmartResponse) {
             QList<SmartResponseConfig> smartList;
             smartList.append(Packet::fetchSmartConfig(1, SETTINGSFILE));
@@ -143,20 +167,34 @@ void DtlsServer::readyRead()
             smartList.append(Packet::fetchSmartConfig(3, SETTINGSFILE));
             smartList.append(Packet::fetchSmartConfig(4, SETTINGSFILE));
             smartList.append(Packet::fetchSmartConfig(5, SETTINGSFILE));
-
             smartData = Packet::smartResponseMatch(smartList, dgram);
-        }
-
-        if (sendResponse || !smartData.isEmpty()) {
-            if(serverResonse(client->get())){
-//                QMessageBox::critical(nullptr, "Connection Error", "server response can't be sent.");
+            if(!smartData.isEmpty()){
+                //TODO: if(responseEnableCheck1 == true)
+                if(serverResonse(client->get())){
+                    return;
+                }
             }
 
+
+        }
+
+        //sendResponse =false;
+
+        if (sendResponse) {
+            //if(!dgram.contains("close notify")){
+
+                if(serverResonse(client->get())){
+                    return;
+    //                QMessageBox::critical(nullptr, "Connection Error", "server response can't be sent.");
+                }
+            //}
+
         }
 
 
-        if ((*client)->dtlsError() == QDtlsError::RemoteClosedConnectionError)
-            knownClients.erase(client);
+//        if ((*client)->dtlsError() == QDtlsError::RemoteClosedConnectionError)
+//            knownClients.erase(client);
+
         return;
     }
     //! [6]
@@ -240,13 +278,16 @@ void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
     if (clientMessage.size()) {
         std::vector<QString> sentPacketInfo = createInfoVect(serverSocket.localAddress(), serverSocket.localPort(), connection->peerAddress(), connection->peerPort());
         Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
-        if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
-            QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
-            sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
-            emit serverPacketSent(sentPacket);
-        }else{
-            sentPacket.errorString = "Could not send response";
-            emit serverPacketSent(sentPacket);
+        if(connection->isConnectionEncrypted()){
+
+            if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
+                QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
+                sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
+                emit serverPacketSent(sentPacket);
+            }else{
+                sentPacket.errorString = "Could not send response";
+                emit serverPacketSent(sentPacket);
+            }
         }
     } else if (connection->dtlsError() == QDtlsError::NoError) {
         emit warningMessage(peerInfo + ": " + tr("0 byte dgram, could be a re-connect attempt?"));
@@ -331,16 +372,18 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
     }
 
     serverSocket.waitForBytesWritten();
-    if(dtlsServer->writeDatagramEncrypted(&serverSocket,responsePacket.getByteArray())){
-        emit serverPacketSent(responsePacket);
-        return true;
-    }else{
-        responsePacket.errorString = "Could not send response";
-        emit serverPacketSent(responsePacket);
-        return false;
 
+    if(dtlsServer->isConnectionEncrypted()){
+        if(dtlsServer->writeDatagramEncrypted(&serverSocket,responsePacket.getByteArray())){
+            emit serverPacketSent(responsePacket);
+            return true;
+        }else{
+            responsePacket.errorString = "Could not send response";
+            emit serverPacketSent(responsePacket);
+            return false;
+
+        }
     }
-
 
 }
 
