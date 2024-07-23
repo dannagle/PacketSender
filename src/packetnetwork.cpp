@@ -941,8 +941,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             PersistentConnection * pcWindow = new PersistentConnection();
 
             pcWindow->sendPacket = sendpacket;
-            pcWindow->init();
             pcWindow->dthread = thread;
+            pcWindow->init();
+
 
             QDEBUG() << ": thread Connection attempt "
                      << connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))

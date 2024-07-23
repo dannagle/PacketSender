@@ -32,6 +32,7 @@ class PersistentConnection : public QDialog
         static const QString RESEND_BUTTON_STYLE;
 
         void init();
+        void initDTLS();
 
         void initWithThread(TCPThread *thethread, quint16 portNum);
     signals:

@@ -28,11 +28,15 @@ void Dtlsthread::run()
     dtlsAssociation->startHandshake();
     //dtlsAssociation->crypto.continueHandshake()
     connect(&(dtlsAssociation->crypto), &QDtls::handshakeTimeout, this, &Dtlsthread::onHandshakeTimeout);
-
     writeMassage(sendpacket, dtlsAssociation);
-    //dtlsAssociation->socket.waitForReadyRead();
-    persistentConnectionLoop();
-    connectStatus("Connected");
+    dtlsAssociation->socket.waitForReadyRead();
+    if(persistentRequest){
+        persistentConnectionLoop();
+        connectStatus("Connected");
+    }
+    else{
+        return;
+    }
 }
 
 
@@ -85,6 +89,7 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
         packetToSend.errorString.append(" Failed to send");
         //if(dtlsAssociation->crypto.isConnectionEncrypted()){
             emit packetSent(packetToSend);
+
         //}
         return;
     }
@@ -225,7 +230,10 @@ void Dtlsthread::persistentConnectionLoop()
         }
 
     } // end while connected
+    emit connectStatus("Disconnected");
+
     if (dtlsAssociation->closeRequest) {
+        emit connectStatus("Disconnected");
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
         //quit();
@@ -281,7 +289,6 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 }
 
 void Dtlsthread::onTimeout(){
-    dtlsAssociation->closeRequest = true;
     if(respondRecieved == false){
 //       if(!handShakeDone && retries < 5){//we can test handShakeDone for each thread because the server serving only one client at one time according to the udp socket
 //           retries++;

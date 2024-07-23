@@ -33,6 +33,7 @@ public:
     bool closeRequest;
     bool handShakeDone;
     bool insidePersistent;
+    bool persistentRequest = false;
 
 public slots:
     void onHandshakeTimeout();
