@@ -3,6 +3,8 @@
 
 #include "association.h"
 #include "packet.h"
+#include <QTimer>
+#include <QCoreApplication>
 
 DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
                                  const QString &connectionName, std::vector<QString> cmdComponents)
@@ -101,12 +103,14 @@ void DtlsAssociation::startHandshake()
     }
 
     if (!crypto.doHandshake(&socket)){
+        //socket.waitForBytesWritten();
         packetToSend.errorString += " Failed to start a handshake ";
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
     }
     else{
+
         while(true){
-            socket.waitForReadyRead();
+            socket.waitForReadyRead(2000);
             if(crypto.isConnectionEncrypted() || closeRequest){
 
                 break;
@@ -164,11 +168,12 @@ void DtlsAssociation::readyRead()
     } else {
         //! [7]
         //! [8]
-        if (!crypto.doHandshake(&socket, dgram)) {
-            packetToSend.errorString += " handshake error ";
-            emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
-            return;
-        }
+        QThread::msleep(HANDSHAKE_STEPS_TIMEOUT);
+       if (!crypto.doHandshake(&socket, dgram)) {
+           packetToSend.errorString += " handshake error ";
+           emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
+           return;
+       }
         //! [8]
         //crypto.doHandshake(&socket, dgram);
         //! [9]

@@ -4,6 +4,7 @@
 #include "association.h"
 #include "packetnetwork.h"
 #include "mainwindow.h"
+#include <QThread>
 //#include "QSettings"
 
 
@@ -18,13 +19,18 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
+
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
     dtlsAssociation->closeRequest = false;
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
 
     dtlsAssociation->startHandshake();
+    //dtlsAssociation->crypto.continueHandshake()
+    connect(&(dtlsAssociation->crypto), &QDtls::handshakeTimeout, this, &Dtlsthread::onHandshakeTimeout);
+
     writeMassage(sendpacket, dtlsAssociation);
+    //dtlsAssociation->socket.waitForReadyRead();
     persistentConnectionLoop();
     connectStatus("Connected");
 }
@@ -229,6 +235,7 @@ void Dtlsthread::persistentConnectionLoop()
 
 }
 void Dtlsthread::receivedDatagram(QByteArray plainText){
+    respondRecieved = true;
     //MainWindow *parentNetwork = qobject_cast<MainWindow*>(parent());
     //connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
     recievedMassage = QString::fromUtf8(plainText);
@@ -274,6 +281,25 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 }
 
 void Dtlsthread::onTimeout(){
+    dtlsAssociation->closeRequest = true;
+    if(respondRecieved == false){
+//       if(!handShakeDone && retries < 5){//we can test handShakeDone for each thread because the server serving only one client at one time according to the udp socket
+//           retries++;
+//           dtlsAssociation->startHandshake();
+//
+//       }else{
+            sendpacket.errorString = "Error timeout" + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
+            //emit packetSent(sendpacket);
+            handShakeDone = false;
+            closeRequest = true;
+            timer->stop();
+//      }
+    } else{
+        closeRequest = true;
+        timer->stop();
+        this->exit();
+    }
+
     //dtlsAssociation->closeRequest = true;
     //timer->stop();
     //&& leaveSessionOpen
@@ -307,6 +333,11 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     return dtlsAssociationP;
 }
 
+void Dtlsthread::onHandshakeTimeout() {
+    // Introduce a delay before retrying
+    QTimer::singleShot(1000, this, &Dtlsthread::retryHandshake);
+}
 
-
-
+void Dtlsthread::retryHandshake() {
+    dtlsAssociation->crypto.handleTimeout(&dtlsAssociation->socket);
+}

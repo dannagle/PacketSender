@@ -13,6 +13,9 @@
 #define SW_VERSION "8.6.5"
 //END SW VERSION
 
+#define HANDSHAKE_STEPS_TIMEOUT 10 /* Milliseconds */
+#define DTLS_THREAS_TIME_TO_LIVE 1000 /* Milliseconds */
+
 //BEGIN FILE VERSION
 #define VER_FILEVERSION 8,6,5,0
 //END FILE VERSION

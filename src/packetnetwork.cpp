@@ -937,6 +937,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
                  << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
         if(settings.value("leaveSessionOpen").toString() == "true"){
+            thread->persistentRequest=true;
             PersistentConnection * pcWindow = new PersistentConnection();
 
             pcWindow->sendPacket = sendpacket;
@@ -952,13 +953,18 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             pcWindow->show();
             thread->start();
 
+
         }
         else{
-            thread->start();
+            //connect(*(thread->dtlsAssociation), &QDtls::handshakeTimeout, *thread, &Dtlsthread::onHandshakeTimeout);
+
             QTimer* timer = new QTimer(this);
+            //timer->setSingleShot(true); // Make the timer single-shot
             thread->timer = timer;
             connect(timer, SIGNAL(timeout()), thread, SLOT(onTimeout()));
-            timer->start(2000);
+            timer->start(1000);
+            thread->start();
+
         }
 
         dtlsthreadList.append(thread);
