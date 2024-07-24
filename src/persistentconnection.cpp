@@ -225,26 +225,67 @@ void PersistentConnection::cancelResends()
     reSendPacket.clear();
 }
 
+void PersistentConnection::initDTLS()
+{
+
+    this->dthread = nullptr;
+    QString tcpOrSSL = "TCP";
+    if (sendPacket.isSSL()) {
+        tcpOrSSL = "SSL";
+    }
+    if(sendPacket.isDTLS()){
+        tcpOrSSL = "DTLS";
+    }
+    setWindowTitle(tcpOrSSL + "://" + sendPacket.toIP + ":" + QString::number(sendPacket.port));
+
+
+    reSendPacket.clear();
+    if (sendPacket.repeat > 0) {
+        QDEBUG() << "This packet is repeating";
+        reSendPacket = sendPacket;
+    } else {
+
+        ui->stopResendingButton->hide();
+    }
+
+
+    QApplication::processEvents();
+
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    bool appendCR = settings.value("appendCRcheck", true).toBool();
+    ui->appendCRcheck->setChecked(appendCR);
+
+    this->darkMode = settings.value("darkModeCheck", true).toBool();
+
+
+    ui->stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
+    ui->stopResendingButton->setFlat(true);
+    ui->stopResendingButton->setCursor(Qt::PointingHandCursor);
+    ui->stopResendingButton->setIcon(QIcon(PSLOGO));
+
+    connect(ui->stopResendingButton, &QPushButton::clicked, this, &PersistentConnection::cancelResends);
+
+}
 
 void PersistentConnection::refreshTimerTimeout()
 {
     //QDEBUG();
-
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
-
-    if (thread->isRunning() && !thread->closeRequest) {
-        QString winTitle = windowTitle();
-        if (winTitle.startsWith("TCP://") && thread->isEncrypted()) {
-            if(sendPacket.isDTLS()){
+    QString winTitle = windowTitle();
+    if (sendPacket.isDTLS()){
+        if(winTitle.startsWith("TCP://")){
+            if(dthread->handShakeDone){
                 winTitle.replace("TCP://", "DTLS://");
                 setWindowTitle(winTitle);
-            }else{
-                winTitle.replace("TCP://", "SSL://");
-                setWindowTitle(winTitle);
             }
-
         }
+    } else{
+        winTitle.replace("TCP://", "SSL://");
+        setWindowTitle(winTitle);
     }
+
+
 
 
     qint64 hours = diff / (1000 * 60 * 60);

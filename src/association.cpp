@@ -3,6 +3,8 @@
 
 #include "association.h"
 #include "packet.h"
+#include <QTimer>
+#include <QCoreApplication>
 
 DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
                                  const QString &connectionName, std::vector<QString> cmdComponents)
@@ -44,22 +46,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
 
     //check if the address field contains a valid host name instead of implicite address
     if (hostName.isEmpty()){
-        QHostInfo host = QHostInfo::fromName(cmdComponents[1]);
-        // Check if the lookup was successful
-        if (host.error() != QHostInfo::NoError) {
-            packetToSend.errorString += "Lookup failed:" + host.errorString();
-            qDebug() << "Lookup failed:" << host.errorString();
-        } else {
-            // Output the host name
-            foreach (const QHostAddress &resolvedAddress, host.addresses()) {
-                //if it is an ipv4 save it as addres and fill the hostName with the current hostName
-                if (resolvedAddress.protocol() == QAbstractSocket::IPv4Protocol){
-                    address = resolvedAddress;
-                    hostName = cmdComponents[1];
-                }
-
-            }
-        }
+        hostName = "empty host name";
     }
 
     configuration.setLocalCertificate(certificate);
@@ -101,12 +88,14 @@ void DtlsAssociation::startHandshake()
     }
 
     if (!crypto.doHandshake(&socket)){
+        //socket.waitForBytesWritten();
         packetToSend.errorString += " Failed to start a handshake ";
         emit errorMessage(tr("%1: failed to start a handshake - %2").arg(name, crypto.dtlsErrorString()));
     }
     else{
+
         while(true){
-            socket.waitForReadyRead();
+            socket.waitForReadyRead(2000);
             if(crypto.isConnectionEncrypted() || closeRequest){
 
                 break;
@@ -153,9 +142,9 @@ void DtlsAssociation::readyRead()
         }
 
         if (crypto.dtlsError() == QDtlsError::RemoteClosedConnectionError) {
-            packetToSend.errorString += " Shutdown alert received";
-            emit errorMessage(tr("%1: shutdown alert received").arg(name));
-            socket.close();
+//            packetToSend.errorString += " Shutdown alert received";
+//            emit errorMessage(tr("%1: shutdown alert received").arg(name));
+            //socket.close();
             pingTimer.stop();
             return;
         }
@@ -164,13 +153,14 @@ void DtlsAssociation::readyRead()
     } else {
         //! [7]
         //! [8]
-        if (!crypto.doHandshake(&socket, dgram)) {
-            packetToSend.errorString += " handshake error ";
-            emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
-            return;
-        }
+        QThread::msleep(HANDSHAKE_STEPS_TIMEOUT);
+       if (!crypto.doHandshake(&socket, dgram)) {
+           packetToSend.errorString += " handshake error ";
+           emit errorMessage(tr("%1: handshake error - %2").arg(name, crypto.dtlsErrorString()));
+           return;
+       }
         //! [8]
-        crypto.doHandshake(&socket, dgram);
+        //crypto.doHandshake(&socket, dgram);
         //! [9]
         if (crypto.isConnectionEncrypted()) {
             emit infoMessage(tr("%1: encrypted connection established!").arg(name));

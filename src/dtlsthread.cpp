@@ -3,6 +3,8 @@
 #include "packet.h"
 #include "association.h"
 #include "packetnetwork.h"
+#include "mainwindow.h"
+#include <QThread>
 //#include "QSettings"
 
 
@@ -17,15 +19,24 @@ Dtlsthread::~Dtlsthread() {
 
 void Dtlsthread::run()
 {
+
     handShakeDone = false;
     dtlsAssociation = initDtlsAssociation();
     dtlsAssociation->closeRequest = false;
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
 
     dtlsAssociation->startHandshake();
+    //dtlsAssociation->crypto.continueHandshake()
+    connect(&(dtlsAssociation->crypto), &QDtls::handshakeTimeout, this, &Dtlsthread::onHandshakeTimeout);
     writeMassage(sendpacket, dtlsAssociation);
-    persistentConnectionLoop();
-    connectStatus("Connected");
+    dtlsAssociation->socket.waitForReadyRead();
+    if(persistentRequest){
+        persistentConnectionLoop();
+        connectStatus("Connected");
+    }
+    else{
+        return;
+    }
 }
 
 
@@ -75,10 +86,11 @@ void Dtlsthread::handShakeComplited(){
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
-        packetToSend.errorString.append(", Failed to send");
-        if(dtlsAssociation->crypto.isConnectionEncrypted()){
+        packetToSend.errorString.append(" Failed to send");
+        //if(dtlsAssociation->crypto.isConnectionEncrypted()){
             emit packetSent(packetToSend);
-        }
+
+        //}
         return;
     }
     emit packetSent(packetToSend);
@@ -218,7 +230,10 @@ void Dtlsthread::persistentConnectionLoop()
         }
 
     } // end while connected
+    emit connectStatus("Disconnected");
+
     if (dtlsAssociation->closeRequest) {
+        emit connectStatus("Disconnected");
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
         //quit();
@@ -228,6 +243,9 @@ void Dtlsthread::persistentConnectionLoop()
 
 }
 void Dtlsthread::receivedDatagram(QByteArray plainText){
+    respondRecieved = true;
+    //MainWindow *parentNetwork = qobject_cast<MainWindow*>(parent());
+    //connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
     recievedMassage = QString::fromUtf8(plainText);
     Packet recPacket;
     recPacket.init();
@@ -271,13 +289,36 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 }
 
 void Dtlsthread::onTimeout(){
-    dtlsAssociation->closeRequest = true;
-    timer->stop();
-    if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
-        //QString  errors = dtlsAssociation->crypto.dtlsErrorString();
-        sendpacket.errorString = "Error " + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
-        emit packetSent(sendpacket);
+    if(respondRecieved == false){
+        dtlsAssociation->closeRequest = true;
+
+//       if(!handShakeDone && retries < 5){//we can test handShakeDone for each thread because the server serving only one client at one time according to the udp socket
+//           retries++;
+//           dtlsAssociation->startHandshake();
+//
+//       }else{
+            sendpacket.errorString = "Error timeout" + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
+            //emit packetSent(sendpacket);
+            handShakeDone = false;
+            closeRequest = true;
+            timer->stop();
+//      }
+    } else{
+        closeRequest = true;
+        timer->stop();
+        this->exit();
     }
+
+    //dtlsAssociation->closeRequest = true;
+    //timer->stop();
+    //&& leaveSessionOpen
+    //emit packetSent(sendpacket);
+
+    //if(!(dtlsAssociation->crypto.isConnectionEncrypted())){
+    //    //QString  errors = dtlsAssociation->crypto.dtlsErrorString();
+    //    sendpacket.errorString = "Error timeout" + dtlsAssociation->packetToSend.errorString /*+ errors*/ ;
+    //    emit packetSent(sendpacket);
+    //}
 }
 
 DtlsAssociation* Dtlsthread::initDtlsAssociation(){
@@ -295,12 +336,17 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     sendpacket.fromPort = dtlsAssociationP->socket.localPort();
     connect(dtlsAssociationP, &DtlsAssociation::receivedDatagram, this, &Dtlsthread::receivedDatagram);
     PacketNetwork *parentNetwork = qobject_cast<PacketNetwork*>(parent());
-    connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
+    //connect(this, SIGNAL(packetReceived(Packet)), parentNetwork,  SLOT(toTrafficLog(Packet)));
     dtlsAssociationP->setCipher(settings.value("cipher", "cipher suit doesn't found").toString());
 
     return dtlsAssociationP;
 }
 
+void Dtlsthread::onHandshakeTimeout() {
+    // Introduce a delay before retrying
+    QTimer::singleShot(1000, this, &Dtlsthread::retryHandshake);
+}
 
-
-
+void Dtlsthread::retryHandshake() {
+    dtlsAssociation->crypto.handleTimeout(&dtlsAssociation->socket);
+}

@@ -12,6 +12,8 @@ class Dtlsthread : public QThread
     Q_OBJECT
 
 public:
+    bool respondRecieved = false;
+    int retries = 0;
     Dtlsthread(Packet sendPacket, QObject *parent);
     DtlsAssociation* initDtlsAssociation();
     virtual ~Dtlsthread();
@@ -19,6 +21,7 @@ public:
     void run() override; // Pure virtual function making this class abstract
     std::vector<QString> getCmdInput(Packet sendpacket, QSettings& settings);
     void writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation);
+    void retryHandshake();
 
     QTimer* timer;
     std::vector<DtlsAssociation*> dtlsAssociations;
@@ -30,8 +33,10 @@ public:
     bool closeRequest;
     bool handShakeDone;
     bool insidePersistent;
+    bool persistentRequest = false;
 
 public slots:
+    void onHandshakeTimeout();
     void onTimeout();
     void sendPersistant(Packet sendpacket);
     void handShakeComplited();

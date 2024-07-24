@@ -17,6 +17,9 @@ class DtlsServer : public QObject
     Q_OBJECT
 
 public:
+    static bool closeNotifyReceived;  // Initialize static member
+
+
     QSslCertificate certificate;
     QSslKey privateKey;
     QSslCertificate caCertificate;
@@ -51,7 +54,7 @@ public:
 
 
 
-
+    //bool closeNotifyRecieved;
     QUdpSocket serverSocket;
     QByteArray smartData;
 
@@ -87,6 +90,7 @@ private:
 
     QDtlsClientVerifier cookieSender;
     std::vector<std::unique_ptr<QDtls>> knownClients;
+
 
     Q_DISABLE_COPY(DtlsServer)
 };
