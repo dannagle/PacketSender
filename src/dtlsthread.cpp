@@ -290,6 +290,8 @@ void Dtlsthread::sendPersistant(Packet sendpacket)
 
 void Dtlsthread::onTimeout(){
     if(respondRecieved == false){
+        dtlsAssociation->closeRequest = true;
+
 //       if(!handShakeDone && retries < 5){//we can test handShakeDone for each thread because the server serving only one client at one time according to the udp socket
 //           retries++;
 //           dtlsAssociation->startHandshake();

@@ -46,22 +46,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
 
     //check if the address field contains a valid host name instead of implicite address
     if (hostName.isEmpty()){
-        QHostInfo host = QHostInfo::fromName(cmdComponents[1]);
-        // Check if the lookup was successful
-        if (host.error() != QHostInfo::NoError) {
-            packetToSend.errorString += "Lookup failed:" + host.errorString();
-            qDebug() << "Lookup failed:" << host.errorString();
-        } else {
-            // Output the host name
-            foreach (const QHostAddress &resolvedAddress, host.addresses()) {
-                //if it is an ipv4 save it as addres and fill the hostName with the current hostName
-                if (resolvedAddress.protocol() == QAbstractSocket::IPv4Protocol){
-                    address = resolvedAddress;
-                    hostName = cmdComponents[1];
-                }
-
-            }
-        }
+        hostName = "empty host name";
     }
 
     configuration.setLocalCertificate(certificate);
