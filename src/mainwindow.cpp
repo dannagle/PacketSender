@@ -113,6 +113,14 @@ MainWindow::MainWindow(QWidget *parent) :
         cipherCb->addItem(cipher.name());
     }
 
+    if(!PacketNetwork::DTLSisSupported()) {
+        int itemAt = ui->udptcpComboBox->findText("DTLS");
+        if(itemAt > 0) {
+            ui->udptcpComboBox->removeItem(itemAt);
+        }
+    }
+
+
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
         ui->leaveSessionOpen->hide();
         ui->twoVerify->hide();

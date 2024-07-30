@@ -1,6 +1,7 @@
 #include "about.h"
 #include "globals.h"
 #include "ui_about.h"
+#include "packetnetwork.h"
 
 #include <QDesktopServices>
 #include <QDate>
@@ -20,6 +21,11 @@ About::About(QWidget *parent) :
     if (QSslSocket::supportsSsl()) {
         versionBuilder.append("\nSSL Version: ");
         versionBuilder.append(QSslSocket::sslLibraryBuildVersionString());
+        if(PacketNetwork::DTLSisSupported()) {
+            versionBuilder.append("\nDTLS is supported.");
+        } else {
+            versionBuilder.append("\nDTLS is NOT supported.");
+        }
     } else {
         versionBuilder.append("\nSSL library not found");
     }
