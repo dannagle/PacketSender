@@ -155,6 +155,26 @@ QString PacketNetwork::getIPmode()
     return ipMode;
 }
 
+
+bool PacketNetwork::DTLSisSupported()
+{
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+
+    return false;
+#endif
+
+    if (!QSslSocket::supportsSsl()) {
+        return false;
+    }
+
+    // For now, only openssl is supported.
+    QString sslVersion = QSslSocket::sslLibraryBuildVersionString();
+    return sslVersion.toLower().contains("openssl");
+
+}
+
+
 bool PacketNetwork::DTLSListening()
 {
     QUdpSocket * dtls;

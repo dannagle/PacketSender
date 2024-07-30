@@ -284,6 +284,12 @@ int main(int argc, char *argv[])
         QCommandLineOption udpOption(QStringList() << "u" << "udp", "Send UDP.");
         parser.addOption(udpOption);
 
+
+        QCommandLineOption dtlsOption(QStringList() << "dtls", "Send DTLS.");
+        if(PacketNetwork::DTLSisSupported()) {
+            parser.addOption(dtlsOption);
+        }
+
         // A single option with a value
         QCommandLineOption httpOption(QStringList() << "http", "Send HTTP. Allowed values are GET (default) and POST", "http");
         parser.addOption(httpOption);
@@ -341,8 +347,30 @@ int main(int argc, char *argv[])
         }
         bool tcp = parser.isSet(tcpOption);
         bool udp = parser.isSet(udpOption);
+        bool dtls = parser.isSet(dtlsOption);
+
+        if(dtls) {
+            if(!PacketNetwork::DTLSisSupported()) {
+                OUTIF() << "DTLS is not supported in this installation. ";
+                OUTPUT();
+                return -1;
+            }
+        }
+
+
         bool ssl = parser.isSet(sslOption);
         bool sslNoError = parser.isSet(sslNoErrorOption);
+
+        if(ssl) {
+            if(!QSslSocket::supportsSsl()) {
+                OUTIF() << "SSL is not supported in this installation. ";
+                OUTPUT();
+                return -1;
+            }
+        }
+
+
+
         bool ipv6  = parser.isSet(bindIPv6Option);
         bool ipv4  = parser.isSet(bindIPv4Option);
         bool http  = parser.isSet(httpOption);
@@ -500,16 +528,28 @@ int main(int argc, char *argv[])
             ipv6 = false;
             ipv4 = true;
             http = false;
+            dtls = false;
         }
 
 
         if (tcp && udp) {
             OUTIF() << "Warning: both TCP and UDP set. Defaulting to TCP.";
             udp = false;
+            dtls = false;
+        }
+        if (tcp && dtls) {
+            OUTIF() << "Warning: both TCP and DTLS set. Defaulting to TCP.";
+            udp = false;
+            dtls = false;
         }
         if (tcp && ssl) {
             OUTIF() << "Warning: both TCP and SSL set. Defaulting to SSL.";
             tcp = false;
+        }
+
+        if (udp && dtls) {
+            OUTIF() << "Warning: both UDP and DTLS set. Defaulting to DTLS.";
+            udp = false;
         }
 
         if (http && tcp) {
@@ -576,11 +616,11 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (!tcp && !udp && !ssl && !http) {
+        if (!tcp && !udp && !ssl && !http && !dtls) {
             tcp = true;
         }
 
-        if ((tcp || ssl || http) && intense) {
+        if ((tcp || ssl || dtls || http) && intense) {
             OUTIF() << "Warning: Intense Traffic is UDP only.";
         }
 
@@ -589,11 +629,11 @@ int main(int argc, char *argv[])
             tcp = false;
             ssl = false;
             http = false;
+            dtls = false;
         }
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
-
 
         if(server) {
             bool bindResult = false;
@@ -615,23 +655,28 @@ int main(int argc, char *argv[])
             }
 
             QString bindmode = "";
-            if(udp) {
-                bindmode = "UDP";
-                QUdpSocket sock;
-                bindResult = receiver->initUDP(bindIP, bind);
-                bind = receiver->udpSocket->localPort();
-                bindIP = receiver->udpSocket->localAddress().toString();
+            if(dtls) {
+                // TODO: how to set up DTLS server?
             } else {
-                if(tcp) {
-                    bindmode = "TCP";
+                if(udp) {
+                    bindmode = "UDP";
+                    QUdpSocket sock;
+                    bindResult = receiver->initUDP(bindIP, bind);
+                    bind = receiver->udpSocket->localPort();
+                    bindIP = receiver->udpSocket->localAddress().toString();
+                } else {
+                    if(tcp) {
+                        bindmode = "TCP";
+                    }
+                    if(ssl) {
+                        bindmode = "SSL";
+                    }
+                    bindResult = receiver->initSSL(bindIP, bind, ssl);
+                    bind = receiver->tcpServer->serverPort();
+                    bindIP = receiver->tcpServer->serverAddress().toString();
                 }
-                if(ssl) {
-                    bindmode = "SSL";
-                }
-                bindResult = receiver->initSSL(bindIP, bind, ssl);
-                bind = receiver->tcpServer->serverPort();
-                bindIP = receiver->tcpServer->serverAddress().toString();
             }
+
 
             bindIP = bindIP.toUpper();
             if(bindResult) {
@@ -677,6 +722,7 @@ int main(int argc, char *argv[])
                 ssl = sendPacket.isSSL();
                 tcp = sendPacket.isTCP();
                 udp = sendPacket.isUDP();
+                dtls = sendPacket.isDTLS();
                 http = sendPacket.isHTTP() || sendPacket.isHTTPS();
 
                 if (data.isEmpty() && (!http)) {
@@ -696,14 +742,18 @@ int main(int argc, char *argv[])
                     udp = true;
                     ssl = false;
                     tcp = false;
+                    dtls = false;
                 }
                 if (parser.isSet(tcpOption)) {
                     tcp = true;
                     http = false;
+                    udp = false;
+                    dtls = false;
                 }
                 if (parser.isSet(sslOption)) {
                     ssl = true;
                     tcp = true;
+                    dtls = false;
                     http = false;
                 }
 
@@ -712,6 +762,7 @@ int main(int argc, char *argv[])
                     ssl = false;
                     tcp = false;
                     http = false;
+                    dtls = false;
                 }
             }
 
@@ -760,6 +811,7 @@ int main(int argc, char *argv[])
         QDEBUGVAR(ipv6);
         QDEBUGVAR(tcp);
         QDEBUGVAR(udp);
+        QDEBUGVAR(dtls);
         QDEBUGVAR(ssl);
         QDEBUGVAR(http);
         QDEBUGVAR(sslNoError);
@@ -779,6 +831,14 @@ int main(int argc, char *argv[])
 
 
         //NOW LETS DO THIS!
+
+        if (dtls && !PacketNetwork::DTLSisSupported()) {
+            OUTIF() << "Error: This computer does not support DTLS.";
+            OUTIF() << "The expected SSL version is " << QSslSocket::sslLibraryBuildVersionString();
+            OUTPUT();
+            return -1;
+        }
+
 
         if (ssl && !QSslSocket::supportsSsl()) {
             OUTIF() << "Error: This computer does not have a native SSL library.";
@@ -924,6 +984,14 @@ int main(int argc, char *argv[])
         QByteArray recvData;
         recvData.clear();
         int bytesWriten = 0;
+
+
+        if(dtls) {
+            //TODO: How to set up DTLS client?
+
+
+        }
+
 
         if (tcp || ssl) {
             QSslSocket sock;
