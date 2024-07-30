@@ -119,7 +119,6 @@ MainWindow::MainWindow(QWidget *parent) :
         cipherCb->hide();
         ui->CipherLable->hide();
         ui->hostName->hide();
-
     }
 
     connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
