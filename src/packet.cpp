@@ -864,6 +864,7 @@ QString Packet::macroSwap(QString data)
 {
     static QString dateFormat = "";
     static QString timeFormat = "";
+    static quint64 counter = 0;
     if(dateFormat.isEmpty()) {
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         dateFormat = settings.value("dateFormat", "yyyy-MM-dd").toString();
@@ -907,6 +908,12 @@ QString Packet::macroSwap(QString data)
         uuidString.replace("{", ""); //do not want brackets in generated string
         uuidString.replace("}", "");
         data = data.replace("{{UNIQUE}}", uuidString);
+    }
+
+
+    if (data.contains("{{COUNTER}}")) {
+        counter++;
+        data = data.replace("{{COUNTER}}", QString::number(counter));
     }
 
     return data;

@@ -351,6 +351,7 @@ Packet Sender supports these macros when sending responses:
 * {{DATE}} -- Sends the current date in "yyy-mm-dd" format.
 * {{TIME}} -- Sends the current time in "hh:mm:ss ap" format.
 * {{UNIXTIME}} -- Sends the current epoch time stamp.
+* {{COUNTER}} -- Sends an incrementing counter for each packet that uses it. Starts at 1 at launch.
 * {{RANDOM}} -- Sends a random number ranging from either 0 to 32767 or 2147483647, depending on 32-bit or 64-bit (default installer for Windows is 32-bit. Mac is 64-bit).
 * {{UNIQUE}} -- Sends a random string. Uses an internal UUID to generate it.
 Packet Sender will swap the macro with real values before sending.

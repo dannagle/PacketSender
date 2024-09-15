@@ -988,7 +988,7 @@
             <item>
              <widget class="QLabel" name="label_8">
               <property name="text">
-               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</string>
+               <string>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</string>
               </property>
              </widget>
             </item>
