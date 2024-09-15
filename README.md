@@ -495,6 +495,7 @@ This repository contains a DTLS (Datagram Transport Layer Security) protocol fea
 ### Main Window
 
 ![Main Window](screenshots/main_window.png)
+<img src="/screenshots/main_window.png" width="400" height="360">
 - **Cipher Suites**: Dropdown to select the desired cipher suite for DTLS communication.
 - **Server Common Name**: Field to input the server’s common name for client-side verification.
 - **Persistent Session**: Option to save the session key after the first handshake by enabling the persistent checkbox.
