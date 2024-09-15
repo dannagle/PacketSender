@@ -493,7 +493,7 @@ This repository contains a DTLS (Datagram Transport Layer Security) protocol fea
 ## Features
 
 ### Main Window
-<img src="screenshots/main_window.png" alt="Main Window" width="421" height="308" />
+<img src="screenshots/main_window.png" alt="Main Window" width="1125" height="396" />
 
 - **Cipher Suites**: Dropdown to select the desired cipher suite for DTLS communication.
 - **Server Common Name**: Field to input the server’s common name for client-side verification.
