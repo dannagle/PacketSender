@@ -485,7 +485,53 @@ _Note: Setting an ID in use will replace that panel_
 * Starter Panel - select this to set the current panel project as the starter panel. 
 * Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
 
+# DTLS
 
+## Overview
+This repository contains a DTLS (Datagram Transport Layer Security) protocol feature. This feature have added a graphical interface to configure and manage DTLS connections, including server verification and session persistence options.
+
+## Features
+
+### Main Window
+![Main Window](screenshots/main_window.png)
+- **Cipher Suites**: Dropdown to select the desired cipher suite for DTLS communication.
+- **Server Common Name**: Field to input the server’s common name for client-side verification.
+- **Persistent Session**: Option to save the session key after the first handshake by enabling the persistent checkbox.
+- **Optional Server Verification**: An option for enabling two-sided verification during the handshake.
+- **DTLS Server Port**: Button to define the DTLS server port for the connection.
+
+#### Additional Images:
+![Cipher Suites Dropdown](screenshots/cipher_suites.png)
+- A detailed view of the cipher suite selection dropdown.
+
+![Persistent Connection](screenshots/persistant_dtls.jpg)
+- Persistent connection window while DTLS.
+
+![Server Port](screenshots/server_ports.png)
+- On click button for DTLS server Enabling or disabling.
+
+### Settings Window
+
+#### Network Tab
+![Network Tab](screenshots/settings.png)
+- **Send Simple Acknowledge**: Checkbox to enable the sending of a simple acknowledgment.
+- **Enable DTLS Server**: Option to enable the DTLS server and select a port.
+- **Certificates and Keys**: Certificates and keys can be loaded similarly to SSL configuration.
+
+#### Smart Responses Tab
+![Smart Responses Tab](screenshots/settings_2.png)
+- **Smart Responses**: Smart responses feature works over the DTLS protocol.
+
+## Wireshark Integration
+Sniffing by Wireshark:
+
+### Regular Connection
+![Regular Connection](screenshots/wireshark_simple_session.png)
+- Example of a regular DTLS connection captured sniffed by Wireshark.
+
+### Persistent Connection
+![Persistent Connection](screenshots/wireshark_persistent_connection.png)
+- Example of a persistent DTLS connection sniffed by Wireshark.
 
 <a id="cli"></a>
 # Command Line
