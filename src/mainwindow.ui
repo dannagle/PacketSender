@@ -236,24 +236,6 @@
              </item>
              <item>
               <property name="text">
-               <string>HTTPS Post</string>
-              </property>
-              <property name="icon">
-               <iconset resource="packetsender.qrc">
-                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>DTLS</string>
-              </property>
-              <property name="icon">
-               <iconset resource="packetsender.qrc">
-                <normaloff>:/icons/tx_dtls.png</normaloff>:/icons/tx_dtls.png</iconset>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>UDP</string>
               </property>
               <property name="icon">
@@ -268,6 +250,15 @@
               <property name="icon">
                <iconset resource="packetsender.qrc">
                 <normaloff>:/icons/tx_ssl.png</normaloff>:/icons/tx_ssl.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DTLS</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_dtls.png</normaloff>:/icons/tx_dtls.png</iconset>
               </property>
              </item>
              <item>
@@ -291,6 +282,15 @@
              <item>
               <property name="text">
                <string>HTTPS Get</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Post</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">
