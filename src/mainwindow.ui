@@ -16,15 +16,12 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-     <widget class="QGroupBox" name="packetSetupGroup">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>150</height>
-       </size>
+     <widget class="QFrame" name="packetSetupGroup">
+      <property name="frameShape">
+       <enum>QFrame::Shape::Panel</enum>
       </property>
-      <property name="title">
-       <string/>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Plain</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -320,10 +317,10 @@
        <item>
         <widget class="QFrame" name="dtlsFrame">
          <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
+          <enum>QFrame::Shape::NoFrame</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
+          <enum>QFrame::Shadow::Plain</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
