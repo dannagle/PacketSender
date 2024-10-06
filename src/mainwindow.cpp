@@ -1491,6 +1491,17 @@ void MainWindow::on_deletePacketButton_clicked()
 void MainWindow::on_packetIPEdit_lostFocus()
 {
     QString ipPacket = ui->packetIPEdit->text().trimmed();
+
+    // Allow pasting URLs and then extract the host name.
+    if(ipPacket.startsWith("http://") || ipPacket.startsWith("https://") ) {
+        QUrl ipPacketURL(ipPacket);
+        if(ipPacketURL.isValid()) {
+            ipPacket = ipPacketURL.host();
+            ui->packetIPEdit->setText(ipPacket);
+        }
+    }
+
+
     QHostAddress address(ipPacket);
     if (QAbstractSocket::IPv4Protocol == address.protocol()) {
         QDEBUG() << "Valid IPv4 address.";
