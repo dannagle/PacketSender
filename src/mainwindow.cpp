@@ -122,11 +122,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     if ( ui->udptcpComboBox->currentText().toLower() != "dtls"){
-        ui->leaveSessionOpen->hide();
-        ui->twoVerify->hide();
-        cipherCb->hide();
-        ui->CipherLable->hide();
-        ui->hostName->hide();
+        ui->dtlsFrame->hide();
     }
 
     connect(cipherCb, &QComboBox::editTextChanged, this, &MainWindow::on_cipherCb_currentIndexChanged);
@@ -2741,22 +2737,9 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     /////////////////////////////////dtls add line edit for adding path for cert
 
     if ( ui->udptcpComboBox->currentText().toLower() == "dtls") {
-        ui->leaveSessionOpen->show();
-        cipherCb->show();
-        ui->CipherLable->show();
-        ui->twoVerify->show();
-        ui->hostName->show();
-
-
+        ui->dtlsFrame->show();
     } else {
-        ui->leaveSessionOpen->hide();
-        cipherCb->hide();
-        ui->CipherLable->hide();
-        ui->twoVerify->hide();
-        ui->hostName->hide();
-
-
-
+        ui->dtlsFrame->hide();
     }
 
 
