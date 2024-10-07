@@ -20,6 +20,8 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QStyleHints>
+
 #endif
 
 const QString Settings::SEND_STR = "Send";
@@ -171,6 +173,15 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     on_smartResponseEnableCheck_clicked();
 
     ui->autolaunchStarterPanelButton->setChecked(settings.value("autolaunchStarterPanelButton", false).toBool());
+
+
+    #if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
+
+    //This is now automatic in Qt6.5
+    ui->darkModeCheck->hide();
+
+    #endif
+
 
     ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
     ui->httpAdjustContentTypeCheck->setChecked(settings.value("httpAdjustContentTypeCheck", true).toBool());
@@ -357,6 +368,31 @@ QString Settings::language()
     }
 
     return "English";
+}
+
+
+
+bool Settings::useDark() {
+
+
+#ifndef CONSOLE_BUILD
+
+    #if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
+
+        QStyleHints * styleHints = QGuiApplication::styleHints();
+        auto colorScheme = styleHints->colorScheme();
+        return colorScheme == Qt::ColorScheme::Dark;
+
+    #endif
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    return settings.value("darkModeCheck", true).toBool();
+
+#else
+    return true;
+
+#endif
+
 }
 
 

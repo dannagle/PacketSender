@@ -1319,23 +1319,8 @@ int main(int argc, char *argv[])
         //Use default OS styling for non-Windows. Too many theme variants.
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-        bool useDark = settings.value("darkModeCheck", true).toBool();
+        bool useDark = Settings::useDark();
         QString styleSheet = "";
-
-#if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
-
-        QStyleHints * styleHints = QGuiApplication::styleHints();
-
-        auto colorScheme = styleHints->colorScheme();
-
-        if (colorScheme == Qt::ColorScheme::Dark ) {
-            QDEBUG() << "OS is set to dark mode";
-        }
-
-        if (colorScheme == Qt::ColorScheme::Light ) {
-            QDEBUG() << "OS is set to light mode";
-        }
-#endif
 
         if(useDark) {
             if (file_dark.open(QFile::ReadOnly)) {

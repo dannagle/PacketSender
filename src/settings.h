@@ -111,7 +111,8 @@ class Settings : public QDialog
         static bool needLanguage();
         static QString logHeaderTranslate(QString txt);
 
-private slots:
+        static bool useDark();
+    private slots:
 
 
         void on_buttonBox_accepted();
