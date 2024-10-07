@@ -209,8 +209,7 @@ void DtlsServer::pskRequired(QSslPreSharedKeyAuthenticator *auth)
 {
     Q_ASSERT(auth);
 
-    emit infoMessage(tr("PSK callback, received a client's identity: '%1'")
-                         .arg(QString::fromLatin1(auth->identity())));
+    emit infoMessage(tr("PSK callback, received a client's identity: ") + QString::fromLatin1(auth->identity()));
     auth->setPreSharedKey(QByteArrayLiteral("\x1a\x2b\x3c\x4d\x5e\x6f"));
 }
 //! [13]
@@ -258,8 +257,7 @@ void DtlsServer::doHandshake(QDtls *newConnection, const QByteArray &clientHello
         emit infoMessage(peerInfo + tr(": handshake is in progress ..."));
         break;
     case QDtls::HandshakeComplete:
-        emit infoMessage(tr("Connection with %1 encrypted. %2")
-                             .arg(peerInfo, connection_info(newConnection)));
+        emit infoMessage(peerInfo + tr(": Connection encrypted. ") + connection_info(newConnection));
         break;
     default:
         Q_UNREACHABLE();
@@ -280,12 +278,12 @@ void DtlsServer::sendAck(QDtls *connection, const QByteArray &clientMessage)
         Packet sentPacket = createPacket(sentPacketInfo, clientMessage);
         if(connection->isConnectionEncrypted()){
 
-            if(connection->writeDatagramEncrypted(&serverSocket, tr("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
+            if(connection->writeDatagramEncrypted(&serverSocket, QString("from %1: %2").arg(serverInfo, QString::fromUtf8(clientMessage)).toLatin1())){
                 QString massageFromTheOtherPeer = "ACK: " + QString::fromUtf8(clientMessage);
                 sentPacket.hexString = sentPacket.ASCIITohex(massageFromTheOtherPeer);
                 emit serverPacketSent(sentPacket);
             }else{
-                sentPacket.errorString = "Could not send response";
+                sentPacket.errorString = tr("Could not send response");
                 emit serverPacketSent(sentPacket);
             }
         }
