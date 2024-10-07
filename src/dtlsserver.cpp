@@ -385,6 +385,8 @@ bool DtlsServer::serverResonse(QDtls* dtlsServer){
         }
     }
 
+    return false;
+
 }
 
 
@@ -515,7 +517,7 @@ void DtlsServer::on_signedCert_textChanged(){
 QSsl::EncodingFormat DtlsServer::getCertFormat(QFile& certFile){
     QFileInfo fileInfo(certFile.fileName());
     QString fileExtension = fileInfo.suffix().toLower();
-    QSsl::EncodingFormat format;
+    QSsl::EncodingFormat format = QSsl::Pem;
 
     if (fileExtension == "pem") {
         format = QSsl::Pem;
