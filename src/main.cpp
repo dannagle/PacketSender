@@ -287,7 +287,8 @@ int main(int argc, char *argv[])
 
         QCommandLineOption dtlsOption(QStringList() << "dtls", "Send DTLS.");
         if(PacketNetwork::DTLSisSupported()) {
-            parser.addOption(dtlsOption);
+            //parser.addOption(dtlsOption);
+            QDEBUG() << "DTLS is not yet supported on DTLS.";
         }
 
         // A single option with a value
