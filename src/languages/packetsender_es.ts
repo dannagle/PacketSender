@@ -29,14 +29,14 @@
         <translation>PacketSender.com</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="26"/>
+        <location filename="../about.cpp" line="34"/>
         <source>
 Commit Hash: </source>
         <translation>
 Hash de confirmación: </translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="31"/>
+        <location filename="../about.cpp" line="39"/>
         <source>About Packet Sender</source>
         <translation>Acerca de Packet Sender</translation>
     </message>
@@ -221,6 +221,148 @@ Hash de confirmación: </translation>
     </message>
 </context>
 <context>
+    <name>DtlsAssociation</name>
+    <message>
+        <location filename="../association.cpp" line="85"/>
+        <source>: connecting UDP socket first ...</source>
+        <translation>: conectando el socket UDP primero...</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="93"/>
+        <source>: failed to start a handshake - </source>
+        <translation>: no se pudo iniciar un protocolo de enlace - </translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="105"/>
+        <source>: starting a handshake</source>
+        <translation>: iniciando un protocolo de enlace</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="113"/>
+        <source>: UDP socket is now in ConnectedState, continue with handshake ...</source>
+        <translation>: el socket UDP ahora está en ConnectedState, continúe con el protocolo de enlace...</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="122"/>
+        <location filename="../association.cpp" line="130"/>
+        <source>: spurious read notification?</source>
+        <translation>: ¿notificación de lectura falsa?</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="152"/>
+        <source>: zero-length datagram received?</source>
+        <translation>: ¿datagrama de longitud cero recibido?</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="159"/>
+        <source>: handshake error - </source>
+        <translation>: error de protocolo de enlace - </translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="166"/>
+        <source>: encrypted connection established!</source>
+        <translation>: ¡conexión cifrada establecida!</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="170"/>
+        <source>: continuing with handshake ...</source>
+        <translation>: continuando con el protocolo de enlace...</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="182"/>
+        <source>: handshake timeout, trying to re-transmit</source>
+        <translation>: tiempo de espera del protocolo de enlace, intentando retransmitir</translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="186"/>
+        <source>: failed to re-transmit - </source>
+        <translation>: error al retransmitir - </translation>
+    </message>
+    <message>
+        <location filename="../association.cpp" line="195"/>
+        <source>: providing pre-shared key ...</source>
+        <translation>: proporcionando una clave precompartida...</translation>
+    </message>
+</context>
+<context>
+    <name>DtlsServer</name>
+    <message>
+        <location filename="../dtlsserver.cpp" line="23"/>
+        <source>Session cipher: </source>
+        <translation>Cifrado de sesión: </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="26"/>
+        <source>; session protocol: </source>
+        <translation>; Protocolo de sesión: </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="29"/>
+        <source>DTLS 1.2.</source>
+        <translation>DTLS 1.2.</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="32"/>
+        <source>Unknown protocol.</source>
+        <translation>Protocolo desconocido.</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="86"/>
+        <source>A spurious read notification</source>
+        <translation>Una notificación de lectura falsa</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="96"/>
+        <source>Failed to read a datagram: </source>
+        <translation>No se pudo leer un datagrama: </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="107"/>
+        <source>Failed to extract peer info (address, port)</source>
+        <translation>Error al extraer información del par (dirección, puerto)</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="212"/>
+        <source>PSK callback, received a client&apos;s identity: </source>
+        <translation>Devolución de llamada PSK, se recibió la identidad de un cliente: </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="226"/>
+        <source>: verified, starting a handshake</source>
+        <translation>: verificado, iniciando un protocolo de enlace</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="238"/>
+        <source>DTLS error: </source>
+        <translation>Error DTLS: </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="240"/>
+        <source>: not verified yet</source>
+        <translation>: no verificado aún</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="257"/>
+        <source>: handshake is in progress ...</source>
+        <translation>: el protocolo de enlace está en curso...</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="260"/>
+        <source>: Connection encrypted. </source>
+        <translation>: Conexión cifrada. </translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="286"/>
+        <source>Could not send response</source>
+        <translation>No se pudo enviar la respuesta</translation>
+    </message>
+    <message>
+        <location filename="../dtlsserver.cpp" line="291"/>
+        <source>0 byte dgram, could be a re-connect attempt?</source>
+        <translation>Dgram de 0 bytes, ¿podría ser un intento de reconexión?</translation>
+    </message>
+</context>
+<context>
     <name>IrisAndMarigold</name>
     <message>
         <location filename="../irisandmarigold.ui" line="26"/>
@@ -274,320 +416,432 @@ Hash de confirmación: </translation>
         <translation>Ventana Principal</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="35"/>
+        <location filename="../mainwindow.ui" line="32"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="48"/>
+        <location filename="../mainwindow.ui" line="45"/>
         <source>Packet Name</source>
         <translation>Nombre del Paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="72"/>
+        <location filename="../mainwindow.ui" line="69"/>
         <source>Request</source>
         <translation>Solicitud</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="79"/>
+        <location filename="../mainwindow.ui" line="76"/>
         <source>URL path</source>
         <translation>ruta de la URL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="93"/>
+        <location filename="../mainwindow.ui" line="90"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="100"/>
+        <location filename="../mainwindow.ui" line="97"/>
         <source>Generate Data</source>
         <translation>Generar Datos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="107"/>
+        <location filename="../mainwindow.ui" line="104"/>
         <source>ASCII representation</source>
         <translation>Representación ASCII</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="117"/>
+        <location filename="../mainwindow.ui" line="114"/>
         <source>Load File</source>
         <translation>Cargar Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="128"/>
+        <location filename="../mainwindow.ui" line="125"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="135"/>
+        <location filename="../mainwindow.ui" line="132"/>
         <source>HEX representation</source>
         <translation>Representación HEX</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="151"/>
+        <location filename="../mainwindow.ui" line="148"/>
         <source>Address</source>
         <translation>Dirección</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="158"/>
+        <location filename="../mainwindow.ui" line="155"/>
         <source>IPv4, IPv6, DNS Lookup</source>
         <translation>Buscar IPv4, IPv6, DNS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="168"/>
+        <location filename="../mainwindow.ui" line="165"/>
         <source>Port</source>
         <translation>Puerto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="184"/>
+        <location filename="../mainwindow.ui" line="181"/>
         <source>1 to 65535</source>
         <translation>1 a 65535</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="194"/>
+        <location filename="../mainwindow.ui" line="191"/>
         <source>Resend Delay</source>
         <translation>Retraso de Reenvío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="207"/>
+        <location filename="../mainwindow.ui" line="204"/>
         <source>0.0/blank off</source>
         <translation>0.0/desactivar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="230"/>
+        <location filename="../mainwindow.ui" line="227"/>
         <source>TCP</source>
         <translation>TCP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="239"/>
+        <location filename="../mainwindow.ui" line="236"/>
         <source>UDP</source>
         <translation>UDP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="248"/>
+        <location filename="../mainwindow.ui" line="245"/>
         <source>SSL</source>
         <translation>SSL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="257"/>
+        <location filename="../mainwindow.ui" line="254"/>
+        <source>DTLS</source>
+        <translation>DTLS</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="263"/>
         <source>HTTP Get</source>
         <translation>HTTP Get</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="266"/>
+        <location filename="../mainwindow.ui" line="272"/>
         <source>HTTP Post</source>
         <translation>HTTP Post</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="275"/>
+        <location filename="../mainwindow.ui" line="281"/>
         <source>HTTPS Get</source>
         <translation>HTTPS Get</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="284"/>
+        <location filename="../mainwindow.ui" line="290"/>
         <source>HTTPS Post</source>
         <translation>HTTPS Post</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="296"/>
-        <location filename="../mainwindow.cpp" line="1074"/>
-        <location filename="../mainwindow.cpp" line="1732"/>
+        <location filename="../mainwindow.ui" line="302"/>
+        <location filename="../mainwindow.cpp" line="1178"/>
+        <location filename="../mainwindow.cpp" line="1847"/>
         <source>Send</source>
         <translation>Enviar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="303"/>
+        <location filename="../mainwindow.ui" line="309"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="332"/>
+        <location filename="../mainwindow.ui" line="331"/>
+        <source>Cipher Suites:</source>
+        <translation>Conjuntos de cifrados:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="339"/>
+        <location filename="../mainwindow.ui" line="349"/>
+        <source>AES256-GCM-SHA384</source>
+        <translation>AES256-GCM-SHA384</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="344"/>
+        <location filename="../mainwindow.ui" line="354"/>
+        <source>AES128-GCM-SHA256</source>
+        <translation>AES128-GCM-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="359"/>
+        <source>AES128-SHA256</source>
+        <translation>AES128-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="364"/>
+        <source>AES256-SHA384</source>
+        <translation>AES256-SHA384</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="369"/>
+        <source>AES128-SHA</source>
+        <translation>AES128-SHA</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="374"/>
+        <source>AES256-SHA</source>
+        <translation>AES256-SHA</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="379"/>
+        <source>CHACHA20-POLY1305-SHA256</source>
+        <translation>CHACHA20-POLY1305-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="384"/>
+        <source>RC4-MD5</source>
+        <translation>RC4-MD5</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="389"/>
+        <source>RC4-SHA</source>
+        <translation>RC4-SHA</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="394"/>
+        <source>CAMELLIA128-SHA256</source>
+        <translation>CAMELLIA128-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="399"/>
+        <source>CAMELLIA256-SHA</source>
+        <translation>CAMELLIA256-SHA</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="404"/>
+        <source>ECDHE-RSA-AES128-GCM-SHA256</source>
+        <translation>ECDHE-RSA-AES128-GCM-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="409"/>
+        <source>ECDHE-RSA-AES256-GCM-SHA384</source>
+        <translation>ECDHE-RSA-AES256-GCM-SHA384</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="414"/>
+        <source>ECDHE-ECDSA-AES128-GCM-SHA256</source>
+        <translation>ECDHE-ECDSA-AES128-GCM-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="419"/>
+        <source>ECDHE-ECDSA-AES256-GCM-SHA384</source>
+        <translation>ECDHE-ECDSA-AES256-GCM-SHA384</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="424"/>
+        <source>DHE-RSA-AES128-GCM-SHA256</source>
+        <translation>DHE-RSA-AES128-GCM-SHA256</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="429"/>
+        <source>DHE-RSA-AES256-GCM-SHA384</source>
+        <translation>DHE-RSA-AES256-GCM-SHA384</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="450"/>
+        <source>Host Name (CN)</source>
+        <translation>Nombre de host (CN)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="470"/>
+        <source>Persistent DTLS</source>
+        <translation>DTLS persistente</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="490"/>
+        <source>Add Server Verification of The Client   </source>
+        <translation>Agregar verificación de servidor del cliente </translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="520"/>
         <source>Search Saved Packets...</source>
         <translation>Buscando Paquetes Guardados...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="360"/>
+        <location filename="../mainwindow.ui" line="548"/>
         <source>Generate Panel!</source>
         <translation>¡Generar Panel!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="383"/>
+        <location filename="../mainwindow.ui" line="571"/>
         <source>Delete Saved Packet</source>
         <translation>Eliminar Paquete Guardado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="578"/>
         <source>Persistent TCP</source>
         <translation>TCP Persistente</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="427"/>
+        <location filename="../mainwindow.ui" line="615"/>
         <source>Clear Log</source>
         <translation>Borrar Registro</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="447"/>
+        <location filename="../mainwindow.ui" line="635"/>
         <source>Log Traffic</source>
         <translation>Registrar Tráfico</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="457"/>
+        <location filename="../mainwindow.ui" line="645"/>
         <source>Save Log</source>
         <translation>Guardar Registro</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="464"/>
+        <location filename="../mainwindow.ui" line="652"/>
         <source>Save Traffic Packet</source>
         <translation>Guardar Paquete de Tráfico</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="471"/>
+        <location filename="../mainwindow.ui" line="659"/>
         <source>Copy to Clipboard</source>
         <translation>Copiar al Portapapeles</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="519"/>
+        <location filename="../mainwindow.ui" line="707"/>
         <source>&amp;File</source>
         <translation>&amp;Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="528"/>
+        <location filename="../mainwindow.ui" line="716"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="539"/>
+        <location filename="../mainwindow.ui" line="727"/>
         <source>&amp;Tools</source>
         <translation>&amp;Herramientas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="548"/>
+        <location filename="../mainwindow.ui" line="736"/>
         <source>&amp;Multicast</source>
         <translation>&amp;Multidifusión</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="554"/>
+        <location filename="../mainwindow.ui" line="742"/>
         <source>Panels</source>
         <translation>Páneles</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="572"/>
+        <location filename="../mainwindow.ui" line="760"/>
         <source>E&amp;xit</source>
         <translation>&amp;Salida</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="581"/>
+        <location filename="../mainwindow.ui" line="769"/>
         <source>&amp;Settings</source>
         <translation>&amp;Ajustes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="590"/>
+        <location filename="../mainwindow.ui" line="778"/>
         <source>&amp;About</source>
         <translation>Acerca de</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="599"/>
+        <location filename="../mainwindow.ui" line="787"/>
         <source>&amp;Import Database</source>
         <translation>Importar Base de Datos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="608"/>
+        <location filename="../mainwindow.ui" line="796"/>
         <source>&amp;Export Database</source>
         <translation>Exportar Base de Datos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="613"/>
+        <location filename="../mainwindow.ui" line="801"/>
         <source>Persistent Connection</source>
         <translation>Conexión Persistente</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="622"/>
+        <location filename="../mainwindow.ui" line="810"/>
         <source>&amp;Subnet Calculator</source>
         <translation>Calculadora de Subred</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="631"/>
+        <location filename="../mainwindow.ui" line="819"/>
         <source>D&amp;onate (Thank You!)</source>
         <translation>Donar (¡Gracias!)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="636"/>
+        <location filename="../mainwindow.ui" line="824"/>
         <source>Documentation</source>
         <translation>Documentación</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="645"/>
+        <location filename="../mainwindow.ui" line="833"/>
         <source>&amp;Documentation</source>
         <translation>&amp;Documentación</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="650"/>
+        <location filename="../mainwindow.ui" line="838"/>
         <source>Export To Cloud</source>
         <translation>Exportar a la Nube</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="659"/>
+        <location filename="../mainwindow.ui" line="847"/>
         <source>&amp;Cloud Save and Share</source>
         <translation>Guardar y Compartir en la Nube</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="668"/>
+        <location filename="../mainwindow.ui" line="856"/>
         <source>&amp;Join/Leave IPv4</source>
         <translation>Unirse/Abandonar IPv4</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="677"/>
+        <location filename="../mainwindow.ui" line="865"/>
         <source>Android App</source>
         <translation>Aplicación de Android</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="686"/>
+        <location filename="../mainwindow.ui" line="874"/>
         <source>iOS App</source>
         <translation>Aplicación de iOS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="695"/>
+        <location filename="../mainwindow.ui" line="883"/>
         <source>Follow on Twitter</source>
         <translation>Seguir en Twitter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="704"/>
+        <location filename="../mainwindow.ui" line="892"/>
         <source>Connect on LinkedIn</source>
         <translation>Conectar en LinkedIn</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="713"/>
+        <location filename="../mainwindow.ui" line="901"/>
         <source>Intense &amp;Traffic Generator</source>
         <translation>Generador de Tráfico Intenso</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="722"/>
+        <location filename="../mainwindow.ui" line="910"/>
         <source>Forums</source>
         <translation>Foros</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="727"/>
+        <location filename="../mainwindow.ui" line="915"/>
         <source>Load Starter Panel</source>
         <translation>Cargar Panel Inicial</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="732"/>
+        <location filename="../mainwindow.ui" line="920"/>
         <source>Empty Panel Project</source>
         <translation>Vaciar Panel del Proyecto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="741"/>
+        <location filename="../mainwindow.ui" line="929"/>
         <source>Wake-On-LAN / Magic Packet</source>
         <translation>Wake-On-LAN</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="594"/>
-        <location filename="../mainwindow.cpp" line="622"/>
+        <location filename="../mainwindow.cpp" line="670"/>
+        <location filename="../mainwindow.cpp" line="698"/>
         <source>Updates.</source>
         <translation>Actualizaciones.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="598"/>
+        <location filename="../mainwindow.cpp" line="674"/>
         <source>There is a new Packet Sender available.
 
 Download?</source>
@@ -596,22 +850,22 @@ Download?</source>
 ¿Descargar?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="626"/>
+        <location filename="../mainwindow.cpp" line="702"/>
         <source>Let Packet Sender check for updates weekly?</source>
         <translation>¿Permitir que Packet Sender busque actualizaciones semanalmente?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="670"/>
+        <location filename="../mainwindow.cpp" line="746"/>
         <source>Packet Sender Updated!</source>
         <translation>¡Packet Sender actualizado!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="674"/>
+        <location filename="../mainwindow.cpp" line="750"/>
         <source>Updated to </source>
         <translation>Actualizado a </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="674"/>
+        <location filename="../mainwindow.cpp" line="750"/>
         <source>!
 
 Would you like to read the release notes?</source>
@@ -620,52 +874,53 @@ Would you like to read the release notes?</source>
 ¿Le gustaría leer las notas de la versión?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="735"/>
+        <location filename="../mainwindow.cpp" line="817"/>
         <source>Clear Log </source>
         <translation>Borrar registro</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="760"/>
-        <location filename="../mainwindow.cpp" line="782"/>
-        <location filename="../mainwindow.cpp" line="803"/>
+        <location filename="../mainwindow.cpp" line="841"/>
+        <location filename="../mainwindow.cpp" line="864"/>
+        <location filename="../mainwindow.cpp" line="886"/>
+        <location filename="../mainwindow.cpp" line="907"/>
         <source> Ports</source>
         <translation>Puertos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="766"/>
+        <location filename="../mainwindow.cpp" line="870"/>
         <source>UDP Server Disabled</source>
         <translation>Servidor UDP Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="788"/>
+        <location filename="../mainwindow.cpp" line="892"/>
         <source>SSL Server Disabled</source>
         <translation>Servidor SSL Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="914"/>
         <source>TCP Server Disabled</source>
         <translation>Servidor TCP Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1030"/>
-        <location filename="../mainwindow.cpp" line="1271"/>
+        <location filename="../mainwindow.cpp" line="1134"/>
+        <location filename="../mainwindow.cpp" line="1375"/>
         <source>Multicast detected.</source>
         <translation>Difusión Múltiple detectada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1034"/>
+        <location filename="../mainwindow.cpp" line="1138"/>
         <source>Do you wish to join the multicast group?</source>
         <translation>¿Desea unirse al grupo de Difusión Múltiple?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1050"/>
-        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1154"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>Broadcast with responses!</source>
         <translation>¡Transmitir con Respuesta!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1054"/>
-        <location filename="../mainwindow.cpp" line="1297"/>
+        <location filename="../mainwindow.cpp" line="1158"/>
+        <location filename="../mainwindow.cpp" line="1401"/>
         <source>You are sending a broadcast packet with responses enabled.
 
 This could cause traffic flooding. Continue?</source>
@@ -674,30 +929,35 @@ This could cause traffic flooding. Continue?</source>
 Esto puede causar una inundación de tráfico. ¿Continuar?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="234"/>
-        <location filename="../mainwindow.cpp" line="1068"/>
-        <location filename="../mainwindow.cpp" line="1333"/>
-        <location filename="../mainwindow.cpp" line="1939"/>
+        <location filename="../mainwindow.cpp" line="291"/>
+        <location filename="../mainwindow.cpp" line="1172"/>
+        <location filename="../mainwindow.cpp" line="1437"/>
+        <location filename="../mainwindow.cpp" line="2055"/>
         <source>Resending</source>
         <translation>Reenviando</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1074"/>
+        <location filename="../mainwindow.cpp" line="847"/>
+        <source>DTLS Server Disabled</source>
+        <translation>Servidor DTLS deshabilitado</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1178"/>
         <source>bytes</source>
         <translation>bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1101"/>
+        <location filename="../mainwindow.cpp" line="1205"/>
         <source>Name cannot be blank.</source>
         <translation>El nombre no puede ser vacío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1105"/>
+        <location filename="../mainwindow.cpp" line="1209"/>
         <source>Name is empty.</source>
         <translation>El nombre está vacío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1155"/>
+        <location filename="../mainwindow.cpp" line="1259"/>
         <source>This computer does not support SSL.
 
 Expected SSL:</source>
@@ -706,52 +966,52 @@ Expected SSL:</source>
 SSL Esperado:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1159"/>
+        <location filename="../mainwindow.cpp" line="1263"/>
         <source>No SSL Library.</source>
         <translation>Sin Librerías SSL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1212"/>
+        <location filename="../mainwindow.cpp" line="1316"/>
         <source>Address cannot be blank.</source>
         <translation>La Dirección no puede estar vacía</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1216"/>
+        <location filename="../mainwindow.cpp" line="1320"/>
         <source>Address is empty.</source>
         <translation>La dirección está vacía</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1227"/>
+        <location filename="../mainwindow.cpp" line="1331"/>
         <source>Port cannot be blank/zero.</source>
         <translation>El puerto no puede estar vacío o ser cero</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1231"/>
+        <location filename="../mainwindow.cpp" line="1335"/>
         <source>Port is zero.</source>
         <translation>El puerto es cero</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1245"/>
+        <location filename="../mainwindow.cpp" line="1349"/>
         <source>IPv6?</source>
         <translation>¿IPv6?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1249"/>
+        <location filename="../mainwindow.cpp" line="1353"/>
         <source>Enable IPv6 support?</source>
         <translation>¿Habilitar Puerto IPv6?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1275"/>
+        <location filename="../mainwindow.cpp" line="1379"/>
         <source>Join UDP multicast group?</source>
         <translation>¿Unirse al Grupo de Difusión Múltiple UDP?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1313"/>
+        <location filename="../mainwindow.cpp" line="1417"/>
         <source>Resend TCP with persistent connections!</source>
         <translation>¡Reenviar TCP con conexiones persistentes!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1317"/>
+        <location filename="../mainwindow.cpp" line="1421"/>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
@@ -760,123 +1020,123 @@ Uncheck persistent connection? (Recommended)</source>
 ¿Desmarcar la conexión persistente? (Recomendado)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1352"/>
-        <location filename="../mainwindow.cpp" line="2002"/>
+        <location filename="../mainwindow.cpp" line="1456"/>
+        <location filename="../mainwindow.cpp" line="2118"/>
         <source>No packets selected.</source>
         <translation>No hay paquetes seleccionados</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1356"/>
+        <location filename="../mainwindow.cpp" line="1460"/>
         <source>Select a packet.</source>
         <translation>Seleccionar un paquete.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1395"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
         <source>Invalid Address / DNS failed</source>
         <translation>Dirección Inválida / Error de DNS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1418"/>
+        <location filename="../mainwindow.cpp" line="1533"/>
         <source>Invalid Port</source>
         <translation>Puerto Inválido</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1862"/>
+        <location filename="../mainwindow.cpp" line="1977"/>
         <source>Clear Log (0)</source>
         <translation>Limpiar Registro (0)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1881"/>
+        <location filename="../mainwindow.cpp" line="1996"/>
         <source>Save Packet</source>
         <translation>Guardar Paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1882"/>
+        <location filename="../mainwindow.cpp" line="1997"/>
         <source>Packet name:</source>
         <translation>Nombre del Paquete:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2006"/>
+        <location filename="../mainwindow.cpp" line="2122"/>
         <source>Clipboard unchanged.</source>
         <translation>Portapapeles sin cambios</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2067"/>
+        <location filename="../mainwindow.cpp" line="2183"/>
         <source>Save Traffic Log</source>
         <translation>Guardar Registro de Tráfico</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2068"/>
+        <location filename="../mainwindow.cpp" line="2184"/>
         <source>log (*.log)</source>
         <translation>Registro (*.log)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2086"/>
+        <location filename="../mainwindow.cpp" line="2202"/>
         <source>TIME</source>
         <translation>TIEMPO</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2086"/>
+        <location filename="../mainwindow.cpp" line="2202"/>
         <source>From IP</source>
         <translation>IP Inicial</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2086"/>
+        <location filename="../mainwindow.cpp" line="2202"/>
         <source>From Port</source>
         <translation>Puerto Inicial</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2086"/>
+        <location filename="../mainwindow.cpp" line="2202"/>
         <source>To IP</source>
         <translation>IP Final</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2087"/>
+        <location filename="../mainwindow.cpp" line="2203"/>
         <source>To Port</source>
         <translation>Puerto Final</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2087"/>
+        <location filename="../mainwindow.cpp" line="2203"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2087"/>
+        <location filename="../mainwindow.cpp" line="2203"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2262"/>
+        <location filename="../mainwindow.cpp" line="2406"/>
         <source>Import JSON</source>
         <translation>importar JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2264"/>
-        <location filename="../mainwindow.cpp" line="2331"/>
+        <location filename="../mainwindow.cpp" line="2408"/>
+        <location filename="../mainwindow.cpp" line="2475"/>
         <source>JSON db (*.json)</source>
         <translation>db JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2288"/>
-        <location filename="../mainwindow.cpp" line="2425"/>
+        <location filename="../mainwindow.cpp" line="2432"/>
+        <location filename="../mainwindow.cpp" line="2569"/>
         <source>Found </source>
         <translation>Encontrado </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2288"/>
-        <location filename="../mainwindow.cpp" line="2425"/>
+        <location filename="../mainwindow.cpp" line="2432"/>
+        <location filename="../mainwindow.cpp" line="2569"/>
         <source> packets!</source>
         <translation> paquetes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2292"/>
-        <location filename="../mainwindow.cpp" line="2429"/>
+        <location filename="../mainwindow.cpp" line="2436"/>
+        <location filename="../mainwindow.cpp" line="2573"/>
         <source>Import </source>
         <translation>Importar </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2292"/>
-        <location filename="../mainwindow.cpp" line="2429"/>
+        <location filename="../mainwindow.cpp" line="2436"/>
+        <location filename="../mainwindow.cpp" line="2573"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -885,95 +1145,95 @@ Packet Sender will overwrite packets with the same name.</source>
 Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2295"/>
-        <location filename="../mainwindow.cpp" line="2316"/>
-        <location filename="../mainwindow.cpp" line="2432"/>
-        <location filename="../mainwindow.cpp" line="2453"/>
+        <location filename="../mainwindow.cpp" line="2439"/>
+        <location filename="../mainwindow.cpp" line="2460"/>
+        <location filename="../mainwindow.cpp" line="2576"/>
+        <location filename="../mainwindow.cpp" line="2597"/>
         <source>Import Cancelled</source>
         <translation>Importación Cancelada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2303"/>
+        <location filename="../mainwindow.cpp" line="2447"/>
         <source>Import Finished</source>
         <translation>Importación Finalizada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2309"/>
-        <location filename="../mainwindow.cpp" line="2446"/>
+        <location filename="../mainwindow.cpp" line="2453"/>
+        <location filename="../mainwindow.cpp" line="2590"/>
         <source>Not a database</source>
         <translation>No es una base de datos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2313"/>
-        <location filename="../mainwindow.cpp" line="2450"/>
+        <location filename="../mainwindow.cpp" line="2457"/>
+        <location filename="../mainwindow.cpp" line="2594"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>No se encontraron paquetes en este archivo. Puede que no sea una exportación de Packet Sender</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2330"/>
+        <location filename="../mainwindow.cpp" line="2474"/>
         <source>Save JSON</source>
         <translation>Guardar JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2352"/>
-        <location filename="../mainwindow.cpp" line="2485"/>
+        <location filename="../mainwindow.cpp" line="2496"/>
+        <location filename="../mainwindow.cpp" line="2629"/>
         <source>Export: </source>
         <translation>Exportar: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2356"/>
+        <location filename="../mainwindow.cpp" line="2500"/>
         <source>Could not save</source>
         <translation>No se pudo guardar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2360"/>
+        <location filename="../mainwindow.cpp" line="2504"/>
         <source>Could not open </source>
         <translation>No se pudo abrir </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2406"/>
-        <location filename="../mainwindow.cpp" line="2531"/>
+        <location filename="../mainwindow.cpp" line="2550"/>
+        <location filename="../mainwindow.cpp" line="2675"/>
         <source>Import File</source>
         <translation>Importar Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2408"/>
-        <location filename="../mainwindow.cpp" line="2463"/>
+        <location filename="../mainwindow.cpp" line="2552"/>
+        <location filename="../mainwindow.cpp" line="2607"/>
         <source>INI db (*.ini)</source>
         <translation>db INI (*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2462"/>
+        <location filename="../mainwindow.cpp" line="2606"/>
         <source>Save File</source>
         <translation>Guardar Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2533"/>
+        <location filename="../mainwindow.cpp" line="2677"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2557"/>
+        <location filename="../mainwindow.cpp" line="2701"/>
         <source>Max size exceeded!</source>
         <translation>¡Tamaño máximo excedido!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2561"/>
+        <location filename="../mainwindow.cpp" line="2705"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>El campo HEX admite hasta 10.922 bytes. Los datos han sido truncados.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2567"/>
+        <location filename="../mainwindow.cpp" line="2711"/>
         <source>Loading </source>
         <translation>Cargando </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2567"/>
+        <location filename="../mainwindow.cpp" line="2711"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2801"/>
+        <location filename="../mainwindow.cpp" line="2791"/>
         <source>Invalid MAC Address.</source>
         <translation>Dirección MAC no válida</translation>
     </message>
@@ -1061,12 +1321,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 <context>
     <name>PacketNetwork</name>
     <message>
-        <location filename="../packetnetwork.cpp" line="246"/>
+        <location filename="../packetnetwork.cpp" line="290"/>
         <source>Port bind error.</source>
         <translation>Error al vincular el puerto</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="250"/>
+        <location filename="../packetnetwork.cpp" line="294"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
@@ -1075,7 +1335,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
 Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel de administrador/root.</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="251"/>
+        <location filename="../packetnetwork.cpp" line="295"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT].
 
  - Are you running multiple instances? 
@@ -1550,7 +1810,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="114"/>
-        <location filename="../persistentconnection.cpp" line="478"/>
+        <location filename="../persistentconnection.cpp" line="527"/>
         <source>Send File</source>
         <translation>Enviar Archivo</translation>
     </message>
@@ -1576,17 +1836,17 @@ Selecting No will generate new IDs and append.</source>
         <translation>Usted:</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="480"/>
+        <location filename="../persistentconnection.cpp" line="529"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="521"/>
+        <location filename="../persistentconnection.cpp" line="570"/>
         <source>Copied</source>
         <translation>Copiado</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="522"/>
+        <location filename="../persistentconnection.cpp" line="571"/>
         <source>Output sent to your clipboard</source>
         <translation>Salida enviada al portapapeles</translation>
     </message>
@@ -1645,17 +1905,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2726"/>
+        <location filename="../mainwindow.cpp" line="2942"/>
         <source>Multi-line editor</source>
         <translation>Editor Multi Líneas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2732"/>
+        <location filename="../mainwindow.cpp" line="2948"/>
         <source>Update</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2733"/>
+        <location filename="../mainwindow.cpp" line="2949"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -1663,68 +1923,68 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../packet.cpp" line="266"/>
-        <location filename="../settings.cpp" line="44"/>
+        <location filename="../packet.cpp" line="272"/>
+        <location filename="../settings.cpp" line="47"/>
         <source>Send</source>
         <translation>Enviar</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="267"/>
+        <location filename="../packet.cpp" line="273"/>
         <source>Send &lt;b&gt;</source>
         <translation>Enviar &lt;b&gt;</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="627"/>
+        <location filename="../packet.cpp" line="644"/>
         <source>Received an invalid MAC address</source>
         <translation>Recibí una dirección MAC no válida</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="47"/>
+        <location filename="../settings.cpp" line="50"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="50"/>
+        <location filename="../settings.cpp" line="53"/>
         <source>Resend</source>
         <translation>Reenviar</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="53"/>
+        <location filename="../settings.cpp" line="56"/>
         <source>To Address</source>
         <translation>Para Final</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="56"/>
+        <location filename="../settings.cpp" line="59"/>
         <source>To Port</source>
         <translation>Puerto Final</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="59"/>
+        <location filename="../settings.cpp" line="62"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="62"/>
+        <location filename="../settings.cpp" line="65"/>
         <source>Request Path</source>
         <translation>Solicitud de Ruta</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="65"/>
+        <location filename="../settings.cpp" line="68"/>
         <source>Time</source>
         <translation>Tiempo</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="68"/>
+        <location filename="../settings.cpp" line="71"/>
         <source>From IP</source>
         <translation>IP Inicial</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="71"/>
+        <location filename="../settings.cpp" line="74"/>
         <source>From Port</source>
         <translation>Puerto Inicial</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="74"/>
+        <location filename="../settings.cpp" line="77"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
@@ -1760,6 +2020,7 @@ Selecting No will generate new IDs and append.</source>
         <location filename="../settings.ui" line="52"/>
         <location filename="../settings.ui" line="77"/>
         <location filename="../settings.ui" line="102"/>
+        <location filename="../settings.ui" line="136"/>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -1785,449 +2046,480 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="111"/>
+        <source>Enable DTLS Servers</source>
+        <translation>Habilitar Servidores DTLS</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="126"/>
+        <source>DTLS Server Port (comma-separated, 0 for random)</source>
+        <translation>Puerto del Servidor DTLS (separados por comas, 0 para aleatorio)</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="145"/>
         <source>Set the server ports to 0 if you want to run multiple Packet Sender instances.</source>
         <translation>Establezca los puertos del servidor en 0 si desea ejecutar varias instancias de Packet Sender.</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="125"/>
+        <location filename="../settings.ui" line="159"/>
         <source>Translate macros when sending</source>
         <translation>Traducir macros al enviar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="132"/>
+        <location filename="../settings.ui" line="166"/>
+        <source>Send simple Acknowledge (for DTLS server only)</source>
+        <translation>Enviar acuse de recibo simple (solo para servidor DTLS)</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="173"/>
         <source>Send a basic response with macro support</source>
         <translation>Enviar una respuesta básica con soporte de macros</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="141"/>
+        <location filename="../settings.ui" line="182"/>
         <source>Response Data</source>
         <translation>Datos de Respuesta</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="155"/>
+        <location filename="../settings.ui" line="196"/>
         <source>ASCII</source>
         <translation>ASCII</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="169"/>
-        <location filename="../settings.ui" line="771"/>
-        <location filename="../settings.ui" line="833"/>
-        <location filename="../settings.ui" line="867"/>
-        <location filename="../settings.ui" line="908"/>
-        <location filename="../settings.ui" line="941"/>
+        <location filename="../settings.ui" line="210"/>
+        <location filename="../settings.ui" line="799"/>
+        <location filename="../settings.ui" line="861"/>
+        <location filename="../settings.ui" line="895"/>
+        <location filename="../settings.ui" line="936"/>
+        <location filename="../settings.ui" line="969"/>
         <source>HEX</source>
         <translation>HEX</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="197"/>
+        <location filename="../settings.ui" line="225"/>
         <source>Additional UDP/TCP/SSL Settings</source>
         <translation>Configuración Adicional de UDP/TCP/SSL</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="205"/>
+        <location filename="../settings.ui" line="233"/>
         <source>IPv4 Only</source>
         <translation>Solo IPv4</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="218"/>
+        <location filename="../settings.ui" line="246"/>
         <source>IPv6 Only</source>
         <translation>Solo IPv6</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="230"/>
+        <location filename="../settings.ui" line="258"/>
         <source>Bind This:</source>
         <translation>Vincular Esto:</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="240"/>
+        <location filename="../settings.ui" line="268"/>
         <source>Your IP</source>
         <translation>Su dirección IP</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="253"/>
+        <location filename="../settings.ui" line="281"/>
         <source>Multi-Send Delay (sec)</source>
         <translation>Retraso de Envío múltiple (seg)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="260"/>
+        <location filename="../settings.ui" line="288"/>
         <source>0.0 for off</source>
         <translation>0.0 para apagado</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="271"/>
+        <location filename="../settings.ui" line="299"/>
         <source>Cancel Resending after # packets</source>
         <translation>Cancelar Reenvío después de # paquetes</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="278"/>
+        <location filename="../settings.ui" line="306"/>
         <source>0 for off</source>
         <translation>0 para apagado</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="287"/>
+        <location filename="../settings.ui" line="315"/>
         <source>Attempt Receive Before Send</source>
         <translation>Intentar recibir antes de enviar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="294"/>
+        <location filename="../settings.ui" line="322"/>
         <source>500 ms delay after connect (slow devices)</source>
         <translation>Retraso de 500 ms después de la conexión (dispositivos lentos)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="301"/>
+        <location filename="../settings.ui" line="329"/>
         <source>Persistent TCP Connections</source>
         <translation>Conexiones TCP Persistentes</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="308"/>
+        <location filename="../settings.ui" line="336"/>
         <source>Resolve DNS during input (old method)</source>
         <translation>Resolver DNS durante la entrada (método antiguo)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="315"/>
+        <location filename="../settings.ui" line="343"/>
         <source>Ignore SSL Errors (Wrong host, expired, self-signed, etc)</source>
         <translation>Ignorar errores de SSL (host incorrecto, caducado, autofirmado, etc.)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="328"/>
+        <location filename="../settings.ui" line="356"/>
         <source>SSL Server may use an internal snake oil cert</source>
         <translation>El servidor SSL puede usar un certificado falso interno</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="337"/>
         <source>SSL CA Certificates</source>
-        <translation>Certificados de CA SSL</translation>
+        <translation type="vanished">Certificados de CA SSL</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="344"/>
+        <location filename="../settings.ui" line="372"/>
         <source>Path from where to load the CA certificats (leave empty for defaults)</source>
         <translation>Ruta desde donde cargar los certificados de CA (dejar en blanco para los valores predeterminados)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="351"/>
-        <location filename="../settings.ui" line="376"/>
-        <location filename="../settings.ui" line="401"/>
+        <location filename="../settings.ui" line="379"/>
+        <location filename="../settings.ui" line="404"/>
+        <location filename="../settings.ui" line="429"/>
         <source>Browse</source>
         <translation>Navegar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="362"/>
         <source>SSL Local Certificate</source>
-        <translation>Certificado Local SSL</translation>
+        <translation type="vanished">Certificado Local SSL</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="369"/>
+        <location filename="../settings.ui" line="397"/>
         <source>File path for the client side local certificate</source>
         <translation>Ruta de archivo para el certificado local del lado del cliente</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="387"/>
         <source>SSL Private Key</source>
-        <translation>Clave Privada SSL</translation>
+        <translation type="vanished">Clave Privada SSL</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="394"/>
+        <location filename="../settings.ui" line="365"/>
+        <source>SSL/DTLS CA Certificates</source>
+        <translation>Certificados de CA SSL/DTLS</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="390"/>
+        <source>SSL/DTLS Local Certificate</source>
+        <translation>Certificado local SSL/DTLS</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="415"/>
+        <source>SSL/DTLS Private Key</source>
+        <translation>Clave privada SSL/DTLS</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="422"/>
         <source>File path for the client side private key</source>
         <translation>Ruta de Archivo para la clave privada del lado del cliente</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="430"/>
+        <location filename="../settings.ui" line="458"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="436"/>
+        <location filename="../settings.ui" line="464"/>
         <source>Automatically adjust ContentType when sending XML or JSON</source>
         <translation>Ajustar automáticamente el Tipo de Contenido al enviar XML o JSON</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="458"/>
+        <location filename="../settings.ui" line="486"/>
         <source>Generate Auth Header</source>
         <translation>Generar Encabezado de Autenticación</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="469"/>
-        <location filename="../settings.cpp" line="975"/>
+        <location filename="../settings.ui" line="497"/>
+        <location filename="../settings.cpp" line="1053"/>
         <source>Host</source>
         <translation>Anfitrión</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="479"/>
+        <location filename="../settings.ui" line="507"/>
         <source>Username/ClientID</source>
         <translation>Nombre de Usuario/ID de Cliente</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="489"/>
+        <location filename="../settings.ui" line="517"/>
         <source>Password/AccessCode</source>
         <translation>Contraseña/Código de Acceso</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="499"/>
-        <location filename="../settings.cpp" line="1046"/>
+        <location filename="../settings.ui" line="527"/>
+        <location filename="../settings.cpp" line="1124"/>
         <source>HTTP Header</source>
         <translation>Encabezado HTTP</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="530"/>
+        <location filename="../settings.ui" line="558"/>
         <source>Delete Header</source>
         <translation>Eliminar Encabezado</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="540"/>
+        <location filename="../settings.ui" line="568"/>
         <source>Display</source>
         <translation>Mostrar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="548"/>
+        <location filename="../settings.ui" line="576"/>
         <source>Saved Packet Display Order (Drag and Drop)</source>
         <translation>Orden de Visualización de Paquetes Guardados (arrastrar y soltar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="555"/>
         <location filename="../settings.ui" line="583"/>
+        <location filename="../settings.ui" line="611"/>
         <source>Name</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="560"/>
         <location filename="../settings.ui" line="588"/>
+        <location filename="../settings.ui" line="616"/>
         <source>To IP</source>
         <translation>IP Final</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="565"/>
         <location filename="../settings.ui" line="593"/>
+        <location filename="../settings.ui" line="621"/>
         <source>From IP</source>
         <translation>IP Inicial</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="576"/>
+        <location filename="../settings.ui" line="604"/>
         <source>Traffic Log Display Order (Drag and Drop)</source>
         <translation>Orden de Visualización del Registro de Tráfico (arrastrar y soltar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="601"/>
+        <location filename="../settings.ui" line="629"/>
         <source>Use Default Order</source>
         <translation>Usar Orden Predeterminado</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="626"/>
+        <location filename="../settings.ui" line="654"/>
         <source>Miscellaneous</source>
         <translation>Misceláneos</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="632"/>
+        <location filename="../settings.ui" line="660"/>
         <source>Use Dark Theme (requires restart)</source>
         <translation>Usar tema oscuro (Es necesario reiniciar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="641"/>
+        <location filename="../settings.ui" line="669"/>
         <source>Language (Requires Restart)</source>
         <translation>Idioma (Es necesario reiniciar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="650"/>
+        <location filename="../settings.ui" line="678"/>
         <source>Copy to Clipboard button uses raw data</source>
         <translation>El botón Copiar al portapapeles usa datos sin procesar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="657"/>
+        <location filename="../settings.ui" line="685"/>
         <source>Rolling 100-entry traffic log</source>
         <translation>Registro de Tráfico Continuo de 100 entradas</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="664"/>
+        <location filename="../settings.ui" line="692"/>
         <source>Restore previous session</source>
         <translation>Restablecer sesión previa</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="671"/>
+        <location filename="../settings.ui" line="699"/>
         <source>Periodically check for updates</source>
         <translation>Comprobar periódicamente si hay actualizaciones</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="678"/>
+        <location filename="../settings.ui" line="706"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
         <translation>usar puntos suspensivos [...] para entradas de datos largas (ayuda al rendimiento)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="685"/>
+        <location filename="../settings.ui" line="713"/>
         <source>Auto-Launch Starter Panel</source>
         <translation>Ejecutar Automáticamente el Panel Inicial</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="722"/>
+        <location filename="../settings.ui" line="750"/>
         <source>Smart Responses</source>
         <translation>Respuestas Inteligentes</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="730"/>
+        <location filename="../settings.ui" line="758"/>
         <source>Send a Smart Response with Macro Support</source>
         <translation>Enviar una respuesta inteligente con compatibilidad con Macros</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="758"/>
+        <location filename="../settings.ui" line="786"/>
         <source>Response 5</source>
         <translation>Respuesta 5</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="766"/>
-        <location filename="../settings.ui" line="828"/>
-        <location filename="../settings.ui" line="862"/>
-        <location filename="../settings.ui" line="903"/>
-        <location filename="../settings.ui" line="936"/>
+        <location filename="../settings.ui" line="794"/>
+        <location filename="../settings.ui" line="856"/>
+        <location filename="../settings.ui" line="890"/>
+        <location filename="../settings.ui" line="931"/>
+        <location filename="../settings.ui" line="964"/>
         <source>Mixed ASCII</source>
         <translation>ASCII mixto</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="779"/>
-        <location filename="../settings.ui" line="844"/>
-        <location filename="../settings.ui" line="882"/>
-        <location filename="../settings.ui" line="895"/>
-        <location filename="../settings.ui" line="928"/>
+        <location filename="../settings.ui" line="807"/>
+        <location filename="../settings.ui" line="872"/>
+        <location filename="../settings.ui" line="910"/>
+        <location filename="../settings.ui" line="923"/>
+        <location filename="../settings.ui" line="956"/>
         <source>Enable</source>
         <translation>Habilitar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="786"/>
+        <location filename="../settings.ui" line="814"/>
         <source>Response 4</source>
         <translation>Respuesta 4</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="793"/>
+        <location filename="../settings.ui" line="821"/>
         <source>If Packet data equals</source>
         <translation>Si los datos del paquete son iguales</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="800"/>
+        <location filename="../settings.ui" line="828"/>
         <source>Reply with</source>
         <translation>Responder con</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="807"/>
+        <location filename="../settings.ui" line="835"/>
         <source>Encoding</source>
         <translation>Codificación</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="814"/>
+        <location filename="../settings.ui" line="842"/>
         <source>Response 1</source>
         <translation>Respuesta 1</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="854"/>
+        <location filename="../settings.ui" line="882"/>
         <source>Response 2</source>
         <translation>Respuesta 2</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="875"/>
+        <location filename="../settings.ui" line="903"/>
         <source>Response 3</source>
         <translation>Respuesta 3</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="963"/>
-        <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
-        <translation>Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
+        <location filename="../settings.ui" line="991"/>
+        <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</source>
+        <translation>Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="970"/>
+        <location filename="../settings.ui" line="998"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
         <translation>Packet Sender intercambiará ek macro con un valor real antes de enviar</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="981"/>
+        <location filename="../settings.ui" line="1009"/>
         <source>{{DATE}} format (Requires Restart)</source>
         <translation>{{DATE}} formato (Es necesario reiniciar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="998"/>
-        <location filename="../settings.ui" line="1039"/>
+        <location filename="../settings.ui" line="1026"/>
+        <location filename="../settings.ui" line="1067"/>
         <source>Example</source>
         <translation>Ejemplo</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1022"/>
+        <location filename="../settings.ui" line="1050"/>
         <source>{{TIME}} format (Requires Restart)</source>
         <translation>{{TIME}} formato (Es necesario reiniciar)</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1083"/>
+        <location filename="../settings.ui" line="1111"/>
         <source>Online Documentation</source>
         <translation>Documentación en línea</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="103"/>
+        <location filename="../settings.cpp" line="125"/>
         <source>Settings</source>
         <translation>Ajustes</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="359"/>
+        <location filename="../settings.cpp" line="424"/>
         <source>Bad IP.</source>
         <translation>IP Inválida</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="363"/>
+        <location filename="../settings.cpp" line="428"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Packet Sender no puede vincularse a una IP Inválida</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="377"/>
+        <location filename="../settings.cpp" line="442"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>Conflicto de puertos TCP y SSL distinto de cero.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="381"/>
+        <location filename="../settings.cpp" line="446"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Packet Sender no puede vincular TCP y SSL al mismo puerto.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="726"/>
+        <location filename="../settings.cpp" line="804"/>
         <source>Open Directory</source>
         <translation>Abrir Directorio</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="747"/>
+        <location filename="../settings.cpp" line="825"/>
         <source>Choose Cert</source>
         <translation>Seleccionar Certificado</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="747"/>
-        <source>Certs (*.pem)</source>
-        <translation>Certificados (*.pem)</translation>
+        <location filename="../settings.cpp" line="825"/>
+        <location filename="../settings.cpp" line="841"/>
+        <source>*.*</source>
+        <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="763"/>
+        <source>Certs (*.pem)</source>
+        <translation type="vanished">Certificados (*.pem)</translation>
+    </message>
+    <message>
+        <location filename="../settings.cpp" line="841"/>
         <source>Choose Key</source>
         <translation>Elegir clave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="763"/>
         <source>Keys (*.key, *.pem)</source>
-        <translation>Claves (*.key, *.pem)</translation>
+        <translation type="vanished">Claves (*.key, *.pem)</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="975"/>
-        <location filename="../settings.cpp" line="1044"/>
+        <location filename="../settings.cpp" line="1053"/>
+        <location filename="../settings.cpp" line="1122"/>
         <source>Key</source>
         <translation>Clave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="975"/>
-        <location filename="../settings.cpp" line="1045"/>
+        <location filename="../settings.cpp" line="1053"/>
+        <location filename="../settings.cpp" line="1123"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1040"/>
+        <location filename="../settings.cpp" line="1118"/>
         <source>UN/ClientID</source>
         <translation>Nombre de usuario/ID de cliente</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1041"/>
+        <location filename="../settings.cpp" line="1119"/>
         <source>PW/Access</source>
         <translation>Contraseña/Código de acceso</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1042"/>
+        <location filename="../settings.cpp" line="1120"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP encabezado de autenticación</translation>
     </message>
