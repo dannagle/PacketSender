@@ -2,9 +2,28 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
 
 #include "dtlsserver.h"
+#include "globals.h"
 
 #include <algorithm>
+#ifndef CONSOLE_BUILD
 #include <QMessageBox>
+
+#else
+
+class QMessageBox {
+public:
+    QMessageBox() {
+
+    };
+    ~QMessageBox() {
+
+    }
+    static void critical(void * ptr, QString msg1, QString msg2) {
+        return;
+    }
+
+};
+#endif
 
 bool DtlsServer::closeNotifyReceived = false;
 

@@ -956,7 +956,13 @@ void PacketNetwork::packetToSend(Packet sendpacket)
                  << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)))
                  << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
-        if(settings.value("leaveSessionOpen").toString() == "true"){
+        bool leaveSessionOpen = settings.value("leaveSessionOpen").toString() == "true";
+#ifndef CONSOLE_BUILD
+        leaveSessionOpen = false;
+#endif
+        if(leaveSessionOpen){
+#ifndef CONSOLE_BUILD
+
             thread->persistentRequest=true;
             PersistentConnection * pcWindow = new PersistentConnection();
 
@@ -974,6 +980,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             pcWindow->show();
             thread->start();
 
+#endif
 
         }
         else{

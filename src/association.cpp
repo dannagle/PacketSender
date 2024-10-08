@@ -3,6 +3,7 @@
 
 #include "association.h"
 #include "packet.h"
+#include "globals.h"
 #include <QTimer>
 #include <QCoreApplication>
 

@@ -2,7 +2,6 @@
 #define SETTINGS_H
 
 #include "globals.h"
-#include "mainwindow.h"
 
 #ifndef CONSOLE_BUILD
 #include <QDialog>
@@ -10,7 +9,6 @@
 #endif
 #include <QSettings>
 #include <QList>
-#include <QCheckBox>
 
 
 #ifdef CONSOLE_BUILD
@@ -54,6 +52,9 @@ private:
 
 };
 #else
+
+#include "mainwindow.h"
+#include <QCheckBox>
 
 
 namespace Ui

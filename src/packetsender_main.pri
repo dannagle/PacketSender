@@ -1,5 +1,8 @@
 
 SOURCES += main.cpp\
+association.cpp \
+dtlsserver.cpp \
+dtlsthread.cpp \
         mainpacketreceiver.cpp \
     packetnetwork.cpp \
     packet.cpp \
@@ -9,6 +12,9 @@ SOURCES += main.cpp\
 
 
 HEADERS  += mainpacketreceiver.h \
+association.h \
+dtlsserver.h \
+dtlsthread.h \
     packetnetwork.h \
     packet.h \
     globals.h \

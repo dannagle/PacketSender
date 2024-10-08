@@ -3,7 +3,6 @@
 #include "packet.h"
 #include "association.h"
 #include "packetnetwork.h"
-#include "mainwindow.h"
 #include <QThread>
 //#include "QSettings"
 

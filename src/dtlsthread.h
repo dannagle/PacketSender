@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include "packet.h"
+#include "globals.h"
 #include "QSettings"
 #include "association.h"
 //#include "QTimer"
