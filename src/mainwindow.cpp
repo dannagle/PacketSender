@@ -2181,26 +2181,46 @@ void MainWindow::on_saveLogButton_clicked()
     static QString fileName = QDir::homePath() + QString("/trafficlog.log");
 
     fileName = QFileDialog::getSaveFileName(this, tr("Save Traffic Log"),
-                                            QDir::toNativeSeparators(fileName), tr("log (*.log)"));
+                                            QDir::toNativeSeparators(fileName), tr("log (*.log);; csv (*.csv)"));
+
+    QStringList headers;
+    headers << tr("TIME")  << tr("From IP")  << tr("From Port")  << tr("To IP")
+         << tr("To Port")  << tr("Method")  << tr("Error")  << "ASCII"  << "Hex";
+
+
 
     QStringList testExt = fileName.split(".");
     QString ext = "";
+    QString delim = "\t";
+
+
+
     if (testExt.size() > 0) {
         ext = testExt.last();
     }
-    if (ext != "log") {
-        fileName.append(".log");
+
+    bool csv = ext.toLower().trimmed() == "csv";
+
+
+    if (csv) {
+        QDEBUG() << "Export csv";
+        delim = ",";
+    } else {
+        if (ext != "log") {
+            fileName.append(".log");
+        }
     }
+
+
+
     QDEBUG() << "Export log to" << fileName;
 
+
     QString exportString = "";
-    QString delim = "\t";
 
     QTextStream out;
     out.setString(&exportString);
-
-    out << tr("TIME") << delim << tr("From IP") << delim << tr("From Port") << delim << tr("To IP")
-        << delim << tr("To Port") << delim << tr("Method") << delim << tr("Error") << delim << "ASCII" << delim << "Hex\n";
+    out << headers.join(delim) << "\n";
 
 
     Packet tempPacket;
@@ -2220,7 +2240,17 @@ void MainWindow::on_saveLogButton_clicked()
         exportString.append(delim);
         exportString.append(tempPacket.errorString);
         exportString.append(delim);
-        exportString.append(tempPacket.hexToASCII(tempPacket.hexString));
+
+        QString escapeAscii = tempPacket.hexToASCII(tempPacket.hexString);
+        if(escapeAscii.contains(delim)) {
+            if(escapeAscii.contains("\"")) {
+                escapeAscii.replace("\"", "\"\"");
+            }
+            escapeAscii = "\"" + escapeAscii + "\"";
+        }
+
+
+        exportString.append(escapeAscii);
         exportString.append(delim);
         exportString.append(tempPacket.hexString);
         exportString.append(delim);
