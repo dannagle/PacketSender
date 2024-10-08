@@ -513,7 +513,7 @@ Engagez le Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="254"/>
         <source>DTLS</source>
-        <translation type="unfinished"></translation>
+        <translation>DTLS</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="263"/>
@@ -550,109 +550,109 @@ Engagez le Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="331"/>
         <source>Cipher Suites:</source>
-        <translation type="unfinished"></translation>
+        <translation>Suites de chiffrement&#xa0;:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="339"/>
         <location filename="../mainwindow.ui" line="349"/>
         <source>AES256-GCM-SHA384</source>
-        <translation type="unfinished"></translation>
+        <translation>AES256-GCM-SHA384</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="344"/>
         <location filename="../mainwindow.ui" line="354"/>
         <source>AES128-GCM-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>AES128-GCM-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="359"/>
         <source>AES128-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>AES128-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="364"/>
         <source>AES256-SHA384</source>
-        <translation type="unfinished"></translation>
+        <translation>AES256-SHA384</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="369"/>
         <source>AES128-SHA</source>
-        <translation type="unfinished"></translation>
+        <translation>AES128-SHA</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="374"/>
         <source>AES256-SHA</source>
-        <translation type="unfinished"></translation>
+        <translation>AES256-SHA</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="379"/>
         <source>CHACHA20-POLY1305-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>CHACHA20-POLY1305-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="384"/>
         <source>RC4-MD5</source>
-        <translation type="unfinished"></translation>
+        <translation>RC4-MD5</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="389"/>
         <source>RC4-SHA</source>
-        <translation type="unfinished"></translation>
+        <translation>RC4-SHA</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="394"/>
         <source>CAMELLIA128-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>CAMELLIA128-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="399"/>
         <source>CAMELLIA256-SHA</source>
-        <translation type="unfinished"></translation>
+        <translation>CAMELLIA256-SHA</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="404"/>
         <source>ECDHE-RSA-AES128-GCM-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>ECDHE-RSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="409"/>
         <source>ECDHE-RSA-AES256-GCM-SHA384</source>
-        <translation type="unfinished"></translation>
+        <translation>ECDHE-RSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="414"/>
         <source>ECDHE-ECDSA-AES128-GCM-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>ECDHE-ECDSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="419"/>
         <source>ECDHE-ECDSA-AES256-GCM-SHA384</source>
-        <translation type="unfinished"></translation>
+        <translation>ECDHE-ECDSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="424"/>
         <source>DHE-RSA-AES128-GCM-SHA256</source>
-        <translation type="unfinished"></translation>
+        <translation>DHE-RSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="429"/>
         <source>DHE-RSA-AES256-GCM-SHA384</source>
-        <translation type="unfinished"></translation>
+        <translation>DHE-RSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="450"/>
         <source>Host Name (CN)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom d&apos;hôte (CN)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="470"/>
         <source>Persistent DTLS</source>
-        <translation type="unfinished"></translation>
+        <translation>DTLS persistant</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="490"/>
         <source>Add Server Verification of The Client   </source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter la vérification du serveur du client </translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="520"/>
@@ -934,7 +934,7 @@ Cela pourrait provoquer une inondation du trafic. Continuer?</translation>
     <message>
         <location filename="../mainwindow.cpp" line="847"/>
         <source>DTLS Server Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur DTLS désactivé</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="892"/>
@@ -2042,12 +2042,12 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.ui" line="111"/>
         <source>Enable DTLS Servers</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer les serveurs DTLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="126"/>
         <source>DTLS Server Port (comma-separated, 0 for random)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ports du serveur DTLS (séparés par des virgules, 0 pour randomiser)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="145"/>
@@ -2062,7 +2062,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.ui" line="166"/>
         <source>Send simple Acknowledge (for DTLS server only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un accusé de réception simple (pour le serveur DTLS uniquement)</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="173"/>
@@ -2201,17 +2201,17 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.ui" line="365"/>
         <source>SSL/DTLS CA Certificates</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificats d&apos;autorité de certification SSL/DTLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="390"/>
         <source>SSL/DTLS Local Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>Certificat local SSL/DTLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="415"/>
         <source>SSL/DTLS Private Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Clé privée SSL/DTLS</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="422"/>
@@ -2414,11 +2414,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.ui" line="991"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
-        <translation type="vanished">Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
+        <translation>Macros disponibles: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="998"/>
@@ -2485,7 +2481,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
         <location filename="../settings.cpp" line="825"/>
         <location filename="../settings.cpp" line="841"/>
         <source>*.*</source>
-        <translation type="unfinished">*.*</translation>
+        <translation>*.*</translation>
     </message>
     <message>
         <source>Certs (*.pem)</source>
