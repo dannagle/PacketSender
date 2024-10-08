@@ -2485,7 +2485,7 @@ Selecting No will generate new IDs and append.</source>
         <location filename="../settings.cpp" line="825"/>
         <location filename="../settings.cpp" line="841"/>
         <source>*.*</source>
-        <translation type="">*.*</translation>
+        <translation>*.*</translation>
     </message>
     <message>
         <source>Certs (*.pem)</source>
