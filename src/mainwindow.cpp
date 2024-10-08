@@ -2181,7 +2181,11 @@ void MainWindow::on_saveLogButton_clicked()
     static QString fileName = QDir::homePath() + QString("/trafficlog.log");
 
     fileName = QFileDialog::getSaveFileName(this, tr("Save Traffic Log"),
-                                            QDir::toNativeSeparators(fileName), tr("log (*.log);; csv (*.csv)"));
+                                            QDir::toNativeSeparators(fileName), "Log (*.log);;CSV (*.csv)");
+
+    if(fileName.isEmpty()) {
+        return;
+    }
 
     QStringList headers;
     headers << tr("TIME")  << tr("From IP")  << tr("From Port")  << tr("To IP")
