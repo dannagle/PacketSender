@@ -1109,7 +1109,7 @@ int main(int argc, char *argv[])
                 sock.close();
 
                 OUTPUT();
-                return bytesWriten;
+                return 0;
 
 
             } else {
@@ -1228,7 +1228,7 @@ int main(int argc, char *argv[])
             sock.close();
 
             OUTPUT();
-            return bytesWriten;
+            return 0;
 
         }
 
