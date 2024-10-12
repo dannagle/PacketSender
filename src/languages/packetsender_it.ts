@@ -223,63 +223,63 @@ Commit Hash: </translation>
 <context>
     <name>DtlsAssociation</name>
     <message>
-        <location filename="../association.cpp" line="85"/>
+        <location filename="../association.cpp" line="86"/>
         <source>: connecting UDP socket first ...</source>
         <translation>: collegando prima il socket UDP ...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="93"/>
+        <location filename="../association.cpp" line="94"/>
         <source>: failed to start a handshake - </source>
         <translation>: non è riuscito ad avviare una stretta di mano -</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="105"/>
+        <location filename="../association.cpp" line="106"/>
         <source>: starting a handshake</source>
         <translation>: iniziare una stretta di mano -</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="113"/>
+        <location filename="../association.cpp" line="114"/>
         <source>: UDP socket is now in ConnectedState, continue with handshake ...</source>
         <translation>: Il socket UDP è ora connesso, continuare con l&apos;handshake ...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="122"/>
-        <location filename="../association.cpp" line="130"/>
+        <location filename="../association.cpp" line="123"/>
+        <location filename="../association.cpp" line="131"/>
         <source>: spurious read notification?</source>
         <translation>notifica di lettura spuria?</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="152"/>
+        <location filename="../association.cpp" line="153"/>
         <source>: zero-length datagram received?</source>
         <translation>: ricevuto datagramma di lunghezza zero?</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="159"/>
+        <location filename="../association.cpp" line="160"/>
         <source>: handshake error - </source>
         <translation>: errore di stretta di mano -</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="166"/>
+        <location filename="../association.cpp" line="167"/>
         <source>: encrypted connection established!</source>
         <translation>: connessione crittografata stabilita!</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="170"/>
+        <location filename="../association.cpp" line="171"/>
         <source>: continuing with handshake ...</source>
         <translation>: continuando con la stretta di mano ...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="182"/>
+        <location filename="../association.cpp" line="183"/>
         <source>: handshake timeout, trying to re-transmit</source>
         <translation>: timeout handshake, tentativo di ritrasmissione</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="186"/>
+        <location filename="../association.cpp" line="187"/>
         <source>: failed to re-transmit - </source>
         <translation>: non è riuscito a ritrasmettere -</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="195"/>
+        <location filename="../association.cpp" line="196"/>
         <source>: providing pre-shared key ...</source>
         <translation>: fornendo una chiave pre-condivisa ...</translation>
     </message>
@@ -287,77 +287,77 @@ Commit Hash: </translation>
 <context>
     <name>DtlsServer</name>
     <message>
-        <location filename="../dtlsserver.cpp" line="23"/>
+        <location filename="../dtlsserver.cpp" line="42"/>
         <source>Session cipher: </source>
         <translation>Cifra di sessione: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="26"/>
+        <location filename="../dtlsserver.cpp" line="45"/>
         <source>; session protocol: </source>
         <translation>; protocollo di sessione: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="29"/>
+        <location filename="../dtlsserver.cpp" line="48"/>
         <source>DTLS 1.2.</source>
         <translation>DTLS 1.2.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="32"/>
+        <location filename="../dtlsserver.cpp" line="51"/>
         <source>Unknown protocol.</source>
         <translation>Protocollo sconosciuto.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="86"/>
+        <location filename="../dtlsserver.cpp" line="105"/>
         <source>A spurious read notification</source>
         <translation>Una notifica di lettura spuria</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="96"/>
+        <location filename="../dtlsserver.cpp" line="115"/>
         <source>Failed to read a datagram: </source>
         <translation>Impossibile leggere un datagramma:</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="107"/>
+        <location filename="../dtlsserver.cpp" line="126"/>
         <source>Failed to extract peer info (address, port)</source>
         <translation>Impossibile estrarre le informazioni peer (indirizzo, porta)</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="212"/>
+        <location filename="../dtlsserver.cpp" line="231"/>
         <source>PSK callback, received a client&apos;s identity: </source>
         <translation>Richiamata PSK, ricevuta l&apos;identità di un cliente: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="226"/>
+        <location filename="../dtlsserver.cpp" line="245"/>
         <source>: verified, starting a handshake</source>
         <translation>verificato, iniziando una stretta di mano</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="238"/>
+        <location filename="../dtlsserver.cpp" line="257"/>
         <source>DTLS error: </source>
         <translation>Errore DTLS: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="240"/>
+        <location filename="../dtlsserver.cpp" line="259"/>
         <source>: not verified yet</source>
         <translation>: non ancora verificato</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="257"/>
+        <location filename="../dtlsserver.cpp" line="276"/>
         <source>: handshake is in progress ...</source>
         <translation>: la stretta di mano è in corso ...</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="260"/>
+        <location filename="../dtlsserver.cpp" line="279"/>
         <source>: Connection encrypted. </source>
         <translation>: Connessione crittografata. </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="286"/>
+        <location filename="../dtlsserver.cpp" line="305"/>
         <source>Could not send response</source>
         <translation>Impossibile inviare la risposta</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="291"/>
+        <location filename="../dtlsserver.cpp" line="310"/>
         <source>0 byte dgram, could be a re-connect attempt?</source>
         <translation>0 byte dgram, potrebbe essere un tentativo di riconnessione?</translation>
     </message>
@@ -1066,77 +1066,72 @@ Disabilitare la Connessione persistente? (Raccomandato)</translation>
         <translation>Salva Log di Traffico</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2184"/>
-        <source>log (*.log)</source>
-        <translation>Log (*.log)</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="2202"/>
+        <location filename="../mainwindow.cpp" line="2191"/>
         <source>TIME</source>
         <translation>TEMPO</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2202"/>
+        <location filename="../mainwindow.cpp" line="2191"/>
         <source>From IP</source>
         <translation>Da IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2202"/>
+        <location filename="../mainwindow.cpp" line="2191"/>
         <source>From Port</source>
         <translation>Da Porta</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2202"/>
+        <location filename="../mainwindow.cpp" line="2191"/>
         <source>To IP</source>
         <translation>A IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2203"/>
+        <location filename="../mainwindow.cpp" line="2192"/>
         <source>To Port</source>
         <translation>A Porta</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2203"/>
+        <location filename="../mainwindow.cpp" line="2192"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2203"/>
+        <location filename="../mainwindow.cpp" line="2192"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2406"/>
+        <location filename="../mainwindow.cpp" line="2440"/>
         <source>Import JSON</source>
         <translation>Importa JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2408"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2442"/>
+        <location filename="../mainwindow.cpp" line="2509"/>
         <source>JSON db (*.json)</source>
         <translation>db JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2432"/>
-        <location filename="../mainwindow.cpp" line="2569"/>
+        <location filename="../mainwindow.cpp" line="2466"/>
+        <location filename="../mainwindow.cpp" line="2603"/>
         <source>Found </source>
         <translation>Trovato </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2432"/>
-        <location filename="../mainwindow.cpp" line="2569"/>
+        <location filename="../mainwindow.cpp" line="2466"/>
+        <location filename="../mainwindow.cpp" line="2603"/>
         <source> packets!</source>
         <translation> Pacchetti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2436"/>
-        <location filename="../mainwindow.cpp" line="2573"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
+        <location filename="../mainwindow.cpp" line="2607"/>
         <source>Import </source>
         <translation>Importa </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2436"/>
-        <location filename="../mainwindow.cpp" line="2573"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
+        <location filename="../mainwindow.cpp" line="2607"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -1145,95 +1140,95 @@ Packet Sender will overwrite packets with the same name.</source>
 Packet Sender sovrascriverà i Pacchetti con lo stesso Nome</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2439"/>
-        <location filename="../mainwindow.cpp" line="2460"/>
-        <location filename="../mainwindow.cpp" line="2576"/>
-        <location filename="../mainwindow.cpp" line="2597"/>
+        <location filename="../mainwindow.cpp" line="2473"/>
+        <location filename="../mainwindow.cpp" line="2494"/>
+        <location filename="../mainwindow.cpp" line="2610"/>
+        <location filename="../mainwindow.cpp" line="2631"/>
         <source>Import Cancelled</source>
         <translation>Importazione Annullata</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2447"/>
+        <location filename="../mainwindow.cpp" line="2481"/>
         <source>Import Finished</source>
         <translation>Importazione Conclusa</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2453"/>
-        <location filename="../mainwindow.cpp" line="2590"/>
+        <location filename="../mainwindow.cpp" line="2487"/>
+        <location filename="../mainwindow.cpp" line="2624"/>
         <source>Not a database</source>
         <translation>Non è un Database</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2457"/>
-        <location filename="../mainwindow.cpp" line="2594"/>
+        <location filename="../mainwindow.cpp" line="2491"/>
+        <location filename="../mainwindow.cpp" line="2628"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>Pacchetti non trovati in questo File. Potrebbe non essere una esportazione di Packet Sender</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2474"/>
+        <location filename="../mainwindow.cpp" line="2508"/>
         <source>Save JSON</source>
         <translation>Salva JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2496"/>
-        <location filename="../mainwindow.cpp" line="2629"/>
+        <location filename="../mainwindow.cpp" line="2530"/>
+        <location filename="../mainwindow.cpp" line="2663"/>
         <source>Export: </source>
         <translation>Esporta: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2500"/>
+        <location filename="../mainwindow.cpp" line="2534"/>
         <source>Could not save</source>
         <translation>Non si può salvare</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2504"/>
+        <location filename="../mainwindow.cpp" line="2538"/>
         <source>Could not open </source>
         <translation>Non si può aprire </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2550"/>
-        <location filename="../mainwindow.cpp" line="2675"/>
+        <location filename="../mainwindow.cpp" line="2584"/>
+        <location filename="../mainwindow.cpp" line="2709"/>
         <source>Import File</source>
         <translation>Importa File</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2552"/>
-        <location filename="../mainwindow.cpp" line="2607"/>
+        <location filename="../mainwindow.cpp" line="2586"/>
+        <location filename="../mainwindow.cpp" line="2641"/>
         <source>INI db (*.ini)</source>
         <translation>db INI (*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2606"/>
+        <location filename="../mainwindow.cpp" line="2640"/>
         <source>Save File</source>
         <translation>Salva File</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2677"/>
+        <location filename="../mainwindow.cpp" line="2711"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2701"/>
+        <location filename="../mainwindow.cpp" line="2735"/>
         <source>Max size exceeded!</source>
         <translation>Dimensione massima superata!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2705"/>
+        <location filename="../mainwindow.cpp" line="2739"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>Il campo HEX supporta fino a 10.922 bytes. I dati sono stati troncati.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2711"/>
+        <location filename="../mainwindow.cpp" line="2745"/>
         <source>Loading </source>
         <translation>Caricando </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2711"/>
+        <location filename="../mainwindow.cpp" line="2745"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2791"/>
+        <location filename="../mainwindow.cpp" line="2825"/>
         <source>Invalid MAC Address.</source>
         <translation>Indirizzo MAC non valido.</translation>
     </message>
@@ -1905,17 +1900,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2942"/>
+        <location filename="../mainwindow.cpp" line="2976"/>
         <source>Multi-line editor</source>
         <translation>Editor Multi Línea</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2948"/>
+        <location filename="../mainwindow.cpp" line="2982"/>
         <source>Update</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2949"/>
+        <location filename="../mainwindow.cpp" line="2983"/>
         <source>Close</source>
         <translation>Chiudi</translation>
     </message>
@@ -2170,10 +2165,6 @@ Selecting No will generate new IDs and append.</source>
         <translation>Macro disponibili: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</translation>
     </message>
     <message>
-        <source>SSL CA Certificates</source>
-        <translation type="vanished">Certificato CA SSL</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="372"/>
         <source>Path from where to load the CA certificats (leave empty for defaults)</source>
         <translation>Percorso dove caricare i certificati di CA (lascia in bianco per valori di default)</translation>
@@ -2186,17 +2177,9 @@ Selecting No will generate new IDs and append.</source>
         <translation>Naviga</translation>
     </message>
     <message>
-        <source>SSL Local Certificate</source>
-        <translation type="vanished">Certificato locale SSL</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="397"/>
         <source>File path for the client side local certificate</source>
         <translation>Percorso File per il certificato locale lato cliente</translation>
-    </message>
-    <message>
-        <source>SSL Private Key</source>
-        <translation type="vanished">Chiave Privata SSL</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="422"/>
@@ -2417,10 +2400,6 @@ Selecting No will generate new IDs and append.</source>
         <translation>Risposta 3</translation>
     </message>
     <message>
-        <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</source>
-        <translation type="vanished">Macros disponibili: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}}</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="998"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
         <translation>Packet Sender sostituirà le macro con i dati reali prima dell&apos;invio</translation>
@@ -2488,17 +2467,9 @@ Selecting No will generate new IDs and append.</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <source>Certs (*.pem)</source>
-        <translation type="vanished">Certificati (*.pem)</translation>
-    </message>
-    <message>
         <location filename="../settings.cpp" line="841"/>
         <source>Choose Key</source>
         <translation>Scegli chiave</translation>
-    </message>
-    <message>
-        <source>Keys (*.key, *.pem)</source>
-        <translation type="vanished">chiavi (*.key, *.pem)</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="1053"/>
