@@ -14,12 +14,15 @@ Description: Network utility for sending and receiving TCP, UDP, SSL packets
  Packet Sender is a utility that sends and receives TCP, UDP and SSL (encrypted
  TCP) packets on the ports of your choosing. It supports IPv4 and IPv6 and
  provides a GUI for final users. However, is also possible use Packet Sender in
- text mode via command line.
+ text mode via command line. Packet Sender also supports HTTP calls and a GUI
+ Builder to make control panels with scriptable buttons.
  .
  Some features:
    * Can act as client/server to send and receive network traffic.
    * A payload can be created in ASCII or hex.
    * Command line mode is available for automation and scripting.
+   * HTTP GET/POST requests
+   * Control panel creation
    * Packet Sender cloud is a disposable resource to be used to publicly
      display and distribute packets (via an URL) for collaboration, tutorials,
      end users, etc. Packet Sender may import public packet sets with public
@@ -27,6 +30,7 @@ Description: Network utility for sending and receiving TCP, UDP, SSL packets
  .
  Some uses:
    * Control network-based devices in ways beyond their original apps.
+   * Develop a control panel system for automation that supports TCP/UDP/HTTP
    * Test automation (using command line tool and/or hotkeys).
    * Test network APIs (using the built-in TCP, UDP, SSL clients).
    * Malware analysis (using the built-in UDP, TCP, SSL servers).
@@ -38,5 +42,5 @@ Description: Network utility for sending and receiving TCP, UDP, SSL packets
      pre-defined settings and packets).
    * Share/Save/Collaborate using the Packet Sender Cloud service.
  .
- Packet Sender is useful for network security, network teaching, pentesters
- and to test firewall systems.
+ Packet Sender is useful for network security, network teaching, pentesters,
+ home automation, and to test firewall systems.
