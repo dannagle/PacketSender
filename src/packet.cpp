@@ -62,7 +62,11 @@ void Packet::clear()
 
 bool Packet::isDTLS()
 {
-    return ((tcpOrUdp.trimmed().toLower() == "dtls"));
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
+        return ((tcpOrUdp.trimmed().toLower() == "dtls"));
+#endif
+
+        return false;
 }
 
 

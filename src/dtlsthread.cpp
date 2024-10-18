@@ -7,6 +7,10 @@
 //#include "QSettings"
 
 
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
+
+
 Dtlsthread::Dtlsthread(Packet sendpacket, QObject *parent)
     : QThread(parent), sendpacket(sendpacket)
 {}
@@ -349,3 +353,23 @@ void Dtlsthread::onHandshakeTimeout() {
 void Dtlsthread::retryHandshake() {
     dtlsAssociation->crypto.handleTimeout(&dtlsAssociation->socket);
 }
+
+#else
+Dtlsthread::Dtlsthread(Packet sendpacket, QObject *parent)
+    : QThread(parent), sendpacket(sendpacket)
+{}
+
+Dtlsthread::~Dtlsthread() {
+    // Destructor implementation (can be empty for this example)
+}
+
+
+void Dtlsthread::run()
+{
+
+}
+
+
+
+#endif
+

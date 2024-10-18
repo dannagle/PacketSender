@@ -25,6 +25,10 @@ public:
 };
 #endif
 
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
+
+
 bool DtlsServer::closeNotifyReceived = false;
 
 namespace {
@@ -585,3 +589,10 @@ QString DtlsServer::getFullPathToCaCert(){
     }
     return fullCaCertPath;
 }
+#else
+void DtlsServer::on_signedCert_textChanged(){
+
+}
+
+
+#endif

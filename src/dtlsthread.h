@@ -1,5 +1,4 @@
-#ifndef BASETHREAD_H
-#define BASETHREAD_H
+#pragma once
 
 #include <QThread>
 #include "packet.h"
@@ -7,6 +6,9 @@
 #include "QSettings"
 #include "association.h"
 //#include "QTimer"
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
+
 
 class Dtlsthread : public QThread
 {
@@ -51,31 +53,31 @@ signals:
 
 
 };
+#else
 
-#endif // BASETHREAD_H
+class Dtlsthread : public QThread
+{
+    Q_OBJECT
 
-
-
-
-//#ifndef DTLSTHREAD_H
-//#define DTLSTHREAD_H
-//#include "packet.h"
-//#include <QThread>
-
-//class Dtlsthread : public QThread
-//{
-//    Q_OBJECT
-
-//public:
-//    Packet sendPacket;
+public:
+    Dtlsthread(Packet sendPacket, QObject *parent) ;
+    virtual ~Dtlsthread();
+    void run() override; // Pure virtual function making this class abstract
 
 
-//    Dtlsthread(Packet sendPacket, QObject *parent);
-//    void run() override; // Entry point for the thread
-////    void setParameters(int param); // Setter for parameters
+    QTimer* timer;
+    std::vector<DtlsAssociation*> dtlsAssociations;
+    DtlsAssociation* dtlsAssociation;
+    QString recievedMassage;
+    Packet sendpacket;
 
-////private:
-////    int m_param; // Parameter to be used in the thread
-//};
-//#endif
+
+    bool closeRequest;
+    bool handShakeDone;
+    bool insidePersistent;
+    bool persistentRequest = false;
+
+};
+
+#endif
 

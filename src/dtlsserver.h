@@ -1,15 +1,15 @@
 
 // Copyright (C) 2018 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-#ifndef SERVER_H
-#define SERVER_H
-
+#pragma once
 #include <QtCore>
 #include <QtNetwork>
 
 #include <vector>
 #include <memory>
 #include "packet.h"
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
 
 //! [0]
 class DtlsServer : public QObject
@@ -47,12 +47,6 @@ public:
     bool IPv4Enabled();
     bool IPv6Enabled();
     QHostAddress resolveDNS(QString hostname);
-
-
-
-
-
-
 
     //bool closeNotifyRecieved;
     QUdpSocket serverSocket;
@@ -96,5 +90,28 @@ private:
 };
 //! [0]
 
-#endif // SERVER_H
+#else
+
+#include "threadedtcpserver.h"
+
+class DtlsServer : public ThreadedTCPServer
+{
+    Q_OBJECT
+
+public:
+    int nothing;
+    QSslCertificate certificate;
+    QSslKey privateKey;
+    QSslCertificate caCertificate;
+
+    QSslConfiguration serverConfiguration;
+    QUdpSocket serverSocket;
+    QByteArray smartData;
+    void on_signedCert_textChanged();
+
+
+};
+
+
+#endif
 

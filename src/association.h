@@ -1,11 +1,14 @@
 // Copyright (C) 2018 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-#ifndef ASSOCIATION_H
-#define ASSOCIATION_H
+#pragma once
 
 #include <QtNetwork>
 #include <QtCore>
 #include "packet.h"
+
+
+#if QT_VERSION > QT_VERSION_CHECK(6, 00, 0)
+
 
 //! [0]
 class DtlsAssociation : public QObject
@@ -52,5 +55,15 @@ private:
     Q_DISABLE_COPY(DtlsAssociation)
 };
 
+#else
+class DtlsAssociation : public QThread
+{
+    Q_OBJECT
 
-#endif // ASSOCIATION_H
+public:
+    int nothing;
+
+};
+
+
+#endif
