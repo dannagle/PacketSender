@@ -487,6 +487,7 @@ _Note: Setting an ID in use will replace that panel_
 * Delete Panel - This will bring up a menu of current panel projects. Select a panel project to delete it. _Note: Buttons and scripts will be retained on the Editing screen until the Panel is closed_
 
 # DTLS
+For now, DTLS is only supported in the GUI with Windows. Other operating systems may enable DTLS by compiling from source using Qt6.
 
 ## Overview
 This repository contains a DTLS (Datagram Transport Layer Security) protocol feature. This feature have added a graphical interface to configure and manage DTLS connections, including server verification and session persistence options.
