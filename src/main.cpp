@@ -100,8 +100,6 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 
 int main(int argc, char *argv[])
 {
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.setValue("leaveSessionOpen", "false");
     int debugMode = DEBUGMODE;
 
     if (QFile::exists("DEBUGMODE")) {
@@ -167,6 +165,49 @@ int main(int argc, char *argv[])
         panels_only = arg2.contains("--starterpanel");
 
     }
+
+    //Create the settings folders if they do not exist
+    QDir mdir;
+    mdir.mkpath(TEMPPATH);
+    mdir.mkpath(SETTINGSPATH);
+
+
+    //this is stored as base64 so smart git repos
+    //do not complain about shipping a private key.
+    QFile snakeoilKey("://ps.key.base64");
+    QFile snakeoilCert("://ps.pem.base64");
+
+
+    QString defaultCertFile = CERTFILE;
+    QString defaultKeyFile = KEYFILE;
+
+    QFile certfile(defaultCertFile);
+    QFile keyfile(defaultKeyFile);
+    QByteArray decoded;
+    decoded.clear();
+
+    if (!certfile.exists()) {
+        if (snakeoilCert.open(QFile::ReadOnly)) {
+            decoded = QByteArray::fromBase64(snakeoilCert.readAll());
+            snakeoilCert.close();
+        }
+        if (certfile.open(QFile::WriteOnly)) {
+            certfile.write(decoded);
+            certfile.close();
+        }
+    }
+
+    if (!keyfile.exists()) {
+        if (snakeoilKey.open(QFile::ReadOnly)) {
+            decoded = QByteArray::fromBase64(snakeoilKey.readAll());
+            snakeoilKey.close();
+        }
+        if (keyfile.open(QFile::WriteOnly)) {
+            keyfile.write(decoded);
+            keyfile.close();
+        }
+    }
+
 
 
 
