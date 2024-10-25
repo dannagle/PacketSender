@@ -168,7 +168,6 @@ int main(int argc, char *argv[])
 
     //Create the settings folders if they do not exist
     QDir mdir;
-    mdir.mkpath(TEMPPATH);
     mdir.mkpath(SETTINGSPATH);
 
 

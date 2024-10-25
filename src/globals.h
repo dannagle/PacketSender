@@ -41,7 +41,7 @@
 
 #define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
 
-#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
+//#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"
 
 //Load local file if it exists or if portablemode.txt exists
