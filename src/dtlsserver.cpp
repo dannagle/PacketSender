@@ -466,9 +466,8 @@ QHostAddress DtlsServer::resolveDNS(QString hostname)
 
 void DtlsServer::loadKeyLocalCertCaCert(){
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.value("sslCaPath", SETTINGSPATH + "cert.pem");
 
-    QString localCertPath = settings.value("sslLocalCertificatePath", SETTINGSPATH + "cert.pem").toString();
+    QString localCertPath = settings.value("sslLocalCertificatePath", CERTFILE).toString();
     QFile certFile(localCertPath);
 
     if(!certFile.open(QIODevice::ReadOnly) && !(localCertPath.isEmpty())){
@@ -485,7 +484,7 @@ void DtlsServer::loadKeyLocalCertCaCert(){
         return;
     }
 
-    QString keyPath = settings.value("sslPrivateKeyPath", SETTINGSPATH + "key.pem").toString();
+    QString keyPath = settings.value("sslPrivateKeyPath", KEYFILE).toString();
     QFile keyFile(keyPath);
 
     if(!keyFile.open(QIODevice::ReadOnly) && !(keyPath.isEmpty())){
@@ -568,7 +567,7 @@ QSslKey DtlsServer::getPrivateKey(QFile& keyFile){
 
 QString DtlsServer::getFullPathToCaCert(){
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    QString caCertFolder = settings.value("sslCaPath", SETTINGSPATH + "cert.pem").toString();
+    QString caCertFolder = settings.value("sslCaPath", KEYFILE).toString();
     QString fullCaCertPath;
     QDir dir(caCertFolder);
     if (dir.exists()) {
