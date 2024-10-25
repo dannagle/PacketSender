@@ -167,9 +167,10 @@ int main(int argc, char *argv[])
     }
 
     //Create the settings folders if they do not exist
-    QDir mdir;
-    mdir.mkpath(SETTINGSPATH);
-
+    if(!QFile::exists("portablemode.txt")) {
+        QDir mdir;
+        mdir.mkpath(SETTINGSPATH);
+    }
 
     //this is stored as base64 so smart git repos
     //do not complain about shipping a private key.
