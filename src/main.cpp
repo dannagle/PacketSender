@@ -208,6 +208,12 @@ int main(int argc, char *argv[])
         }
     }
 
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    if(settings.value("leaveSessionOpen", "").toString().isEmpty()) {
+        settings.setValue("leaveSessionOpen", "false");
+    }
+
+
 
 
 
