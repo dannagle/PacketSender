@@ -284,6 +284,12 @@ void PacketNetwork::init()
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
 
+    activateDTLS = settings.value("dtlsServerEnable", false).toBool();
+    activateUDP = settings.value("udpServerEnable", true).toBool();
+    activateTCP = settings.value("tcpServerEnable", false).toBool();
+    activateSSL = settings.value("sslServerEnable", false).toBool();
+
+
     QString ipMode = settings.value("ipMode", "0.0.0.0").toString();
     QDEBUGVAR(ipMode);
     QMessageBox msgBoxBindError;
@@ -297,6 +303,7 @@ void PacketNetwork::init()
 #ifdef RENDER_ONLY
     tcpPortList.clear();
     sslPortList.clear();
+    dtlsPortList.clear();
 #endif
 
 
@@ -307,6 +314,10 @@ void PacketNetwork::init()
 
 
     foreach (dtlsPort, dtlsPortList) {
+
+        if(!activateDTLS) {
+            continue;
+        }
         bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
 
 
@@ -340,10 +351,13 @@ void PacketNetwork::init()
         }
 
     }
-    reJoinMulticast();
 
 
     foreach (udpPort, udpPortList) {
+
+        if(!activateUDP) {
+            continue;
+        }
 
 
         udpSocket = new QUdpSocket(this);
@@ -385,6 +399,11 @@ void PacketNetwork::init()
 
     foreach (tcpPort, tcpPortList) {
 
+        if(!activateTCP) {
+            continue;
+        }
+
+
         tcp = new ThreadedTCPServer(this);
         tcp->init(tcpPort, false, ipMode);
         tcpServers.append(tcp);
@@ -392,6 +411,10 @@ void PacketNetwork::init()
     }
 
     foreach (sslPort, sslPortList) {
+
+        if(!activateSSL) {
+            continue;
+        }
 
         ssl = new ThreadedTCPServer(this);
         ssl->init(sslPort, true, ipMode);
@@ -432,10 +455,6 @@ void PacketNetwork::init()
 
     sendResponse = settings.value("sendReponse", false).toBool();
     responseData = (settings.value("responseHex", "")).toString();
-    activateDTLS = settings.value("dtlsServerEnable", true).toBool();
-    activateUDP = settings.value("udpServerEnable", true).toBool();
-    activateTCP = settings.value("tcpServerEnable", true).toBool();
-    activateSSL = settings.value("sslServerEnable", true).toBool();
     receiveBeforeSend = settings.value("attemptReceiveCheck", false).toBool();
     persistentConnectCheck = settings.value("persistentConnectCheck", false).toBool();
     sendSmartResponse = settings.value("smartResponseEnableCheck", false).toBool();
@@ -452,6 +471,7 @@ void PacketNetwork::init()
 #ifdef RENDER_ONLY
     activateTCP = false;
     activateSSL = false;
+    activateDTLS = false;
     smartList.clear();
 #endif
     if (settings.value("delayAfterConnectCheck", false).toBool()) {
