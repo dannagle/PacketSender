@@ -284,6 +284,21 @@ void PacketNetwork::init()
     tcpPortList = Settings::portsToIntList(settings.value("tcpPort", "0").toString());
     sslPortList = Settings::portsToIntList(settings.value("sslPort", "0").toString());
 
+    if(settings.value("dtlsServerEnable", "").toString().isEmpty()) {
+        settings.setValue("dtlsServerEnable", false);
+        settings.sync();
+    }
+    if(settings.value("udpServerEnable", "").toString().isEmpty()) {
+        settings.setValue("udpServerEnable", true);
+    }
+    if(settings.value("tcpServerEnable", "").toString().isEmpty()) {
+        settings.setValue("tcpServerEnable", false);
+    }
+    if(settings.value("sslServerEnable", "").toString().isEmpty()) {
+        settings.setValue("sslServerEnable", false);
+        settings.sync();
+    }
+
     activateDTLS = settings.value("dtlsServerEnable", false).toBool();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", false).toBool();
