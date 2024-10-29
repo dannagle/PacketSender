@@ -136,7 +136,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(mIcon);
 
     tableActive = false;
-    darkMode = settings.value("darkModeCheck", true).toBool();
+    darkMode = Settings::useDark();
 
     PanelGenerator::darkMode = darkMode;
 

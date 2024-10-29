@@ -1,4 +1,5 @@
 #include "persistentconnection.h"
+#include "settings.h"
 #include "ui_persistentconnection.h"
 
 #include <QTextStream>
@@ -67,7 +68,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     translateMacroSend = settings.value("translateMacroSendCheck", true).toBool();
-    this->darkMode = settings.value("darkModeCheck", true).toBool();
+    this->darkMode = Settings::useDark();
 
 
     if(this->darkMode) {
@@ -205,7 +206,7 @@ void PersistentConnection::init()
     bool appendCR = settings.value("appendCRcheck", true).toBool();
     ui->appendCRcheck->setChecked(appendCR);
 
-    this->darkMode = settings.value("darkModeCheck", true).toBool();
+    this->darkMode = Settings::useDark();
 
 
     ui->stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);
@@ -256,7 +257,7 @@ void PersistentConnection::initDTLS()
     bool appendCR = settings.value("appendCRcheck", true).toBool();
     ui->appendCRcheck->setChecked(appendCR);
 
-    this->darkMode = settings.value("darkModeCheck", true).toBool();
+    this->darkMode = Settings::useDark();
 
 
     ui->stopResendingButton->setStyleSheet(PersistentConnection::RESEND_BUTTON_STYLE);

@@ -1390,7 +1390,7 @@ int main(int argc, char *argv[])
 
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
-            bool darkMode = settings.value("darkModeCheck", true).toBool();
+            bool darkMode = Settings::useDark();
             PanelGenerator::darkMode = darkMode;
             PanelGenerator::renderOnly = panels_only;
 
