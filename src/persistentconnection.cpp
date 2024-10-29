@@ -186,6 +186,7 @@ void PersistentConnection::init()
     if(sendPacket.isDTLS()){
         tcpOrSSL = "DTLS";
     }
+    QDEBUGVAR(tcpOrSSL);
     setWindowTitle(tcpOrSSL + "://" + sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
 
@@ -275,17 +276,23 @@ void PersistentConnection::refreshTimerTimeout()
     qint64 diff = startTime.msecsTo(QDateTime::currentDateTime());
     QString winTitle = windowTitle();
     if (sendPacket.isDTLS()){
-        if(winTitle.startsWith("TCP://")){
-            if(dthread->handShakeDone){
-                winTitle.replace("TCP://", "DTLS://");
-                setWindowTitle(winTitle);
-            }
+        if(dthread->handShakeDone){
+            winTitle.replace("TCP://", "DTLS://");
+            winTitle.replace("SSL://", "DTLS://");
+        } else {
+            winTitle.replace("SSL://", "TCP://");
+            winTitle.replace("DTLS://", "TCP://");
         }
     } else{
-        winTitle.replace("TCP://", "SSL://");
-        setWindowTitle(winTitle);
+        if(sendPacket.isSSL()) {
+            winTitle.replace("TCP://", "SSL://");
+        } else {
+            winTitle.replace("DTLS://", "TCP://");
+            winTitle.replace("SSL://", "TCP://");
+        }
     }
 
+    setWindowTitle(winTitle);
 
 
 
