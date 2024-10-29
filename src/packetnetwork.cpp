@@ -991,9 +991,9 @@ void PacketNetwork::packetToSend(Packet sendpacket)
                  << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)))
                  << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
 
-        bool leaveSessionOpen = settings.value("leaveSessionOpen").toString() == "true";
+        bool leaveSessionOpen = false;
 #ifndef CONSOLE_BUILD
-        leaveSessionOpen = false;
+        leaveSessionOpen = settings.value("leaveSessionOpen").toString() == "true";
 #endif
         if(leaveSessionOpen){
 #ifndef CONSOLE_BUILD
