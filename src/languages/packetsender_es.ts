@@ -223,63 +223,63 @@ Hash de confirmación: </translation>
 <context>
     <name>DtlsAssociation</name>
     <message>
-        <location filename="../association.cpp" line="86"/>
+        <location filename="../association.cpp" line="88"/>
         <source>: connecting UDP socket first ...</source>
         <translation>: conectando el socket UDP primero...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="94"/>
+        <location filename="../association.cpp" line="96"/>
         <source>: failed to start a handshake - </source>
         <translation>: no se pudo iniciar un protocolo de enlace - </translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="106"/>
+        <location filename="../association.cpp" line="108"/>
         <source>: starting a handshake</source>
         <translation>: iniciando un protocolo de enlace</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="114"/>
+        <location filename="../association.cpp" line="116"/>
         <source>: UDP socket is now in ConnectedState, continue with handshake ...</source>
         <translation>: el socket UDP ahora está en ConnectedState, continúe con el protocolo de enlace...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="123"/>
-        <location filename="../association.cpp" line="131"/>
+        <location filename="../association.cpp" line="125"/>
+        <location filename="../association.cpp" line="133"/>
         <source>: spurious read notification?</source>
         <translation>: ¿notificación de lectura falsa?</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="153"/>
+        <location filename="../association.cpp" line="155"/>
         <source>: zero-length datagram received?</source>
         <translation>: ¿datagrama de longitud cero recibido?</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="160"/>
+        <location filename="../association.cpp" line="162"/>
         <source>: handshake error - </source>
         <translation>: error de protocolo de enlace - </translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="167"/>
+        <location filename="../association.cpp" line="169"/>
         <source>: encrypted connection established!</source>
         <translation>: ¡conexión cifrada establecida!</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="171"/>
+        <location filename="../association.cpp" line="173"/>
         <source>: continuing with handshake ...</source>
         <translation>: continuando con el protocolo de enlace...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="183"/>
+        <location filename="../association.cpp" line="185"/>
         <source>: handshake timeout, trying to re-transmit</source>
         <translation>: tiempo de espera del protocolo de enlace, intentando retransmitir</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="187"/>
+        <location filename="../association.cpp" line="189"/>
         <source>: failed to re-transmit - </source>
         <translation>: error al retransmitir - </translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="196"/>
+        <location filename="../association.cpp" line="198"/>
         <source>: providing pre-shared key ...</source>
         <translation>: proporcionando una clave precompartida...</translation>
     </message>
@@ -287,77 +287,77 @@ Hash de confirmación: </translation>
 <context>
     <name>DtlsServer</name>
     <message>
-        <location filename="../dtlsserver.cpp" line="42"/>
+        <location filename="../dtlsserver.cpp" line="46"/>
         <source>Session cipher: </source>
         <translation>Cifrado de sesión: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="45"/>
+        <location filename="../dtlsserver.cpp" line="49"/>
         <source>; session protocol: </source>
         <translation>; Protocolo de sesión: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="48"/>
+        <location filename="../dtlsserver.cpp" line="52"/>
         <source>DTLS 1.2.</source>
         <translation>DTLS 1.2.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="51"/>
+        <location filename="../dtlsserver.cpp" line="55"/>
         <source>Unknown protocol.</source>
         <translation>Protocolo desconocido.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="105"/>
+        <location filename="../dtlsserver.cpp" line="109"/>
         <source>A spurious read notification</source>
         <translation>Una notificación de lectura falsa</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="115"/>
+        <location filename="../dtlsserver.cpp" line="119"/>
         <source>Failed to read a datagram: </source>
         <translation>No se pudo leer un datagrama: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="126"/>
+        <location filename="../dtlsserver.cpp" line="130"/>
         <source>Failed to extract peer info (address, port)</source>
         <translation>Error al extraer información del par (dirección, puerto)</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="231"/>
+        <location filename="../dtlsserver.cpp" line="235"/>
         <source>PSK callback, received a client&apos;s identity: </source>
         <translation>Devolución de llamada PSK, se recibió la identidad de un cliente: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="245"/>
+        <location filename="../dtlsserver.cpp" line="249"/>
         <source>: verified, starting a handshake</source>
         <translation>: verificado, iniciando un protocolo de enlace</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="257"/>
+        <location filename="../dtlsserver.cpp" line="261"/>
         <source>DTLS error: </source>
         <translation>Error DTLS: </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="259"/>
+        <location filename="../dtlsserver.cpp" line="263"/>
         <source>: not verified yet</source>
         <translation>: no verificado aún</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="276"/>
+        <location filename="../dtlsserver.cpp" line="280"/>
         <source>: handshake is in progress ...</source>
         <translation>: el protocolo de enlace está en curso...</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="279"/>
+        <location filename="../dtlsserver.cpp" line="283"/>
         <source>: Connection encrypted. </source>
         <translation>: Conexión cifrada. </translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="305"/>
+        <location filename="../dtlsserver.cpp" line="309"/>
         <source>Could not send response</source>
         <translation>No se pudo enviar la respuesta</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="310"/>
+        <location filename="../dtlsserver.cpp" line="314"/>
         <source>0 byte dgram, could be a re-connect attempt?</source>
         <translation>Dgram de 0 bytes, ¿podría ser un intento de reconexión?</translation>
     </message>
@@ -537,8 +537,8 @@ Hash de confirmación: </translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="302"/>
-        <location filename="../mainwindow.cpp" line="1178"/>
-        <location filename="../mainwindow.cpp" line="1847"/>
+        <location filename="../mainwindow.cpp" line="1142"/>
+        <location filename="../mainwindow.cpp" line="1811"/>
         <source>Send</source>
         <translation>Enviar</translation>
     </message>
@@ -835,13 +835,13 @@ Hash de confirmación: </translation>
         <translation>Wake-On-LAN</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="670"/>
-        <location filename="../mainwindow.cpp" line="698"/>
+        <location filename="../mainwindow.cpp" line="634"/>
+        <location filename="../mainwindow.cpp" line="662"/>
         <source>Updates.</source>
         <translation>Actualizaciones.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="674"/>
+        <location filename="../mainwindow.cpp" line="638"/>
         <source>There is a new Packet Sender available.
 
 Download?</source>
@@ -850,22 +850,22 @@ Download?</source>
 ¿Descargar?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="702"/>
+        <location filename="../mainwindow.cpp" line="666"/>
         <source>Let Packet Sender check for updates weekly?</source>
         <translation>¿Permitir que Packet Sender busque actualizaciones semanalmente?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="746"/>
+        <location filename="../mainwindow.cpp" line="710"/>
         <source>Packet Sender Updated!</source>
         <translation>¡Packet Sender actualizado!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="750"/>
+        <location filename="../mainwindow.cpp" line="714"/>
         <source>Updated to </source>
         <translation>Actualizado a </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="750"/>
+        <location filename="../mainwindow.cpp" line="714"/>
         <source>!
 
 Would you like to read the release notes?</source>
@@ -874,53 +874,53 @@ Would you like to read the release notes?</source>
 ¿Le gustaría leer las notas de la versión?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="817"/>
+        <location filename="../mainwindow.cpp" line="781"/>
         <source>Clear Log </source>
         <translation>Borrar registro</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="841"/>
-        <location filename="../mainwindow.cpp" line="864"/>
-        <location filename="../mainwindow.cpp" line="886"/>
-        <location filename="../mainwindow.cpp" line="907"/>
+        <location filename="../mainwindow.cpp" line="805"/>
+        <location filename="../mainwindow.cpp" line="828"/>
+        <location filename="../mainwindow.cpp" line="850"/>
+        <location filename="../mainwindow.cpp" line="871"/>
         <source> Ports</source>
         <translation>Puertos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="870"/>
+        <location filename="../mainwindow.cpp" line="834"/>
         <source>UDP Server Disabled</source>
         <translation>Servidor UDP Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="892"/>
+        <location filename="../mainwindow.cpp" line="856"/>
         <source>SSL Server Disabled</source>
         <translation>Servidor SSL Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="914"/>
+        <location filename="../mainwindow.cpp" line="878"/>
         <source>TCP Server Disabled</source>
         <translation>Servidor TCP Deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1134"/>
-        <location filename="../mainwindow.cpp" line="1375"/>
+        <location filename="../mainwindow.cpp" line="1098"/>
+        <location filename="../mainwindow.cpp" line="1339"/>
         <source>Multicast detected.</source>
         <translation>Difusión Múltiple detectada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1138"/>
+        <location filename="../mainwindow.cpp" line="1102"/>
         <source>Do you wish to join the multicast group?</source>
         <translation>¿Desea unirse al grupo de Difusión Múltiple?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1154"/>
-        <location filename="../mainwindow.cpp" line="1397"/>
+        <location filename="../mainwindow.cpp" line="1118"/>
+        <location filename="../mainwindow.cpp" line="1361"/>
         <source>Broadcast with responses!</source>
         <translation>¡Transmitir con Respuesta!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1158"/>
-        <location filename="../mainwindow.cpp" line="1401"/>
+        <location filename="../mainwindow.cpp" line="1122"/>
+        <location filename="../mainwindow.cpp" line="1365"/>
         <source>You are sending a broadcast packet with responses enabled.
 
 This could cause traffic flooding. Continue?</source>
@@ -930,34 +930,34 @@ Esto puede causar una inundación de tráfico. ¿Continuar?</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="291"/>
-        <location filename="../mainwindow.cpp" line="1172"/>
-        <location filename="../mainwindow.cpp" line="1437"/>
-        <location filename="../mainwindow.cpp" line="2055"/>
+        <location filename="../mainwindow.cpp" line="1136"/>
+        <location filename="../mainwindow.cpp" line="1401"/>
+        <location filename="../mainwindow.cpp" line="2019"/>
         <source>Resending</source>
         <translation>Reenviando</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="847"/>
+        <location filename="../mainwindow.cpp" line="811"/>
         <source>DTLS Server Disabled</source>
         <translation>Servidor DTLS deshabilitado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1178"/>
+        <location filename="../mainwindow.cpp" line="1142"/>
         <source>bytes</source>
         <translation>bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1205"/>
+        <location filename="../mainwindow.cpp" line="1169"/>
         <source>Name cannot be blank.</source>
         <translation>El nombre no puede ser vacío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1209"/>
+        <location filename="../mainwindow.cpp" line="1173"/>
         <source>Name is empty.</source>
         <translation>El nombre está vacío</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1259"/>
+        <location filename="../mainwindow.cpp" line="1223"/>
         <source>This computer does not support SSL.
 
 Expected SSL:</source>
@@ -966,52 +966,52 @@ Expected SSL:</source>
 SSL Esperado:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1263"/>
+        <location filename="../mainwindow.cpp" line="1227"/>
         <source>No SSL Library.</source>
         <translation>Sin Librerías SSL</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1316"/>
+        <location filename="../mainwindow.cpp" line="1280"/>
         <source>Address cannot be blank.</source>
         <translation>La Dirección no puede estar vacía</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1320"/>
+        <location filename="../mainwindow.cpp" line="1284"/>
         <source>Address is empty.</source>
         <translation>La dirección está vacía</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1331"/>
+        <location filename="../mainwindow.cpp" line="1295"/>
         <source>Port cannot be blank/zero.</source>
         <translation>El puerto no puede estar vacío o ser cero</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1335"/>
+        <location filename="../mainwindow.cpp" line="1299"/>
         <source>Port is zero.</source>
         <translation>El puerto es cero</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1349"/>
+        <location filename="../mainwindow.cpp" line="1313"/>
         <source>IPv6?</source>
         <translation>¿IPv6?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1353"/>
+        <location filename="../mainwindow.cpp" line="1317"/>
         <source>Enable IPv6 support?</source>
         <translation>¿Habilitar Puerto IPv6?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1379"/>
+        <location filename="../mainwindow.cpp" line="1343"/>
         <source>Join UDP multicast group?</source>
         <translation>¿Unirse al Grupo de Difusión Múltiple UDP?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1417"/>
+        <location filename="../mainwindow.cpp" line="1381"/>
         <source>Resend TCP with persistent connections!</source>
         <translation>¡Reenviar TCP con conexiones persistentes!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1421"/>
+        <location filename="../mainwindow.cpp" line="1385"/>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
@@ -1020,118 +1020,118 @@ Uncheck persistent connection? (Recommended)</source>
 ¿Desmarcar la conexión persistente? (Recomendado)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1456"/>
-        <location filename="../mainwindow.cpp" line="2118"/>
+        <location filename="../mainwindow.cpp" line="1420"/>
+        <location filename="../mainwindow.cpp" line="2082"/>
         <source>No packets selected.</source>
         <translation>No hay paquetes seleccionados</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1460"/>
+        <location filename="../mainwindow.cpp" line="1424"/>
         <source>Select a packet.</source>
         <translation>Seleccionar un paquete.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1474"/>
         <source>Invalid Address / DNS failed</source>
         <translation>Dirección Inválida / Error de DNS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1533"/>
+        <location filename="../mainwindow.cpp" line="1497"/>
         <source>Invalid Port</source>
         <translation>Puerto Inválido</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1977"/>
+        <location filename="../mainwindow.cpp" line="1941"/>
         <source>Clear Log (0)</source>
         <translation>Limpiar Registro (0)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1996"/>
+        <location filename="../mainwindow.cpp" line="1960"/>
         <source>Save Packet</source>
         <translation>Guardar Paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1997"/>
+        <location filename="../mainwindow.cpp" line="1961"/>
         <source>Packet name:</source>
         <translation>Nombre del Paquete:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2122"/>
+        <location filename="../mainwindow.cpp" line="2086"/>
         <source>Clipboard unchanged.</source>
         <translation>Portapapeles sin cambios</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2183"/>
+        <location filename="../mainwindow.cpp" line="2147"/>
         <source>Save Traffic Log</source>
         <translation>Guardar Registro de Tráfico</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2191"/>
+        <location filename="../mainwindow.cpp" line="2155"/>
         <source>TIME</source>
         <translation>TIEMPO</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2191"/>
+        <location filename="../mainwindow.cpp" line="2155"/>
         <source>From IP</source>
         <translation>IP Inicial</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2191"/>
+        <location filename="../mainwindow.cpp" line="2155"/>
         <source>From Port</source>
         <translation>Puerto Inicial</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2191"/>
+        <location filename="../mainwindow.cpp" line="2155"/>
         <source>To IP</source>
         <translation>IP Final</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2192"/>
+        <location filename="../mainwindow.cpp" line="2156"/>
         <source>To Port</source>
         <translation>Puerto Final</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2192"/>
+        <location filename="../mainwindow.cpp" line="2156"/>
         <source>Method</source>
         <translation>Método</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2192"/>
+        <location filename="../mainwindow.cpp" line="2156"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2440"/>
+        <location filename="../mainwindow.cpp" line="2404"/>
         <source>Import JSON</source>
         <translation>importar JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2509"/>
+        <location filename="../mainwindow.cpp" line="2406"/>
+        <location filename="../mainwindow.cpp" line="2473"/>
         <source>JSON db (*.json)</source>
         <translation>db JSON (*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2466"/>
-        <location filename="../mainwindow.cpp" line="2603"/>
+        <location filename="../mainwindow.cpp" line="2430"/>
+        <location filename="../mainwindow.cpp" line="2567"/>
         <source>Found </source>
         <translation>Encontrado </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2466"/>
-        <location filename="../mainwindow.cpp" line="2603"/>
+        <location filename="../mainwindow.cpp" line="2430"/>
+        <location filename="../mainwindow.cpp" line="2567"/>
         <source> packets!</source>
         <translation> paquetes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2470"/>
-        <location filename="../mainwindow.cpp" line="2607"/>
+        <location filename="../mainwindow.cpp" line="2434"/>
+        <location filename="../mainwindow.cpp" line="2571"/>
         <source>Import </source>
         <translation>Importar </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2470"/>
-        <location filename="../mainwindow.cpp" line="2607"/>
+        <location filename="../mainwindow.cpp" line="2434"/>
+        <location filename="../mainwindow.cpp" line="2571"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
@@ -1140,95 +1140,95 @@ Packet Sender will overwrite packets with the same name.</source>
 Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2473"/>
-        <location filename="../mainwindow.cpp" line="2494"/>
-        <location filename="../mainwindow.cpp" line="2610"/>
-        <location filename="../mainwindow.cpp" line="2631"/>
+        <location filename="../mainwindow.cpp" line="2437"/>
+        <location filename="../mainwindow.cpp" line="2458"/>
+        <location filename="../mainwindow.cpp" line="2574"/>
+        <location filename="../mainwindow.cpp" line="2595"/>
         <source>Import Cancelled</source>
         <translation>Importación Cancelada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2481"/>
+        <location filename="../mainwindow.cpp" line="2445"/>
         <source>Import Finished</source>
         <translation>Importación Finalizada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2487"/>
-        <location filename="../mainwindow.cpp" line="2624"/>
+        <location filename="../mainwindow.cpp" line="2451"/>
+        <location filename="../mainwindow.cpp" line="2588"/>
         <source>Not a database</source>
         <translation>No es una base de datos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2491"/>
-        <location filename="../mainwindow.cpp" line="2628"/>
+        <location filename="../mainwindow.cpp" line="2455"/>
+        <location filename="../mainwindow.cpp" line="2592"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>No se encontraron paquetes en este archivo. Puede que no sea una exportación de Packet Sender</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2508"/>
+        <location filename="../mainwindow.cpp" line="2472"/>
         <source>Save JSON</source>
         <translation>Guardar JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2530"/>
-        <location filename="../mainwindow.cpp" line="2663"/>
+        <location filename="../mainwindow.cpp" line="2494"/>
+        <location filename="../mainwindow.cpp" line="2627"/>
         <source>Export: </source>
         <translation>Exportar: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2534"/>
+        <location filename="../mainwindow.cpp" line="2498"/>
         <source>Could not save</source>
         <translation>No se pudo guardar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2538"/>
+        <location filename="../mainwindow.cpp" line="2502"/>
         <source>Could not open </source>
         <translation>No se pudo abrir </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2584"/>
-        <location filename="../mainwindow.cpp" line="2709"/>
+        <location filename="../mainwindow.cpp" line="2548"/>
+        <location filename="../mainwindow.cpp" line="2673"/>
         <source>Import File</source>
         <translation>Importar Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2586"/>
-        <location filename="../mainwindow.cpp" line="2641"/>
+        <location filename="../mainwindow.cpp" line="2550"/>
+        <location filename="../mainwindow.cpp" line="2605"/>
         <source>INI db (*.ini)</source>
         <translation>db INI (*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2640"/>
+        <location filename="../mainwindow.cpp" line="2604"/>
         <source>Save File</source>
         <translation>Guardar Archivo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2711"/>
+        <location filename="../mainwindow.cpp" line="2675"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2735"/>
+        <location filename="../mainwindow.cpp" line="2699"/>
         <source>Max size exceeded!</source>
         <translation>¡Tamaño máximo excedido!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2739"/>
+        <location filename="../mainwindow.cpp" line="2703"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>El campo HEX admite hasta 10.922 bytes. Los datos han sido truncados.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2745"/>
+        <location filename="../mainwindow.cpp" line="2709"/>
         <source>Loading </source>
         <translation>Cargando </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2745"/>
+        <location filename="../mainwindow.cpp" line="2709"/>
         <source> bytes</source>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2825"/>
+        <location filename="../mainwindow.cpp" line="2789"/>
         <source>Invalid MAC Address.</source>
         <translation>Dirección MAC no válida</translation>
     </message>
@@ -1316,12 +1316,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 <context>
     <name>PacketNetwork</name>
     <message>
-        <location filename="../packetnetwork.cpp" line="290"/>
+        <location filename="../packetnetwork.cpp" line="311"/>
         <source>Port bind error.</source>
         <translation>Error al vincular el puerto</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="294"/>
+        <location filename="../packetnetwork.cpp" line="315"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
@@ -1330,7 +1330,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
 Los puertos privilegiados requieren ejecutar Packet Sender con permisos de nivel de administrador/root.</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="295"/>
+        <location filename="../packetnetwork.cpp" line="316"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT].
 
  - Are you running multiple instances? 
@@ -1805,7 +1805,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../persistentconnection.ui" line="114"/>
-        <location filename="../persistentconnection.cpp" line="527"/>
+        <location filename="../persistentconnection.cpp" line="535"/>
         <source>Send File</source>
         <translation>Enviar Archivo</translation>
     </message>
@@ -1825,23 +1825,23 @@ Selecting No will generate new IDs and append.</source>
         <translation>Reenviando(1)</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="164"/>
-        <location filename="../persistentconnection.cpp" line="166"/>
+        <location filename="../persistentconnection.cpp" line="165"/>
+        <location filename="../persistentconnection.cpp" line="167"/>
         <source>You:</source>
         <translation>Usted:</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="529"/>
+        <location filename="../persistentconnection.cpp" line="537"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="570"/>
+        <location filename="../persistentconnection.cpp" line="578"/>
         <source>Copied</source>
         <translation>Copiado</translation>
     </message>
     <message>
-        <location filename="../persistentconnection.cpp" line="571"/>
+        <location filename="../persistentconnection.cpp" line="579"/>
         <source>Output sent to your clipboard</source>
         <translation>Salida enviada al portapapeles</translation>
     </message>
@@ -1900,17 +1900,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2976"/>
+        <location filename="../mainwindow.cpp" line="2940"/>
         <source>Multi-line editor</source>
         <translation>Editor Multi Líneas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2982"/>
+        <location filename="../mainwindow.cpp" line="2946"/>
         <source>Update</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2983"/>
+        <location filename="../mainwindow.cpp" line="2947"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
@@ -1918,18 +1918,18 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../packet.cpp" line="272"/>
+        <location filename="../packet.cpp" line="276"/>
         <location filename="../settings.cpp" line="47"/>
         <source>Send</source>
         <translation>Enviar</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="273"/>
+        <location filename="../packet.cpp" line="277"/>
         <source>Send &lt;b&gt;</source>
         <translation>Enviar &lt;b&gt;</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="644"/>
+        <location filename="../packet.cpp" line="648"/>
         <source>Received an invalid MAC address</source>
         <translation>Recibí una dirección MAC no válida</translation>
     </message>
@@ -2218,7 +2218,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="497"/>
-        <location filename="../settings.cpp" line="1053"/>
+        <location filename="../settings.cpp" line="1062"/>
         <source>Host</source>
         <translation>Anfitrión</translation>
     </message>
@@ -2234,7 +2234,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="527"/>
-        <location filename="../settings.cpp" line="1124"/>
+        <location filename="../settings.cpp" line="1133"/>
         <source>HTTP Header</source>
         <translation>Encabezado HTTP</translation>
     </message>
@@ -2431,70 +2431,70 @@ Selecting No will generate new IDs and append.</source>
         <translation>Ajustes</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="424"/>
+        <location filename="../settings.cpp" line="433"/>
         <source>Bad IP.</source>
         <translation>IP Inválida</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="428"/>
+        <location filename="../settings.cpp" line="437"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Packet Sender no puede vincularse a una IP Inválida</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="442"/>
+        <location filename="../settings.cpp" line="451"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>Conflicto de puertos TCP y SSL distinto de cero.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="446"/>
+        <location filename="../settings.cpp" line="455"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Packet Sender no puede vincular TCP y SSL al mismo puerto.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="804"/>
+        <location filename="../settings.cpp" line="813"/>
         <source>Open Directory</source>
         <translation>Abrir Directorio</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="825"/>
+        <location filename="../settings.cpp" line="834"/>
         <source>Choose Cert</source>
         <translation>Seleccionar Certificado</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="825"/>
-        <location filename="../settings.cpp" line="841"/>
+        <location filename="../settings.cpp" line="834"/>
+        <location filename="../settings.cpp" line="850"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="841"/>
+        <location filename="../settings.cpp" line="850"/>
         <source>Choose Key</source>
         <translation>Elegir clave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1053"/>
-        <location filename="../settings.cpp" line="1122"/>
+        <location filename="../settings.cpp" line="1062"/>
+        <location filename="../settings.cpp" line="1131"/>
         <source>Key</source>
         <translation>Clave</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1053"/>
-        <location filename="../settings.cpp" line="1123"/>
+        <location filename="../settings.cpp" line="1062"/>
+        <location filename="../settings.cpp" line="1132"/>
         <source>Value</source>
         <translation>Valor</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1118"/>
+        <location filename="../settings.cpp" line="1127"/>
         <source>UN/ClientID</source>
         <translation>Nombre de usuario/ID de cliente</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1119"/>
+        <location filename="../settings.cpp" line="1128"/>
         <source>PW/Access</source>
         <translation>Contraseña/Código de acceso</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1120"/>
+        <location filename="../settings.cpp" line="1129"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP encabezado de autenticación</translation>
     </message>
