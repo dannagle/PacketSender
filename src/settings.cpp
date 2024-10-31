@@ -234,6 +234,15 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     QList<int> tcpList = portsToIntList(settings.value("tcpPort", "0").toString());
     QList<int> sslList = portsToIntList(settings.value("sslPort", "0").toString());
 
+
+    if(!PacketNetwork::DTLSisSupported()) {
+        ui->dtlsServerPortEdit->hide();
+        ui->dtlsServerEnableCheck->hide();
+        ui->dtlsServerLabel->hide();
+        ui->sendSimpleAck->hide();
+    }
+
+
     ui->udpServerPortEdit->setText(intListToPorts(udpList));
     ui->tcpServerPortEdit->setText(intListToPorts(tcpList));
     ui->sslServerPortEdit->setText(intListToPorts(sslList));

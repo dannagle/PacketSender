@@ -301,6 +301,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stopResendingButton->hide();
 
+
     dtlsServerStatus = new QPushButton("DTLS:" + packetNetwork.getDTLSPortString());
     themeTheButton(dtlsServerStatus);
     dtlsServerStatus->setIcon(QIcon(DTLSRXICON));
@@ -309,7 +310,14 @@ MainWindow::MainWindow(QWidget *parent) :
             this, SLOT(toggleDTLSServer()));
 
 
-    statusBar()->insertPermanentWidget(2, dtlsServerStatus);
+
+    if(PacketNetwork::DTLSisSupported()) {
+        statusBar()->insertPermanentWidget(2, dtlsServerStatus);
+    }
+
+
+
+
 
     udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
     themeTheButton(udpServerStatus);
