@@ -22,6 +22,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
 * [Intense Traffic Generator (GUI)](#udptraffic)
 * [Network](#network)
 * [Downloads](#downloads)
+* [iOS Mobile App](#ios)
 * [Support](#support)
 * [IPv4 Subnet Calculator](#subnetcalculator)
 * [Wake-On-LAN / Magic Packet](#wakeonlan)
@@ -83,7 +84,6 @@ Official releases of Packet Sender can be downloaded at  [PacketSender.com](http
 Not sure when this will be back.
 
 ## Mobile Apps
-The Packet Sender mobile editions are fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
 
 
 ### Android Mobile App
@@ -96,18 +96,15 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 -->
 
 
-<!--
-Not sure when this will be back.
 
+<a id="ios"></a>
 ## iOS Mobile App
-
-![Packet Sender logo](screenshots/ios_logo.png)
+The Packet Sender for iOS is fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
 
 The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
 [![Packet Sender iOS](screenshots/packetsender-ios-traffic-log-ascii.png)](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
--->
 <a id="gui"></a>
 # GUI 
 
