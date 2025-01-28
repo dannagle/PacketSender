@@ -699,7 +699,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -730,6 +730,7 @@
     <addaction name="actionSubnet_Calculator"/>
     <addaction name="actionIntense_Traffic_Generator"/>
     <addaction name="actionWake_On_LAN_Magic_Packet"/>
+    <addaction name="actioniOS_App"/>
    </widget>
    <widget class="QMenu" name="menuMulitcast">
     <property name="title">
@@ -759,6 +760,9 @@
    <property name="text">
     <string>E&amp;xit</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionSettings">
    <property name="icon">
@@ -767,6 +771,9 @@
    </property>
    <property name="text">
     <string>&amp;Settings</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionAbout">
@@ -777,6 +784,9 @@
    <property name="text">
     <string>&amp;About</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionImport_Packets">
    <property name="icon">
@@ -786,6 +796,9 @@
    <property name="text">
     <string>&amp;Import Database</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionExport_Packets">
    <property name="icon">
@@ -794,6 +807,9 @@
    </property>
    <property name="text">
     <string>&amp;Export Database</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionPersistent_Connection">
@@ -809,6 +825,9 @@
    <property name="text">
     <string>&amp;Subnet Calculator</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionDonate_Thank_You">
    <property name="icon">
@@ -818,10 +837,16 @@
    <property name="text">
     <string>D&amp;onate (Thank You!)</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionDocumentation">
    <property name="text">
     <string>Documentation</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionHelp">
@@ -831,6 +856,9 @@
    </property>
    <property name="text">
     <string>&amp;Documentation</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionExport_Packets_JSON">
@@ -846,6 +874,9 @@
    <property name="text">
     <string>&amp;Cloud Save and Share</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionJoin_IPv4">
    <property name="icon">
@@ -854,6 +885,9 @@
    </property>
    <property name="text">
     <string>&amp;Join/Leave IPv4</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionAndroid_App">
@@ -864,6 +898,9 @@
    <property name="text">
     <string>Android App</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actioniOS_App">
    <property name="icon">
@@ -872,6 +909,9 @@
    </property>
    <property name="text">
     <string>iOS App</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionFollow_NagleCode">
@@ -882,6 +922,9 @@
    <property name="text">
     <string>Follow on Twitter</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionConnect_on_LinkedIn">
    <property name="icon">
@@ -890,6 +933,9 @@
    </property>
    <property name="text">
     <string>Connect on LinkedIn</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionIntense_Traffic_Generator">
@@ -900,6 +946,9 @@
    <property name="text">
     <string>Intense &amp;Traffic Generator</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionForums">
    <property name="icon">
@@ -908,6 +957,9 @@
    </property>
    <property name="text">
     <string>Forums</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionPanel_Generator">
@@ -927,6 +979,9 @@
    </property>
    <property name="text">
     <string>Wake-On-LAN / Magic Packet</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
    </property>
   </action>
  </widget>

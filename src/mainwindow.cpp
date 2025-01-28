@@ -2285,7 +2285,7 @@ void MainWindow::on_actionAndroid_App_triggered()
 
 void MainWindow::on_actioniOS_App_triggered()
 {
-    QDesktopServices::openUrl(QUrl("https://packetsender.com/ios"));
+    QDesktopServices::openUrl(QUrl("https://apps.apple.com/us/app/packet-sender-udp-tcp-ssl/id1558236648#?platform=iphone"));
 }
 
 
@@ -3004,4 +3004,5 @@ void MainWindow::on_hostName_editingFinished(){
     settings.setValue("hostNameEdit", ui->hostName->text());
 
 }
+
 
