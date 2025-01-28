@@ -19,7 +19,7 @@ jobs:
     - name: install_dependencies
       run: |
            sudo apt update
-           sudo apt install cmake debhelper devscripts qttools5-dev
+           sudo apt install cmake debhelper devscripts qttools5-dev build-essential
     - name: build
       run: |
            debuild --no-lintian --no-sign
