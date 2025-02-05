@@ -17,7 +17,7 @@ Packet Sender is an open source utility to allow sending and receiving TCP, UDP,
   * Visit [IWL.com](https://www.iwl.com/)
   * Visit [NagleCode.com](https://dannagle.com/)
   * Visit [Eletiope.com](http://eletiope.com/)
-
+  * Visit [John Huntington](https://www.controlgeek.net/)
 * [GUI](#gui)
 * [Intense Traffic Generator (GUI)](#udptraffic)
 * [Network](#network)
@@ -56,6 +56,9 @@ Packet Sender would like to thank the following sponsors.
 <br>Eletiope installs lighting, audiovisuals and immersive rooms for exhibitions and museums, and for corporate showrooms. 
 <br><br><br>
 
+[John Huntington](https://www.controlgeek.net/)
+<br>Author, consultant, educator, sound engineer, award-winning photographer, and storm chaser.
+<br><br><br>
 
 [Would you like your name/logo listed here?](https://github.com/sponsors/dannagle)
 
