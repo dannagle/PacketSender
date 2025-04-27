@@ -17,6 +17,7 @@ steps:
     cd src
     qmake6 PacketSender.pro
     make
+    ls
   displayName: 'Build Packet Sender'
 
 - script: |
