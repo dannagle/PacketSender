@@ -16,6 +16,7 @@ steps:
   displayName: 'Install Qt6 dependencies'
 
 - script: |
-    qmake src/PacketSender.pro
+    cde src
+    qmake PacketSender.pro
     make
   displayName: 'Build Packet Sender'
