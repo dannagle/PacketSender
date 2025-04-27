@@ -24,5 +24,5 @@ steps:
     mkdir -p $(Build.ArtifactStagingDirectory)/bin
     cd src
     ls
-    cp packetsender ../$(Build.ArtifactStagingDirectory)/bin/
+    cp packetsender $(Build.ArtifactStagingDirectory)/bin/
   displayName: 'Copy Packet Sender binary to staging'
