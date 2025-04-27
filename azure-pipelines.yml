@@ -26,3 +26,10 @@ steps:
     ls
     cp packetsender $(Build.ArtifactStagingDirectory)/bin/
   displayName: 'Copy Packet Sender binary to staging'
+
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/bin'
+    ArtifactName: 'BuiltApp'
+    publishLocation: 'Container'
