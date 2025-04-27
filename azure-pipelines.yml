@@ -19,4 +19,7 @@ steps:
     make
   displayName: 'Build Packet Sender'
 
-
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/bin
+    cp PacketSender $(Build.ArtifactStagingDirectory)/bin/
+  displayName: 'Copy Packet Sender binary to staging'
