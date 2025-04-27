@@ -4,16 +4,18 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- azure-pipelines
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    sudo apt install -y qt6-base-dev qt6-tools-dev qt6-tools-dev-tools
+  displayName: 'Install Qt6 dependencies'
+
+- script: |
+    qmake src/PacketSender.pro
+    make
+  displayName: 'Build Packet Sender'
