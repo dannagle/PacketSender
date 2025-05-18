@@ -15,12 +15,8 @@ Packet Sender will always support free security fixes for the latest version. If
 
 ## Reporting a Vulnerability
 
-Vulnerabilities are to be reported using the standard [bug reporting process](/dannagle/PacketSender/issues/new/choose). 
-
-
-## Contacts for Security Vulnerabilities
-
-Use https://packetsender.com/contact if you do not wish to use the GitHub reporting system.
+- Use the standard [bug reporting process](/dannagle/PacketSender/issues/new/choose). 
+- Use https://packetsender.com/contact if you do not wish to use a GitHub account.
 
 
 ## Release signing
