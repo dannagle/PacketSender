@@ -715,122 +715,122 @@ Commit Hash: </translation>
         <translation>&amp;Strumenti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="736"/>
+        <location filename="../mainwindow.ui" line="737"/>
         <source>&amp;Multicast</source>
         <translation>&amp;Multicast</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="742"/>
+        <location filename="../mainwindow.ui" line="743"/>
         <source>Panels</source>
         <translation>Pannelli</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="760"/>
+        <location filename="../mainwindow.ui" line="761"/>
         <source>E&amp;xit</source>
         <translation>&amp;Esci</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="769"/>
+        <location filename="../mainwindow.ui" line="773"/>
         <source>&amp;Settings</source>
         <translation>&amp;Impostazioni</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="778"/>
+        <location filename="../mainwindow.ui" line="785"/>
         <source>&amp;About</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="787"/>
+        <location filename="../mainwindow.ui" line="797"/>
         <source>&amp;Import Database</source>
         <translation>Importa Database</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="796"/>
+        <location filename="../mainwindow.ui" line="809"/>
         <source>&amp;Export Database</source>
         <translation>Esporta Database</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="801"/>
+        <location filename="../mainwindow.ui" line="817"/>
         <source>Persistent Connection</source>
         <translation>Connessione Persistente</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="810"/>
+        <location filename="../mainwindow.ui" line="826"/>
         <source>&amp;Subnet Calculator</source>
         <translation>Calcolatrice di Subnet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="819"/>
+        <location filename="../mainwindow.ui" line="838"/>
         <source>D&amp;onate (Thank You!)</source>
         <translation>Donare (Grazie!)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="824"/>
+        <location filename="../mainwindow.ui" line="846"/>
         <source>Documentation</source>
         <translation>Documentazione</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="833"/>
+        <location filename="../mainwindow.ui" line="858"/>
         <source>&amp;Documentation</source>
         <translation>&amp;Documentazione</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="838"/>
+        <location filename="../mainwindow.ui" line="866"/>
         <source>Export To Cloud</source>
         <translation>Esporta a Cloud</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="847"/>
+        <location filename="../mainwindow.ui" line="875"/>
         <source>&amp;Cloud Save and Share</source>
         <translation>Salva e Condividi nel Cloud</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="856"/>
+        <location filename="../mainwindow.ui" line="887"/>
         <source>&amp;Join/Leave IPv4</source>
         <translation>Unisci/Lascia IPv4</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="865"/>
+        <location filename="../mainwindow.ui" line="899"/>
         <source>Android App</source>
         <translation>Android App</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="874"/>
+        <location filename="../mainwindow.ui" line="911"/>
         <source>iOS App</source>
         <translation>iOS App</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="883"/>
+        <location filename="../mainwindow.ui" line="923"/>
         <source>Follow on Twitter</source>
         <translation>Segui su Twitter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="892"/>
+        <location filename="../mainwindow.ui" line="935"/>
         <source>Connect on LinkedIn</source>
         <translation>Connetti su LinkedIn</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="901"/>
+        <location filename="../mainwindow.ui" line="947"/>
         <source>Intense &amp;Traffic Generator</source>
         <translation>Generatore di Traffico Intenso</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="910"/>
+        <location filename="../mainwindow.ui" line="959"/>
         <source>Forums</source>
         <translation>Forum</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="915"/>
+        <location filename="../mainwindow.ui" line="967"/>
         <source>Load Starter Panel</source>
         <translation>Carica Pannello Iniziale</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="920"/>
+        <location filename="../mainwindow.ui" line="972"/>
         <source>Empty Panel Project</source>
         <translation>Pulisci il Progetto Pannello</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="929"/>
+        <location filename="../mainwindow.ui" line="981"/>
         <source>Wake-On-LAN / Magic Packet</source>
         <translation>Wake-On-LAN</translation>
     </message>
@@ -2528,56 +2528,66 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../subnetcalc.ui" line="66"/>
+        <source>Network</source>
+        <translation>Rete</translation>
+    </message>
+    <message>
+        <location filename="../subnetcalc.ui" line="73"/>
+        <source>Calculated Network...</source>
+        <translation>Rete calcolato...</translation>
+    </message>
+    <message>
+        <location filename="../subnetcalc.ui" line="84"/>
         <source>Start</source>
         <translation>Inizio</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="76"/>
+        <location filename="../subnetcalc.ui" line="94"/>
         <source>Calculated Start..</source>
         <translation>Inizio calcolato..</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="87"/>
+        <location filename="../subnetcalc.ui" line="105"/>
         <source>End</source>
         <translation>Fine</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="97"/>
+        <location filename="../subnetcalc.ui" line="115"/>
         <source>Calculated End...</source>
         <translation>Fine calcolata...</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="108"/>
+        <location filename="../subnetcalc.ui" line="126"/>
         <source>Broadcast</source>
         <translation>Broadcast</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="118"/>
+        <location filename="../subnetcalc.ui" line="136"/>
         <source>Broadcast...</source>
         <translation>Broadcast...</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="133"/>
+        <location filename="../subnetcalc.ui" line="151"/>
         <source>Within subnet check</source>
         <translation>Interno alla verifica Subnet</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="140"/>
+        <location filename="../subnetcalc.ui" line="158"/>
         <source>IP Address...</source>
         <translation>Indirizzo IP...</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="156"/>
+        <location filename="../subnetcalc.ui" line="174"/>
         <source>Subnet Check Result...</source>
         <translation>Risultato della verifica Subnet...</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="168"/>
+        <location filename="../subnetcalc.ui" line="186"/>
         <source>Results log...</source>
         <translation>Log dei risultati...</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.ui" line="177"/>
+        <location filename="../subnetcalc.ui" line="195"/>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
@@ -2596,12 +2606,12 @@ Selecting No will generate new IDs and append.</source>
 </translation>
     </message>
     <message>
-        <location filename="../subnetcalc.cpp" line="263"/>
+        <location filename="../subnetcalc.cpp" line="267"/>
         <source>Within </source>
         <translation>Interno a </translation>
     </message>
     <message>
-        <location filename="../subnetcalc.cpp" line="273"/>
+        <location filename="../subnetcalc.cpp" line="277"/>
         <source>No entries in subnet.</source>
         <translation>Nessun valore di subnet.</translation>
     </message>
