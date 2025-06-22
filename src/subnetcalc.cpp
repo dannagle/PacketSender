@@ -157,12 +157,15 @@ void SubnetCalc::populate()
             quint32 firstAddress = startSubnet + 1;
             quint32 lastAddress = startSubnet + numAddresses - 2;
             quint32 broadcastAddress = startSubnet + numAddresses - 1;
+
             ipv4Address.setAddress(firstAddress);
             ui->startEdit->setText(ipv4Address.toString());
             ipv4Address.setAddress(lastAddress);
             ui->endEdit->setText(ipv4Address.toString());
             ipv4Address.setAddress(broadcastAddress);
             ui->broadcastEdit->setText(ipv4Address.toString());
+            ipv4Address.setAddress(startSubnet);
+            ui->networkEdit->setText(ipv4Address.toString());
 
         }
         if (isIPv6) {
@@ -209,6 +212,7 @@ void SubnetCalc::on_clearButton_clicked()
     ui->endEdit->clear();
     ui->broadcastEdit->clear();
     ui->checkSubnetResultEdit->clear();
+    ui->networkEdit->clear();
 }
 
 void SubnetCalc::on_ipsubnetCheckEdit_textChanged(const QString &arg1)
