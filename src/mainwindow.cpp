@@ -2285,7 +2285,7 @@ void MainWindow::on_actionAndroid_App_triggered()
 
 void MainWindow::on_actioniOS_App_triggered()
 {
-    QDesktopServices::openUrl(QUrl("https://apps.apple.com/us/app/packet-sender-udp-tcp-ssl/id1558236648#?platform=iphone"));
+    QDesktopServices::openUrl(QUrl("https://apps.apple.com/app/id1558236648#?platform=iphone"));
 }
 
 
