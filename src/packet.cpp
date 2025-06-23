@@ -860,6 +860,7 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
     smart.ifEquals = settings.value("responseIfEdit" + QString::number(num), "").toString();
     smart.replyWith = settings.value("responseReplyEdit" + QString::number(num), "").toString();
     smart.enabled = settings.value("responseEnableCheck" + QString::number(num), false).toBool();
+    smart.matchMethod = settings.value("matchMethodBox" + QString::number(num), "").toString();
 
     return smart;
 }
@@ -1014,8 +1015,27 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
 
     foreach (config, smartList) {
         if (config.enabled) {
+            bool matched = false;
             QByteArray testData = Packet::encodingToByteArray(config.encoding, config.ifEquals);
-            if (testData == (data)) {
+
+            if(config.matchMethod == "Starts With") {
+                matched = data.startsWith(testData);
+            }
+
+            if(config.matchMethod == "Contains") {
+                matched = data.contains(testData);
+            }
+
+            if(config.matchMethod == "Ends With") {
+                matched = data.endsWith(testData);
+            }
+
+            if(config.matchMethod == "Exact Match") {
+                matched = (testData == (data));
+            }
+
+
+            if (matched) {
                 QDEBUG() << "Match! Sending:" << config.replyWith;
                 return Packet::encodingToByteArray(config.encoding, config.replyWith);
             }

@@ -31,6 +31,7 @@ struct SmartResponseConfig {
     QString ifEquals;
     QString replyWith;
     QString encoding;
+    QString matchMethod;
     bool enabled;
 };
 

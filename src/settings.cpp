@@ -169,6 +169,14 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ENCODEMACRO(4);
     ENCODEMACRO(5);
 
+#define MATCHMACRO(NUM) ui->matchMethodBox##NUM->setCurrentIndex(ui->matchMethodBox##NUM->findText(settings.value("matchMethodBox"#NUM,"Exact Match").toString()))
+
+    MATCHMACRO(1);
+    MATCHMACRO(2);
+    MATCHMACRO(3);
+    MATCHMACRO(4);
+    MATCHMACRO(5);
+
 
     on_smartResponseEnableCheck_clicked();
 
@@ -586,6 +594,17 @@ void Settings::on_buttonBox_accepted()
     ENCODEMACROSAVE(3);
     ENCODEMACROSAVE(4);
     ENCODEMACROSAVE(5);
+
+
+#define MATCHMACROSAVE(NUM) settings.setValue("matchMethodBox" #NUM, ui->matchMethodBox##NUM->currentText());
+
+    MATCHMACROSAVE(1);
+    MATCHMACROSAVE(2);
+    MATCHMACROSAVE(3);
+    MATCHMACROSAVE(4);
+    MATCHMACROSAVE(5);
+
+
 
     if((initialSslLocalCertificatePath != settings.value("sslLocalCertificatePath", "").toString()) ||
         (initialSslCaPath != settings.value("sslCaPath", "").toString()) ||
