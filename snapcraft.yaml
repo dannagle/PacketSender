@@ -1,5 +1,5 @@
 name: packetsender
-version: 8.8.2
+version: 8.8.8
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
 icon: src/pslogo128.png
 description: |
@@ -38,6 +38,7 @@ parts:
     plugin: qmake
     source: src/
     qmake-project-file: PacketSenderSnap.pro
+    qmake-major-version: 6
     build-environment:
       - QT_SELECT: qt6
     build-packages:
