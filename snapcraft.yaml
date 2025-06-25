@@ -1,10 +1,27 @@
 name: packetsender
+title: Packet Sender
 version: 8.8.8
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
-icon: src/pslogo128.png
+icon: src/packetsender.svg
 description: |
   Packet Sender - Free utility to for sending / receiving of network
   packets. TCP, UDP, SSL, and HTTP. https://packetsender.com/
+
+source-code:
+  - https://github.com/dannagle/PacketSender
+
+contact:
+  - https://packetsender.com/contact
+
+website:
+  - https://packetsender.com
+
+issues:
+  - https://github.com/dannagle/PacketSender/issues
+
+donation:
+  - https://www.paypal.com/biz/fund?id=RGDM593DYR9LJ
+
 
 platforms:
   amd64:
