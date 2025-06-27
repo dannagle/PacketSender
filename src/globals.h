@@ -10,14 +10,14 @@
 #pragma once
 
 //BEGIN SW VERSION
-#define SW_VERSION "8.8.9"
+#define SW_VERSION "8.9.1"
 //END SW VERSION
 
 #define HANDSHAKE_STEPS_TIMEOUT 10 /* Milliseconds */
 #define DTLS_THREAS_TIME_TO_LIVE 1000 /* Milliseconds */
 
 //BEGIN FILE VERSION
-#define VER_FILEVERSION 8,8,9,0
+#define VER_FILEVERSION 8,9,1,0
 //END FILE VERSION
 
 #define QDEBUG() qDebug() << __FILE__ << "/" <<__LINE__  <<"(" << __FUNCTION__ << "):"
