@@ -311,12 +311,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    if(PacketNetwork::DTLSisSupported()) {
-        statusBar()->insertPermanentWidget(2, dtlsServerStatus);
-    }
-
-
-
 
 
     udpServerStatus = new QPushButton("UDP:" + packetNetwork.getUDPPortString());
@@ -352,12 +346,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     statusBar()->insertPermanentWidget(5, sslServerStatus);
 
+    if(PacketNetwork::DTLSisSupported()) {
+        statusBar()->insertPermanentWidget(6, dtlsServerStatus);
+    }
+
 
 
     //ipmode toggle
     IPmodeButton = new QPushButton("IPv4 Mode");
     themeTheButton(IPmodeButton);
-    statusBar()->insertPermanentWidget(6, IPmodeButton);
+    statusBar()->insertPermanentWidget(7, IPmodeButton);
 
     setIPMode();
 
