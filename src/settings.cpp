@@ -791,26 +791,6 @@ void Settings::loadTableHeaders()
     ui->displayOrderListTraffic->setAlternatingRowColors(true);
 }
 
-void Settings::on_responsePacketBox_currentIndexChanged(const QString &arg1)
-{
-
-    Q_UNUSED(arg1);
-
-    Packet tempPacket;
-    QString selectedName = ui->responsePacketBox->currentText();
-
-    //QDEBUGVAR(selectedName);
-    foreach (tempPacket, packetsSaved) {
-        if (tempPacket.name == selectedName) {
-            ui->hexResponseEdit->setText(tempPacket.hexString);
-            on_hexResponseEdit_textEdited(tempPacket.hexString);
-            break;
-        }
-
-    }
-
-    ui->responsePacketBox->setCurrentIndex(0);
-}
 
 void Settings::on_defaultDisplayButton_clicked()
 {
@@ -1168,6 +1148,31 @@ void Settings::on_chooseLanguageButton_clicked()
     lang->exec();
 
 #endif
+
+}
+
+
+
+void Settings::on_responsePacketBox_currentIndexChanged(int index)
+{
+
+    Q_UNUSED(index);
+    QDEBUG();
+
+    Packet tempPacket;
+    QString selectedName = ui->responsePacketBox->currentText();
+
+    //QDEBUGVAR(selectedName);
+    foreach (tempPacket, packetsSaved) {
+        if (tempPacket.name == selectedName) {
+            ui->hexResponseEdit->setText(tempPacket.hexString);
+            on_hexResponseEdit_textEdited(tempPacket.hexString);
+            break;
+        }
+
+    }
+
+    ui->responsePacketBox->setCurrentIndex(0);
 
 }
 

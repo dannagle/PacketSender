@@ -122,8 +122,6 @@ class Settings : public QDialog
 
         void on_hexResponseEdit_textEdited(const QString &arg1);
 
-        void on_responsePacketBox_currentIndexChanged(const QString &arg1);
-
         void on_defaultDisplayButton_clicked();
 
         void on_smartResponseEnableCheck_clicked();
@@ -149,7 +147,10 @@ class Settings : public QDialog
 
         void on_chooseLanguageButton_clicked();
 
-private:
+
+        void on_responsePacketBox_currentIndexChanged(int index);
+
+    private:
         QWidget *parentWidget;
         Ui::Settings *ui;
         QList<Packet> packetsSaved;
