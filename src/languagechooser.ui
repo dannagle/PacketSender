@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
+    <width>994</width>
     <height>226</height>
    </rect>
   </property>
@@ -149,6 +149,42 @@
          </property>
          <property name="text">
           <string>Français</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_chinese">
+       <item>
+        <widget class="QPushButton" name="chineseLabel">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">image:url(:/languages/chinese-flag.png);</string>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QRadioButton" name="radioChinese">
+         <property name="styleSheet">
+          <string notr="true">font: bold;font-size: 18px;</string>
+         </property>
+         <property name="text">
+          <string>中文</string>
          </property>
          <property name="checked">
           <bool>false</bool>

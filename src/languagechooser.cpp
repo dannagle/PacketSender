@@ -37,6 +37,10 @@ LanguageChooser::LanguageChooser(QWidget *parent) :
     if(language.contains("italian")) {
         on_italianLabel_clicked();
     }
+
+    if(language.contains("chinese")) {
+        on_chineseLabel_clicked();
+    }
 }
 
 LanguageChooser::~LanguageChooser()
@@ -52,6 +56,7 @@ void LanguageChooser::preClicked()
     ui->radioGerman->setChecked(true);
     ui->radioFrench->setChecked(true);
     ui->radioItalian->setChecked(true);
+    ui->radioChinese->setChecked(true);
 
 }
 
@@ -100,7 +105,11 @@ void LanguageChooser::on_okButton_clicked()
     if(ui->radioFrench->isChecked()) {
         settings.setValue("languageCombo", "French");
     }
-	
+
+    if(ui->radioChinese->isChecked()) {
+        settings.setValue("languageCombo", "Chinese");
+    }
+
     if(ui->radioItalian->isChecked()) {
         settings.setValue("languageCombo", "Italian");
     }
@@ -125,3 +134,12 @@ void LanguageChooser::on_italianLabel_clicked()
     ui->radioItalian->setChecked(true);
     ui->italianLabel->setFocus();
 }
+
+void LanguageChooser::on_chineseLabel_clicked()
+{
+    preClicked();
+    ui->radioChinese->setChecked(true);
+    ui->chineseLabel->setFocus();
+
+}
+

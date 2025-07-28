@@ -368,6 +368,11 @@ QString Settings::language()
     QDEBUGVAR(locale);
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString language = settings.value("languageCombo", "English").toString().toLower();
+
+    if(language.contains("chinese")) {
+        return "Chinese";
+    }
+
     if(language.contains("spanish")) {
         return "Spanish";
     }

@@ -15,6 +15,7 @@ TRANSLATIONS += languages/packetsender_en.ts \
                 languages/packetsender_fr.ts \
                 languages/packetsender_de.ts \
                 languages/packetsender_hi.ts \
+                languages/packetsender_cn.ts \
                 languages/packetsender_it.ts
 
 SOURCES += mainwindow.cpp \
@@ -73,4 +74,6 @@ FORMS    += mainwindow.ui \
 
 
 include(packetsender_main.pri)
+
+DISTFILES +=
 

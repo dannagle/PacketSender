@@ -12,5 +12,7 @@
         <file>languages/packetsender_fr.qm</file>
         <file>languages/italian-flag.png</file>
         <file>languages/packetsender_it.qm</file>
+        <file>languages/packetsender_cn.qm</file>
+        <file>languages/chinese-flag.png</file>
     </qresource>
 </RCC>
