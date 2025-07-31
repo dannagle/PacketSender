@@ -437,7 +437,7 @@ Commit Hash: </source>
     <message>
         <location filename="../mainwindow.ui" line="90"/>
         <source>ASCII</source>
-        <translation type="unfinished">A S C I I</translation>
+        <translation>A S C I I</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="97"/>
