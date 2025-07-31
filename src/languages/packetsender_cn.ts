@@ -399,7 +399,7 @@ Commit Hash: </source>
     <message>
         <location filename="../languagechooser.ui" line="187"/>
         <source>Italiano</source>
-        <translation>中文</translation>
+        <translation>意大利语</translation>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="206"/>
