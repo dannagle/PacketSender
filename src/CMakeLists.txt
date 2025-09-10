@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.6.0)
 project(PacketSender)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -6,7 +6,10 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-FIND_PACKAGE(Qt5 COMPONENTS Core Gui Network Widgets)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+FIND_PACKAGE(Qt6 COMPONENTS Core Gui Network Widgets)
 
 set(
   PACKETSENDER_UI_HEADERS
@@ -86,9 +89,9 @@ set(
   translations.qrc
 )
 
-QT5_ADD_RESOURCES(srcs_qrc ${PACKETSENDER_QRC})
-QT5_WRAP_UI(moc_uis ${PACKETSENDER_UIS})
-QT5_WRAP_CPP(moc_srcs ${PACKETSENDER_UI_HEADERS})
+QT6_ADD_RESOURCES(srcs_qrc ${PACKETSENDER_QRC})
+QT6_WRAP_UI(moc_uis ${PACKETSENDER_UIS})
+QT6_WRAP_CPP(moc_srcs ${PACKETSENDER_UI_HEADERS})
 
 add_executable(
   ${PROJECT_NAME}
@@ -98,8 +101,8 @@ add_executable(
   ${PACKETSENDER_SRCS}
 )
 
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Network Qt5::Core)
-QT5_USE_MODULES(${PROJECT_NAME} Core Gui Network Widgets)
+target_link_libraries(${PROJECT_NAME} Qt6::Widgets Qt6::Network Qt6::Core)
+QT6_USE_MODULES(${PROJECT_NAME} Core Gui Network Widgets)
 
 install(TARGETS
   ${PROJECT_NAME}
@@ -118,7 +121,7 @@ get_git_head_revision(GIT_REFSPEC GIT_HASH)
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "${PROJECT_NAME} project")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A network test utility for sending / receiving TCP and UDP packets http://packetsender.com/")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A network test utility for sending/receiving TCP/UDP/SSL and HTTP https://packetsender.com/")
 set(CPACK_PACKAGE_VERSION ${GIT_VERSION_SHORT})
 set(CPACK_PACKAGE_VERSION_MAJOR ${GIT_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${GIT_VERSION_MINOR})
