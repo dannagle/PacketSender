@@ -1,15 +1,14 @@
 cmake_minimum_required(VERSION 3.6.0)
-project(PacketSender)
+project(PacketSender LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-FIND_PACKAGE(Qt6 COMPONENTS Core Gui Network Widgets)
+# Find Qt6 components
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets)
 
 set(
   PACKETSENDER_UI_HEADERS
@@ -89,26 +88,24 @@ set(
   translations.qrc
 )
 
-QT6_ADD_RESOURCES(srcs_qrc ${PACKETSENDER_QRC})
-QT6_WRAP_UI(moc_uis ${PACKETSENDER_UIS})
-QT6_WRAP_CPP(moc_srcs ${PACKETSENDER_UI_HEADERS})
-
 add_executable(
   ${PROJECT_NAME}
-  ${srcs_qrc}
-  ${moc_uis}
-  ${moc_srcs}
   ${PACKETSENDER_SRCS}
+  ${PACKETSENDER_UI_HEADERS}
+  ${PACKETSENDER_UIS}
+  ${PACKETSENDER_QRC}
 )
 
-target_link_libraries(${PROJECT_NAME} Qt6::Widgets Qt6::Network Qt6::Core)
-QT6_USE_MODULES(${PROJECT_NAME} Core Gui Network Widgets)
-
-install(TARGETS
-  ${PROJECT_NAME}
-  DESTINATION bin
+target_link_libraries(${PROJECT_NAME} PRIVATE
+  Qt6::Core
+  Qt6::Gui
+  Qt6::Network
+  Qt6::Widgets
 )
 
+# -------------------
+# Versioning from git
+# -------------------
 include(GetGitRevisionDescription)
 git_describe(GIT_VERSION --tags)
 string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" GIT_VERSION_MAJOR "${GIT_VERSION}")
@@ -118,6 +115,9 @@ string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" GIT_VERSION_SHA1 "${
 set(GIT_VERSION_SHORT "${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}")
 get_git_head_revision(GIT_REFSPEC GIT_HASH)
 
+# -------------------
+# Packaging
+# -------------------
 set(CPACK_GENERATOR "DEB")
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "${PROJECT_NAME} project")
@@ -130,5 +130,7 @@ set(CPACK_PACKAGE_CONTACT "dan@dannagle.com")
 
 include(CPack)
 
-
-
+install(TARGETS
+  ${PROJECT_NAME}
+  DESTINATION bin
+)
