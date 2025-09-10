@@ -2,7 +2,7 @@ Source: packetsender
 Section: net
 Priority: optional
 Maintainer: Joao Eriberto Mota Filho <eriberto@debian.org>
-Build-Depends: debhelper-compat (= 12), cmake, qttools5-dev
+Build-Depends: debhelper-compat (= 12), cmake, qttools6-dev
 Standards-Version: 4.5.0
 Homepage: https://packetsender.com/
 Rules-Requires-Root: no
