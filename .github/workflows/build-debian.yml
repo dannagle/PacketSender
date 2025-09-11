@@ -24,14 +24,18 @@ jobs:
       run: |
            debuild --no-lintian --no-sign
 
+    - name: Collect Debian Artifacts
+      run: |
+        mkdir -p artifacts
+        cp ../*.deb artifacts/ || true
+        cp ../*.ddeb artifacts/ || true
+        cp ../*.changes artifacts/ || true
+        cp ../*.buildinfo artifacts/ || true
+        ls -lh artifacts
 
-    - name: Upload Debian packages
+    - name: Upload Debian Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: packetsender-debs
-        path: |
-          ../*.deb
-          ../*.ddeb
-          ../*.changes
-          ../*.buildinfo
-        retention-days: 30
+        name: packetsender-debian-artifacts
+        path: artifacts/*
+
