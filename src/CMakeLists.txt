@@ -106,6 +106,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 # -------------------
 # Versioning from git
 # -------------------
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
 include(GetGitRevisionDescription)
 git_describe(GIT_VERSION --tags)
 string(REGEX REPLACE "^v([0-9]+)\\..*" "\\1" GIT_VERSION_MAJOR "${GIT_VERSION}")
