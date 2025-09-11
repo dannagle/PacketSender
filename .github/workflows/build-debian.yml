@@ -23,3 +23,15 @@ jobs:
     - name: build
       run: |
            debuild --no-lintian --no-sign
+
+
+    - name: Upload Debian packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: packetsender-debs
+        path: |
+          ../*.deb
+          ../*.ddeb
+          ../*.changes
+          ../*.buildinfo
+        retention-days: 30
