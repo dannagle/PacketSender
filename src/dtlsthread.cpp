@@ -55,9 +55,10 @@ std::vector<QString> Dtlsthread::getCmdInput(Packet sendpacket, QSettings& setti
     //get the pathes for verification from the settings
     QString defaultCertFile = CERTFILE;
     QString defaultKeyFile = KEYFILE;
+    QString defaultCAFile = CAFILE;
     cmdComponents.push_back(settings.value("sslPrivateKeyPath", defaultKeyFile).toString());
     cmdComponents.push_back(settings.value("sslLocalCertificatePath", defaultCertFile).toString());
-    QString sslCaPath = settings.value("sslCaPath", "").toString();
+    QString sslCaPath = settings.value("sslCaPath", defaultCAFile).toString();
 
 
     //get the full path to to ca-signed-cert.pem file
@@ -73,10 +74,10 @@ std::vector<QString> Dtlsthread::getCmdInput(Packet sendpacket, QSettings& setti
             // Select the first file that matches the filter
             cmdComponents.push_back(dir.filePath(fileList.first()));
         } else {
-            qDebug() << "No matching files found.";
+            QDEBUG() << "No matching files found.";
         }
     } else {
-        qDebug() << "Directory does not exist.";
+        QDEBUG() << "Directory does not exist.";
     }
     cmdComponents.push_back(settings.value("cipher", "AES256-GCM-SHA384").toString());
     return cmdComponents;
@@ -99,6 +100,8 @@ void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociat
         //}
         return;
     }
+
+    packetToSend.errorString = dtlsAssociation->crypto.sessionCipher().encryptionMethod();
     emit packetSent(packetToSend);
 }
 
