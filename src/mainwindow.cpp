@@ -98,11 +98,16 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->twoVerify->setChecked(true);
     }
 
+    //currently broken.
+    ui->twoVerify->setEnabled(false);
+    ui->twoVerify->setChecked(false);
+    ui->hostName->setEnabled(false);
+
     twoVerify = ui->twoVerify;
     connect(twoVerify, &QCheckBox::toggled, &packetNetwork , &PacketNetwork::on_twoVerify_StateChanged);
 
     //hostName
-    connect(ui->hostName, &QLineEdit::editingFinished, this, &MainWindow::on_hostName_editingFinished);
+    connect(ui->packetIPEdit, &QLineEdit::editingFinished, this, &MainWindow::on_hostName_editingFinished);
 
 
     //cipher comboBox
@@ -2999,7 +3004,7 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(int index)
 
 void MainWindow::on_hostName_editingFinished(){
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    settings.setValue("hostNameEdit", ui->hostName->text());
+    settings.setValue("hostNameEdit", ui->packetIPEdit->text());
 
 }
 

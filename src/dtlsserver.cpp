@@ -523,7 +523,7 @@ void DtlsServer::setConfiguration(){
     serverConfiguration.setLocalCertificate(certificate);
     serverConfiguration.setPrivateKey(privateKey);
     serverConfiguration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
-    if(settings.value("twoVerify").toString() == "true"){
+    if(settings.value("twoVerify").toString() == "true" && false){
         serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
     } else{
         serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);

@@ -48,6 +48,7 @@
 #define SETTINGSFILE ((QFile::exists("ps_settings.ini") || QFile::exists("portablemode.txt") ) ? ("ps_settings.ini") : ((SETTINGSPATH)  + "ps_settings.ini"))
 #define PACKETSFILE ((QFile::exists("packets.ini") || QFile::exists("portablemode.txt") ) ? ("packets.ini") : ((SETTINGSPATH)  + "packets.ini"))
 #define CERTFILE ((QFile::exists("cert.pem") || QFile::exists("portablemode.txt") ) ? ("cert.pem") : ((SETTINGSPATH)  + "cert.pem"))
+#define CAFILE ((QFile::exists("snakeoilca.crt") || QFile::exists("portablemode.txt") ) ? ("snakeoilca.crt") : ((SETTINGSPATH)  + "snakeoilca.crt"))
 #define KEYFILE ((QFile::exists("key.pem") || QFile::exists("portablemode.txt") ) ? ("key.pem") : ((SETTINGSPATH)  + "key.pem"))
 #define PANELSFILE ((QFile::exists("ps_panels.json") || QFile::exists("portablemode.txt") ) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
 

@@ -55,5 +55,8 @@
         <file>icons/outline_lightbulb_white_24dp.png</file>
         <file>icons/tx_dtls.png</file>
         <file>icons/rx_dtls.png</file>
+        <file>snakeoil.pem.base64</file>
+        <file>snakeoilca.crt.base64</file>
+        <file>private.key.base64</file>
     </qresource>
 </RCC>

@@ -176,13 +176,16 @@ int main(int argc, char *argv[])
     //do not complain about shipping a private key.
     QFile snakeoilKey("://ps.key.base64");
     QFile snakeoilCert("://ps.pem.base64");
+    QFile snakeoilCA("://snakeoilca.crt.base64");
 
 
     QString defaultCertFile = CERTFILE;
     QString defaultKeyFile = KEYFILE;
+    QString defaultCAFile = CAFILE;
 
     QFile certfile(defaultCertFile);
     QFile keyfile(defaultKeyFile);
+    QFile cafile(defaultCAFile);
     QByteArray decoded;
     decoded.clear();
 
@@ -205,6 +208,17 @@ int main(int argc, char *argv[])
         if (keyfile.open(QFile::WriteOnly)) {
             keyfile.write(decoded);
             keyfile.close();
+        }
+    }
+
+    if (!cafile.exists()) {
+        if (snakeoilCA.open(QFile::ReadOnly)) {
+            decoded = QByteArray::fromBase64(snakeoilCA.readAll());
+            snakeoilCA.close();
+        }
+        if (cafile.open(QFile::WriteOnly)) {
+            cafile.write(decoded);
+            cafile.close();
         }
     }
 

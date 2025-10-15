@@ -56,7 +56,7 @@ DtlsAssociation::DtlsAssociation(QHostAddress &address, quint16 port,
     configuration.setPrivateKey(privateKey);
     configuration.setCaCertificates(QList<QSslCertificate>() << caCertificate);
 
-    configuration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+    configuration.setPeerVerifyMode(QSslSocket::VerifyNone);
     crypto.setPeer(address, port);
     crypto.setPeerVerificationName(hostName);
     crypto.setDtlsConfiguration(configuration);

@@ -53,9 +53,12 @@ std::vector<QString> Dtlsthread::getCmdInput(Packet sendpacket, QSettings& setti
     cmdComponents.push_back(QString::number(sendpacket.port));
 
     //get the pathes for verification from the settings
-    cmdComponents.push_back(settings.value("sslPrivateKeyPath", "default").toString());
-    cmdComponents.push_back(settings.value("sslLocalCertificatePath", "default").toString());
-    QString sslCaPath = settings.value("sslCaPath", "default").toString();
+    QString defaultCertFile = CERTFILE;
+    QString defaultKeyFile = KEYFILE;
+    cmdComponents.push_back(settings.value("sslPrivateKeyPath", defaultKeyFile).toString());
+    cmdComponents.push_back(settings.value("sslLocalCertificatePath", defaultCertFile).toString());
+    QString sslCaPath = settings.value("sslCaPath", "").toString();
+
 
     //get the full path to to ca-signed-cert.pem file
     QDir dir(sslCaPath);
@@ -89,7 +92,7 @@ void Dtlsthread::handShakeComplited(){
 void Dtlsthread::writeMassage(Packet packetToSend, DtlsAssociation* dtlsAssociation){
     const qint64 written = dtlsAssociation->crypto.writeDatagramEncrypted(&(dtlsAssociation->socket), packetToSend.asciiString().toLatin1());
     if (written <= 0) {
-        packetToSend.errorString.append(" Failed to send");
+        packetToSend.errorString.append(dtlsAssociation->crypto.dtlsErrorString());
         //if(dtlsAssociation->crypto.isConnectionEncrypted()){
             emit packetSent(packetToSend);
 
