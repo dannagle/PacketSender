@@ -1153,6 +1153,7 @@ void Settings::on_chooseLanguageButton_clicked()
 
 
 
+#ifndef CONSOLE_BUILD
 void Settings::on_responsePacketBox_currentIndexChanged(int index)
 {
 
@@ -1174,5 +1175,7 @@ void Settings::on_responsePacketBox_currentIndexChanged(int index)
 
     ui->responsePacketBox->setCurrentIndex(0);
 
+
 }
+#endif
 
