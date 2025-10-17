@@ -2,10 +2,8 @@ echo Building Installers
 set /p BUILD_VERSION=<buildversion.txt
 set "BUILD_VERSION=%BUILD_VERSION: =%"
 cd C:\Users\danie\github\naglecode-installers\packetsenderinstaller\installer
-D:
 move *.* ../archive
-cd ..
-
+cd C:\Users\danie\github\naglecode-installers\packetsenderinstaller\
 "C:\Program Files\7-Zip\7z.exe" a PacketSenderPortable_v%BUILD_VERSION%.zip PacketSenderPortable
 move PacketSenderPortable_v%BUILD_VERSION%.zip installer
 "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" packetsender64bit.iss
