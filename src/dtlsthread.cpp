@@ -56,6 +56,15 @@ std::vector<QString> Dtlsthread::getCmdInput(Packet sendpacket, QSettings& setti
     QString defaultCertFile = CERTFILE;
     QString defaultKeyFile = KEYFILE;
     QString defaultCAFile = CAFILE;
+
+
+    QFileInfo fileInfo(defaultCAFile);
+    defaultCAFile = (fileInfo.absolutePath());
+
+    QDEBUGVAR(defaultCertFile);
+    QDEBUGVAR(defaultKeyFile);
+    QDEBUGVAR(defaultCAFile);
+
     cmdComponents.push_back(settings.value("sslPrivateKeyPath", defaultKeyFile).toString());
     cmdComponents.push_back(settings.value("sslLocalCertificatePath", defaultCertFile).toString());
     QString sslCaPath = settings.value("sslCaPath", defaultCAFile).toString();
