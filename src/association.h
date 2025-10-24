@@ -39,6 +39,7 @@ signals:
     void infoMessage(const QString &message);
     void handShakeComplited();
     void receivedDatagram(QByteArray plainText);
+    void packetSent(Packet);
 
 private slots:
     void udpSocketConnected();

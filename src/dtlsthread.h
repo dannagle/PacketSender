@@ -44,13 +44,14 @@ public slots:
     void sendPersistant(Packet sendpacket);
     void handShakeComplited();
     void receivedDatagram(QByteArray plainText);
+    void packetSentEcho(Packet packetEcho);
 
 signals:
     void toStatusBar(const QString & message, int timeout = 0, bool override = false);
     void connectStatus(QString);
     void packetSent(Packet);
     void packetReceived(Packet);
-
+    void error(QSslSocket::SocketError socketError);
 
 };
 #else

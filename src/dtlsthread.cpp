@@ -27,10 +27,12 @@ void Dtlsthread::run()
     dtlsAssociation = initDtlsAssociation();
     dtlsAssociation->closeRequest = false;
     connect(dtlsAssociation, &DtlsAssociation::handShakeComplited,this, &Dtlsthread::handShakeComplited);
+    QDEBUG() << "packet echo" << connect(dtlsAssociation, &DtlsAssociation::packetSent, this, &Dtlsthread::packetSentEcho);
 
     dtlsAssociation->startHandshake();
     //dtlsAssociation->crypto.continueHandshake()
     connect(&(dtlsAssociation->crypto), &QDtls::handshakeTimeout, this, &Dtlsthread::onHandshakeTimeout);
+
     writeMassage(sendpacket, dtlsAssociation);
     dtlsAssociation->socket.waitForReadyRead();
     if(persistentRequest){
@@ -135,7 +137,7 @@ void Dtlsthread::persistentConnectionLoop()
         if (sendpacket.hexString.isEmpty() /*&& sendpacket.persistent */ && (clientConnection->bytesAvailable() == 0)) {
             count++;
             if (count % 10 == 0) {
-                emit connectStatus("Connected and idle.");
+                QDEBUG() << ("Connected and idle.");
             }
             clientConnection->waitForReadyRead(200);
             continue;
@@ -143,21 +145,21 @@ void Dtlsthread::persistentConnectionLoop()
 
         if (clientConnection->state() != QAbstractSocket::ConnectedState /*&& sendPacket.persistent*/) {
             QDEBUG() << "Connection broken.";
-            emit connectStatus("Connection broken");
+            QDEBUG() << ("Connection broken");
 
             break;
         }
 
         if (sendpacket.receiveBeforeSend) {
             QDEBUG() << "Wait for data before sending...";
-            emit connectStatus("Waiting for data");
+            QDEBUG() << ("Waiting for data");
             clientConnection->waitForReadyRead(500);
 
             Packet tcpRCVPacket;
             tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
             if (!tcpRCVPacket.hexString.trimmed().isEmpty()) {
                 QDEBUG() << "Received: " << tcpRCVPacket.hexString;
-                emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
+                QDEBUG() << ("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
 
                 tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                 tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
@@ -189,7 +191,7 @@ void Dtlsthread::persistentConnectionLoop()
         } // end receive before send
 
         if(sendpacket.getByteArray().size() > 0) {
-            emit connectStatus("Sending data:" + sendpacket.asciiString());
+            QDEBUG() << ("Sending data:" + sendpacket.asciiString());
             QDEBUG() << "Attempting write data";
         }
 
@@ -213,7 +215,7 @@ void Dtlsthread::persistentConnectionLoop()
         tcpPacket.fromPort = sendpacket.port;
 
         clientConnection->waitForReadyRead(500);
-        emit connectStatus("Waiting to receive");
+        QDEBUG() << ("Waiting to receive");
         tcpPacket.hexString.clear();
 
         while (clientConnection->bytesAvailable()) {
@@ -233,7 +235,7 @@ void Dtlsthread::persistentConnectionLoop()
             //emit packetSent(tcpPacket);
         }
 
-        emit connectStatus("Reading response");
+        QDEBUG() << ("Reading response");
 
         tcpPacket.hexString = recievedMassage;
 
@@ -248,10 +250,10 @@ void Dtlsthread::persistentConnectionLoop()
         }
 
     } // end while connected
-    emit connectStatus("Disconnected");
+    QDEBUG() << ("Disconnected");
 
     if (dtlsAssociation->closeRequest) {
-        emit connectStatus("Disconnected");
+        QDEBUG() << ("Disconnected");
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
         //quit();
@@ -275,6 +277,12 @@ void Dtlsthread::receivedDatagram(QByteArray plainText){
     recPacket.port = dtlsAssociation->socket.localPort();
     recPacket.tcpOrUdp = "DTLS";
     emit packetReceived(recPacket);
+}
+
+void Dtlsthread::packetSentEcho(Packet packetEcho)
+{
+
+    emit packetReceived(packetEcho);
 }
 
 
@@ -341,6 +349,9 @@ void Dtlsthread::onTimeout(){
 
 DtlsAssociation* Dtlsthread::initDtlsAssociation(){
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QDEBUG();
+
     if (settings.status() != QSettings::NoError) {
         sendpacket.errorString ="Can't open settings file.";
     }
@@ -362,10 +373,12 @@ DtlsAssociation* Dtlsthread::initDtlsAssociation(){
 
 void Dtlsthread::onHandshakeTimeout() {
     // Introduce a delay before retrying
+    QDEBUG();
     QTimer::singleShot(1000, this, &Dtlsthread::retryHandshake);
 }
 
 void Dtlsthread::retryHandshake() {
+    QDEBUG();
     dtlsAssociation->crypto.handleTimeout(&dtlsAssociation->socket);
 }
 
