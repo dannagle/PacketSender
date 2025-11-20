@@ -8,10 +8,21 @@ QStatusBar::item {
     border-radius: 3px;
 } 
 
-/*
-QStatusBar QPushButton:hover,
-QStatusBar QPushButton:checked:hover{
-    border: 1px transparent #148CD2;
+QStatusBar::item {
+    padding: 3px;
+    border-radius: 3px;
+}
+QTableWidget::item:selected {
+    background-color: #fff9c4;
+    color: black;
 }
 
-*/
+
+QTableWidget::item:selected {
+    background-color: #fff9c4;   /* light yellow */
+    color: black;
+}
+
+QTableWidget::item:hover {
+    background-color: #fffbda;
+}
