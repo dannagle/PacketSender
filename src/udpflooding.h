@@ -19,7 +19,7 @@ class ThreadSender : public QThread
         qint64  getElapsedMS();
         QString ip;
         quint16 port;
-        int delay;
+        double delay;
         bool speedSendEnabled;
         QString ascii;
         QByteArray hex;

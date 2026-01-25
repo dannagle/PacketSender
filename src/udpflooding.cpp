@@ -69,7 +69,7 @@ void UDPFlooding::on_startButton_clicked()
     bool ok1, ok2;
 
     ui->portEdit->text().toUInt(&ok1);
-    ui->delayEdit->text().toInt(&ok2);
+    ui->delayEdit->text().toDouble(&ok2);
 
 
     if (!ok1) {
@@ -87,7 +87,7 @@ void UDPFlooding::on_startButton_clicked()
     thread->ascii = ui->asciiEdit->text();
     thread->ip = ui->ipEdit->text();
     thread->port = static_cast<quint16>(ui->portEdit->text().toUInt(&ok1));
-    thread->delay = ui->delayEdit->text().toInt(&ok2);
+    thread->delay = ui->delayEdit->text().toDouble(&ok2);
 
 
     // do a swap test to see if it is used.
@@ -221,7 +221,8 @@ void ThreadSender::run()
 
     msleep(10); //momentarily break thread
 
-    bool full_speed = delay == 0;
+    bool full_speed = floor(delay * 1000) == 0;
+    QDEBUGVAR(full_speed);
 
     elapsedTimer.start();
 
@@ -243,8 +244,8 @@ void ThreadSender::run()
             }
         }
     } else if (speedSendEnabled && delay > 0) {
-        int speed = delay;
-        const int packets_to_send_per_sec = ceil((double) speed * 1024 * 1024 / hex.size());
+        double speed = delay;
+        const int packets_to_send_per_sec = ceil((double) (speed * 1024 * 1024) / hex.size());
 
         int steps_in_one_second = 4; //send packets in 4 bursts
         int part_of_second = 1000 / steps_in_one_second; // 250ms
