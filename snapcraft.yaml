@@ -22,6 +22,7 @@ issues:
 donation:
   - https://www.paypal.com/biz/fund?id=RGDM593DYR9LJ
 
+
 platforms:
   amd64:
     build-on: [amd64]
@@ -30,32 +31,67 @@ platforms:
     build-on: [arm64]
     build-for: [arm64]
 
+# sudo snap install packetsender*.snap --dangerous
+
 grade: stable
 base: core24
 confinement: strict
+environment:
+  QT_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins"
 
 apps:
   packetsender:
     command: usr/local/bin/packetsender
-    extensions: [kde-neon-6]
     desktop: usr/share/applications/packetsender.desktop
     plugs:
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
       - home
       - removable-media
       - network
       - cups
+    environment:
+      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libproxy:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins
 
 parts:
   packetsender:
     plugin: qmake
     source: src/
     qmake-project-file: PacketSenderSnap.pro
-
+    qmake-major-version: 6
+    build-environment:
+      - QT_SELECT: qt6
     build-packages:
       - build-essential
+      - qt6-base-dev
+      - libqt6gui6
+      - libqt6core6
+      - qtchooser
+      - libxkbcommon-dev
+      - qt6-declarative-dev
+      - libgl1-mesa-dev
+      - libglvnd-dev
       - libssl-dev
+      - libqt6core6
+      - libqt6gui6
+      - libqt6network6t64
+      - libqt6widgets6
+      - qt6-translations-l10n
 
     stage-packages:
+      - qt6-base-dev
+      - qt6-declarative-dev
       - libproxy1v5
+      - libqt6core6
+      - libqt6gui6
+      - libqt6widgets6
+      - libqt6network6
+      - libqt6printsupport6
       - libcurl4
+      - qt6-translations-l10n
+      - qt6-gtk-platformtheme
+      - qt6-qpa-plugins
+      - qt6-wayland
       - cups-client
