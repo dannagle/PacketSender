@@ -27,6 +27,9 @@ platforms:
   amd64:
     build-on: [amd64]
     build-for: [amd64]
+  arm64:
+    build-on: [arm64]
+    build-for: [arm64]
 
 # sudo snap install packetsender*.snap --dangerous
 
@@ -49,6 +52,8 @@ apps:
       - removable-media
       - network
       - cups
+    environment:
+      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libproxy:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins
       
 parts:
   packetsender:
@@ -78,6 +83,7 @@ parts:
     stage-packages:
       - qt6-base-dev
       - qt6-declarative-dev
+      - libproxy1v5
       - libqt6core6
       - libqt6gui6
       - libqt6widgets6
