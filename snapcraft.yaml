@@ -49,8 +49,8 @@ plugs:
 
 apps:
   packetsender:
-    command: usr/bin/PacketSender          # ← matches install DESTINATION bin
-    desktop: usr/share/applications/packetsender.desktop   # ← matches the RENAME
+    command: usr/local/bin/packetsender
+    desktop: usr/share/applications/packetsender.desktop
     extensions:
       - kde-neon-6
     plugs:
