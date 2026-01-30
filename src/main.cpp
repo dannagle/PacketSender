@@ -1304,9 +1304,8 @@ int main(int argc, char *argv[])
     } else {
 
 
-
-#ifdef __linux__
 #ifndef ISSNAP
+#ifdef __linux__
 
         //Workaround linux check for those that support xrandr. Does not work for snaps
         //Note that this bug is actually within Qt.
