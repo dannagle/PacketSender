@@ -49,8 +49,8 @@ plugs:
 
 apps:
   packetsender:
-    command: usr/local/bin/packetsender
-    desktop: usr/share/applications/packetsender.desktop
+    command: usr/bin/PacketSender          # ← matches install DESTINATION bin
+    desktop: usr/share/applications/packetsender.desktop   # ← matches the RENAME
     extensions:
       - kde-neon-6
     plugs:
@@ -65,13 +65,11 @@ apps:
       
 parts:
   packetsender:
-    plugin: qmake
+    plugin: cmake
     source: src/
-    qmake-project-file: PacketSenderSnap.pro
-    qmake-major-version: 6
-    build-environment:
-      - QT_SELECT: qt6
-
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
     build-packages:
       - build-essential
       - qt6-base-dev
