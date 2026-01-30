@@ -135,3 +135,13 @@ install(TARGETS
   ${PROJECT_NAME}
   DESTINATION bin
 )
+
+# Install desktop file for snap desktop integration
+install(FILES packetsender.desktop
+        DESTINATION share/applications
+        RENAME packetsender.desktop)
+
+# Optional but recommended: install scalable SVG icon
+install(FILES packetsender.svg
+        DESTINATION share/icons/hicolor/scalable/apps)
+
