@@ -44,6 +44,7 @@
 #define DEBUGMODE 0
 
 
+#include <cstdlib>
 
 #define STOPSENDCHECK()     if(hasstop) { \
                                 stopcounter++; \
@@ -57,7 +58,6 @@
 int intenseTrafficGenerator(QTextStream &out, QUdpSocket &sock, QHostAddress addy, unsigned int port, QString hexString, double bps, double rate, qint64 stopnum, qint64 usdelay);
 
 
-
 bool isGuiApp()
 {
 
@@ -67,7 +67,7 @@ bool isGuiApp()
     process->waitForFinished(500);
     int exitcode = process->exitCode();
     QDEBUGVAR(exitcode);
-    free(process);
+    delete process;
     if (exitcode > 0) {
         // This means xrandr exists, but it couldn't connect.
         return false;
@@ -1304,21 +1304,22 @@ int main(int argc, char *argv[])
     } else {
 
 
-#ifndef ISSNAP
-#ifdef __linux__
+        if(!ISSNAP()) {
+            #ifdef __linux__
 
-        //Workaround linux check for those that support xrandr. Does not work for snaps
-        //Note that this bug is actually within Qt.
-        if(!force_gui) {
-            if (!isGuiApp()) {
-                printf("\nCannot open display. Try --help to access console app. Try --gui to bypass this check.\n");
-                return -1;
-            }
-        } else {
-            QDEBUG() << "Bypassing GUI check";
+                        //Workaround linux check for those that support xrandr. Does not work for snaps
+                        //Note that this bug is actually within Qt.
+                        if(!force_gui) {
+                            if (!isGuiApp()) {
+                                printf("\nCannot open display. Try --help to access console app. Try --gui to bypass this check.\n");
+                                return -1;
+                            }
+                        } else {
+                            QDEBUG() << "Bypassing GUI check";
+                        }
+            #endif
         }
-#endif
-#endif
+
 
 
 #ifndef CONSOLE_BUILD

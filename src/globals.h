@@ -38,6 +38,7 @@
 
 #define DAYS_BETWEEN_UPDATES 7
 
+#define ISSNAP() (std::getenv("SNAP") != nullptr)
 
 #define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
 

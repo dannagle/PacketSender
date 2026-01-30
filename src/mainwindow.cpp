@@ -40,6 +40,7 @@
 #include <QStringList>
 #include <QSslCipher>
 
+#include <cstdlib>
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 
@@ -579,9 +580,10 @@ void MainWindow::updateManager(QByteArray response)
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
     //snaps do not need to check for updates.
-#ifdef ISSNAP
-    return;
-#endif
+
+    if(ISSNAP()) {
+        return;
+    }
 
     if (!response.isEmpty()) {
         QJsonDocument doc = QJsonDocument::fromJson(response);

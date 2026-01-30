@@ -18,6 +18,7 @@ set(
   mainpacketreceiver.h
   mainwindow.h
   panel.h
+  globals.h
   panelgenerator.h
   persistentconnection.h
   persistenthttp.h
