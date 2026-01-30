@@ -70,6 +70,7 @@ parts:
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
       - -DCMAKE_BUILD_TYPE=Release
+      - -DISSNAP=1
     build-packages:
       - build-essential
       - qt6-base-dev
