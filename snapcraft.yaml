@@ -36,13 +36,23 @@ platforms:
 grade: stable
 base: core24
 confinement: strict
-environment:
-  QT_PLUGIN_PATH: "$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins"
+
+plugs:
+  kf6-core24:
+    interface: content
+    target: $SNAP/kf6
+    default-provider: kf6-core24
+  gpu-2404:
+      interface: content
+      target: $SNAP/gpu-2404
+      default-provider: mesa-2404
 
 apps:
   packetsender:
-    command: usr/local/bin/packetsender
-    desktop: usr/share/applications/packetsender.desktop
+    command: usr/bin/PacketSender          # ← matches install DESTINATION bin
+    desktop: usr/share/applications/professortom-packetsender-test.desktop   # ← matches the RENAME
+    extensions:
+      - kde-neon-6
     plugs:
       - desktop
       - desktop-legacy
@@ -52,46 +62,24 @@ apps:
       - removable-media
       - network
       - cups
-    environment:
-      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/libproxy:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt6/plugins
-
+      
 parts:
   packetsender:
-    plugin: qmake
+    plugin: cmake
     source: src/
-    qmake-project-file: PacketSenderSnap.pro
-    qmake-major-version: 6
-    build-environment:
-      - QT_SELECT: qt6
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
     build-packages:
       - build-essential
       - qt6-base-dev
-      - libqt6gui6
-      - libqt6core6
-      - qtchooser
       - libxkbcommon-dev
       - qt6-declarative-dev
       - libgl1-mesa-dev
       - libglvnd-dev
       - libssl-dev
-      - libqt6core6
-      - libqt6gui6
-      - libqt6network6t64
-      - libqt6widgets6
-      - qt6-translations-l10n
 
     stage-packages:
-      - qt6-base-dev
-      - qt6-declarative-dev
       - libproxy1v5
-      - libqt6core6
-      - libqt6gui6
-      - libqt6widgets6
-      - libqt6network6
-      - libqt6printsupport6
       - libcurl4
-      - qt6-translations-l10n
-      - qt6-gtk-platformtheme
-      - qt6-qpa-plugins
-      - qt6-wayland
       - cups-client
