@@ -6,5 +6,5 @@ wsl php ci_cd/windows/win-prebuild.php
 GOTO End1
 
 :No1
-  ECHO Need build version param (such as 8.4.3)
+  ECHO Need build version param (such as 8.9.2)
 :End1
