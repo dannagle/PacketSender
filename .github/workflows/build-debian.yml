@@ -19,7 +19,7 @@ jobs:
     - name: install_dependencies
       run: |
            sudo apt update
-           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools libqt6uitools6 build-essential
+           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools build-essential
     - name: build
       run: |
            debuild --no-lintian --no-sign

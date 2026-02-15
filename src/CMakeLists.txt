@@ -12,7 +12,6 @@ find_package(Qt6 REQUIRED COMPONENTS
     Core
     Gui
     Network
-    UiTools
     Widgets
 )
 
@@ -109,7 +108,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::Core
   Qt6::Gui
   Qt6::Network
-  Qt6::UiTools
   Qt6::Widgets
 )
 
