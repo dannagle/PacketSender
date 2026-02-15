@@ -44,6 +44,8 @@ sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.pli
 
 export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
 
+mkdir build
+cd build
 
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -G Xcode \
   -DCMAKE_BUILD_TYPE=Release \
@@ -62,16 +64,18 @@ export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
   -DQT_FEATURE_core=ON \
   ..
 
+rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
+
+
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release
 
 
 ~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app  -appstore-compliant
 
-mv Release/packetsender.app sender.app
+mv Release/packetsender.app packetsender.app
 
 /usr/bin/codesign --option runtime --deep --force --sign  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
-rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
 
 rm -rf newbuild.dmg  || true

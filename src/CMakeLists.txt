@@ -8,7 +8,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Find Qt6 components
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Network Widgets)
+find_package(Qt6 REQUIRED COMPONENTS
+    Core
+    Gui
+    Network
+    UiTools
+    Widgets
+)
 
 set(
   PACKETSENDER_UI_HEADERS
@@ -90,19 +96,24 @@ set(
 )
 
 add_executable(
-  ${PROJECT_NAME}
+  ${PROJECT_NAME} MACOSX_BUNDLE
   ${PACKETSENDER_SRCS}
   ${PACKETSENDER_UI_HEADERS}
   ${PACKETSENDER_UIS}
   ${PACKETSENDER_QRC}
+  psicons.icns
+
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::Core
   Qt6::Gui
   Qt6::Network
+  Qt6::UiTools
   Qt6::Widgets
 )
+
+set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Build architectures for Mac OS X" FORCE)
 
 # -------------------
 # Versioning from git
@@ -116,6 +127,23 @@ string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.([0-9]+).*" "\\1" GIT_VERSION_PATCH "$
 string(REGEX REPLACE "^v[0-9]+\\.[0-9]+\\.[0-9]+(.*)" "\\1" GIT_VERSION_SHA1 "${GIT_VERSION}")
 set(GIT_VERSION_SHORT "${GIT_VERSION_MAJOR}.${GIT_VERSION_MINOR}")
 get_git_head_revision(GIT_REFSPEC GIT_HASH)
+
+
+# Tell CMake this is a macOS app bundle
+set(MACOSX_BUNDLE_ICON_FILE psicons.icns)
+
+
+# Copy the icon into the bundle Resources
+set_source_files_properties(psicons.icns PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources")
+
+
+# Use a custom Info.plist
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
+    OUTPUT_NAME "packetsender"
+)
+
 
 # -------------------
 # Packaging
