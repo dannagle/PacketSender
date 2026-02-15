@@ -51,14 +51,14 @@ make
 # /Users/dannagle/Qt/6.9.0/macos/bin/macdeployqt packetsender.app -appstore-compliant
 /Users/dannagle/Qt/6.9.0/macos/bin/macdeployqt packetsender.app -appstore-compliant
 
-/usr/bin/codesign --option runtime --deep --force --sign  38E41C6C66CCA827750A10E26539E038F033E933 --timestamp packetsender.app
+/usr/bin/codesign --option runtime --deep --force --sign  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 mv PacketSender.app /Users/dannagle/github/PacketSender
 
 rm -rf newbuild.dmg  || true
 "/Applications/DMG Canvas.app/Contents/Resources/dmgcanvas" "/Users/dannagle/github/PacketSender/PacketSender.dmgCanvas" newbuild.dmg 
-# -identity  38E41C6C66CCA827750A10E26539E038F033E933 -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "38E41C6C66CCA827750A10E26539E038F033E933" -notarizationAppleID "$2" -notarizationPassword "$3"
+# -identity  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 -notarizationPrimaryBundleID "com.packetsender.desktop" -identity "78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571" -notarizationAppleID "$2" -notarizationPassword "$3"
 
 rm -rf /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg || true
 mv newbuild.dmg /Users/dannagle/github/PacketSender/PacketSender_v$BUILD_VERSION.dmg
