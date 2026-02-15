@@ -42,14 +42,32 @@ sed -i '' '/BEGIN/,/END/c\
 echo "Replacing Info.plist with $BUILD_VERSION"
 sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
 
-# "/Users/dannagle/Qt/6.9.0/macos/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler
-"/Users/dannagle/Qt/6.9.0/macos/bin/qmake" PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64"
+export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
 
-# /Users/dannagle/Qt/6.9.0/macos/bin/qmake /Users/dannagle/github/PacketSender/src/PacketSender.pro -spec macx-clang CONFIG+=qtquickcompiler QMAKE_APPLE_DEVICE_ARCHS="x86_64 arm64" && /usr/bin/make qmake_all
 
-make 
-# /Users/dannagle/Qt/6.9.0/macos/bin/macdeployqt packetsender.app -appstore-compliant
-/Users/dannagle/Qt/6.9.0/macos/bin/macdeployqt packetsender.app -appstore-compliant
+~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -G Xcode \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+  -DCMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake \
+  -DCMAKE_INSTALL_PREFIX=~/QtBuilds/install \
+  -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+  -DQT_QMAKE_EXECUTABLE=~/Qt/6.9.2/macos/bin/qmake \
+  -DQT_DEBUG_FIND_PACKAGE=ON \
+  -DQT_NO_CREATE_VERSIONLESS_TARGETS=OFF \
+  -DQT_FEATURE_webengine=ON \
+  -DQT_FEATURE_multimedia=ON \
+  -DQT_FEATURE_network=ON \
+  -DQT_FEATURE_widgets=ON \
+  -DQT_FEATURE_gui=ON \
+  -DQT_FEATURE_core=ON \
+  ..
+
+~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release
+
+
+~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app  -appstore-compliant
+
+mv Release/packetsender.app sender.app
 
 /usr/bin/codesign --option runtime --deep --force --sign  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
