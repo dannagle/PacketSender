@@ -4,7 +4,7 @@ Upstream-Contact: https://github.com/dannagle/PacketSender/issues
 Source: https://github.com/dannagle/PacketSender
 
 Files: *
-Copyright: 2015-2025 NagleCode, LLC
+Copyright: 2015-2026 NagleCode, LLC
 License: GPL-2+
 
 Files: debian/*
