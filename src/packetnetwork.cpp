@@ -115,6 +115,13 @@ void PacketNetwork::kill()
     }
     sslServers.clear();
 
+    DtlsServer * dtls;
+    foreach (dtls, dtlsServers) {
+        dtls->close();
+        dtls->deleteLater();
+    }
+    dtlsServers.clear();
+
     QDEBUG();
 
     QCoreApplication::processEvents();

@@ -97,6 +97,7 @@ bool DtlsServer::isListening() const
 
 void DtlsServer::close()
 {
+    shutdown();
     listening = false;
 }
 
