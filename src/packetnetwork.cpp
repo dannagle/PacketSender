@@ -177,11 +177,11 @@ bool PacketNetwork::DTLSisSupported()
 
 bool PacketNetwork::DTLSListening()
 {
-    QUdpSocket * dtls;
+    DtlsServer * dtls;
     QDEBUGVAR(dtlsServers.size());
     foreach(dtls, dtlsServers) {
-        QDEBUGVAR(dtls->state());
-        if(dtls->state() == QAbstractSocket::BoundState) {
+        QDEBUGVAR(dtls->serverSocket.state());
+        if(dtls->serverSocket.state() == QAbstractSocket::BoundState) {
             return true;
         }
     }
@@ -322,7 +322,8 @@ void PacketNetwork::init()
 #endif
 
 
-    QUdpSocket *udpSocket, *dtlsSocket;
+    QUdpSocket *udpSocket;
+    DtlsServer *dtlsServer;
     ThreadedTCPServer *ssl, *tcp;
 
 
@@ -333,12 +334,10 @@ void PacketNetwork::init()
         if(!activateDTLS) {
             continue;
         }
-        bool bindResult = dtlsServer.listen(IPV4_OR_IPV6, dtlsPort);
+        dtlsServer = new DtlsServer();
+        bool bindResult = dtlsServer->listen(IPV4_OR_IPV6, dtlsPort);
 
-
-        dtlsSocket = &(dtlsServer.serverSocket);
-
-        dtlsSocket->setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
+        dtlsServer->serverSocket.setSocketOption(QAbstractSocket::MulticastTtlOption, 128);
 
         if ((!bindResult) && (!erroronce)) {
             QDEBUGVAR(dtlsPort);
@@ -356,13 +355,13 @@ void PacketNetwork::init()
                 msgBoxBindError.exec();
 
             }
-            dtlsSocket->close();
-            dtlsSocket->deleteLater();
+            dtlsServer->close();
+            dtlsServer->deleteLater();
 
         }
 
         if(bindResult) {
-            dtlsServers.append(dtlsSocket);
+            dtlsServers.append(dtlsServer);
         }
 
     }
@@ -494,15 +493,15 @@ void PacketNetwork::init()
     }
 
     if (activateDTLS) {
-        foreach (dtlsSocket, dtlsServers) {
-            connect(&dtlsServer, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
-            connect(&dtlsServer, SIGNAL(serverPacketSent(Packet)), this, SLOT(packetSentECHO(Packet)),Qt::UniqueConnection);
+        foreach (dtlsServer, dtlsServers) {
+            connect(&dtlsServer->serverSocket, SIGNAL(serverPacketReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)),Qt::UniqueConnection);
+            connect(&dtlsServer->serverSocket, SIGNAL(serverPacketSent(Packet)), this, SLOT(packetSentECHO(Packet)),Qt::UniqueConnection);
         }
 
     } else {
         QDEBUG() << "udp server disable";
-        foreach (dtlsSocket, dtlsServers) {
-            dtlsSocket->close();
+        foreach (dtlsServer, dtlsServers) {
+            dtlsServer->close();
         }
         dtlsServers.clear();
 
@@ -558,12 +557,10 @@ QList<int> PacketNetwork::getDTLSPortsBound()
 {
     QList<int> pList;
     pList.clear();
-    QUdpSocket * dtlsServer;
+    DtlsServer * dtlsServer;
     foreach (dtlsServer, dtlsServers) {
-        if(dtlsServer->BoundState == QAbstractSocket::BoundState) {
-            if(dtlsServer){
-                pList.append(dtlsServer->localPort());
-            }
+        if(dtlsServer->serverSocket.BoundState == QAbstractSocket::BoundState) {
+            pList.append(dtlsServer->serverSocket.localPort());
         }
     }
     return pList;
@@ -1317,11 +1314,15 @@ void PacketNetwork::on_twoVerify_StateChanged(){
     QString twoVerify = settings.value("twoVerify", "false").toString();
     if(twoVerify == "false"){
         settings.setValue("twoVerify", "true");
-        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+        foreach(auto dtlsServer, dtlsServers) {
+            dtlsServer->serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyPeer);
+        }
     }
     else{
         settings.setValue("twoVerify", "false");
-        dtlsServer.serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+        foreach(auto dtlsServer, dtlsServers) {
+            dtlsServer->serverConfiguration.setPeerVerifyMode(QSslSocket::VerifyNone);
+        }
 
     }
 }

@@ -81,7 +81,7 @@ bool DtlsServer::listen(const QHostAddress &address, quint16 port)
         shutdown();
         listening = serverSocket.bind(address, port);
         if (!listening)
-            QMessageBox::critical(nullptr, "Bind Error", "The server can't bind " + QString::number(serverSocket.localPort()) + serverSocket.errorString());
+            QMessageBox::critical(nullptr, "Bind Error", "The server can't bind " + QString::number(port) + ". " + serverSocket.errorString());
     } else {
         listening = true;
     }

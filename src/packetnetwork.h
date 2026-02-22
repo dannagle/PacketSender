@@ -41,8 +41,6 @@ class PacketNetwork : public QObject
 {
         Q_OBJECT
     public:
-        QList<QUdpSocket *> dtlsServers;
-        DtlsServer dtlsServer;
         QString keyPath;
         QString certPath;
         explicit PacketNetwork(QObject *parent = nullptr);
@@ -104,6 +102,9 @@ class PacketNetwork : public QObject
         void leaveMulticast();
         QUdpSocket * findMulticast(QString multicast);
         static bool DTLSisSupported();
+        QList<DtlsServer *> dtlsServers;
+
+
     signals:
         void packetReceived(Packet sendpacket);
         void toStatusBar(const QString & message, int timeout = 0, bool override = false);
@@ -146,6 +147,7 @@ private:
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;
         QList<QUdpSocket *> udpServers;
+
 
 
 };

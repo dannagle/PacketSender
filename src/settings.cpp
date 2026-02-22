@@ -107,9 +107,10 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     initialSslPrivateKeyPath = settings.value("sslPrivateKeyPath", "").toString();
 
     MainWindow *mainWindow = dynamic_cast<MainWindow*>(parent);
-    DtlsServer& dtlsServer = mainWindow->packetNetwork.dtlsServer;
 
-    connect(this, &Settings::loadingCertsAgain, &dtlsServer, &DtlsServer::on_signedCert_textChanged);
+    foreach(auto dtlsServer, mainWindow->packetNetwork.dtlsServers) {
+        connect(this, &Settings::loadingCertsAgain, dtlsServer, &DtlsServer::on_signedCert_textChanged);
+    }
 
     if(settings.value("sendSimpleAck").toString() == "false"){
         ui->sendSimpleAck->setChecked(false);
