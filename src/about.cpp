@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "ui_about.h"
 #include "packetnetwork.h"
+#include "settings.h"
 
 #include <QDesktopServices>
 #include <QDate>
@@ -44,7 +45,17 @@ About::About(QWidget *parent) :
 
 
     QPalette pal = ui->psLinkButton->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::white));
+
+    if(Settings::useDark()) {
+        pal.setColor(QPalette::Button, QColor(Qt::white));
+    } else {
+        pal.setColor(QPalette::Button, QColor(Qt::black));
+    }
+
+
+
+
+
     ui->psLinkButton->setAutoFillBackground(true);
     ui->psLinkButton->setPalette(pal);
 
@@ -55,6 +66,14 @@ About::About(QWidget *parent) :
     ui->psLinkButton->setCursor(Qt::PointingHandCursor);
     connect(ui->psLinkButton, SIGNAL(clicked()),
             this, SLOT(gotoPacketSenderDotCom()));
+
+
+    if(Settings::useDark()) {
+        ui->psAboutLabel->setStyleSheet("font-size: 24px; color: white;");
+    } else {
+        ui->psAboutLabel->setStyleSheet("font-size: 24px; color: black;");
+    }
+
 
 }
 
