@@ -306,7 +306,7 @@ void PacketNetwork::init()
         settings.sync();
     }
 
-    activateDTLS = settings.value("dtlsServerEnable", false).toBool();
+    activateDTLS = settings.value("dtlsServerEnable", false).toBool() && PacketNetwork::DTLSisSupported();
     activateUDP = settings.value("udpServerEnable", true).toBool();
     activateTCP = settings.value("tcpServerEnable", false).toBool();
     activateSSL = settings.value("sslServerEnable", false).toBool();
