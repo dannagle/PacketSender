@@ -26,3 +26,9 @@ QTableWidget::item:selected {
 QTableWidget::item:hover {
     background-color: #fffbda;
 }
+
+QLineEdit {
+    border: 1px solid grey;
+    border-radius: 4px; 
+    padding: 4px; 
+}
