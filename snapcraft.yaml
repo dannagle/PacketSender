@@ -1,6 +1,6 @@
 name: packetsender
 title: Packet Sender
-version: 8.9.2
+version: 8.10.1
 summary: Packet Sender - Free TCP/UDP/SSL/HTTP Utility
 icon: src/packetsender.svg
 description: |
