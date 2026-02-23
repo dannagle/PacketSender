@@ -41,6 +41,7 @@
 #define ISSNAP() (std::getenv("SNAP") != nullptr)
 
 #define HYPERLINKSTYLE "QPushButton { color: lightblue; } QPushButton::hover { color: #BC810C; } "
+#define HYPERLINKSTYLELIGHT "QPushButton { color: darkblue; } QPushButton::hover { color: #BC810C; } "
 
 //#define TEMPPATH  QDir::toNativeSeparators(QDir::temp().absolutePath()) + "/PacketSender/"
 #define SETTINGSPATH QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation )+ "/PacketSender/"

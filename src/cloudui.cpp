@@ -14,6 +14,8 @@
 #include <QUrlQuery>
 #include <QDesktopServices>
 
+#include "settings.h"
+
 bool isLetterNumUnder(QString str);
 
 void popMsg(QString title, QString msg, bool isError);
@@ -29,12 +31,20 @@ void linkifyButton(QPushButton * btn)
 {
 
     QPalette pal = btn->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::white));
+    if(Settings::useDark()) {
+        pal.setColor(QPalette::Button, QColor(Qt::white));
+    } else {
+        pal.setColor(QPalette::Button, QColor(Qt::black));
+    }
     btn->setAutoFillBackground(true);
     btn->setPalette(pal);
 
 
-    btn->setStyleSheet(HYPERLINKSTYLE);
+    if(Settings::useDark()) {
+        btn->setStyleSheet(HYPERLINKSTYLE);
+    } else {
+        btn->setStyleSheet(HYPERLINKSTYLELIGHT);
+    }
     btn->setFlat(true);
     btn->setCursor(Qt::PointingHandCursor);
 }
