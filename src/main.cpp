@@ -33,6 +33,7 @@
 #include <QProcess>
 #include <QStandardPaths>
 #include <QSettings>
+#include <QTimer>
 
 #include<tuple>
 
@@ -171,6 +172,29 @@ void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *main
     PanelGenerator::darkMode = isDark;
 }
 
+void setupThemePolling(QApplication *app, MainWindow *mainWindow, bool debugMode = false)
+{
+    QTimer *themePollTimer = new QTimer(app);  // parent = app so it auto-deletes
+    themePollTimer->setInterval(3000);
+
+    bool lastDark = Settings::useDark();
+
+    QObject::connect(themePollTimer, &QTimer::timeout, [app, mainWindow, debugMode, &lastDark]() {
+        bool current = Settings::useDark();
+
+        if (current != lastDark) {
+            qDebug() << "[THEME POLL] Change detected:" << (current ? "Dark" : "Light");
+            applyTheme(current, debugMode, app, mainWindow);
+            lastDark = current;
+        }
+    });
+
+    themePollTimer->start();
+
+    if(debugMode) {
+        qDebug() << "[THEME POLL] Timer started - polling every 3 seconds";
+    }
+}
 
 int main(int argc, char *argv[])
 {
