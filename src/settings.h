@@ -99,6 +99,9 @@ class Settings : public QDialog
         static const QString ALLHTTPSHOSTS;
         static const QString HTTPHEADERINDEX;
 
+        static const QString LIGHT_STYLE_SHEET_NAME;
+        static const QString DARK_STYLE_SHEET_NAME;
+
         static QList<int> portsToIntList(QString ports);
         static QString intListToPorts(QList<int> portList);
         void statusBarMessage(QString msg);
