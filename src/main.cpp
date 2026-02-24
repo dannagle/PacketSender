@@ -125,6 +125,43 @@ bool loadAndInstallTranslators(
 }
 
 
+void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *mainWin = nullptr) {
+    QFile file(isDark ? ":/qdarkstyle/style.qss" : ":/packetsender.css");
+    
+    QString styleSheet = "";
+    if (file.open(QFile::ReadOnly)) {
+        styleSheet = QLatin1String(file.readAll());
+        file.close();
+    } else {
+        qWarning() << "Failed to open embedded stylesheet:" << file.fileName()
+               << "(error:" << file.errorString() << ")";
+        return;  // <<<<< Don't set empty! Skip apply to avoid crash
+    }
+
+    app->setStyleSheet(styleSheet);
+
+    // Force repolish on EVERY widget in the app (including children)
+    QList<QWidget*> allWidgets = qApp->allWidgets();  // This gets everything, top-level + children
+    for (QWidget *widget : allWidgets) {
+        if (widget) {
+            if (!widget->styleSheet().isEmpty() && widget->styleSheet() != styleSheet) {
+                qDebug() << "Clearing local stylesheet on" << widget->objectName() << "or class" << widget->metaObject()->className();
+                widget->setStyleSheet("");
+            }
+
+            widget->style()->unpolish(widget);
+            widget->style()->polish(widget);
+            widget->update();
+            widget->updateGeometry();  // Helps layouts recalc if needed
+        }
+    }
+    
+    // Update global darkMode for other uses (e.g., in MainWindow)
+    PanelGenerator::darkMode = isDark;
+    // If needed, add: mainWin->darkMode = isDark; then mainWin->setIPMode(); or similar to re-theme buttons
+}
+
+
 int main(int argc, char *argv[])
 {
     int debugMode = DEBUGMODE;
