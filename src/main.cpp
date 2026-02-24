@@ -125,6 +125,15 @@ bool loadAndInstallTranslators(
 }
 
 
+void debugThemeFiles(bool debugMode) {
+    if(debugMode) {
+        QFile testDark(":/qdarkstyle/style.qss");
+        qDebug() << "Dark stylesheet exists?" << testDark.exists();
+        QFile testLight(":/packetsender.css");
+        qDebug() << "Light stylesheet exists?" << testLight.exists();
+    }
+}
+
 void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *mainWin = nullptr) {
     QFile file(isDark ? ":/qdarkstyle/style.qss" : ":/packetsender.css");
     
