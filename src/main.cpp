@@ -1448,26 +1448,8 @@ int main(int argc, char *argv[])
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
 
-        //Use default OS styling for non-Windows. Too many theme variants.
-
-        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
         bool useDark = Settings::useDark();
-        QString styleSheet = "";
-
-        if(useDark) {
-            if (file_dark.open(QFile::ReadOnly)) {
-                styleSheet = QLatin1String(file_dark.readAll());
-                a.setStyleSheet(styleSheet);
-                file_dark.close();
-            }
-        } else {
-            if (file_system.open(QFile::ReadOnly)) {
-                styleSheet = QLatin1String(file_system.readAll());
-                a.setStyleSheet(styleSheet);
-                file_system.close();
-            }
-        }
-
+        applyTheme(useDark, debugMode, &a);
 
 
         //panels_only = true;
@@ -1497,6 +1479,7 @@ int main(int argc, char *argv[])
         } else {
 
             MainWindow w;
+            setupThemePolling(&a, &w, debugMode);
             w.show();
             return a.exec();
 
