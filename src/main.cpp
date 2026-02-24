@@ -1465,9 +1465,6 @@ int main(int argc, char *argv[])
             PacketNetwork packetNetwork;
             packetNetwork.init();
             PanelGenerator * gpanel = new PanelGenerator();
-            if(!styleSheet.isEmpty()) {
-                gpanel->setStyleSheet(styleSheet);
-            }
 
             QDEBUG() << " packet send connect attempt:" << QObject::connect(gpanel, SIGNAL(sendPacket(Packet)),
                      &packetNetwork, SLOT(packetToSend(Packet)));
