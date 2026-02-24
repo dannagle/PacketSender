@@ -31,6 +31,7 @@ set(
   settings.h
   udpflooding.h
   languagechooser.h
+  translations.h
   wakeonlan.h
   association.h
   dtlsserver.h
@@ -81,6 +82,7 @@ set(
   threadedtcpserver.cpp
   udpflooding.cpp
   languagechooser.cpp
+  translations.cpp
   wakeonlan.cpp
   association.cpp
   dtlsserver.cpp
