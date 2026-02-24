@@ -135,6 +135,8 @@ void debugThemeFiles(bool debugMode) {
 }
 
 void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *mainWin = nullptr) {
+    debugThemeFiles(debugMode);
+
     QFile file(isDark ? ":/qdarkstyle/style.qss" : ":/packetsender.css");
     
     QString styleSheet = "";
