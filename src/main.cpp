@@ -169,7 +169,6 @@ void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *main
     
     // Update global darkMode for other uses (e.g., in MainWindow)
     PanelGenerator::darkMode = isDark;
-    // If needed, add: mainWin->darkMode = isDark; then mainWin->setIPMode(); or similar to re-theme buttons
 }
 
 
