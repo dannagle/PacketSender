@@ -29,6 +29,7 @@ SOURCES += mainwindow.cpp \
     subnetcalc.cpp \
     cloudui.cpp \
     multicastsetup.cpp \
+    translations.cpp \
     udpflooding.cpp \
     packetlogmodel.cpp \
     postdatagen.cpp \
@@ -47,6 +48,7 @@ HEADERS  += mainwindow.h \
     subnetcalc.h \
     cloudui.h \
     multicastsetup.h \
+    translations.h \
     udpflooding.h \
     packetlogmodel.h \
     postdatagen.h\
