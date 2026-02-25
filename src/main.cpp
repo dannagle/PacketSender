@@ -34,7 +34,10 @@
 #include <QStandardPaths>
 #include <QSettings>
 
+#include<tuple>
+
 #include "mainpacketreceiver.h"
+#include "translations.h"
 
 #ifndef CONSOLE_BUILD
     #include "panelgenerator.h"
@@ -95,7 +98,31 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 #define OUTIF()  if(!quiet) o<< "\n"
 #define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; out.flush(); outBuilder.clear();
 
+bool loadAndInstallTranslators(
+    QTranslator &qtTrans,
+    QTranslator &qtbaseTrans,
+    QTranslator &appTrans,
+    const QString &qtName,
+    const QString &qtbaseName,
+    const QString &appQmPath)
+{
+    bool qtOk     = qtTrans.load(qtName,     QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    bool qtbaseOk = qtbaseTrans.load(qtbaseName, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    bool appOk    = appTrans.load(appQmPath);
 
+    qDebug() << "qt lang loaded"     << qtOk;
+    qDebug() << "base lang loaded"   << qtbaseOk;
+    qDebug() << "app lang loaded"    << appOk;
+
+    bool allInstalled =
+        QApplication::installTranslator(&qtTrans) &&
+        QApplication::installTranslator(&qtbaseTrans) &&
+        QApplication::installTranslator(&appTrans);
+
+    qDebug() << "All translators installed:" << allInstalled;
+
+    return allInstalled;
+}
 
 
 int main(int argc, char *argv[])
@@ -1343,45 +1370,8 @@ int main(int argc, char *argv[])
             lang.exec();
         }
 
-
         QString language = Settings::language();
-
-
-        if(language == "Chinese") {
-            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_zh_cn"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_zh_cn"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_cn.qm");
-            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        }
-
-        if(language == "Spanish") {
-            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_es"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_es.qm");
-            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        }
-
-        if(language == "German") {
-            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_de"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_de"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_de.qm");
-            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        }
-
-        if(language == "French") {
-            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_fr"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_fr"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_fr.qm");
-            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        }
-
-
-        if(language == "Italian") {
-            QDEBUG() << "qt lang loaded" << translator_qt.load(QString("qt_it"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "base lang loaded" << translator_qtbase.load(QString("qtbase_it"), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-            QDEBUG() << "app lang loaded" << translator.load(":/languages/packetsender_it.qm");
-            QDEBUG() << QApplication::installTranslator(&translator_qt) << QApplication::installTranslator(&translator_qtbase) << QApplication::installTranslator(&translator) ;
-        }
+        Translations::installLanguage(language);
 
 
         QFile file_system(":/packetsender.css");
