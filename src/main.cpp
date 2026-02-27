@@ -38,9 +38,9 @@
 #include<tuple>
 
 #include "mainpacketreceiver.h"
-#include "translations.h"
 
 #ifndef CONSOLE_BUILD
+    #include "translations.h"
     #include "panelgenerator.h"
     #include "packetnetwork.h"
     #include "mainwindow.h"
@@ -98,6 +98,8 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 #define OUTVAR(var)  o<< "\n" << # var << ":" << var ;
 #define OUTIF()  if(!quiet) o<< "\n"
 #define OUTPUT() outBuilder = outBuilder.trimmed(); outBuilder.append("\n"); out << outBuilder; out.flush(); outBuilder.clear();
+
+#ifndef CONSOLE_BUILD
 
 bool loadAndInstallTranslators(
     QTranslator &qtTrans,
@@ -195,6 +197,8 @@ void setupThemePolling(QApplication *app, MainWindow *mainWindow, bool debugMode
         qDebug() << "[THEME POLL] Timer started - polling every 3 seconds";
     }
 }
+
+#endif
 
 int main(int argc, char *argv[])
 {

@@ -39,8 +39,10 @@ const QString Settings::FROMIP_STR = "From IP";
 const QString Settings::FROMPORT_STR = "From Port";
 const QString Settings::ERROR_STR = "Error";
 
+#ifndef CONSOLE_BUILD
 const QString Settings::LIGHT_STYLE_SHEET_NAME = ":/packetsender.css";
 const QString Settings::DARK_STYLE_SHEET_NAME = ":/qdarkstyle/style.qss";
+#endif
 
 QString Settings::logHeaderTranslate(QString txt)
 {
