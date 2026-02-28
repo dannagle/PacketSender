@@ -113,16 +113,16 @@ bool loadAndInstallTranslators(
     bool qtbaseOk = qtbaseTrans.load(qtbaseName, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     bool appOk    = appTrans.load(appQmPath);
 
-    qDebug() << "qt lang loaded"     << qtOk;
-    qDebug() << "base lang loaded"   << qtbaseOk;
-    qDebug() << "app lang loaded"    << appOk;
+    QDEBUG() << "qt lang loaded"     << qtOk;
+    QDEBUG() << "base lang loaded"   << qtbaseOk;
+    QDEBUG() << "app lang loaded"    << appOk;
 
     bool allInstalled =
         QApplication::installTranslator(&qtTrans) &&
         QApplication::installTranslator(&qtbaseTrans) &&
         QApplication::installTranslator(&appTrans);
 
-    qDebug() << "All translators installed:" << allInstalled;
+    QDEBUG() << "All translators installed:" << allInstalled;
 
     return allInstalled;
 }
@@ -131,9 +131,9 @@ bool loadAndInstallTranslators(
 void debugThemeFiles(bool debugMode) {
     if(debugMode) {
         QFile testDark(Settings::DARK_STYLE_SHEET_NAME);
-        qDebug() << "Dark stylesheet exists?" << testDark.exists();
+        QDEBUG() << "Dark stylesheet exists?" << testDark.exists();
         QFile testLight(Settings::LIGHT_STYLE_SHEET_NAME);
-        qDebug() << "Light stylesheet exists?" << testLight.exists();
+        QDEBUG() << "Light stylesheet exists?" << testLight.exists();
     }
 }
 
@@ -159,7 +159,7 @@ void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *main
     for (QWidget *widget : allWidgets) {
         if (widget) {
             if (!widget->styleSheet().isEmpty() && widget->styleSheet() != styleSheet) {
-                qDebug() << "Clearing local stylesheet on" << widget->objectName() << "or class" << widget->metaObject()->className();
+                QDEBUG() << "Clearing local stylesheet on" << widget->objectName() << "or class" << widget->metaObject()->className();
                 widget->setStyleSheet("");
             }
 
@@ -185,7 +185,7 @@ void setupThemePolling(QApplication *app, MainWindow *mainWindow, bool debugMode
         bool current = Settings::useDark();
 
         if (current != lastDark) {
-            qDebug() << "[THEME POLL] Change detected:" << (current ? "Dark" : "Light");
+            QDEBUG() << "[THEME POLL] Change detected:" << (current ? "Dark" : "Light");
             applyTheme(current, debugMode, app, mainWindow);
             lastDark = current;
         }
@@ -194,7 +194,7 @@ void setupThemePolling(QApplication *app, MainWindow *mainWindow, bool debugMode
     themePollTimer->start();
 
     if(debugMode) {
-        qDebug() << "[THEME POLL] Timer started - polling every 3 seconds";
+        QDEBUG() << "[THEME POLL] Timer started - polling every 3 seconds";
     }
 }
 
