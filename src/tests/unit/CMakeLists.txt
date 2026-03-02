@@ -1,6 +1,6 @@
 set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Forced architecture" FORCE)
 
-set(TEST_NAME "translation_test")
+set(TEST_NAME "packetsender_unittests")
 
 add_executable(${TEST_NAME}
     translation_test.cpp
