@@ -156,6 +156,17 @@ if(APPLE)
   )
 endif()
 
+# ==================== UNIT TESTS (QtTest) ====================
+option(PACKETSENDER_BUILD_TESTS "Build unit tests (QtTest)" OFF)
+
+if(PACKETSENDER_BUILD_TESTS)
+  find_package(Qt6 REQUIRED COMPONENTS Test)
+
+  enable_testing()
+
+  add_subdirectory(tests/unit)
+endif()
+
 # -------------------
 # Packaging
 # -------------------
