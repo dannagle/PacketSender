@@ -7,13 +7,13 @@
 
 #include <QtTest/QTest>
 
-class TestConnection : public QObject
+class ConnectionTests : public QObject
 {
     Q_OBJECT
 
 public:
-    // TestConnection();
-    // ~TestConnection();
+    // ConnectionTests();
+    // ~ConnectionTests();
 
 private slots:
     void testCreationAndId();

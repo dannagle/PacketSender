@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
     // Instantiate and run each
     runTest(new TranslationTest());
-    runTest(new TestConnection());
+    runTest(new ConnectionTests());
     // Add new ones here as you go, e.g. runTest(new TestSomethingElse());
 
     return status;  // 0 = all passed, non-zero = failures
