@@ -5,7 +5,7 @@
 #include <QtTest/QTest.h>
 
 // test header files
-#include "test_connection.h"
+#include "connection_tests.h"
 
 // code header files
 #include "connection.h"

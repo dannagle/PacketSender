@@ -9,7 +9,7 @@ add_executable(${TEST_NAME}
     translation_test.cpp
 
     ../../connection.cpp
-    test_connection.cpp
+    connection_tests.cpp
 )
 
 target_include_directories(${TEST_NAME} PRIVATE
