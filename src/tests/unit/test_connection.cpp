@@ -10,17 +10,17 @@
 // code header files
 #include "connection.h"
 
-// TestConnection::TestConnection(){}
-// TestConnection::~TestConnection(){}
+// TestConnection::ConnectionTests(){}
+// TestConnection::~ConnectionTests(){}
 
-void TestConnection::testCreationAndId()
+void ConnectionTests::testCreationAndId()
 {
     Connection conn("127.0.0.1", 12345);
     QVERIFY(!conn.id().isEmpty());
     QVERIFY(conn.id().length() > 20);  // typical UUID string length without braces
 }
 
-void TestConnection::testDestructionDoesNotCrash()
+void ConnectionTests::testDestructionDoesNotCrash()
 {
     // Scope-based destruction
     {
@@ -31,7 +31,7 @@ void TestConnection::testDestructionDoesNotCrash()
     QVERIFY(true);
 }
 
-void TestConnection::testMultipleInstancesHaveUniqueIds()
+void ConnectionTests::testMultipleInstancesHaveUniqueIds()
 {
     Connection a("host1", 1000);
     Connection b("host2", 2000);
