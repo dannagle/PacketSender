@@ -5,7 +5,7 @@
 #include <QtTest/QtTest>
 
 // test headers
-#include "translation_test.h"
+#include "translation_tests.h"
 
 // code headers
 #include "translations.h"

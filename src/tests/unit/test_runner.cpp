@@ -7,7 +7,7 @@
 #include <QtTest/Qtest.h>
 
 #include "connection_tests.h"
-#include "translation_test.h"
+#include "translation_tests.h"
 
 int main(int argc, char *argv[])
 {
