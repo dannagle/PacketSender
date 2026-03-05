@@ -3,10 +3,13 @@ set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Forced architecture" FORCE)
 set(TEST_NAME "packetsender_unittests")
 
 add_executable(${TEST_NAME}
+    test_runner.cpp
+
+    ../../translations.cpp
     translation_test.cpp
 
-    ../../translations.h
-    ../../translations.cpp
+    ../../connection.cpp
+    test_connection.cpp
 )
 
 target_include_directories(${TEST_NAME} PRIVATE
