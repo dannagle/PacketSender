@@ -3,38 +3,38 @@
 //
 
 #include <QtTest/QtTest>
+
+// test headers
+#include "translation_test.h"
+
+// code headers
 #include "translations.h"
 
-class TranslationTest : public QObject
+
+void TranslationTest::testInstallLanguage_data()
 {
-    Q_OBJECT
+    QTest::addColumn<QString>("language");
+    QTest::addColumn<bool>("expected");
 
-private slots:
-    void testInstallLanguage_data()
-    {
-        QTest::addColumn<QString>("language");
-        QTest::addColumn<bool>("expected");
+    QTest::newRow("empty → system default")     << ""         << true;
+    QTest::newRow("unsupported")                << "Klingon" << false;
+    QTest::newRow("Spanish (supported)")        << "Spanish"  << true;
+    QTest::newRow("German (supported)")         << "German"   << true;
+    QTest::newRow("French (supported)")         << "French"   << true;
+    QTest::newRow("Italian (supported)")        << "Italian"  << true;
+    QTest::newRow("Chinese (supported)")        << "Chinese"  << true;
+}
 
-        QTest::newRow("empty → system default")     << ""         << true;
-        QTest::newRow("unsupported")                << "Klingon" << false;
-        QTest::newRow("Spanish (supported)")        << "Spanish"  << true;
-        QTest::newRow("German (supported)")         << "German"   << true;
-        QTest::newRow("French (supported)")         << "French"   << true;
-        QTest::newRow("Italian (supported)")        << "Italian"  << true;
-        QTest::newRow("Chinese (supported)")        << "Chinese"  << true;
-    }
+void TranslationTest::testInstallLanguage()
+{
+    QFETCH(QString, language);
+    QFETCH(bool, expected);
 
-    void testInstallLanguage()
-    {
-        QFETCH(QString, language);
-        QFETCH(bool, expected);
+    // This exercises both loadAndInstallTranslators() and the map lookup
+    bool result = Translations::installLanguage(language);
 
-        // This exercises both loadAndInstallTranslators() and the map lookup
-        bool result = Translations::installLanguage(language);
+    QCOMPARE(result, expected);
+}
 
-        QCOMPARE(result, expected);
-    }
-};
-
-QTEST_MAIN(TranslationTest)
-#include "translation_test.moc"
+// QTEST_MAIN(TranslationTest)
+// #include "translation_test.moc"
