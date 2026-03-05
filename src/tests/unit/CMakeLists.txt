@@ -6,7 +6,7 @@ add_executable(${TEST_NAME}
     test_runner.cpp
 
     ../../translations.cpp
-    translation_test.cpp
+    translation_tests.cpp
 
     ../../connection.cpp
     connection_tests.cpp
