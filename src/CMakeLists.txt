@@ -62,6 +62,7 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  connection.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp
