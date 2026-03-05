@@ -11,7 +11,7 @@
 #include "translations.h"
 
 
-void TranslationTest::testInstallLanguage_data()
+void TranslationTests::testInstallLanguage_data()
 {
     QTest::addColumn<QString>("language");
     QTest::addColumn<bool>("expected");
@@ -25,7 +25,7 @@ void TranslationTest::testInstallLanguage_data()
     QTest::newRow("Chinese (supported)")        << "Chinese"  << true;
 }
 
-void TranslationTest::testInstallLanguage()
+void TranslationTests::testInstallLanguage()
 {
     QFETCH(QString, language);
     QFETCH(bool, expected);

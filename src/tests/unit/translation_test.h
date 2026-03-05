@@ -7,13 +7,13 @@
 
 #include <QtTest/QTest>
 
-class TranslationTest : public QObject
+class TranslationTests : public QObject
 {
     Q_OBJECT
 
 public:
-    // TranslationTest();
-    // ~TranslationTest();
+    // TranslationTests();
+    // ~TranslationTests();
 
 private slots:
     void testInstallLanguage_data();

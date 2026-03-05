@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     };
 
     // Instantiate and run each
-    runTest(new TranslationTest());
+    runTest(new TranslationTests());
     runTest(new ConnectionTests());
     // Add new ones here as you go, e.g. runTest(new TestSomethingElse());
 
