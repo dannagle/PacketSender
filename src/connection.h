@@ -61,6 +61,11 @@ private:
     // quint16 m_port = 0;
     std::unique_ptr<TCPThread> m_thread;  // RAII ownership of the thread
     bool m_threadStarted = false;
+    bool m_isIncoming = false;
+    bool m_isSecure = false;
+    bool m_isPersistent = false;
+    qintptr m_socketDescriptor = -1;
+
     static constexpr int threadShutdownWaitMs = 10000;
 
 protected:
