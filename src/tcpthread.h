@@ -36,7 +36,7 @@ class TCPThread : public QThread
         void run();
         bool sendFlag;
         bool incomingPersistent;
-        bool closeRequest;
+        bool closeRequest = false;
         bool isSecure;
         bool isEncrypted();
         Packet packetReply;
