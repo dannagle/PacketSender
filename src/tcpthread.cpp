@@ -84,18 +84,11 @@ TCPThread::TCPThread(const QString &host, quint16 port,
     clientConnection = new QSslSocket(this);
 
     // Connect signals for tracking
-    connect(clientConnection, &QAbstractSocket::connected,
-            this, &TCPThread::onConnected);           // add slot if needed
-    connect(clientConnection, &QAbstractSocket::errorOccurred,
-            this, &TCPThread::onSocketError);
-    connect(clientConnection, &QAbstractSocket::stateChanged,
-            this, &TCPThread::onStateChanged);
-
-    // Store host/port for run()
-    this->host = host;   // add QString host; quint16 port; as private members
-    this->port = port;
-
+    wireupSocketSignals();
     qDebug() << "TCPThread (managed client) created for" << host << ":" << port;
+}
+
+
 }
 
 // SLOTS
