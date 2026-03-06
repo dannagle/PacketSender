@@ -65,6 +65,7 @@ class TCPThread : public QThread
         Packet sendPacket;
         void init();
         void writeResponse(QSslSocket *sock, Packet tcpPacket);
+        void wireupSocketSignals();
         QSslSocket * clientConnection;
         bool insidePersistent;
 
