@@ -93,7 +93,42 @@ TCPThread::TCPThread(const QString &host, quint16 port,
     qDebug() << "TCPThread (managed client) created for" << host << ":" << port;
 }
 
+// Incoming / server constructor
+TCPThread::TCPThread(int socketDescriptor,
+                     bool isSecure,
+                     bool isPersistent,
+                     QObject *parent)
+    : QThread(parent)
+    , sendFlag(false)               // no auto-send on accept
+    , incomingPersistent(isPersistent)
+    , isSecure(isSecure)
+    , consoleMode(false)
+    , socketDescriptor(socketDescriptor)
+    , insidePersistent(false)
+    , m_managedByConnection(true)
+{
+    clientConnection = new QSslSocket(this);  // Always QSslSocket — works for plain TCP too
 
+    // Choose socket type based on isSecure
+    if (isSecure) {
+        // TODO: Load server certificate / private key here
+        /* If isSecure == true, prepare for server-side encryption (deferred to run() or init)
+         * For now, just log the intent
+         */
+        qDebug() << "Incoming secure connection requested — server SSL setup pending in run()";
+        // e.g. clientConnection->setLocalCertificate(...);
+        // clientConnection->setPrivateKey(...);
+    } // else {
+        // clientConnection = new QTcpSocket(this);
+    // }
+
+    // host and port unused in incoming mode — left to defaults
+
+    wireupSocketSignals();
+
+    qDebug() << "TCPThread (incoming) created with descriptor" << socketDescriptor
+             << (isSecure ? " (SSL)" : " (plain)")
+             << (isPersistent ? " - persistent" : "");
 }
 
 // SLOTS
