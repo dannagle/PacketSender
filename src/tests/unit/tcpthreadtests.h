@@ -5,12 +5,16 @@
 #ifndef TCPTHREADTESTS_H
 #define TCPTHREADTESTS_H
 
+#include <QObject>
 
 
-class TcpThread_tests {
-
+class TcpThreadTests : public QObject
+{
+    Q_OBJECT
+private slots:
+    void testIncomingConstructorBasic();
+    void testIncomingConstructorWithSecureFlag();
 };
-
 
 
 #endif //TCPTHREADTESTS_H
