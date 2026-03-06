@@ -10,6 +10,11 @@ add_executable(${TEST_NAME}
 
     ../../connection.cpp
     connection_tests.cpp
+
+    # project files that need to be added to the executable
+    ../../packet.cpp
+    ../../tcpthread.cpp
+    ../../sendpacketbutton.cpp
 )
 
 target_include_directories(${TEST_NAME} PRIVATE
@@ -21,6 +26,7 @@ target_link_libraries(${TEST_NAME} PRIVATE
     Qt6::Gui
     Qt6::Widgets                    # needed because installLanguage uses QApplication
     Qt6::Test
+    Qt6::Network
 )
 
 # Make ctest run it
