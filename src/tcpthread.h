@@ -21,6 +21,12 @@ class TCPThread : public QThread
     public:
         TCPThread(int socketDescriptor, QObject *parent);
         TCPThread(Packet sendPacket, QObject *parent);
+
+        // NEW constructor for Connection-managed persistent client
+        TCPThread(const QString &host, quint16 port,
+            const Packet &initialPacket = Packet(),
+            QObject *parent = nullptr);
+
         void sendAnother(Packet sendPacket);
         static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
@@ -48,6 +54,10 @@ class TCPThread : public QThread
     private slots:
         void wasdisconnected();
 
+        void onConnected();
+        void onSocketError(QAbstractSocket::SocketError socketError);
+        void onStateChanged(QAbstractSocket::SocketState state);
+
     private:
         int socketDescriptor;
         QString text;
@@ -58,6 +68,10 @@ class TCPThread : public QThread
         bool insidePersistent;
 
         void persistentConnectionLoop();
+
+        QString host;
+        quint16 port = 0;
+        bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 };
 
 #endif // TCPTHREAD_H
