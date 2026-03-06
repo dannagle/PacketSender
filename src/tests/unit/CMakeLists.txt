@@ -14,9 +14,11 @@ add_executable(${TEST_NAME}
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
 
+    ../../tcpthread.cpp
+    tcpthreadtests.cpp
+
     # project files that need to be added to the executable
     ../../packet.cpp
-    ../../tcpthread.cpp
     ../../sendpacketbutton.cpp
 )
 
