@@ -13,9 +13,28 @@
 // TestConnection::ConnectionTests(){}
 // TestConnection::~ConnectionTests(){}
 
+class TestConnection : public Connection
+{
+public:
+    TestConnection(const QString &host, quint16 port, const Packet &initial = Packet(),
+                   QObject *parent = nullptr)
+        : Connection(host, port, initial, parent)
+    {
+    }
+
+private:
+    static constexpr int testThreadShutdownWaitMs = 1000;
+
+protected:
+    int threadWaitTimeoutMs() const override
+    {
+        return testThreadShutdownWaitMs;
+    }
+};
+
 void ConnectionTests::testCreationAndId()
 {
-    Connection conn("127.0.0.1", 12345);
+    TestConnection conn("127.0.0.1", 12345);
     QVERIFY(!conn.id().isEmpty());
     QVERIFY(conn.id().length() > 20);  // typical UUID string length without braces
 }
@@ -24,7 +43,7 @@ void ConnectionTests::testDestructionDoesNotCrash()
 {
     // Scope-based destruction
     {
-        Connection conn("example.com", 80);
+        TestConnection conn("example.com", 80);
         // do nothing
     }
     // If we reach here without crash → good
@@ -33,8 +52,8 @@ void ConnectionTests::testDestructionDoesNotCrash()
 
 void ConnectionTests::testMultipleInstancesHaveUniqueIds()
 {
-    Connection a("host1", 1000);
-    Connection b("host2", 2000);
+    TestConnection a("host1", 1000);
+    TestConnection b("host2", 2000);
 
     QVERIFY(a.id() != b.id());
 }
@@ -42,7 +61,7 @@ void ConnectionTests::testMultipleInstancesHaveUniqueIds()
 // NEW: basic thread lifecycle test
 void ConnectionTests::testThreadStartsAndStops()
 {
-    Connection conn("127.0.0.1", 12345);
+    TestConnection conn("127.0.0.1", 12345);
 
     // Give thread a moment to start
     QTest::qWait(500);

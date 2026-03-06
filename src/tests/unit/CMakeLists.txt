@@ -11,6 +11,9 @@ add_executable(${TEST_NAME}
     ../../connection.cpp
     connection_tests.cpp
 
+    ../../connectionmanager.cpp
+    connectionmanager_tests.cpp
+
     # project files that need to be added to the executable
     ../../packet.cpp
     ../../tcpthread.cpp
