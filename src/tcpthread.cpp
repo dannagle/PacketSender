@@ -824,6 +824,51 @@ bool TCPThread::isEncrypted()
     }
 }
 
+bool TCPThread::isValid() const
+{
+    qDebug() << "TCPThread::isValid() called for thread" << this;
+
+    if (!clientConnection) {
+        qWarning() << "  → invalid: clientConnection is null";
+        return false;
+    }
+
+    qDebug() << "  Socket state:" << clientConnection->state()
+             << "error:" << clientConnection->error()
+             << "error string:" << clientConnection->errorString()
+             << "insidePersistent:" << insidePersistent;
+
+    if (clientConnection->error() != QAbstractSocket::UnknownSocketError &&
+        clientConnection->error() != QAbstractSocket::SocketTimeoutError) {
+        qWarning() << "  → invalid: serious socket error";
+        return false;
+        }
+
+    switch (clientConnection->state()) {
+    case QAbstractSocket::UnconnectedState:
+    case QAbstractSocket::ClosingState:
+        if (insidePersistent) {
+            qWarning() << "  → invalid: Unconnected + insidePersistent=true";
+            return false;
+        }
+        break;
+
+    case QAbstractSocket::HostLookupState:
+    case QAbstractSocket::ConnectingState:
+    case QAbstractSocket::ConnectedState:
+    case QAbstractSocket::BoundState:
+    case QAbstractSocket::ListeningState:
+        break;
+
+    default:
+        qWarning() << "  → invalid: unknown socket state";
+        return false;
+    }
+
+    qDebug() << "  → valid";
+    return true;
+}
+
 void TCPThread::sendPersistant(Packet sendpacket)
 {
     if ((!sendpacket.hexString.isEmpty()) && (clientConnection->state() == QAbstractSocket::ConnectedState)) {

@@ -38,6 +38,7 @@ class TCPThread : public QThread
         bool isEncrypted();
         Packet packetReply;
         bool consoleMode;
+        [[nodiscard]] bool isValid() const;
 
     signals:
         void error(QSslSocket::SocketError socketError);
