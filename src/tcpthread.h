@@ -27,6 +27,9 @@ class TCPThread : public QThread
             const Packet &initialPacket = Packet(),
             QObject *parent = nullptr);
 
+        // NEW constructor for Connection-managed incoming/server connections
+        TCPThread(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent = nullptr);
+
         void sendAnother(Packet sendPacket);
         static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
