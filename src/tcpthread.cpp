@@ -470,7 +470,13 @@ void TCPThread::persistentConnectionLoop()
 void TCPThread::closeConnection()
 {
     QDEBUG() << "Closing connection";
-    clientConnection->close();
+
+    if (clientConnection) {
+        clientConnection->close();
+        clientConnection->waitForDisconnected(1000);  // 1 second timeout
+    } else {
+        qWarning() << "closeConnection called with null clientConnection";
+    }
 }
 
 
