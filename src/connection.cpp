@@ -22,7 +22,20 @@ Connection::Connection(const QString &host, quint16 port, const Packet &initialP
 
     // Signal forwarding (unchanged)
     setupThreadConnections();
+    start();
+}
 
+// server/incoming constructor
+Connection::Connection(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent)
+    : QObject(parent),
+        m_id(QUuid::createUuid().toString(QUuid::WithoutBraces)),
+        m_isIncoming(true),
+        m_isSecure(isSecure),
+        m_isPersistent(isPersistent),
+        m_socketDescriptor(socketDescriptor) // useful for logging
+{
+    m_thread = std::make_unique<TCPThread>(socketDescriptor, isSecure, isPersistent, this);
+    setupThreadConnections();
     start();
 }
 
