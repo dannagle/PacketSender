@@ -39,6 +39,7 @@ public:
 
     void send(const Packet &packet);
     void start();
+    void close();
 
 signals:
     // NEW: forward important signals from TCPThread
@@ -58,6 +59,10 @@ private:
     // quint16 m_port = 0;
     std::unique_ptr<TCPThread> m_thread;  // RAII ownership of the thread
     bool m_threadStarted = false;
+    static constexpr int threadShutdownWaitMs = 10000;
+
+protected:
+    virtual int threadWaitTimeoutMs() const { return threadShutdownWaitMs; }  // default production value
 };
 
 
