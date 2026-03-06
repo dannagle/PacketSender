@@ -6,6 +6,14 @@
 #include "tcpthread.h"
 #include "packet.h"
 
+void Connection::setupThreadConnections()
+{
+    connect(m_thread.get(), &TCPThread::packetReceived, this, &Connection::onThreadPacketReceived);
+    connect(m_thread.get(), &TCPThread::connectStatus, this, &Connection::onThreadConnectStatus);
+    connect(m_thread.get(), &TCPThread::error, this, &Connection::onThreadError);
+    // Future-proof: if you later add more signals to TCPThread, add connects here
+}
+
 Connection::Connection(const QString &host, quint16 port, const Packet &initialPacket, QObject *parent)
     : QObject(parent)
     , m_id(QUuid::createUuid().toString(QUuid::WithoutBraces))

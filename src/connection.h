@@ -54,6 +54,8 @@ private slots:
     void onThreadError(QSslSocket::SocketError error);
 
 private:
+    void setupThreadConnections();
+
     QString m_id;
     // QString m_host;       // uncomment later if needed for reconnect
     // quint16 m_port = 0;
