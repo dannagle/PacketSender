@@ -68,6 +68,8 @@ void TCPThread::wireupSocketSignals()
     // connect(clientConnection, &QAbstractSocket::readyRead, this, &TCPThread::onReadyRead);
     // connect(clientConnection, &QAbstractSocket::bytesWritten, this, &TCPThread::onBytesWritten);
 }
+
+// Client / outgoing persistent constructor
 TCPThread::TCPThread(const QString &host, quint16 port,
                      const Packet &initialPacket,
                      QObject *parent)
