@@ -62,6 +62,7 @@ set(
   about.cpp
   brucethepoodle.cpp
   connection.cpp
+  connectionmanager.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp

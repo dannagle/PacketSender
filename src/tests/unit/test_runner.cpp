@@ -6,6 +6,7 @@
 
 #include <QtTest/Qtest.h>
 
+#include "connectionmanager_tests.h"
 #include "connection_tests.h"
 #include "translation_tests.h"
 
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
 
     // Then non-GUI or independent tests
     runNonGuiTest(new ConnectionTests());
+    runNonGuiTest(new ConnectionManagerTests());
 
     return status;  // 0 = all passed, non-zero = failures
 }
