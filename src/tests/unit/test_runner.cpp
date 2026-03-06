@@ -9,6 +9,7 @@
 #include "connectionmanager_tests.h"
 #include "connection_tests.h"
 #include "translation_tests.h"
+#include "tcpthreadtests.h"
 
 int main(int argc, char *argv[])
 {
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
     runGuiTest(new TranslationTests());
 
     // Then non-GUI or independent tests
+    runNonGuiTest(new TcpThreadTests());
     runNonGuiTest(new ConnectionTests());
     runNonGuiTest(new ConnectionManagerTests());
 
