@@ -542,8 +542,6 @@ void TCPThread::closeConnection()
 
 void TCPThread::run()
 {
-    closeRequest = false;
-
     //determine IP mode based on send address.
     int ipMode = 4;
     QHostAddress theAddress(sendPacket.toIP);
