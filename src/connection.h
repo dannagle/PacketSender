@@ -11,6 +11,15 @@
 #include <QObject>
 #include <QString>
 #include <QUuid>
+#include <QSslSocket>
+
+#include <memory>  // for std::unique_ptr
+
+#include "packet.h"
+
+// forward declarations
+class TCPThread;
+class Packet;
 
 /**
  * @brief RAII-style wrapper for a persistent connection.
@@ -21,20 +30,34 @@ class Connection : public QObject
     Q_OBJECT
 
 public:
-    explicit Connection(const QString &host, quint16 port, QObject *parent = nullptr);
+    explicit Connection(const QString &host, quint16 port, const Packet &initialPacket = Packet(), QObject *parent = nullptr);
     ~Connection() override;
 
-    QString id() const;
+    [[nodiscard]] QString id() const;
+    [[nodiscard]] bool isConnected() const;
+    [[nodiscard]] bool isSecure() const;
 
-    // Placeholder for future API
-    // void send(const QByteArray &data);
-    // etc.
+    void send(const Packet &packet);
+    void start();
+
+signals:
+    // NEW: forward important signals from TCPThread
+    void dataReceived(const Packet &packet);
+    void stateChanged(const QString &stateMessage);  // or use enum later
+    void errorOccurred(const QString &errorString);
+    void disconnected();
+
+private slots:
+    void onThreadPacketReceived(const Packet &p);
+    void onThreadConnectStatus(const QString &msg);
+    void onThreadError(QSslSocket::SocketError error);
 
 private:
     QString m_id;
     // QString m_host;       // uncomment later if needed for reconnect
     // quint16 m_port = 0;
-    // TCPThread *m_thread = nullptr;  // or std::unique_ptr<TCPThread> — add in next step
+    std::unique_ptr<TCPThread> m_thread;  // RAII ownership of the thread
+    bool m_threadStarted = false;
 };
 
 
