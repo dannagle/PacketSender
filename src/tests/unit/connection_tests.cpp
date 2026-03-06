@@ -58,7 +58,7 @@ void ConnectionTests::testMultipleInstancesHaveUniqueIds()
     QVERIFY(a.id() != b.id());
 }
 
-// NEW: basic thread lifecycle test
+// basic thread lifecycle test
 void ConnectionTests::testThreadStartsAndStops()
 {
     TestConnection conn("127.0.0.1", 12345);
