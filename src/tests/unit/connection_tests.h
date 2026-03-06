@@ -19,6 +19,7 @@ private slots:
     void testCreationAndId();
     void testDestructionDoesNotCrash();
     void testMultipleInstancesHaveUniqueIds();
+    void testThreadStartsAndStops();
 };
 
 #endif //TEST_CONNETION_H
