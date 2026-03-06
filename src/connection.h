@@ -31,6 +31,8 @@ class Connection : public QObject
 
 public:
     explicit Connection(const QString &host, quint16 port, const Packet &initialPacket = Packet(), QObject *parent = nullptr);
+    // Server/incoming constructor
+    explicit Connection(int socketDescriptor, bool isSecure = false, bool persistent = true, QObject *parent = nullptr);
     ~Connection() override;
 
     [[nodiscard]] QString id() const;
