@@ -51,6 +51,23 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     consoleMode =  false;
 }
 
+// Helper – called from all constructors that create/use a socket
+void TCPThread::wireupSocketSignals()
+{
+    if (!clientConnection) {
+        qWarning() << "setupSocketConnections called but clientConnection is null";
+        return;
+    }
+
+    connect(clientConnection, &QAbstractSocket::connected, this, &TCPThread::onConnected);
+    connect(clientConnection, &QAbstractSocket::errorOccurred, this, &TCPThread::onSocketError);
+    connect(clientConnection, &QAbstractSocket::stateChanged, this, &TCPThread::onStateChanged);
+
+    // Add any other common connects here in the future (bytesWritten, readyRead, etc.)
+    // Example:
+    // connect(clientConnection, &QAbstractSocket::readyRead, this, &TCPThread::onReadyRead);
+    // connect(clientConnection, &QAbstractSocket::bytesWritten, this, &TCPThread::onBytesWritten);
+}
 TCPThread::TCPThread(const QString &host, quint16 port,
                      const Packet &initialPacket,
                      QObject *parent)
