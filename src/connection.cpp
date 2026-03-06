@@ -21,12 +21,7 @@ Connection::Connection(const QString &host, quint16 port, const Packet &initialP
     m_thread = std::make_unique<TCPThread>(host, port, initialPacket, this);
 
     // Signal forwarding (unchanged)
-    connect(m_thread.get(), &TCPThread::packetReceived,
-            this, &Connection::onThreadPacketReceived);
-    connect(m_thread.get(), &TCPThread::connectStatus,
-            this, &Connection::onThreadConnectStatus);
-    connect(m_thread.get(), &TCPThread::error,
-            this, &Connection::onThreadError);
+    setupThreadConnections();
 
     start();
 }
