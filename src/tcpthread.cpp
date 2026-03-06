@@ -473,7 +473,17 @@ void TCPThread::closeConnection()
 
     if (clientConnection) {
         clientConnection->close();
-        clientConnection->waitForDisconnected(1000);  // 1 second timeout
+
+        // Only wait if the socket was ever connected or is still trying
+        // This prevents the "waitForDisconnected() is not allowed in UnconnectedState" warning
+        if (clientConnection->state() != QAbstractSocket::UnconnectedState &&
+            clientConnection->state() != QAbstractSocket::ClosingState) {
+            if (!clientConnection->waitForDisconnected(1000)) {
+                qWarning() << "waitForDisconnected timed out";
+            }
+            } else {
+                qDebug() << "Socket already unconnected or closing - no wait needed";
+            }
     } else {
         qWarning() << "closeConnection called with null clientConnection";
     }
