@@ -26,16 +26,25 @@ Connection::Connection(const QString &host, quint16 port, const Packet &initialP
 Connection::~Connection()
 {
     // NEW: RAII cleanup – close and wait for thread
+    close();
+
+    // Wait with a generous timeout; log if it hangs
+    if (m_thread && m_threadStarted && !m_thread->wait(threadWaitTimeoutMs())) {
+        qWarning() << "TCPThread for" << m_id << "did not finish within 10 seconds";
+    }
+    // unique_ptr will delete it automatically here
+}
+
+void Connection::close()
+{
     if (m_thread && m_threadStarted) {
         m_thread->closeConnection();
-        // Wait with a generous timeout; log if it hangs
-        if (!m_thread->wait(10000)) {
-            qWarning() << "TCPThread for" << m_id << "did not finish within 10 seconds";
-        }
-        // unique_ptr will delete it automatically here
+        emit disconnected();
+    } else {
+        qDebug() << "close() called but thread not started for" << m_id;
     }
-
 }
+
 QString Connection::id() const
 {
     return m_id;
