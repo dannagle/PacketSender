@@ -77,6 +77,18 @@ class TCPThread : public QThread
         QString host;
         quint16 port = 0;
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
+
+    protected:
+        // Protected accessors — added for unit tests
+        [[nodiscard]] QSslSocket* getClientConnection() const { return clientConnection; }
+        [[nodiscard]] int getSocketDescriptor() const { return socketDescriptor; }
+        [[nodiscard]] bool getIsSecure() const { return isSecure; }
+        [[nodiscard]] bool getIncomingPersistent() const { return incomingPersistent; }
+        [[nodiscard]] const QString& getHost() const { return host; }
+        [[nodiscard]] quint16 getPort() const { return port; }
+        [[nodiscard]] bool getSendFlag() const { return sendFlag; }
+        [[nodiscard]] bool getManagedByConnection() const { return m_managedByConnection; }
+
 };
 
 #endif // TCPTHREAD_H
