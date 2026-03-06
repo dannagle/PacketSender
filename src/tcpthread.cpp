@@ -631,7 +631,11 @@ void TCPThread::run()
 
         }
         clientConnection->close();
-        clientConnection->deleteLater();
+
+        if (!m_managedByConnection)
+        {
+            clientConnection->deleteLater();
+        }
 
         return;
     }
