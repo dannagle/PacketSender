@@ -76,8 +76,11 @@ TCPThread::TCPThread(const QString &host, quint16 port,
     , incomingPersistent(false) // treat like client persistent send
     , isSecure(false)
     , consoleMode(false)
-    , sendPacket(initialPacket) // set later if SSL
+    , socketDescriptor(-1) // set later if SSL
+    , sendPacket(initialPacket)
     , insidePersistent(false)
+    , host(host) // Store host for run()
+    , port(port) // Store port for run()
     , m_managedByConnection(true)
 {
     // Create socket (use QSslSocket if you plan to support SSL here)
