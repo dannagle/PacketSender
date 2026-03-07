@@ -16,9 +16,9 @@
 #include <memory>  // for std::unique_ptr
 
 #include "packet.h"
+#include "tcpthread.h"
 
 // forward declarations
-class TCPThread;
 class Packet;
 
 /**
