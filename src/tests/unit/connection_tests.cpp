@@ -89,5 +89,70 @@ void ConnectionTests::testThreadStartsAndStops()
     // but no crash = good enough for now
 }
 
+void ConnectionTests::testIncomingConstructor_setsModeFlagsCorrectly()
+{
+    const int dummyDescriptor = 9876;
+    bool isSecure = false;
+    bool isPersistent = true;
+
+    auto mockThread = std::make_unique<TestTcpThreadClass>(dummyDescriptor, isSecure, isPersistent);
+    mockThread->forceFastExitFromPersistentLoop();
+
+    TestConnection conn(dummyDescriptor, isSecure, isPersistent, nullptr, std::move(mockThread));
+
+    // Public queries (assuming you have or will add these getters)
+    // If not public yet, add them or use direct access via test subclass
+    QCOMPARE(conn.isIncoming(), true);          // add bool isIncoming() const { return m_isIncoming; }
+    QCOMPARE(conn.isSecure(), isSecure);
+    QCOMPARE(conn.isPersistent(), isPersistent); // add if missing: bool isPersistent() const { return m_isPersistent; }
+
+    // If m_socketDescriptor is private, skip or add getter
+    // QCOMPARE(conn.socketDescriptor(), qintptr(dummyDescriptor));
+}
+
+void ConnectionTests::testIncomingConstructor_generatesValidId()
+{
+    TestConnection conn(54321, false, true);
+
+    QString id = conn.id();
+    QVERIFY(!id.isEmpty());
+    QVERIFY(id.length() >= 32);               // rough UUID length check
+    QVERIFY(!id.contains('{'));               // if using WithoutBraces
+    QVERIFY(!id.contains('}'));
+    // Optional: more strict UUID format check if desired
+}
+
+void ConnectionTests::testIncomingConstructor_threadCreatedAndStartSucceeds()
+{
+    TestConnection conn(1111, false, true);
+
+    QVERIFY(conn.getThread() != nullptr);       // if m_thread protected or via getter
+    // or indirect check:
+    QVERIFY(conn.getThreadStarted());          // start() called in constructors, so thread should be started
+
+    // Optional: check no immediate error signal if you have spy setup
+    // QSignalSpy errorSpy(&conn, &Connection::errorOccurred);
+    // QCOMPARE(errorSpy.count(), 0);
+}
+
+void ConnectionTests::testIncomingConstructor_variations_securePersistent()
+{
+    // Variant 1: secure + non-persistent
+    {
+        TestConnection c(3333, true, false);
+        QCOMPARE(c.isSecure(), true);
+        QCOMPARE(c.isPersistent(), false);
+        QCOMPARE(c.isIncoming(), true);
+    }
+
+    // Variant 2: non-secure + persistent (default)
+    {
+        TestConnection c(4444);  // using defaults isSecure=false, persistent=true
+        QCOMPARE(c.isSecure(), false);
+        QCOMPARE(c.isPersistent(), true);
+        QCOMPARE(c.isIncoming(), true);
+    }
+}
+
 // QTEST_MAIN(TestConnection)
 // #include "test_connection.moc"   // needed for moc processing

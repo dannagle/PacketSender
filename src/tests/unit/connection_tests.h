@@ -22,6 +22,11 @@ private slots:
     void testMultipleInstancesHaveUniqueIds();
     void testThreadStartsAndStops();
 
+    void testIncomingConstructor_setsModeFlagsCorrectly();
+    void testIncomingConstructor_generatesValidId();
+    void testIncomingConstructor_threadCreatedAndStartSucceeds();
+    void testIncomingConstructor_variations_securePersistent();
+
     void init()
     {
         currentTestTimer.start();
