@@ -89,6 +89,7 @@ class TCPThread : public QThread
         [[nodiscard]] bool getSendFlag() const { return sendFlag; }
         [[nodiscard]] bool getManagedByConnection() const { return m_managedByConnection; }
 
+        [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
 };
 
 #endif // TCPTHREAD_H
