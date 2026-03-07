@@ -16,11 +16,11 @@ void Connection::setupThreadConnections()
 
 Connection::Connection(const QString &host, quint16 port, const Packet &initialPacket, QObject *parent)
     : QObject(parent)
-    , m_id(QUuid::createUuid().toString(QUuid::WithoutBraces))
 {
     m_thread = std::make_unique<TCPThread>(host, port, initialPacket, this);
 
     // Signal forwarding (unchanged)
+    assignUniqueId();
     setupThreadConnections();
     start();
 }
@@ -28,13 +28,13 @@ Connection::Connection(const QString &host, quint16 port, const Packet &initialP
 // server/incoming constructor
 Connection::Connection(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent)
     : QObject(parent),
-        m_id(QUuid::createUuid().toString(QUuid::WithoutBraces)),
         m_isIncoming(true),
         m_isSecure(isSecure),
         m_isPersistent(isPersistent),
         m_socketDescriptor(socketDescriptor) // useful for logging
 {
     m_thread = std::make_unique<TCPThread>(socketDescriptor, isSecure, isPersistent, this);
+    assignUniqueId();
     setupThreadConnections();
     start();
 }
