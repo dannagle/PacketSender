@@ -4,6 +4,7 @@ set(TEST_NAME "packetsender_unittests")
 
 add_executable(${TEST_NAME}
     test_runner.cpp
+    testdoubles/testtcpthreadclass.h
 
     ../../translations.cpp
     translation_tests.cpp
