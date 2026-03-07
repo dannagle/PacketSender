@@ -14,29 +14,49 @@ void Connection::setupThreadConnections()
     // Future-proof: if you later add more signals to TCPThread, add connects here
 }
 
-Connection::Connection(const QString &host, quint16 port, const Packet &initialPacket, QObject *parent)
-    : QObject(parent)
+// Target constructor
+Connection::Connection(std::unique_ptr<TCPThread> thread,
+                       bool isIncoming,
+                       bool isSecure,
+                       bool isPersistent,
+                       qintptr socketDescriptor,
+                       QObject *parent)
+    : QObject(parent),
+      m_isIncoming(isIncoming),
+      m_isSecure(isSecure),
+      m_isPersistent(isPersistent),
+      m_socketDescriptor(socketDescriptor)
 {
-    m_thread = std::make_unique<TCPThread>(host, port, initialPacket, this);
+    if (!thread) {
+        throw std::invalid_argument("Thread must be provided");
+    }
 
-    // Signal forwarding (unchanged)
+    m_thread = std::move(thread);
+    m_thread->setParent(this);
+
     assignUniqueId();
     setupThreadConnections();
     start();
 }
 
-// server/incoming constructor
-Connection::Connection(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent)
-    : QObject(parent),
-        m_isIncoming(true),
-        m_isSecure(isSecure),
-        m_isPersistent(isPersistent),
-        m_socketDescriptor(socketDescriptor) // useful for logging
+/* Client/outgoing constructor (delegates) */
+Connection::Connection(const QString &host,
+                    quint16 port,
+                    const Packet &initialPacket,
+                    QObject *parent,
+                    std::unique_ptr<TCPThread> thread)
+    : Connection(thread ? std::move(thread)
+                        : std::make_unique<TCPThread>(host, port, initialPacket, nullptr),
+                 false, false, true, -1, parent)
 {
-    m_thread = std::make_unique<TCPThread>(socketDescriptor, isSecure, isPersistent, this);
-    assignUniqueId();
-    setupThreadConnections();
-    start();
+}
+
+// Server/incoming constructor (delegates, preserves member assignments)
+Connection::Connection(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent, std::unique_ptr<TCPThread> thread)
+    : Connection(thread ? std::move(thread)
+                        : std::make_unique<TCPThread>(socketDescriptor, isSecure, isPersistent, nullptr),
+                 true, isSecure, isPersistent, socketDescriptor, parent)
+{
 }
 
 Connection::~Connection()

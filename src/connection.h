@@ -30,9 +30,24 @@ class Connection : public QObject
     Q_OBJECT
 
 public:
-    explicit Connection(const QString &host, quint16 port, const Packet &initialPacket = Packet(), QObject *parent = nullptr);
+    // target constructor
+    explicit Connection(std::unique_ptr<TCPThread> thread,
+                        bool isIncoming = false,
+                        bool isSecure = false,
+                        bool isPersistent = true,
+                        qintptr socketDescriptor = -1,
+                        QObject *parent = nullptr);
+    explicit Connection(const QString &host,
+                        quint16 port,
+                        const Packet &initialPacket = Packet(),
+                        QObject *parent = nullptr,
+                        std::unique_ptr<TCPThread> thread = nullptr);
     // Server/incoming constructor
-    explicit Connection(int socketDescriptor, bool isSecure = false, bool persistent = true, QObject *parent = nullptr);
+    explicit Connection(int socketDescriptor,
+                        bool isSecure = false,
+                        bool isPersistent = true,
+                        QObject *parent = nullptr,
+                        std::unique_ptr<TCPThread> thread = nullptr);
     ~Connection() override;
 
     [[nodiscard]] QString id() const;
