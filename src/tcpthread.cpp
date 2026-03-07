@@ -378,9 +378,15 @@ void TCPThread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while (clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+    while (!isInterruptionRequested() &&
+        clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
         insidePersistent = true;
 
+        if (isInterruptionRequested()) {  // early exit check (good hygiene)
+            qDebug() << "Interruption requested - exiting persistent loop";
+            closeRequest = true;
+            break;
+        }
 
         if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
             count++;
@@ -530,7 +536,7 @@ void TCPThread::persistentConnectionLoop()
         }
     } // end while connected
 
-    if (closeRequest) {
+    if (closeRequest || isInterruptionRequested()) {
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
     }
