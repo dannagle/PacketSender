@@ -2,9 +2,9 @@
 // Created by Tomas Gallucci on 3/5/26.
 //
 
-#include "connection.h"
 #include "tcpthread.h"
 #include "packet.h"
+#include "connection.h"
 
 void Connection::setupThreadConnections()
 {
