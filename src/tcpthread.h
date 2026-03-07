@@ -79,6 +79,8 @@ class TCPThread : public QThread
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 
     protected:
+        bool interruptibleWaitForReadyRead(int timeoutMs) const;
+
         // Protected accessors — added for unit tests
         [[nodiscard]] QSslSocket* getClientConnection() const { return clientConnection; }
         [[nodiscard]] int getSocketDescriptor() const { return socketDescriptor; }

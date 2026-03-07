@@ -131,6 +131,27 @@ TCPThread::TCPThread(int socketDescriptor,
              << (isPersistent ? " - persistent" : "");
 }
 
+
+bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
+{
+    const int chunk = 50;  // check every 50 ms
+    int remaining = divideWaitBy10ForUnitTest() ? timeoutMs / 10 : timeoutMs;
+
+    QDEBUG() << "initial remaining: " << remaining;
+
+    while (remaining > 0 && !isInterruptionRequested()) {
+        if (clientConnection->waitForReadyRead(chunk)) {
+            QDEBUG() << "inside if waitForReadyRead(chunk)";
+            return true;
+        }
+        remaining -= chunk;
+        QDEBUG() << "remaining after substraction: " << remaining;
+        QThread::msleep(1);  // tiny yield
+    }
+
+    return false;
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {
