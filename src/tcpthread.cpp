@@ -51,7 +51,7 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     consoleMode =  false;
 }
 
-// Helper – called from all constructors that create/use a socket
+// Helper – called from all Connection-managed constructors that create/use a socket
 void TCPThread::wireupSocketSignals()
 {
     if (!clientConnection) {
