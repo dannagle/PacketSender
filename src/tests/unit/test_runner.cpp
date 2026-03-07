@@ -40,5 +40,11 @@ int main(int argc, char *argv[])
     runNonGuiTest(new ConnectionTests());
     runNonGuiTest(new ConnectionManagerTests());
 
+    if (failures == 0) {
+        qInfo() << "All tests passed!";
+    } else {
+        qWarning() << "Tests failed! Total failures:" << failures;
+    }
+
     return failures;  // 0 = all passed, non-zero = failures
 }
