@@ -13,22 +13,22 @@
 
 int main(int argc, char *argv[])
 {
-    int status = 0;
+    int failures = 0;
 
     /* Run each test class in sequence
      * Use auto so we don't need to know the exact type
      */
 
     // Run GUI-dependent tests with their own QApplication
-    auto runGuiTest = [&status, &argc, &argv](QObject *testObject) {
+    auto runGuiTest = [&failures, &argc, &argv](QObject *testObject) {
         QApplication localApp(argc, argv);
-        status |= QTest::qExec(testObject, argc, argv);
+        failures += QTest::qExec(testObject, argc, argv);
         delete testObject;
     };
 
     // Run pure non-GUI tests without QApplication
-    auto runNonGuiTest = [&status, argc, argv](QObject *testObject) {
-        status |= QTest::qExec(testObject, argc, argv);
+    auto runNonGuiTest = [&failures, argc, argv](QObject *testObject) {
+        failures += QTest::qExec(testObject, argc, argv);
         delete testObject;
     };
 
@@ -40,5 +40,5 @@ int main(int argc, char *argv[])
     runNonGuiTest(new ConnectionTests());
     runNonGuiTest(new ConnectionManagerTests());
 
-    return status;  // 0 = all passed, non-zero = failures
+    return failures;  // 0 = all passed, non-zero = failures
 }
