@@ -6,8 +6,6 @@
 #define CONNECTIONMANAGER_H
 
 
-#include <QObject>
-#include <QHash>
 #include <memory>
 #include <unordered_map>
 #include "connection.h"
