@@ -83,6 +83,8 @@ void Connection::start()
 
     if (m_thread->isRunning()) {
         qDebug() << "Thread already running for" << m_id;
+        qDebug() << "setting m_threadStarted to true inside if is running";
+        m_threadStarted = true;
         return;
     }
 
