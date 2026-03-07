@@ -388,7 +388,7 @@ void TCPThread::persistentConnectionLoop()
                 //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
                 emit connectStatus("Connected and idle.");
             }
-            clientConnection->waitForReadyRead(200);
+            interruptibleWaitForReadyRead(200);
             continue;
         }
 
@@ -402,7 +402,7 @@ void TCPThread::persistentConnectionLoop()
         if (sendPacket.receiveBeforeSend) {
             QDEBUG() << "Wait for data before sending...";
             emit connectStatus("Waiting for data");
-            clientConnection->waitForReadyRead(500);
+            interruptibleWaitForReadyRead(500);
 
             Packet tcpRCVPacket;
             tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
@@ -472,7 +472,7 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.port = sendPacket.fromPort;
         tcpPacket.fromPort =    clientConnection->peerPort();
 
-        clientConnection->waitForReadyRead(500);
+        interruptibleWaitForReadyRead(500);
         emit connectStatus("Waiting to receive");
         tcpPacket.hexString.clear();
 
@@ -480,7 +480,7 @@ void TCPThread::persistentConnectionLoop()
             tcpPacket.hexString.append(" ");
             tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
             tcpPacket.hexString = tcpPacket.hexString.simplified();
-            clientConnection->waitForReadyRead(100);
+            interruptibleWaitForReadyRead(100);
         }
 
 
