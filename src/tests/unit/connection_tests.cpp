@@ -6,6 +6,7 @@
 
 // test header files
 #include "connection_tests.h"
+#include "testdoubles/testtcpthreadclass.h"
 
 // code header files
 #include "connection.h"
@@ -18,18 +19,32 @@ class TestConnection : public Connection
 public:
     TestConnection(const QString &host, quint16 port, const Packet &initial = Packet(),
                    QObject *parent = nullptr)
-        : Connection(host, port, initial, parent)
+        : Connection(host, port, initial, nullptr, std::make_unique<TestTcpThreadClass>(host, port, initial, nullptr))
+    {
+        m_threadWaitTimeoutMs = testThreadShutdownWaitMs;
+
+    }
+
+    TestConnection(int socketDescriptor, bool isSecure = false,
+        bool persistent = true, QObject *parent = nullptr)
+        : Connection(socketDescriptor, isSecure, persistent, nullptr,
+                 std::make_unique<TestTcpThreadClass>(socketDescriptor, isSecure, persistent, nullptr))
+    {
+        m_threadWaitTimeoutMs = testThreadShutdownWaitMs;
+    }
+
+    TestConnection(int socketDescriptor, bool isSecure, bool persistent,
+                   QObject *parent,
+                   std::unique_ptr<TestTcpThreadClass> thread)
+        : Connection(socketDescriptor, isSecure, persistent, parent, std::move(thread))
     {
     }
+
+    using Connection::getThread;
+    using Connection::getThreadStarted;
 
 private:
-    static constexpr int testThreadShutdownWaitMs = 1000;
-
-protected:
-    int threadWaitTimeoutMs() const override
-    {
-        return testThreadShutdownWaitMs;
-    }
+    static constexpr int testThreadShutdownWaitMs = 100;
 };
 
 void ConnectionTests::testCreationAndId()
