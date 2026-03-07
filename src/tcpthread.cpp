@@ -131,6 +131,21 @@ TCPThread::TCPThread(int socketDescriptor,
              << (isPersistent ? " - persistent" : "");
 }
 
+TCPThread::~TCPThread()
+{
+    if (isRunning()) {
+        qDebug() << "TCPThread destructor: requesting interruption and waiting...";
+        requestInterruption();           // tell run() to stop
+        quit();                          // if using exec(), stop event loop
+
+            qDebug() << "TCPThread destructor: waiting " << destructorWaitMs << " ms...";
+        if (!wait(destructorWaitMs)) {               // give it 5 seconds in production, 500 ms in unit tests
+            qWarning() << "TCPThread did not finish in time during destruction - terminating!";
+            terminate();                 // last resort (not ideal, but better than crash)
+        }
+    }
+
+}
 
 bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
 {

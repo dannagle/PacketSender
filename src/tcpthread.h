@@ -29,6 +29,7 @@ class TCPThread : public QThread
 
         // NEW constructor for Connection-managed incoming/server connections
         TCPThread(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent = nullptr);
+        ~TCPThread() override;
 
         void sendAnother(Packet sendPacket);
         static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
@@ -92,6 +93,9 @@ class TCPThread : public QThread
         [[nodiscard]] bool getManagedByConnection() const { return m_managedByConnection; }
 
         [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
+
+        int destructorWaitMs = 5000;
+
 };
 
 #endif // TCPTHREAD_H
