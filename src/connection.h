@@ -53,6 +53,9 @@ public:
     [[nodiscard]] QString id() const;
     [[nodiscard]] bool isConnected() const;
     [[nodiscard]] bool isSecure() const;
+    [[nodiscard]] bool isIncoming() const { return m_isIncoming; }
+    [[nodiscard]] bool isPersistent() const { return m_isPersistent; }  // rename if you prefer isPersistentConnection()
+    [[nodiscard]] qintptr socketDescriptor() const { return m_socketDescriptor; }
 
     void send(const Packet &packet);
     void start();
