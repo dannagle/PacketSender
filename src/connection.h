@@ -71,7 +71,8 @@ private:
     static constexpr int threadShutdownWaitMs = 10000;
 
 protected:
-    virtual int threadWaitTimeoutMs() const { return threadShutdownWaitMs; }  // default production value
+
+    int m_threadWaitTimeoutMs = 10000;
 
     void assignUniqueId() {m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);}
 };

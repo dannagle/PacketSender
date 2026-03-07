@@ -45,8 +45,8 @@ Connection::~Connection()
     close();
 
     // Wait with a generous timeout; log if it hangs
-    if (m_thread && m_threadStarted && !m_thread->wait(threadWaitTimeoutMs())) {
-        qWarning() << "TCPThread for" << m_id << "did not finish within 10 seconds";
+    if (m_thread && m_threadStarted && !m_thread->wait(m_threadWaitTimeoutMs)) {
+        qWarning() << "In ~Connection(): TCPThread for" << m_id << "did not finish within " << m_threadWaitTimeoutMs << " ms";
     }
     // unique_ptr will delete it automatically here
 }
