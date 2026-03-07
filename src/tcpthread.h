@@ -21,17 +21,28 @@ class TCPThread : public QThread
     public:
         TCPThread(int socketDescriptor, QObject *parent);
         TCPThread(Packet sendPacket, QObject *parent);
+
+        // NEW constructor for Connection-managed persistent client
+        TCPThread(const QString &host, quint16 port,
+            const Packet &initialPacket = Packet(),
+            QObject *parent = nullptr);
+
+        // NEW constructor for Connection-managed incoming/server connections
+        TCPThread(int socketDescriptor, bool isSecure, bool isPersistent, QObject *parent = nullptr);
+        ~TCPThread() override;
+
         void sendAnother(Packet sendPacket);
         static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
         void run();
         bool sendFlag;
         bool incomingPersistent;
-        bool closeRequest;
+        bool closeRequest = false;
         bool isSecure;
         bool isEncrypted();
         Packet packetReply;
         bool consoleMode;
+        [[nodiscard]] bool isValid() const;
 
     signals:
         void error(QSslSocket::SocketError socketError);
@@ -48,16 +59,43 @@ class TCPThread : public QThread
     private slots:
         void wasdisconnected();
 
+        void onConnected();
+        void onSocketError(QAbstractSocket::SocketError socketError);
+        void onStateChanged(QAbstractSocket::SocketState state);
+
     private:
         int socketDescriptor;
         QString text;
         Packet sendPacket;
         void init();
         void writeResponse(QSslSocket *sock, Packet tcpPacket);
+        void wireupSocketSignals();
         QSslSocket * clientConnection;
         bool insidePersistent;
 
         void persistentConnectionLoop();
+
+        QString host;
+        quint16 port = 0;
+        bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
+
+    protected:
+        bool interruptibleWaitForReadyRead(int timeoutMs) const;
+
+        // Protected accessors — added for unit tests
+        [[nodiscard]] QSslSocket* getClientConnection() const { return clientConnection; }
+        [[nodiscard]] int getSocketDescriptor() const { return socketDescriptor; }
+        [[nodiscard]] bool getIsSecure() const { return isSecure; }
+        [[nodiscard]] bool getIncomingPersistent() const { return incomingPersistent; }
+        [[nodiscard]] const QString& getHost() const { return host; }
+        [[nodiscard]] quint16 getPort() const { return port; }
+        [[nodiscard]] bool getSendFlag() const { return sendFlag; }
+        [[nodiscard]] bool getManagedByConnection() const { return m_managedByConnection; }
+
+        [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
+
+        int destructorWaitMs = 5000;
+
 };
 
 #endif // TCPTHREAD_H

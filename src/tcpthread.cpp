@@ -51,6 +51,173 @@ TCPThread::TCPThread(Packet sendPacket, QObject *parent)
     consoleMode =  false;
 }
 
+// Helper – called from all Connection-managed constructors that create/use a socket
+void TCPThread::wireupSocketSignals()
+{
+    if (!clientConnection) {
+        qWarning() << "setupSocketConnections called but clientConnection is null";
+        return;
+    }
+
+    connect(clientConnection, &QAbstractSocket::connected, this, &TCPThread::onConnected);
+    connect(clientConnection, &QAbstractSocket::errorOccurred, this, &TCPThread::onSocketError);
+    connect(clientConnection, &QAbstractSocket::stateChanged, this, &TCPThread::onStateChanged);
+
+    // Add any other common connects here in the future (bytesWritten, readyRead, etc.)
+    // Example:
+    // connect(clientConnection, &QAbstractSocket::readyRead, this, &TCPThread::onReadyRead);
+    // connect(clientConnection, &QAbstractSocket::bytesWritten, this, &TCPThread::onBytesWritten);
+}
+
+// Client / outgoing persistent constructor
+TCPThread::TCPThread(const QString &host, quint16 port,
+                     const Packet &initialPacket,
+                     QObject *parent)
+    : QThread(parent)
+    , sendFlag(true)
+    , incomingPersistent(false) // treat like client persistent send
+    , isSecure(false)
+    , consoleMode(false)
+    , socketDescriptor(-1) // set later if SSL
+    , sendPacket(initialPacket)
+    , insidePersistent(false)
+    , host(host) // Store host for run()
+    , port(port) // Store port for run()
+    , m_managedByConnection(true)
+{
+    // Create socket (use QSslSocket if you plan to support SSL here)
+    clientConnection = new QSslSocket(this);
+
+    // Connect signals for tracking
+    wireupSocketSignals();
+    qDebug() << "TCPThread (managed client) created for" << host << ":" << port;
+}
+
+// Incoming / server constructor
+TCPThread::TCPThread(int socketDescriptor,
+                     bool isSecure,
+                     bool isPersistent,
+                     QObject *parent)
+    : QThread(parent)
+    , sendFlag(false)               // no auto-send on accept
+    , incomingPersistent(isPersistent)
+    , isSecure(isSecure)
+    , consoleMode(false)
+    , socketDescriptor(socketDescriptor)
+    , insidePersistent(false)
+    , m_managedByConnection(true)
+{
+    clientConnection = new QSslSocket(this);  // Always QSslSocket — works for plain TCP too
+
+    // Choose socket type based on isSecure
+    if (isSecure) {
+        // TODO: Load server certificate / private key here
+        /* If isSecure == true, prepare for server-side encryption (deferred to run() or init)
+         * For now, just log the intent
+         */
+        qDebug() << "Incoming secure connection requested — server SSL setup pending in run()";
+        // e.g. clientConnection->setLocalCertificate(...);
+        // clientConnection->setPrivateKey(...);
+    } // else {
+        // clientConnection = new QTcpSocket(this);
+    // }
+
+    // host and port unused in incoming mode — left to defaults
+
+    wireupSocketSignals();
+
+    qDebug() << "TCPThread (incoming) created with descriptor" << socketDescriptor
+             << (isSecure ? " (SSL)" : " (plain)")
+             << (isPersistent ? " - persistent" : "");
+}
+
+TCPThread::~TCPThread()
+{
+    if (isRunning()) {
+        qDebug() << "TCPThread destructor: requesting interruption and waiting...";
+        requestInterruption();           // tell run() to stop
+        quit();                          // if using exec(), stop event loop
+
+            qDebug() << "TCPThread destructor: waiting " << destructorWaitMs << " ms...";
+        if (!wait(destructorWaitMs)) {               // give it 5 seconds in production, 500 ms in unit tests
+            qWarning() << "TCPThread did not finish in time during destruction - terminating!";
+            terminate();                 // last resort (not ideal, but better than crash)
+        }
+    }
+
+}
+
+bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
+{
+    const int chunk = 50;  // check every 50 ms
+    int remaining = divideWaitBy10ForUnitTest() ? timeoutMs / 10 : timeoutMs;
+
+    QDEBUG() << "initial remaining: " << remaining;
+
+    while (remaining > 0 && !isInterruptionRequested()) {
+        if (clientConnection->waitForReadyRead(chunk)) {
+            QDEBUG() << "inside if waitForReadyRead(chunk)";
+            return true;
+        }
+        remaining -= chunk;
+        QDEBUG() << "remaining after substraction: " << remaining;
+        QThread::msleep(1);  // tiny yield
+    }
+
+    return false;
+}
+
+// SLOTS
+void TCPThread::onConnected()
+{
+    QDEBUG() << "TCPThread: Connected to" << clientConnection->peerAddress().toString() << ":" << clientConnection->peerPort();
+
+    emit connectStatus("Connected");
+
+    // If this is a client persistent connection, start sending/receiving loop
+    if (sendFlag) {
+        persistentConnectionLoop();
+    }
+}
+
+void TCPThread::onSocketError(QAbstractSocket::SocketError socketError)
+{
+    QString errMsg = clientConnection ? clientConnection->errorString() : "Unknown socket error";
+    qWarning() << "TCPThread: Socket error" << socketError << "-" << errMsg;
+
+    emit error(socketError);
+    emit connectStatus("Error: " + errMsg);
+
+    // Optional: close and clean up
+    if (clientConnection) {
+        clientConnection->close();
+    }
+}
+
+void TCPThread::onStateChanged(QAbstractSocket::SocketState state)
+{
+    QString stateStr;
+    switch (state) {
+    case QAbstractSocket::UnconnectedState: stateStr = "Unconnected"; break;
+    case QAbstractSocket::HostLookupState:  stateStr = "Host Lookup"; break;
+    case QAbstractSocket::ConnectingState:  stateStr = "Connecting"; break;
+    case QAbstractSocket::ConnectedState:   stateStr = "Connected"; break;
+    case QAbstractSocket::BoundState:       stateStr = "Bound"; break;
+    case QAbstractSocket::ClosingState:     stateStr = "Closing"; break;
+    case QAbstractSocket::ListeningState:   stateStr = "Listening"; break;
+    default: stateStr = "Unknown"; break;
+    }
+
+    QDEBUG() << "TCPThread: State changed to" << stateStr;
+
+    emit connectStatus(stateStr);
+
+    // If disconnected unexpectedly and persistent, could try reconnect here
+    if (state == QAbstractSocket::UnconnectedState && !closeRequest) {
+        // Optional: emit disconnected() or retry logic
+    }
+}
+
 void TCPThread::sendAnother(Packet sendPacket)
 {
 
@@ -226,9 +393,15 @@ void TCPThread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while (clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+    while (!isInterruptionRequested() &&
+        clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
         insidePersistent = true;
 
+        if (isInterruptionRequested()) {  // early exit check (good hygiene)
+            qDebug() << "Interruption requested - exiting persistent loop";
+            closeRequest = true;
+            break;
+        }
 
         if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
             count++;
@@ -236,7 +409,7 @@ void TCPThread::persistentConnectionLoop()
                 //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
                 emit connectStatus("Connected and idle.");
             }
-            clientConnection->waitForReadyRead(200);
+            interruptibleWaitForReadyRead(200);
             continue;
         }
 
@@ -250,7 +423,7 @@ void TCPThread::persistentConnectionLoop()
         if (sendPacket.receiveBeforeSend) {
             QDEBUG() << "Wait for data before sending...";
             emit connectStatus("Waiting for data");
-            clientConnection->waitForReadyRead(500);
+            interruptibleWaitForReadyRead(500);
 
             Packet tcpRCVPacket;
             tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
@@ -320,7 +493,7 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.port = sendPacket.fromPort;
         tcpPacket.fromPort =    clientConnection->peerPort();
 
-        clientConnection->waitForReadyRead(500);
+        interruptibleWaitForReadyRead(500);
         emit connectStatus("Waiting to receive");
         tcpPacket.hexString.clear();
 
@@ -328,7 +501,7 @@ void TCPThread::persistentConnectionLoop()
             tcpPacket.hexString.append(" ");
             tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
             tcpPacket.hexString = tcpPacket.hexString.simplified();
-            clientConnection->waitForReadyRead(100);
+            interruptibleWaitForReadyRead(100);
         }
 
 
@@ -378,7 +551,7 @@ void TCPThread::persistentConnectionLoop()
         }
     } // end while connected
 
-    if (closeRequest) {
+    if (closeRequest || isInterruptionRequested()) {
         clientConnection->close();
         clientConnection->waitForDisconnected(100);
     }
@@ -389,14 +562,28 @@ void TCPThread::persistentConnectionLoop()
 void TCPThread::closeConnection()
 {
     QDEBUG() << "Closing connection";
-    clientConnection->close();
+
+    if (clientConnection) {
+        clientConnection->close();
+
+        // Only wait if the socket was ever connected or is still trying
+        // This prevents the "waitForDisconnected() is not allowed in UnconnectedState" warning
+        if (clientConnection->state() != QAbstractSocket::UnconnectedState &&
+            clientConnection->state() != QAbstractSocket::ClosingState) {
+            if (!clientConnection->waitForDisconnected(1000)) {
+                qWarning() << "waitForDisconnected timed out";
+            }
+            } else {
+                qDebug() << "Socket already unconnected or closing - no wait needed";
+            }
+    } else {
+        qWarning() << "closeConnection called with null clientConnection";
+    }
 }
 
 
 void TCPThread::run()
 {
-    closeRequest = false;
-
     //determine IP mode based on send address.
     int ipMode = 4;
     QHostAddress theAddress(sendPacket.toIP);
@@ -550,7 +737,11 @@ void TCPThread::run()
 
         }
         clientConnection->close();
-        clientConnection->deleteLater();
+
+        if (!m_managedByConnection)
+        {
+            clientConnection->deleteLater();
+        }
 
         return;
     }
@@ -737,6 +928,51 @@ bool TCPThread::isEncrypted()
     } else {
         return false;
     }
+}
+
+bool TCPThread::isValid() const
+{
+    qDebug() << "TCPThread::isValid() called for thread" << this;
+
+    if (!clientConnection) {
+        qWarning() << "  → invalid: clientConnection is null";
+        return false;
+    }
+
+    qDebug() << "  Socket state:" << clientConnection->state()
+             << "error:" << clientConnection->error()
+             << "error string:" << clientConnection->errorString()
+             << "insidePersistent:" << insidePersistent;
+
+    if (clientConnection->error() != QAbstractSocket::UnknownSocketError &&
+        clientConnection->error() != QAbstractSocket::SocketTimeoutError) {
+        qWarning() << "  → invalid: serious socket error";
+        return false;
+        }
+
+    switch (clientConnection->state()) {
+    case QAbstractSocket::UnconnectedState:
+    case QAbstractSocket::ClosingState:
+        if (insidePersistent) {
+            qWarning() << "  → invalid: Unconnected + insidePersistent=true";
+            return false;
+        }
+        break;
+
+    case QAbstractSocket::HostLookupState:
+    case QAbstractSocket::ConnectingState:
+    case QAbstractSocket::ConnectedState:
+    case QAbstractSocket::BoundState:
+    case QAbstractSocket::ListeningState:
+        break;
+
+    default:
+        qWarning() << "  → invalid: unknown socket state";
+        return false;
+    }
+
+    qDebug() << "  → valid";
+    return true;
 }
 
 void TCPThread::sendPersistant(Packet sendpacket)
