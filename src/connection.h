@@ -86,6 +86,8 @@ private:
     static constexpr int threadShutdownWaitMs = 10000;
 
 protected:
+    [[nodiscard]] TCPThread* getThread() const { return m_thread.get(); }
+    [[nodiscard]] bool getThreadStarted() const { return m_threadStarted; }
 
     int m_threadWaitTimeoutMs = 10000;
 
