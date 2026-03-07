@@ -72,6 +72,8 @@ private:
 
 protected:
     virtual int threadWaitTimeoutMs() const { return threadShutdownWaitMs; }  // default production value
+
+    void assignUniqueId() {m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);}
 };
 
 
