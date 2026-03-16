@@ -392,6 +392,12 @@ void TCPThread::writeResponse(QSslSocket *sock, Packet tcpPacket)
 void TCPThread::persistentConnectionLoop()
 {
     QDEBUG() << "Entering the forever loop";
+
+    if (closeRequest || isInterruptionRequested()) {
+        qDebug() << "Early exit from persistent loop due to close request";
+        return;
+    }
+
     int ipMode = 4;
     QHostAddress theAddress(sendPacket.toIP);
     if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
@@ -403,8 +409,10 @@ void TCPThread::persistentConnectionLoop()
         clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
         insidePersistent = true;
 
-        if (isInterruptionRequested()) {  // early exit check (good hygiene)
-            qDebug() << "Interruption requested - exiting persistent loop";
+        if (closeRequest || isInterruptionRequested()) {  // early exit check (good hygiene)
+            qDebug() << "Interruption or close requested - exiting persistent loop";
+            QDEBUG() << "closeRequest: " << closeRequest;
+            QDEBUG() << "isInterruptionRequested(): " << isInterruptionRequested();
             closeRequest = true;
             break;
         }
