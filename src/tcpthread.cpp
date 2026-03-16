@@ -90,6 +90,12 @@ TCPThread::TCPThread(const QString &host, quint16 port,
 
     // Connect signals for tracking
     wireupSocketSignals();
+
+    sendPacket.toIP = host;          // ← make run() use the passed host
+    sendPacket.port = port;          // ← make run() use the passed port
+    qDebug() << "Constructor set sendPacket.toIP =" << sendPacket.toIP
+             << "port =" << sendPacket.port;
+
     qDebug() << "TCPThread (managed client) created for" << host << ":" << port;
 }
 
@@ -594,6 +600,12 @@ void TCPThread::run()
     if (sendFlag) {
         QDEBUG() << "We are threaded sending!";
         clientConnection = new QSslSocket(nullptr);
+
+        // Use the constructor-passed host/port instead of sendPacket
+        QString connectHost = host.isEmpty() ? sendPacket.toIP : host;
+        quint16 connectPort = (port > 0) ? port : sendPacket.port;
+
+        qDebug() << "Connecting using host:" << connectHost << "port:" << connectPort;
 
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
