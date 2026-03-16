@@ -78,22 +78,20 @@ void Connection::close()
         return;
     }
 
+    if (m_isClosing) {
+        qDebug() << "close() already in progress for" << m_id;
+        return;
+    }
+
+    m_isClosing = true;
+
     qDebug() << "Connection::close() for" << m_id;
 
-    m_thread->closeConnection();          // sets closeRequest + interruption
-    m_thread->requestInterruption();      // extra safety
+    shutdownThreadSafely(2000);           // normal graceful timeout
 
-    // Optional: short wait if you want to ensure quick exit
-    // but DON'T block forever here — app might call close() on shutdown
-    if (!m_thread->wait(2000)) {
-        qWarning() << "Thread for" << m_id << "did not exit within 2 seconds after close request";
-    }
-
-    if (m_thread && !m_threadStarted) {
-        qDebug() << "close() called but thread not started for" << m_id;
-    }
 
     m_threadStarted = false;
+    m_isClosing = false;
     emit disconnected();
 
     qDebug() << "close() completed for" << m_id;
