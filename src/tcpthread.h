@@ -34,6 +34,8 @@ class TCPThread : public QThread
         void sendAnother(Packet sendPacket);
         static void loadSSLCerts(QSslSocket *sock, bool allowSnakeOil);
 
+        void forceShutdown();
+
         void run();
         bool sendFlag;
         bool incomingPersistent;

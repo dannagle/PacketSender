@@ -99,6 +99,36 @@ void Connection::close()
     qDebug() << "close() completed for" << m_id;
 }
 
+void Connection::shutdownThreadSafely(int timeoutMs)
+{
+    if (!m_thread || !m_threadStarted) {
+        qDebug() << "shutdownThreadSafely: no active thread for" << m_id;
+        return;
+    }
+
+    qDebug() << "shutdownThreadSafely: requesting thread stop for" << m_id
+             << "(timeout:" << timeoutMs << "ms)";
+
+    m_thread->closeConnection();          // sets closeRequest + interruption
+    m_thread->requestInterruption();
+
+    bool exitedCleanly = m_thread->wait(timeoutMs);
+
+    if (!exitedCleanly) {
+        qWarning() << "shutdownThreadSafely: thread did not exit within" << timeoutMs << "ms";
+        m_thread->forceShutdown();        // abort socket to unblock waits
+
+        // One last short chance
+        if (!m_thread->wait(1000)) {
+            qWarning() << "shutdownThreadSafely: force failed — terminating thread";
+            m_thread->terminate();        // absolute last resort
+        }
+    }
+
+    qDebug() << "shutdownThreadSafely: completed for" << m_id
+             << "(exited cleanly:" << exitedCleanly << ")";
+}
+
 QString Connection::id() const
 {
     return m_id;
