@@ -85,6 +85,8 @@ TCPThread::TCPThread(const QString &host, quint16 port,
     , port(port) // Store port for run()
     , m_managedByConnection(true)
 {
+    qDebug() << "NEW CONSTRUCTOR CALLED with host:" << host;
+
     // Create socket (use QSslSocket if you plan to support SSL here)
     clientConnection = new QSslSocket(this);
 
@@ -503,6 +505,7 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
         tcpPacket.tcpOrUdp = "TCP";
         if (clientConnection->isEncrypted()) {
+            QDEBUG() << "Got inside clientConnection->isEncrypted() in persistentConnectionLoop()";
             tcpPacket.tcpOrUdp = "SSL";
         }
 
@@ -568,6 +571,7 @@ void TCPThread::persistentConnectionLoop()
 
 
         if (!sendPacket.persistent) {
+            QDEBUG() << "inside if (!sendPacket.persistent)" ;
             break;
         } else {
             sendPacket.clear();
