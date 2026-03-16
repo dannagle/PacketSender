@@ -589,24 +589,12 @@ void TCPThread::persistentConnectionLoop()
 
 void TCPThread::closeConnection()
 {
-    QDEBUG() << "Closing connection";
+    QDEBUG() << "closeConnection requested from" << (QThread::currentThread() == this ? "worker" : "main/other");
 
-    if (clientConnection) {
-        clientConnection->close();
+    closeRequest = true;               // worker loop checks this
+    requestInterruption();             // for any interruptible waits
 
-        // Only wait if the socket was ever connected or is still trying
-        // This prevents the "waitForDisconnected() is not allowed in UnconnectedState" warning
-        if (clientConnection->state() != QAbstractSocket::UnconnectedState &&
-            clientConnection->state() != QAbstractSocket::ClosingState) {
-            if (!clientConnection->waitForDisconnected(1000)) {
-                qWarning() << "waitForDisconnected timed out";
-            }
-            } else {
-                qDebug() << "Socket already unconnected or closing - no wait needed";
-            }
-    } else {
-        qWarning() << "closeConnection called with null clientConnection";
-    }
+    // Do NOT call clientConnection->close() here — worker will do it
 }
 
 
@@ -727,7 +715,16 @@ void TCPThread::run()
 
             }
 
-            clientConnection->waitForConnected(5000);
+            bool connectSuccess = clientConnection->waitForConnected(5000);
+
+            qDebug() << "[TCPThread client connect] ========================================";
+            qDebug() << "  waitForConnected() returned:" << connectSuccess;
+            qDebug() << "  socket state:" << clientConnection->state();
+            qDebug() << "  socket error code:" << clientConnection->error();
+            qDebug() << "  socket error string:" << clientConnection->errorString();
+            qDebug() << "  peer:" << clientConnection->peerAddress().toString() << ":" << clientConnection->peerPort();
+            qDebug() << "  local port:" << clientConnection->localPort();
+            qDebug() << "================================================================";
 
 
         }
