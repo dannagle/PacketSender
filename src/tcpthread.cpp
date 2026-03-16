@@ -153,6 +153,18 @@ TCPThread::~TCPThread()
 
 }
 
+void TCPThread::forceShutdown()
+{
+    closeRequest = true;
+    requestInterruption();
+
+    // If we're blocked in waitForReadyRead, abort the socket to unblock
+    if (clientConnection && clientConnection->state() == QAbstractSocket::ConnectedState) {
+        clientConnection->abort();  // immediately unblocks waitFor* calls
+        qDebug() << "forceShutdown: aborted socket to unblock waits";
+    }
+}
+
 bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
 {
     const int chunk = 50;  // check every 50 ms

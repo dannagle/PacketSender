@@ -75,6 +75,7 @@ private slots:
 
 private:
     void setupThreadConnections();
+    void shutdownThreadSafely(int timeoutMs = 2000);
     bool m_isClosing = false;
 
 
