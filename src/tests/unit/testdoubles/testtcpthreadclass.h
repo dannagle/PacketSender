@@ -7,6 +7,8 @@
 
 #include "tcpthread.h"
 
+#include <QString>
+
 class TestTcpThreadClass : public TCPThread
 {
 public:
@@ -43,11 +45,14 @@ public:
     using TCPThread::getPort;
     using TCPThread::getSendFlag;
     using TCPThread::getManagedByConnection;
+    using TCPThread::getIPConnectionProtocol;
 
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
 
     void set_m_managedByConnection(bool isManagedByConnection) {this->m_managedByConnection = isManagedByConnection;};
+
+    void setSendPacketToIp(QString toIp) {sendPacket.toIP = toIp;};
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
