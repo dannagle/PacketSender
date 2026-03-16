@@ -73,12 +73,30 @@ Connection::~Connection()
 
 void Connection::close()
 {
-    if (m_thread && m_threadStarted) {
-        m_thread->closeConnection();
-        emit disconnected();
-    } else {
+    if (!m_thread || !m_threadStarted) {
+        qDebug() << "close() called but thread not started or already closed";
+        return;
+    }
+
+    qDebug() << "Connection::close() for" << m_id;
+
+    m_thread->closeConnection();          // sets closeRequest + interruption
+    m_thread->requestInterruption();      // extra safety
+
+    // Optional: short wait if you want to ensure quick exit
+    // but DON'T block forever here — app might call close() on shutdown
+    if (!m_thread->wait(2000)) {
+        qWarning() << "Thread for" << m_id << "did not exit within 2 seconds after close request";
+    }
+
+    if (m_thread && !m_threadStarted) {
         qDebug() << "close() called but thread not started for" << m_id;
     }
+
+    m_threadStarted = false;
+    emit disconnected();
+
+    qDebug() << "close() completed for" << m_id;
 }
 
 QString Connection::id() const
