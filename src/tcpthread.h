@@ -95,6 +95,8 @@ class TCPThread : public QThread
         [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
 
         Packet sendPacket;
+        QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
+
         int destructorWaitMs = 5000;
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 
