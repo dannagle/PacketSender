@@ -47,6 +47,8 @@ public:
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
 
+    void set_m_managedByConnection(bool isManagedByConnection) {this->m_managedByConnection = isManagedByConnection;};
+
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
 };
