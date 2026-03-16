@@ -565,12 +565,26 @@ void TCPThread::persistentConnectionLoop()
         }
     } // end while connected
 
-    if (closeRequest || isInterruptionRequested()) {
+    qDebug() << "persistentConnectionLoop exiting - cleaning up socket";
+
+    if (clientConnection) {
+        if (clientConnection->state() == QAbstractSocket::ConnectedState ||
+            clientConnection->state() == QAbstractSocket::ClosingState) {
+            clientConnection->disconnectFromHost();
+            clientConnection->waitForDisconnected(500);  // shorter timeout is fine here
+        }
+
         clientConnection->close();
-        clientConnection->waitForDisconnected(100);
+
+        if (!m_managedByConnection) {
+            clientConnection->deleteLater();
+        }
+        clientConnection = nullptr;  // clear pointer
     }
 
-}
+    emit connectStatus("Disconnected");
+
+} // end persistentConnectionLoop()
 
 
 void TCPThread::closeConnection()
@@ -747,20 +761,6 @@ void TCPThread::run()
             sendPacket.errorString = "Could not connect";
             emit packetSent(sendPacket);
 
-        }
-
-        QDEBUG() << "packetSent " << sendPacket.name;
-        if (clientConnection->state() == QAbstractSocket::ConnectedState) {
-            clientConnection->disconnectFromHost();
-            clientConnection->waitForDisconnected(1000);
-            emit connectStatus("Disconnected.");
-
-        }
-        clientConnection->close();
-
-        if (!m_managedByConnection)
-        {
-            clientConnection->deleteLater();
         }
 
         return;
