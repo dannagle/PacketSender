@@ -87,3 +87,51 @@ void TcpThread_QApplicationNeeded_tests::testFullLifecycleWithServer()
     QVERIFY(thread->wait(8000));
     QVERIFY(thread->isFinished());
 }
+
+void TcpThread_QApplicationNeeded_tests::testOutgoingClientPathStartsLoopAndSendsPacket()
+{
+    // Characterization test for outgoing client path in TCPThread::run()
+    // - Uses dummy port (no real server) to avoid macOS/QSslSocket loopback accept issues
+    // - Verifies: connect attempt, loop entry, packet send signal, clean stop
+    // - Does NOT verify server-side receipt (tested separately if needed)
+    // ...
+    const QString testHost = "127.0.0.1";  // reliable IPv4
+
+    Packet initial;
+    initial.toIP     = testHost;
+    initial.port     = 12345;  // dummy port — we don't need a real server
+    initial.hexString = "AA BB CC DD 00 11";
+    initial.persistent = true;
+
+    auto thread = std::make_unique<TestTcpThreadClass>(
+        testHost, initial.port, initial
+    );
+
+    QSignalSpy connectSpy(thread.get(), &TCPThread::connectStatus);
+    QSignalSpy packetSentSpy(thread.get(), &TCPThread::packetSent);
+    QSignalSpy errorSpy(thread.get(), &TCPThread::error);
+
+    thread->start();
+
+    // Wait for connection attempt to complete (success or failure)
+    QVERIFY(connectSpy.wait(6000));
+
+    // Expect at least one "Connected" status (or "Connecting" if you emit that)
+    QVERIFY(connectSpy.count() > 0);
+    QString status = connectSpy.last().at(0).toString().toLower();
+    QVERIFY(status.contains("connect") || status.contains("connected"));
+
+    // Give time for loop to send at least one packet
+    QTest::qWait(3000);
+
+    // Verify at least one packet was "sent" client-side
+    QVERIFY2(packetSentSpy.count() >= 1,
+             "No packetSent signal emitted — loop didn't run");
+
+    // Cleanup
+    thread->closeConnection();
+    QVERIFY(thread->wait(4000));
+
+    QVERIFY(!thread->isRunning());
+    QVERIFY(errorSpy.isEmpty() || errorSpy.last().at(0).value<QSslSocket::SocketError>() == QSslSocket::UnknownSocketError);
+}

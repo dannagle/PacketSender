@@ -13,6 +13,7 @@ class TcpThread_QApplicationNeeded_tests: public QObject
 private slots:
     void testDestructorWaitsGracefullyWhenManaged();
     void testFullLifecycleWithServer();
+    void testOutgoingClientPathStartsLoopAndSendsPacket();
 };
 
 
