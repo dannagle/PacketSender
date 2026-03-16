@@ -187,6 +187,34 @@ bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
     return false;
 }
 
+// EXTRACTIONS FROM run()
+
+QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const
+{
+    // Primary source: sendPacket.toIP (matches original run() logic)
+    QHostAddress packetAddr(sendPacket.toIP);
+    QAbstractSocket::NetworkLayerProtocol protocol =
+        (packetAddr.protocol() == QAbstractSocket::IPv6Protocol)
+            ? QAbstractSocket::IPv6Protocol
+            : QAbstractSocket::IPv4Protocol;
+
+    // Defensive check: warn if host disagrees (host is actual connect target)
+    QHostAddress hostAddr(host);
+    QAbstractSocket::NetworkLayerProtocol hostProtocol =
+        (hostAddr.protocol() == QAbstractSocket::IPv6Protocol)
+            ? QAbstractSocket::IPv6Protocol
+            : QAbstractSocket::IPv4Protocol;
+
+    if (protocol != hostProtocol && !host.isEmpty() && !sendPacket.toIP.isEmpty()) {
+        qWarning().nospace()
+            << "IP protocol mismatch: sendPacket.toIP indicates "
+            << protocol << " but host indicates " << hostProtocol
+            << " (using sendPacket.toIP)";
+    }
+
+    return protocol;
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {
