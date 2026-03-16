@@ -8,6 +8,7 @@
 
 #include "connectionmanager_tests.h"
 #include "connection_tests.h"
+#include "tcpthreadqapplicationneededtests.h"
 #include "translation_tests.h"
 #include "tcpthreadtests.h"
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
 
     // Order matters: translation tests first (they install translators)
     runGuiTest(new TranslationTests());
+    runGuiTest(new TcpThread_QApplicationNeeded_tests());
 
     // Then non-GUI or independent tests
     runNonGuiTest(new TcpThreadTests());

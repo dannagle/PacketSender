@@ -17,6 +17,7 @@ add_executable(${TEST_NAME}
 
     ../../tcpthread.cpp
     tcpthreadtests.cpp
+    tcpthreadqapplicationneededtests.cpp
 
     # project files that need to be added to the executable
     ../../packet.cpp
