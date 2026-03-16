@@ -77,7 +77,6 @@ class TCPThread : public QThread
 
         QString host;
         quint16 port = 0;
-        bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 
     protected:
         bool interruptibleWaitForReadyRead(int timeoutMs) const;
@@ -95,6 +94,7 @@ class TCPThread : public QThread
         [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
 
         int destructorWaitMs = 5000;
+        bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 
 };
 
