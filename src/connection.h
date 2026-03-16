@@ -75,6 +75,9 @@ private slots:
 
 private:
     void setupThreadConnections();
+    bool m_isClosing = false;
+
+
 
     QString m_id;
     // QString m_host;       // uncomment later if needed for reconnect
