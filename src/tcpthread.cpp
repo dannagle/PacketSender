@@ -909,9 +909,18 @@ void TCPThread::run()
 
 
     if (incomingPersistent) {
-        clientConnection = &sock;
-        QDEBUG() << "We are persistent incoming";
-        sendPacket =  tcpPacket;
+        clientConnection = new QSslSocket(this);
+
+        if (!clientConnection->setSocketDescriptor(socketDescriptor)) {
+            qWarning() << "Failed to set socket descriptor on clientConnection";
+            delete clientConnection;
+            clientConnection = nullptr;
+            return;
+        }
+
+        // ... copy any state from sock if needed (e.g. encryption state)
+        QDEBUG() << "Persistent incoming mode entered - using heap clientConnection";
+        sendPacket = tcpPacket;
         sendPacket.persistent = true;
         sendPacket.hexString.clear();
         sendPacket.port = clientConnection->peerPort();
