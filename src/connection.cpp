@@ -62,11 +62,11 @@ Connection::Connection(int socketDescriptor, bool isSecure, bool isPersistent, Q
 Connection::~Connection()
 {
     // NEW: RAII cleanup – close and wait for thread
-    close();
+    if (m_thread && m_thread->isRunning()) {
+        qWarning() << "~Connection(): thread still running for" << m_id
+                   << "— forcing quick shutdown (user did not call close())";
 
-    // Wait with a generous timeout; log if it hangs
-    if (m_thread && m_threadStarted && !m_thread->wait(m_threadWaitTimeoutMs)) {
-        qWarning() << "In ~Connection(): TCPThread for" << m_id << "did not finish within " << m_threadWaitTimeoutMs << " ms";
+        shutdownThreadSafely(1000);  // shorter timeout in destructor
     }
     // unique_ptr will delete it automatically here
 }
