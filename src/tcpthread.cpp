@@ -644,12 +644,7 @@ void TCPThread::closeConnection()
 
 void TCPThread::run()
 {
-    //determine IP mode based on send address.
-    int ipMode = 4;
-    QHostAddress theAddress(sendPacket.toIP);
-    if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
-        ipMode = 6;
-    }
+    QAbstractSocket::NetworkLayerProtocol ipConnectionProtocol = getIPConnectionProtocol();
 
     if (sendFlag) {
         QDEBUG() << "We are threaded sending!";
@@ -677,14 +672,7 @@ void TCPThread::run()
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
             loadSSLCerts(clientConnection, false);
-
-            if (ipMode > 4) {
-                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
-
-            } else {
-                clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
-
-            }
+            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
 
 
             if (settings.value("ignoreSSLCheck", true).toBool()) {
@@ -749,15 +737,7 @@ void TCPThread::run()
 
 
         } else {
-
-
-            if (ipMode > 4) {
-                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv6Protocol);
-
-            } else {
-                clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, QAbstractSocket::IPv4Protocol);
-
-            }
+            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
 
             bool connectSuccess = clientConnection->waitForConnected(5000);
 
@@ -928,11 +908,9 @@ void TCPThread::run()
     tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
     tcpPacket.tcpOrUdp = sendPacket.tcpOrUdp;
 
-    if (ipMode < 6) {
-        tcpPacket.fromIP = Packet::removeIPv6Mapping(sock.peerAddress());
-    } else {
-        tcpPacket.fromIP = (sock.peerAddress()).toString();
-    }
+
+    tcpPacket.fromIP = ipConnectionProtocol == QAbstractSocket::IPv6Protocol ?
+        Packet::removeIPv6Mapping(sock.peerAddress()) : (sock.peerAddress()).toString();
 
     tcpPacket.toIP = "You";
     tcpPacket.port = sock.localPort();
