@@ -15,7 +15,7 @@ private slots:
     void testIncomingConstructorBasic();
     void testIncomingConstructorWithSecureFlag();
 
-    // testDetermineIpMode() tests
+    // getIPConnectionProtocol() tests
     void testGetIPConnectionProtocol_bothIPv4_returnsIPv4();
     void testGetIPConnectionProtocol_bothIPv6_returnsIPv6();
     void testGetIPConnectionProtocol_hostIPv4_packetIPv6_returnsPacketValue();
