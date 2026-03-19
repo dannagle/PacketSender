@@ -79,6 +79,7 @@ class TCPThread : public QThread
 
     protected:
         bool interruptibleWaitForReadyRead(int timeoutMs) const;
+        QSslSocket* clientSocket();  // non-const (for creation/modification)
 
         // Protected accessors — added for unit tests
         [[nodiscard]] QSslSocket* getClientConnection() const { return clientConnection; }

@@ -187,6 +187,17 @@ bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
     return false;
 }
 
+QSslSocket* TCPThread::clientSocket()
+{
+    if (!clientConnection) {
+        QDEBUG() << "clientSocket: lazy creation of real socket";
+        clientConnection = new QSslSocket(this);
+        clientSocket()->setParent(this);
+        wireupSocketSignals();
+    }
+
+    return clientConnection;
+}
 // EXTRACTIONS FROM run()
 
 QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const
