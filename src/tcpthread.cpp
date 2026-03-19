@@ -826,12 +826,8 @@ void TCPThread::run()
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
         sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
-        bool portpass = false;
 
-        portpass = clientConnection->bind(); //use random port.
-        if (portpass) {
-            sendPacket.fromPort = clientConnection->localPort();
-        }
+        bindClientSocket();
 
         // SSL Version...
 
