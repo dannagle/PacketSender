@@ -61,6 +61,8 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  connection.cpp
+  connectionmanager.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp
@@ -154,6 +156,17 @@ if(APPLE)
       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
       OUTPUT_NAME "packetsender"
   )
+endif()
+
+# ==================== UNIT TESTS (QtTest) ====================
+option(PACKETSENDER_BUILD_TESTS "Build unit tests (QtTest)" OFF)
+
+if(PACKETSENDER_BUILD_TESTS)
+  find_package(Qt6 REQUIRED COMPONENTS Test)
+
+  enable_testing()
+
+  add_subdirectory(tests/unit)
 endif()
 
 # -------------------
