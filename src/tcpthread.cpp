@@ -124,8 +124,8 @@ TCPThread::TCPThread(int socketDescriptor,
          * For now, just log the intent
          */
         qDebug() << "Incoming secure connection requested — server SSL setup pending in run()";
-        // e.g. clientConnection->setLocalCertificate(...);
-        // clientConnection->setPrivateKey(...);
+        // e.g. clientSocket()->setLocalCertificate(...);
+        // clientSocket()->setPrivateKey(...);
     } // else {
         // clientConnection = new QTcpSocket(this);
     // }
@@ -155,19 +155,20 @@ TCPThread::~TCPThread()
 
 }
 
+// HELPERS
 void TCPThread::forceShutdown()
 {
     closeRequest = true;
     requestInterruption();
 
     // If we're blocked in waitForReadyRead, abort the socket to unblock
-    if (clientConnection && clientConnection->state() == QAbstractSocket::ConnectedState) {
-        clientConnection->abort();  // immediately unblocks waitFor* calls
+    if (clientConnection && clientSocket()->state() == QAbstractSocket::ConnectedState) {
+        clientSocket()->abort();  // immediately unblocks waitFor* calls
         qDebug() << "forceShutdown: aborted socket to unblock waits";
     }
 }
 
-bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
+bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs)
 {
     const int chunk = 50;  // check every 50 ms
     int remaining = divideWaitBy10ForUnitTest() ? timeoutMs / 10 : timeoutMs;
@@ -175,7 +176,7 @@ bool TCPThread::interruptibleWaitForReadyRead(const int timeoutMs) const
     QDEBUG() << "initial remaining: " << remaining;
 
     while (remaining > 0 && !isInterruptionRequested()) {
-        if (clientConnection->waitForReadyRead(chunk)) {
+        if (clientSocket()->waitForReadyRead(chunk)) {
             QDEBUG() << "inside if waitForReadyRead(chunk)";
             return true;
         }
@@ -198,6 +199,12 @@ QSslSocket* TCPThread::clientSocket()
 
     return clientConnection;
 }
+
+const QSslSocket* TCPThread::clientSocket() const
+{
+    return clientConnection;  // no creation in const version
+}
+
 // EXTRACTIONS FROM run()
 
 QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const
@@ -229,7 +236,7 @@ QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const
 // SLOTS
 void TCPThread::onConnected()
 {
-    QDEBUG() << "TCPThread: Connected to" << clientConnection->peerAddress().toString() << ":" << clientConnection->peerPort();
+    QDEBUG() << "TCPThread: Connected to" << clientSocket()->peerAddress().toString() << ":" << clientSocket()->peerPort();
 
     emit connectStatus("Connected");
 
@@ -241,7 +248,7 @@ void TCPThread::onConnected()
 
 void TCPThread::onSocketError(QAbstractSocket::SocketError socketError)
 {
-    QString errMsg = clientConnection ? clientConnection->errorString() : "Unknown socket error";
+    QString errMsg = clientConnection ? clientSocket()->errorString() : "Unknown socket error";
     qWarning() << "TCPThread: Socket error" << socketError << "-" << errMsg;
 
     emit error(socketError);
@@ -249,7 +256,7 @@ void TCPThread::onSocketError(QAbstractSocket::SocketError socketError)
 
     // Optional: close and clean up
     if (clientConnection) {
-        clientConnection->close();
+        clientSocket()->close();
     }
 }
 
@@ -459,7 +466,7 @@ void TCPThread::persistentConnectionLoop()
 
     int count = 0;
     while (!isInterruptionRequested() &&
-        clientConnection->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+        clientSocket()->state() == QAbstractSocket::ConnectedState && !closeRequest) {
         insidePersistent = true;
 
         if (closeRequest || isInterruptionRequested()) {  // early exit check (good hygiene)
@@ -470,17 +477,17 @@ void TCPThread::persistentConnectionLoop()
             break;
         }
 
-        if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientConnection->bytesAvailable() == 0)) {
+        if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientSocket()->bytesAvailable() == 0)) {
             count++;
             if (count % 10 == 0) {
-                //QDEBUG() << "Loop and wait." << count++ << clientConnection->state();
+                //QDEBUG() << "Loop and wait." << count++ << clientSocket()->state();
                 emit connectStatus("Connected and idle.");
             }
             interruptibleWaitForReadyRead(200);
             continue;
         }
 
-        if (clientConnection->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
+        if (clientSocket()->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
             QDEBUG() << "Connection broken.";
             emit connectStatus("Connection broken");
 
@@ -493,7 +500,7 @@ void TCPThread::persistentConnectionLoop()
             interruptibleWaitForReadyRead(500);
 
             Packet tcpRCVPacket;
-            tcpRCVPacket.hexString = Packet::byteArrayToHex(clientConnection->readAll());
+            tcpRCVPacket.hexString = Packet::byteArrayToHex(clientSocket()->readAll());
             if (!tcpRCVPacket.hexString.trimmed().isEmpty()) {
                 QDEBUG() << "Received: " << tcpRCVPacket.hexString;
                 emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
@@ -501,21 +508,21 @@ void TCPThread::persistentConnectionLoop()
                 tcpRCVPacket.timestamp = QDateTime::currentDateTime();
                 tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
                 tcpRCVPacket.tcpOrUdp = "TCP";
-                if (clientConnection->isEncrypted()) {
+                if (clientSocket()->isEncrypted()) {
                     tcpRCVPacket.tcpOrUdp = "SSL";
                 }
 
                 if (ipMode < 6) {
-                    tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+                    tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientSocket()->peerAddress());
                 } else {
-                    tcpRCVPacket.fromIP = (clientConnection->peerAddress()).toString();
+                    tcpRCVPacket.fromIP = (clientSocket()->peerAddress()).toString();
                 }
 
 
                 QDEBUGVAR(tcpRCVPacket.fromIP);
                 tcpRCVPacket.toIP = "You";
                 tcpRCVPacket.port = sendPacket.fromPort;
-                tcpRCVPacket.fromPort =    clientConnection->peerPort();
+                tcpRCVPacket.fromPort =    clientSocket()->peerPort();
                 if (tcpRCVPacket.hexString.size() > 0) {
                     emit packetSent(tcpRCVPacket);
 
@@ -531,11 +538,11 @@ void TCPThread::persistentConnectionLoop()
         } // end receive before send
 
 
-        //sendPacket.fromPort = clientConnection->localPort();
+        //sendPacket.fromPort = clientSocket()->localPort();
         if(sendPacket.getByteArray().size() > 0) {
             emit connectStatus("Sending data:" + sendPacket.asciiString());
             QDEBUG() << "Attempting write data";
-            clientConnection->write(sendPacket.getByteArray());
+            clientSocket()->write(sendPacket.getByteArray());
             emit packetSent(sendPacket);
         }
 
@@ -543,31 +550,31 @@ void TCPThread::persistentConnectionLoop()
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
         tcpPacket.tcpOrUdp = "TCP";
-        if (clientConnection->isEncrypted()) {
-            QDEBUG() << "Got inside clientConnection->isEncrypted() in persistentConnectionLoop()";
+        if (clientSocket()->isEncrypted()) {
+            QDEBUG() << "Got inside clientSocket()->isEncrypted() in persistentConnectionLoop()";
             tcpPacket.tcpOrUdp = "SSL";
         }
 
         if (ipMode < 6) {
-            tcpPacket.fromIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+            tcpPacket.fromIP = Packet::removeIPv6Mapping(clientSocket()->peerAddress());
 
         } else {
-            tcpPacket.fromIP = (clientConnection->peerAddress()).toString();
+            tcpPacket.fromIP = (clientSocket()->peerAddress()).toString();
 
         }
         QDEBUGVAR(tcpPacket.fromIP);
 
         tcpPacket.toIP = "You";
         tcpPacket.port = sendPacket.fromPort;
-        tcpPacket.fromPort =    clientConnection->peerPort();
+        tcpPacket.fromPort =    clientSocket()->peerPort();
 
         interruptibleWaitForReadyRead(500);
         emit connectStatus("Waiting to receive");
         tcpPacket.hexString.clear();
 
-        while (clientConnection->bytesAvailable()) {
+        while (clientSocket()->bytesAvailable()) {
             tcpPacket.hexString.append(" ");
-            tcpPacket.hexString.append(Packet::byteArrayToHex(clientConnection->readAll()));
+            tcpPacket.hexString.append(Packet::byteArrayToHex(clientSocket()->readAll()));
             tcpPacket.hexString = tcpPacket.hexString.simplified();
             interruptibleWaitForReadyRead(100);
         }
@@ -575,7 +582,7 @@ void TCPThread::persistentConnectionLoop()
 
         if (!sendPacket.persistent) {
             emit connectStatus("Disconnecting");
-            clientConnection->disconnectFromHost();
+            clientSocket()->disconnectFromHost();
         }
 
         QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
@@ -593,7 +600,7 @@ void TCPThread::persistentConnectionLoop()
 
 
         emit connectStatus("Reading response");
-        tcpPacket.hexString  = clientConnection->readAll();
+        tcpPacket.hexString  = clientSocket()->readAll();
 
         tcpPacket.timestamp = QDateTime::currentDateTime();
         tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
@@ -623,16 +630,16 @@ void TCPThread::persistentConnectionLoop()
     qDebug() << "persistentConnectionLoop exiting - cleaning up socket";
 
     if (clientConnection) {
-        if (clientConnection->state() == QAbstractSocket::ConnectedState ||
-            clientConnection->state() == QAbstractSocket::ClosingState) {
-            clientConnection->disconnectFromHost();
-            clientConnection->waitForDisconnected(500);  // shorter timeout is fine here
+        if (clientSocket()->state() == QAbstractSocket::ConnectedState ||
+            clientSocket()->state() == QAbstractSocket::ClosingState) {
+            clientSocket()->disconnectFromHost();
+            clientSocket()->waitForDisconnected(500);  // shorter timeout is fine here
         }
 
-        clientConnection->close();
+        clientSocket()->close();
 
         if (!m_managedByConnection) {
-            clientConnection->deleteLater();
+            clientSocket()->deleteLater();
         }
         clientConnection = nullptr;  // clear pointer
     }
@@ -649,7 +656,7 @@ void TCPThread::closeConnection()
     closeRequest = true;               // worker loop checks this
     requestInterruption();             // for any interruptible waits
 
-    // Do NOT call clientConnection->close() here — worker will do it
+    // Do NOT call clientSocket()->close() here — worker will do it
 }
 
 
@@ -683,22 +690,22 @@ void TCPThread::run()
             QSettings settings(SETTINGSFILE, QSettings::IniFormat);
 
             loadSSLCerts(clientConnection, false);
-            clientConnection->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
+            clientSocket()->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
 
 
             if (settings.value("ignoreSSLCheck", true).toBool()) {
                 QDEBUG() << "Telling SSL to ignore errors";
-                clientConnection->ignoreSslErrors();
+                clientSocket()->ignoreSslErrors();
             }
 
 
             QDEBUG() << "Connecting to" << sendPacket.toIP << ":" << sendPacket.port;
-            QDEBUG() << "Wait for connected finished" << clientConnection->waitForConnected(5000);
-            QDEBUG() << "Wait for encrypted finished" << clientConnection->waitForEncrypted(5000);
+            QDEBUG() << "Wait for connected finished" << clientSocket()->waitForConnected(5000);
+            QDEBUG() << "Wait for encrypted finished" << clientSocket()->waitForEncrypted(5000);
 
-            QDEBUG() << "isEncrypted" << clientConnection->isEncrypted();
+            QDEBUG() << "isEncrypted" << clientSocket()->isEncrypted();
 
-            QList<QSslError> sslErrorsList  = clientConnection->
+            QList<QSslError> sslErrorsList  = clientSocket()->
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
                     sslErrors();
 #else
@@ -716,8 +723,8 @@ void TCPThread::run()
                 }
             }
 
-            if (clientConnection->isEncrypted()) {
-                QSslCipher cipher = clientConnection->sessionCipher();
+            if (clientSocket()->isEncrypted()) {
+                QSslCipher cipher = clientSocket()->sessionCipher();
                 Packet errorPacket = sendPacket;
                 errorPacket.hexString.clear();
                 errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
@@ -729,12 +736,12 @@ void TCPThread::run()
                 emit packetSent(errorPacket);
 
                 errorPacket.hexString.clear();
-                errorPacket.errorString = "Peer Cert issued by " +  clientConnection->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+                errorPacket.errorString = "Peer Cert issued by " +  clientSocket()->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
                 QDEBUGVAR(cipher.encryptionMethod());
                 emit packetSent(errorPacket);
 
                 errorPacket.hexString.clear();
-                errorPacket.errorString = "Our Cert issued by " +  clientConnection->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+                errorPacket.errorString = "Our Cert issued by " +  clientSocket()->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
                 QDEBUGVAR(cipher.encryptionMethod());
                 emit packetSent(errorPacket);
 
@@ -748,17 +755,17 @@ void TCPThread::run()
 
 
         } else {
-            clientConnection->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
+            clientSocket()->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
 
-            bool connectSuccess = clientConnection->waitForConnected(5000);
+            bool connectSuccess = clientSocket()->waitForConnected(5000);
 
             qDebug() << "[TCPThread client connect] ========================================";
             qDebug() << "  waitForConnected() returned:" << connectSuccess;
-            qDebug() << "  socket state:" << clientConnection->state();
-            qDebug() << "  socket error code:" << clientConnection->error();
-            qDebug() << "  socket error string:" << clientConnection->errorString();
-            qDebug() << "  peer:" << clientConnection->peerAddress().toString() << ":" << clientConnection->peerPort();
-            qDebug() << "  local port:" << clientConnection->localPort();
+            qDebug() << "  socket state:" << clientSocket()->state();
+            qDebug() << "  socket error code:" << clientSocket()->error();
+            qDebug() << "  socket error string:" << clientSocket()->errorString();
+            qDebug() << "  peer:" << clientSocket()->peerAddress().toString() << ":" << clientSocket()->peerPort();
+            qDebug() << "  local port:" << clientSocket()->localPort();
             qDebug() << "================================================================";
 
 
@@ -770,12 +777,12 @@ void TCPThread::run()
             QObject().thread()->usleep(1000 * sendPacket.delayAfterConnect);
         }
 
-        QDEBUGVAR(clientConnection->localPort());
+        QDEBUGVAR(clientSocket()->localPort());
 
-        if (clientConnection->state() == QAbstractSocket::ConnectedState) {
+        if (clientSocket()->state() == QAbstractSocket::ConnectedState) {
             emit connectStatus("Connected");
-            sendPacket.port = clientConnection->peerPort();
-            sendPacket.fromPort = clientConnection->localPort();
+            sendPacket.port = clientSocket()->peerPort();
+            sendPacket.fromPort = clientSocket()->localPort();
 
             persistentConnectionLoop();
 
@@ -785,9 +792,9 @@ void TCPThread::run()
         } else {
 
 
-            //qintptr sock = clientConnection->socketDescriptor();
+            //qintptr sock = clientSocket()->socketDescriptor();
 
-            //sendPacket.fromPort = clientConnection->localPort();
+            //sendPacket.fromPort = clientSocket()->localPort();
             emit connectStatus("Could not connect.");
             QDEBUG() << "Could not connect";
             sendPacket.errorString = "Could not connect";
@@ -941,7 +948,7 @@ void TCPThread::run()
     if (incomingPersistent) {
         clientConnection = new QSslSocket(this);
 
-        if (!clientConnection->setSocketDescriptor(socketDescriptor)) {
+        if (!clientSocket()->setSocketDescriptor(socketDescriptor)) {
             qWarning() << "Failed to set socket descriptor on clientConnection";
             delete clientConnection;
             clientConnection = nullptr;
@@ -953,8 +960,8 @@ void TCPThread::run()
         sendPacket = tcpPacket;
         sendPacket.persistent = true;
         sendPacket.hexString.clear();
-        sendPacket.port = clientConnection->peerPort();
-        sendPacket.fromPort = clientConnection->localPort();
+        sendPacket.port = clientSocket()->peerPort();
+        sendPacket.fromPort = clientSocket()->localPort();
         persistentConnectionLoop();
     }
 
@@ -983,7 +990,7 @@ void TCPThread::run()
 bool TCPThread::isEncrypted()
 {
     if (insidePersistent && !closeRequest) {
-        return clientConnection->isEncrypted();
+        return clientSocket()->isEncrypted();
     } else {
         return false;
     }
@@ -998,18 +1005,18 @@ bool TCPThread::isValid() const
         return false;
     }
 
-    qDebug() << "  Socket state:" << clientConnection->state()
-             << "error:" << clientConnection->error()
-             << "error string:" << clientConnection->errorString()
+    qDebug() << "  Socket state:" << clientSocket()->state()
+             << "error:" << clientSocket()->error()
+             << "error string:" << clientSocket()->errorString()
              << "insidePersistent:" << insidePersistent;
 
-    if (clientConnection->error() != QAbstractSocket::UnknownSocketError &&
-        clientConnection->error() != QAbstractSocket::SocketTimeoutError) {
+    if (clientSocket()->error() != QAbstractSocket::UnknownSocketError &&
+        clientSocket()->error() != QAbstractSocket::SocketTimeoutError) {
         qWarning() << "  → invalid: serious socket error";
         return false;
         }
 
-    switch (clientConnection->state()) {
+    switch (clientSocket()->state()) {
     case QAbstractSocket::UnconnectedState:
     case QAbstractSocket::ClosingState:
         if (insidePersistent) {
@@ -1036,9 +1043,9 @@ bool TCPThread::isValid() const
 
 void TCPThread::sendPersistant(Packet sendpacket)
 {
-    if ((!sendpacket.hexString.isEmpty()) && (clientConnection->state() == QAbstractSocket::ConnectedState)) {
+    if ((!sendpacket.hexString.isEmpty()) && (clientSocket()->state() == QAbstractSocket::ConnectedState)) {
         QDEBUGVAR(sendpacket.hexString);
-        clientConnection->write(sendpacket.getByteArray());
+        clientSocket()->write(sendpacket.getByteArray());
         sendpacket.fromIP = "You";
 
         QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1046,14 +1053,14 @@ void TCPThread::sendPersistant(Packet sendpacket)
 
 
         if (ipMode < 6) {
-            sendpacket.toIP = Packet::removeIPv6Mapping(clientConnection->peerAddress());
+            sendpacket.toIP = Packet::removeIPv6Mapping(clientSocket()->peerAddress());
         } else {
-            sendpacket.toIP = (clientConnection->peerAddress()).toString();
+            sendpacket.toIP = (clientSocket()->peerAddress()).toString();
         }
 
-        sendpacket.port = clientConnection->peerPort();
-        sendpacket.fromPort = clientConnection->localPort();
-        if (clientConnection->isEncrypted()) {
+        sendpacket.port = clientSocket()->peerPort();
+        sendpacket.fromPort = clientSocket()->localPort();
+        if (clientSocket()->isEncrypted()) {
             sendpacket.tcpOrUdp = "SSL";
         }
         emit packetSent(sendpacket);
