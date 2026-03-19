@@ -817,11 +817,8 @@ void TCPThread::run()
         QDEBUG() << "We are threaded sending!";
         clientConnection = new QSslSocket(nullptr);
 
-        // Use the constructor-passed host/port instead of sendPacket
-        QString connectHost = host.isEmpty() ? sendPacket.toIP : host;
-        quint16 connectPort = (port > 0) ? port : sendPacket.port;
-
-        qDebug() << "Connecting using host:" << connectHost << "port:" << connectPort;
+        qDebug() << "Connecting using host:" << sendPacket.toIP << "port:" << sendPacket.port
+            << " passed in host " << host << " and port " << port << " are currently unused.";
 
         sendPacket.fromIP = "You";
         sendPacket.timestamp = QDateTime::currentDateTime();
