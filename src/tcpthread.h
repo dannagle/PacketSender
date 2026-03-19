@@ -70,8 +70,6 @@ class TCPThread : public QThread
         QString text;
         void init();
         void writeResponse(QSslSocket *sock, Packet tcpPacket);
-        void wireupSocketSignals();
-        QSslSocket * clientConnection;
         bool insidePersistent;
 
         void persistentConnectionLoop();
@@ -96,6 +94,9 @@ class TCPThread : public QThread
 
         Packet sendPacket;
         QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
+        void wireupSocketSignals();
+
+        QSslSocket * clientConnection;
 
         int destructorWaitMs = 5000;
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
