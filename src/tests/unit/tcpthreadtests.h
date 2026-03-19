@@ -25,6 +25,17 @@ private slots:
     void testGetIPConnectionProtocol_hostEmpty_packetIPv6_returnsIPv6();
     void testGetIPConnectionProtocol_bothEmpty_returnsIPv4();
     void testGetIPConnectionProtocol_hostInvalid_packetIPv4_returnsIPv4();
+
+    // tryConnectEncrypted() tests
+    void testTryConnectEncrypted_success_emitsCipherAndCertInfo();
+    void testTryConnectEncrypted_sslErrors_emitsErrorPackets();
+    void testTryConnectEncrypted_connectFailure_returnsFalse();
+
+    // clientSocket() tests
+    void testClientSocket_lazyCreation_createsRealSocketOnFirstCall();
+    void testClientSocket_lazyCreation_returnsExistingSocketOnSecondCall();
+    void testInjectionConstructor_assignsMockSocket();
+    void characterizeRun_outgoingSsl_connectsAndEmitsCipherPackets();
 };
 
 

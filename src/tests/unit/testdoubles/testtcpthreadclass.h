@@ -9,6 +9,8 @@
 
 #include <QString>
 
+#include "MockSslSocket.h"
+
 class TestTcpThreadClass : public TCPThread
 {
 public:
@@ -31,11 +33,25 @@ public:
         destructorWaitMs = 500;
     }
 
+    explicit TestTcpThreadClass(QSslSocket *preCreatedSocket,
+                            const QString &host,
+                            quint16 port,
+                            const Packet &initialPacket = Packet(),
+                            QObject *parent = nullptr)
+        : TCPThread(preCreatedSocket, host, port, initialPacket, parent)
+    {
+        destructorWaitMs = 500;
+    }
+
     void forceFastExitFromPersistentLoop()
     {
         closeRequest = true;
         qDebug() << "MOCK: Forced immediate exit via closeRequest";
     }
+
+    // Hide base member with derived type
+    MockSslSocket *clientConnection;
+
     // Expose the protected getters as public for easy test use
     using TCPThread::getClientConnection;
     using TCPThread::getSocketDescriptor;
@@ -46,6 +62,7 @@ public:
     using TCPThread::getSendFlag;
     using TCPThread::getManagedByConnection;
     using TCPThread::getIPConnectionProtocol;
+    using TCPThread::clientSocket;
 
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
@@ -53,10 +70,57 @@ public:
     void set_m_managedByConnection(bool isManagedByConnection) {this->m_managedByConnection = isManagedByConnection;};
 
     void setSendPacketToIp(QString toIp) {sendPacket.toIP = toIp;};
+    void setClientConnection(QSslSocket *sock)
+    {
+        clientConnection = dynamic_cast<MockSslSocket*>(sock);
+        if (!clientConnection && sock) {
+            qWarning() << "setClientConnection: sock is not a MockSslSocket instance";
+        }
+    }
+
+    bool fireTryConnectEncrypted() { return tryConnectEncrypted(); }
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
+
+    bool checkConnectionAndEncryption() override
+    {
+        {
+            MockSslSocket *mock = qobject_cast<MockSslSocket*>(clientSocket());
+            if (!mock) {
+                qWarning() << "No mock in test — falling back to base";
+                return TCPThread::checkConnectionAndEncryption();
+            }
+
+            bool connected = mock->waitForConnected(5000);
+            bool encrypted = mock->waitForEncrypted(5000);
+            bool isEnc = mock->isEncrypted();
+
+            qDebug() << "from checkConnectionAndEncryption Test mock: connected =" << connected;
+            qDebug() << "from checkConnectionAndEncryption Test mock: encrypted =" << encrypted;
+            qDebug() << "from checkConnectionAndEncryption Test mock: isEncrypted =" << isEnc;
+
+            return connected && encrypted;
+        }
+    }
+
+    std::pair<bool, bool> performEncryptedHandshake() override
+    {
+        MockSslSocket *mock = qobject_cast<MockSslSocket*>(clientSocket());
+        if (!mock) return TCPThread::performEncryptedHandshake();
+
+        bool connected = mock->waitForConnected(5000);
+        bool encrypted = mock->waitForEncrypted(5000);
+        bool isEnc = mock->isEncrypted();
+
+        qDebug() << "Test mock handshake: connected =" << connected
+                 << "encrypted =" << encrypted
+                 << "isEncrypted =" << isEnc;
+
+        return {connected, encrypted};
+    }
 };
+
 
 
 #endif //TESTTCPTHREADCLASS_H
