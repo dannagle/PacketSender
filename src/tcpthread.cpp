@@ -139,6 +139,35 @@ TCPThread::TCPThread(int socketDescriptor,
              << (isPersistent ? " - persistent" : "");
 }
 
+TCPThread::TCPThread(QSslSocket *preCreatedSocket,
+                     const QString &host,
+                     quint16 port,
+                     const Packet &initialPacket,
+                     QObject *parent)
+    : QThread(parent)
+    , sendFlag(true)
+    , incomingPersistent(false)
+    , isSecure(false)
+    , consoleMode(false)
+    , socketDescriptor(-1)
+    , sendPacket(initialPacket)
+    , insidePersistent(false)
+    , host(host)
+    , port(port)
+    , m_managedByConnection(true)
+{
+    if (preCreatedSocket) {
+        clientConnection = preCreatedSocket;
+        clientSocket()->setParent(this);
+        wireupSocketSignals();
+    }
+
+    sendPacket.toIP = host;
+    sendPacket.port = port;
+
+    qDebug() << "Constructor (injected socket) called for" << host << ":" << port;
+}
+
 TCPThread::~TCPThread()
 {
     if (isRunning()) {
