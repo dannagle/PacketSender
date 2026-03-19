@@ -78,7 +78,6 @@ class TCPThread : public QThread
         quint16 port = 0;
 
     protected:
-        bool interruptibleWaitForReadyRead(int timeoutMs) const;
         // Allow injecting a pre-created socket (primarily for unit testing)
         explicit TCPThread(QSslSocket *preCreatedSocket,
                            const QString &host,
@@ -87,6 +86,9 @@ class TCPThread : public QThread
                            QObject *parent = nullptr);
 
         QSslSocket* clientSocket();  // non-const (for creation/modification)
+        const QSslSocket* clientSocket() const;  // const (for read-only access)
+
+        bool interruptibleWaitForReadyRead(int timeoutMs);
 
         // Protected accessors — added for unit tests
         [[nodiscard]] QSslSocket* getClientConnection() const { return clientConnection; }
@@ -102,9 +104,21 @@ class TCPThread : public QThread
 
         Packet sendPacket;
         QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
+        bool tryConnectEncrypted();
         void wireupSocketSignals();
 
         QSslSocket * clientConnection;
+
+        // Default implementation uses real socket
+        virtual bool checkConnectionAndEncryption();
+
+        virtual std::pair<bool, bool> performEncryptedHandshake();
+
+        // The common logic — can be called from base or test override
+        void handleEncryptedConnectionOutcome(bool handshakeSucceeded, bool isEncryptedResult);
+
+        // Virtual method for binding — override in test doubles to skip or control
+        virtual bool bindClientSocket();
 
         int destructorWaitMs = 5000;
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()

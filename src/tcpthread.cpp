@@ -262,6 +262,126 @@ QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const
     return protocol;
 }
 
+bool TCPThread::checkConnectionAndEncryption()
+{
+    bool connected = clientSocket()->waitForConnected(5000);
+    bool encrypted = clientSocket()->waitForEncrypted(5000);
+    qDebug() << "waitForConnected finished:" << connected;
+    qDebug() << "waitForEncrypted finished:" << encrypted;
+    qDebug() << "isEncrypted:" << clientSocket()->isEncrypted();
+
+    return connected && encrypted;
+}
+
+bool TCPThread::tryConnectEncrypted()
+{
+    qDebug() << "clientSocket type:" << clientSocket()->metaObject()->className();
+
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    loadSSLCerts(clientSocket(), false);
+    clientSocket()->setProtocol(QSsl::AnyProtocol);
+
+    if (settings.value("ignoreSSLCheck", true).toBool()) {
+        qDebug() << "Telling SSL to ignore errors";
+        clientSocket()->ignoreSslErrors();
+    }
+
+    qDebug() << "Connecting to" << sendPacket.toIP << ":" << sendPacket.port;
+    clientSocket()->connectToHostEncrypted(
+        sendPacket.toIP,
+        sendPacket.port,
+        QIODevice::ReadWrite,
+        getIPConnectionProtocol()
+    );
+
+    // Get both from the virtual override
+    auto [connected, encrypted] = performEncryptedHandshake();
+
+    // Pass the mocked encrypted value
+    handleEncryptedConnectionOutcome(connected && encrypted, encrypted);
+
+    return connected && encrypted;
+}
+
+std::pair<bool, bool> TCPThread::performEncryptedHandshake()
+{
+    bool connected = clientSocket()->waitForConnected(5000);
+    bool encrypted = clientSocket()->waitForEncrypted(5000);
+
+    qDebug() << "waitForConnected finished:" << connected;
+    qDebug() << "waitForEncrypted finished:" << encrypted;
+    qDebug() << "isEncrypted:" << clientSocket()->isEncrypted();
+
+    return {connected, encrypted};
+}
+
+void TCPThread::handleEncryptedConnectionOutcome(bool handshakeSucceeded, bool isEncrypted)
+{
+    qDebug() << "[DEBUG] handle outcome called - handshakeSucceeded:" << handshakeSucceeded;
+    qDebug() << "[DEBUG] handle outcome called - isEncrypted:" << isEncrypted;
+
+    // SSL errors
+    QList<QSslError> sslErrorsList =
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+        clientSocket()->sslErrors();
+#else
+            clientSocket()->sslHandshakeErrors();
+#endif
+
+    if (!sslErrorsList.isEmpty()) {
+        for (const QSslError &sError : sslErrorsList) {
+            Packet errorPacket = sendPacket;
+            errorPacket.hexString.clear();
+            errorPacket.errorString = sError.errorString();
+            emit packetSent(errorPacket);
+        }
+    }
+
+    // Use the value passed from the handshake check
+    if (isEncrypted) {
+        qDebug() << "[DEBUG] Entering encrypted branch – emitting 4 packets";
+
+        QSslCipher cipher = clientSocket()->sessionCipher();
+
+        Packet infoPacket = sendPacket;
+        infoPacket.hexString.clear();
+
+        infoPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
+        emit packetSent(infoPacket);
+
+        infoPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
+        emit packetSent(infoPacket);
+
+        infoPacket.errorString = "Peer Cert issued by " +
+            clientSocket()->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+        emit packetSent(infoPacket);
+
+        infoPacket.errorString = "Our Cert issued by " +
+            clientSocket()->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+        emit packetSent(infoPacket);
+    } else {
+        qDebug() << "[DEBUG] Entering NOT encrypted branch – emitting 1 packet";
+
+        Packet infoPacket = sendPacket;
+        infoPacket.hexString.clear();
+        infoPacket.errorString = "Not Encrypted!";
+        emit packetSent(infoPacket);
+    }
+}
+
+bool TCPThread::bindClientSocket()
+{
+    bool success = clientSocket()->bind();
+    if (success) {
+        sendPacket.fromPort = clientSocket()->localPort();
+        qDebug() << "Bound to random source port:" << sendPacket.fromPort;
+    } else {
+        qDebug() << "Bind failed - using system-assigned source port";
+    }
+    return success;
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {
