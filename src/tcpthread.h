@@ -79,6 +79,13 @@ class TCPThread : public QThread
 
     protected:
         bool interruptibleWaitForReadyRead(int timeoutMs) const;
+        // Allow injecting a pre-created socket (primarily for unit testing)
+        explicit TCPThread(QSslSocket *preCreatedSocket,
+                           const QString &host,
+                           quint16 port,
+                           const Packet &initialPacket = Packet(),
+                           QObject *parent = nullptr);
+
         QSslSocket* clientSocket();  // non-const (for creation/modification)
 
         // Protected accessors — added for unit tests
