@@ -50,6 +50,7 @@ cd build
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -G Xcode \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+  -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
   -DCMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake \
   -DCMAKE_INSTALL_PREFIX=~/QtBuilds/install \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
