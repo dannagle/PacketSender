@@ -119,6 +119,16 @@ protected:
 
         return {connected, encrypted};
     }
+
+    bool isSocketEncrypted(const QSslSocket &sock) const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(&sock)) {
+            qDebug() << "TestTcpThreadClass::isSocketEncrypted - using mock value:" << mock->isEncrypted();
+            return mock->isEncrypted();
+        }
+
+        return TCPThread::isSocketEncrypted(sock);
+    }
 };
 
 
