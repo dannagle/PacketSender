@@ -6,11 +6,11 @@
 #define TESTUTILS_H
 
 
-
-class TestUtils {
-
+class TestUtils
+{
+public:
+    static void debugSpy(const QSignalSpy& spy);
 };
-
 
 
 #endif //TESTUTILS_H
