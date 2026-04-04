@@ -7,6 +7,8 @@ add_executable(${TEST_NAME}
     testdoubles/testtcpthreadclass.h
     testdoubles/MockSslSocket.h
 
+    testutils.cpp
+
     ../../translations.cpp
     translation_tests.cpp
 
