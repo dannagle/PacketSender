@@ -14,6 +14,8 @@ private slots:
     void testDestructorWaitsGracefullyWhenManaged();
     void testFullLifecycleWithServer();
     void testOutgoingClientPathStartsLoopAndSendsPacket();
+    void testRunOutgoingConnectFailure();
+    void testRunOutgoingCloseDuringLoop();
 };
 
 
