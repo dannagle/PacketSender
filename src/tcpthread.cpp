@@ -299,7 +299,7 @@ bool TCPThread::tryConnectEncrypted()
     auto [connected, encrypted] = performEncryptedHandshake();
 
     // Pass the mocked encrypted value
-    handleEncryptedConnectionOutcome(connected && encrypted, encrypted);
+    handleOutgoingEncryptedConnection(connected && encrypted, encrypted);
 
     return connected && encrypted;
 }
@@ -316,7 +316,7 @@ std::pair<bool, bool> TCPThread::performEncryptedHandshake()
     return {connected, encrypted};
 }
 
-void TCPThread::handleEncryptedConnectionOutcome(bool handshakeSucceeded, bool isEncrypted)
+void TCPThread::handleOutgoingEncryptedConnection(bool handshakeSucceeded, bool isEncrypted)
 {
     qDebug() << "[DEBUG] handle outcome called - handshakeSucceeded:" << handshakeSucceeded;
     qDebug() << "[DEBUG] handle outcome called - isEncrypted:" << isEncrypted;
