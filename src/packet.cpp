@@ -1215,3 +1215,35 @@ QString Packet::ASCIITohex(QString &ascii)
 
 }
 
+QDebug operator<<(QDebug debug, const Packet& packet)
+{
+    QDebugStateSaver saver(debug);   // Important: preserves formatting state (nospace, etc.)
+
+    debug.nospace() << "Packet("
+                    << "name=" << packet.name
+                    << ", hexString=\"" << packet.hexString << "\""
+                    << ", requestPath=" << packet.requestPath
+                    // Add the remaining useful fields below:
+                    << ", fromIP=" << packet.fromIP
+                    << ", toIP=" << packet.toIP
+                    << ", resolvedIP=" << packet.resolvedIP
+                    << ", errorString=\"" << packet.errorString << "\""
+                    << ", repeat=" << packet.repeat
+                    << ", port=" << packet.port
+                    << ", fromPort=" << packet.fromPort
+                    << ", tcpOrUdp=" << packet.tcpOrUdp
+                    << ", sendResponse=" << packet.sendResponse
+                    << ", incoming=" << (packet.incoming ? "true" : "false")
+                    // Using const_cast for the non-const isXXX() methods:
+                    << ", isDTLS=" << (const_cast<Packet&>(packet).isDTLS() ? "true" : "false")
+                    << ", isTCP="  << (const_cast<Packet&>(packet).isTCP()  ? "true" : "false")
+                    << ", isSSL="  << (const_cast<Packet&>(packet).isSSL()  ? "true" : "false")
+                    << ", isUDP="  << (const_cast<Packet&>(packet).isUDP()  ? "true" : "false")
+                    << ", isHTTP=" << (const_cast<Packet&>(packet).isHTTP() ? "true" : "false")
+                    << ", isHTTPS="<< (const_cast<Packet&>(packet).isHTTPS()? "true" : "false")
+                    << ", isPOST=" << (const_cast<Packet&>(packet).isPOST() ? "true" : "false")
+                    << ")";
+
+    return debug;
+}
+
