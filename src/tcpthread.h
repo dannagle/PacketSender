@@ -115,7 +115,7 @@ class TCPThread : public QThread
         virtual std::pair<bool, bool> performEncryptedHandshake();
 
         // The common logic — can be called from base or test override
-        void handleOutgoingEncryptedConnection(bool handshakeSucceeded, bool isEncryptedResult);
+        void handleOutgoingSSLHandshake(bool handshakeSucceeded, bool isEncryptedResult);
 
         // Virtual method for binding — override in test doubles to skip or control
         virtual bool bindClientSocket();
