@@ -101,6 +101,7 @@ class TCPThread : public QThread
         [[nodiscard]] bool getManagedByConnection() const { return m_managedByConnection; }
 
         [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
+        [[nodiscard]] virtual bool isSocketEncrypted(const QSslSocket &sock) const { return sock.isEncrypted(); };
 
         Packet sendPacket;
         QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
