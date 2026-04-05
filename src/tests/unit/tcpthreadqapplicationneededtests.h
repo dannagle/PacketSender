@@ -27,6 +27,10 @@ private slots:
     void testHandleOutgoingSSLHandshake_success();
     void testHandleOutgoingSSLHandshake_withErrors();
 
+    // runOutgoingClient characterization tests
+    void testRunOutgoingClient_plainTCP_connectFailure();
+    void testRunOutgoingClient_SSL_path_is_attempted();
+
 };
 
 

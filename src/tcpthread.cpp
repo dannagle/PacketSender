@@ -411,6 +411,65 @@ bool TCPThread::bindClientSocket()
     return success;
 }
 
+void TCPThread::runOutgoingClient()
+{
+    QDEBUG() << "We are threaded sending!";
+
+    clientConnection = new QSslSocket(nullptr);
+
+    qDebug() << "Connecting using host:" << sendPacket.toIP << "port:" << sendPacket.port
+             << " (passed-in host:" << host << " port:" << port << " currently unused)";
+
+    sendPacket.fromIP = "You";
+    sendPacket.timestamp = QDateTime::currentDateTime();
+    sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
+
+    bindClientSocket();
+
+    if (sendPacket.isSSL()) {
+        tryConnectEncrypted();
+    } else {
+        // Plain TCP path
+        clientSocket()->connectToHost(sendPacket.toIP,
+                                      sendPacket.port,
+                                      QIODevice::ReadWrite,
+                                      getIPConnectionProtocol());
+
+        bool connectSuccess = clientSocket()->waitForConnected(5000);
+
+        qDebug() << "[TCPThread plain connect] ========================================";
+        qDebug() << "  waitForConnected() returned:" << connectSuccess;
+        qDebug() << "  socket state:" << clientSocket()->state();
+        qDebug() << "  socket error code:" << clientSocket()->error();
+        qDebug() << "  socket error string:" << clientSocket()->errorString();
+        qDebug() << "  peer:" << clientSocket()->peerAddress().toString() << ":" << clientSocket()->peerPort();
+        qDebug() << "  local port:" << clientSocket()->localPort();
+        qDebug() << "================================================================";
+    }
+
+    if (sendPacket.delayAfterConnect > 0) {
+        QDEBUG() << "sleeping" << sendPacket.delayAfterConnect;
+        QThread::usleep(1000 * sendPacket.delayAfterConnect);
+    }
+
+    QDEBUGVAR(clientSocket()->localPort());
+
+    if (clientSocket()->state() == QAbstractSocket::ConnectedState) {
+        emit connectStatus("Connected");
+        sendPacket.port = clientSocket()->peerPort();
+        sendPacket.fromPort = clientSocket()->localPort();
+
+        persistentConnectionLoop();
+
+        emit connectStatus("Not connected.");
+        QDEBUG() << "Not connected.";
+    } else {
+        emit connectStatus("Could not connect.");
+        QDEBUG() << "Could not connect";
+        sendPacket.errorString = "Could not connect";
+        emit packetSent(sendPacket);
+    }
+}
 
 void TCPThread::handleIncomingSSLHandshake(QSslSocket &sock)
 {
