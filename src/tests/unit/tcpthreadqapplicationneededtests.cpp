@@ -236,3 +236,165 @@ void TcpThread_QApplicationNeeded_tests::testRunOutgoingCloseDuringLoop()
     QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}) ||
             statusSpy.contains(QVariantList{"Not connected."}));
 }
+
+//////////////////////////////////////////////////////////////////////
+///           handleIncomingSSLHandshake() TESTS            /////////
+////////////////////////////////////////////////////////////////////
+
+void TcpThread_QApplicationNeeded_tests::testHandleIncomingSSLHandshake_success()
+{
+    MockSslSocket *mockSock = new MockSslSocket();
+    TestTcpThreadClass thread("127.0.0.1", 8443, Packet());
+    thread.setClientConnection(mockSock);
+
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(true);
+    mockSock->setMockSslErrors({});
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleIncomingSSLHandshake(*mockSock);
+
+    QCOMPARE(packetSpy.count(), 4);
+
+    QStringList messages;
+    for (const auto& args : packetSpy) {
+        Packet p = args[0].value<Packet>();
+        messages << p.errorString;
+        qDebug() << "Emitted packet:" << p.errorString;
+    }
+
+    // Current mock produces empty strings for most fields because we haven't set those fields/overridden those methods yet.
+    QVERIFY(messages.contains(QRegularExpression("^Encrypted with ")));
+    QVERIFY(messages.contains(QRegularExpression("^Authenticated with ")));
+    QVERIFY(messages.contains(QRegularExpression("^Peer cert issued by ")));
+    QVERIFY(messages.contains(QRegularExpression("^Our Cert issued by SnakeOil")));
+
+    QCOMPARE(thread.incomingSSLCallCount, 1);
+}
+
+void TcpThread_QApplicationNeeded_tests::testHandleIncomingSSLHandshake_withErrors()
+{
+    MockSslSocket *mockSock = new MockSslSocket();
+    TestTcpThreadClass thread("127.0.0.1", 8443, Packet());
+    thread.setClientConnection(mockSock);
+
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(false);
+
+    QList<QSslError> errors = { QSslError(QSslError::SelfSignedCertificate) };
+    mockSock->setMockSslErrors(errors);
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleIncomingSSLHandshake(*mockSock);
+
+    qDebug() << "Error test - packetSpy.count() =" << packetSpy.count();
+
+    // We expect at least one error packet to be emitted
+    QVERIFY2(packetSpy.count() >= 1, "Expected at least one SSL error packet when errors are present");
+
+    // Check that one of the emitted packets contains error information
+    // Platform-agnostic check using any_of + contains
+    static const QStringList expectedPhrases = {
+        /*
+         * The string on macOS is "The certificate is self-signed, and untrusted"
+         * Grok thinks the strings are:
+         *
+         * Windows (Schannel): "The certificate is self-signed" or "Certificate is self-signed"
+         * Linux (OpenSSL): "self signed certificate" or "Self-signed certificate"
+         *
+         * and apparently macOS uses Secure Transport
+         */
+        "self-signed",
+        "self signed",
+        "untrusted",
+        "certificate is self"
+    };
+
+    bool sawExpectedError = false;
+    QString actualErrorMsg;
+
+    for (const auto& args : packetSpy) {
+        Packet p = args[0].value<Packet>();
+        actualErrorMsg = p.errorString.toLower();
+
+        // One clean call using std::any_of
+        sawExpectedError = std::any_of(expectedPhrases.begin(), expectedPhrases.end(),
+            [&](const QString& phrase) {
+                return actualErrorMsg.contains(phrase, Qt::CaseInsensitive);
+            });
+
+        if (sawExpectedError) {
+            qDebug() << "Found expected SSL error phrase in:" << p.errorString;
+            break;
+        }
+    }
+
+    QVERIFY2(sawExpectedError,
+             qPrintable(QString("Expected error packet containing one of: %1\nActual: %2")
+                            .arg(expectedPhrases.join(", "))
+                            .arg(actualErrorMsg)));
+
+    QCOMPARE(thread.incomingSSLCallCount, 1);
+}
+
+//////////////////////////////////////////////////////////////////////
+///         handleOutgoingSSLHandshake() TESTS              /////////
+////////////////////////////////////////////////////////////////////
+
+void TcpThread_QApplicationNeeded_tests::testHandleOutgoingSSLHandshake_success()
+{
+    MockSslSocket *mockSock = new MockSslSocket();
+    TestTcpThreadClass thread(mockSock, "127.0.0.1", 443, Packet());
+
+    // Setup mock socket behavior
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(true);
+    mockSock->setMockSslErrors({});
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+
+    // Call through the test helper (passes the two parameters the method expects)
+    thread.callHandleOutgoingSSLHandshake(true, true);
+
+    // Should emit 4 info packets (cipher, auth, peer cert, our cert)
+    QCOMPARE(packetSpy.count(), 4);
+
+    QStringList messages;
+    for (const auto& args : packetSpy) {
+        Packet p = args[0].value<Packet>();
+        messages << p.errorString;
+    }
+
+    QVERIFY(messages.contains(QRegularExpression("^Encrypted with.*")));
+    QVERIFY(messages.contains(QRegularExpression("^Authenticated with.*")));
+    QVERIFY(messages.contains(QRegularExpression("^Peer Cert issued by.*")));
+    QVERIFY(messages.contains(QRegularExpression("^Our Cert issued by.*")));
+
+    // Verify the handler was actually called
+    QCOMPARE(thread.outgoingSSLCallCount, 1);
+}
+
+void TcpThread_QApplicationNeeded_tests::testHandleOutgoingSSLHandshake_withErrors()
+{
+    MockSslSocket *mockSock = new MockSslSocket();
+    TestTcpThreadClass thread(mockSock, "127.0.0.1", 443, Packet());
+
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(false);
+
+    QList<QSslError> errors = { QSslError(QSslError::SelfSignedCertificate) };
+    mockSock->setMockSslErrors(errors);
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+
+    // Call with failure parameters
+    thread.callHandleOutgoingSSLHandshake(false, false);
+
+    // Should emit at least one error packet + "Not Encrypted!"
+    QVERIFY(packetSpy.count() >= 1);
+
+    // Verify the handler was called
+    QCOMPARE(thread.outgoingSSLCallCount, 1);
+}
