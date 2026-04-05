@@ -18,6 +18,15 @@ private slots:
     // characterization tests
     void testRunOutgoingConnectFailure();
     void testRunOutgoingCloseDuringLoop();
+
+    // SSL handshake handler tests - INCOMING
+    void testHandleIncomingSSLHandshake_success();
+    void testHandleIncomingSSLHandshake_withErrors();
+
+    // SSL handshake handler tests - OUTGOING
+    void testHandleOutgoingSSLHandshake_success();
+    void testHandleOutgoingSSLHandshake_withErrors();
+
 };
 
 
