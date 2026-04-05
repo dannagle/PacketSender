@@ -101,23 +101,21 @@ protected:
 
     bool checkConnectionAndEncryption() override
     {
-        {
-            MockSslSocket *mock = qobject_cast<MockSslSocket*>(clientSocket());
-            if (!mock) {
-                qWarning() << "No mock in test — falling back to base";
-                return TCPThread::checkConnectionAndEncryption();
-            }
-
-            bool connected = mock->waitForConnected(5000);
-            bool encrypted = mock->waitForEncrypted(5000);
-            bool isEnc = mock->isEncrypted();
-
-            qDebug() << "from checkConnectionAndEncryption Test mock: connected =" << connected;
-            qDebug() << "from checkConnectionAndEncryption Test mock: encrypted =" << encrypted;
-            qDebug() << "from checkConnectionAndEncryption Test mock: isEncrypted =" << isEnc;
-
-            return connected && encrypted;
+        MockSslSocket *mock = qobject_cast<MockSslSocket*>(clientSocket());
+        if (!mock) {
+            qWarning() << "No mock in test — falling back to base";
+            return TCPThread::checkConnectionAndEncryption();
         }
+
+        bool connected = mock->waitForConnected(5000);
+        bool encrypted = mock->waitForEncrypted(5000);
+        bool isEncrypted = mock->isEncrypted();
+
+        qDebug() << "from checkConnectionAndEncryption Test mock: connected =" << connected;
+        qDebug() << "from checkConnectionAndEncryption Test mock: encrypted =" << encrypted;
+        qDebug() << "from checkConnectionAndEncryption Test mock: isEncrypted =" << isEncrypted;
+
+        return connected && encrypted;
     }
 
     std::pair<bool, bool> performEncryptedHandshake() override
