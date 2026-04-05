@@ -90,10 +90,16 @@ public:
         outgoingSSLCallCount++;
         handleOutgoingSSLHandshake(handshakeSucceeded, isEncryptedResult);
     }
+
     void callHandleIncomingSSLHandshake(QSslSocket &sock)
     {
         incomingSSLCallCount++;
         handleIncomingSSLHandshake(sock);
+    }
+
+    void callRunOutgoingClient()
+    {
+        TCPThread::runOutgoingClient(); // for clarity until we override
     }
 
 protected:
