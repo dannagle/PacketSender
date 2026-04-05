@@ -129,6 +129,22 @@ protected:
 
         return TCPThread::isSocketEncrypted(sock);
     }
+
+    QList<QSslError> getSslErrors(QSslSocket* sock) const override
+    {
+        if (MockSslSocket *mock = qobject_cast<MockSslSocket*>(sock)) {
+            return mock->sslErrors();
+        }
+        return TCPThread::getSslErrors(sock);
+    }
+
+    QList<QSslError> getSslHandshakeErrors(QSslSocket* sock) const override
+    {
+        if (MockSslSocket *mock = qobject_cast<MockSslSocket*>(sock)) {
+            return mock->sslErrors();
+        }
+        return TCPThread::getSslHandshakeErrors(sock);
+    }
 };
 
 
