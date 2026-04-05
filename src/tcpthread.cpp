@@ -411,6 +411,95 @@ bool TCPThread::bindClientSocket()
     return success;
 }
 
+
+void TCPThread::handleIncomingSSLHandshake(QSslSocket &sock)
+{
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+
+    QDEBUG() << "in handleIncomingSSLHandshake, supportsSsl" << sock.supportsSsl();
+    QDEBUG() << "in handleIncomingSSLHandshake, isEncrypted" << sock.isEncrypted();
+
+    loadSSLCerts(&sock, settings.value("serverSnakeOilCheck", true).toBool());
+    QDEBUG() << "in handleIncomingSSLHandshake after loadSSLCerts, supportsSsl" << sock.supportsSsl();
+    QDEBUG() << "in handleIncomingSSLHandshake after loadSSLCerts, isEncrypted" << sock.isEncrypted();
+
+    sock.setProtocol(QSsl::AnyProtocol);
+    QDEBUG() << "in handleIncomingSSLHandshake after setProtocol, supportsSsl" << sock.supportsSsl();
+    QDEBUG() << "in handleIncomingSSLHandshake after setProtocol, isEncrypted" << sock.isEncrypted();
+
+    if (settings.value("ignoreSSLCheck", true).toBool()) {
+        sock.ignoreSslErrors();
+    }
+
+    sock.startServerEncryption();
+    QDEBUG() << "in handleIncomingSSLHandshake after startServerEncryption, supportsSsl" << sock.supportsSsl();
+    QDEBUG() << "in handleIncomingSSLHandshake after startServerEncryption, isEncrypted" << sock.isEncrypted();
+    sock.waitForEncrypted();
+    QDEBUG() << "in handleIncomingSSLHandshake after waitForEncrypted, supportsSsl" << sock.supportsSsl();
+    QDEBUG() << "in handleIncomingSSLHandshake after waitForEncrypted, isEncrypted" << sock.isEncrypted();
+
+    QList<QSslError> sslErrorsList =
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+        getSslErrors(&sock);
+#else
+            getSslHandshakeErrors(&sock);
+#endif
+
+    Packet errorPacket;
+    errorPacket.init();
+    errorPacket.timestamp = QDateTime::currentDateTime();
+    errorPacket.name = errorPacket.timestamp.toString(DATETIMEFORMAT);
+    errorPacket.toIP = "You";
+    errorPacket.port = sock.localPort();
+    errorPacket.fromPort = sock.peerPort();
+    errorPacket.fromIP = sock.peerAddress().toString();
+
+    if (sock.isEncrypted()) {
+        errorPacket.tcpOrUdp = "SSL";
+    }
+
+    // Emit SSL error packets if any
+    if (sslErrorsList.size() > 0) {
+        QSslError sError;
+        foreach (sError, sslErrorsList) {
+            errorPacket.hexString.clear();
+            errorPacket.errorString = sError.errorString();
+            emit packetSent(errorPacket);
+        }
+    }
+
+    QDEBUG() << "before if statement in handleIncomingSSLHandshake, sock.isEncrypted(): " << sock.isEncrypted();
+
+    // Emit cipher and certificate info if encrypted
+    if (isSocketEncrypted(sock)) {
+        qDebug() << ">>> ENTERED if (sock.isEncrypted()) block - isEncrypted() returned true";
+        qDebug() << "    cipher name:" << sock.sessionCipher().name();
+
+        QSslCipher cipher = sock.sessionCipher();
+
+        errorPacket.hexString.clear();
+        errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
+        emit packetSent(errorPacket);
+
+        errorPacket.hexString.clear();
+        errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
+        emit packetSent(errorPacket);
+
+        errorPacket.hexString.clear();
+        errorPacket.errorString = "Peer cert issued by " +
+            sock.peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+        emit packetSent(errorPacket);
+
+        errorPacket.hexString.clear();
+        errorPacket.errorString = "Our Cert issued by " +
+            sock.localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+        emit packetSent(errorPacket);
+    } else
+    {
+        qDebug() << ">>> SKIPPED if (sock.isEncrypted()) block - isEncrypted() returned false";
+    }
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {
