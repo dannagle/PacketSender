@@ -131,6 +131,8 @@ class TCPThread : public QThread
         virtual void runOutgoingClient();
         virtual void handleIncomingSSLHandshake(QSslSocket& sock);
 
+        virtual Packet buildInitialReceivedPacket(QSslSocket &sock);
+
 };
 
 #endif // TCPTHREAD_H
