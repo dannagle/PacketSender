@@ -31,6 +31,8 @@ private slots:
     void testRunOutgoingClient_plainTCP_connectFailure();
     void testRunOutgoingClient_SSL_path_is_attempted();
 
+    void testBuildInitialReceivedPacket();
+    void testBuildInitialReceivedPacket_SSLPath();
 };
 
 

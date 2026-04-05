@@ -83,6 +83,7 @@ public:
     // for spying / verification
     int outgoingSSLCallCount = 0;
     int incomingSSLCallCount = 0;
+    int buildInitialReceivedPacketCallCount = 0;
 
     // Test helpers to call protected SSL handlers
     void callHandleOutgoingSSLHandshake(bool handshakeSucceeded, bool isEncryptedResult)
@@ -100,6 +101,12 @@ public:
     void callRunOutgoingClient()
     {
         TCPThread::runOutgoingClient(); // for clarity until we override
+    }
+
+    Packet callBuildInitialReceivedPacket(QSslSocket &sock)
+    {
+        buildInitialReceivedPacketCallCount++;
+        return buildInitialReceivedPacket(sock);
     }
 
 protected:

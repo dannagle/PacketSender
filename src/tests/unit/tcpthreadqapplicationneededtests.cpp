@@ -440,3 +440,85 @@ void TcpThread_QApplicationNeeded_tests::testRunOutgoingClient_SSL_path_is_attem
     // Verify we went through the SSL path
     QCOMPARE(thread->outgoingSSLCallCount, 0);   // we'll update this once we add the counter
 }
+
+void TcpThread_QApplicationNeeded_tests::testBuildInitialReceivedPacket()
+{
+    QTcpServer server;
+    QVERIFY(server.listen(QHostAddress::LocalHost, 0));
+    quint16 serverPort = server.serverPort();
+
+    qDebug() << "Server listening on port:" << serverPort;
+
+    QTest::qWait(100);
+
+    QSslSocket clientSock;
+    clientSock.connectToHost("127.0.0.1", serverPort);
+    QVERIFY(clientSock.waitForConnected(3000));
+
+    QByteArray testData = "Bland \"data\" from test client";
+    clientSock.write(testData);
+    QVERIFY(clientSock.waitForBytesWritten(1000));
+
+    quint16 clientEphemeralPort = clientSock.localPort();
+
+    QTest::qWait(200);
+
+    QTcpSocket *rawAccepted = server.nextPendingConnection();
+    QVERIFY(rawAccepted);
+
+    // Use unique_ptr for automatic cleanup even on failure
+    std::unique_ptr<QTcpSocket> acceptedSock(rawAccepted);
+
+    TestTcpThreadClass thread("127.0.0.1", serverPort, Packet());
+
+    Packet receivedPacket = thread.callBuildInitialReceivedPacket(
+        static_cast<QSslSocket&>(*acceptedSock));
+
+    qDebug() << "receivedPacket.hexString:" << receivedPacket.hexString;
+
+    // Core assertions
+    const QString expectedHex =
+        "42 6C 61 6E 64 20 22 64 61 74 61 22 20 66 72 6F 6D 20 74 65 73 74 20 63 6C 69 65 6E 74";
+    const QString actualHex = receivedPacket.hexString.trimmed();
+    QVERIFY2(actualHex == expectedHex,
+             qPrintable(QString("Hex string mismatch in buildInitialReceivedPacket()\n"
+                              "Expected (trimmed): %1\n"
+                              "Actual   (trimmed): %2\n\n"
+                              "Assumption: Packet::byteArrayToHex() uses QByteArray::toHex(' ').toUpper()")
+                              .arg(expectedHex, actualHex)));
+
+    QCOMPARE(receivedPacket.toIP, QString("You"));
+    QCOMPARE(receivedPacket.fromIP, QString("127.0.0.1"));
+
+    QCOMPARE(receivedPacket.port, serverPort);
+    QCOMPARE(receivedPacket.fromPort, clientEphemeralPort);
+
+    QVERIFY(receivedPacket.timestamp.isValid());
+    QCOMPARE(receivedPacket.tcpOrUdp, QString("TCP"));
+
+    QVERIFY(receivedPacket.name.contains(receivedPacket.timestamp.toString(DATETIMEFORMAT)));
+}
+
+void TcpThread_QApplicationNeeded_tests::testBuildInitialReceivedPacket_SSLPath()
+{
+    auto mockSock = std::make_unique<MockSslSocket>();
+    mockSock->setMockEncrypted(true);
+
+    TestTcpThreadClass thread("127.0.0.1", 8443, Packet());
+
+    // Inject the mock socket
+    thread.setClientConnection(mockSock.get());
+
+    Packet receivedPacket = thread.callBuildInitialReceivedPacket(*mockSock);
+
+    qDebug() << "SSL Path Test - tcpOrUdp :" << receivedPacket.tcpOrUdp;
+    qDebug() << "SSL Path Test - hexString:" << receivedPacket.hexString;
+
+    // Main assertion: verify the if (sock.isEncrypted()) branch was taken
+    QCOMPARE(receivedPacket.tcpOrUdp, QString("SSL"));
+
+    // Basic sanity checks
+    QCOMPARE(receivedPacket.toIP, QString("You"));
+    QVERIFY(receivedPacket.timestamp.isValid());
+    QVERIFY(!receivedPacket.name.isEmpty());
+}

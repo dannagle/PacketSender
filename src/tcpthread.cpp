@@ -559,6 +559,34 @@ void TCPThread::handleIncomingSSLHandshake(QSslSocket &sock)
     }
 }
 
+Packet TCPThread::buildInitialReceivedPacket(QSslSocket &sock)
+{
+    Packet tcpPacket;
+    QByteArray data;
+
+    data.clear();
+    tcpPacket.timestamp = QDateTime::currentDateTime();
+    tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
+    tcpPacket.tcpOrUdp = sendPacket.tcpOrUdp;
+
+    tcpPacket.fromIP = getIPConnectionProtocol() == QAbstractSocket::IPv6Protocol ?
+        Packet::removeIPv6Mapping(sock.peerAddress()) : (sock.peerAddress()).toString();
+
+    tcpPacket.toIP = "You";
+    tcpPacket.port = sock.localPort();
+    tcpPacket.fromPort = sock.peerPort();
+
+    sock.waitForReadyRead(5000); // initial packet
+    data = sock.readAll();
+    tcpPacket.hexString = Packet::byteArrayToHex(data);
+
+    if (isSocketEncrypted(sock)) {
+        tcpPacket.tcpOrUdp = "SSL";
+    }
+
+    return tcpPacket;
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {
