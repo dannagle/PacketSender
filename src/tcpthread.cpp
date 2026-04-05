@@ -234,6 +234,35 @@ const QSslSocket* TCPThread::clientSocket() const
     return clientConnection;  // no creation in const version
 }
 
+QList<QSslError> TCPThread::getSslErrors(QSslSocket* sock) const
+{
+    QList<QSslError> sslErrorsList;
+    if (sock) {
+        QSslSocket& nonConstSock = const_cast<QSslSocket&>(*sock);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+        sslErrorsList = nonConstSock.sslErrors();
+#else
+        sslErrorsList = nonConstSock.sslHandshakeErrors();
+#endif
+    }
+
+    return sslErrorsList;
+}
+
+QList<QSslError> TCPThread::getSslHandshakeErrors(QSslSocket* sock) const
+{
+    QList<QSslError> sslErrorsList;
+    if (sock) {
+        QSslSocket& nonConstSock = const_cast<QSslSocket&>(*sock);
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+        sslErrorsList = nonConstSock.sslErrors();
+#else
+        sslErrorsList = nonConstSock.sslHandshakeErrors();
+#endif
+    }
+    return sslErrorsList;
+}
+
 // EXTRACTIONS FROM run()
 
 QAbstractSocket::NetworkLayerProtocol TCPThread::getIPConnectionProtocol() const

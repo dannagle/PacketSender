@@ -103,6 +103,9 @@ class TCPThread : public QThread
         [[nodiscard]] virtual bool divideWaitBy10ForUnitTest() const { return false; }
         [[nodiscard]] virtual bool isSocketEncrypted(const QSslSocket &sock) const { return sock.isEncrypted(); };
 
+        virtual QList<QSslError> getSslErrors(QSslSocket *sock) const;
+        virtual QList<QSslError> getSslHandshakeErrors(QSslSocket *sock) const;
+
         Packet sendPacket;
         QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
         bool tryConnectEncrypted();
