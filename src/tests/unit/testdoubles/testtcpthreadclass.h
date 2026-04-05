@@ -80,6 +80,23 @@ public:
 
     bool fireTryConnectEncrypted() { return tryConnectEncrypted(); }
 
+    // for spying / verification
+    int outgoingSSLCallCount = 0;
+    int incomingSSLCallCount = 0;
+
+    // Test helpers to call protected SSL handlers
+    void callHandleOutgoingSSLHandshake(bool handshakeSucceeded, bool isEncryptedResult)
+    {
+        outgoingSSLCallCount++;
+        handleOutgoingSSLHandshake(handshakeSucceeded, isEncryptedResult);
+    }
+    void callHandleIncomingSSLHandshake(QSslSocket &sock)
+    {
+        incomingSSLCallCount++;
+        handleIncomingSSLHandshake(sock);
+    }
+    ;
+
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
 
