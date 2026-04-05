@@ -127,6 +127,9 @@ class TCPThread : public QThread
         int destructorWaitMs = 5000;
         bool m_managedByConnection = false;  // flag to skip deleteLater() in run()
 
+        // doesn't need to be public, but we do want to spy on it in unit tests
+        virtual void handleIncomingSSLHandshake(QSslSocket& sock);
+
 };
 
 #endif // TCPTHREAD_H
