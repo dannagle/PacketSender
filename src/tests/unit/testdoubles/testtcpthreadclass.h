@@ -95,7 +95,6 @@ public:
         incomingSSLCallCount++;
         handleIncomingSSLHandshake(sock);
     }
-    ;
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
