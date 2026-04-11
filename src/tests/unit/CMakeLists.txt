@@ -19,6 +19,7 @@ add_executable(${TEST_NAME}
     connectionmanager_tests.cpp
 
     ../../tcpthread.cpp
+    ../../persistentLoopConnection.cpp
     tcpthreadtests.cpp
     tcpthreadqapplicationneededtests.cpp
 
