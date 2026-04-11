@@ -613,6 +613,36 @@ Packet TCPThread::buildInitialReceivedPacket(QSslSocket &sock)
     return tcpPacket;
 }
 
+void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
+{
+    // Socket setup - only for real incoming connections
+    if (socketDescriptor > 0) {
+        clientConnection = new QSslSocket(this);
+
+        if (!clientSocket()->setSocketDescriptor(socketDescriptor)) {
+            qWarning() << "Failed to set socket descriptor on clientConnection for persistent incoming connection";
+            delete clientConnection;
+            clientConnection = nullptr;
+            return;
+        }
+
+        QDEBUG() << "Persistent incoming mode entered - using heap clientConnection";
+    }
+
+    // Core packet preparation
+    sendPacket = initialPacket;
+    sendPacket.persistent = true;
+    sendPacket.hexString.clear();
+
+    // Set port information from live socket if available
+    if (clientSocket() && clientSocket()->state() == QAbstractSocket::ConnectedState) {
+        sendPacket.port = clientSocket()->peerPort();
+        sendPacket.fromPort = clientSocket()->localPort();   // this is the important one
+    }
+    // else: leave fromPort and port as they were in initialPacket
+    // (unit tests can set them explicitly if they care)
+}
+
 // SLOTS
 void TCPThread::onConnected()
 {

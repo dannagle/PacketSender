@@ -33,6 +33,10 @@ private slots:
 
     void testBuildInitialReceivedPacket();
     void testBuildInitialReceivedPacket_SSLPath();
+
+    void testPrepareForPersistentLoop_preparesSendPacketCorrectly();
+    void testPrepareForPersistentLoop_setsUpClientConnection();
+    void testPrepareForPersistentLoop_withRealSocket_updatesPorts();
 };
 
 

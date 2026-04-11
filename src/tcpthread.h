@@ -133,6 +133,7 @@ class TCPThread : public QThread
         virtual void handleIncomingSSLHandshake(QSslSocket& sock);
 
         virtual Packet buildInitialReceivedPacket(QSslSocket &sock);
+        virtual void prepareForPersistentLoop(const Packet& initialPacket);
 
         void setSocketDescriptor(int descriptor) { socketDescriptor = descriptor; }
 };
