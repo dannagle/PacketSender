@@ -1,3 +1,9 @@
+cmake_minimum_required(VERSION 3.16)
+project(PacketSender_UnitTests)
+
+# Find Qt6 - this is critical
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Test Network)
+
 set(CMAKE_OSX_ARCHITECTURES "arm64" CACHE STRING "Forced architecture" FORCE)
 
 set(TEST_NAME "packetsender_unittests")
@@ -30,6 +36,7 @@ add_executable(${TEST_NAME}
 )
 
 target_include_directories(${TEST_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}             # so #include "translations.h" works cleanly
 )
 
