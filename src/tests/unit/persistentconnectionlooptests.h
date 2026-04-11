@@ -5,9 +5,16 @@
 #ifndef PERSISTENTCONNECTIONLOOPTESTS_H
 #define PERSISTENTCONNECTIONLOOPTESTS_H
 
+#include <QObject>
 
-class PersistentConnectionLoopTests
+class PersistentConnectionLoopTests : public QObject
 {
+    Q_OBJECT
+
+private slots:
+    void testPrepareForPersistentLoop_preparesSendPacketCorrectly();
+    void testPrepareForPersistentLoop_setsUpClientConnection();
+    void testPrepareForPersistentLoop_withRealSocket_updatesPorts();
 };
 
 
