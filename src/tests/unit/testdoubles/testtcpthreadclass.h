@@ -63,6 +63,7 @@ public:
     using TCPThread::getManagedByConnection;
     using TCPThread::getIPConnectionProtocol;
     using TCPThread::clientSocket;
+    using TCPThread::setSocketDescriptor;
 
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
@@ -84,6 +85,7 @@ public:
     int outgoingSSLCallCount = 0;
     int incomingSSLCallCount = 0;
     int buildInitialReceivedPacketCallCount = 0;
+    int prepareForPersistentLoopCallCount = 0;
 
     // Test helpers to call protected SSL handlers
     void callHandleOutgoingSSLHandshake(bool handshakeSucceeded, bool isEncryptedResult)
@@ -108,6 +110,14 @@ public:
         buildInitialReceivedPacketCallCount++;
         return buildInitialReceivedPacket(sock);
     }
+
+    void callPrepareForPersistentLoop(const Packet &initialPacket)
+    {
+        prepareForPersistentLoopCallCount++;
+        prepareForPersistentLoop(initialPacket);
+    };
+
+    Packet getSendPacket() { return sendPacket; };
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
