@@ -129,6 +129,7 @@ class TCPThread : public QThread
 
         // doesn't need to be public, but we do want to spy on it in unit tests
         virtual void runOutgoingClient();
+        void runIncomingConnection();
         virtual void handleIncomingSSLHandshake(QSslSocket& sock);
 
         virtual Packet buildInitialReceivedPacket(QSslSocket &sock);

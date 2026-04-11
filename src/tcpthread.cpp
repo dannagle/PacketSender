@@ -471,6 +471,32 @@ void TCPThread::runOutgoingClient()
     }
 }
 
+void TCPThread::runIncomingConnection()
+{
+    QSslSocket sock;
+    sock.setSocketDescriptor(socketDescriptor);
+
+    if (isSecure) {
+        handleIncomingSSLHandshake(sock);
+    }
+
+    connect(&sock, SIGNAL(disconnected()), this, SLOT(wasdisconnected()));
+
+    Packet tcpPacket = buildInitialReceivedPacket(sock);
+
+    emit packetSent(tcpPacket);
+    writeResponse(&sock, tcpPacket);
+
+    if (incomingPersistent) {
+        prepareForPersistentLoop(tcpPacket);
+        persistentConnectionLoop();
+    }
+
+    insidePersistent = false;
+    sock.disconnectFromHost();
+    sock.close();
+}
+
 void TCPThread::handleIncomingSSLHandshake(QSslSocket &sock)
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1013,325 +1039,14 @@ void TCPThread::closeConnection()
     // Do NOT call clientSocket()->close() here — worker will do it
 }
 
-
 void TCPThread::run()
 {
-    QAbstractSocket::NetworkLayerProtocol ipConnectionProtocol = getIPConnectionProtocol();
-
     if (sendFlag) {
-        QDEBUG() << "We are threaded sending!";
-        clientConnection = new QSslSocket(nullptr);
-
-        qDebug() << "Connecting using host:" << sendPacket.toIP << "port:" << sendPacket.port
-            << " passed in host " << host << " and port " << port << " are currently unused.";
-
-        sendPacket.fromIP = "You";
-        sendPacket.timestamp = QDateTime::currentDateTime();
-        sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
-
-        bindClientSocket();
-
-        // SSL Version...
-
-        if (sendPacket.isSSL()) {
-            QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-            loadSSLCerts(clientConnection, false);
-            clientSocket()->connectToHostEncrypted(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
-
-
-            if (settings.value("ignoreSSLCheck", true).toBool()) {
-                QDEBUG() << "Telling SSL to ignore errors";
-                clientSocket()->ignoreSslErrors();
-            }
-
-
-            QDEBUG() << "Connecting to" << sendPacket.toIP << ":" << sendPacket.port;
-            QDEBUG() << "Wait for connected finished" << clientSocket()->waitForConnected(5000);
-            QDEBUG() << "Wait for encrypted finished" << clientSocket()->waitForEncrypted(5000);
-
-            QDEBUG() << "isEncrypted" << clientSocket()->isEncrypted();
-
-            QList<QSslError> sslErrorsList  = clientSocket()->
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-                    sslErrors();
-#else
-                    sslHandshakeErrors();
-#endif
-
-            Packet errorPacket = sendPacket;
-            if (sslErrorsList.size() > 0) {
-                QSslError sError;
-                foreach (sError, sslErrorsList) {
-                    Packet errorPacket = sendPacket;
-                    errorPacket.hexString.clear();
-                    errorPacket.errorString = sError.errorString();
-                    emit packetSent(errorPacket);
-                }
-            }
-
-            if (clientSocket()->isEncrypted()) {
-                QSslCipher cipher = clientSocket()->sessionCipher();
-                Packet errorPacket = sendPacket;
-                errorPacket.hexString.clear();
-                errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
-                emit packetSent(errorPacket);
-
-                errorPacket.hexString.clear();
-                errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
-                QDEBUGVAR(cipher.encryptionMethod());
-                emit packetSent(errorPacket);
-
-                errorPacket.hexString.clear();
-                errorPacket.errorString = "Peer Cert issued by " +  clientSocket()->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-                QDEBUGVAR(cipher.encryptionMethod());
-                emit packetSent(errorPacket);
-
-                errorPacket.hexString.clear();
-                errorPacket.errorString = "Our Cert issued by " +  clientSocket()->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-                QDEBUGVAR(cipher.encryptionMethod());
-                emit packetSent(errorPacket);
-
-
-
-            } else {
-                Packet errorPacket = sendPacket;
-                errorPacket.hexString.clear();
-                errorPacket.errorString = "Not Encrypted!";
-            }
-
-
-        } else {
-            clientSocket()->connectToHost(sendPacket.toIP,  sendPacket.port, QIODevice::ReadWrite, ipConnectionProtocol);
-
-            bool connectSuccess = clientSocket()->waitForConnected(5000);
-
-            qDebug() << "[TCPThread client connect] ========================================";
-            qDebug() << "  waitForConnected() returned:" << connectSuccess;
-            qDebug() << "  socket state:" << clientSocket()->state();
-            qDebug() << "  socket error code:" << clientSocket()->error();
-            qDebug() << "  socket error string:" << clientSocket()->errorString();
-            qDebug() << "  peer:" << clientSocket()->peerAddress().toString() << ":" << clientSocket()->peerPort();
-            qDebug() << "  local port:" << clientSocket()->localPort();
-            qDebug() << "================================================================";
-
-
-        }
-
-
-        if (sendPacket.delayAfterConnect > 0) {
-            QDEBUG() << "sleeping " << sendPacket.delayAfterConnect;
-            QObject().thread()->usleep(1000 * sendPacket.delayAfterConnect);
-        }
-
-        QDEBUGVAR(clientSocket()->localPort());
-
-        if (clientSocket()->state() == QAbstractSocket::ConnectedState) {
-            emit connectStatus("Connected");
-            sendPacket.port = clientSocket()->peerPort();
-            sendPacket.fromPort = clientSocket()->localPort();
-
-            persistentConnectionLoop();
-
-            emit connectStatus("Not connected.");
-            QDEBUG() << "Not connected.";
-
-        } else {
-
-
-            //qintptr sock = clientSocket()->socketDescriptor();
-
-            //sendPacket.fromPort = clientSocket()->localPort();
-            emit connectStatus("Could not connect.");
-            QDEBUG() << "Could not connect";
-            sendPacket.errorString = "Could not connect";
-            emit packetSent(sendPacket);
-
-        }
-
+        runOutgoingClient();
         return;
     }
 
-
-    QSslSocket sock;
-    sock.setSocketDescriptor(socketDescriptor);
-
-    //isSecure = true;
-
-    if (isSecure) {
-
-        QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-
-
-        //Do the SSL handshake
-        QDEBUG() << "supportsSsl" << sock.supportsSsl();
-
-        loadSSLCerts(&sock, settings.value("serverSnakeOilCheck", true).toBool());
-
-        sock.setProtocol(QSsl::AnyProtocol);
-
-        //suppress prompts
-        bool envOk = false;
-        const int env = qEnvironmentVariableIntValue("QT_SSL_USE_TEMPORARY_KEYCHAIN", &envOk);
-        if ((env == 0)) {
-            QDEBUG() << "Possible prompting in Mac";
-        }
-
-        if (settings.value("ignoreSSLCheck", true).toBool()) {
-            sock.ignoreSslErrors();
-        }
-        sock.startServerEncryption();
-        sock.waitForEncrypted();
-
-        QList<QSslError> sslErrorsList  = sock
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-                            .sslErrors();
-#else
-                            .sslHandshakeErrors();
-#endif
-
-        Packet errorPacket;
-        errorPacket.init();
-        errorPacket.timestamp = QDateTime::currentDateTime();
-        errorPacket.name = errorPacket.timestamp.toString(DATETIMEFORMAT);
-        errorPacket.toIP = "You";
-        errorPacket.port = sock.localPort();
-        errorPacket.fromPort = sock.peerPort();
-        errorPacket.fromIP = sock.peerAddress().toString();
-
-        if (sock.isEncrypted()) {
-            errorPacket.tcpOrUdp = "SSL";
-        }
-
-
-        QDEBUGVAR(sock.isEncrypted());
-
-        QDEBUGVAR(sslErrorsList.size());
-
-        if (sslErrorsList.size() > 0) {
-
-            QSslError sError;
-            foreach (sError, sslErrorsList) {
-                errorPacket.hexString.clear();
-                errorPacket.errorString = sError.errorString();
-                emit packetSent(errorPacket);
-            }
-
-        }
-
-
-        if (sock.isEncrypted()) {
-            QSslCipher cipher = sock.sessionCipher();
-            errorPacket.hexString.clear();
-            errorPacket.errorString = "Encrypted with " + cipher.encryptionMethod();
-            QDEBUGVAR(cipher.encryptionMethod());
-            emit packetSent(errorPacket);
-
-            errorPacket.hexString.clear();
-            errorPacket.errorString = "Authenticated with " + cipher.authenticationMethod();
-            QDEBUGVAR(cipher.encryptionMethod());
-            emit packetSent(errorPacket);
-
-            errorPacket.hexString.clear();
-            errorPacket.errorString = "Peer cert issued by " +  sock.peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-            QDEBUGVAR(cipher.encryptionMethod());
-            emit packetSent(errorPacket);
-
-            errorPacket.hexString.clear();
-            errorPacket.errorString = "Our Cert issued by " +  sock.localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-            QDEBUGVAR(cipher.encryptionMethod());
-            emit packetSent(errorPacket);
-
-
-        }
-
-
-        QDEBUG() << "Errors" << sock
-
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-                            .sslErrors();
-#else
-                            .sslHandshakeErrors();
-#endif
-
-
-
-    }
-
-    connect(&sock, SIGNAL(disconnected()),
-            this, SLOT(wasdisconnected()));
-
-    //connect(&sock, SIGNAL(readyRead())
-
-    Packet tcpPacket;
-    QByteArray data;
-
-    data.clear();
-    tcpPacket.timestamp = QDateTime::currentDateTime();
-    tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
-    tcpPacket.tcpOrUdp = sendPacket.tcpOrUdp;
-
-
-    tcpPacket.fromIP = ipConnectionProtocol == QAbstractSocket::IPv6Protocol ?
-        Packet::removeIPv6Mapping(sock.peerAddress()) : (sock.peerAddress()).toString();
-
-    tcpPacket.toIP = "You";
-    tcpPacket.port = sock.localPort();
-    tcpPacket.fromPort = sock.peerPort();
-
-    sock.waitForReadyRead(5000); //initial packet
-    data = sock.readAll();
-    tcpPacket.hexString = Packet::byteArrayToHex(data);
-    if (sock.isEncrypted()) {
-        tcpPacket.tcpOrUdp = "SSL";
-    }
-    emit packetSent(tcpPacket);
-    writeResponse(&sock, tcpPacket);
-
-
-
-    if (incomingPersistent) {
-        clientConnection = new QSslSocket(this);
-
-        if (!clientSocket()->setSocketDescriptor(socketDescriptor)) {
-            qWarning() << "Failed to set socket descriptor on clientConnection";
-            delete clientConnection;
-            clientConnection = nullptr;
-            return;
-        }
-
-        // ... copy any state from sock if needed (e.g. encryption state)
-        QDEBUG() << "Persistent incoming mode entered - using heap clientConnection";
-        sendPacket = tcpPacket;
-        sendPacket.persistent = true;
-        sendPacket.hexString.clear();
-        sendPacket.port = clientSocket()->peerPort();
-        sendPacket.fromPort = clientSocket()->localPort();
-        persistentConnectionLoop();
-    }
-
-
-
-    /*
-
-        QDateTime twentyseconds = QDateTime::currentDateTime().addSecs(30);
-
-        while ( sock.bytesAvailable() < 1 && twentyseconds > QDateTime::currentDateTime()) {
-            sock.waitForReadyRead();
-            data = sock.readAll();
-            tcpPacket.hexString = Packet::byteArrayToHex(data);
-            tcpPacket.timestamp = QDateTime::currentDateTime();
-            tcpPacket.name = tcpPacket.timestamp.toString(DATETIMEFORMAT);
-            emit packetSent(tcpPacket);
-
-            writeResponse(&sock, tcpPacket);
-        }
-    */
-    insidePersistent = false;
-    sock.disconnectFromHost();
-    sock.close();
+    runIncomingConnection();
 }
 
 bool TCPThread::isEncrypted()
