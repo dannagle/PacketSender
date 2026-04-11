@@ -22,6 +22,7 @@ add_executable(${TEST_NAME}
     ../../persistentLoopConnection.cpp
     tcpthreadtests.cpp
     tcpthreadqapplicationneededtests.cpp
+    persistentconnectionlooptests.cpp
 
     # project files that need to be added to the executable
     ../../packet.cpp
