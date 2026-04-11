@@ -90,6 +90,7 @@ set(
   association.cpp
   dtlsserver.cpp
   dtlsthread.cpp
+  persistentLoopConnection.cpp
 )
 
 
