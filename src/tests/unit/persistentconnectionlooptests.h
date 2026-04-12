@@ -23,6 +23,9 @@ private slots:
     void testPersistentLoop_exitsImmediatelyOnCloseRequest();
     void testPersistentLoop_exitsOnConnectionBroken();
     void testPersistentLoop_cleansUpOnExit();
+
+    // cleanupAfterPersistentConnectionLoop() tests
+    void testCleanupAfterPersistentConnectionLoop_whenClientConnectionIsNull_emitsDisconnected();
 };
 
 
