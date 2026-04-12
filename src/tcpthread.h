@@ -134,11 +134,13 @@ class TCPThread : public QThread
 
         void setSocketDescriptor(int descriptor) { socketDescriptor = descriptor; }
 
+        // persistentConnectionLoop() methods
         bool insidePersistent;
         void persistentConnectionLoop();
         virtual bool shouldContinuePersistentLoop() const;
         virtual QAbstractSocket::SocketState socketState() const;
         virtual qint64 socketBytesAvailable() const;
+        void cleanupAfterPersistentConnectionLoop();
 };
 
 #endif // TCPTHREAD_H

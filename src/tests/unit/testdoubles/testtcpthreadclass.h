@@ -88,6 +88,7 @@ public:
     int buildInitialReceivedPacketCallCount = 0;
     int prepareForPersistentLoopCallCount = 0;
     int persistentConnectionLoopCallCount = 0;
+    int cleanupAfterPersistentConnectionLoopCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -125,6 +126,12 @@ public:
     {
         persistentConnectionLoopCallCount++;
         persistentConnectionLoop();
+    }
+
+    void callCleanupAfterPersistentConnectionLoop()
+    {
+        cleanupAfterPersistentConnectionLoopCallCount++;
+        cleanupAfterPersistentConnectionLoop();
     }
 
     Packet getSendPacket() { return sendPacket; };

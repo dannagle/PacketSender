@@ -268,3 +268,31 @@ void PersistentConnectionLoopTests::testPersistentLoop_cleansUpOnExit()
     QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
     QVERIFY(thread.clientSocket() == nullptr || !thread.clientSocket()->isOpen());
 }
+
+// cleanupAfterPersistentConnectionLoop() unit tests
+
+void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whenClientConnectionIsNull_emitsDisconnected()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Ensure clientConnection is nullptr
+    thread.setClientConnection(nullptr);
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callCleanupAfterPersistentConnectionLoop();
+
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    QVERIFY2(statusSpy.contains(QVariantList{"Disconnected"}),
+             "Expected 'Disconnected' to be emitted even when clientConnection is null");
+
+    // verify no other signals were emitted
+    QCOMPARE(statusSpy.count(), 1);
+
+    // verify thread.clientConnection remains nullptr
+    QCOMPARE(thread.getClientConnection(), nullptr);
+}

@@ -63,6 +63,30 @@ void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
     // (unit tests can set them explicitly if they care)
 }
 
+void TCPThread::cleanupAfterPersistentConnectionLoop()
+{
+    qDebug() << "persistentConnectionLoop exiting - cleaning up socket";
+
+    if (clientConnection) {
+        if (clientSocket()->state() == QAbstractSocket::ConnectedState ||
+            clientSocket()->state() == QAbstractSocket::ClosingState) {
+            clientSocket()->disconnectFromHost();
+            clientSocket()->waitForDisconnected(500);  // shorter timeout is fine here
+        }
+
+        clientSocket()->close();
+
+        if (!m_managedByConnection) {
+            clientSocket()->deleteLater();
+        }
+        clientConnection = nullptr;  // clear pointer
+    }
+
+    emit connectStatus("Disconnected");
+}
+
+
+// THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
     QDEBUG() << "Entering the forever loop";
@@ -248,23 +272,6 @@ void TCPThread::persistentConnectionLoop()
         }
     } // end while connected
 
-    qDebug() << "persistentConnectionLoop exiting - cleaning up socket";
-
-    if (clientConnection) {
-        if (clientSocket()->state() == QAbstractSocket::ConnectedState ||
-            clientSocket()->state() == QAbstractSocket::ClosingState) {
-            clientSocket()->disconnectFromHost();
-            clientSocket()->waitForDisconnected(500);  // shorter timeout is fine here
-        }
-
-        clientSocket()->close();
-
-        if (!m_managedByConnection) {
-            clientSocket()->deleteLater();
-        }
-        clientConnection = nullptr;  // clear pointer
-    }
-
-    emit connectStatus("Disconnected");
+    cleanupAfterPersistentConnectionLoop();
 
 } // end persistentConnectionLoop()
