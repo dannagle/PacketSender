@@ -6,6 +6,7 @@
 #define PERSISTENTCONNECTIONLOOPTESTS_H
 
 #include <QObject>
+#include <QSignalSpy>
 
 class PersistentConnectionLoopTests : public QObject
 {
@@ -26,6 +27,9 @@ private slots:
 
     // cleanupAfterPersistentConnectionLoop() tests
     void testCleanupAfterPersistentConnectionLoop_whenClientConnectionIsNull_emitsDisconnected();
+
+private:
+    void dumpStatusSpy(const QSignalSpy& statusSpy);
 };
 
 

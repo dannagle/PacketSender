@@ -16,6 +16,16 @@
 
 #include "persistentconnectionlooptests.h"
 
+// HELPERS
+void PersistentConnectionLoopTests::dumpStatusSpy(const QSignalSpy& statusSpy)
+{
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+}
+
+// TESTS
 void PersistentConnectionLoopTests::testPrepareForPersistentLoop_preparesSendPacketCorrectly()
 {
     Packet initialPacket;
@@ -141,10 +151,7 @@ void PersistentConnectionLoopTests::testPersistentLoop_processesNoDataAndExits()
     thread.callPersistentConnectionLoop();
 
     // Debug what actually happened
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     // Assert the exact sequence/behavior we currently see
     QVERIFY(statusSpy.contains(QVariantList{"Waiting to receive"}));
@@ -181,10 +188,7 @@ void PersistentConnectionLoopTests::testPersistentLoop_emitsIdleStatusWhenNoData
 
     thread.callPersistentConnectionLoop();
 
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     QVERIFY2(statusSpy.contains(QVariantList{"Connected and idle."}),
              "Expected 'Connected and idle.' status to be emitted in the idle path");
@@ -200,10 +204,7 @@ void PersistentConnectionLoopTests::testPersistentLoop_exitsImmediatelyOnCloseRe
 
     thread.callPersistentConnectionLoop();
 
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     // Should exit immediately without going into the main loop
     // Early exit should skip almost everything, including the final "Disconnected"
@@ -230,10 +231,7 @@ void PersistentConnectionLoopTests::testPersistentLoop_exitsOnConnectionBroken()
 
     thread.callPersistentConnectionLoop();
 
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     QVERIFY2(statusSpy.contains(QVariantList{"Connection broken"}),
              "Expected 'Connection broken.' status when socket is not connected");
@@ -259,10 +257,7 @@ void PersistentConnectionLoopTests::testPersistentLoop_cleansUpOnExit()
 
     thread.callPersistentConnectionLoop();
 
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     // Verify final cleanup behavior
     QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
@@ -282,10 +277,7 @@ void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whe
 
     thread.callCleanupAfterPersistentConnectionLoop();
 
-    qDebug() << "Status signals received:" << statusSpy.count();
-    for (const auto& args : statusSpy) {
-        qDebug() << "  Status:" << args.first().toString();
-    }
+    dumpStatusSpy(statusSpy);
 
     QVERIFY2(statusSpy.contains(QVariantList{"Disconnected"}),
              "Expected 'Disconnected' to be emitted even when clientConnection is null");
