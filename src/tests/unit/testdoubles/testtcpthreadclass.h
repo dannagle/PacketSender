@@ -64,6 +64,7 @@ public:
     using TCPThread::getIPConnectionProtocol;
     using TCPThread::clientSocket;
     using TCPThread::setSocketDescriptor;
+    using TCPThread::insidePersistent;
 
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
@@ -86,6 +87,9 @@ public:
     int incomingSSLCallCount = 0;
     int buildInitialReceivedPacketCallCount = 0;
     int prepareForPersistentLoopCallCount = 0;
+    int persistentConnectionLoopCallCount = 0;
+
+    bool forceExitAfterOneIteration = false;
 
     // Test helpers to call protected SSL handlers
     void callHandleOutgoingSSLHandshake(bool handshakeSucceeded, bool isEncryptedResult)
@@ -117,7 +121,14 @@ public:
         prepareForPersistentLoop(initialPacket);
     };
 
+    void callPersistentConnectionLoop()
+    {
+        persistentConnectionLoopCallCount++;
+        persistentConnectionLoop();
+    }
+
     Packet getSendPacket() { return sendPacket; };
+    Packet& getSendPacketByReference() { return sendPacket; };
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
@@ -182,6 +193,46 @@ protected:
         }
         return TCPThread::getSslHandshakeErrors(sock);
     }
+
+    bool shouldContinuePersistentLoop() const override
+    {
+        QDEBUG() << "closeRequest from shouldContinuePersistentLoop" << closeRequest;
+
+        if (forceExitAfterOneIteration) {
+            if (persistentLoopIterationCount == 0) {
+                qDebug() << "Test double: allowing first full iteration";
+                persistentLoopIterationCount++;
+                return true;                    // allow the loop body to run once
+            } else {
+                qDebug() << "Test double: forcing exit after one iteration";
+                return false;
+            }
+        }
+
+        return TCPThread::shouldContinuePersistentLoop();
+    }
+
+    QAbstractSocket::SocketState socketState() const override
+    {
+        // Prefer the mock if we have one injected
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
+            return mock->getMockState();   // we'll add this getter
+        }
+
+        // Fall back to real implementation
+        return TCPThread::socketState();
+    }
+
+    qint64 socketBytesAvailable() const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
+            return mock->getMockBytesAvailable();
+        }
+        return TCPThread::socketBytesAvailable();
+    }
+
+private:
+    mutable short persistentLoopIterationCount = 0;
 };
 
 

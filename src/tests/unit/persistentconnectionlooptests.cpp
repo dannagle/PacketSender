@@ -102,3 +102,169 @@ void PersistentConnectionLoopTests::testPrepareForPersistentLoop_withRealSocket_
     QVERIFY(sendPacket.port > 0);
     QCOMPARE(sendPacket.fromIP, QString("127.0.0.1"));
 }
+
+// persistentConnectionLoop characterization tests
+
+void PersistentConnectionLoopTests::testPersistentLoop_exitsOnCloseRequest()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+    thread.closeRequest = true;   // trigger early exit
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    // The early exit path does NOT emit "Disconnected" — that's only in the cleanup at the bottom
+    // So we should check that it exited cleanly without crashing
+    QVERIFY(!thread.insidePersistent);
+
+    // Optional: check that it did NOT emit "Connected and idle"
+    QVERIFY(!statusSpy.contains(QVariantList{"Connected and idle."}));
+}
+
+void PersistentConnectionLoopTests::testPersistentLoop_processesNoDataAndExits()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+
+    // Setup mock socket in ConnectedState
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    thread.setClientConnection(mockSock);
+
+    // Prevent immediate early exit and control loop iterations
+    thread.forceExitAfterOneIteration = true;   // exits after 1-2 iterations
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    // Debug what actually happened
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    // Assert the exact sequence/behavior we currently see
+    QVERIFY(statusSpy.contains(QVariantList{"Waiting to receive"}));
+    QVERIFY(statusSpy.contains(QVariantList{"Reading response"}));
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnecting"}));
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
+
+    // Optional: check we did NOT emit the idle message (to keep the tests distinct)
+    QVERIFY(!statusSpy.contains(QVariantList{"Connected and idle."}));
+}
+
+void PersistentConnectionLoopTests::testPersistentLoop_emitsIdleStatusWhenNoData()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+    thread.forceExitAfterOneIteration = true;
+
+    Packet initial;
+    initial.hexString.clear();
+    initial.persistent = true;           // make sure it's set
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockBytesAvailable(0);
+    thread.setClientConnection(mockSock);
+
+    // This should set persistent = true and hexString = empty
+    thread.callPrepareForPersistentLoop(initial);
+
+    // Extra safety: force it again right before running the loop
+    thread.getSendPacketByReference().persistent = true;   // if you have getSendPacket()
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    QVERIFY2(statusSpy.contains(QVariantList{"Connected and idle."}),
+             "Expected 'Connected and idle.' status to be emitted in the idle path");
+}
+
+void PersistentConnectionLoopTests::testPersistentLoop_exitsImmediatelyOnCloseRequest()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+    thread.closeRequest = true;        // Trigger immediate early exit
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    // Should exit immediately without going into the main loop
+    // Early exit should skip almost everything, including the final "Disconnected"
+    QCOMPARE(statusSpy.count(), 0);
+    QVERIFY(!thread.insidePersistent);
+}
+
+void PersistentConnectionLoopTests::testPersistentLoop_exitsOnConnectionBroken()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+    thread.forceExitAfterOneIteration = true;
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(false);           // Force not connected
+    mockSock->setMockBytesAvailable(10);         // Non-zero so idle is skipped
+    thread.setClientConnection(mockSock);
+
+    // Bypass prepareForPersistentLoop to have full control
+    thread.getSendPacketByReference().hexString = "AA BB CC";   // not empty
+    thread.getSendPacketByReference().persistent = true;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    QVERIFY2(statusSpy.contains(QVariantList{"Connection broken"}),
+             "Expected 'Connection broken.' status when socket is not connected");
+}
+
+void PersistentConnectionLoopTests::testPersistentLoop_cleansUpOnExit()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+    thread.incomingPersistent = true;
+    thread.forceExitAfterOneIteration = true;
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockBytesAvailable(0);
+    thread.setClientConnection(mockSock);
+
+    Packet initial;
+    initial.hexString.clear();
+    initial.persistent = true;
+    thread.callPrepareForPersistentLoop(initial);
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callPersistentConnectionLoop();
+
+    qDebug() << "Status signals received:" << statusSpy.count();
+    for (const auto& args : statusSpy) {
+        qDebug() << "  Status:" << args.first().toString();
+    }
+
+    // Verify final cleanup behavior
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
+    QVERIFY(thread.clientSocket() == nullptr || !thread.clientSocket()->isOpen());
+}

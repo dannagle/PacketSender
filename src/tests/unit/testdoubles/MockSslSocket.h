@@ -27,6 +27,12 @@ public:
     MockSslSocket(MockSslSocket &&) = delete;
     MockSslSocket& operator=(MockSslSocket &&) = delete;
 
+    [[nodiscard]] QAbstractSocket::SocketState getMockState() const
+    {
+        qDebug() << "=== MOCK mockState() called → returning" << mockState;
+        return mockState;
+    }
+
 
     void setMockCipher(const QSslCipher &cipher) { mockCipher = cipher; }
 
@@ -42,7 +48,27 @@ public:
 #endif
 
     // Mock setters
-    void setMockConnected(bool val) { mockConnected = val; }
+    void setMockConnected(bool val)
+    {
+        mockConnected = val;
+
+        if (mockConnected)
+        {
+            mockState = QAbstractSocket::ConnectedState;
+        } else
+        {
+            mockState = QAbstractSocket::UnconnectedState;
+        }
+    }
+
+    void setMockBytesAvailable(qint64 bytes) { mockBytesAvailable = bytes; }
+
+    qint64 getMockBytesAvailable() const
+    {
+        qDebug() << "=== MOCK getMockBytesAvailable() called → returning" << mockBytesAvailable;
+        return mockBytesAvailable;
+    }
+
     void setMockEncrypted(bool val) { mockEncrypted = val; }
     void setMockSslErrors(const QList<QSslError> &errors) { mockSslErrors = errors; }
 
@@ -51,5 +77,7 @@ private:
     bool mockEncrypted = false;
     QList<QSslError> mockSslErrors;
     QSslCipher mockCipher;
+    QAbstractSocket::SocketState mockState = QAbstractSocket::UnconnectedState;
+    qint64 mockBytesAvailable = 0;
 };
 #endif //MOCKSSLSOCKET_H

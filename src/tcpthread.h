@@ -70,9 +70,7 @@ class TCPThread : public QThread
         QString text;
         void init();
         void writeResponse(QSslSocket *sock, Packet tcpPacket);
-        bool insidePersistent;
 
-        void persistentConnectionLoop();
 
         QString host;
         quint16 port = 0;
@@ -135,6 +133,12 @@ class TCPThread : public QThread
         virtual void prepareForPersistentLoop(const Packet& initialPacket);
 
         void setSocketDescriptor(int descriptor) { socketDescriptor = descriptor; }
+
+        bool insidePersistent;
+        void persistentConnectionLoop();
+        virtual bool shouldContinuePersistentLoop() const;
+        virtual QAbstractSocket::SocketState socketState() const;
+        virtual qint64 socketBytesAvailable() const;
 };
 
 #endif // TCPTHREAD_H

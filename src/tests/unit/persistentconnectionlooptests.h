@@ -15,6 +15,14 @@ private slots:
     void testPrepareForPersistentLoop_preparesSendPacketCorrectly();
     void testPrepareForPersistentLoop_setsUpClientConnection();
     void testPrepareForPersistentLoop_withRealSocket_updatesPorts();
+
+    // characterization tests
+    void testPersistentLoop_exitsOnCloseRequest();
+    void testPersistentLoop_processesNoDataAndExits();
+    void testPersistentLoop_emitsIdleStatusWhenNoData();
+    void testPersistentLoop_exitsImmediatelyOnCloseRequest();
+    void testPersistentLoop_exitsOnConnectionBroken();
+    void testPersistentLoop_cleansUpOnExit();
 };
 
 
