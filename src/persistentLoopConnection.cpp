@@ -2,10 +2,37 @@
 // Created by Tomas Gallucci on 4/11/26.
 //
 
-// EXTRACTED FROM TcpThread
+
 
 #include "tcpthread.h"
 
+// HELPERS
+QAbstractSocket::SocketState TCPThread::socketState() const
+{
+    return clientSocket() ? clientSocket()->state() : QAbstractSocket::UnconnectedState;
+}
+
+bool TCPThread::shouldContinuePersistentLoop() const
+{
+    QDEBUG() << "inside shouldContinuePersistentLoop in TcpThread, !isInterruptionRequested: " << !isInterruptionRequested()
+            <<  "\n !closeRequest: " << !closeRequest
+            <<  "\n clientSocket(): " << clientSocket()
+            <<  "\n socketState(): " << socketState()
+            <<"\n clientSocket() && socketState() == QAbstractSocket::ConnectedState: " << (clientSocket() && socketState() == QAbstractSocket::ConnectedState);
+    return !isInterruptionRequested() &&
+           !closeRequest &&
+           clientSocket() && socketState() == QAbstractSocket::ConnectedState;
+}
+
+qint64 TCPThread::socketBytesAvailable() const
+{
+    if (clientSocket()) {
+        return clientSocket()->bytesAvailable();
+    }
+    return 0;
+}
+
+// EXTRACTED FROM TcpThread
 void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
 {
     // Socket setup - only for real incoming connections
@@ -52,8 +79,7 @@ void TCPThread::persistentConnectionLoop()
     }
 
     int count = 0;
-    while (!isInterruptionRequested() &&
-        clientSocket()->state() == QAbstractSocket::ConnectedState && !closeRequest) {
+    while (shouldContinuePersistentLoop()) {
         insidePersistent = true;
 
         if (closeRequest || isInterruptionRequested()) {  // early exit check (good hygiene)
@@ -66,12 +92,20 @@ void TCPThread::persistentConnectionLoop()
 
         if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientSocket()->bytesAvailable() == 0)) {
             count++;
-            if (count % 10 == 0) {
-                //QDEBUG() << "Loop and wait." << count++ << clientSocket()->state();
+            QDEBUG() << "IDLE PATH TAKEN - count =" << count
+                     << " hexString empty =" << sendPacket.hexString.isEmpty()
+                     << " persistent =" << sendPacket.persistent
+                     << " bytesAvailable =" << clientSocket()->bytesAvailable();
+
+            if (count % 10 == 0 || count == 1) {
                 emit connectStatus("Connected and idle.");
             }
             interruptibleWaitForReadyRead(200);
             continue;
+        } else {
+            QDEBUG() << "IDLE PATH SKIPPED - hexString empty =" << sendPacket.hexString.isEmpty()
+                     << " persistent =" << sendPacket.persistent
+                     << " bytesAvailable =" << clientSocket()->bytesAvailable();
         }
 
         if (clientSocket()->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
