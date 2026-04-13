@@ -288,3 +288,86 @@ void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whe
     // verify thread.clientConnection remains nullptr
     QCOMPARE(thread.getClientConnection(), nullptr);
 }
+
+void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whenSocketIsConnected_performsFullCleanup()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockState(QAbstractSocket::ConnectedState);
+    thread.setClientConnection(mockSock);
+
+    thread.set_m_managedByConnection(false);
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    qDebug() << "Before cleanup - clientConnection =" << thread.getClientConnection();
+    thread.callCleanupAfterPersistentConnectionLoop();
+    qDebug() << "After cleanup - clientConnection =" << thread.getClientConnection();
+
+    dumpStatusSpy(statusSpy);
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
+
+    // Main observable outcomes of cleanup
+    QVERIFY(thread.getClientConnection() == nullptr);
+
+    // this should be the same object as getClientConnection,
+    // but we do a dynamic cast, so we're just verifying that
+    // the mock is null. Belt and suspenders.
+    QVERIFY(thread.getMockSocket() == nullptr);
+}
+
+void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whenManagedByConnection_doesNotCallDeleteLater()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockState(QAbstractSocket::ConnectedState);
+    thread.setClientConnection(mockSock);
+
+    thread.set_m_managedByConnection(true);   // Key: managed by Connection
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callCleanupAfterPersistentConnectionLoop();
+
+    dumpStatusSpy(statusSpy);
+
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
+
+    // Core cleanup outcomes
+    QVERIFY(thread.getClientConnection() == nullptr);
+
+    // Most important assertion for this test:
+    // When managed by Connection, deleteLater() should NOT be called
+    QCOMPARE(thread.deleteLaterCallCount, 0);
+}
+
+void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whenNotManagedByConnection_callsDeleteLater()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockState(QAbstractSocket::ConnectedState);
+    thread.setClientConnection(mockSock);
+
+    thread.set_m_managedByConnection(false);   // Key: managed by Connection
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callCleanupAfterPersistentConnectionLoop();
+
+    dumpStatusSpy(statusSpy);
+
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnected"}));
+
+    // Core cleanup outcomes
+    QVERIFY(thread.getClientConnection() == nullptr);
+
+    // Most important assertion for this test:
+    // When managed by Connection, deleteLater() should NOT be called
+    QCOMPARE(thread.deleteLaterCallCount, 1);
+}

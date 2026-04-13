@@ -32,6 +32,13 @@ qint64 TCPThread::socketBytesAvailable() const
     return 0;
 }
 
+void TCPThread::deleteSocketLater()
+{
+    if (clientConnection) {
+        clientConnection->deleteLater();
+    }
+}
+
 // EXTRACTED FROM TcpThread
 void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
 {
@@ -66,6 +73,7 @@ void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
 void TCPThread::cleanupAfterPersistentConnectionLoop()
 {
     qDebug() << "persistentConnectionLoop exiting - cleaning up socket";
+    qDebug() << "cleanupAfterPersistentConnectionLoop() called with clientConnection =" << clientConnection;
 
     if (clientConnection) {
         if (clientSocket()->state() == QAbstractSocket::ConnectedState ||
@@ -77,7 +85,7 @@ void TCPThread::cleanupAfterPersistentConnectionLoop()
         clientSocket()->close();
 
         if (!m_managedByConnection) {
-            clientSocket()->deleteLater();
+            deleteSocketLater();
         }
         clientConnection = nullptr;  // clear pointer
     }
