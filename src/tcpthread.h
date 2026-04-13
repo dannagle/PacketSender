@@ -141,6 +141,7 @@ class TCPThread : public QThread
         virtual QAbstractSocket::SocketState socketState() const;
         virtual qint64 socketBytesAvailable() const;
         void cleanupAfterPersistentConnectionLoop();
+        virtual void deleteSocketLater();
 };
 
 #endif // TCPTHREAD_H

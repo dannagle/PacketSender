@@ -49,9 +49,6 @@ public:
         qDebug() << "MOCK: Forced immediate exit via closeRequest";
     }
 
-    // Hide base member with derived type
-    MockSslSocket *clientConnection;
-
     // Expose the protected getters as public for easy test use
     using TCPThread::getClientConnection;
     using TCPThread::getSocketDescriptor;
@@ -69,15 +66,22 @@ public:
     // Optional: add test-specific methods if needed, e.g.
     // bool isThreadStarted() const { return isRunning(); }  // example
 
+    MockSslSocket* getMockSocket()
+    {
+        MockSslSocket* mock = dynamic_cast<MockSslSocket*>(getClientConnection());
+        if (!mock && getClientConnection() != nullptr) {
+            qWarning() << "getMockSocket: clientConnection is not a MockSslSocket!";
+        }
+        return mock;
+    }
+
     void set_m_managedByConnection(bool isManagedByConnection) {this->m_managedByConnection = isManagedByConnection;};
 
     void setSendPacketToIp(QString toIp) {sendPacket.toIP = toIp;};
     void setClientConnection(QSslSocket *sock)
     {
-        clientConnection = dynamic_cast<MockSslSocket*>(sock);
-        if (!clientConnection && sock) {
-            qWarning() << "setClientConnection: sock is not a MockSslSocket instance";
-        }
+        // Update the base class member (this is what the real code uses)
+        TCPThread::clientConnection = sock;
     }
 
     bool fireTryConnectEncrypted() { return tryConnectEncrypted(); }
@@ -89,6 +93,7 @@ public:
     int prepareForPersistentLoopCallCount = 0;
     int persistentConnectionLoopCallCount = 0;
     int cleanupAfterPersistentConnectionLoopCallCount = 0;
+    int deleteLaterCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -236,6 +241,12 @@ protected:
             return mock->getMockBytesAvailable();
         }
         return TCPThread::socketBytesAvailable();
+    }
+
+    void deleteSocketLater() override
+    {
+        deleteLaterCallCount++;
+        TCPThread::deleteSocketLater();
     }
 
 private:

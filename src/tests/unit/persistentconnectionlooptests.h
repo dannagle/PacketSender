@@ -27,6 +27,9 @@ private slots:
 
     // cleanupAfterPersistentConnectionLoop() tests
     void testCleanupAfterPersistentConnectionLoop_whenClientConnectionIsNull_emitsDisconnected();
+    void testCleanupAfterPersistentConnectionLoop_whenSocketIsConnected_performsFullCleanup();
+    void testCleanupAfterPersistentConnectionLoop_whenManagedByConnection_doesNotCallDeleteLater();
+    void testCleanupAfterPersistentConnectionLoop_whenNotManagedByConnection_callsDeleteLater();
 
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);
