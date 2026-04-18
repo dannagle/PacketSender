@@ -402,3 +402,47 @@ void PersistentConnectionLoopTests::testGetPeerAddressAsString_returnsCorrectIPv
     QString result = thread.getPeerAddressAsString();
     QCOMPARE(result, QString("::1"));
 }
+
+void PersistentConnectionLoopTests::testSendCurrentPacket_emitsConnectionStatusWhenDataExists()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    Packet testPacket;
+    testPacket.hexString = "AA BB CC DD";
+    thread.getSendPacketByReference() = testPacket;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+
+    thread.callSendCurrentPacket();
+    QVERIFY(statusSpy.contains(QVariantList{"Sending data:" + testPacket.asciiString()}));
+}
+
+void PersistentConnectionLoopTests::testSendCurrentPacket_emitsSentPacketWhenDataExists()
+{
+    const QString hexString = "AA BB CC DD";
+    const QString name = "Test Packet";
+    const QString toIP = "127.0.0.1";
+    constexpr unsigned int port = 12345;
+
+    TestTcpThreadClass thread(toIP, 12345, Packet());
+
+    // Set up a packet with known data
+    Packet testPacket;
+    testPacket.hexString = hexString;
+    testPacket.name = name;
+    testPacket.toIP = toIP;
+    testPacket.port = port;
+    thread.getSendPacketByReference() = testPacket;
+
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+    thread.callSendCurrentPacket();
+
+    // Check that packetSent was emitted
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    // Check the actual packet that was emitted
+    Packet emittedPacket = packetSentSpy.first().first().value<Packet>();
+    QCOMPARE(emittedPacket.hexString, hexString);
+    QCOMPARE(emittedPacket.toIP, toIP);
+    QCOMPARE(emittedPacket.port, port);
+}

@@ -147,6 +147,8 @@ class TCPThread : public QThread
 
         void handlePersistentIdleCase();
         virtual QHostAddress getPeerAddress() const;
+
+        void sendCurrentPacket();
 };
 
 #endif // TCPTHREAD_H

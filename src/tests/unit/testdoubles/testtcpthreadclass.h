@@ -99,6 +99,7 @@ public:
     int persistentConnectionLoopCallCount = 0;
     int cleanupAfterPersistentConnectionLoopCallCount = 0;
     int deleteLaterCallCount = 0;
+    int sendCurrentPacketCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -142,6 +143,12 @@ public:
     {
         cleanupAfterPersistentConnectionLoopCallCount++;
         cleanupAfterPersistentConnectionLoop();
+    }
+
+    void callSendCurrentPacket()
+    {
+        sendCurrentPacketCallCount++;
+        sendCurrentPacket();
     }
 
     Packet getSendPacket() { return sendPacket; };
