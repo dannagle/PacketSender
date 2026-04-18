@@ -173,7 +173,11 @@ void TCPThread::persistentConnectionLoop()
                      << " bytesAvailable =" << clientSocket()->bytesAvailable();
         }
 
-        if (clientSocket()->state() != QAbstractSocket::ConnectedState && sendPacket.persistent) {
+        const bool disconnected = clientSocket()->state() != QAbstractSocket::ConnectedState;
+
+        // Only treat a disconnection as "broken" if we were expecting the connection to stay open.
+        // If this is a non-persistent connection, we expect it to end naturally.
+        if (disconnected && sendPacket.persistent) {
             QDEBUG() << "Connection broken.";
             emit connectStatus("Connection broken");
 
