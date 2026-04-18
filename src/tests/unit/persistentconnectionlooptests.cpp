@@ -371,3 +371,34 @@ void PersistentConnectionLoopTests::testCleanupAfterPersistentConnectionLoop_whe
     // When managed by Connection, deleteLater() should NOT be called
     QCOMPARE(thread.deleteLaterCallCount, 1);
 }
+
+void PersistentConnectionLoopTests::testGetPeerAddressAsString_returnsCorrectIPv4Format()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Setup IPv4 behavior
+    thread.setMockIPProtocol(QAbstractSocket::IPv4Protocol);
+
+    // We need a socket for getPeerAddressAsString() to work
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockPeerAddress(QHostAddress("192.168.1.100"));
+    thread.setClientConnection(mockSock);
+
+    QString result = thread.getPeerAddressAsString();
+    QCOMPARE(result, QString("192.168.1.100"));
+}
+
+void PersistentConnectionLoopTests::testGetPeerAddressAsString_returnsCorrectIPv6Format()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Setup IPv6 behavior
+    thread.setMockIPProtocol(QAbstractSocket::IPv6Protocol);
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockPeerAddress(QHostAddress("::1"));
+    thread.setClientConnection(mockSock);
+
+    QString result = thread.getPeerAddressAsString();
+    QCOMPARE(result, QString("::1"));
+}

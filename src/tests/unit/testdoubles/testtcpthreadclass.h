@@ -58,7 +58,6 @@ public:
     using TCPThread::getPort;
     using TCPThread::getSendFlag;
     using TCPThread::getManagedByConnection;
-    using TCPThread::getIPConnectionProtocol;
     using TCPThread::clientSocket;
     using TCPThread::setSocketDescriptor;
     using TCPThread::insidePersistent;
@@ -82,6 +81,12 @@ public:
     {
         // Update the base class member (this is what the real code uses)
         TCPThread::clientConnection = sock;
+    }
+
+    void setMockIPProtocol(QAbstractSocket::NetworkLayerProtocol protocol)
+    {
+        mockIPProtocol = protocol;
+        mockIPProtocolSet = true;
     }
 
     bool fireTryConnectEncrypted() { return tryConnectEncrypted(); }
@@ -141,6 +146,14 @@ public:
 
     Packet getSendPacket() { return sendPacket; };
     Packet& getSendPacketByReference() { return sendPacket; };
+
+    QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const override
+    {
+        if (mockIPProtocolSet) {
+            return mockIPProtocol;
+        }
+        return TCPThread::getIPConnectionProtocol();
+    }
 
 protected:
     [[nodiscard]] bool divideWaitBy10ForUnitTest() const override { return true; }
@@ -249,8 +262,18 @@ protected:
         TCPThread::deleteSocketLater();
     }
 
+    QHostAddress getPeerAddress() const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
+            return mock->getMockPeerAddress();
+        }
+        return TCPThread::getPeerAddress();
+    }
+
 private:
     mutable short persistentLoopIterationCount = 0;
+    bool mockIPProtocolSet = false;
+    QAbstractSocket::NetworkLayerProtocol mockIPProtocol = QAbstractSocket::IPv4Protocol;
 };
 
 

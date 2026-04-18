@@ -73,6 +73,14 @@ public:
     void setMockSslErrors(const QList<QSslError> &errors) { mockSslErrors = errors; }
     void setMockState(const QAbstractSocket::SocketState &state) { mockState = state; }
 
+    void setMockPeerAddress(const QHostAddress &address) { mockPeerAddress = address; }
+
+    QHostAddress getMockPeerAddress() const
+    {
+        qDebug() << "=== MOCK getMockPeerAddress() called → returning" << mockPeerAddress.toString();
+        return mockPeerAddress;
+    }
+
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;
@@ -80,5 +88,6 @@ private:
     QSslCipher mockCipher;
     QAbstractSocket::SocketState mockState = QAbstractSocket::UnconnectedState;
     qint64 mockBytesAvailable = 0;
+    QHostAddress mockPeerAddress = QHostAddress("127.0.0.1");
 };
 #endif //MOCKSSLSOCKET_H
