@@ -93,6 +93,24 @@ void TCPThread::cleanupAfterPersistentConnectionLoop()
     emit connectStatus("Disconnected");
 }
 
+void TCPThread::handlePersistentIdleCase()
+{
+    QDEBUG() << "IDLE PATH TAKEN"
+                     << " hexString empty =" << sendPacket.hexString.isEmpty()
+                     << " persistent =" << sendPacket.persistent
+                     << " bytesAvailable =" << clientSocket()->bytesAvailable();
+
+    const QDateTime now = QDateTime::currentDateTime();
+
+    // NOSONAR - if-with-initializer reduces readability here
+    if (!lastIdleStatusEmitTime.has_value() || lastIdleStatusEmitTime->msecsTo(now) >= 2000) {
+            emit connectStatus("Connected and idle.");
+            lastIdleStatusEmitTime = now;
+    }
+
+    interruptibleWaitForReadyRead(200);
+}
+
 
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
@@ -110,7 +128,6 @@ void TCPThread::persistentConnectionLoop()
         ipMode = 6;
     }
 
-    int count = 0;
     while (shouldContinuePersistentLoop()) {
         insidePersistent = true;
 
@@ -123,16 +140,7 @@ void TCPThread::persistentConnectionLoop()
         }
 
         if (sendPacket.hexString.isEmpty() && sendPacket.persistent && (clientSocket()->bytesAvailable() == 0)) {
-            count++;
-            QDEBUG() << "IDLE PATH TAKEN - count =" << count
-                     << " hexString empty =" << sendPacket.hexString.isEmpty()
-                     << " persistent =" << sendPacket.persistent
-                     << " bytesAvailable =" << clientSocket()->bytesAvailable();
-
-            if (count % 10 == 0 || count == 1) {
-                emit connectStatus("Connected and idle.");
-            }
-            interruptibleWaitForReadyRead(200);
+            handlePersistentIdleCase();
             continue;
         } else {
             QDEBUG() << "IDLE PATH SKIPPED - hexString empty =" << sendPacket.hexString.isEmpty()

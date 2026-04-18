@@ -70,6 +70,7 @@ class TCPThread : public QThread
         QString text;
         void init();
         void writeResponse(QSslSocket *sock, Packet tcpPacket);
+        mutable std::optional<QDateTime> lastIdleStatusEmitTime;
 
 
         QString host;
@@ -142,6 +143,8 @@ class TCPThread : public QThread
         virtual qint64 socketBytesAvailable() const;
         void cleanupAfterPersistentConnectionLoop();
         virtual void deleteSocketLater();
+
+        void handlePersistentIdleCase();
 };
 
 #endif // TCPTHREAD_H
