@@ -45,6 +45,7 @@ class TCPThread : public QThread
         Packet packetReply;
         bool consoleMode;
         [[nodiscard]] bool isValid() const;
+        QString getPeerAddressAsString() const;
 
     signals:
         void error(QSslSocket::SocketError socketError);
@@ -106,7 +107,7 @@ class TCPThread : public QThread
         virtual QList<QSslError> getSslHandshakeErrors(QSslSocket *sock) const;
 
         Packet sendPacket;
-        QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
+        virtual QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
         bool tryConnectEncrypted();
         void wireupSocketSignals();
 
@@ -145,6 +146,7 @@ class TCPThread : public QThread
         virtual void deleteSocketLater();
 
         void handlePersistentIdleCase();
+        virtual QHostAddress getPeerAddress() const;
 };
 
 #endif // TCPTHREAD_H

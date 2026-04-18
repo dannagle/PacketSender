@@ -39,6 +39,14 @@ void TCPThread::deleteSocketLater()
     }
 }
 
+QHostAddress TCPThread::getPeerAddress() const
+{
+    if (clientSocket()) {
+        return clientSocket()->peerAddress();
+    }
+    return QHostAddress();
+}
+
 // EXTRACTED FROM TcpThread
 void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
 {
@@ -111,6 +119,29 @@ void TCPThread::handlePersistentIdleCase()
     interruptibleWaitForReadyRead(200);
 }
 
+QString TCPThread::getPeerAddressAsString() const
+{
+    qDebug() << "getPeerAddressAsString() called";
+    qDebug() << "  clientSocket() =" << clientSocket();
+
+    if (!clientSocket()) {
+        qDebug() << "  → No clientSocket, returning empty string";
+        return "";
+    }
+
+    QAbstractSocket::NetworkLayerProtocol protocol = getIPConnectionProtocol();
+    qDebug() << "  IP protocol =" << protocol;
+
+    if (protocol == QAbstractSocket::IPv6Protocol) {
+        QString result = Packet::removeIPv6Mapping(getPeerAddress());
+        qDebug() << "  IPv6 result =" << result;
+        return result;
+    } else {
+        QString result = getPeerAddress().toString();
+        qDebug() << "  IPv4 result =" << result;
+        return result;
+    }
+}
 
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
@@ -120,12 +151,6 @@ void TCPThread::persistentConnectionLoop()
     if (closeRequest || isInterruptionRequested()) {
         qDebug() << "Early exit from persistent loop due to close request";
         return;
-    }
-
-    int ipMode = 4;
-    QHostAddress theAddress(sendPacket.toIP);
-    if (QAbstractSocket::IPv6Protocol == theAddress.protocol()) {
-        ipMode = 6;
     }
 
     while (shouldContinuePersistentLoop()) {
@@ -173,11 +198,7 @@ void TCPThread::persistentConnectionLoop()
                     tcpRCVPacket.tcpOrUdp = "SSL";
                 }
 
-                if (ipMode < 6) {
-                    tcpRCVPacket.fromIP = Packet::removeIPv6Mapping(clientSocket()->peerAddress());
-                } else {
-                    tcpRCVPacket.fromIP = (clientSocket()->peerAddress()).toString();
-                }
+                tcpRCVPacket.fromIP = getPeerAddressAsString();
 
 
                 QDEBUGVAR(tcpRCVPacket.fromIP);
@@ -216,13 +237,8 @@ void TCPThread::persistentConnectionLoop()
             tcpPacket.tcpOrUdp = "SSL";
         }
 
-        if (ipMode < 6) {
-            tcpPacket.fromIP = Packet::removeIPv6Mapping(clientSocket()->peerAddress());
+        tcpPacket.fromIP = getPeerAddressAsString();
 
-        } else {
-            tcpPacket.fromIP = (clientSocket()->peerAddress()).toString();
-
-        }
         QDEBUGVAR(tcpPacket.fromIP);
 
         tcpPacket.toIP = "You";
