@@ -31,8 +31,13 @@ private slots:
     void testCleanupAfterPersistentConnectionLoop_whenManagedByConnection_doesNotCallDeleteLater();
     void testCleanupAfterPersistentConnectionLoop_whenNotManagedByConnection_callsDeleteLater();
 
+    // getPeerAddressAsString() tests
     void testGetPeerAddressAsString_returnsCorrectIPv4Format();
     void testGetPeerAddressAsString_returnsCorrectIPv6Format();
+
+    // sendCurrentPacket() tests
+    void testSendCurrentPacket_emitsConnectionStatusWhenDataExists();
+    void testSendCurrentPacket_emitsSentPacketWhenDataExists();
 
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);

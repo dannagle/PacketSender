@@ -143,6 +143,16 @@ QString TCPThread::getPeerAddressAsString() const
     }
 }
 
+void TCPThread::sendCurrentPacket()
+{
+    if(sendPacket.getByteArray().size() > 0) {
+        emit connectStatus("Sending data:" + sendPacket.asciiString());
+        QDEBUG() << "Attempting write data";
+        clientSocket()->write(sendPacket.getByteArray());
+        emit packetSent(sendPacket);
+    }
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
@@ -224,13 +234,7 @@ void TCPThread::persistentConnectionLoop()
         } // end receive before send
 
 
-        //sendPacket.fromPort = clientSocket()->localPort();
-        if(sendPacket.getByteArray().size() > 0) {
-            emit connectStatus("Sending data:" + sendPacket.asciiString());
-            QDEBUG() << "Attempting write data";
-            clientSocket()->write(sendPacket.getByteArray());
-            emit packetSent(sendPacket);
-        }
+        sendCurrentPacket();
 
         Packet tcpPacket;
         tcpPacket.timestamp = QDateTime::currentDateTime();
