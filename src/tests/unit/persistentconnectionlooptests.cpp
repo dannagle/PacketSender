@@ -446,3 +446,22 @@ void PersistentConnectionLoopTests::testSendCurrentPacket_emitsSentPacketWhenDat
     QCOMPARE(emittedPacket.toIP, toIP);
     QCOMPARE(emittedPacket.port, port);
 }
+
+void PersistentConnectionLoopTests::testSendCurrentPacket_doesNothingWhenNoDataToSend()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Ensure there's no data to send
+    Packet emptyPacket;
+    emptyPacket.hexString.clear();
+    thread.getSendPacketByReference() = emptyPacket;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    thread.callSendCurrentPacket();
+
+    // Should not emit anything
+    QCOMPARE(statusSpy.count(), 0);
+    QCOMPARE(packetSentSpy.count(), 0);
+}
