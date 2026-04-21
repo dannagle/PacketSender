@@ -47,6 +47,14 @@ QHostAddress TCPThread::getPeerAddress() const
     return QHostAddress();
 }
 
+QByteArray TCPThread::readSocketData()
+{
+    if (clientSocket()) {
+        return clientSocket()->readAll();
+    }
+    return QByteArray();
+}
+
 // EXTRACTED FROM TcpThread
 void TCPThread::prepareForPersistentLoop(const Packet &initialPacket)
 {
@@ -153,6 +161,45 @@ void TCPThread::sendCurrentPacket()
     }
 }
 
+void TCPThread::handleReceiveBeforeSend()
+{
+    QDEBUG() << "Wait for data before sending...";
+    emit connectStatus("Waiting for data");
+    interruptibleWaitForReadyRead(500);
+
+    Packet tcpRCVPacket;
+    tcpRCVPacket.hexString = Packet::byteArrayToHex(readSocketData());
+
+    if (!tcpRCVPacket.hexString.trimmed().isEmpty()) {
+        QDEBUG() << "Received: " << tcpRCVPacket.hexString;
+        emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
+
+        tcpRCVPacket.timestamp = QDateTime::currentDateTime();
+        tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        tcpRCVPacket.tcpOrUdp = "TCP";
+
+        if (clientSocket()->isEncrypted()) {
+            tcpRCVPacket.tcpOrUdp = "SSL";
+        }
+
+        tcpRCVPacket.fromIP = getPeerAddressAsString();
+
+        QDEBUGVAR(tcpRCVPacket.fromIP);
+        tcpRCVPacket.toIP = "You";
+        tcpRCVPacket.port = sendPacket.fromPort;
+        tcpRCVPacket.fromPort = clientSocket()->peerPort();
+
+        if (tcpRCVPacket.hexString.size() > 0) {
+            emit packetSent(tcpRCVPacket);
+
+            // Do I need to reply?
+            writeResponse(clientConnection, tcpRCVPacket);
+        }
+    } else {
+        QDEBUG() << "No pre-emptive receive data";
+    }
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
@@ -195,44 +242,8 @@ void TCPThread::persistentConnectionLoop()
         }
 
         if (sendPacket.receiveBeforeSend) {
-            QDEBUG() << "Wait for data before sending...";
-            emit connectStatus("Waiting for data");
-            interruptibleWaitForReadyRead(500);
-
-            Packet tcpRCVPacket;
-            tcpRCVPacket.hexString = Packet::byteArrayToHex(clientSocket()->readAll());
-            if (!tcpRCVPacket.hexString.trimmed().isEmpty()) {
-                QDEBUG() << "Received: " << tcpRCVPacket.hexString;
-                emit connectStatus("Received " + QString::number((tcpRCVPacket.hexString.size() / 3) + 1));
-
-                tcpRCVPacket.timestamp = QDateTime::currentDateTime();
-                tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-                tcpRCVPacket.tcpOrUdp = "TCP";
-                if (clientSocket()->isEncrypted()) {
-                    tcpRCVPacket.tcpOrUdp = "SSL";
-                }
-
-                tcpRCVPacket.fromIP = getPeerAddressAsString();
-
-
-                QDEBUGVAR(tcpRCVPacket.fromIP);
-                tcpRCVPacket.toIP = "You";
-                tcpRCVPacket.port = sendPacket.fromPort;
-                tcpRCVPacket.fromPort =    clientSocket()->peerPort();
-                if (tcpRCVPacket.hexString.size() > 0) {
-                    emit packetSent(tcpRCVPacket);
-
-                    // Do I need to reply?
-                    writeResponse(clientConnection, tcpRCVPacket);
-
-                }
-
-            } else {
-                QDEBUG() << "No pre-emptive receive data";
-            }
-
-        } // end receive before send
-
+            handleReceiveBeforeSend();
+        }
 
         sendCurrentPacket();
 

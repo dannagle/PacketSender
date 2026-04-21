@@ -465,3 +465,85 @@ void PersistentConnectionLoopTests::testSendCurrentPacket_doesNothingWhenNoDataT
     QCOMPARE(statusSpy.count(), 0);
     QCOMPARE(packetSentSpy.count(), 0);
 }
+
+void PersistentConnectionLoopTests::testHandleReceiveBeforeSend_whenDataReceived_processesAndSendsResponse()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockBytesAvailable(10);           // doesn't have to match the length of the data
+    mockSock->setMockReadData("AA BB CC DD");
+    thread.setClientConnection(mockSock);
+
+    Packet initial;
+    initial.receiveBeforeSend = true;
+    thread.getSendPacketByReference() = initial;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleReceiveBeforeSend();
+
+    dumpStatusSpy(statusSpy);
+
+    QVERIFY(statusSpy.contains(QVariantList{"Waiting for data"}));
+    QVERIFY(packetSentSpy.count() > 0);
+}
+
+void PersistentConnectionLoopTests::testHandleReceiveBeforeSend_whenNoDataReceived_doesNothing()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockBytesAvailable(0);            // no data
+    mockSock->setMockReadData(QByteArray());
+    thread.setClientConnection(mockSock);
+
+    Packet initial;
+    initial.receiveBeforeSend = true;
+    thread.getSendPacketByReference() = initial;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleReceiveBeforeSend();
+
+    dumpStatusSpy(statusSpy);
+
+    // When no data is received in receiveBeforeSend mode:
+    // - We still emit "Waiting for data"
+    // - We emit the debug message "No pre-emptive receive data" (NOT currently asserted
+    //   since we'd have to capture the output of the QDEBUG() macro)
+    // - We do NOT emit any packetSent signal
+    QVERIFY(statusSpy.contains(QVariantList{"Waiting for data"}));
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+void PersistentConnectionLoopTests::testHandleReceiveBeforeSend_setsCorrectPacketFields()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockBytesAvailable(10);
+    mockSock->setMockReadData(QByteArray::fromHex("AA BB CC DD"));
+    thread.setClientConnection(mockSock);
+
+    Packet initial;
+    initial.receiveBeforeSend = true;
+    thread.getSendPacketByReference() = initial;
+
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleReceiveBeforeSend();
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    Packet received = packetSentSpy.first().first().value<Packet>();
+    QVERIFY(!received.hexString.isEmpty());
+    QVERIFY(received.timestamp.isValid());
+    QCOMPARE(received.toIP, QString("You"));
+    QCOMPARE(received.fromIP, thread.getPeerAddressAsString());   // or mock it
+}
+

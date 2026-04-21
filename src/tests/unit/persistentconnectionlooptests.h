@@ -39,6 +39,9 @@ private slots:
     void testSendCurrentPacket_emitsConnectionStatusWhenDataExists();
     void testSendCurrentPacket_emitsSentPacketWhenDataExists();
     void testSendCurrentPacket_doesNothingWhenNoDataToSend();
+    void testHandleReceiveBeforeSend_whenDataReceived_processesAndSendsResponse();
+    void testHandleReceiveBeforeSend_whenNoDataReceived_doesNothing();
+    void testHandleReceiveBeforeSend_setsCorrectPacketFields();
 
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);

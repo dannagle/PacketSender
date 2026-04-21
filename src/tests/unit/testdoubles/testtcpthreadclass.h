@@ -100,6 +100,7 @@ public:
     int cleanupAfterPersistentConnectionLoopCallCount = 0;
     int deleteLaterCallCount = 0;
     int sendCurrentPacketCallCount = 0;
+    int handleReceiveBeforeSendCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -149,6 +150,12 @@ public:
     {
         sendCurrentPacketCallCount++;
         sendCurrentPacket();
+    }
+
+    void callHandleReceiveBeforeSend()
+    {
+        handleReceiveBeforeSendCallCount++;
+        handleReceiveBeforeSend();
     }
 
     Packet getSendPacket() { return sendPacket; };
@@ -275,6 +282,14 @@ protected:
             return mock->getMockPeerAddress();
         }
         return TCPThread::getPeerAddress();
+    }
+
+    QByteArray readSocketData() override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
+            return mock->getMockReadData();
+        }
+        return TCPThread::readSocketData();
     }
 
 private:
