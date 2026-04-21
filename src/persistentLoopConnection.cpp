@@ -200,6 +200,44 @@ void TCPThread::handleReceiveBeforeSend()
     }
 }
 
+Packet TCPThread::buildReceivedPacket()
+{
+    Packet receivedPacket;
+    receivedPacket.timestamp = QDateTime::currentDateTime();
+    receivedPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+    receivedPacket.tcpOrUdp = "TCP";
+
+    if (isSocketEncrypted(*clientSocket())) {
+        QDEBUG() << "Got inside if (isSocketEncrypted(*clientSocket())) in persistentConnectionLoop()";
+        receivedPacket.tcpOrUdp = "SSL";
+    }
+
+    receivedPacket.fromIP = getPeerAddressAsString();
+
+    QDEBUGVAR(receivedPacket.fromIP);
+
+    receivedPacket.toIP = "You";
+    receivedPacket.port = sendPacket.fromPort;
+    receivedPacket.fromPort = getPeerPort();
+
+    interruptibleWaitForReadyRead(500);
+    emit connectStatus("Waiting to receive");
+    receivedPacket.hexString.clear();
+
+    while (clientSocket()->bytesAvailable()) {
+        receivedPacket.hexString.append(" ");
+        receivedPacket.hexString.append(Packet::byteArrayToHex(clientSocket()->readAll()));
+        receivedPacket.hexString = receivedPacket.hexString.simplified();
+        interruptibleWaitForReadyRead(100);
+    }
+    return receivedPacket;
+}
+
+quint16 TCPThread::getPeerPort() const
+{
+    return clientSocket() ? clientSocket()->peerPort() : 0;
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
@@ -247,33 +285,7 @@ void TCPThread::persistentConnectionLoop()
 
         sendCurrentPacket();
 
-        Packet tcpPacket;
-        tcpPacket.timestamp = QDateTime::currentDateTime();
-        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-        tcpPacket.tcpOrUdp = "TCP";
-        if (clientSocket()->isEncrypted()) {
-            QDEBUG() << "Got inside clientSocket()->isEncrypted() in persistentConnectionLoop()";
-            tcpPacket.tcpOrUdp = "SSL";
-        }
-
-        tcpPacket.fromIP = getPeerAddressAsString();
-
-        QDEBUGVAR(tcpPacket.fromIP);
-
-        tcpPacket.toIP = "You";
-        tcpPacket.port = sendPacket.fromPort;
-        tcpPacket.fromPort =    clientSocket()->peerPort();
-
-        interruptibleWaitForReadyRead(500);
-        emit connectStatus("Waiting to receive");
-        tcpPacket.hexString.clear();
-
-        while (clientSocket()->bytesAvailable()) {
-            tcpPacket.hexString.append(" ");
-            tcpPacket.hexString.append(Packet::byteArrayToHex(clientSocket()->readAll()));
-            tcpPacket.hexString = tcpPacket.hexString.simplified();
-            interruptibleWaitForReadyRead(100);
-        }
+        Packet receivedPacket = buildReceivedPacket();
 
 
         if (!sendPacket.persistent) {
@@ -281,32 +293,32 @@ void TCPThread::persistentConnectionLoop()
             clientSocket()->disconnectFromHost();
         }
 
-        QDEBUG() << "packetSent " << tcpPacket.name << tcpPacket.hexString.size();
+        QDEBUG() << "packetSent " << receivedPacket.name << receivedPacket.hexString.size();
 
         if (sendPacket.receiveBeforeSend) {
-            if (!tcpPacket.hexString.isEmpty()) {
-                emit packetSent(tcpPacket);
+            if (!receivedPacket.hexString.isEmpty()) {
+                emit packetSent(receivedPacket);
             }
         } else {
-            emit packetSent(tcpPacket);
+            emit packetSent(receivedPacket);
         }
 
         // Do I need to reply?
-        writeResponse(clientConnection, tcpPacket);
+        writeResponse(clientConnection, receivedPacket);
 
 
         emit connectStatus("Reading response");
-        tcpPacket.hexString  = clientSocket()->readAll();
+        receivedPacket.hexString  = clientSocket()->readAll();
 
-        tcpPacket.timestamp = QDateTime::currentDateTime();
-        tcpPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+        receivedPacket.timestamp = QDateTime::currentDateTime();
+        receivedPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
 
 
-        if (tcpPacket.hexString.size() > 0) {
-            emit packetSent(tcpPacket);
+        if (receivedPacket.hexString.size() > 0) {
+            emit packetSent(receivedPacket);
 
             // Do I need to reply?
-            writeResponse(clientConnection, tcpPacket);
+            writeResponse(clientConnection, receivedPacket);
 
         }
 

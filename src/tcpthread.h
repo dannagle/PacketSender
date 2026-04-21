@@ -151,6 +151,9 @@ class TCPThread : public QThread
         void sendCurrentPacket();
         void handleReceiveBeforeSend();
 
+        Packet buildReceivedPacket();
+        virtual quint16 getPeerPort() const;
+
         virtual QByteArray readSocketData();
 };
 

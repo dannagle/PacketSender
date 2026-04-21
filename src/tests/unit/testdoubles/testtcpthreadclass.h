@@ -101,6 +101,7 @@ public:
     int deleteLaterCallCount = 0;
     int sendCurrentPacketCallCount = 0;
     int handleReceiveBeforeSendCallCount = 0;
+    int buildReceivedPacketCallCount;
 
     bool forceExitAfterOneIteration = false;
 
@@ -156,6 +157,12 @@ public:
     {
         handleReceiveBeforeSendCallCount++;
         handleReceiveBeforeSend();
+    }
+
+    Packet callBuildReceivedPacket()
+    {
+        buildReceivedPacketCallCount++;
+        return buildReceivedPacket();
     }
 
     Packet getSendPacket() { return sendPacket; };
@@ -290,6 +297,14 @@ protected:
             return mock->getMockReadData();
         }
         return TCPThread::readSocketData();
+    }
+
+    quint16 getPeerPort() const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
+            return mock->getPeerPort();   // we'll add this to the mock
+        }
+        return TCPThread::getPeerPort();
     }
 
 private:

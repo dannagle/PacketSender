@@ -89,6 +89,13 @@ public:
         return mockReadData;
     }
 
+    void setMockPeerPort(quint16 port) { mockPeerPort = port; }
+
+    quint16 getPeerPort() const {
+        qDebug() << "=== MOCK peerPort() called → returning" << mockPeerPort;
+        return mockPeerPort;
+    }
+
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;
@@ -98,5 +105,6 @@ private:
     qint64 mockBytesAvailable = 0;
     QHostAddress mockPeerAddress = QHostAddress("127.0.0.1");
     QByteArray mockReadData;
+    quint16 mockPeerPort = 0;
 };
 #endif //MOCKSSLSOCKET_H
