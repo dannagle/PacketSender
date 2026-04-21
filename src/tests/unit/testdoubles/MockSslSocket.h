@@ -81,6 +81,14 @@ public:
         return mockPeerAddress;
     }
 
+    void setMockReadData(const QByteArray &data) { mockReadData = data; }
+
+    QByteArray getMockReadData() const
+    {
+        qDebug() << "=== MOCK getMockReadData() called → returning" << mockReadData.size() << "bytes";
+        return mockReadData;
+    }
+
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;
@@ -89,5 +97,6 @@ private:
     QAbstractSocket::SocketState mockState = QAbstractSocket::UnconnectedState;
     qint64 mockBytesAvailable = 0;
     QHostAddress mockPeerAddress = QHostAddress("127.0.0.1");
+    QByteArray mockReadData;
 };
 #endif //MOCKSSLSOCKET_H

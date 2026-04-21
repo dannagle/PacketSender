@@ -149,6 +149,9 @@ class TCPThread : public QThread
         virtual QHostAddress getPeerAddress() const;
 
         void sendCurrentPacket();
+        void handleReceiveBeforeSend();
+
+        virtual QByteArray readSocketData();
 };
 
 #endif // TCPTHREAD_H
