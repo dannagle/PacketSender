@@ -44,6 +44,7 @@ private slots:
     void testHandleReceiveBeforeSend_whenDataReceived_processesAndSendsResponse();
     void testHandleReceiveBeforeSend_whenNoDataReceived_doesNothing();
     void testHandleReceiveBeforeSend_setsCorrectPacketFields();
+    void testHandleReceiveBeforeSend_setsSSLWhenSocketIsEncrypted();
 
     // buildReceivedPacket() tests
     void testBuildReceivedPacket_populatesMetadataAndDrainsData();

@@ -545,6 +545,34 @@ void PersistentConnectionLoopTests::testHandleReceiveBeforeSend_setsCorrectPacke
     QVERIFY(received.timestamp.isValid());
     QCOMPARE(received.toIP, QString("You"));
     QCOMPARE(received.fromIP, thread.getPeerAddressAsString());   // or mock it
+    QCOMPARE(received.tcpOrUdp, "TCP");
+}
+
+void PersistentConnectionLoopTests::testHandleReceiveBeforeSend_setsSSLWhenSocketIsEncrypted()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(true);           // Triggers SSL path
+    mockSock->setMockBytesAvailable(10); // may not need to set this to non-zero, but let's cover all bases
+    mockSock->setMockReadData(QByteArray::fromHex("AA BB CC DD")); // has to have some data to send
+    mockSock->setMockPeerPort(54321);
+    thread.setClientConnection(mockSock);
+
+    // Make sure receiveBeforeSend is enabled
+    Packet initial;
+    initial.receiveBeforeSend = true;
+    thread.getSendPacketByReference() = initial;
+
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    thread.callHandleReceiveBeforeSend();
+
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    Packet sentPacket = packetSentSpy.first().first().value<Packet>();
+    QCOMPARE(sentPacket.tcpOrUdp, QString("SSL"));
 }
 
 void PersistentConnectionLoopTests::testBuildReceivedPacket_populatesMetadataAndDrainsData()

@@ -178,7 +178,7 @@ void TCPThread::handleReceiveBeforeSend()
         tcpRCVPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
         tcpRCVPacket.tcpOrUdp = "TCP";
 
-        if (clientSocket()->isEncrypted()) {
+        if (isSocketEncrypted(*clientSocket())) {
             tcpRCVPacket.tcpOrUdp = "SSL";
         }
 
