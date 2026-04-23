@@ -176,7 +176,7 @@ void DtlsServer::readyRead()
             sendAck(dtlsServer, dgram);
             return;
         } else {
-            errorMessage("close notify recieved");
+            errorMessage("close notify received");
         }
 
 
