@@ -12,7 +12,9 @@
 #include "globals.h"
 #ifndef CONSOLE_BUILD
     #include <QtWidgets/QApplication>
+    #include <QColor>
     #include <QDesktopServices>
+    #include <QPalette>
     #include <QTranslator>
     #include <QLibraryInfo>
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
@@ -138,6 +140,26 @@ void debugThemeFiles(bool debugMode) {
 }
 
 void applyTheme(bool isDark, bool debugMode, QApplication *app, MainWindow *mainWin = nullptr) {
+    if(isDark) {
+        app->setPalette(app->style()->standardPalette());
+    } else {
+        QPalette lightPalette;
+        lightPalette.setColor(QPalette::Window, QColor(250, 250, 250));
+        lightPalette.setColor(QPalette::WindowText, Qt::black);
+        lightPalette.setColor(QPalette::Base, Qt::white);
+        lightPalette.setColor(QPalette::AlternateBase, QColor(245, 245, 245));
+        lightPalette.setColor(QPalette::ToolTipBase, Qt::white);
+        lightPalette.setColor(QPalette::ToolTipText, Qt::black);
+        lightPalette.setColor(QPalette::Text, Qt::black);
+        lightPalette.setColor(QPalette::Button, QColor(245, 245, 245));
+        lightPalette.setColor(QPalette::ButtonText, Qt::black);
+        lightPalette.setColor(QPalette::BrightText, Qt::red);
+        lightPalette.setColor(QPalette::Link, QColor(0, 80, 160));
+        lightPalette.setColor(QPalette::Highlight, QColor(255, 249, 196));
+        lightPalette.setColor(QPalette::HighlightedText, Qt::black);
+        app->setPalette(lightPalette);
+    }
+
     debugThemeFiles(debugMode);
 
     QFile file(isDark ? Settings::DARK_STYLE_SHEET_NAME : Settings::LIGHT_STYLE_SHEET_NAME);
