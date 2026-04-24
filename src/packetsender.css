@@ -32,3 +32,47 @@ QLineEdit {
     border-radius: 4px; 
     padding: 4px; 
 }
+
+QMenuBar {
+    background-color: #fafafa;
+    color: #111111;
+}
+
+QMenuBar::item {
+    background: transparent;
+    color: #111111;
+    padding: 4px 8px;
+}
+
+QMenuBar::item:selected {
+    background-color: #ececec;
+    border-radius: 4px;
+}
+
+QMenuBar::item:pressed {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+}
+
+QMenu {
+    background-color: #fafafa;
+    color: #111111;
+    border: 1px solid #cfcfcf;
+}
+
+QMenu::item {
+    background-color: transparent;
+    color: #111111;
+    padding: 6px 24px 6px 28px;
+}
+
+QMenu::item:selected {
+    background-color: #fff9c4;
+    color: #111111;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: #d8d8d8;
+    margin: 4px 8px;
+}
