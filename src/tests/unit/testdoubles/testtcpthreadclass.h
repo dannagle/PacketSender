@@ -101,7 +101,7 @@ public:
     int deleteLaterCallCount = 0;
     int sendCurrentPacketCallCount = 0;
     int handleReceiveBeforeSendCallCount = 0;
-    int buildReceivedPacketCallCount;
+    int buildReceivedPacketCallCount = 0;
     int handleResponseAfterSendCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
