@@ -347,15 +347,11 @@ void TCPThread::persistentConnectionLoop()
         Packet receivedPacket = buildReceivedPacket();
         handleResponseAfterSend(receivedPacket);
 
-        if (!sendPacket.persistent) {
-            QDEBUG() << "inside if (!sendPacket.persistent)" ;
+        if (shouldBreakPersistentLoop()) {
             break;
-        } else {
-            sendPacket.clear();
-            sendPacket.persistent = true;
-            QDEBUG() << "Persistent connection. Loop and wait.";
-            continue;
         }
+
+        resetPacketForPersistentLoop();
     } // end while connected
 
     cleanupAfterPersistentConnectionLoop();
