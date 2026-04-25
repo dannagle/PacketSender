@@ -103,6 +103,7 @@ public:
     int handleReceiveBeforeSendCallCount = 0;
     int buildReceivedPacketCallCount = 0;
     int handleResponseAfterSendCallCount = 0;
+    int shouldBreakPersistentLoopCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -170,6 +171,12 @@ public:
     {
         handleResponseAfterSendCallCount++;
         handleResponseAfterSend(receivedPacket);
+    }
+
+    bool callShouldBreakPersistentLoop()
+    {
+        shouldBreakPersistentLoopCallCount++;
+        return shouldBreakPersistentLoop();
     }
 
     Packet getSendPacket() { return sendPacket; };

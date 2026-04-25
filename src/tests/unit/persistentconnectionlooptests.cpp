@@ -738,3 +738,27 @@ void PersistentConnectionLoopTests::testHandleResponseAfterSend_secondReadEmitsR
     Packet response = packetSentSpy.at(1).first().value<Packet>();
     QCOMPARE(response.hexString.trimmed(), QString("EE FF 11 22"));
 }
+
+void PersistentConnectionLoopTests::testShouldBreakPersistentLoop_returnsTrueForNonPersistent()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Non-persistent connection
+    Packet sendPkt;
+    sendPkt.persistent = false;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QCOMPARE(thread.callShouldBreakPersistentLoop(), true);
+}
+
+void PersistentConnectionLoopTests::testShouldBreakPersistentLoop_returnsFalseForPersistent()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // Persistent connection
+    Packet sendPkt;
+    sendPkt.persistent = true;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QCOMPARE(thread.callShouldBreakPersistentLoop(), false);
+}

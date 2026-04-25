@@ -57,6 +57,10 @@ private slots:
     void testHandleResponseAfterSend_receiveBeforeSendOnlyEmitsWhenDataPresent();
     void testHandleResponseAfterSend_secondReadEmitsResponseAndReplies();
 
+    // shouldBreakPersistentLoop() tests
+    void testShouldBreakPersistentLoop_returnsTrueForNonPersistent();
+    void testShouldBreakPersistentLoop_returnsFalseForPersistent();
+
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);
 };

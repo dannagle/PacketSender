@@ -157,6 +157,8 @@ class TCPThread : public QThread
         virtual QByteArray readSocketData();
 
         void handleResponseAfterSend(const Packet& receivedPacket);
+
+        bool shouldBreakPersistentLoop() const;
 };
 
 #endif // TCPTHREAD_H

@@ -276,6 +276,15 @@ void TCPThread::handleResponseAfterSend(const Packet& receivedPacket)
     }
 }
 
+bool TCPThread::shouldBreakPersistentLoop() const
+{
+    if (!sendPacket.persistent) {
+        QDEBUG() << "inside if (!sendPacket.persistent)" ;
+        return true;
+    }
+    return false;
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
