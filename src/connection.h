@@ -25,6 +25,14 @@ class Packet;
  * @brief RAII-style wrapper for a persistent connection.
  *        Initially minimal; will later own a TCPThread or similar.
  */
+
+/**
+ * Represents a high-level TCP (or SSL) connection managed by PacketSender.
+ *
+ * Note: In strict TCP terms, a connection is a 4-tuple: (local IP, local port, remote IP, remote port)
+ * Here, a Connection object owns and manages one side of that (the local socket + thread).
+ *
+ */
 class Connection : public QObject
 {
     Q_OBJECT
@@ -59,6 +67,11 @@ public:
 
     void send(const Packet &packet);
     void start();
+
+    /**
+     * Closes this side of the connection and cleans up the underlying socket/thread.
+     * This does NOT send a TCP FIN in all cases — it depends on the implementation.
+    */
     void close();
 
 signals:
