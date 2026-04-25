@@ -636,3 +636,105 @@ void PersistentConnectionLoopTests::testBuildReceivedPacket_handlesNoDataGracefu
     QCOMPARE(received.toIP, QString("You"));
     QVERIFY(received.hexString.isEmpty());   // important: no data = empty hex
 }
+
+void PersistentConnectionLoopTests::testHandleResponseAfterSend_nonPersistent_emitsDisconnecting()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    thread.setClientConnection(mockSock);
+
+    Packet received;
+    received.hexString = "AA BB CC";
+
+    // Make it non-persistent
+    Packet sendPkt;
+    sendPkt.persistent = false;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QSignalSpy statusSpy(&thread, &TCPThread::connectStatus);
+    thread.callHandleResponseAfterSend(received);
+    QVERIFY(statusSpy.contains(QVariantList{"Disconnecting"}));
+}
+
+void PersistentConnectionLoopTests::testHandleResponseAfterSend_normalCase_emitsReceivedPacket()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    thread.setClientConnection(mockSock);
+
+    Packet received;
+    received.hexString = "AA BB CC DD";
+    received.name = "Test Packet";
+
+    Packet sendPkt;
+    sendPkt.persistent = true;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+    thread.callHandleResponseAfterSend(received);
+    QCOMPARE(packetSpy.count(), 1);
+
+    Packet emitted = packetSpy.first().first().value<Packet>();
+    QCOMPARE(emitted.hexString, received.hexString);
+}
+
+void PersistentConnectionLoopTests::testHandleResponseAfterSend_receiveBeforeSendOnlyEmitsWhenDataPresent()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    thread.setClientConnection(mockSock);
+
+    Packet received;
+    received.hexString = "";   // empty
+
+    Packet sendPkt;
+    sendPkt.persistent = true;
+    sendPkt.receiveBeforeSend = true;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QSignalSpy packetSpy(&thread, &TCPThread::packetSent);
+    thread.callHandleResponseAfterSend(received);
+    QCOMPARE(packetSpy.count(), 0);   // should NOT emit when no data
+}
+
+void PersistentConnectionLoopTests::testHandleResponseAfterSend_secondReadEmitsResponseAndReplies()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockPeerPort(54321);
+
+    // Set up data for the SECOND read (the response after our reply)
+    mockSock->setMockReadData(QByteArray::fromHex("EE FF 11 22"));
+
+    thread.setClientConnection(mockSock);
+
+    // Setup persistent connection
+    Packet sendPkt;
+    sendPkt.persistent = true;
+    thread.getSendPacketByReference() = sendPkt;
+
+    QSignalSpy packetSentSpy(&thread, &TCPThread::packetSent);
+
+    // Use a packet with some initial data so first emit happens
+    Packet received;
+    received.hexString = "AA BB CC";
+
+    thread.callHandleResponseAfterSend(received);
+
+    // We should get TWO packetSent emissions:
+    // 1. The original received packet
+    // 2. The response from the second read
+    QCOMPARE(packetSentSpy.count(), 2);
+
+    // Check the second emission (the response)
+    Packet response = packetSentSpy.at(1).first().value<Packet>();
+    QCOMPARE(response.hexString.trimmed(), QString("EE FF 11 22"));
+}
