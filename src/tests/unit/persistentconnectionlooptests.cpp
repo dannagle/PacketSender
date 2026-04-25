@@ -3,6 +3,7 @@
 //
 
 #include <QtTest/QTest.h>
+#include <QVariant>
 #include <QSignalSpy>
 #include <QTcpServer>
 
@@ -761,4 +762,80 @@ void PersistentConnectionLoopTests::testShouldBreakPersistentLoop_returnsFalseFo
     thread.getSendPacketByReference() = sendPkt;
 
     QCOMPARE(thread.callShouldBreakPersistentLoop(), false);
+}
+
+void PersistentConnectionLoopTests::testResetPacketForPersistentLoop()
+{
+    TestTcpThreadClass thread("127.0.0.1", 12345, Packet());
+
+    // 1. Dirty up the packet to simulate real usage
+    Packet &sendPkt = thread.getSendPacketByReference();
+    sendPkt.hexString = "AA BB CC DD";
+    sendPkt.name = "Dirty Packet";
+    sendPkt.fromIP = "192.168.1.100";
+    sendPkt.toIP = "8.8.8.8";
+    sendPkt.errorString = "Some error";
+    sendPkt.port = 9999;
+    sendPkt.fromPort = 8888;
+    sendPkt.persistent = true;
+    sendPkt.receiveBeforeSend = true;
+
+    // 2. Capture original timestamp in ms
+    const qint64 originalMSecs = sendPkt.timestamp.toMSecsSinceEpoch();
+
+    // 3. Force clock to advance before creating fresh packet
+    QTest::qSleep(2);   // 2ms is enough on modern hardware
+
+    // 4. Create a fresh default packet for field comparison
+    Packet fresh;
+    fresh.init();                    // exactly what resetPacketForPersistentLoop() calls internally
+
+    // 5. capture the ~2 ms difference between creating sendPkt and the fresh packet
+    qint64 freshMSecs = fresh.timestamp.toMSecsSinceEpoch();
+
+    // 6. Force another small delay before the actual reset
+    QTest::qSleep(2);
+
+    // 7. Perform the reset
+    thread.callResetPacketForPersistentLoop();
+
+    // 8. Compare all fields that should be reset (except persistent)
+    QCOMPARE(sendPkt.name, fresh.name);
+    QCOMPARE(sendPkt.hexString, fresh.hexString);
+    QCOMPARE(sendPkt.fromIP, fresh.fromIP);
+    QCOMPARE(sendPkt.toIP, fresh.toIP);
+    QCOMPARE(sendPkt.errorString, fresh.errorString);
+    QCOMPARE(sendPkt.port, fresh.port);
+    QCOMPARE(sendPkt.tcpOrUdp, fresh.tcpOrUdp);
+    QCOMPARE(sendPkt.sendResponse, fresh.sendResponse);
+    QCOMPARE(sendPkt.repeat, fresh.repeat);
+    QCOMPARE(sendPkt.incoming, fresh.incoming);
+    QCOMPARE(sendPkt.receiveBeforeSend, fresh.receiveBeforeSend);
+    QCOMPARE(sendPkt.delayAfterConnect, fresh.delayAfterConnect);
+    QCOMPARE(sendPkt.persistent, true);           // this one we deliberately keep
+
+    // 9. Timestamp assertions — exactly what you asked for
+    const qint64 finalMSecs = sendPkt.timestamp.toMSecsSinceEpoch();
+
+    // Optional debug output - updated for the three timestamps
+    QString warningMessage;
+
+    warningMessage.append("=== Timestamp Test Debug ===\n");
+    warningMessage.append("originalMSecs (initial sendPkt):  " + QString::number(originalMSecs) + "\n");
+    warningMessage.append("freshMSecs     (before reset):    " + QString::number(freshMSecs) + "\n");
+    warningMessage.append("finalMSecs     (after reset):     " + QString::number(finalMSecs) + "\n\n");
+
+    warningMessage.append("original < fresh : " + QVariant(originalMSecs < freshMSecs).toString() + "\n");
+    warningMessage.append("fresh < final    : " + QVariant(freshMSecs < finalMSecs).toString() + "\n");
+    warningMessage.append("final > original : " + QVariant(finalMSecs > originalMSecs).toString() + "\n\n");
+
+    warningMessage.append("sendPkt.timestamp: " + sendPkt.timestamp.toString() + "\n");
+    warningMessage.append("fresh.timestamp:   " + fresh.timestamp.toString() + "\n");
+
+    QTest::qWarn(warningMessage.toUtf8().constData());
+
+    QVERIFY(sendPkt.timestamp.isValid());
+    QVERIFY(originalMSecs < freshMSecs);      // original < fresh
+    QVERIFY(freshMSecs < finalMSecs);         // fresh < final (after reset)
+    QVERIFY(finalMSecs > originalMSecs);      // final is newest
 }

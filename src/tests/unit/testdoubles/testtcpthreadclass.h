@@ -104,6 +104,7 @@ public:
     int buildReceivedPacketCallCount = 0;
     int handleResponseAfterSendCallCount = 0;
     int shouldBreakPersistentLoopCallCount = 0;
+    int resetPacketForPersistentLoopCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -177,6 +178,12 @@ public:
     {
         shouldBreakPersistentLoopCallCount++;
         return shouldBreakPersistentLoop();
+    }
+
+    void callResetPacketForPersistentLoop()
+    {
+        resetPacketForPersistentLoopCallCount++;
+        resetPacketForPersistentLoop();
     }
 
     Packet getSendPacket() { return sendPacket; };
