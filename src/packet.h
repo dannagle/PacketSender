@@ -143,4 +143,6 @@ private:
 
 Q_DECLARE_METATYPE(Packet)
 
+QDebug operator<<(QDebug debug, const Packet &packet);
+
 #endif // PACKET_H
