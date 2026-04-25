@@ -238,6 +238,44 @@ quint16 TCPThread::getPeerPort() const
     return clientSocket() ? clientSocket()->peerPort() : 0;
 }
 
+void TCPThread::handleResponseAfterSend(const Packet& receivedPacket)
+{
+    // Disconnect now if this is not a persistent connection
+    if (!sendPacket.persistent) {
+        emit connectStatus("Disconnecting");
+        clientSocket()->disconnectFromHost();
+    }
+
+    QDEBUG() << "packetSent " << receivedPacket.name << receivedPacket.hexString.size();
+
+    // Emit the received packet (with special case for receiveBeforeSend)
+    if (sendPacket.receiveBeforeSend) {
+        if (!receivedPacket.hexString.isEmpty()) {
+            emit packetSent(receivedPacket);
+        }
+    } else {
+        emit packetSent(receivedPacket);
+    }
+
+    // Do I need to reply?
+    writeResponse(clientConnection, receivedPacket);
+
+    // Second read: look for any response that came back after our reply
+    emit connectStatus("Reading response");
+
+    Packet responsePacket = receivedPacket;  // start with copy
+    QByteArray rawData = readSocketData();
+    responsePacket.hexString = Packet::byteArrayToHex(rawData);
+
+    responsePacket.timestamp = QDateTime::currentDateTime();
+    responsePacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+
+    if (responsePacket.hexString.size() > 0) {
+        emit packetSent(responsePacket);
+        writeResponse(clientConnection, responsePacket);
+    }
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
@@ -286,43 +324,7 @@ void TCPThread::persistentConnectionLoop()
         sendCurrentPacket();
 
         Packet receivedPacket = buildReceivedPacket();
-
-
-        if (!sendPacket.persistent) {
-            emit connectStatus("Disconnecting");
-            clientSocket()->disconnectFromHost();
-        }
-
-        QDEBUG() << "packetSent " << receivedPacket.name << receivedPacket.hexString.size();
-
-        if (sendPacket.receiveBeforeSend) {
-            if (!receivedPacket.hexString.isEmpty()) {
-                emit packetSent(receivedPacket);
-            }
-        } else {
-            emit packetSent(receivedPacket);
-        }
-
-        // Do I need to reply?
-        writeResponse(clientConnection, receivedPacket);
-
-
-        emit connectStatus("Reading response");
-        receivedPacket.hexString  = clientSocket()->readAll();
-
-        receivedPacket.timestamp = QDateTime::currentDateTime();
-        receivedPacket.name = QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-
-
-        if (receivedPacket.hexString.size() > 0) {
-            emit packetSent(receivedPacket);
-
-            // Do I need to reply?
-            writeResponse(clientConnection, receivedPacket);
-
-        }
-
-
+        handleResponseAfterSend(receivedPacket);
 
         if (!sendPacket.persistent) {
             QDEBUG() << "inside if (!sendPacket.persistent)" ;

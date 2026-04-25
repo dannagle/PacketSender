@@ -102,6 +102,7 @@ public:
     int sendCurrentPacketCallCount = 0;
     int handleReceiveBeforeSendCallCount = 0;
     int buildReceivedPacketCallCount;
+    int handleResponseAfterSendCallCount = 0;
 
     bool forceExitAfterOneIteration = false;
 
@@ -163,6 +164,12 @@ public:
     {
         buildReceivedPacketCallCount++;
         return buildReceivedPacket();
+    }
+
+    void callHandleResponseAfterSend(Packet &receivedPacket)
+    {
+        handleResponseAfterSendCallCount++;
+        handleResponseAfterSend(receivedPacket);
     }
 
     Packet getSendPacket() { return sendPacket; };

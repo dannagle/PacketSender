@@ -51,6 +51,12 @@ private slots:
     void testBuildReceivedPacket_setsSSLWhenSocketIsEncrypted();
     void testBuildReceivedPacket_handlesNoDataGracefully();
 
+    // responseAfterSend() tests
+    void testHandleResponseAfterSend_nonPersistent_emitsDisconnecting();
+    void testHandleResponseAfterSend_normalCase_emitsReceivedPacket();
+    void testHandleResponseAfterSend_receiveBeforeSendOnlyEmitsWhenDataPresent();
+    void testHandleResponseAfterSend_secondReadEmitsResponseAndReplies();
+
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);
 };
