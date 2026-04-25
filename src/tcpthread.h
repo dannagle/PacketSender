@@ -159,6 +159,7 @@ class TCPThread : public QThread
         void handleResponseAfterSend(const Packet& receivedPacket);
 
         bool shouldBreakPersistentLoop() const;
+        void resetPacketForPersistentLoop();
 };
 
 #endif // TCPTHREAD_H

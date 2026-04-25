@@ -61,6 +61,9 @@ private slots:
     void testShouldBreakPersistentLoop_returnsTrueForNonPersistent();
     void testShouldBreakPersistentLoop_returnsFalseForPersistent();
 
+    // resetPacketForPersistentLoop() tests
+    void testResetPacketForPersistentLoop();
+
 private:
     void dumpStatusSpy(const QSignalSpy& statusSpy);
 };

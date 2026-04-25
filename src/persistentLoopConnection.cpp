@@ -285,6 +285,18 @@ bool TCPThread::shouldBreakPersistentLoop() const
     return false;
 }
 
+void TCPThread::resetPacketForPersistentLoop()
+{
+    sendPacket.clear();
+    /*
+     *  clear() resets persistentent to false
+     *  But we know we want to go through the loop again
+     *  so we have to reassign this variable.
+     **/
+    sendPacket.persistent = true;
+    QDEBUG() << "Persistent connection. Loop and wait.";
+}
+
 // THE LOOP
 void TCPThread::persistentConnectionLoop()
 {
