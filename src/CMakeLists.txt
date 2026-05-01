@@ -90,6 +90,7 @@ set(
   dtlsserver.cpp
   dtlsthread.cpp
   persistentLoopConnection.cpp
+  basetcpthread.cpp
 )
 
 set(

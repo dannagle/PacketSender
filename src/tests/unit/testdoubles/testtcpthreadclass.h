@@ -323,7 +323,7 @@ protected:
     quint16 getPeerPort() const override
     {
         if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
-            return mock->getPeerPort();   // we'll add this to the mock
+            return mock->getPeerPort();
         }
         return TCPThread::getPeerPort();
     }

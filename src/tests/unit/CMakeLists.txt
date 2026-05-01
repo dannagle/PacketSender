@@ -30,7 +30,11 @@ add_executable(${TEST_NAME}
     tcpthreadqapplicationneededtests.cpp
     persistentconnectionlooptests.cpp
 
-    # project files that need to be added to the executable
+    ../../basetcpthread.cpp
+    basetcpthreadtests.cpp
+    testdoubles/basetcpthreadtestdouble.h
+
+        # project files that need to be added to the executable
     ../../packet.cpp
     ../../sendpacketbutton.cpp
 )
