@@ -1099,15 +1099,16 @@ QByteArray Packet::HEXtoByteArray(QString thehex)
 
 QString Packet::removeIPv6Mapping(QHostAddress ipv6)
 {
-    quint32 ipv4 = ipv6.toIPv4Address();
-
-    //valid address will have a result greater than 0
-    if (ipv4 > 0) {
-        QHostAddress new_ipv4(ipv4);
-        return new_ipv4.toString();
-    } else {
-        return ipv6.toString();
+    if (ipv6.isNull()) {
+        return "";
     }
+
+    quint32 ipv4 = ipv6.toIPv4Address();
+    if (ipv4 > 0) {
+        return QHostAddress(ipv4).toString();   // IPv4-mapped address
+    }
+
+    return ipv6.toString();   // real IPv6 or IPv4 address
 
 }
 
@@ -1213,5 +1214,37 @@ QString Packet::ASCIITohex(QString &ascii)
 
     return hexText;
 
+}
+
+QDebug operator<<(QDebug debug, const Packet& packet)
+{
+    QDebugStateSaver saver(debug);   // Important: preserves formatting state (nospace, etc.)
+
+    debug.nospace() << "Packet("
+                    << "name=" << packet.name
+                    << ", hexString=\"" << packet.hexString << "\""
+                    << ", requestPath=" << packet.requestPath
+                    // Add the remaining useful fields below:
+                    << ", fromIP=" << packet.fromIP
+                    << ", toIP=" << packet.toIP
+                    << ", resolvedIP=" << packet.resolvedIP
+                    << ", errorString=\"" << packet.errorString << "\""
+                    << ", repeat=" << packet.repeat
+                    << ", port=" << packet.port
+                    << ", fromPort=" << packet.fromPort
+                    << ", tcpOrUdp=" << packet.tcpOrUdp
+                    << ", sendResponse=" << packet.sendResponse
+                    << ", incoming=" << (packet.incoming ? "true" : "false")
+                    // Using const_cast for the non-const isXXX() methods:
+                    << ", isDTLS=" << (const_cast<Packet&>(packet).isDTLS() ? "true" : "false")
+                    << ", isTCP="  << (const_cast<Packet&>(packet).isTCP()  ? "true" : "false")
+                    << ", isSSL="  << (const_cast<Packet&>(packet).isSSL()  ? "true" : "false")
+                    << ", isUDP="  << (const_cast<Packet&>(packet).isUDP()  ? "true" : "false")
+                    << ", isHTTP=" << (const_cast<Packet&>(packet).isHTTP() ? "true" : "false")
+                    << ", isHTTPS="<< (const_cast<Packet&>(packet).isHTTPS()? "true" : "false")
+                    << ", isPOST=" << (const_cast<Packet&>(packet).isPOST() ? "true" : "false")
+                    << ")";
+
+    return debug;
 }
 
