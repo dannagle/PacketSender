@@ -81,6 +81,15 @@ public:
         return mockPeerAddress;
     }
 
+    [[nodiscard]] NetworkLayerProtocol getIPConnectionProtocol() const
+    {
+        QHostAddress addr = getMockPeerAddress();
+        if (addr.protocol() == IPv6Protocol) {
+            return IPv6Protocol;
+        }
+        return IPv4Protocol;
+    }
+
     void setMockReadData(const QByteArray &data) { mockReadData = data; }
 
     QByteArray getMockReadData() const
