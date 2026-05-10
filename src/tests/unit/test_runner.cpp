@@ -13,6 +13,7 @@
 #include "translation_tests.h"
 #include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
+#include "outgoingtcptests.h"
 
 int main(int argc, char *argv[])
 {
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
     runGuiTest(new TcpThread_QApplicationNeeded_tests());
     runGuiTest(new PersistentConnectionLoopTests());
     runGuiTest(new BaseTcpThreadTests());
+    runGuiTest(new OutgoingTcpTests());
 
     // Then non-GUI or independent tests
     runNonGuiTest(new TcpThreadTests());

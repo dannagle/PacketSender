@@ -91,6 +91,7 @@ set(
   dtlsthread.cpp
   persistentLoopConnection.cpp
   basetcpthread.cpp
+  outgoingtcpthread.cpp
 )
 
 set(
