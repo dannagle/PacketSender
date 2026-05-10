@@ -30,7 +30,7 @@ void OutgoingTcpTests::testConstructor_throwsIfPacketToSendPortIsNotSet()
 
     try
     {
-        OutgoingTcpThread thread = OutgoingTcpThread(new QSslSocket(), p);
+        OutgoingTcpThread thread = OutgoingTcpThread(p);
         QFAIL("invalid_argument exception was not thrown");
     } catch (std::invalid_argument& e)
     {
@@ -44,7 +44,7 @@ void OutgoingTcpTests::testConstructor_throwsIfPacketToSendAddressIsNotSet()
 
     try
     {
-        OutgoingTcpThread thread = OutgoingTcpThread(new QSslSocket(), p);
+        OutgoingTcpThread thread = OutgoingTcpThread(p);
         QFAIL("invalid_argument exception was not thrown");
     } catch (std::invalid_argument& e)
     {
@@ -57,7 +57,7 @@ void OutgoingTcpTests::testGetDestinationAddress()
     QString destinationAddress = "foo bar baz";
     Packet p = createPacketForTest(destinationAddress);
 
-    OutgoingTcpThread thread = OutgoingTcpThread(new QSslSocket(), p);
+    OutgoingTcpThread thread = OutgoingTcpThread(p);
     QCOMPARE(thread.getDestinationAddress(), destinationAddress);
 }
 
@@ -66,7 +66,7 @@ void OutgoingTcpTests::testGetDestinationPort()
     unsigned int port = 666;
     Packet p = createPacketForTest(OutgoingTcpTests::DEFAULT_ADDRESS, port);
 
-    OutgoingTcpThread thread = OutgoingTcpThread(new QSslSocket(), p);
+    OutgoingTcpThread thread = OutgoingTcpThread(p);
     QCOMPARE(thread.getDestinationPort(), port);
 }
 
@@ -85,7 +85,7 @@ void OutgoingTcpTests::testIsValid_returnsFalseWhenSendPacketDotToIpIsEmptyStrin
 void OutgoingTcpTests::testIsValid_returnsFalseWhenSendPacketDotPortIsZero()
 {
     // taking advantage of createPacketForTest defaults
-    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(new QSslSocket(), createPacketForTest());
+    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(createPacketForTest());
 
     Packet p = thread.getSendPacketByReference();
     p.toIP = "";
@@ -95,7 +95,7 @@ void OutgoingTcpTests::testIsValid_returnsFalseWhenSendPacketDotPortIsZero()
 
 void OutgoingTcpTests::testIsValid_returnsFalseWhenSocketHasNotBeenConnectedToHost()
 {
-    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(new QSslSocket(), createPacketForTest());
+    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(createPacketForTest());
     QCOMPARE(thread.isValid(), false);
 }
 
@@ -108,7 +108,6 @@ void OutgoingTcpTests::testIsValid_returnsTrueWithValidPacketAndSocket()
     Packet validPacket = createPacketForTest("127.0.0.1", 9999);
 
     OutgoingTcpThreadTestDouble thread(mockSock, validPacket);
-
     QCOMPARE(thread.isValid(), true);
 }
 

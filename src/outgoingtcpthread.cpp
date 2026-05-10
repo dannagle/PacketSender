@@ -17,6 +17,13 @@ OutgoingTcpThread::OutgoingTcpThread(QSslSocket* socket, const Packet& packetToS
     }
 }
 
+// Convenience constructor
+OutgoingTcpThread::OutgoingTcpThread(const Packet& packetToSend,
+                                     QObject* parent)
+    : OutgoingTcpThread(new QSslSocket(), packetToSend, parent)   // delegates to main constructor
+{
+}
+
 OutgoingTcpThread::~OutgoingTcpThread()
 {
 }

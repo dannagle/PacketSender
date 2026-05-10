@@ -9,8 +9,13 @@
 class OutgoingTcpThreadTestDouble : public OutgoingTcpThread
 {
 public:
-    OutgoingTcpThreadTestDouble(
+    explicit OutgoingTcpThreadTestDouble(
         QSslSocket* socket, const Packet& packetToSend): OutgoingTcpThread(socket, packetToSend)
+    {}
+
+    // Convenience constructor
+    explicit OutgoingTcpThreadTestDouble(const Packet& packetToSend)
+        : OutgoingTcpThreadTestDouble(new QSslSocket(), packetToSend)   // delegates to main constructor
     {}
 
     Packet& getSendPacketByReference()
