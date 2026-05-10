@@ -42,6 +42,9 @@ public:
     bool waitForEncrypted(int msecs = 30000) { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool isEncrypted() const {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
 
+    bool isValid() const { return isMockValid;}
+    void setIsValid(bool isValid) { isMockValid = isValid; }
+
     QList<QSslError> sslErrors() const { return mockSslErrors; }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     QList<QSslError> sslHandshakeErrors() const { return mockSslErrors; }
@@ -108,6 +111,7 @@ public:
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;
+    bool isMockValid = false;
     QList<QSslError> mockSslErrors;
     QSslCipher mockCipher;
     QAbstractSocket::SocketState mockState = QAbstractSocket::UnconnectedState;

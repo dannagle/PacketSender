@@ -50,6 +50,7 @@ protected:
     // void wireupSocketSignals(QSslSocket* socket);
 
     [[nodiscard]] virtual QHostAddress getSocketPeerAddress() const;
+    [[nodiscard]] virtual bool isSocketValid() const;
 
     QSslSocket* socket = nullptr;
     bool managedByConnection = false;

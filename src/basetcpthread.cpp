@@ -26,7 +26,7 @@ BaseTcpThread::~BaseTcpThread()
 
 bool BaseTcpThread::isValid() const
 {
-    return socket != nullptr && socket->isValid();
+    return isSocketValid();
 }
 
 QSslSocket* BaseTcpThread::getSocket() const
@@ -52,6 +52,11 @@ quint16 BaseTcpThread::getLocalPort() const
 QHostAddress BaseTcpThread::getSocketPeerAddress() const
 {
     return socket ? socket->peerAddress() : QHostAddress();
+}
+
+bool BaseTcpThread::isSocketValid() const
+{
+    return socket != nullptr && socket->isValid();
 }
 
 QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() const

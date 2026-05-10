@@ -34,6 +34,10 @@ add_executable(${TEST_NAME}
     basetcpthreadtests.cpp
     testdoubles/basetcpthreadtestdouble.h
 
+    ../../outgoingtcpthread.cpp
+    outgoingtcptests.cpp
+    testdoubles/outgoingtchpthreadtestdouble.h
+
         # project files that need to be added to the executable
     ../../packet.cpp
     ../../sendpacketbutton.cpp
