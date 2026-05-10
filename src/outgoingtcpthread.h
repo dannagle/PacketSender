@@ -28,10 +28,7 @@ public:
      * Convenience constructor - creates the socket internally.
      * This is what most production code (Connection) will use.
      */
-    // OutgoingTcpThread(const QString &host,
-    //                   quint16 port,
-    //                   const Packet &initialPacket = Packet(),
-    //                   QObject* parent = nullptr);
+    explicit OutgoingTcpThread(const Packet& packetToSend, QObject* parent = nullptr);
 
     ~OutgoingTcpThread() override;
 
