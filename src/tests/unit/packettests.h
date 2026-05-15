@@ -23,6 +23,18 @@ private slots:
 
     void test_isValidForSending_happyPath_returnsTrue();
     void test_isValidForSending_happyPath_outParameterValue();
+
+    // operator==() tests
+    void testOperatorEquals_returnsTrueForIdenticalPackets();
+    void testOperatorEquals_ignoresTimestamp();
+
+    void testOperatorEquals_returnsFalseWhenAnyFieldDiffers_data(); // QtTest's version of parameterized testing
+    void testOperatorEquals_returnsFalseWhenAnyFieldDiffers();
+
+    // operator!=() tests
+    void testOperatorNotEquals_returnsFalseForIdenticalPackets();
+    void testOperatorNotEquals_returnsTrueWhenAnyFieldDiffers_data(); // QtTest's version of parameterized testing
+    void testOperatorNotEquals_returnsTrueWhenAnyFieldDiffers();
 };
 
 

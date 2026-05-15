@@ -14,6 +14,7 @@
 #include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
 #include "outgoingtcptests.h"
+#include "packettests.h"
 
 int main(int argc, char *argv[])
 {
@@ -47,6 +48,7 @@ int main(int argc, char *argv[])
     runNonGuiTest(new TcpThreadTests());
     runNonGuiTest(new ConnectionTests());
     runNonGuiTest(new ConnectionManagerTests());
+    runNonGuiTest(new PacketTests());
 
     if (failures == 0) {
         qInfo() << "All tests passed!";

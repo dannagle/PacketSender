@@ -122,6 +122,8 @@ class Packet
 
 
         bool operator()(const Packet* a, const Packet* b) const;
+        bool operator==(const Packet& other) const;
+        bool operator!=(const Packet& other) const;
 
 #ifndef CONSOLE_BUILD
         SendPacketButton * getSendButton(QTableWidget *parent);

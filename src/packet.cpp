@@ -139,6 +139,7 @@ Packet::Packet(const Packet &other)
     OTHEREQUALS(hexString);
     OTHEREQUALS(fromIP);
     OTHEREQUALS(toIP);
+    OTHEREQUALS(resolvedIP);
     OTHEREQUALS(errorString);
     OTHEREQUALS(repeat);
     OTHEREQUALS(port);
@@ -1070,6 +1071,32 @@ QByteArray Packet::smartResponseMatch(QList<SmartResponseConfig> smartList, QByt
 bool Packet::operator()(const Packet *a, const Packet *b) const
 {
     return a->timestamp < b->timestamp;
+}
+
+bool Packet::operator==(const Packet& other) const
+{
+    return name == other.name &&
+           hexString == other.hexString &&
+           requestPath == other.requestPath &&
+           fromIP == other.fromIP &&
+           toIP == other.toIP &&
+           resolvedIP == other.resolvedIP &&
+           errorString == other.errorString &&
+           repeat == other.repeat &&
+           port == other.port &&
+           fromPort == other.fromPort &&
+           tcpOrUdp == other.tcpOrUdp &&
+           sendResponse == other.sendResponse &&
+           incoming == other.incoming &&
+           receiveBeforeSend == other.receiveBeforeSend &&
+           delayAfterConnect == other.delayAfterConnect &&
+           persistent == other.persistent;
+    // timestamp intentionally excluded
+}
+
+bool Packet::operator!=(const Packet& other) const
+{
+    return !(*this == other);
 }
 
 #ifndef CONSOLE_BUILD
