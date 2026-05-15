@@ -75,6 +75,7 @@ class Packet
         bool isPUT();
         bool isDELETE();
         bool isPATCH();
+        bool isValidForSending(QString* errorMessage = nullptr);
 
         QDateTime timestamp;
 
