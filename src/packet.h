@@ -70,6 +70,7 @@ class Packet
         bool isHTTP();
         bool isHTTPS();
         bool isPOST();
+        bool isValidForSending(QString* errorMessage = nullptr);
 
         QDateTime timestamp;
 
@@ -121,6 +122,8 @@ class Packet
 
 
         bool operator()(const Packet* a, const Packet* b) const;
+        bool operator==(const Packet& other) const;
+        bool operator!=(const Packet& other) const;
 
 #ifndef CONSOLE_BUILD
         SendPacketButton * getSendButton(QTableWidget *parent);
@@ -142,5 +145,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(Packet)
+
+QDebug operator<<(QDebug debug, const Packet &packet);
 
 #endif // PACKET_H
