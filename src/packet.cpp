@@ -98,6 +98,26 @@ bool Packet::isTCP()
     return ((tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL()));
 }
 
+bool Packet::isValidForSending(QString* errorMessage)
+{
+    if (toIP.isEmpty()) {
+        if (errorMessage) *errorMessage = "Destination address (toIP) is empty";
+        return false;
+    }
+
+    if (port == 0) {
+        if (errorMessage) *errorMessage = "Port must be a positive number";
+        return false;
+    }
+
+    if (getByteArray().isEmpty()) {
+        if (errorMessage) *errorMessage = "No data to send (hexString is empty)";
+        return false;
+    }
+
+    return true;
+}
+
 float Packet::oneDecimal(float value)
 {
     float valueFloat = value * 10;

@@ -38,8 +38,10 @@ add_executable(${TEST_NAME}
     outgoingtcptests.cpp
     testdoubles/outgoingtchpthreadtestdouble.h
 
-        # project files that need to be added to the executable
     ../../packet.cpp
+    packettests.cpp
+
+    # project files that need to be added to the executable
     ../../sendpacketbutton.cpp
 )
 
