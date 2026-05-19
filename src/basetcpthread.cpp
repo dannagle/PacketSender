@@ -3,6 +3,7 @@
 //
 
 #include <stdexcept>
+#include <QAbstractSocket>
 #include "basetcpthread.h"
 
 
@@ -31,37 +32,47 @@ bool BaseTcpThread::isValid() const
 
 QSslSocket* BaseTcpThread::getSocket() const
 {
-    return socket;
+    return socket.get();
+}
+
+QAbstractSocket::SocketState BaseTcpThread::getSocketState() const
+{
+    return socket->state();
 }
 
 bool BaseTcpThread::isSocketEncrypted() const
 {
-    return socket ? socket->isEncrypted() : false;
+    return getSocket() ? socket->isEncrypted() : false;
 }
 
 quint16 BaseTcpThread::getPeerPort() const
 {
-    return socket ? socket->peerPort() : 0;
+    return getSocket() ? socket->peerPort() : 0;
 }
 
 quint16 BaseTcpThread::getLocalPort() const
 {
-    return socket ? socket->localPort() : 0;
+    return getSocket() ? socket->localPort() : 0;
+}
+
+void BaseTcpThread::sleep(unsigned long usec)
+{
+    usleep(usec);
 }
 
 QHostAddress BaseTcpThread::getSocketPeerAddress() const
 {
-    return socket ? socket->peerAddress() : QHostAddress();
+    return getSocket() ? socket->peerAddress() : QHostAddress();
 }
 
 bool BaseTcpThread::isSocketValid() const
 {
-    return socket != nullptr && socket->isValid();
+    return getSocket() != nullptr && socket->isValid();
 }
 
 QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() const
 {
-    if (!socket) {
+    if (!getSocket()) {
         qWarning() << "getIPConnectionProtocol() called on BaseTcpThread with null socket";
         return QAbstractSocket::IPv4Protocol;   // safe default
     }
@@ -76,10 +87,46 @@ QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() c
     return peerAddr.protocol();
 }
 
+void BaseTcpThread::sendOutgoingPacket(Packet& packet)
+{
+    QSslSocket* sock = getSocket();
+    if (!sock) {
+        qWarning() << "sendOutgoingPacket: No socket available";
+        emit connectionStatus("Error: No socket available");
+        emit error(QAbstractSocket::SocketAccessError);
+        return;
+    }
+
+    if (getSocketState() != QAbstractSocket::ConnectedState) {
+        qWarning() << "sendOutgoingPacket: Socket is not connected (state =" << getSocketState() << ")";
+        emit connectionStatus("Error: Socket not connected");
+        emit error(QAbstractSocket::SocketAccessError);
+        return;
+    }
+
+    QString errorMsg;
+    if (!(packet.isValidForSending(&errorMsg)))
+    {
+        qDebug() << "=== VALIDATION FAILED ===";
+        qDebug() << "Error message from isValidForSending:" << errorMsg;
+        qDebug() << "Packet hexString was:" << packet.hexString;
+        qDebug() << "Packet toIP was:" << packet.toIP;
+        qDebug() << "Packet port was:" << packet.port;
+
+        emit errorMessage(errorMsg);
+        return;
+    }
+
+    emit connectionStatus("Sending data: " + packet.asciiString());
+
+    sock->write(packet.getByteArray());
+    emit packetSent(packet);
+}
+
 QString BaseTcpThread::getPeerAddressAsString() const
 {
     qDebug() << "getPeerAddressAsString() called";
-    if (!socket) {
+    if (!getSocket()) {
         qDebug() << "  → No socket, returning empty string";
         return "";
     }
@@ -103,4 +150,3 @@ QString BaseTcpThread::getPeerAddressAsString() const
         return result;
     }
 }
-

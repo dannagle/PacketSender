@@ -7,6 +7,7 @@
 
 #include <QObject>
 #include "basetcpthread.h"
+#include "packet.h"
 
 /**
  * Handles outgoing (client) TCP connections - both one-shot and persistent.
@@ -38,7 +39,10 @@ public:
     [[nodiscard]] bool isValid() const override;
 
 protected:
-    // void run() override;
+    void run() override;
+    virtual void prepareOutgoingPacket();
+    virtual void sendOutgoingPacket();
+    void closeConnection() override;
 
     Packet      sendPacket;
     Packet      replyPacket;
@@ -48,6 +52,8 @@ protected:
     bool        receiveBeforeSend = false;
     int         delayAfterConnect = 0;
 
+private:
+    void outgoingConnectionDebugMessage(bool connectSuccess);
 };
 
 

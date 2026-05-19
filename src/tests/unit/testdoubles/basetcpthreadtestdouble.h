@@ -18,20 +18,14 @@ public:
     {
     }
 
-    // Minimal implementation of the pure virtual method
-    void run() override
-    {
-        // Do nothing for most tests, or QThread::run() if you want default behavior
-    }
-
     void setSocketForTest(QSslSocket* newSocket)
     {
-        socket = newSocket;
+        getSocketPtrByReference().reset(newSocket);
     }
 
     bool isSocketEncrypted() const override
     {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(socket)) {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
             return mock->isEncrypted();
         }
         return BaseTcpThread::isSocketEncrypted();
@@ -39,38 +33,46 @@ public:
 
     quint16 getPeerPort() const override
     {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(socket)) {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
             return mock->getPeerPort();
         }
 
         return BaseTcpThread::getPeerPort();
     }
 
-    // [[nodiscard]] QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const override
-    // {
-    //     if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(socket)) {
-    //         return mock->getIPConnectionProtocol();
-    //     }
-    //
-    //     return BaseTcpThread::getIPConnectionProtocol();
-    // }
-    //
-    // [[nodiscard]] QString getPeerAddressAsString() const override
-    // {
-    //     if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(socket)) {
-    //         return mock->getIPConnectionProtocol();
-    //     }
-    //
-    //     return BaseTcpThread::getIPConnectionProtocol();
-    // }
+    void callSendOutgoingPacket(Packet &packet)
+    {
+        sendOutgoingPacket(packet);
+    }
 
 protected:
+    // Minimal implementation of the pure virtual method
+    void run() override
+    {
+        // Do nothing for most tests, or QThread::run() if you want default behavior
+    }
+
+    // Minimal implementation of the pure virtual method
+    void closeConnection() override
+    {
+        // Do nothing
+    }
+
     QHostAddress getSocketPeerAddress() const override
     {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(socket)) {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
             return mock->getMockPeerAddress();
         }
         return BaseTcpThread::getSocketPeerAddress();
+    }
+
+    [[nodiscard]] QAbstractSocket::SocketState getSocketState() const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
+            return mock->getMockState();
+        }
+
+        return BaseTcpThread::getSocketState();
     }
 };
 

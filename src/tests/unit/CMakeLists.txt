@@ -35,7 +35,8 @@ add_executable(${TEST_NAME}
     testdoubles/basetcpthreadtestdouble.h
 
     ../../outgoingtcpthread.cpp
-    outgoingtcptests.cpp
+    outgoingtcpthreadtests.cpp
+    singlesendoutgoingtcpthreadtests.cpp
     testdoubles/outgoingtchpthreadtestdouble.h
 
     ../../packet.cpp

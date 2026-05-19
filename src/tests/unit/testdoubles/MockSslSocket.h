@@ -38,7 +38,8 @@ public:
 
     QSslCipher sessionCipher() const { return mockCipher; }
 
-    bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return mockConnected; }
+    bool makeWaitForConnectedReturnFalse = false;
+    bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return makeWaitForConnectedReturnFalse? false: mockConnected; }
     bool waitForEncrypted(int msecs = 30000) { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool isEncrypted() const {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
 
@@ -106,6 +107,37 @@ public:
     quint16 getPeerPort() const {
         qDebug() << "=== MOCK peerPort() called → returning" << mockPeerPort;
         return mockPeerPort;
+    }
+
+    int disconnectFromHostCallCount = 0;
+    void disconnectFromHost() override
+    {
+        disconnectFromHostCallCount++;
+        qDebug() << "MockSslSocket::disconnectFromHost() called";
+        qDebug() << "closeCallCount: " << disconnectFromHostCallCount;
+        QSslSocket::disconnectFromHost();   // call base implementation
+        qDebug() << "closeCallCount AFTER disconnectFromHost: " << disconnectFromHostCallCount;
+    }
+
+    int closeCallCount = 0;
+    void close() override
+    {
+        closeCallCount++;
+        qDebug() << "MockSslSocket::close() called";
+        qDebug() << "closeCallCount: " << closeCallCount;
+        QSslSocket::close();                // call base implementation
+    }
+
+    bool shouldCallConnectToHost = true;
+    int connectToHostCallCount = 0;
+    void connectToHost(const QString &hostName, quint16 port, OpenMode openMode = ReadWrite, NetworkLayerProtocol protocol = AnyIPProtocol) override
+    {
+        connectToHostCallCount++;
+
+        if (shouldCallConnectToHost)
+        {
+            QSslSocket::connectToHost(hostName, port, openMode, protocol);
+        }
     }
 
 private:

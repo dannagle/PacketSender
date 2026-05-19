@@ -27,8 +27,6 @@ public:
 
     [[nodiscard]] virtual bool isValid() const;
     [[nodiscard]] QSslSocket* getSocket() const;
-    //
-    // virtual void closeConnection();
     // virtual void sendPersistent(const Packet& packet);
 
     // Common query helpers - public because they are safe and widely useful
@@ -38,25 +36,33 @@ public:
     virtual QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
     virtual QString getPeerAddressAsString() const;
     //
-    // signals:
+signals:
     //     void packetReceived(const Packet& packet);
-    //     void packetSent(const Packet& packet);
-    //     void connectStatus(const QString& message);
-    //     void error(QSslSocket::SocketError socketError);
+    void packetSent(const Packet& packet);
+    void connectionStatus(const QString& message);
+    void error(QSslSocket::SocketError socketError);
+    void errorMessage(const QString& msg);
 
 protected:
     // virtual void run() override = 0;
     //
     // void wireupSocketSignals(QSslSocket* socket);
 
+    std::unique_ptr<QSslSocket>& getSocketPtrByReference() {return socket;}
+    [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
+    void sendOutgoingPacket(Packet& packet);
+    virtual void closeConnection() = 0;
+    virtual void sleep(unsigned long usec);
+
     [[nodiscard]] virtual QHostAddress getSocketPeerAddress() const;
     [[nodiscard]] virtual bool isSocketValid() const;
 
-    QSslSocket* socket = nullptr;
     bool managedByConnection = false;
     bool closeRequest = false;
     bool insidePersistent = false;
 
+private:
+    std::unique_ptr<QSslSocket> socket;
 // protected slots:
 //     virtual void onConnected();
 //     virtual void onSocketError(QSslSocket::SocketError error);
