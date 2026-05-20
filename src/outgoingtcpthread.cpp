@@ -66,6 +66,30 @@ void OutgoingTcpThread::prepareOutgoingPacket()
     sendPacket.name = sendPacket.timestamp.toString(DATETIMEFORMAT);
 }
 
+void OutgoingTcpThread::sendOutgoingPacket()
+{
+    BaseTcpThread::sendOutgoingPacket(sendPacket);
+}
+
+void OutgoingTcpThread::closeConnection()
+{
+    const auto s = getSocket();
+    if (s)
+    {
+        if (getSocketState() == QAbstractSocket::ConnectedState ||
+            getSocketState() == QAbstractSocket::ClosingState) {
+            QDEBUG() << "got inside if statement that calls disconnectFromHost()";
+            s->disconnectFromHost();
+            s->waitForDisconnected(500);  // shorter timeout is fine here
+        }
+
+        s->close();
+
+        emit connectionStatus("Disconnected");
+        QDEBUG() << "Single packet sent. Disconnected.";
+    }
+}
+
 void OutgoingTcpThread::run()
 {
     QDEBUG() << "OutgoingTcpThread::run() started for" << sendPacket.toIP << ":" << sendPacket.port;
@@ -102,29 +126,5 @@ void OutgoingTcpThread::run()
 
         sendPacket.errorString = "Could not connect";
         emit packetSent(sendPacket);
-    }
-}
-
-void OutgoingTcpThread::sendOutgoingPacket()
-{
-    BaseTcpThread::sendOutgoingPacket(sendPacket);
-}
-
-void OutgoingTcpThread::closeConnection()
-{
-    const auto s = getSocket();
-    if (s)
-    {
-        if (getSocketState() == QAbstractSocket::ConnectedState ||
-            getSocketState() == QAbstractSocket::ClosingState) {
-            QDEBUG() << "got inside if statement that calls disconnectFromHost()";
-            s->disconnectFromHost();
-            s->waitForDisconnected(500);  // shorter timeout is fine here
-        }
-
-        s->close();
-
-        emit connectionStatus("Disconnected");
-        QDEBUG() << "Single packet sent. Disconnected.";
     }
 }
