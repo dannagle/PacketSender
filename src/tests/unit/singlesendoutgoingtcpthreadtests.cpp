@@ -2,40 +2,17 @@
 // Created by Tomas Gallucci on 5/19/26.
 //
 
-#include <QSignalSpy>
-
 #include "singlesendoutgoingtcpthreadtests.h"
 
 #include "../../packet.h"
 #include "testdoubles/MockSslSocket.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
-
-Packet createPacketForTest()
-{
-    Packet p;
-
-    p.toIP = "127.0.0.1";
-    p.port = 666;
-    p.hexString = "AA BB CC DD";
-    p.tcpOrUdp = "TCP";
-
-    return p;
-}
-
-MockSslSocket* createMockSocketForTest()
-{
-    auto mockSock = new MockSslSocket();;
-
-    mockSock->setMockConnected(true);
-    mockSock->setIsValid(true);
-
-    return mockSock;
-}
+#include "testutils.h"
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emitsConnectionStatus_Connected()
 {
-    auto mockSocket = createMockSocketForTest();
-    Packet packet = createPacketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
+    Packet packet = TestUtils::createPacketForTest();
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -47,8 +24,8 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emits
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emitsConnectionStatus_SendingData()
 {
-    auto mockSocket = createMockSocketForTest();
-    Packet packet = createPacketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
+    Packet packet = TestUtils::createPacketForTest();
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -60,8 +37,8 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emits
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emitsConnectionStatus_Disconnected()
 {
-    auto mockSocket = createMockSocketForTest();
-    Packet packet = createPacketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
+    Packet packet = TestUtils::createPacketForTest();
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -73,10 +50,10 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emits
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsConnectionStatus_CouldNotConnect()
 {
-    auto mockSocket = createMockSocketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
     mockSocket->makeWaitForConnectedReturnFalse = true;
 
-    Packet packet = createPacketForTest();
+    Packet packet = TestUtils::createPacketForTest();
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -88,10 +65,10 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsConnectio
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_packetErrorMessageUpdated()
 {
-    auto mockSocket = createMockSocketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
     mockSocket->makeWaitForConnectedReturnFalse = true;
 
-    Packet packet = createPacketForTest();
+    Packet packet = TestUtils::createPacketForTest();
     QVERIFY(packet.errorString.isEmpty());
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
@@ -102,10 +79,10 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_packetErrorMes
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsPacketSent()
 {
-    auto mockSocket = createMockSocketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
     mockSocket->makeWaitForConnectedReturnFalse = true;
 
-    Packet packet = createPacketForTest();
+    Packet packet = TestUtils::createPacketForTest();
     QVERIFY(packet.errorString.isEmpty());
 
 
@@ -121,10 +98,10 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsPacketSen
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsErrorMessage()
 {
-    auto mockSocket = createMockSocketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
     mockSocket->makeWaitForConnectedReturnFalse = true;
 
-    Packet packet = createPacketForTest();
+    Packet packet = TestUtils::createPacketForTest();
     QVERIFY(packet.errorString.isEmpty());
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
@@ -139,8 +116,8 @@ void SingleSendOutgoingTcpThreadTests::testRun_SocketNotConnected_emitsErrorMess
 
 void SingleSendOutgoingTcpThreadTests::testRun_successPath_callsMethodsInCorrectOrder()
 {
-    auto mockSocket = createMockSocketForTest();
-    Packet packet = createPacketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
+    Packet packet = TestUtils::createPacketForTest();
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);
 
@@ -157,8 +134,8 @@ void SingleSendOutgoingTcpThreadTests::testRun_successPath_callsMethodsInCorrect
 
 void SingleSendOutgoingTcpThreadTests::testRun_respectsDelayAfterConnect()
 {
-    auto mockSocket = createMockSocketForTest();
-    Packet packet = createPacketForTest();
+    auto mockSocket = TestUtils::createMockSocketForTest();
+    Packet packet = TestUtils::createPacketForTest();
     packet.delayAfterConnect = 100;   // 100ms
 
     OutgoingTcpThreadTestDouble thread(mockSocket, packet);

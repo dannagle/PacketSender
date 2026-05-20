@@ -20,3 +20,25 @@ void TestUtils::debugSpy(const QSignalSpy& spy)
         }
     }
 }
+
+Packet TestUtils::createPacketForTest()
+{
+    Packet p;
+
+    p.toIP = "127.0.0.1";
+    p.port = 666;
+    p.hexString = "AA BB CC DD";
+    p.tcpOrUdp = "TCP";
+
+    return p;
+}
+
+MockSslSocket* TestUtils::createMockSocketForTest()
+{
+    auto mockSock = new MockSslSocket();;
+
+    mockSock->setMockConnected(true);
+    mockSock->setIsValid(true);
+
+    return mockSock;
+}
