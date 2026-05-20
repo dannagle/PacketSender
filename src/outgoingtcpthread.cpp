@@ -174,6 +174,15 @@ void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
     interruptibleWaitForReadyRead(200);
 }
 
+void OutgoingTcpThread::idleDebugMessage(bool isIdleCondition)
+{
+    QDEBUG() << "Idle condition check:"
+        << "hexString.empty() =" << sendPacket.hexString.isEmpty()
+        << "persistent =" << sendPacket.persistent
+        << "bytesAvailable() =" << getSocket()->bytesAvailable()
+        << "→ isIdleCondition =" << isIdleCondition;
+}
+
 void OutgoingTcpThread::persistentConnectionLoop()
 {
     QDEBUG() << "Entering persistent connection loop for" << sendPacket.toIP << ":" << sendPacket.port;
@@ -193,11 +202,7 @@ void OutgoingTcpThread::persistentConnectionLoop()
         bool isIdleCondition = sendPacket.hexString.isEmpty() &&
                                sendPacket.persistent &&
                                getSocket()->bytesAvailable() == 0;
-        QDEBUG() << "Idle condition check:"
-                 << "hexString.empty() =" << sendPacket.hexString.isEmpty()
-                 << "persistent =" << sendPacket.persistent
-                 << "bytesAvailable() =" << getSocket()->bytesAvailable()
-                 << "→ isIdleCondition =" << isIdleCondition;
+        idleDebugMessage(isIdleCondition);
 
         // === Idle path when there's no data to send ===
         if (isIdleCondition) {

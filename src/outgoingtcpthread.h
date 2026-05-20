@@ -60,6 +60,7 @@ protected:
 
 private:
     void outgoingConnectionDebugMessage(bool connectSuccess);
+    void idleDebugMessage(bool isIdleCondition);
     mutable std::optional<QDateTime> lastIdleStatusEmitTime;
 };
 
