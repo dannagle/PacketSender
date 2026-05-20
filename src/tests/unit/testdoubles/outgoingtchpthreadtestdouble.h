@@ -4,6 +4,8 @@
 
 #ifndef OUTGOINGTCHPTHREADTESTDOUBLE_H
 #define OUTGOINGTCHPTHREADTESTDOUBLE_H
+#include <qtestcase.h>
+
 #include "../../outgoingtcpthread.h"
 
 class OutgoingTcpThreadTestDouble : public OutgoingTcpThread
@@ -21,6 +23,11 @@ public:
     Packet& getSendPacketByReference()
     {
         return this->sendPacket;
+    }
+
+    void setSocketForTest(QSslSocket* newSocket)
+    {
+        getSocketPtrByReference().reset(newSocket);
     }
 
     bool isSocketValid() const override
@@ -43,10 +50,33 @@ public:
         return BaseTcpThread::getSocketState();
     }
 
+    void stop() override
+    {
+        simulateRequestInterruptionCalled = true;
+    }
+
+    [[nodiscard]] bool shouldStop() const override
+    {
+        QDEBUG() << "simulateRequestInterruptionCalled in test double: " << simulateRequestInterruptionCalled;
+        return simulateRequestInterruptionCalled;
+    }
+
+    bool loopExitedCleanly() const
+    {
+        return !shouldContinuePersistentLoop() &&
+               shouldContinuePersistentConnectionLoopCallCount > 0;   // we actually entered the loop at least once
+    }
+
+    int forceExitAfterNIterations = 2;
+
     int prepareOutgoingPacketCallCount = 0;
     int sendOutgoingPacketCallCount = 0;
     int closeConnectionCallCount = 0;
     int sleepCallCount = 0;
+    mutable int shouldContinuePersistentConnectionLoopCallCount = 0;
+    mutable int shouldStopPersistentConnectionLoopCallCount = 0;
+    mutable int persistentConnectionLoopIterationsCount = 0;
+    int handlePersistentIdleCaseCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
     void resetCallTracking()
@@ -72,6 +102,26 @@ public:
     void callRun()
     {
         OutgoingTcpThread::run();
+    }
+
+    bool callShouldContinuePersistentConnectionLoop()
+    {
+        return shouldContinuePersistentLoop();
+    }
+
+    bool callShouldStopPersistentConnectionLoop()
+    {
+        return shouldStopPersistentConnectionLoop();
+    }
+
+    void callHandlePersistentIdleCase(int idleThresholdms = 200)
+    {
+        handlePersistentIdleCase(idleThresholdms);
+    }
+
+    void callPersistentConnectionLoop()
+    {
+        persistentConnectionLoop();
     }
 
 protected:
@@ -104,8 +154,35 @@ protected:
         OutgoingTcpThread::sleep(usecs);
     }
 
+
+    bool shouldContinuePersistentLoop() const override
+    {
+        shouldContinuePersistentConnectionLoopCallCount++;
+        persistentConnectionLoopIterationsCount++;
+
+        if (persistentConnectionLoopIterationsCount >= forceExitAfterNIterations) {
+            qDebug() << "Test double: forcing exit after iteration" << shouldContinuePersistentConnectionLoopCallCount;
+            return false;
+        }
+
+        return OutgoingTcpThread::shouldContinuePersistentLoop();
+    }
+
+    bool shouldStopPersistentConnectionLoop() const override
+    {
+        shouldStopPersistentConnectionLoopCallCount++;
+        return OutgoingTcpThread::shouldStopPersistentConnectionLoop();
+    }
+
+    void handlePersistentIdleCase(int idleThresholdMs) override
+    {
+        handlePersistentIdleCaseCallCount++;
+        OutgoingTcpThread::handlePersistentIdleCase(idleThresholdMs);
+    }
+
 private:
     std::vector<QString> callSequence;
+    bool simulateRequestInterruptionCalled = false;
 };
 
 #endif //OUTGOINGTCHPTHREADTESTDOUBLE_H

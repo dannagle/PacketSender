@@ -4,6 +4,8 @@
 
 #include "outgoingtcpthread.h"
 
+#include <QMetaEnum>
+
 OutgoingTcpThread::OutgoingTcpThread(QSslSocket* socket, const Packet& packetToSend, QObject* parent)
 :BaseTcpThread(socket, parent), sendPacket(packetToSend)
 {
@@ -127,4 +129,83 @@ void OutgoingTcpThread::run()
         sendPacket.errorString = "Could not connect";
         emit packetSent(sendPacket);
     }
+}
+
+bool OutgoingTcpThread::shouldContinuePersistentLoop() const
+{
+    QDEBUG() << "\nshouldContinuePersistentLoop()\n"
+             << "isInterruptionRequested(): " << isInterruptionRequested() << "\n"
+             << "getSocket(): " << getSocket() << "\n"
+             << "getSocketState(): " << getSocketState() << "\n"
+             << "getSocketState() == QAbstractSocket::ConnectedState: " << (getSocketState() == QAbstractSocket::ConnectedState) << "\n"
+             << "!shouldStop(): " << !shouldStop() << "\n";
+
+    bool result =  !shouldStop() &&
+           getSocket() &&
+           getSocketState() == QAbstractSocket::ConnectedState;
+
+    QDEBUG() << "result: " << result;
+    return result;
+}
+
+bool OutgoingTcpThread::shouldStopPersistentConnectionLoop() const
+{
+    return shouldStop();
+}
+
+void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
+{
+    const QDateTime now = QDateTime::currentDateTime();
+
+    QDEBUG() << "IDLE PATH TAKEN"
+             << "hexString empty =" << sendPacket.hexString.isEmpty()
+             << "persistent =" << sendPacket.persistent
+             << "bytesAvailable =" << (getSocket() ? getSocket()->bytesAvailable() : -1);
+
+    // NOSONAR - if-with-initializer reduces readability here
+    if (!lastIdleStatusEmitTime.has_value() ||
+        lastIdleStatusEmitTime->msecsTo(now) >= idleThresholdMs) {
+
+        emit connectionStatus("Connected and idle.");
+        QDEBUG() << ">>> Emitted 'Connected and idle.'";
+        lastIdleStatusEmitTime = now;
+        }
+
+    interruptibleWaitForReadyRead(200);
+}
+
+void OutgoingTcpThread::persistentConnectionLoop()
+{
+    QDEBUG() << "Entering persistent connection loop for" << sendPacket.toIP << ":" << sendPacket.port;
+
+    if (shouldStopPersistentConnectionLoop()) {
+        qDebug() << "Early exit from persistent loop due to close request";
+        return;
+    }
+
+    while (shouldContinuePersistentLoop()) {
+        insidePersistent = true;   // keeping for now, we can remove later if unused
+
+        if (shouldStopPersistentConnectionLoop()) {
+            break;
+        }
+
+        bool isIdleCondition = sendPacket.hexString.isEmpty() &&
+                               sendPacket.persistent &&
+                               getSocket()->bytesAvailable() == 0;
+        QDEBUG() << "Idle condition check:"
+                 << "hexString.empty() =" << sendPacket.hexString.isEmpty()
+                 << "persistent =" << sendPacket.persistent
+                 << "bytesAvailable() =" << getSocket()->bytesAvailable()
+                 << "→ isIdleCondition =" << isIdleCondition;
+
+        // === Idle path when there's no data to send ===
+        if (isIdleCondition) {
+            handlePersistentIdleCase(2000);
+        } else {
+            QDEBUG() << "IDLE PATH SKIPPED - data is available or not persistent mode";
+        }
+    }
+
+    QDEBUG() << "Exiting persistent connection loop";
 }

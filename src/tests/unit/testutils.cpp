@@ -33,6 +33,20 @@ Packet TestUtils::createPacketForTest()
     return p;
 }
 
+Packet TestUtils::createIdlePacketForTest()
+{
+    Packet p;
+
+    p.toIP = "127.0.0.1";
+    p.port = 666;
+    p.hexString.clear();
+    p.tcpOrUdp = "TCP";
+    p.persistent = true;
+
+    return p;
+
+}
+
 MockSslSocket* TestUtils::createMockSocketForTest()
 {
     auto mockSock = new MockSslSocket();;

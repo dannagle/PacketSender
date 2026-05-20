@@ -13,6 +13,7 @@
 #include "translation_tests.h"
 #include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
+#include "outgoingtcpthreadpersistentconnectionlooptests.h"
 #include "outgoingtcpthreadtests.h"
 #include "packettests.h"
 #include "singlesendoutgoingtcpthreadtests.h"
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
     runGuiTest(new BaseTcpThreadTests());
     runGuiTest(new OutgoingTcpThreadTests());
     runGuiTest(new SingleSendOutgoingTcpThreadTests());
+    runGuiTest(new OutgoingTcpThreadPersistentConnectionLoopTests());
 
     // Then non-GUI or independent tests
     runNonGuiTest(new TcpThreadTests());

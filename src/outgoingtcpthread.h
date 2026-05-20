@@ -44,6 +44,12 @@ protected:
     virtual void sendOutgoingPacket();
     void closeConnection() override;
 
+    // persistentConnectionLoop() methods
+    virtual bool shouldContinuePersistentLoop() const;
+    virtual bool shouldStopPersistentConnectionLoop() const;
+    virtual void handlePersistentIdleCase(int idleThresholdMs);
+    void persistentConnectionLoop();
+
     Packet      sendPacket;
     Packet      replyPacket;
 
@@ -54,6 +60,7 @@ protected:
 
 private:
     void outgoingConnectionDebugMessage(bool connectSuccess);
+    mutable std::optional<QDateTime> lastIdleStatusEmitTime;
 };
 
 

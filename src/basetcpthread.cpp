@@ -25,6 +25,36 @@ BaseTcpThread::~BaseTcpThread()
     // No explicit deleteLater() needed here
 }
 
+void BaseTcpThread::stop()
+{
+    requestInterruption();
+}
+
+bool BaseTcpThread::shouldStop() const
+{
+    return isInterruptionRequested();
+}
+
+bool BaseTcpThread::interruptibleWaitForReadyRead(const int timeoutMs)
+{
+    const int chunk = 50;  // check every 50 ms
+    int remaining = timeoutMs;
+
+    QDEBUG() << "initial remaining: " << remaining;
+
+    while (remaining > 0 && !shouldStop()) {
+        if (getSocket() && getSocket()->waitForReadyRead(chunk)) {
+            QDEBUG() << "inside if waitForReadyRead(chunk)";
+            return true;
+        }
+        remaining -= chunk;
+        QDEBUG() << "remaining after substraction: " << remaining;
+        msleep(1);  // tiny yield
+    }
+
+    return false;
+}
+
 bool BaseTcpThread::isValid() const
 {
     return isSocketValid();
@@ -37,7 +67,7 @@ QSslSocket* BaseTcpThread::getSocket() const
 
 QAbstractSocket::SocketState BaseTcpThread::getSocketState() const
 {
-    return socket->state();
+    return socket? socket->state() : QAbstractSocket::UnconnectedState;
 }
 
 bool BaseTcpThread::isSocketEncrypted() const

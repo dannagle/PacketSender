@@ -15,6 +15,7 @@ class TestUtils
 public:
     static void debugSpy(const QSignalSpy& spy);
     static Packet createPacketForTest();
+    static Packet createIdlePacketForTest();
     static MockSslSocket* createMockSocketForTest();
 };
 

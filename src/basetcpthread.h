@@ -25,6 +25,10 @@ public:
     explicit BaseTcpThread(QSslSocket* socket, QObject* parent = nullptr);
     ~BaseTcpThread() override;
 
+    virtual void stop();
+    virtual bool shouldStop() const;
+    virtual bool interruptibleWaitForReadyRead(int timeoutMs);
+
     [[nodiscard]] virtual bool isValid() const;
     [[nodiscard]] QSslSocket* getSocket() const;
     // virtual void sendPersistent(const Packet& packet);
