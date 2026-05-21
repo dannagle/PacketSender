@@ -174,7 +174,43 @@ void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
     interruptibleWaitForReadyRead(200);
 }
 
-void OutgoingTcpThread::idleDebugMessage(bool isIdleCondition)
+Packet OutgoingTcpThread::buildReceivedPacket()
+{
+    Packet p;
+    p.timestamp = QDateTime::currentDateTime();
+    p.name = "Received (Persistent)";
+    p.tcpOrUdp = sendPacket.tcpOrUdp;
+
+    // Direction reversal
+    p.toIP = "You";
+    p.fromIP = sendPacket.toIP;
+    p.fromPort = getSocket() ? getSocket()->localPort() : 0;
+
+    if (getSocket()) {
+        QByteArray data = readSocketData();
+        p.hexString = Packet::byteArrayToHex(data);
+    }
+
+    return p;
+}
+
+void OutgoingTcpThread::processIncomingData()
+{
+    if (!getSocket() || getSocket()->bytesAvailable() == 0) {
+        return;
+    }
+
+    QDEBUG() << "past early return";
+
+    Packet received = buildReceivedPacket();
+    if (!received.hexString.isEmpty()) {
+        emit packetReceived(received);
+
+        // TODO: Smart response logic will go here later
+    }
+}
+
+void OutgoingTcpThread::idleDebugMessage(bool isIdleCondition) const
 {
     QDEBUG() << "Idle condition check:"
         << "hexString.empty() =" << sendPacket.hexString.isEmpty()
@@ -208,7 +244,7 @@ void OutgoingTcpThread::persistentConnectionLoop()
         if (isIdleCondition) {
             handlePersistentIdleCase(2000);
         } else {
-            QDEBUG() << "IDLE PATH SKIPPED - data is available or not persistent mode";
+            processIncomingData();
         }
     }
 

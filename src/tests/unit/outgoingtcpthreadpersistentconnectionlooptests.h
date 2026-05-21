@@ -29,6 +29,16 @@ private slots:
     void testHandlePersistentIdleCase_doesNotEmitTooSoon();
     void testHandlePersistentIdleCase_respectsCustomThreshold();
 
+    // buildReceivedPacket() tests
+    void testBuildReceivedPacket_socketNull();
+    void testBuildReceivedPacket_socketHasNoData();
+    void testBuildReceivedPacket_socketHasData();
+
+    // processIncomingData() tests
+    void testProcessIncomingData_socketIsNull_returnsEarly();
+    void testProcessIncomingData_socketHasNoData_returnsEarly();
+    void testProcessIncomingData_socketHasData_emitsReceivedPacket();
+
     // persistentConnectionLoop() tests
     void testPersistentConnectionLoop_exitsImmediatelyOnInterruption();
     void testPersistentConnectionLoop_callsShouldContinuePersistentLoop();
@@ -38,6 +48,7 @@ private slots:
     void testPersistentConnectionLoop_doesNotEnterLoopIfAlreadyStopped();
     void testPersistentConnectionLoop_exitsWhenSocketDisconnects();
     void testPersistentConnectionLoop_emitsIdleStatusOnlyEveryTwoSeconds();
+    void testPersistentConnectionLoop_callsProcessIncomingData();
 };
 
 

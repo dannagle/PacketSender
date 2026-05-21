@@ -41,8 +41,8 @@ public:
     virtual QString getPeerAddressAsString() const;
     //
 signals:
-    //     void packetReceived(const Packet& packet);
     void packetSent(const Packet& packet);
+    void packetReceived(const Packet& packet);
     void connectionStatus(const QString& message);
     void error(QSslSocket::SocketError socketError);
     void errorMessage(const QString& msg);
@@ -54,6 +54,8 @@ protected:
 
     std::unique_ptr<QSslSocket>& getSocketPtrByReference() {return socket;}
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
+    [[nodiscard]] virtual QByteArray readSocketData();
+
     void sendOutgoingPacket(Packet& packet);
     virtual void closeConnection() = 0;
     virtual void sleep(unsigned long usec);

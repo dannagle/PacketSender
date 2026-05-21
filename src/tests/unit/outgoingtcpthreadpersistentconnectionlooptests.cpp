@@ -108,6 +108,136 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testHandlePersistentIdleCas
     QCOMPARE(statusSpy.count(), 1);
 }
 
+// buildReceivedPacket() tests
+void OutgoingTcpThreadPersistentConnectionLoopTests::testBuildReceivedPacket_socketNull()
+{
+    auto* mockSock = TestUtils::createMockSocketForTest();
+
+    Packet p = TestUtils::createPacketForTest();
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+    thread.setSocketForTest(nullptr);
+
+    QThread::msleep(5); // to differentiate packet timestamps
+    Packet receivedPacket = thread.callBuildReceivedPacket();
+
+    p.name = "Received (Persistent)";
+    p.hexString.clear();
+
+    p.fromIP = p.toIP;
+    p.toIP = "You";
+
+    p.fromPort = receivedPacket.fromPort; // may be 0 because we never called connectToHost() on socket
+    p.port = receivedPacket.port;
+
+    QCOMPARE(receivedPacket, p);
+    QVERIFY(receivedPacket.timestamp.isValid());
+    QVERIFY(receivedPacket.timestamp != p.timestamp);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testBuildReceivedPacket_socketHasNoData()
+{
+    auto* mockSock = TestUtils::createMockSocketForTest();
+
+    Packet p = TestUtils::createPacketForTest();
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+
+    QThread::msleep(5); // to differentiate packet timestamps
+    Packet receivedPacket = thread.callBuildReceivedPacket();
+
+    p.name = "Received (Persistent)";
+    p.hexString.clear();
+
+    p.fromIP = p.toIP;
+    p.toIP = "You";
+
+    p.fromPort = receivedPacket.fromPort; // may be 0 because we never called connectToHost() on socket
+    p.port = receivedPacket.port;
+
+    QCOMPARE(receivedPacket, p);
+    QVERIFY(receivedPacket.timestamp.isValid());
+    QVERIFY(receivedPacket.timestamp != p.timestamp);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testBuildReceivedPacket_socketHasData()
+{
+    const QByteArray data = "This is the song that never ends.";
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData(data);
+
+    Packet p = TestUtils::createPacketForTest();
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+
+    QThread::msleep(5); // to differentiate packet timestamps
+    Packet receivedPacket = thread.callBuildReceivedPacket();
+
+    p.name = "Received (Persistent)";
+    p.hexString = data.toHex(' ').toUpper() + " "; // current implementation has a trailing space
+
+    p.fromIP = p.toIP;
+    p.toIP = "You";
+
+    p.fromPort = receivedPacket.fromPort;
+    p.port = receivedPacket.port;
+
+    QCOMPARE(receivedPacket, p);
+    QVERIFY(receivedPacket.timestamp.isValid());
+    QVERIFY(receivedPacket.timestamp != p.timestamp);
+}
+
+// processIncomingData() tests
+void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_socketIsNull_returnsEarly()
+{
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+
+    thread.setSocketForTest(nullptr);
+
+    thread.callProcessIncomingData();
+    QCOMPARE(thread.buildReceivedPacketCallCount, 0);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_socketHasNoData_returnsEarly()
+{
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData("");
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+
+    thread.callProcessIncomingData();
+    QCOMPARE(thread.buildReceivedPacketCallCount, 0);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_socketHasData_emitsReceivedPacket()
+{
+    const QByteArray data = "This is the song that never ends.";
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData(data);
+
+    Packet p = TestUtils::createPacketForTest();
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+    QSignalSpy packetReceivedSpy(&thread, &BaseTcpThread::packetReceived);
+
+    QThread::msleep(5); // to differentiate packet timestamps
+    thread.callProcessIncomingData();
+    QCOMPARE(packetReceivedSpy.count(), 1);
+
+    p.name = "Received (Persistent)";
+    p.hexString = data.toHex(' ').toUpper() + " "; // current implementation has a trailing space
+
+    p.fromIP = p.toIP;
+    p.toIP = "You";
+
+    TestUtils::debugSpy(packetReceivedSpy);
+
+    auto receivedPacket = packetReceivedSpy.first().first().value<Packet>();
+    p.fromPort = receivedPacket.fromPort;
+    p.port = receivedPacket.port;
+    QCOMPARE(receivedPacket, p);
+}
+
 // persistentConnectionLoop() tests
 void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_exitsImmediatelyOnInterruption()
 {
@@ -220,4 +350,15 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
 
     // Should emit at most a couple of times even after 5 iterations
     QVERIFY(statusSpy.count() <= 3);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_callsProcessIncomingData()
+{
+    const QByteArray data = "This is the song that never ends.";
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData(data);
+
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.callPersistentConnectionLoop();
+    QCOMPARE(thread.processIncomingDataCallCount, 1);
 }

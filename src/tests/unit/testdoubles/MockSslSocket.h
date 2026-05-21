@@ -73,6 +73,11 @@ public:
         return mockBytesAvailable;
     }
 
+    qint64 bytesAvailable() const override
+    {
+        return mockReadData.size();
+    }
+
     void setMockEncrypted(bool val) { mockEncrypted = val; }
     void setMockSslErrors(const QList<QSslError> &errors) { mockSslErrors = errors; }
     void setMockState(const QAbstractSocket::SocketState &state) { mockState = state; }

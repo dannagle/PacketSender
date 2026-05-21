@@ -77,6 +77,8 @@ public:
     mutable int shouldStopPersistentConnectionLoopCallCount = 0;
     mutable int persistentConnectionLoopIterationsCount = 0;
     int handlePersistentIdleCaseCallCount = 0;
+    int buildReceivedPacketCallCount = 0;
+    int processIncomingDataCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
     void resetCallTracking()
@@ -124,6 +126,16 @@ public:
         persistentConnectionLoop();
     }
 
+    Packet callBuildReceivedPacket()
+    {
+        return buildReceivedPacket();
+    }
+
+    void callProcessIncomingData()
+    {
+        processIncomingData();
+    }
+
 protected:
 
     void prepareOutgoingPacket() override
@@ -154,6 +166,26 @@ protected:
         OutgoingTcpThread::sleep(usecs);
     }
 
+    QByteArray readSocketData() override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
+            return mock->getMockReadData();
+        }
+
+        return BaseTcpThread::readSocketData();
+    }
+
+    Packet buildReceivedPacket() override
+    {
+        buildReceivedPacketCallCount++;
+        return OutgoingTcpThread::buildReceivedPacket();
+    }
+
+    void processIncomingData() override
+    {
+        processIncomingDataCallCount++;
+        OutgoingTcpThread::processIncomingData();
+    }
 
     bool shouldContinuePersistentLoop() const override
     {

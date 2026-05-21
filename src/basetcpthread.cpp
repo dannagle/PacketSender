@@ -70,6 +70,11 @@ QAbstractSocket::SocketState BaseTcpThread::getSocketState() const
     return socket? socket->state() : QAbstractSocket::UnconnectedState;
 }
 
+QByteArray BaseTcpThread::readSocketData()
+{
+    return getSocket() ? getSocket()->readAll() : "";
+}
+
 bool BaseTcpThread::isSocketEncrypted() const
 {
     return getSocket() ? socket->isEncrypted() : false;
