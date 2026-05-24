@@ -67,6 +67,16 @@ public:
                shouldContinuePersistentConnectionLoopCallCount > 0;   // we actually entered the loop at least once
     }
 
+    bool isSocketEncrypted() const override
+    {
+        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket()))
+        {
+            return mock->isEncrypted();
+        }
+
+        return BaseTcpThread::isSocketEncrypted();
+    }
+
     int forceExitAfterNIterations = 2;
 
     int prepareOutgoingPacketCallCount = 0;
@@ -81,6 +91,7 @@ public:
     int processIncomingDataCallCount = 0;
     int waitForAndProcessIncomingDataCallCount = 0;
     int interruptibleWaitForReadyReadCallCount = 0;
+    int buildReplyPacketCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
     void resetCallTracking()
@@ -141,6 +152,11 @@ public:
     void callWaitForAndProcessIncomingData()
     {
         waitForAndProcessIncomingData();
+    }
+
+    Packet callBuildReplyPacket(const Packet& receivedPacket, const QByteArray& responseData)
+    {
+        return buildReplyPacket(receivedPacket, responseData);
     }
 
 protected:
@@ -220,7 +236,7 @@ protected:
         OutgoingTcpThread::handlePersistentIdleCase(idleThresholdMs);
     }
 
-    bool interruptibleWaitForReadyRead(int timeoutMs)
+    bool interruptibleWaitForReadyRead(int timeoutMs) override
     {
         interruptibleWaitForReadyReadCallCount++;
         callSequence.push_back("interruptibleWaitForReadyRead");
@@ -236,6 +252,14 @@ protected:
         OutgoingTcpThread::waitForAndProcessIncomingData();
     }
 
+
+    Packet buildReplyPacket(const Packet& receivedPacket, const QByteArray& responseData) override
+    {
+        buildReplyPacketCallCount++;
+        callSequence.push_back("buildReplyPacket");
+
+        return OutgoingTcpThread::buildReplyPacket(receivedPacket, responseData);
+    }
 
 private:
     std::vector<QString> callSequence;

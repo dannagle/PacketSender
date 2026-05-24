@@ -32,6 +32,10 @@ private slots:
     // preparePacket() tests
     void testPreparePacket();
 
+    // buildReplyPacket() tests
+    void testBuildReplyPacket_data();
+    void testBuildReplyPacket();
+
     // closeConnection() tests
     void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
     void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();

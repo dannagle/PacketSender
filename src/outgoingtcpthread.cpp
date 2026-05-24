@@ -92,6 +92,44 @@ void OutgoingTcpThread::closeConnection()
     }
 }
 
+Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
+                                           const QByteArray& responseData)
+{
+    Packet reply;
+
+    reply.timestamp = QDateTime::currentDateTime();
+    reply.name = "Reply to " + receivedPacket.timestamp.toString(DATETIMEFORMAT);
+
+    reply.fromIP = "You (Response)";
+
+    // Safe reversal with fallbacks
+    reply.toIP = !receivedPacket.fromIP.isEmpty()
+                 ? receivedPacket.fromIP
+                 : sendPacket.toIP;                    // fallback
+
+    reply.port = (receivedPacket.fromPort > 0)
+                 ? receivedPacket.fromPort
+                 : sendPacket.port;                    // fallback
+
+    reply.fromPort = getSocket() ? getSocket()->localPort() : 0;
+
+    reply.tcpOrUdp = sendPacket.tcpOrUdp;
+    if (isSocketEncrypted()) {
+        reply.tcpOrUdp = "SSL";
+    }
+
+    // Response content
+    if (!responseData.isEmpty()) {
+        reply.hexString = Packet::byteArrayToHex(responseData);
+    }
+
+    // Macro expansion
+    QString expanded = Packet::macroSwap(reply.asciiString());
+    reply.hexString = Packet::ASCIITohex(expanded);
+
+    return reply;
+}
+
 void OutgoingTcpThread::run()
 {
     QDEBUG() << "OutgoingTcpThread::run() started for" << sendPacket.toIP << ":" << sendPacket.port;

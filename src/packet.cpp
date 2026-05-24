@@ -1278,13 +1278,13 @@ QString Packet::ASCIITohex(QString &ascii)
             }
 
             if (msb) {
-                hexText.append(QString::number(msbInt, 16));
+                hexText.append(QString::number(msbInt, 16).toUpper());
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"hexText append result" << hexText;
                 i++;
             }
 
             if (lsb) {
-                hexText.append(QString::number(lsbInt, 16));
+                hexText.append(QString::number(lsbInt, 16).toUpper());
                 // qDebug() << __FILE__ << "/" << __LINE__ <<"hexText append" << hexText;
                 i++;
             }
@@ -1295,7 +1295,7 @@ QString Packet::ASCIITohex(QString &ascii)
             if (lsbInt > 0 && lsbInt < 16) {
                 hexText.append("0");
             }
-            hexText.append(QString::number(lsbInt, 16));
+            hexText.append(QString::number(lsbInt, 16).toUpper());
             // qDebug() << __FILE__ << "/" << __LINE__ <<"appended lsbInt:" << QString::number(lsbInt, 16);
         }
 

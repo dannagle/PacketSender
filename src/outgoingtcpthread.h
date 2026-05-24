@@ -44,6 +44,8 @@ protected:
     virtual void sendOutgoingPacket();
     void closeConnection() override;
 
+    virtual Packet buildReplyPacket(const Packet &receivedPacket, const QByteArray &responseData);
+
     // persistentConnectionLoop() methods
     virtual bool shouldContinuePersistentLoop() const;
     virtual bool shouldStopPersistentConnectionLoop() const;

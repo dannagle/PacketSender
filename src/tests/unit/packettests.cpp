@@ -366,3 +366,59 @@ void PacketTests::testOperatorNotEquals_returnsTrueWhenAnyFieldDiffers()
     QVERIFY(modifiedPacket != base);
     QVERIFY(!(modifiedPacket == base));
 }
+
+void PacketTests::testASCIITohex_alwaysReturnsUppercase_data()
+{
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("description");
+
+    QTest::newRow("mixed case")
+        << "Hello World"
+        << "mixed case text";
+
+    QTest::newRow("lowercase")
+        << "hello world"
+        << "all lowercase";
+
+    QTest::newRow("uppercase")
+        << "HELLO WORLD"
+        << "all uppercase";
+
+    QTest::newRow("with escapes")
+        << "Line1\\nLine2\\r\\tTab"
+        << "escape sequences";
+
+    QTest::newRow("hex-like")
+        << "AA BB CC DD aa bb cc dd"
+        << "mixed hex case";
+
+    QTest::newRow("empty")
+        << ""
+        << "empty string";
+}
+
+void PacketTests::testASCIITohex_alwaysReturnsUppercase()
+{
+    QFETCH(QString, input);
+    QFETCH(QString, description);
+
+    QString result = Packet::ASCIITohex(input);
+
+    if (input.isEmpty()) {
+        QCOMPARE(result, QString(""));
+        return;
+    }
+
+    QVERIFY2(!result.isEmpty(),
+             qPrintable(QString("ASCIITohex returned empty for non-empty input: %1").arg(description)));
+
+    // Main assertion: result should be entirely uppercase
+    QVERIFY2(result == result.toUpper(),
+             qPrintable(QString("ASCIITohex did not return uppercase hex.\n"
+                               "Input: %1\n"
+                               "Result: %2").arg(input).arg(result)));
+
+    // Optional: ensure it contains only valid hex chars + spaces
+    QVERIFY2(result.contains(QRegularExpression("^[0-9A-F ]+$")),
+             qPrintable(QString("Result contains invalid characters: %1").arg(result)));
+}

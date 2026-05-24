@@ -35,6 +35,10 @@ private slots:
     void testOperatorNotEquals_returnsFalseForIdenticalPackets();
     void testOperatorNotEquals_returnsTrueWhenAnyFieldDiffers_data(); // QtTest's version of parameterized testing
     void testOperatorNotEquals_returnsTrueWhenAnyFieldDiffers();
+
+    // basic ASCIITohex() tests
+    void testASCIITohex_alwaysReturnsUppercase_data();
+    void testASCIITohex_alwaysReturnsUppercase();
 };
 
 

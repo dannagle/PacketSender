@@ -7,6 +7,8 @@
 #include <utility>
 
 #include "outgoingtcpthreadtests.h"
+
+#include "testutils.h"
 #include "../../outgoingtcpthread.h"
 #include "../../packet.h"
 #include "../../../../../../../../../opt/homebrew/lib/QtTest.framework/Headers/QSignalSpy"
@@ -129,6 +131,63 @@ void OutgoingTcpThreadTests::testPreparePacket()
     QCOMPARE("You", sendPreparedPacket.fromIP);
     QVERIFY(sendPreparedPacket.timestamp.isValid());
     QCOMPARE(sendPreparedPacket.timestamp.toString(DATETIMEFORMAT), sendPreparedPacket.name);
+}
+
+// buildReplyPacket() tests
+void OutgoingTcpThreadTests::testBuildReplyPacket_data()
+{
+    QTest::addColumn<bool>("isEncrypted");
+    QTest::addColumn<QString>("expectedTcpOrUdp");
+    QTest::addColumn<bool>("responseDataEmpty");
+
+    QTest::newRow("plain TCP + response data")     << false << "TCP"   << false;
+    QTest::newRow("SSL encrypted + response data") << true  << "SSL"   << false;
+    QTest::newRow("plain TCP + empty responseData")<< false << "TCP"   << true;
+}
+
+void OutgoingTcpThreadTests::testBuildReplyPacket()
+{
+    QFETCH(bool, isEncrypted);
+    QFETCH(QString, expectedTcpOrUdp);
+    QFETCH(bool, responseDataEmpty);
+
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockEncrypted(isEncrypted);
+
+    Packet received = TestUtils::createPacketForTest();
+    received.fromIP = "192.168.1.100";
+    received.fromPort = 54321;
+    received.timestamp = QDateTime::currentDateTime();
+
+    QByteArray responseData;
+    if (!responseDataEmpty) {
+        responseData = Packet::HEXtoByteArray("AA BB CC DD");
+    }
+    QDEBUG() << "responseData: " << responseData;
+
+    OutgoingTcpThreadTestDouble thread(mockSock, received);
+    Packet reply = thread.callBuildReplyPacket(received, responseData);
+
+    // === Handle timestamp in name field ===
+    QVERIFY(reply.name.startsWith("Reply to "));
+
+    QString timestampPart = reply.name.mid(9); // skip "Reply to "
+    QVERIFY(QDateTime::fromString(timestampPart, DATETIMEFORMAT).isValid());
+
+    // Normalize name for == comparison
+    Packet normalizedReply = reply;
+    normalizedReply.name = "Reply to ";
+
+    Packet expectedReply;
+    expectedReply.fromIP = "You (Response)";
+    expectedReply.toIP = received.fromIP;
+    expectedReply.port = received.fromPort;
+    expectedReply.fromPort = mockSock->localPort();
+    expectedReply.tcpOrUdp = expectedTcpOrUdp;
+    expectedReply.hexString = Packet::byteArrayToHex(responseData);
+    expectedReply.name = "Reply to ";
+
+    QCOMPARE(normalizedReply, expectedReply);
 }
 
 // closeConnection() tests
