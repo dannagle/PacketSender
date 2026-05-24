@@ -238,6 +238,34 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_soc
     QCOMPARE(receivedPacket, p);
 }
 
+// waitForAndProcessIncomingData()
+void OutgoingTcpThreadPersistentConnectionLoopTests::testWaitForAndProcessIncomingData_emitsConnectionStatus_WaitingForDataBeforeSend()
+{
+    auto mockSock = new MockSslSocket();
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    QSignalSpy connectionStausSpy(&thread, &BaseTcpThread::connectionStatus);
+
+    thread.callWaitForAndProcessIncomingData();
+    QCOMPARE(connectionStausSpy.count(), 1);
+    QCOMPARE(connectionStausSpy.first().first().value<QString>(), "Waiting for data before send");
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testWaitForAndProcessIncomingData_functionCallsOrder()
+{
+    auto mockSock = new MockSslSocket();
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+
+    thread.callWaitForAndProcessIncomingData();
+
+    auto callSequence = thread.getCallSequence();
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("waitForAndProcessIncomingData");
+    expectedCallSequence.push_back("interruptibleWaitForReadyRead");
+    expectedCallSequence.push_back("processIncomingData");
+    QCOMPARE(callSequence, expectedCallSequence);
+}
+
 // persistentConnectionLoop() tests
 void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_exitsImmediatelyOnInterruption()
 {
@@ -361,4 +389,16 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
     thread.callPersistentConnectionLoop();
     QCOMPARE(thread.processIncomingDataCallCount, 1);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_callsWaitForAndProcessIncomingData()
+{
+    auto* mockSock = TestUtils::createMockSocketForTest();
+
+    auto p = TestUtils::createPacketForTest();
+    p.receiveBeforeSend = true;
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+    thread.callPersistentConnectionLoop();
+    QCOMPARE(thread.waitForAndProcessIncomingDataCallCount, 1);
 }

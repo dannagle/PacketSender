@@ -50,6 +50,7 @@ protected:
     virtual void handlePersistentIdleCase(int idleThresholdMs);
     virtual Packet buildReceivedPacket();
     virtual void processIncomingData();
+    virtual void waitForAndProcessIncomingData();
     void persistentConnectionLoop();
 
     Packet      sendPacket;

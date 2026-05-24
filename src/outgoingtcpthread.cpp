@@ -219,6 +219,19 @@ void OutgoingTcpThread::idleDebugMessage(bool isIdleCondition) const
         << "→ isIdleCondition =" << isIdleCondition;
 }
 
+void OutgoingTcpThread::waitForAndProcessIncomingData()
+{
+    QDEBUG() << "receiveBeforeSend mode: waiting for incoming data...";
+    emit connectionStatus("Waiting for data before send");
+
+    // Wait for data (interruptible)
+    interruptibleWaitForReadyRead(500);
+
+    processIncomingData();
+
+    // Optionally: auto-send a response here if configured
+}
+
 void OutgoingTcpThread::persistentConnectionLoop()
 {
     QDEBUG() << "Entering persistent connection loop for" << sendPacket.toIP << ":" << sendPacket.port;
@@ -241,9 +254,14 @@ void OutgoingTcpThread::persistentConnectionLoop()
         idleDebugMessage(isIdleCondition);
 
         // === Idle path when there's no data to send ===
-        if (isIdleCondition) {
+        if (sendPacket.receiveBeforeSend)
+        {
+            waitForAndProcessIncomingData();
+        } else if (isIdleCondition)
+        {
             handlePersistentIdleCase(2000);
-        } else {
+        }
+        else {
             processIncomingData();
         }
     }

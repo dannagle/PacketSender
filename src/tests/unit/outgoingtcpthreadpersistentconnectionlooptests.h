@@ -39,6 +39,10 @@ private slots:
     void testProcessIncomingData_socketHasNoData_returnsEarly();
     void testProcessIncomingData_socketHasData_emitsReceivedPacket();
 
+    // waitForAndProcessIncomingData() tests
+    void testWaitForAndProcessIncomingData_emitsConnectionStatus_WaitingForDataBeforeSend();
+    void testWaitForAndProcessIncomingData_functionCallsOrder();
+
     // persistentConnectionLoop() tests
     void testPersistentConnectionLoop_exitsImmediatelyOnInterruption();
     void testPersistentConnectionLoop_callsShouldContinuePersistentLoop();
@@ -49,6 +53,7 @@ private slots:
     void testPersistentConnectionLoop_exitsWhenSocketDisconnects();
     void testPersistentConnectionLoop_emitsIdleStatusOnlyEveryTwoSeconds();
     void testPersistentConnectionLoop_callsProcessIncomingData();
+    void testPersistentConnectionLoop_callsWaitForAndProcessIncomingData();
 };
 
 

@@ -79,6 +79,8 @@ public:
     int handlePersistentIdleCaseCallCount = 0;
     int buildReceivedPacketCallCount = 0;
     int processIncomingDataCallCount = 0;
+    int waitForAndProcessIncomingDataCallCount = 0;
+    int interruptibleWaitForReadyReadCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
     void resetCallTracking()
@@ -136,6 +138,11 @@ public:
         processIncomingData();
     }
 
+    void callWaitForAndProcessIncomingData()
+    {
+        waitForAndProcessIncomingData();
+    }
+
 protected:
 
     void prepareOutgoingPacket() override
@@ -184,6 +191,7 @@ protected:
     void processIncomingData() override
     {
         processIncomingDataCallCount++;
+        callSequence.push_back("processIncomingData");
         OutgoingTcpThread::processIncomingData();
     }
 
@@ -211,6 +219,23 @@ protected:
         handlePersistentIdleCaseCallCount++;
         OutgoingTcpThread::handlePersistentIdleCase(idleThresholdMs);
     }
+
+    bool interruptibleWaitForReadyRead(int timeoutMs)
+    {
+        interruptibleWaitForReadyReadCallCount++;
+        callSequence.push_back("interruptibleWaitForReadyRead");
+
+        return BaseTcpThread::interruptibleWaitForReadyRead(timeoutMs);
+    }
+
+    void waitForAndProcessIncomingData() override
+    {
+        waitForAndProcessIncomingDataCallCount++;
+        callSequence.push_back("waitForAndProcessIncomingData");
+
+        OutgoingTcpThread::waitForAndProcessIncomingData();
+    }
+
 
 private:
     std::vector<QString> callSequence;
