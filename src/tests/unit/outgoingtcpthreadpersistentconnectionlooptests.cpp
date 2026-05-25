@@ -230,8 +230,6 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_soc
     p.fromIP = p.toIP;
     p.toIP = "You";
 
-    TestUtils::debugSpy(packetReceivedSpy);
-
     auto receivedPacket = packetReceivedSpy.first().first().value<Packet>();
     p.fromPort = receivedPacket.fromPort;
     p.port = receivedPacket.port;
