@@ -8,10 +8,10 @@
 
 #include "outgoingtcpthreadtests.h"
 
+#include "settingnames.h"
 #include "testutils.h"
 #include "../../outgoingtcpthread.h"
 #include "../../packet.h"
-#include "../../../../../../../../../opt/homebrew/lib/QtTest.framework/Headers/QSignalSpy"
 #include "testdoubles/MockSslSocket.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
 
@@ -188,6 +188,232 @@ void OutgoingTcpThreadTests::testBuildReplyPacket()
     expectedReply.name = "Reply to ";
 
     QCOMPARE(normalizedReply, expectedReply);
+}
+
+// shouldSendReply() tests
+void OutgoingTcpThreadTests::testShouldSendReply_data()
+{
+    QTest::addColumn<bool>("consoleMode");
+    QTest::addColumn<bool>("basicEnabled");
+    QTest::addColumn<bool>("smartEnabled");
+    QTest::addColumn<bool>("hasCommandLineReply");
+    QTest::addColumn<bool>("expected");
+
+    // Console mode cases
+    QTest::newRow("console + nothing")           << true  << false << false << false << false;
+    QTest::newRow("console + basic")             << true  << true  << false << false << false;
+    QTest::newRow("console + smart")             << true  << false << true  << false << false;
+    QTest::newRow("console + command line only") << true  << false << false << true  << true;
+    QTest::newRow("console + all")               << true  << true  << true  << true  << true;
+
+    // Normal (non-console) cases
+    QTest::newRow("normal + nothing")            << false << false << false << false << false;
+    QTest::newRow("normal + basic")              << false << true  << false << false << true;
+    QTest::newRow("normal + smart")              << false << false << true  << false << true;
+    QTest::newRow("normal + command line")       << false << false << false << true  << true;
+    QTest::newRow("normal + basic + smart")      << false << true  << true  << false << true;
+    QTest::newRow("normal + all")                << false << true  << true  << true  << true;
+}
+
+void OutgoingTcpThreadTests::testShouldSendReply()
+{
+    QFETCH(bool, consoleMode);
+    QFETCH(bool, basicEnabled);
+    QFETCH(bool, smartEnabled);
+    QFETCH(bool, hasCommandLineReply);
+    QFETCH(bool, expected);
+
+    auto mockSock = TestUtils::createMockSocketForTest();
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.setConsoleMode(consoleMode);
+
+    // Simulate settings
+    QSettings &settings = getSettings();
+    settings.setValue("sendReponse", basicEnabled);
+    settings.setValue("smartResponseEnableCheck", smartEnabled);
+    settings.sync();
+
+    // Simulate command line reply
+    if (hasCommandLineReply) {
+        thread.getCommandLineReplyPacketByReference().hexString = "AA BB CC DD";
+    } else {
+        thread.getCommandLineReplyPacketByReference().hexString.clear();
+    }
+
+    QCOMPARE(thread.callShouldSendReply(), expected);
+}
+
+// sendReplyIfNeeded() tests
+void OutgoingTcpThreadTests::testSendReplyIfNeeded_exitsEarlyIfShouldSendReplyReturnsFalse()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    auto p = TestUtils::createPacketForTest();
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+    thread.setConsoleMode(false);
+
+    // Simulate settings
+    QSettings &settings = getSettings();
+    settings.setValue("sendReponse", false);
+    settings.setValue("smartResponseEnableCheck", false);
+    settings.sync();
+
+    thread.callSendReplyIfNeeded(p);
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    expectedCallSequence.push_back("shouldSendReply");
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+}
+
+OutgoingTcpThreadTestDouble& setupThreadToSendReply()
+{
+    const auto mockSock = TestUtils::createMockSocketForTest();
+    const auto p = TestUtils::createPacketForTest();
+    auto thread = new OutgoingTcpThreadTestDouble(mockSock, p);
+    thread->setConsoleMode(false);
+
+    // not all flags need to be true to send a response.
+    // But if we set them all to true, we can turn them off in tets
+    QSettings &settings = getSettings();
+    settings.setValue(SEND_RESPONSE, true);
+    settings.setValue(SMART_RESPONSES_ENABLED, true);
+    settings.sync();
+
+    return *thread;
+}
+
+Packet buildExpectedReplyPacket(OutgoingTcpThreadTestDouble& thread, const unsigned int port, const QString& responseHex)
+{
+    auto p = thread.getSendPacketByReference();
+    p.name = "Reply to";
+    p.port = port;
+    p.fromPort = 0;
+    p.fromIP = "You (Response)";
+    p.hexString = responseHex;
+    p.hexString += " ";
+
+    return p;
+}
+
+bool normalizeReplyPacket(const Packet& returnedPacket, Packet& outPacket, QString& outErrorMessage)
+{
+    if (!returnedPacket.name.startsWith("Reply to"))
+    {
+        outErrorMessage = "packet name did not start with 'Reply to'";
+        return false;
+    }
+
+    QString timestampPart = returnedPacket.name.mid(9);
+
+    if (!QDateTime::fromString(timestampPart, DATETIMEFORMAT).isValid())
+    {
+        outErrorMessage = "packet name did not contain a valid timestamp";
+        return false;
+    }
+
+    outPacket = returnedPacket;
+    outPacket.name = "Reply to";
+
+    return true;
+}
+
+void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_whenResponseHexIsSet()
+{
+    auto &settings = getSettings();
+    constexpr auto responseHex = "FF DD EE 00 11 22";
+    settings.setValue(RESPONSE_HEX, responseHex);
+    settings.sync();
+
+    OutgoingTcpThreadTestDouble& thread = setupThreadToSendReply();
+
+    QSignalSpy errorSpy(&thread, &BaseTcpThread::error);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    expectedCallSequence.push_back("shouldSendReply");
+    expectedCallSequence.push_back("buildReplyPacket");
+    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
+    // our override isn't called, so we don't get the sequence here
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+
+    QCOMPARE(errorSpy.count(), 0);
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    auto returnedPacket = packetSentSpy.first().first().value<Packet>();
+
+    Packet normalizedReply;
+    QString errorMessage;
+    QVERIFY2(normalizeReplyPacket(
+        returnedPacket, normalizedReply, errorMessage),
+        qPrintable(errorMessage.prepend("failed to normalize packet\n")));
+
+    auto p = buildExpectedReplyPacket(thread, normalizedReply.port, responseHex);
+    QCOMPARE(normalizedReply, p);
+}
+
+void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_commandlineOverrides()
+{
+    auto &settings = getSettings();
+    constexpr auto responseHex = "FF DD EE 00 11 22";
+    settings.setValue(RESPONSE_HEX, responseHex);
+    settings.sync();
+
+    OutgoingTcpThreadTestDouble& thread = setupThreadToSendReply();
+    thread.getCommandLineReplyPacketByReference().toIP = "128.0.0.1";
+    thread.getCommandLineReplyPacketByReference().hexString = "foo bar baz";
+
+    QSignalSpy errorSpy(&thread, &BaseTcpThread::error);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    expectedCallSequence.push_back("shouldSendReply");
+    expectedCallSequence.push_back("buildReplyPacket");
+    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
+    // our override isn't called, so we don't get the sequence here
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+
+    QCOMPARE(errorSpy.count(), 0);
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    auto returnedPacket = packetSentSpy.first().first().value<Packet>();
+    QCOMPARE(returnedPacket, thread.getCommandLineReplyPacketByReference());
+}
+
+void OutgoingTcpThreadTests::testSendReplyIfNeeded_doesNOTSendPacket_whenNoResponse()
+{
+    auto &settings = getSettings();
+    settings.remove(RESPONSE_HEX);
+    settings.sync();
+
+    OutgoingTcpThreadTestDouble& thread = setupThreadToSendReply();
+
+    QSignalSpy errorSpy(&thread, &BaseTcpThread::error);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    expectedCallSequence.push_back("shouldSendReply");
+    expectedCallSequence.push_back("buildReplyPacket");
+    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
+    // our override isn't called, so we don't get the sequence here
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+
+    QCOMPARE(errorSpy.count(), 0);
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(packetSentSpy.count(), 0);
 }
 
 // closeConnection() tests

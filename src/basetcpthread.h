@@ -56,7 +56,7 @@ protected:
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
     [[nodiscard]] virtual QByteArray readSocketData();
 
-    void sendOutgoingPacket(Packet& packet);
+    virtual void sendOutgoingPacket(Packet& packet);
     virtual void closeConnection() = 0;
     virtual void sleep(unsigned long usec);
 
@@ -66,6 +66,13 @@ protected:
     bool managedByConnection = false;
     bool closeRequest = false;
     bool insidePersistent = false;
+
+#ifdef CONSOLE_MODE
+    bool consoleMode = true;
+#else
+    bool consoleMode = false;
+#endif
+
 
 private:
     std::unique_ptr<QSslSocket> socket;

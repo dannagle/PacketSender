@@ -36,6 +36,16 @@ private slots:
     void testBuildReplyPacket_data();
     void testBuildReplyPacket();
 
+    // shouldSendReply() tests
+    void testShouldSendReply_data();
+    void testShouldSendReply();
+
+    // sendReplyIfNeeded() tests
+    void testSendReplyIfNeeded_exitsEarlyIfShouldSendReplyReturnsFalse();
+    void testSendReplyIfNeeded_sendsPacket_whenResponseHexIsSet();
+    void testSendReplyIfNeeded_sendsPacket_commandlineOverrides();
+    void testSendReplyIfNeeded_doesNOTSendPacket_whenNoResponse();
+
     // closeConnection() tests
     void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
     void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();

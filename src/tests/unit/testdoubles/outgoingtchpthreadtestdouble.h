@@ -25,6 +25,11 @@ public:
         return this->sendPacket;
     }
 
+    Packet& getCommandLineReplyPacketByReference()
+    {
+        return this->commandLineReplyPacket;
+    }
+
     void setSocketForTest(QSslSocket* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
@@ -81,6 +86,7 @@ public:
 
     int prepareOutgoingPacketCallCount = 0;
     int sendOutgoingPacketCallCount = 0;
+    int baseSendOutgoingPacketCallCount = 0;
     int closeConnectionCallCount = 0;
     int sleepCallCount = 0;
     mutable int shouldContinuePersistentConnectionLoopCallCount = 0;
@@ -92,17 +98,10 @@ public:
     int waitForAndProcessIncomingDataCallCount = 0;
     int interruptibleWaitForReadyReadCallCount = 0;
     int buildReplyPacketCallCount = 0;
+    mutable int shouldSendReplyCallCount = 0;
+    mutable int sendReplyIfNeededCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
-    void resetCallTracking()
-    {
-        prepareOutgoingPacketCallCount
-            = sendOutgoingPacketCallCount
-            = closeConnectionCallCount
-            = sleepCallCount
-            = 0;
-        callSequence.clear();
-    }
 
     void callPrepareOutgoingSendPacket()
     {
@@ -159,6 +158,18 @@ public:
         return buildReplyPacket(receivedPacket, responseData);
     }
 
+    bool callShouldSendReply() const
+    {
+        return shouldSendReply();
+    }
+
+    void callSendReplyIfNeeded(const Packet& p)
+    {
+        sendReplyIfNeeded(p);
+    }
+
+    void setConsoleMode(bool isConsoleMode) { consoleMode = isConsoleMode; }
+
 protected:
 
     void prepareOutgoingPacket() override
@@ -173,6 +184,13 @@ protected:
         sendOutgoingPacketCallCount++;
         callSequence.push_back("sendOutgoingPacket");
         OutgoingTcpThread::sendOutgoingPacket();
+    }
+
+    void sendOutgoingPacket(Packet &packet) override
+    {
+        baseSendOutgoingPacketCallCount++;
+        callSequence.push_back("BaseTcpThread::sendOutgoingPacket");
+        BaseTcpThread::sendOutgoingPacket(packet);
     }
 
     void closeConnection() override
@@ -261,8 +279,24 @@ protected:
         return OutgoingTcpThread::buildReplyPacket(receivedPacket, responseData);
     }
 
+    bool shouldSendReply() const override
+    {
+        shouldSendReplyCallCount++;
+        callSequence.push_back("shouldSendReply");
+
+        return OutgoingTcpThread::shouldSendReply();
+    }
+
+    void sendReplyIfNeeded(const Packet& receivedPacket) override
+    {
+        sendReplyIfNeededCallCount++;
+        callSequence.push_back("sendReplyIfNeeded");
+
+        OutgoingTcpThread::sendReplyIfNeeded(receivedPacket);
+    }
+
 private:
-    std::vector<QString> callSequence;
+    mutable std::vector<QString> callSequence;
     bool simulateRequestInterruptionCalled = false;
 };
 

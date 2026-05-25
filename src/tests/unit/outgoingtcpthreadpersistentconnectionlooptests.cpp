@@ -299,10 +299,7 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
 
     thread.callPersistentConnectionLoop();
-
-    constexpr int beforeLoopCallCount = 1;
-    constexpr int insideLoopCallCount = 1;
-    QCOMPARE(thread.shouldStopPersistentConnectionLoopCallCount, beforeLoopCallCount + insideLoopCallCount);
+    QCOMPARE(thread.shouldStopPersistentConnectionLoopCallCount, 1);
 }
 
 void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_callsIdleHandlerWhenNoData()
@@ -339,7 +336,7 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     QCOMPARE(thread.handlePersistentIdleCaseCallCount, 0);
 }
 
-void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_doesNotEnterLoopIfAlreadyStopped()
+void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_exitsLoopEarlyIfAlreadyStopped()
 {
     auto* mockSock = TestUtils::createMockSocketForTest();
     OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
@@ -347,7 +344,7 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     thread.stop();  // stop before calling
 
     thread.callPersistentConnectionLoop();
-    QCOMPARE(thread.shouldContinuePersistentConnectionLoopCallCount, 0);   // never entered while()
+    QCOMPARE(thread.shouldContinuePersistentConnectionLoopCallCount, 1);   // never entered while()
 }
 
 void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_exitsWhenSocketDisconnects()

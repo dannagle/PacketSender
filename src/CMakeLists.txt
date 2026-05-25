@@ -25,6 +25,7 @@ set(
   mainwindow.h
   panel.h
   globals.h
+  settingnames.h
   panelgenerator.h
   persistentconnection.h
   persistenthttp.h

@@ -53,10 +53,12 @@ protected:
     virtual Packet buildReceivedPacket();
     virtual void processIncomingData();
     virtual void waitForAndProcessIncomingData();
+    virtual bool shouldSendReply() const;
+    virtual void sendReplyIfNeeded(const Packet& receivedPacket);
     void persistentConnectionLoop();
 
     Packet      sendPacket;
-    Packet      replyPacket;
+    Packet      commandLineReplyPacket;
 
     bool        consoleMode = false;
     bool        persistent = false;

@@ -9,6 +9,11 @@
  */
 #pragma once
 
+#include <QCoreApplication>
+#include <QSettings>
+#include <QTemporaryFile>
+#include <QStandardPaths>
+
 //BEGIN SW VERSION
 #define SW_VERSION "8.11.1"
 //END SW VERSION
@@ -53,6 +58,32 @@
 #define CAFILE ((QFile::exists("snakeoilca.crt") || QFile::exists("portablemode.txt") ) ? ("snakeoilca.crt") : ((SETTINGSPATH)  + "snakeoilca.crt"))
 #define KEYFILE ((QFile::exists("key.pem") || QFile::exists("portablemode.txt") ) ? ("key.pem") : ((SETTINGSPATH)  + "key.pem"))
 #define PANELSFILE ((QFile::exists("ps_panels.json") || QFile::exists("portablemode.txt") ) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
+
+
+// globals.cpp
+inline QSettings& getSettings()
+{
+    // === Unit Test Path ===
+    if (QCoreApplication::applicationName().contains("unittest", Qt::CaseInsensitive)) {
+
+        static QTemporaryFile* testSettingsFile = nullptr;
+
+        if (!testSettingsFile) {
+            testSettingsFile = new QTemporaryFile();
+            if (testSettingsFile->open())
+            {
+                testSettingsFile->close();   // Important
+            }
+        }
+
+        static QSettings testSettings(testSettingsFile->fileName(), QSettings::IniFormat);
+        return testSettings;
+    }
+
+    // === Normal Application Path ===
+    static QSettings normalSettings(SETTINGSFILE, QSettings::IniFormat);
+    return normalSettings;
+}
 
 #define NAMEINIKEY "NAMES"
 #define DTLSSENDICON ":icons/tx_dtls.png"

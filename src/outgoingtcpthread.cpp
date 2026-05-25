@@ -6,6 +6,8 @@
 
 #include <QMetaEnum>
 
+#include "settingnames.h"
+
 OutgoingTcpThread::OutgoingTcpThread(QSslSocket* socket, const Packet& packetToSend, QObject* parent)
 :BaseTcpThread(socket, parent), sendPacket(packetToSend)
 {
@@ -113,7 +115,7 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
 
     reply.fromPort = getSocket() ? getSocket()->localPort() : 0;
 
-    reply.tcpOrUdp = sendPacket.tcpOrUdp;
+    reply.tcpOrUdp = receivedPacket.tcpOrUdp;
     if (isSocketEncrypted()) {
         reply.tcpOrUdp = "SSL";
     }
@@ -121,6 +123,10 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
     // Response content
     if (!responseData.isEmpty()) {
         reply.hexString = Packet::byteArrayToHex(responseData);
+    } else
+    {
+        const QSettings& settings = getSettings();
+        reply.hexString = settings.value(RESPONSE_HEX).toString();
     }
 
     // Macro expansion
@@ -270,14 +276,56 @@ void OutgoingTcpThread::waitForAndProcessIncomingData()
     // Optionally: auto-send a response here if configured
 }
 
+bool OutgoingTcpThread::shouldSendReply() const
+{
+    const QSettings &settings = getSettings();
+
+    bool basicResponseEnabled = settings.value(SEND_RESPONSE, false).toBool();
+    bool smartResponseEnabled = settings.value(SMART_RESPONSES_ENABLED, false).toBool();
+    bool hasCommandLineReply  = !commandLineReplyPacket.hexString.isEmpty();
+
+    if (consoleMode)
+    {
+        return hasCommandLineReply;
+    }
+
+    // If either basic response or smart responses are enabled
+    return basicResponseEnabled || smartResponseEnabled || hasCommandLineReply;
+}
+
+void OutgoingTcpThread::sendReplyIfNeeded(const Packet& receivedPacket)
+{
+    if (!shouldSendReply()) {
+        QDEBUG() << "No reply configured - skipping";
+        return;
+    }
+
+    QDEBUG() << "shouldSendReply() == true → building reply";
+
+    // Smart response data will go here in the future
+    QByteArray responseData;
+
+    Packet reply = buildReplyPacket(receivedPacket, responseData);
+
+    // Command-line reply has highest priority
+    if (!commandLineReplyPacket.hexString.isEmpty()) {
+        reply = commandLineReplyPacket;
+        QDEBUG() << "Using command-line reply packet instead";
+    }
+
+    // Don't send empty replies (this was in the old writeResponse)
+    if (reply.hexString.isEmpty()) {
+        QDEBUG() << "Reply has no data - skipping send";
+        return;
+    }
+
+    // === Actual send via Base class ===
+    BaseTcpThread::sendOutgoingPacket(reply);
+}
+
 void OutgoingTcpThread::persistentConnectionLoop()
 {
     QDEBUG() << "Entering persistent connection loop for" << sendPacket.toIP << ":" << sendPacket.port;
-
-    if (shouldStopPersistentConnectionLoop()) {
-        qDebug() << "Early exit from persistent loop due to close request";
-        return;
-    }
 
     while (shouldContinuePersistentLoop()) {
         insidePersistent = true;   // keeping for now, we can remove later if unused

@@ -49,7 +49,7 @@ private slots:
     void testPersistentConnectionLoop_callsShouldStopPersistentLoop();
     void testPersistentConnectionLoop_callsIdleHandlerWhenNoData();
     void testPersistentConnectionLoop_skipsIdleWhenHasDataToSend();
-    void testPersistentConnectionLoop_doesNotEnterLoopIfAlreadyStopped();
+    void testPersistentConnectionLoop_exitsLoopEarlyIfAlreadyStopped();
     void testPersistentConnectionLoop_exitsWhenSocketDisconnects();
     void testPersistentConnectionLoop_emitsIdleStatusOnlyEveryTwoSeconds();
     void testPersistentConnectionLoop_callsProcessIncomingData();
