@@ -330,8 +330,6 @@ void OutgoingTcpThread::persistentConnectionLoop()
     QDEBUG() << "Entering persistent connection loop for" << sendPacket.toIP << ":" << sendPacket.port;
 
     while (shouldContinuePersistentLoop()) {
-        insidePersistent = true;   // keeping for now, we can remove later if unused
-
         if (shouldStopPersistentConnectionLoop()) {
             break;
         }

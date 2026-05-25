@@ -65,7 +65,6 @@ protected:
 
     bool managedByConnection = false;
     bool closeRequest = false;
-    bool insidePersistent = false;
 
 #ifdef CONSOLE_MODE
     bool consoleMode = true;
