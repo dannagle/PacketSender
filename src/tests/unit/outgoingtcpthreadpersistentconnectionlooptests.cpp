@@ -255,13 +255,11 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testWaitForAndProcessIncomi
 
     thread.callWaitForAndProcessIncomingData();
 
-    auto callSequence = thread.getCallSequence();
-
     std::vector<QString> expectedCallSequence;
     expectedCallSequence.push_back("waitForAndProcessIncomingData");
     expectedCallSequence.push_back("interruptibleWaitForReadyRead");
     expectedCallSequence.push_back("processIncomingData");
-    QCOMPARE(callSequence, expectedCallSequence);
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
 }
 
 // persistentConnectionLoop() tests
