@@ -165,6 +165,7 @@ void OutgoingTcpThread::run()
         // Send the packet once
         prepareOutgoingPacket();
         sendOutgoingPacket();
+        processIncomingData();
         closeConnection();
     } else {
         emit connectionStatus("Could not connect.");

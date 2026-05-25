@@ -128,6 +128,7 @@ void SingleSendOutgoingTcpThreadTests::testRun_successPath_callsMethodsInCorrect
     std::vector<QString> expectedCallSequence;
     expectedCallSequence.push_back("prepareOutgoingPacket");
     expectedCallSequence.push_back("sendOutgoingPacket");
+    expectedCallSequence.push_back("processIncomingData");
     expectedCallSequence.push_back("closeConnection");
     QCOMPARE(callSequence, expectedCallSequence);
 }
@@ -149,6 +150,7 @@ void SingleSendOutgoingTcpThreadTests::testRun_respectsDelayAfterConnect()
     expectedCallSequence.push_back("usleep 100000 usecs");
     expectedCallSequence.push_back("prepareOutgoingPacket");
     expectedCallSequence.push_back("sendOutgoingPacket");
+    expectedCallSequence.push_back("processIncomingData");
     expectedCallSequence.push_back("closeConnection");
     QCOMPARE(callSequence, expectedCallSequence);
 }
