@@ -219,6 +219,7 @@ protected:
     Packet buildReceivedPacket() override
     {
         buildReceivedPacketCallCount++;
+        callSequence.push_back("buildReceivedPacket");
         return OutgoingTcpThread::buildReceivedPacket();
     }
 

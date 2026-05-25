@@ -251,6 +251,7 @@ void OutgoingTcpThread::processIncomingData()
         emit packetReceived(received);
 
         // TODO: Smart response logic will go here later
+        sendReplyIfNeeded(received);
     }
 }
 

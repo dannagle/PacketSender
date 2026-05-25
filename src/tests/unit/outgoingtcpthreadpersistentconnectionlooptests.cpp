@@ -236,6 +236,26 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_soc
     QCOMPARE(receivedPacket, p);
 }
 
+void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_socketHasData_callsSendResponseIfNeeded()
+{
+    const QByteArray data = "This is the song that never ends.";
+    auto* mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData(data);
+
+    Packet p = TestUtils::createPacketForTest();
+
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+    thread.callProcessIncomingData();
+
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("processIncomingData");
+    expectedCallSequence.push_back("buildReceivedPacket");
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    QVERIFY(std::equal(expectedCallSequence.begin(), expectedCallSequence.end(),
+                   thread.getCallSequence().begin()));
+    // QCOMPARE(expectedCallSequence, thread.getCallSequence());
+}
+
 // waitForAndProcessIncomingData()
 void OutgoingTcpThreadPersistentConnectionLoopTests::testWaitForAndProcessIncomingData_emitsConnectionStatus_WaitingForDataBeforeSend()
 {

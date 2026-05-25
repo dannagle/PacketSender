@@ -38,6 +38,7 @@ private slots:
     void testProcessIncomingData_socketIsNull_returnsEarly();
     void testProcessIncomingData_socketHasNoData_returnsEarly();
     void testProcessIncomingData_socketHasData_emitsReceivedPacket();
+    void testProcessIncomingData_socketHasData_callsSendResponseIfNeeded();
 
     // waitForAndProcessIncomingData() tests
     void testWaitForAndProcessIncomingData_emitsConnectionStatus_WaitingForDataBeforeSend();
