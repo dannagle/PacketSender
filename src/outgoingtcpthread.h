@@ -51,6 +51,7 @@ protected:
     virtual bool shouldStopPersistentConnectionLoop() const;
     virtual void handlePersistentIdleCase(int idleThresholdMs);
     virtual Packet buildReceivedPacket();
+    virtual QByteArray getSmartResponseData(const Packet& receivedPacket);
     virtual void processIncomingData();
     virtual void waitForAndProcessIncomingData();
     virtual bool shouldSendReply() const;

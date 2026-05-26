@@ -416,6 +416,69 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_doesNOTSendPacket_whenNoRespo
     QCOMPARE(packetSentSpy.count(), 0);
 }
 
+// getSmartResponseData() tests
+void OutgoingTcpThreadTests::testGetSmartResponseData_data()
+{
+    QTest::addColumn<bool>("smartEnabled");
+    QTest::addColumn<QString>("incomingHex");
+    QTest::addColumn<QString>("expectedSmartReplyHex");  // empty = no match / disabled
+
+    QTest::newRow("smart disabled")
+        << false << "AA BB CC" << "";
+
+    QTest::newRow("smart enabled - no match")
+        << true << "00 11 22" << "";
+
+    // You can add more rows once you have real smart config test data
+    QTest::newRow("smart enabled - match found")
+        << true << "DE AD BE EF" << "CA FE BA BE ";
+}
+
+void OutgoingTcpThreadTests::testGetSmartResponseData()
+{
+    QFETCH(bool, smartEnabled);
+    QFETCH(QString, incomingHex);
+    QFETCH(QString, expectedSmartReplyHex);
+
+    auto mockSock = TestUtils::createMockSocketForTest();
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.setConsoleMode(false);
+
+    // Setup settings
+    QSettings &settings = getSettings();
+    settings.setValue(SMART_RESPONSES_ENABLED, smartEnabled);
+
+    if (smartEnabled) {
+        // Setup Smart Response #1 (the one we'll match on)
+        settings.setValue("responseEnableCheck1", true);
+        settings.setValue("responseIfEdit1", "DE AD BE EF");
+        settings.setValue("responseReplyEdit1", "CA FE BA BE");
+        settings.setValue("matchMethodBox1", "Exact Match");
+        settings.setValue("responseEncodingBox1", "HEX");
+        // You can leave the other 4 empty
+    }
+
+    settings.sync();
+
+    // TODO: Setup smart config #1 (or whichever) for matching tests
+    // For now we can at least test the disabled / no-match paths
+
+    Packet received = TestUtils::createPacketForTest();
+    received.hexString = incomingHex;
+
+    QByteArray result = thread.callGetSmartResponseData(received);
+
+    if (expectedSmartReplyHex.isEmpty()) {
+        QVERIFY(result.isEmpty());
+    } else {
+        QCOMPARE(Packet::byteArrayToHex(result), expectedSmartReplyHex);
+    }
+
+    // Optional: check call tracking
+    const auto& calls = thread.getCallSequence();
+    QVERIFY(std::find(calls.begin(), calls.end(), "getSmartResponseData") != calls.end());
+}
+
 // closeConnection() tests
 void OutgoingTcpThreadTests::testCloseConnection_SocketIsConnected_DisconnectFromHostCalled()
 {

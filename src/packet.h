@@ -103,7 +103,8 @@ class Packet
         static void populateTableWidgetItem(QTableWidgetItem *tItem, Packet thepacket);
         static Packet fetchTableWidgetItemData(QTableWidgetItem *tItem);
 #endif
-        static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
+        static SmartResponseConfig fetchSmartConfig(int num, const QString& importFile);
+        static SmartResponseConfig fetchSmartConfig(int num, const QSettings& settings);
         static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
         static QByteArray encodingToByteArray(QString encoding, QString data);
 

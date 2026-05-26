@@ -100,6 +100,7 @@ public:
     int buildReplyPacketCallCount = 0;
     mutable int shouldSendReplyCallCount = 0;
     mutable int sendReplyIfNeededCallCount = 0;
+    int getSmartResponseDataCallCount = 0;
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
 
@@ -166,6 +167,11 @@ public:
     void callSendReplyIfNeeded(const Packet& p)
     {
         sendReplyIfNeeded(p);
+    }
+
+    QByteArray callGetSmartResponseData(const Packet& receivedPacket)
+    {
+        return getSmartResponseData(receivedPacket);
     }
 
     void setConsoleMode(bool isConsoleMode) { consoleMode = isConsoleMode; }
@@ -294,6 +300,14 @@ protected:
         callSequence.push_back("sendReplyIfNeeded");
 
         OutgoingTcpThread::sendReplyIfNeeded(receivedPacket);
+    }
+
+    QByteArray getSmartResponseData(const Packet& receivedPacket) override
+    {
+        getSmartResponseDataCallCount++;
+        callSequence.push_back("getSmartResponseData");
+
+        return OutgoingTcpThread::getSmartResponseData(receivedPacket);
     }
 
 private:

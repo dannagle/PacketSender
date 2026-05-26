@@ -46,6 +46,10 @@ private slots:
     void testSendReplyIfNeeded_sendsPacket_commandlineOverrides();
     void testSendReplyIfNeeded_doesNOTSendPacket_whenNoResponse();
 
+    // getSmartResponseData() tests
+    void testGetSmartResponseData_data();
+    void testGetSmartResponseData();
+
     // closeConnection() tests
     void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
     void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();

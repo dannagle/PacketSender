@@ -916,10 +916,8 @@ Packet Packet::fetchTableWidgetItemData(QTableWidgetItem * tItem)
 }
 #endif
 
-SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
+SmartResponseConfig Packet::fetchSmartConfig(int num, const QSettings& settings)
 {
-    QSettings settings(importFile, QSettings::IniFormat);
-
     SmartResponseConfig smart;
     smart.id = num;
     smart.encoding = settings.value("responseEncodingBox" + QString::number(num), "").toString();
@@ -929,6 +927,12 @@ SmartResponseConfig Packet::fetchSmartConfig(int num, QString importFile)
     smart.matchMethod = settings.value("matchMethodBox" + QString::number(num), "").toString();
 
     return smart;
+}
+
+SmartResponseConfig Packet::fetchSmartConfig(int num, const QString& importFile)
+{
+    QSettings settings(importFile, QSettings::IniFormat);
+    return fetchSmartConfig(num, settings);
 }
 
 QString Packet::macroSwap(QString data)

@@ -239,6 +239,33 @@ Packet OutgoingTcpThread::buildReceivedPacket()
     return p;
 }
 
+QByteArray OutgoingTcpThread::getSmartResponseData(const Packet& receivedPacket)
+{
+    const QSettings& settings = getSettings();
+
+    if (!settings.value(SMART_RESPONSES_ENABLED, false).toBool()) {
+        return {};
+    }
+
+    QList<SmartResponseConfig> smartList;
+    for (int i = 1; i <= 5; ++i) {
+        smartList.append(Packet::fetchSmartConfig(i, settings));
+    }
+
+    Packet nonConstPacket = receivedPacket;
+    QByteArray smartData = Packet::smartResponseMatch(smartList, nonConstPacket.getByteArray());
+
+    QDEBUG() << "SmartResponseMatch input hex :" << receivedPacket.hexString;
+    QDEBUG() << "SmartResponseMatch result size:" << smartData.size();
+    QDEBUG() << "SmartResponseMatch result hex :" << Packet::byteArrayToHex(smartData);
+
+    if (!smartData.isEmpty()) {
+        QDEBUG() << "Smart response matched";
+    }
+
+    return smartData;
+}
+
 void OutgoingTcpThread::processIncomingData()
 {
     if (!getSocket() || getSocket()->bytesAvailable() == 0) {
@@ -339,7 +366,6 @@ void OutgoingTcpThread::persistentConnectionLoop()
                                getSocket()->bytesAvailable() == 0;
         idleDebugMessage(isIdleCondition);
 
-        // === Idle path when there's no data to send ===
         if (sendPacket.receiveBeforeSend)
         {
             waitForAndProcessIncomingData();
