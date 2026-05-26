@@ -4,6 +4,7 @@
 
 #include "outgoingtcpthreadpersistentconnectionlooptests.h"
 
+#include "settingnames.h"
 #include "testutils.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
 
@@ -414,4 +415,36 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     OutgoingTcpThreadTestDouble thread(mockSock, p);
     thread.callPersistentConnectionLoop();
     QCOMPARE(thread.waitForAndProcessIncomingDataCallCount, 1);
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistent_sendsSmartResponse()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData("DE AD BE EF");
+
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.setConsoleMode(false);
+
+    // Make it persistent
+    thread.getSendPacketByReference().persistent = true;
+
+    // Setup smart response
+    QSettings &settings = getSettings();
+    settings.setValue(SMART_RESPONSES_ENABLED, true);
+    settings.setValue("responseEnableCheck1", true);
+    settings.setValue("responseIfEdit1", "44 45 20 41 44 20 42 45 20 45 46");
+    settings.setValue("responseReplyEdit1", "CA FE BA BE");
+    settings.setValue("matchMethodBox1", "Exact Match");
+    settings.setValue("responseEncodingBox1", "HEX");
+    settings.sync();
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    // This will enter the persistent loop (which calls processIncomingData)
+    thread.callPersistentConnectionLoop();
+
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    auto sent = packetSentSpy.first().first().value<Packet>();
+    QCOMPARE(Packet::byteArrayToHex(sent.getByteArray()), "CA FE BA BE ");
 }

@@ -121,7 +121,12 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
     }
 
     // Response content
-    if (!responseData.isEmpty()) {
+    // === Smart Response (higher priority) ===
+    QByteArray smartData = getSmartResponseData(receivedPacket);
+
+    if (!smartData.isEmpty()) {
+        reply.hexString = Packet::byteArrayToHex(smartData);
+    }  else if (!responseData.isEmpty()) {
         reply.hexString = Packet::byteArrayToHex(responseData);
     } else
     {

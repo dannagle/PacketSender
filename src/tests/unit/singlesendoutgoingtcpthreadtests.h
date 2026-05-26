@@ -22,6 +22,7 @@ class SingleSendOutgoingTcpThreadTests : public QObject
     void testRun_SocketNotConnected_emitsErrorMessage();
     void testRun_successPath_callsMethodsInCorrectOrder();
     void testRun_respectsDelayAfterConnect();
+    void testSingleShot_sendsSmartResponse();
 };
 
 

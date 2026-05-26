@@ -55,6 +55,7 @@ private slots:
     void testPersistentConnectionLoop_emitsIdleStatusOnlyEveryTwoSeconds();
     void testPersistentConnectionLoop_callsProcessIncomingData();
     void testPersistentConnectionLoop_callsWaitForAndProcessIncomingData();
+    void testPersistent_sendsSmartResponse();
 };
 
 

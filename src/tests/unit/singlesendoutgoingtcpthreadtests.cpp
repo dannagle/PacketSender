@@ -4,6 +4,7 @@
 
 #include "singlesendoutgoingtcpthreadtests.h"
 
+#include "settingnames.h"
 #include "../../packet.h"
 #include "testdoubles/MockSslSocket.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
@@ -153,4 +154,31 @@ void SingleSendOutgoingTcpThreadTests::testRun_respectsDelayAfterConnect()
     expectedCallSequence.push_back("processIncomingData");
     expectedCallSequence.push_back("closeConnection");
     QCOMPARE(callSequence, expectedCallSequence);
+}
+
+void SingleSendOutgoingTcpThreadTests::testSingleShot_sendsSmartResponse()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockReadData("DE AD BE EF");
+
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.setConsoleMode(false);
+
+    // Setup smart response
+    QSettings &settings = getSettings();
+    settings.setValue(SMART_RESPONSES_ENABLED, true);
+    settings.setValue("responseEnableCheck1", true);
+    settings.setValue("responseIfEdit1", "44 45 20 41 44 20 42 45 20 45 46");
+    settings.setValue("responseReplyEdit1", "CA FE BA BE");
+    settings.setValue("matchMethodBox1", "Exact Match");
+    settings.setValue("responseEncodingBox1", "HEX");
+    settings.sync();
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    thread.callProcessIncomingData();
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    auto sent = packetSentSpy.first().first().value<Packet>();
+    QCOMPARE(Packet::byteArrayToHex(sent.getByteArray()), "CA FE BA BE ");
 }
