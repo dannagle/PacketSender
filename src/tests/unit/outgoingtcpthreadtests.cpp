@@ -317,6 +317,18 @@ bool normalizeReplyPacket(const Packet& returnedPacket, Packet& outPacket, QStri
     return true;
 }
 
+std::vector<QString> getSendReplyIfNeededExpectedCallSequence()
+{
+    std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("sendReplyIfNeeded");
+    expectedCallSequence.push_back("shouldSendReply");
+    expectedCallSequence.push_back("buildReplyPacket");
+    expectedCallSequence.push_back("getSmartResponseData");
+    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
+    // our override isn't called, so we don't get the sequence here
+    return expectedCallSequence;
+}
+
 void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_whenResponseHexIsSet()
 {
     auto &settings = getSettings();
@@ -332,12 +344,7 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_whenResponseHexIs
 
     thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
 
-    std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("sendReplyIfNeeded");
-    expectedCallSequence.push_back("shouldSendReply");
-    expectedCallSequence.push_back("buildReplyPacket");
-    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
-    // our override isn't called, so we don't get the sequence here
+    std::vector<QString> expectedCallSequence = getSendReplyIfNeededExpectedCallSequence();
     QCOMPARE(thread.getCallSequence(), expectedCallSequence);
 
     QCOMPARE(errorSpy.count(), 0);
@@ -373,12 +380,7 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_commandlineOverri
 
     thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
 
-    std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("sendReplyIfNeeded");
-    expectedCallSequence.push_back("shouldSendReply");
-    expectedCallSequence.push_back("buildReplyPacket");
-    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
-    // our override isn't called, so we don't get the sequence here
+    std::vector<QString> expectedCallSequence = getSendReplyIfNeededExpectedCallSequence();
     QCOMPARE(thread.getCallSequence(), expectedCallSequence);
 
     QCOMPARE(errorSpy.count(), 0);
@@ -388,6 +390,7 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_sendsPacket_commandlineOverri
     auto returnedPacket = packetSentSpy.first().first().value<Packet>();
     QCOMPARE(returnedPacket, thread.getCommandLineReplyPacketByReference());
 }
+
 
 void OutgoingTcpThreadTests::testSendReplyIfNeeded_doesNOTSendPacket_whenNoResponse()
 {
@@ -403,12 +406,7 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_doesNOTSendPacket_whenNoRespo
 
     thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
 
-    std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("sendReplyIfNeeded");
-    expectedCallSequence.push_back("shouldSendReply");
-    expectedCallSequence.push_back("buildReplyPacket");
-    // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
-    // our override isn't called, so we don't get the sequence here
+    std::vector<QString> expectedCallSequence = getSendReplyIfNeededExpectedCallSequence();
     QCOMPARE(thread.getCallSequence(), expectedCallSequence);
 
     QCOMPARE(errorSpy.count(), 0);
