@@ -127,6 +127,7 @@ void SingleSendOutgoingTcpThreadTests::testRun_successPath_callsMethodsInCorrect
     const auto& callSequence = thread.getCallSequence();
 
     std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("handleOutgoingPlainTCP");
     expectedCallSequence.push_back("prepareOutgoingPacket");
     expectedCallSequence.push_back("sendOutgoingPacket");
     expectedCallSequence.push_back("processIncomingData");
@@ -148,6 +149,7 @@ void SingleSendOutgoingTcpThreadTests::testRun_respectsDelayAfterConnect()
     auto callSequence = thread.getCallSequence();
 
     std::vector<QString> expectedCallSequence;
+    expectedCallSequence.push_back("handleOutgoingPlainTCP");
     expectedCallSequence.push_back("usleep 100000 usecs");
     expectedCallSequence.push_back("prepareOutgoingPacket");
     expectedCallSequence.push_back("sendOutgoingPacket");

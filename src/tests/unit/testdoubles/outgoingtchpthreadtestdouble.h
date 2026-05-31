@@ -82,6 +82,7 @@ public:
         return BaseTcpThread::isSocketEncrypted();
     }
 
+
     int forceExitAfterNIterations = 2;
 
     int prepareOutgoingPacketCallCount = 0;
@@ -101,6 +102,14 @@ public:
     mutable int shouldSendReplyCallCount = 0;
     mutable int sendReplyIfNeededCallCount = 0;
     int getSmartResponseDataCallCount = 0;
+    int handleOutgoingPlainTcpCallCount = 0;
+    int handleConnectionFailureCallCount = 0;
+
+    bool wasMethodCalled(const QString& methodName) const
+    {
+        return std::find(callSequence.begin(), callSequence.end(), methodName)
+               != callSequence.end();
+    }
 
     const std::vector<QString>& getCallSequence() const { return callSequence; }
 
@@ -172,6 +181,16 @@ public:
     QByteArray callGetSmartResponseData(const Packet& receivedPacket)
     {
         return getSmartResponseData(receivedPacket);
+    }
+
+    bool callHandleOutgoingPlainTCP()
+    {
+        return handleOutgoingPlainTCP();
+    }
+
+    void callHandleConnectionFailure()
+    {
+        handleConnectionFailure();
     }
 
     void setConsoleMode(bool isConsoleMode) { consoleMode = isConsoleMode; }
@@ -308,6 +327,22 @@ protected:
         callSequence.push_back("getSmartResponseData");
 
         return OutgoingTcpThread::getSmartResponseData(receivedPacket);
+    }
+
+    bool handleOutgoingPlainTCP() override
+    {
+        handleOutgoingPlainTcpCallCount++;
+        callSequence.push_back("handleOutgoingPlainTCP");
+
+        return OutgoingTcpThread::handleOutgoingPlainTCP();
+    }
+
+    void handleConnectionFailure() override
+    {
+        handleConnectionFailureCallCount++;
+        callSequence.push_back("handleConnectionFailure");
+
+        OutgoingTcpThread::handleConnectionFailure();
     }
 
 private:

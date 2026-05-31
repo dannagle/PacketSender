@@ -5,6 +5,8 @@
 #include "outgoingtcpthread.h"
 
 #include <QMetaEnum>
+#include <QSslKey>
+#include <QSslCipher>
 
 #include "settingnames.h"
 
@@ -141,44 +143,216 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
     return reply;
 }
 
-void OutgoingTcpThread::run()
+void OutgoingTcpThread::loadSSLCerts(bool allowSnakeOil)
 {
-    QDEBUG() << "OutgoingTcpThread::run() started for" << sendPacket.toIP << ":" << sendPacket.port;
-
-    if (sendPacket.isSSL()) {
-        qWarning() << "SSL not yet implemented in OutgoingTcpThread";
+    auto sock = getSocket();
+    if (!sock) {
+        qWarning() << "loadSSLCerts called with null socket";
         return;
     }
 
-    // === Plain TCP - single send (non-persistent for now) ===
-    getSocket()->connectToHost(sendPacket.toIP,
-                        sendPacket.port,
-                        QIODevice::ReadWrite,
-                        getIPConnectionProtocol());
+    const QSettings& settings = getSettings();
 
-    bool connectSuccess = getSocket()->waitForConnected(5000);
-    outgoingConnectionDebugMessage(connectSuccess);
+    if (!allowSnakeOil) {
+        // Production / user-provided certs
+        QString certPath = settings.value("sslLocalCertificatePath").toString();
+        QString keyPath  = settings.value("sslPrivateKeyPath").toString();
 
-    if (connectSuccess) {
-        emit connectionStatus("Connected");
+        if (!certPath.isEmpty()) {
+            sock->setLocalCertificate(certPath);
+        }
+        if (!keyPath.isEmpty()) {
+            sock->setPrivateKey(keyPath);
+        }
+    }
+    else {
+        // Snake oil / default self-signed certs (for testing)
+        QString defaultCertFile = CERTFILE;
+        QString defaultKeyFile  = KEYFILE;
 
-        if (sendPacket.delayAfterConnect > 0) {
-            QDEBUG() << "sleeping" << sendPacket.delayAfterConnect;
-            sleep(1000 * sendPacket.delayAfterConnect);
+        QFile certfile(defaultCertFile);
+        QFile keyfile(defaultKeyFile);
+
+        if (certfile.open(QIODevice::ReadOnly)) {
+            QSslCertificate certificate(&certfile, QSsl::Pem);
+            certfile.close();
+            if (!certificate.isNull()) {
+                sock->setLocalCertificate(certificate);
+            }
         }
 
-        // Send the packet once
-        prepareOutgoingPacket();
-        sendOutgoingPacket();
-        processIncomingData();
-        closeConnection();
-    } else {
-        emit connectionStatus("Could not connect.");
-        emit errorMessage("Could not connect to " + sendPacket.toIP + ":" + QString::number(sendPacket.port));
-
-        sendPacket.errorString = "Could not connect";
-        emit packetSent(sendPacket);
+        if (keyfile.open(QIODevice::ReadOnly)) {
+            QSslKey sslKey(&keyfile, QSsl::Rsa, QSsl::Pem);
+            keyfile.close();
+            if (!sslKey.isNull()) {
+                sock->setPrivateKey(sslKey);
+            }
+        }
     }
+}
+
+void OutgoingTcpThread::handleOutgoingSSLHandshakeSuccess()
+{
+    auto sslSocket = getSocket();
+    if (!sslSocket) return;
+
+    QSslCipher cipher = sslSocket->sessionCipher();
+
+    Packet info = sendPacket;
+    info.hexString.clear();
+
+    info.errorString = "Encrypted with " + cipher.encryptionMethod();
+    emit packetSent(info);
+
+    info.errorString = "Authenticated with " + cipher.authenticationMethod();
+    emit packetSent(info);
+
+    info.errorString = "Peer Cert: " +
+        sslSocket->peerCertificate().issuerInfo(QSslCertificate::CommonName).join(", ");
+    emit packetSent(info);
+
+    QDEBUG() << "SSL handshake successful - cipher:" << cipher.name();
+}
+
+void OutgoingTcpThread::handleOutgoingSSLHandshakeFailure()
+{
+    QDEBUG() << "SSL handshake failed";
+
+    Packet errorPacket = sendPacket;
+    errorPacket.hexString.clear();
+    errorPacket.errorString.clear();
+
+    bool hadSpecificErrors = false;
+
+    auto sslSocket = getSocket();
+    if (sslSocket) {
+        QList<QSslError> errors =
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+            sslSocket->sslErrors();
+#else
+                sslSocket->sslHandshakeErrors();
+#endif
+
+        for (const QSslError& err : errors) {
+            QString msg = "SSL Error: " + err.errorString();
+
+            emit errorMessage(msg);
+            QDEBUG() << msg;
+
+            // Still show each concrete SSL error in the packet log (preserves Dan's UI intent)
+            errorPacket.errorString = msg;
+            emit packetSent(errorPacket);
+
+            hadSpecificErrors = true;
+        }
+    }
+
+    // Summary (only once, outside the loop)
+    QString summary = "SSL Handshake Failed";
+    emit errorMessage(summary);
+    emit error(QSslSocket::SslHandshakeFailedError);   // low-level signal once
+
+    if (!hadSpecificErrors) {
+        errorPacket.errorString = summary;
+        emit packetSent(errorPacket);
+    }
+
+    // Note: We do *not* emit a generic "SSL connection failed" here.
+    // That can be emitted at a higher level if needed (e.g. in handleOutgoingSSL()).
+}
+
+void OutgoingTcpThread::handleConnectionFailure()
+{
+    emit connectionStatus("Could not connect.");
+    emit errorMessage("Could not connect to " + sendPacket.toIP + ":" + QString::number(sendPacket.port));
+
+    sendPacket.errorString = "Could not connect";
+    emit packetSent(sendPacket);
+}
+
+bool OutgoingTcpThread::handleOutgoingSSL()
+{
+    QDEBUG() << "Starting SSL connection to" << sendPacket.toIP << ":" << sendPacket.port;
+    auto sslSocket = getSocket();
+    if (!sslSocket) {
+        qWarning() << "Failed to get QSslSocket";
+        handleConnectionFailure();
+        return false;
+    }
+
+    // Load certificates / keys
+    loadSSLCerts(true);        // true = allow snake oil defaults
+
+    sslSocket->setProtocol(QSsl::AnyProtocol);
+
+    const QSettings& settings = getSettings();
+    if (settings.value(IGNORE_SSL_CHECK, true).toBool()) {
+        sslSocket->ignoreSslErrors();
+    }
+
+    sslSocket->connectToHostEncrypted(sendPacket.toIP,
+                                      sendPacket.port,
+                                      QIODevice::ReadWrite,
+                                      getIPConnectionProtocol());
+
+    bool connected = sslSocket->waitForConnected(5000);
+    bool encrypted = sslSocket->waitForEncrypted(5000);
+
+    outgoingConnectionDebugMessage(connected && encrypted);
+
+    if (connected && encrypted) {
+        emit connectionStatus("SSL Connected");
+        handleOutgoingSSLHandshakeSuccess();
+        return true;
+    } else {
+        handleOutgoingSSLHandshakeFailure();
+        return false;
+    }
+}
+
+bool OutgoingTcpThread::handleOutgoingPlainTCP()
+{
+    getSocket()->connectToHost(sendPacket.toIP,
+                               sendPacket.port,
+                               QIODevice::ReadWrite,
+                               getIPConnectionProtocol());
+
+    bool success = getSocket()->waitForConnected(5000);
+    outgoingConnectionDebugMessage(success);
+
+    success ? emit connectionStatus("Connected") : handleConnectionFailure();
+    return success;
+}
+
+void OutgoingTcpThread::run()
+{
+    // === 1. Establish connection (plain TCP or SSL) ===
+    if (sendPacket.isSSL()) {
+        if (!handleOutgoingSSL()) {
+            return;                    // SSL handshake failed - errors already emitted
+        }
+    } else {
+        if (!handleOutgoingPlainTCP()) {
+            return;                    // plain TCP connect failed - errors already emitted
+        }
+    }
+
+    // === 2. We are now successfully connected (plain or SSL) ===
+    if (sendPacket.delayAfterConnect > 0) {
+        QDEBUG() << "sleeping" << sendPacket.delayAfterConnect;
+        sleep(1000 * sendPacket.delayAfterConnect);
+    }
+
+    prepareOutgoingPacket();
+    sendOutgoingPacket();
+    processIncomingData();
+
+    // === 3. Decide how to finish the connection ===
+    if (persistent) {
+        persistentConnectionLoop();    // pure loop only
+    }
+
+    closeConnection();                 // Single cleanup point for both single-shot and persistent
 }
 
 bool OutgoingTcpThread::shouldContinuePersistentLoop() const

@@ -46,6 +46,18 @@ protected:
 
     virtual Packet buildReplyPacket(const Packet &receivedPacket, const QByteArray &responseData);
 
+    // SSL methods
+    virtual void loadSSLCerts(bool allowSnakeOil);
+    void handleOutgoingSSLHandshakeSuccess();
+    void handleOutgoingSSLHandshakeFailure();
+    bool handleOutgoingSSL();
+
+    // non-ssl path
+    virtual bool handleOutgoingPlainTCP();
+
+    // applicable to both
+    virtual void handleConnectionFailure();
+
     // persistentConnectionLoop() methods
     virtual bool shouldContinuePersistentLoop() const;
     virtual bool shouldStopPersistentConnectionLoop() const;

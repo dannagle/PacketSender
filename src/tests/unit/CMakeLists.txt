@@ -38,6 +38,7 @@ add_executable(${TEST_NAME}
     outgoingtcpthreadtests.cpp
     singlesendoutgoingtcpthreadtests.cpp
     outgoingtcpthreadpersistentconnectionlooptests.cpp
+    outgoingtcpthreadconnectiontests.cpp
     testdoubles/outgoingtchpthreadtestdouble.h
 
     ../../packet.cpp

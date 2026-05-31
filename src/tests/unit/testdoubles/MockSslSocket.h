@@ -139,11 +139,19 @@ public:
     {
         connectToHostCallCount++;
 
+        lastConnectedToHostName = hostName;
+        lastConnectedToPort = port;
+        lastProtocol = protocol;
+
         if (shouldCallConnectToHost)
         {
             QSslSocket::connectToHost(hostName, port, openMode, protocol);
         }
     }
+
+    QString lastConnectedToHostName;
+    quint16 lastConnectedToPort = 0;
+    NetworkLayerProtocol lastProtocol = QAbstractSocket::AnyIPProtocol;
 
 private:
     bool mockConnected = false;

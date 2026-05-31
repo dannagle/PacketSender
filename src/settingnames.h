@@ -10,4 +10,6 @@
 #define SMART_RESPONSES_ENABLED "smartResponseEnableCheck"
 #define RESPONSE_HEX "responseHex"
 
+#define IGNORE_SSL_CHECK "ignoreSSLCheck"
+
 #endif //SETTINGNAMES_H
