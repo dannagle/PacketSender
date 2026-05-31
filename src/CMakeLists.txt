@@ -106,6 +106,14 @@ if(APPLE)
     psicons.icns
 
   )
+elseif(WIN32)
+  add_executable(
+    ${PROJECT_NAME} WIN32
+    ${PACKETSENDER_SRCS}
+    ${PACKETSENDER_UI_HEADERS}
+    ${PACKETSENDER_UIS}
+    ${PACKETSENDER_QRC}
+  )
 else()
   add_executable(
     ${PROJECT_NAME}

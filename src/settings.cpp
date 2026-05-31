@@ -19,7 +19,9 @@
 
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QGuiApplication>
 #include <QMessageBox>
+#include <QPalette>
 #include <QStyleHints>
 
 #endif
@@ -42,6 +44,9 @@ const QString Settings::ERROR_STR = "Error";
 #ifndef CONSOLE_BUILD
 const QString Settings::LIGHT_STYLE_SHEET_NAME = ":/packetsender.css";
 const QString Settings::DARK_STYLE_SHEET_NAME = ":/qdarkstyle/style.qss";
+const QString Settings::THEME_MODE_SYSTEM = "system";
+const QString Settings::THEME_MODE_LIGHT = "light";
+const QString Settings::THEME_MODE_DARK = "dark";
 #endif
 
 QString Settings::logHeaderTranslate(QString txt)
@@ -187,15 +192,13 @@ Settings::Settings(QWidget *parent, MainWindow* mw) :
     ui->autolaunchStarterPanelButton->setChecked(settings.value("autolaunchStarterPanelButton", false).toBool());
 
 
-    #if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
+    QString currentThemeMode = Settings::themeMode();
+    ui->themeModeCombo->setItemData(0, Settings::THEME_MODE_SYSTEM);
+    ui->themeModeCombo->setItemData(1, Settings::THEME_MODE_LIGHT);
+    ui->themeModeCombo->setItemData(2, Settings::THEME_MODE_DARK);
+    int themeIndex = ui->themeModeCombo->findData(currentThemeMode);
+    ui->themeModeCombo->setCurrentIndex(themeIndex < 0 ? 0 : themeIndex);
 
-    //This is now automatic in Qt6.5
-    ui->darkModeCheck->hide();
-
-    #endif
-
-
-    ui->darkModeCheck->setChecked(settings.value("darkModeCheck", true).toBool());
     ui->httpAdjustContentTypeCheck->setChecked(settings.value("httpAdjustContentTypeCheck", true).toBool());
 
     ui->translateMacroSendCheck->setChecked(settings.value("translateMacroSendCheck", true).toBool());
@@ -398,12 +401,38 @@ QString Settings::language()
 
 
 
+QString Settings::themeMode() {
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    QString mode = settings.value("themeMode", "").toString().toLower();
+
+    if(mode == THEME_MODE_SYSTEM || mode == THEME_MODE_LIGHT || mode == THEME_MODE_DARK) {
+        return mode;
+    }
+
+    if(settings.contains("darkModeCheck")) {
+        return settings.value("darkModeCheck", true).toBool() ? THEME_MODE_DARK : THEME_MODE_LIGHT;
+    }
+
+    return THEME_MODE_SYSTEM;
+}
+
+
 bool Settings::useDark() {
 
 
 #ifndef CONSOLE_BUILD
 
-    #if QT_VERSION > QT_VERSION_CHECK(6, 5, 0)
+    QString mode = Settings::themeMode();
+
+    if(mode == THEME_MODE_DARK) {
+        return true;
+    }
+
+    if(mode == THEME_MODE_LIGHT) {
+        return false;
+    }
+
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
 
         QStyleHints * styleHints = QGuiApplication::styleHints();
         auto colorScheme = styleHints->colorScheme();
@@ -411,8 +440,7 @@ bool Settings::useDark() {
 
     #endif
 
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    return settings.value("darkModeCheck", true).toBool();
+    return QGuiApplication::palette().color(QPalette::Window).lightness() < 128;
 
 #else
     return true;
@@ -529,7 +557,8 @@ void Settings::on_buttonBox_accepted()
     settings.setValue("translateMacroSendCheck", ui->translateMacroSendCheck->isChecked());
 
     settings.setValue("autolaunchStarterPanelButton", ui->autolaunchStarterPanelButton->isChecked());
-    settings.setValue("darkModeCheck", ui->darkModeCheck->isChecked());
+    QString themeMode = ui->themeModeCombo->currentData().toString();
+    settings.setValue("themeMode", themeMode.isEmpty() ? Settings::THEME_MODE_SYSTEM : themeMode);
     settings.setValue("httpAdjustContentTypeCheck", ui->httpAdjustContentTypeCheck->isChecked());
 
     settings.setValue("cancelResendNum", ui->cancelResendNumEdit->text().toUInt());

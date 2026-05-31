@@ -655,11 +655,34 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_18">
           <item>
-           <widget class="QCheckBox" name="darkModeCheck">
-            <property name="text">
-             <string>Use Dark Theme (requires restart)</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="themeModeLayout">
+            <item>
+             <widget class="QLabel" name="themeModeLabel">
+              <property name="text">
+               <string>Theme</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="themeModeCombo">
+              <item>
+               <property name="text">
+                <string>System</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Light</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Dark</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <layout class="QHBoxLayout" name="LanguageHolderLayout">
@@ -1296,6 +1319,7 @@
   <tabstop>displayOrderList</tabstop>
   <tabstop>displayOrderListTraffic</tabstop>
   <tabstop>defaultDisplayButton</tabstop>
+  <tabstop>themeModeCombo</tabstop>
   <tabstop>copyUnformattedCheck</tabstop>
   <tabstop>rolling500entryCheck</tabstop>
   <tabstop>restoreSessionCheck</tabstop>
