@@ -92,6 +92,8 @@ set(
   dtlsserver.cpp
   dtlsthread.cpp
   persistentLoopConnection.cpp
+  packetsenderqsslsocketinterface.h
+  realqsslsocket.cpp
   basetcpthread.cpp
   outgoingtcpthread.cpp
 )

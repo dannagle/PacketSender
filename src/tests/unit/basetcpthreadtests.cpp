@@ -7,6 +7,7 @@
 #include <QTcpServer>
 #include <QSignalSpy>
 
+#include "realqsslsocket.h"
 #include "testdoubles/basetcpthreadtestdouble.h"
 #include "testdoubles/MockSslSocket.h"
 
@@ -68,7 +69,10 @@ void BaseTcpThreadTests::testIsValid_returnsTrueWithValidSocket()
     QTcpServer server;
     QVERIFY(server.listen(QHostAddress::LocalHost, 0));
 
-    QSslSocket *clientSock = new QSslSocket();
+    auto *clientSock = new MockSslSocket();
+    clientSock->setMockConnected(true);
+    clientSock->setIsValid(true);
+
     clientSock->connectToHost("127.0.0.1", server.serverPort());
     QVERIFY(clientSock->waitForConnected(1000));   // wait until connected
 
@@ -78,7 +82,7 @@ void BaseTcpThreadTests::testIsValid_returnsTrueWithValidSocket()
 
 void BaseTcpThreadTests::testIsValid_returnsFalseWithNullSocket()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
     QCOMPARE(thread.isValid(), false);
 }
@@ -87,7 +91,7 @@ void BaseTcpThreadTests::testIsValid_returnsFalseForFreshUnconnectedSocket()
 {
     // A freshly created QSslSocket is not valid until bind() or connectToHost() succeeds
     // We do neither in the BaseTcpThreadTestDouble constructor
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     QCOMPARE(thread.isValid(), false);
 }
 
@@ -112,7 +116,7 @@ void BaseTcpThreadTests::testIsSocketEncrypted_returnsSocketState()
 void BaseTcpThreadTests::testIsSocketEncrypted_returnsFalseWithNullSocket()
 {
     // Constructor throws on null, so we use a test helper or create a valid thread first
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
 
     thread.setSocketForTest(nullptr);
     QCOMPARE(thread.isSocketEncrypted(), false);
@@ -124,7 +128,7 @@ void BaseTcpThreadTests::testGetPeerPort_returnsCorrectValue()
     QVERIFY(server.listen(QHostAddress::LocalHost, 0));
     quint16 expectedPort = server.serverPort();
 
-    auto *clientSock = new QSslSocket();
+    auto *clientSock = new RealQSslSocket(new QSslSocket());
     clientSock->connectToHost("127.0.0.1", expectedPort);
     QVERIFY(clientSock->waitForConnected(2000));
 
@@ -134,7 +138,7 @@ void BaseTcpThreadTests::testGetPeerPort_returnsCorrectValue()
 
 void BaseTcpThreadTests::testGetPeerPort_returnsOWhenSocketIsNull()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
 
     thread.setSocketForTest(nullptr);
     QCOMPARE(thread.getPeerPort(), 0);
@@ -146,7 +150,7 @@ void BaseTcpThreadTests::testGetLocalPort_returnsCorrectValue()
     QVERIFY(server.listen(QHostAddress::LocalHost, 0));
     quint16 serverPort = server.serverPort();
 
-    auto *clientSock = new QSslSocket();
+    auto *clientSock = new RealQSslSocket(new QSslSocket());
     clientSock->connectToHost("127.0.0.1", serverPort);
     QVERIFY(clientSock->waitForConnected(2000));
 
@@ -160,7 +164,7 @@ void BaseTcpThreadTests::testGetLocalPort_returnsCorrectValue()
 
 void BaseTcpThreadTests::testGetLocalPort_returnsOWhenSocketIsNull()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
     QCOMPARE(thread.getLocalPort(), 0);
 }
@@ -168,7 +172,7 @@ void BaseTcpThreadTests::testGetLocalPort_returnsOWhenSocketIsNull()
 // getIPConnectionProtocol() tests
 void BaseTcpThreadTests::testGetIPConnectionProtocol_returnsIPv4WhenSocketIsNull()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
     QCOMPARE(thread.getIPConnectionProtocol(), QAbstractSocket::IPv4Protocol);
 }
@@ -203,7 +207,7 @@ void BaseTcpThreadTests::testGetIPConnectionProtocol_returnsIPv6ForIPv6Peer()
 // getPeerAddressAsString() tests
 void BaseTcpThreadTests::testGetPeerAddressAsString_returnsEmptyStringWhenSocketIsNull()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
     QVERIFY(thread.getPeerAddressAsString().isEmpty());
 }
@@ -230,7 +234,7 @@ void BaseTcpThreadTests::testGetPeerAddressAsString_returnsIPV6()
 // testSendOutgoingPacket() tests
 void BaseTcpThreadTests::testSendOutgoingPacket_socketIsNullptr_emitsConnectionStatusError()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
 
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -243,7 +247,7 @@ void BaseTcpThreadTests::testSendOutgoingPacket_socketIsNullptr_emitsConnectionS
 
 void BaseTcpThreadTests::testSendOutgoingPacket_socketIsNullptr_emitsErrorSignalWithSocketAccessError()
 {
-    BaseTcpThreadTestDouble thread(new QSslSocket());
+    BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     thread.setSocketForTest(nullptr);
 
     QSignalSpy errorSignalSpy(&thread, &BaseTcpThread::error);

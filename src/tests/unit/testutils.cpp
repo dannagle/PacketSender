@@ -49,7 +49,7 @@ Packet TestUtils::createIdlePacketForTest()
 
 MockSslSocket* TestUtils::createMockSocketForTest()
 {
-    auto mockSock = new MockSslSocket();;
+    auto mockSock = new MockSslSocket();
 
     mockSock->setMockConnected(true);
     mockSock->setIsValid(true);

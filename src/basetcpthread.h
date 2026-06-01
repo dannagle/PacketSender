@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QSslSocket>
 #include "packet.h"
+#include "packetsenderqsslsocketinterface.h"
 
 /**
  * Base class for all TCP thread implementations.
@@ -18,11 +19,13 @@ class BaseTcpThread : public QThread
     Q_OBJECT
 
 public:
+    void debugSocketState() const;
     /**
      * Takes ownership of the socket.
      * Throws std::invalid_argument if socket is null.
      */
-    explicit BaseTcpThread(QSslSocket* socket, QObject* parent = nullptr);
+    explicit BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
+                           QObject* parent = nullptr);
     ~BaseTcpThread() override;
 
     virtual void stop();
@@ -39,8 +42,10 @@ public:
     virtual quint16 getLocalPort() const;
     virtual QAbstractSocket::NetworkLayerProtocol getIPConnectionProtocol() const;
     virtual QString getPeerAddressAsString() const;
-    //
-signals:
+
+    std::unique_ptr<PacketSenderQSslSocketInterface> socketInterface;
+
+    signals:
     void packetSent(const Packet& packet);
     void packetReceived(const Packet& packet);
     void connectionStatus(const QString& message);
@@ -52,7 +57,7 @@ protected:
     //
     // void wireupSocketSignals(QSslSocket* socket);
 
-    std::unique_ptr<QSslSocket>& getSocketPtrByReference() {return socket;}
+    std::unique_ptr<PacketSenderQSslSocketInterface>& getSocketPtrByReference() {return socketInterface;}
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
     [[nodiscard]] virtual QByteArray readSocketData();
 

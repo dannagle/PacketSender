@@ -6,17 +6,27 @@
 #include <QAbstractSocket>
 #include "basetcpthread.h"
 
-
-BaseTcpThread::BaseTcpThread(QSslSocket* socket, QObject* parent)
-    : QThread(parent),
-      socket(socket)
+void BaseTcpThread::debugSocketState() const
 {
-    if (!socket) {
-        throw std::invalid_argument("BaseTcpThread: socket cannot be null");
+    qDebug() << "=== BaseTcpThread::debugSocketState ===";
+    qDebug() << "socketInterface:" << (socketInterface ? "PRESENT" : "NULL");
+    qDebug() << "socket (unique_ptr):" << (socket ? "PRESENT" : "NULL");
+    qDebug() << "getSocket() returns:" << getSocket();
+}
+
+BaseTcpThread::BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
+                             QObject* parent)
+    : QThread(parent)
+    , socketInterface(socketInterface)
+{
+    if (!socketInterface) {
+        throw std::invalid_argument("BaseTcpThread: socketInterface cannot be null");
     }
 
-    // Have Qt automagically clean up the thread when BaseTcpThread is destructed
-    socket->setParent(this);
+    // Set Qt parent on the underlying real socket for proper cleanup
+    if (QSslSocket* realSocket = socketInterface->rawSocket()) {
+        realSocket->setParent(this);
+    }
 }
 
 BaseTcpThread::~BaseTcpThread()
@@ -62,32 +72,45 @@ bool BaseTcpThread::isValid() const
 
 QSslSocket* BaseTcpThread::getSocket() const
 {
-    return socket.get();
+    qDebug() << "=== getSocket() called ===";
+    qDebug() << "  socketInterface:" << (socketInterface ? "YES" : "NULL");
+    qDebug() << "  socket (unique_ptr):" << (socket ? "YES" : "NULL");
+    qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
+
+    return socketInterface? socketInterface->rawSocket() : nullptr;
 }
+
+// QSslSocket* BaseTcpThread::getSocket() const
+// {
+//     if (socketInterface) {
+//         return socketInterface->rawSocket();
+//     }
+//     return socket.get();
+// }
 
 QAbstractSocket::SocketState BaseTcpThread::getSocketState() const
 {
-    return socket? socket->state() : QAbstractSocket::UnconnectedState;
+    return socketInterface? socketInterface->getSocketState() : QAbstractSocket::UnconnectedState;
 }
 
 QByteArray BaseTcpThread::readSocketData()
 {
-    return getSocket() ? getSocket()->readAll() : "";
+    return socketInterface ? socketInterface->readData() : "";
 }
 
 bool BaseTcpThread::isSocketEncrypted() const
 {
-    return getSocket() ? socket->isEncrypted() : false;
+    return socketInterface ? socketInterface->isEncrypted() : false;
 }
 
 quint16 BaseTcpThread::getPeerPort() const
 {
-    return getSocket() ? socket->peerPort() : 0;
+    return socketInterface ? socketInterface->getPeerPort() : 0;
 }
 
 quint16 BaseTcpThread::getLocalPort() const
 {
-    return getSocket() ? socket->localPort() : 0;
+    return socketInterface ? socketInterface->getLocalPort() : 0;
 }
 
 void BaseTcpThread::sleep(unsigned long usec)
@@ -97,16 +120,21 @@ void BaseTcpThread::sleep(unsigned long usec)
 
 QHostAddress BaseTcpThread::getSocketPeerAddress() const
 {
-    return getSocket() ? socket->peerAddress() : QHostAddress();
+    return socketInterface ? socketInterface->getPeerAddress() : QHostAddress();
 }
 
 bool BaseTcpThread::isSocketValid() const
 {
-    return getSocket() != nullptr && socket->isValid();
+    // in production, socketInterface shouldn't be null.
+    // But we can set socketInterface to null in the unit tests
+    // and there might be a rare instance where it could become null in production
+    return socketInterface && socketInterface->isValid();
 }
 
 QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() const
 {
+    qWarning() << "does this go bang if we try to do !getSocket(): " << !getSocket();
+
     if (!getSocket()) {
         qWarning() << "getIPConnectionProtocol() called on BaseTcpThread with null socket";
         return QAbstractSocket::IPv4Protocol;   // safe default

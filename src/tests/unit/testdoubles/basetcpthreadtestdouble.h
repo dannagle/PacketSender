@@ -13,31 +13,14 @@ class BaseTcpThreadTestDouble : public BaseTcpThread
     Q_OBJECT
 
 public:
-    explicit BaseTcpThreadTestDouble(QSslSocket* socket, QObject* parent = nullptr)
-        : BaseTcpThread(socket, parent)
+    explicit BaseTcpThreadTestDouble(PacketSenderQSslSocketInterface *socketInterface, QObject* parent = nullptr)
+        : BaseTcpThread(socketInterface, parent)
     {
     }
 
-    void setSocketForTest(QSslSocket* newSocket)
+    void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
-    }
-
-    bool isSocketEncrypted() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
-            return mock->isEncrypted();
-        }
-        return BaseTcpThread::isSocketEncrypted();
-    }
-
-    quint16 getPeerPort() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
-            return mock->getPeerPort();
-        }
-
-        return BaseTcpThread::getPeerPort();
     }
 
     void callSendOutgoingPacket(Packet &packet)
@@ -56,23 +39,6 @@ protected:
     void closeConnection() override
     {
         // Do nothing
-    }
-
-    QHostAddress getSocketPeerAddress() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
-            return mock->getMockPeerAddress();
-        }
-        return BaseTcpThread::getSocketPeerAddress();
-    }
-
-    [[nodiscard]] QAbstractSocket::SocketState getSocketState() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
-            return mock->getMockState();
-        }
-
-        return BaseTcpThread::getSocketState();
     }
 };
 

@@ -30,6 +30,9 @@ add_executable(${TEST_NAME}
     tcpthreadqapplicationneededtests.cpp
     persistentconnectionlooptests.cpp
 
+    ../../packetsenderqsslsocketinterface.h
+    ../../realqsslsocket.cpp
+
     ../../basetcpthread.cpp
     basetcpthreadtests.cpp
     testdoubles/basetcpthreadtestdouble.h

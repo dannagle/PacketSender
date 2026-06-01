@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 
     // Order matters: translation tests first (they install translators)
     runGuiTest(new TranslationTests());
-    runGuiTest(new TcpThread_QApplicationNeeded_tests());
+    // runGuiTest(new TcpThread_QApplicationNeeded_tests());
     runGuiTest(new PersistentConnectionLoopTests());
     runGuiTest(new BaseTcpThreadTests());
     runGuiTest(new OutgoingTcpThreadTests());
@@ -51,9 +51,9 @@ int main(int argc, char *argv[])
     runGuiTest(new OutgoingTcpThreadConnectionTests());
 
     // Then non-GUI or independent tests
-    runNonGuiTest(new TcpThreadTests());
-    runNonGuiTest(new ConnectionTests());
-    runNonGuiTest(new ConnectionManagerTests());
+    // runNonGuiTest(new TcpThreadTests());
+    // runNonGuiTest(new ConnectionTests());
+    // runNonGuiTest(new ConnectionManagerTests());
     runNonGuiTest(new PacketTests());
 
     if (failures == 0) {

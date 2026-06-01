@@ -9,8 +9,10 @@
 #include <QObject>
 #include <QSslSocket>
 
+#include "../../packetsenderqsslsocketinterface.h"
+
 // Mock QSslSocket for testing (or use a real one in a controlled way)
-class MockSslSocket : public QSslSocket {
+class MockSslSocket : public QSslSocket, public PacketSenderQSslSocketInterface {
     Q_OBJECT
 public:
     explicit MockSslSocket(QObject *parent = nullptr)
@@ -27,7 +29,12 @@ public:
     MockSslSocket(MockSslSocket &&) = delete;
     MockSslSocket& operator=(MockSslSocket &&) = delete;
 
-    [[nodiscard]] QAbstractSocket::SocketState getMockState() const
+    [[nodiscard]] QSslSocket* rawSocket() const override
+    {
+        return const_cast<QSslSocket*>(static_cast<const QSslSocket*>(this));
+    }
+
+    [[nodiscard]] QAbstractSocket::SocketState getSocketState() const override
     {
         qDebug() << "=== MOCK mockState() called → returning" << mockState;
         return mockState;
@@ -43,13 +50,31 @@ public:
     bool waitForEncrypted(int msecs = 30000) { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool isEncrypted() const {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
 
-    bool isValid() const { return isMockValid;}
+    [[nodiscard]] bool isValid() const override { return isMockValid;}
     void setIsValid(bool isValid) { isMockValid = isValid; }
 
     QList<QSslError> sslErrors() const { return mockSslErrors; }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     QList<QSslError> sslHandshakeErrors() const { return mockSslErrors; }
 #endif
+
+    // === PacketSenderQSslSocketInterface methods ===
+    QSslCertificate peerCertificate() const override
+    {
+        return QSslSocket::peerCertificate();
+    }
+
+    void connectToHostEncrypted(const QString& hostName, quint16 port,
+                                QIODevice::OpenMode openMode = QIODevice::ReadWrite,
+                                QAbstractSocket::NetworkLayerProtocol protocol = QAbstractSocket::AnyIPProtocol) override
+    {
+
+    }
+
+    void ignoreSslErrors() override
+    {
+        qDebug("ignoreSslErrors called in MockSslSocket");
+    }
 
     // Mock setters
     void setMockConnected(bool val)
@@ -84,16 +109,9 @@ public:
 
     void setMockPeerAddress(const QHostAddress &address) { mockPeerAddress = address; }
 
-    QHostAddress getMockPeerAddress() const
-    {
-        qDebug() << "=== MOCK getMockPeerAddress() called → returning" << mockPeerAddress.toString();
-        return mockPeerAddress;
-    }
-
     [[nodiscard]] NetworkLayerProtocol getIPConnectionProtocol() const
     {
-        QHostAddress addr = getMockPeerAddress();
-        if (addr.protocol() == IPv6Protocol) {
+        if (mockPeerAddress.protocol() == IPv6Protocol) {
             return IPv6Protocol;
         }
         return IPv4Protocol;
@@ -101,17 +119,25 @@ public:
 
     void setMockReadData(const QByteArray &data) { mockReadData = data; }
 
-    QByteArray getMockReadData() const
+    [[nodiscard]] QByteArray readData() const override
     {
-        qDebug() << "=== MOCK getMockReadData() called → returning" << mockReadData.size() << "bytes";
         return mockReadData;
     }
 
     void setMockPeerPort(quint16 port) { mockPeerPort = port; }
+    void setMockLocalPort(quint16 port) { mockLocalPort = port; }
 
-    quint16 getPeerPort() const {
+    [[nodiscard]] quint16 getPeerPort() const override {
         qDebug() << "=== MOCK peerPort() called → returning" << mockPeerPort;
         return mockPeerPort;
+    }
+    [[nodiscard]] quint16 getLocalPort() const override {
+        qDebug() << "=== MOCK getLocalPort() called → returning" << mockLocalPort;
+        return mockLocalPort;
+    }
+    [[nodiscard]] QHostAddress getPeerAddress() const override
+    {
+        return mockPeerAddress;
     }
 
     int disconnectFromHostCallCount = 0;
@@ -164,5 +190,6 @@ private:
     QHostAddress mockPeerAddress = QHostAddress("127.0.0.1");
     QByteArray mockReadData;
     quint16 mockPeerPort = 0;
+    quint16 mockLocalPort = 0;
 };
 #endif //MOCKSSLSOCKET_H

@@ -21,9 +21,9 @@ public:
      * Main constructor - takes ownership of the socket.
      * This is the primary constructor used by tests and low-level code.
      */
-    explicit OutgoingTcpThread(QSslSocket* socket,
-                               const Packet& packetToSend,
-                               QObject* parent = nullptr);
+    OutgoingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
+                                const Packet& packetToSend,
+                                QObject* parent = nullptr);
 
     /**
      * Convenience constructor - creates the socket internally.

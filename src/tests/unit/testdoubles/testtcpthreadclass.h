@@ -283,7 +283,7 @@ protected:
     {
         // Prefer the mock if we have one injected
         if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
-            return mock->getMockState();   // we'll add this getter
+            return mock->getSocketState();   // we'll add this getter
         }
 
         // Fall back to real implementation
@@ -307,7 +307,7 @@ protected:
     QHostAddress getPeerAddress() const override
     {
         if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
-            return mock->getMockPeerAddress();
+            return mock->getPeerAddress();
         }
         return TCPThread::getPeerAddress();
     }
@@ -315,7 +315,7 @@ protected:
     QByteArray readSocketData() override
     {
         if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(clientSocket())) {
-            return mock->getMockReadData();
+            return mock->readData();
         }
         return TCPThread::readSocketData();
     }

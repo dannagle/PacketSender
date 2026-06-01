@@ -78,7 +78,7 @@ void OutgoingTcpThreadTests::testGetDestinationPort()
 void OutgoingTcpThreadTests::testIsValid_returnsFalseWhenSendPacketDotToIpIsEmptyString()
 {
     // taking advantage of createPacketForTest defaults
-    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(new QSslSocket(), createPacketForTest());
+    OutgoingTcpThreadTestDouble thread = OutgoingTcpThreadTestDouble(new RealQSslSocket(new QSslSocket()), createPacketForTest());
 
     Packet p = thread.getSendPacketByReference();
     p.port = 0;
@@ -112,6 +112,7 @@ void OutgoingTcpThreadTests::testIsValid_returnsTrueWithValidPacketAndSocket()
     Packet validPacket = createPacketForTest("127.0.0.1", 9999);
 
     OutgoingTcpThreadTestDouble thread(mockSock, validPacket);
+    thread.debugSocketState();
     QCOMPARE(thread.isValid(), true);
 }
 

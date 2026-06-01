@@ -6,18 +6,19 @@
 #define OUTGOINGTCHPTHREADTESTDOUBLE_H
 #include <qtestcase.h>
 
+#include "realqsslsocket.h"
 #include "../../outgoingtcpthread.h"
 
 class OutgoingTcpThreadTestDouble : public OutgoingTcpThread
 {
 public:
-    explicit OutgoingTcpThreadTestDouble(
-        QSslSocket* socket, const Packet& packetToSend): OutgoingTcpThread(socket, packetToSend)
-    {}
+    explicit OutgoingTcpThreadTestDouble(PacketSenderQSslSocketInterface* socketInterface,
+                                         const Packet& packet)
+        : OutgoingTcpThread(socketInterface, packet) {}
 
     // Convenience constructor
     explicit OutgoingTcpThreadTestDouble(const Packet& packetToSend)
-        : OutgoingTcpThreadTestDouble(new QSslSocket(), packetToSend)   // delegates to main constructor
+        : OutgoingTcpThreadTestDouble(new MockSslSocket(), packetToSend)   // delegates to main constructor
     {}
 
     Packet& getSendPacketByReference()
@@ -30,29 +31,9 @@ public:
         return this->commandLineReplyPacket;
     }
 
-    void setSocketForTest(QSslSocket* newSocket)
+    void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
-    }
-
-    bool isSocketValid() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket()))
-        {
-            return mock->isValid();
-        }
-
-        return BaseTcpThread::isSocketValid();
-    }
-
-    QAbstractSocket::SocketState getSocketState() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket()))
-        {
-            return mock->getMockState();
-        }
-
-        return BaseTcpThread::getSocketState();
     }
 
     void stop() override
@@ -71,17 +52,6 @@ public:
         return !shouldContinuePersistentLoop() &&
                shouldContinuePersistentConnectionLoopCallCount > 0;   // we actually entered the loop at least once
     }
-
-    bool isSocketEncrypted() const override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket()))
-        {
-            return mock->isEncrypted();
-        }
-
-        return BaseTcpThread::isSocketEncrypted();
-    }
-
 
     int forceExitAfterNIterations = 2;
 
@@ -230,15 +200,6 @@ protected:
         sleepCallCount++;
         callSequence.push_back("usleep " + QString::number(usecs) + " usecs");
         OutgoingTcpThread::sleep(usecs);
-    }
-
-    QByteArray readSocketData() override
-    {
-        if (const MockSslSocket *mock = qobject_cast<const MockSslSocket*>(getSocket())) {
-            return mock->getMockReadData();
-        }
-
-        return BaseTcpThread::readSocketData();
     }
 
     Packet buildReceivedPacket() override
