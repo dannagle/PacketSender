@@ -61,7 +61,7 @@ void BaseTcpThreadTests::testGetSocket_returnsPassedSocket()
     auto *mockSock = new MockSslSocket();
     BaseTcpThreadTestDouble thread(mockSock);
 
-    QCOMPARE(thread.getSocket(), mockSock);
+    QCOMPARE(thread.getSocketInterface(), mockSock);
 }
 
 void BaseTcpThreadTests::testIsValid_returnsTrueWithValidSocket()

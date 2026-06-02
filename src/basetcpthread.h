@@ -33,7 +33,7 @@ public:
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
 
     [[nodiscard]] virtual bool isValid() const;
-    [[nodiscard]] QSslSocket* getSocket() const;
+    PacketSenderQSslSocketInterface* getSocketInterface() const;
     // virtual void sendPersistent(const Packet& packet);
 
     // Common query helpers - public because they are safe and widely useful

@@ -59,6 +59,21 @@ bool RealQSslSocket::waitForEncrypted(int msecs)
     return socket ? socket->waitForEncrypted(msecs) : false;
 }
 
+bool RealQSslSocket::waitForReadyRead(int msecs)
+{
+    return socket ? socket->waitForReadyRead(msecs) : false;
+}
+
+bool RealQSslSocket::waitForDisconnected(int msecs)
+{
+    return socket->waitForDisconnected(msecs);
+}
+
+qint64 RealQSslSocket::write(const QByteArray& data)
+{
+    return socket->write(data);
+}
+
 bool RealQSslSocket::isEncrypted() const
 {
     return socket ? socket->isEncrypted() : false;
@@ -97,4 +112,54 @@ QByteArray RealQSslSocket::readData() const
 QAbstractSocket::SocketState RealQSslSocket::getSocketState() const
 {
     return socket ? socket->state() : QAbstractSocket::SocketState::UnconnectedState;
+}
+
+qint64 RealQSslSocket::bytesAvailable() const
+{
+    return socket->bytesAvailable();
+}
+
+QString RealQSslSocket::getErrorString() const
+{
+    return socket->errorString();
+}
+
+void RealQSslSocket::setLocalCertificate(const QString &fileName,
+                                         QSsl::EncodingFormat format)
+{
+    if (socket) {
+        socket->setLocalCertificate(fileName, format);
+    }
+}
+
+void RealQSslSocket::setLocalCertificate(const QSslCertificate &certificate)
+{
+    if (socket) {
+        socket->setLocalCertificate(certificate);
+    }
+}
+
+void RealQSslSocket::setPrivateKey(const QString &fileName,
+                                   QSsl::KeyAlgorithm algorithm,
+                                   QSsl::EncodingFormat format,
+                                   const QByteArray &passPhrase)
+{
+    if (socket) {
+        socket->setPrivateKey(fileName, algorithm, format, passPhrase);
+    }
+}
+
+void RealQSslSocket::setPrivateKey(const QSslKey& key)
+{
+    socket->setPrivateKey(key);
+}
+
+void RealQSslSocket::setProtocol(QSsl::SslProtocol protocol)
+{
+    socket->setProtocol(protocol);
+}
+
+void RealQSslSocket::close()
+{
+    socket->close();
 }

@@ -101,7 +101,7 @@ void OutgoingTcpThread::sendOutgoingPacket()
 
 void OutgoingTcpThread::closeConnection()
 {
-    const auto s = getSocket();
+    const auto s = getSocketInterface();
     if (s)
     {
         if (getSocketState() == QAbstractSocket::ConnectedState ||
@@ -137,7 +137,7 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
                      ? receivedPacket.fromPort
                      : sendPacket.port;                    // fallback
 
-    reply.fromPort = getSocket() ? getSocket()->localPort() : 0;
+    reply.fromPort = getSocketInterface()->getLocalPort();
 
     reply.tcpOrUdp = receivedPacket.tcpOrUdp;
     if (isSocketEncrypted()) {
@@ -167,7 +167,7 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
 
 void OutgoingTcpThread::loadSSLCerts(bool allowSnakeOil)
 {
-    auto sock = getSocket();
+    auto sock = getSocketInterface();
     if (!sock) {
         qWarning() << "loadSSLCerts called with null socket";
         return;
@@ -215,7 +215,7 @@ void OutgoingTcpThread::loadSSLCerts(bool allowSnakeOil)
 
 void OutgoingTcpThread::handleOutgoingSSLHandshakeSuccess()
 {
-    auto sslSocket = getSocket();
+    auto sslSocket = getSocketInterface();
     if (!sslSocket) return;
 
     QSslCipher cipher = sslSocket->sessionCipher();
@@ -246,7 +246,7 @@ void OutgoingTcpThread::handleOutgoingSSLHandshakeFailure()
 
     bool hadSpecificErrors = false;
 
-    auto sslSocket = getSocket();
+    auto sslSocket = getSocketInterface();
     if (sslSocket) {
         QList<QSslError> errors =
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
@@ -286,8 +286,8 @@ void OutgoingTcpThread::handleOutgoingSSLHandshakeFailure()
 bool OutgoingTcpThread::handleOutgoingSSL()
 {
     QDEBUG() << "Starting SSL connection to" << sendPacket.toIP << ":" << sendPacket.port;
-    auto sslSocket = getSocket();
-    if (!sslSocket) {
+    const auto sslSocketInterface = getSocketInterface();
+    if (!sslSocketInterface) {
         qWarning() << "Failed to get QSslSocket";
         handleConnectionFailure();
         return false;
@@ -296,20 +296,20 @@ bool OutgoingTcpThread::handleOutgoingSSL()
     // Load certificates / keys
     loadSSLCerts(true);        // true = allow snake oil defaults
 
-    sslSocket->setProtocol(QSsl::AnyProtocol);
+    sslSocketInterface->setProtocol(QSsl::AnyProtocol);
 
     const QSettings& settings = getSettings();
     if (settings.value(IGNORE_SSL_CHECK, true).toBool()) {
-        sslSocket->ignoreSslErrors();
+        sslSocketInterface->ignoreSslErrors();
     }
 
-    sslSocket->connectToHostEncrypted(sendPacket.toIP,
+    sslSocketInterface->connectToHostEncrypted(sendPacket.toIP,
                                       sendPacket.port,
                                       QIODevice::ReadWrite,
                                       getIPConnectionProtocol());
 
-    bool connected = sslSocket->waitForConnected(5000);
-    bool encrypted = sslSocket->waitForEncrypted(5000);
+    bool connected = sslSocketInterface->waitForConnected(5000);
+    bool encrypted = sslSocketInterface->waitForEncrypted(5000);
 
     outgoingConnectionDebugMessage(connected && encrypted);
 
@@ -325,12 +325,12 @@ bool OutgoingTcpThread::handleOutgoingSSL()
 
 bool OutgoingTcpThread::handleOutgoingPlainTCP()
 {
-    getSocket()->connectToHost(sendPacket.toIP,
+    getSocketInterface()->connectToHost(sendPacket.toIP,
                                sendPacket.port,
                                QIODevice::ReadWrite,
                                getIPConnectionProtocol());
 
-    bool success = getSocket()->waitForConnected(5000);
+    bool success = getSocketInterface()->waitForConnected(5000);
     outgoingConnectionDebugMessage(success);
 
     success ? emit connectionStatus("Connected") : handleConnectionFailure();
@@ -350,13 +350,13 @@ bool OutgoingTcpThread::shouldContinuePersistentLoop() const
 {
     QDEBUG() << "\nshouldContinuePersistentLoop()\n"
         << "isInterruptionRequested(): " << isInterruptionRequested() << "\n"
-        << "getSocket(): " << getSocket() << "\n"
+        << "getSocketInterface(): " << getSocketInterface() << "\n"
         << "getSocketState(): " << getSocketState() << "\n"
         << "getSocketState() == QAbstractSocket::ConnectedState: " << (getSocketState() == QAbstractSocket::ConnectedState) << "\n"
         << "!shouldStop(): " << !shouldStop() << "\n";
 
     bool result =  !shouldStop() &&
-        getSocket() &&
+        getSocketInterface() &&
         getSocketState() == QAbstractSocket::ConnectedState;
 
     QDEBUG() << "result: " << result;
@@ -375,7 +375,7 @@ void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
     QDEBUG() << "IDLE PATH TAKEN"
         << "hexString empty =" << sendPacket.hexString.isEmpty()
         << "persistent =" << sendPacket.persistent
-        << "bytesAvailable =" << (getSocket() ? getSocket()->bytesAvailable() : -1);
+        << "bytesAvailable =" << (getSocketInterface() ? getSocketInterface()->bytesAvailable() : -1);
 
     // NOSONAR - if-with-initializer reduces readability here
     if (!lastIdleStatusEmitTime.has_value() ||
@@ -399,9 +399,9 @@ Packet OutgoingTcpThread::buildReceivedPacket()
     // Direction reversal
     p.toIP = "You";
     p.fromIP = sendPacket.toIP;
-    p.fromPort = getSocket() ? getSocket()->localPort() : 0;
+    p.fromPort = getSocketInterface() ? getSocketInterface()->getLocalPort() : 0;
 
-    if (getSocket()) {
+    if (getSocketInterface()) {
         QByteArray data = readSocketData();
         p.hexString = Packet::byteArrayToHex(data);
     }
@@ -438,7 +438,7 @@ QByteArray OutgoingTcpThread::getSmartResponseData(const Packet& receivedPacket)
 
 void OutgoingTcpThread::processIncomingData()
 {
-    if (!getSocket() || getSocket()->bytesAvailable() == 0) {
+    if (!getSocketInterface() || getSocketInterface()->bytesAvailable() == 0) {
         return;
     }
 
@@ -522,9 +522,9 @@ void OutgoingTcpThread::persistentConnectionLoop()
             break;
         }
 
-        bool isIdleCondition = sendPacket.hexString.isEmpty() &&
+        const bool isIdleCondition = sendPacket.hexString.isEmpty() &&
             sendPacket.persistent &&
-            getSocket()->bytesAvailable() == 0;
+            getSocketInterface()->bytesAvailable() == 0;
         idleDebugMessage(isIdleCondition);
 
         if (sendPacket.receiveBeforeSend)
@@ -544,13 +544,13 @@ void OutgoingTcpThread::persistentConnectionLoop()
 
 void OutgoingTcpThread::outgoingConnectionDebugMessage(const bool connectSuccess)
 {
-    const auto s = getSocket();
+    const auto s = getSocketInterface();
     qDebug() << "[OutgoingTcpThread plain connect] ========================================";
     qDebug() << "  waitForConnected() returned:" << connectSuccess;
-    qDebug() << "  socket state:" << s->state();
-    qDebug() << "  socket error:" << s->errorString();
-    qDebug() << "  peer:" << s->peerAddress().toString() << ":" << s->peerPort();
-    qDebug() << "  local port:" << s->localPort();
+    qDebug() << "  socket state:" << s->getSocketState();
+    qDebug() << "  socket error:" << s->getErrorString();
+    qDebug() << "  peer:" << s->getPeerAddress().toString() << ":" << s->getPeerPort();
+    qDebug() << "  local port:" << s->getLocalPort();
     qDebug() << "================================================================";
 }
 
@@ -559,6 +559,6 @@ void OutgoingTcpThread::idleDebugMessage(bool isIdleCondition) const
     QDEBUG() << "Idle condition check:"
         << "hexString.empty() =" << sendPacket.hexString.isEmpty()
         << "persistent =" << sendPacket.persistent
-        << "bytesAvailable() =" << getSocket()->bytesAvailable()
+        << "bytesAvailable() =" << getSocketInterface()->bytesAvailable()
         << "→ isIdleCondition =" << isIdleCondition;
 }

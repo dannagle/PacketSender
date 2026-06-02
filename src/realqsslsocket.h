@@ -30,6 +30,10 @@ public:
 
     bool waitForConnected(int msecs) override;
     bool waitForEncrypted(int msecs) override;
+    bool waitForReadyRead(int msecs) override;
+    bool waitForDisconnected(int msecs) override;
+
+    qint64 write(const QByteArray &data) override;
 
     [[nodiscard]] bool isEncrypted() const override;
     void ignoreSslErrors() override;
@@ -42,7 +46,19 @@ public:
     [[nodiscard]] QByteArray readData() const override;
     [[nodiscard]] QAbstractSocket::SocketState getSocketState() const override;
 
+    qint64 bytesAvailable() const override;
+    QString getErrorString() const override;
+
+    void setLocalCertificate(const QString &fileName, QSsl::EncodingFormat format = QSsl::Pem) override;
+    void setLocalCertificate(const QSslCertificate& certificate) override;
+    void setPrivateKey(const QString& fileName, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format,
+                       const QByteArray& passPhrase) override;
+    void setPrivateKey(const QSslKey &key) override;
+    void setProtocol(QSsl::SslProtocol protocol) override;
+
     [[nodiscard]] QSslSocket* rawSocket() const override { return socket; }
+
+    void close() override;
 
 private:
     QSslSocket* socket = nullptr;

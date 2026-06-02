@@ -11,7 +11,7 @@ void BaseTcpThread::debugSocketState() const
     qDebug() << "=== BaseTcpThread::debugSocketState ===";
     qDebug() << "socketInterface:" << (socketInterface ? "PRESENT" : "NULL");
     qDebug() << "socket (unique_ptr):" << (socket ? "PRESENT" : "NULL");
-    qDebug() << "getSocket() returns:" << getSocket();
+    qDebug() << "getSocketInterface() returns:" << getSocketInterface();
 }
 
 BaseTcpThread::BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
@@ -53,7 +53,7 @@ bool BaseTcpThread::interruptibleWaitForReadyRead(const int timeoutMs)
     QDEBUG() << "initial remaining: " << remaining;
 
     while (remaining > 0 && !shouldStop()) {
-        if (getSocket() && getSocket()->waitForReadyRead(chunk)) {
+        if (getSocketInterface() && getSocketInterface()->waitForReadyRead(chunk)) {
             QDEBUG() << "inside if waitForReadyRead(chunk)";
             return true;
         }
@@ -70,23 +70,15 @@ bool BaseTcpThread::isValid() const
     return isSocketValid();
 }
 
-QSslSocket* BaseTcpThread::getSocket() const
+PacketSenderQSslSocketInterface* BaseTcpThread::getSocketInterface() const
 {
     qDebug() << "=== getSocket() called ===";
     qDebug() << "  socketInterface:" << (socketInterface ? "YES" : "NULL");
     qDebug() << "  socket (unique_ptr):" << (socket ? "YES" : "NULL");
     qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
 
-    return socketInterface? socketInterface->rawSocket() : nullptr;
+    return socketInterface.get();
 }
-
-// QSslSocket* BaseTcpThread::getSocket() const
-// {
-//     if (socketInterface) {
-//         return socketInterface->rawSocket();
-//     }
-//     return socket.get();
-// }
 
 QAbstractSocket::SocketState BaseTcpThread::getSocketState() const
 {
@@ -133,9 +125,9 @@ bool BaseTcpThread::isSocketValid() const
 
 QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() const
 {
-    qWarning() << "does this go bang if we try to do !getSocket(): " << !getSocket();
+    qWarning() << "does this go bang if we try to do !getSocketInterface(): " << !getSocketInterface();
 
-    if (!getSocket()) {
+    if (!getSocketInterface()) {
         qWarning() << "getIPConnectionProtocol() called on BaseTcpThread with null socket";
         return QAbstractSocket::IPv4Protocol;   // safe default
     }
@@ -152,8 +144,8 @@ QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() c
 
 void BaseTcpThread::sendOutgoingPacket(Packet& packet)
 {
-    QSslSocket* sock = getSocket();
-    if (!sock) {
+    PacketSenderQSslSocketInterface* psSocketInterface = getSocketInterface();
+    if (!psSocketInterface) {
         qWarning() << "sendOutgoingPacket: No socket available";
         emit connectionStatus("Error: No socket available");
         emit error(QAbstractSocket::SocketAccessError);
@@ -182,14 +174,14 @@ void BaseTcpThread::sendOutgoingPacket(Packet& packet)
 
     emit connectionStatus("Sending data: " + packet.asciiString());
 
-    sock->write(packet.getByteArray());
+    psSocketInterface->write(packet.getByteArray());
     emit packetSent(packet);
 }
 
 QString BaseTcpThread::getPeerAddressAsString() const
 {
     qDebug() << "getPeerAddressAsString() called";
-    if (!getSocket()) {
+    if (!getSocketInterface()) {
         qDebug() << "  → No socket, returning empty string";
         return "";
     }

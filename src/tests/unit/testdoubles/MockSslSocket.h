@@ -8,6 +8,7 @@
 #include <QSslCipher>
 #include <QObject>
 #include <QSslSocket>
+#include <QSslKey>
 
 #include "../../packetsenderqsslsocketinterface.h"
 
@@ -47,15 +48,94 @@ public:
 
     bool makeWaitForConnectedReturnFalse = false;
     bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return makeWaitForConnectedReturnFalse? false: mockConnected; }
-    bool waitForEncrypted(int msecs = 30000) { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
+    bool waitForEncrypted(int msecs = 30000) override { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool isEncrypted() const {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
+    bool waitForReadyRead(int msecs) override
+    {
+        // this is a down and dirty implementation
+        // that will screw us if we get caught in an infinite loop
+        // because once we have data, we'll always have data.
+        // can make this more sophisticated later.
+
+        if (msecs <= 0) return false;
+        return !mockReadData.isEmpty();
+    }
+
+    int writeCallCount;
+    QByteArray lastWrittenData;
+    QByteArray mockWrittenData;
+
+    qint64 write(const QByteArray &data) override
+    {
+        writeCallCount++;
+        lastWrittenData = data;        // useful for verification
+
+        qDebug() << "=== MOCK write() called with" << data.size() << "bytes";
+
+        // Store the data so tests can verify what was written
+        mockWrittenData.append(data);
+
+        // Return number of bytes "written" (mimics success)
+        return data.size();
+    }
+
+    bool shouldWaitForDisconectedReturnTrue = true;
+    bool waitForDisconnected(int msecs) override
+    {
+        return shouldWaitForDisconectedReturnTrue;
+    }
+
+    // === Certificate / Key variables ===
+    QString lastLocalCertFile;
+    QSsl::EncodingFormat lastLocalCertFormat = QSsl::Pem;
+
+    QString lastPrivateKeyFile;
+    QSslCertificate mockLocalCertificate;
+
+    // === Certificate / Key methods ===
+    void setLocalCertificate(const QString &fileName, QSsl::EncodingFormat format = QSsl::Pem) override
+    {
+        setLocalCertificateCallCount++;
+        lastLocalCertFile = fileName;
+        lastLocalCertFormat = format;
+        qDebug() << "=== MOCK setLocalCertificate(file) called:" << fileName;
+    }
+
+    void setLocalCertificate(const QSslCertificate &certificate) override
+    {
+        setLocalCertificateCallCount++;
+        mockLocalCertificate = certificate;
+        qDebug() << "=== MOCK setLocalCertificate(QSslCertificate) called";
+    }
+
+    void setPrivateKey(const QString &fileName,
+                       QSsl::KeyAlgorithm algorithm = QSsl::Rsa,
+                       QSsl::EncodingFormat format = QSsl::Pem,
+                       const QByteArray &passPhrase = QByteArray()) override
+    {
+        setPrivateKeyCallCount++;
+        lastPrivateKeyFile = fileName;
+        qDebug() << "=== MOCK setPrivateKey(file) called:" << fileName;
+    }
+
+    void setPrivateKey(const QSslKey &key) override
+    {
+        setPrivateKeyCallCount++;
+        lastPrivateKey = key;
+        qDebug() << "=== MOCK setPrivateKey(QSslKey) called";
+    }
+
+    void setProtocol(QSsl::SslProtocol protocol) override
+    {
+        this->protocol = protocol;
+    }
 
     [[nodiscard]] bool isValid() const override { return isMockValid;}
     void setIsValid(bool isValid) { isMockValid = isValid; }
 
     QList<QSslError> sslErrors() const { return mockSslErrors; }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    QList<QSslError> sslHandshakeErrors() const { return mockSslErrors; }
+    QList<QSslError> sslHandshakeErrors() const override { return mockSslErrors; }
 #endif
 
     // === PacketSenderQSslSocketInterface methods ===
@@ -161,6 +241,8 @@ public:
 
     bool shouldCallConnectToHost = true;
     int connectToHostCallCount = 0;
+    int setPrivateKeyCallCount = 0;
+    QSslKey lastPrivateKey;
     void connectToHost(const QString &hostName, quint16 port, OpenMode openMode = ReadWrite, NetworkLayerProtocol protocol = AnyIPProtocol) override
     {
         connectToHostCallCount++;
@@ -175,9 +257,19 @@ public:
         }
     }
 
+    QString mockErrorString;
+    QString getErrorString() const override
+    {
+        return errorString();
+    };
+
     QString lastConnectedToHostName;
     quint16 lastConnectedToPort = 0;
     NetworkLayerProtocol lastProtocol = QAbstractSocket::AnyIPProtocol;
+
+    mutable int setLocalCertificateCallCount = 0;
+    mutable QString lastLocalCertificateFile;
+    mutable QSsl::EncodingFormat lastLocalCertificateFormat = QSsl::Pem;
 
 private:
     bool mockConnected = false;
@@ -191,5 +283,6 @@ private:
     QByteArray mockReadData;
     quint16 mockPeerPort = 0;
     quint16 mockLocalPort = 0;
+    QSsl::SslProtocol protocol;
 };
 #endif //MOCKSSLSOCKET_H
