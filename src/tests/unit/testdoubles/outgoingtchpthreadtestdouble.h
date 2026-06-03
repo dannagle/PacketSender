@@ -31,6 +31,11 @@ public:
         return this->commandLineReplyPacket;
     }
 
+    bool getPersistentFlagValue()
+    {
+        return OutgoingTcpThread::persistentFlagValue();
+    }
+
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
@@ -79,6 +84,7 @@ public:
     int handleOutgoingSSLHandshakeSuccessCallCount = 0;
     int handleOutgoingSSLHandshakeFailureCallCount = 0;
     int handleOutgoingSSLCallCount = 0;
+    int persistentConnectionLoopCallCount = 0;
 
     bool wasMethodCalled(const QString& methodName) const
     {
@@ -376,6 +382,14 @@ protected:
         callSequence.push_back("handleOutgoingSSL");
 
         return OutgoingTcpThread::handleOutgoingSSL();
+    }
+
+    void persistentConnectionLoop() override
+    {
+        persistentConnectionLoopCallCount++;
+        callSequence.push_back("persistentConnectionLoop");
+
+        OutgoingTcpThread::persistentConnectionLoop();
     }
 
 private:

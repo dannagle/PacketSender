@@ -448,3 +448,71 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistent_sendsSmartRe
     auto sent = packetSentSpy.first().first().value<Packet>();
     QCOMPARE(Packet::byteArrayToHex(sent.getByteArray()), "CA FE BA BE ");
 }
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testRun_callsPersistentConnectionLoopWhenFlagIsSet()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(false);
+
+    auto p = TestUtils::createPacketForTest();
+    p.persistent = true;
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+
+    thread.callRun();
+    QVERIFY(thread.wasMethodCalled("persistentConnectionLoop"));
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testRun_closesConnectionAfterPersistentLoopExits()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockConnected(true);
+
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+    thread.getSendPacketByReference().persistent = true;
+
+    thread.callRun();
+
+    QVERIFY(thread.wasMethodCalled("closeConnection"));
+}
+
+void OutgoingTcpThreadPersistentConnectionLoopTests::testRun_SSL_persistent_worksRepeatedly()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(true);
+
+    auto p = TestUtils::createPacketForTest();
+    p.persistent = true;
+    OutgoingTcpThreadTestDouble thread(mockSock, p);
+
+    auto& packet = thread.getSendPacketByReference();
+    packet.tcpOrUdp = "SSL";
+    packet.persistent = true;
+    packet.hexString = "AA BB CC DD";   // something to send
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+
+    // Simulate some incoming data so the loop can run a couple times
+    mockSock->setMockReadData("11 22 33 44");
+
+    thread.callRun();
+
+    // Basic assertions that SSL path was taken and loop ran
+    QVERIFY(thread.wasMethodCalled("handleOutgoingSSL"));
+    QVERIFY(thread.wasMethodCalled("persistentConnectionLoop"));
+
+    // We should have emitted "SSL Connected"
+    bool sawSslConnected = false;
+    for (int i = 0; i < connectionStatusSpy.count(); ++i) {
+        if (connectionStatusSpy.at(i).at(0).value<QString>() == "SSL Connected") {
+            sawSslConnected = true;
+            break;
+        }
+    }
+    QVERIFY2(sawSslConnected, "Should have emitted SSL Connected status");
+
+    // At minimum we should have sent our packet at least once
+    QVERIFY(packetSentSpy.count() >= 1);
+}

@@ -73,7 +73,8 @@ protected:
     virtual void waitForAndProcessIncomingData();
     virtual bool shouldSendReply() const;
     virtual void sendReplyIfNeeded(const Packet& receivedPacket);
-    void persistentConnectionLoop();
+    virtual void persistentConnectionLoop();
+    virtual bool persistentFlagValue() { return persistent; }
 
     Packet      sendPacket;
     Packet      commandLineReplyPacket;

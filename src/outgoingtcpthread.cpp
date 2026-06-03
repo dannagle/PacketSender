@@ -24,6 +24,8 @@ OutgoingTcpThread::OutgoingTcpThread(PacketSenderQSslSocketInterface* socketInte
     if (packetToSend.port <= 0) {
         throw std::invalid_argument("OutgoingTcpThread: packetToSend.port must be set to a positive integer value");
     }
+
+    persistent = packetToSend.persistent;
 }
 
 // Convenience constructor
@@ -81,6 +83,7 @@ void OutgoingTcpThread::run()
 
     // === 3. Decide how to finish the connection ===
     if (persistent) {
+        qWarning() << "got inside persistent if statement before loop";
         persistentConnectionLoop();    // pure loop only
     }
 

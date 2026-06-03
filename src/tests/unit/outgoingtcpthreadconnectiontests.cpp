@@ -469,3 +469,26 @@ void OutgoingTcpThreadConnectionTests::testRun_SSL_callsMethodsInCorrectOrder()
     };
     QCOMPARE(callSequence, expected);
 }
+
+void OutgoingTcpThreadConnectionTests::testRun_nonPersistent_doesNotCallPersistentLoop()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockConnected(true);
+    mockSock->setMockEncrypted(false);   // plain TCP for this test
+
+    OutgoingTcpThreadTestDouble thread(mockSock, TestUtils::createPacketForTest());
+
+    // Explicitly make it non-persistent
+    thread.getSendPacketByReference().persistent = false;
+
+    thread.callRun();
+
+    QVERIFY(thread.wasMethodCalled("handleOutgoingPlainTCP"));   // or handleOutgoingSSL if testing SSL
+    QVERIFY(!thread.wasMethodCalled("persistentConnectionLoop"));
+
+    // Should still do the normal single-shot flow
+    QVERIFY(thread.wasMethodCalled("prepareOutgoingPacket"));
+    QVERIFY(thread.wasMethodCalled("sendOutgoingPacket"));
+    QVERIFY(thread.wasMethodCalled("processIncomingData"));
+    QVERIFY(thread.wasMethodCalled("closeConnection"));
+}

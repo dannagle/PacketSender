@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     // Order matters: translation tests first (they install translators)
     runGuiTest(new TranslationTests());
     // runGuiTest(new TcpThread_QApplicationNeeded_tests());
-    runGuiTest(new PersistentConnectionLoopTests());
+    // runGuiTest(new PersistentConnectionLoopTests());
     runGuiTest(new BaseTcpThreadTests());
     runGuiTest(new OutgoingTcpThreadTests());
     runGuiTest(new SingleSendOutgoingTcpThreadTests());

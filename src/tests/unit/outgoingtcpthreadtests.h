@@ -16,6 +16,9 @@ class OutgoingTcpThreadTests : public QObject
 private slots:
     void testConstructor_throwsIfPacketToSendPortIsNotSet();
     void testConstructor_throwsIfPacketToSendAddressIsNotSet();
+    void testConstructor_setsPersistentFlagFromPacket_data();
+    void testConstructor_setsPersistentFlagFromPacket();
+    void testConstructor_packetFlagNotExplicitlySetOutsideOfInitInPacket();
 
     // getDestinationAddress() Tests
     void testGetDestinationAddress();

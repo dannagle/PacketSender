@@ -56,6 +56,33 @@ void OutgoingTcpThreadTests::testConstructor_throwsIfPacketToSendAddressIsNotSet
     }
 }
 
+void OutgoingTcpThreadTests::testConstructor_setsPersistentFlagFromPacket_data()
+{
+    QTest::addColumn<bool>("flagOnPacket");
+    QTest::addColumn<bool>("expectedValue");
+
+    QTest::newRow("persistent flag on packet = true")  << true  << true;
+    QTest::newRow("persistent flag on packet = false")  << false  << false;
+}
+
+void OutgoingTcpThreadTests::testConstructor_setsPersistentFlagFromPacket()
+{
+    QFETCH(bool, flagOnPacket);
+    QFETCH(bool, expectedValue);
+
+    Packet p = TestUtils::createPacketForTest();
+    p.persistent = flagOnPacket;
+
+    OutgoingTcpThreadTestDouble thread(p);
+    QCOMPARE(thread.getPersistentFlagValue(), expectedValue);
+}
+
+void OutgoingTcpThreadTests::testConstructor_packetFlagNotExplicitlySetOutsideOfInitInPacket()
+{
+    OutgoingTcpThreadTestDouble thread(TestUtils::createPacketForTest());
+    QCOMPARE(thread.getPersistentFlagValue(), false);
+}
+
 void OutgoingTcpThreadTests::testGetDestinationAddress()
 {
     QString destinationAddress = "foo bar baz";

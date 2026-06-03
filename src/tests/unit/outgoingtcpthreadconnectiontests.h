@@ -52,6 +52,9 @@ private slots:
     void testRun_SSL_success();
     void testRun_SSL_handshakeFailure();
     void testRun_SSL_callsMethodsInCorrectOrder();
+
+    // run() tests
+    void testRun_nonPersistent_doesNotCallPersistentLoop();
 };
 
 

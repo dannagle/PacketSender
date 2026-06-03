@@ -56,6 +56,11 @@ private slots:
     void testPersistentConnectionLoop_callsProcessIncomingData();
     void testPersistentConnectionLoop_callsWaitForAndProcessIncomingData();
     void testPersistent_sendsSmartResponse();
+
+    // run() + persistent tests
+    void testRun_callsPersistentConnectionLoopWhenFlagIsSet();
+    void testRun_closesConnectionAfterPersistentLoopExits();
+    void testRun_SSL_persistent_worksRepeatedly();
 };
 
 
