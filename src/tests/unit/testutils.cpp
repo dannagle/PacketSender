@@ -7,6 +7,8 @@
 
 #include "testutils.h"
 
+#include "settingnames.h"
+#include "globals.h"
 
 void TestUtils::debugSpy(const QSignalSpy& spy)
 {
@@ -55,4 +57,48 @@ MockSslSocket* TestUtils::createMockSocketForTest()
     mockSock->setIsValid(true);
 
     return mockSock;
+}
+
+QString TestUtils::extractResourceToTempFile(const QString& resourcePath)
+{
+    QFile resource(resourcePath);
+    if (!resource.open(QIODevice::ReadOnly)) {
+        qWarning() << "Failed to open resource:" << resourcePath;
+        return {};
+    }
+
+    QByteArray data = resource.readAll();
+    resource.close();
+
+    if (resourcePath.endsWith(".base64")) {
+        data = QByteArray::fromBase64(data);
+    }
+
+    QTemporaryFile tempFile;
+    tempFile.setAutoRemove(false);   // keep file after test
+    if (tempFile.open()) {
+        tempFile.write(data);
+        tempFile.close();
+        return tempFile.fileName();
+    }
+
+    return {};
+}
+
+void TestUtils::setupProductionSnakeOilCertsForTest()
+{
+    QSettings& settings = getSettings();
+
+    QString certPath = extractResourceToTempFile(SNAKEOIL_BASE64_CERT);
+    QString keyPath  = extractResourceToTempFile(SNAKEOIL_BASE64_KEY);
+
+    if (!certPath.isEmpty()) {
+        settings.setValue(SET_LOCAL_CERTIFICATE_PATH, certPath);
+    }
+    if (!keyPath.isEmpty()) {
+        settings.setValue(SSL_PRIVATE_KEY_PATH, keyPath);
+    }
+
+    settings.setValue(LOAD_SNAKEOIL_CERTS, false);
+    settings.sync();
 }

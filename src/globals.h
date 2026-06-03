@@ -59,12 +59,21 @@
 #define KEYFILE ((QFile::exists("key.pem") || QFile::exists("portablemode.txt") ) ? ("key.pem") : ((SETTINGSPATH)  + "key.pem"))
 #define PANELSFILE ((QFile::exists("ps_panels.json") || QFile::exists("portablemode.txt") ) ? ("ps_panels.json") : ((SETTINGSPATH)  + "ps_panels.json"))
 
+/*
+ * These next few constants are really for unit tests,
+ * but they could also be used in main.cpp
+ * (perhaps a smaller PR for that in the future?)
+ *
+ */
 
-// globals.cpp
+#define SNAKEOIL_BASE64_CERT "://ps.pem.base64"
+#define SNAKEOIL_BASE64_KEY "://ps.key.base64"
+
 inline QSettings& getSettings()
 {
     // === Unit Test Path ===
     if (QCoreApplication::applicationName().contains("unittest", Qt::CaseInsensitive)) {
+        qWarning() << "inside test version of getSettings";
 
         static QTemporaryFile* testSettingsFile = nullptr;
 
@@ -75,6 +84,19 @@ inline QSettings& getSettings()
                 testSettingsFile->close();   // Important
             }
         }
+
+        qWarning() << "testSettingsFile: " << testSettingsFile->fileName();
+        QFile snakeoilKey("://ps.key.base64");
+        QFile snakeoilCert("://ps.pem.base64");
+        QFile snakeoilCA("://snakeoilca.crt.base64");
+
+        qDebug() << "snakeoilKey (://ps.key.base64) exists(): " << snakeoilKey.exists() << "\n"
+            << "snakeoilKey.filename: " << snakeoilKey.fileName() << "\n"
+            << "snakeoilCert (://ps.pem.base64) exists(): " << snakeoilCert.exists() << "\n"
+            << "snakeoilCert.filename: " << snakeoilCert.fileName() << "\n"
+            << "snakeoilCA (://snakeoilca.crt.base64) exists(): " << snakeoilCA.exists() << "\n"
+            << "snakeoilCA.filename: " << snakeoilCert.fileName();
+
 
         static QSettings testSettings(testSettingsFile->fileName(), QSettings::IniFormat);
         return testSettings;

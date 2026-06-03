@@ -12,4 +12,9 @@
 
 #define IGNORE_SSL_CHECK "ignoreSSLCheck"
 
+#define SET_LOCAL_CERTIFICATE_PATH "sslLocalCertificatePath"
+#define SSL_PRIVATE_KEY_PATH "sslPrivateKeyPath"
+
+#define LOAD_SNAKEOIL_CERTS "serverSnakeOilCheck"
+
 #endif //SETTINGNAMES_H

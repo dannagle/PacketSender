@@ -96,6 +96,7 @@ set(
   realqsslsocket.cpp
   basetcpthread.cpp
   outgoingtcpthread.cpp
+  fileutils.cpp
 )
 
 

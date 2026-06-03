@@ -3,6 +3,8 @@
 //
 
 #include "realqsslsocket.h"
+
+#include <QSslKey>
 #include <QSslSocket>
 
 RealQSslSocket::RealQSslSocket(QSslSocket* socket)
@@ -152,6 +154,16 @@ void RealQSslSocket::setPrivateKey(const QString &fileName,
 void RealQSslSocket::setPrivateKey(const QSslKey& key)
 {
     socket->setPrivateKey(key);
+}
+
+bool RealQSslSocket::hasLocalCertificate() const
+{
+    return !rawSocket()->localCertificate().isNull();
+}
+
+bool RealQSslSocket::hasPrivateKey() const
+{
+    return !rawSocket()->privateKey().isNull();
 }
 
 void RealQSslSocket::setProtocol(QSsl::SslProtocol protocol)

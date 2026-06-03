@@ -74,6 +74,11 @@ public:
     int getSmartResponseDataCallCount = 0;
     int handleOutgoingPlainTcpCallCount = 0;
     int handleConnectionFailureCallCount = 0;
+    int loadSSLCertsCallCount = 0;
+    int loadSnakeOilCertsCallCount = 0;
+    int handleOutgoingSSLHandshakeSuccessCallCount = 0;
+    int handleOutgoingSSLHandshakeFailureCallCount = 0;
+    int handleOutgoingSSLCallCount = 0;
 
     bool wasMethodCalled(const QString& methodName) const
     {
@@ -163,7 +168,33 @@ public:
         handleConnectionFailure();
     }
 
+    void callLoadSSLCerts(bool allowSnakeOil)
+    {
+        loadSSLCerts(allowSnakeOil);
+    }
+
+    void callLoadSnakeOilCerts()
+    {
+        loadSnakeOilCerts();
+    }
+
+    void callHandleOutgoingSSLHandshakeSuccess()
+    {
+        handleOutgoingSSLHandshakeSuccess();
+    }
+
+    void callHandleOutgoingSSLHandshakeFailure()
+    {
+        handleOutgoingSSLHandshakeFailure();
+    }
+
+    bool callHandleOutgoingSSL()
+    {
+        return handleOutgoingSSL();
+    }
+
     void setConsoleMode(bool isConsoleMode) { consoleMode = isConsoleMode; }
+    std::optional<bool> lastAllowSnakeOilValue;
 
 protected:
 
@@ -304,6 +335,47 @@ protected:
         callSequence.push_back("handleConnectionFailure");
 
         OutgoingTcpThread::handleConnectionFailure();
+    }
+
+    void loadSSLCerts(bool allowSnakeOil) override
+    {
+        loadSSLCertsCallCount++;
+        callSequence.push_back("loadSSLCerts");
+        lastAllowSnakeOilValue = allowSnakeOil;
+
+        OutgoingTcpThread::loadSSLCerts(allowSnakeOil);
+    }
+
+    void loadSnakeOilCerts() override
+    {
+        loadSnakeOilCertsCallCount++;
+        callSequence.push_back("loadSnakeOilCerts");
+
+        OutgoingTcpThread::loadSnakeOilCerts();
+    }
+
+    void handleOutgoingSSLHandshakeSuccess() override
+    {
+        handleOutgoingSSLHandshakeSuccessCallCount++;
+        callSequence.push_back("handleOutgoingSSLHandshakeSuccess");
+
+        OutgoingTcpThread::handleOutgoingSSLHandshakeSuccess();
+    }
+
+    void handleOutgoingSSLHandshakeFailure() override
+    {
+        handleOutgoingSSLHandshakeFailureCallCount++;
+        callSequence.push_back("handleOutgoingSSLHandshakeFailure");
+
+        OutgoingTcpThread::handleOutgoingSSLHandshakeFailure();
+    }
+
+    bool handleOutgoingSSL() override
+    {
+        handleOutgoingSSLCallCount++;
+        callSequence.push_back("handleOutgoingSSL");
+
+        return OutgoingTcpThread::handleOutgoingSSL();
     }
 
 private:

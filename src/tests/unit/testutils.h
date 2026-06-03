@@ -17,6 +17,8 @@ public:
     static Packet createPacketForTest();
     static Packet createIdlePacketForTest();
     static MockSslSocket* createMockSocketForTest();
+    static QString extractResourceToTempFile(const QString& resourcePath);
+    static void setupProductionSnakeOilCertsForTest();
 };
 
 

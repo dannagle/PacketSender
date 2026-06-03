@@ -44,12 +44,12 @@ public:
 
     void setMockCipher(const QSslCipher &cipher) { mockCipher = cipher; }
 
-    QSslCipher sessionCipher() const { return mockCipher; }
+    QSslCipher sessionCipher() const override { return mockCipher; }
 
     bool makeWaitForConnectedReturnFalse = false;
     bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return makeWaitForConnectedReturnFalse? false: mockConnected; }
     bool waitForEncrypted(int msecs = 30000) override { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
-    bool isEncrypted() const {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
+    bool isEncrypted() const override {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool waitForReadyRead(int msecs) override
     {
         // this is a down and dirty implementation
@@ -92,6 +92,9 @@ public:
     QString lastPrivateKeyFile;
     QSslCertificate mockLocalCertificate;
 
+    mutable QString lastLocalCertificateFile;
+    mutable QSsl::EncodingFormat lastLocalCertificateFormat = QSsl::Pem;
+
     // === Certificate / Key methods ===
     void setLocalCertificate(const QString &fileName, QSsl::EncodingFormat format = QSsl::Pem) override
     {
@@ -106,6 +109,7 @@ public:
         setLocalCertificateCallCount++;
         mockLocalCertificate = certificate;
         qDebug() << "=== MOCK setLocalCertificate(QSslCertificate) called";
+        qDebug() << "mockLocalCertificate: " << mockLocalCertificate;
     }
 
     void setPrivateKey(const QString &fileName,
@@ -116,6 +120,7 @@ public:
         setPrivateKeyCallCount++;
         lastPrivateKeyFile = fileName;
         qDebug() << "=== MOCK setPrivateKey(file) called:" << fileName;
+        qDebug() << "lastPrivateKeyFile: " << lastPrivateKeyFile;
     }
 
     void setPrivateKey(const QSslKey &key) override
@@ -123,6 +128,17 @@ public:
         setPrivateKeyCallCount++;
         lastPrivateKey = key;
         qDebug() << "=== MOCK setPrivateKey(QSslKey) called";
+        qDebug() << "lastPrivateKey: " << lastPrivateKey;
+    }
+
+    bool hasLocalCertificate() const override
+    {
+        return !mockLocalCertificate.isNull();
+    }
+
+    bool hasPrivateKey() const override
+    {
+        return !lastPrivateKey.isNull();
     }
 
     void setProtocol(QSsl::SslProtocol protocol) override
@@ -130,12 +146,17 @@ public:
         this->protocol = protocol;
     }
 
+    QList<QSslError> mockSslHandshakeErrors;
+    void setMockSslHandshakeErrors(const QList<QSslError>& errors)
+    {
+        mockSslHandshakeErrors = errors;
+    }
     [[nodiscard]] bool isValid() const override { return isMockValid;}
     void setIsValid(bool isValid) { isMockValid = isValid; }
 
     QList<QSslError> sslErrors() const { return mockSslErrors; }
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    QList<QSslError> sslHandshakeErrors() const override { return mockSslErrors; }
+    QList<QSslError> sslHandshakeErrors() const override { return mockSslHandshakeErrors; }
 #endif
 
     // === PacketSenderQSslSocketInterface methods ===
@@ -151,8 +172,10 @@ public:
 
     }
 
+    int ignoreSslErrorsCallCount = 0;
     void ignoreSslErrors() override
     {
+        ignoreSslErrorsCallCount++;
         qDebug("ignoreSslErrors called in MockSslSocket");
     }
 
@@ -261,15 +284,13 @@ public:
     QString getErrorString() const override
     {
         return errorString();
-    };
+    }
 
     QString lastConnectedToHostName;
     quint16 lastConnectedToPort = 0;
     NetworkLayerProtocol lastProtocol = QAbstractSocket::AnyIPProtocol;
 
     mutable int setLocalCertificateCallCount = 0;
-    mutable QString lastLocalCertificateFile;
-    mutable QSsl::EncodingFormat lastLocalCertificateFormat = QSsl::Pem;
 
 private:
     bool mockConnected = false;

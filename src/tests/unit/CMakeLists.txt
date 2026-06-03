@@ -49,6 +49,9 @@ add_executable(${TEST_NAME}
 
     # project files that need to be added to the executable
     ../../sendpacketbutton.cpp
+    ../../fileutils.cpp
+
+    ../../packetsender.qrc
 )
 
 target_include_directories(${TEST_NAME} PRIVATE

@@ -54,6 +54,8 @@ public:
     void setPrivateKey(const QString& fileName, QSsl::KeyAlgorithm algorithm, QSsl::EncodingFormat format,
                        const QByteArray& passPhrase) override;
     void setPrivateKey(const QSslKey &key) override;
+    bool hasLocalCertificate() const;
+    bool hasPrivateKey() const;
     void setProtocol(QSsl::SslProtocol protocol) override;
 
     [[nodiscard]] QSslSocket* rawSocket() const override { return socket; }

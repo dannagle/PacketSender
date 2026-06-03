@@ -67,6 +67,9 @@ public:
     virtual void setPrivateKey(const QSslKey &key) = 0;
     virtual void setProtocol(QSsl::SslProtocol protocol) = 0;
 
+    virtual bool hasLocalCertificate() const = 0;
+    virtual bool hasPrivateKey() const = 0;
+
     // Helper for gradual migration
     [[nodiscard]] virtual QSslSocket* rawSocket() const { return nullptr; }
 

@@ -6,10 +6,10 @@
 
 #include <QMetaEnum>
 #include <QSslKey>
-#include <QSslCipher>
 
 #include "realqsslsocket.h"
 #include "settingnames.h"
+#include "fileutils.h"
 
 OutgoingTcpThread::OutgoingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
                                      const Packet& packetToSend,
@@ -165,50 +165,68 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
     return reply;
 }
 
+void OutgoingTcpThread::loadSnakeOilCertificate()
+{
+    const QByteArray decoded = FileUtils::decodeBase64EncodedResourceFile(SNAKEOIL_BASE64_CERT);
+    const QSslCertificate certificate(decoded, QSsl::Pem);
+
+    if (!certificate.isNull() && getSocketInterface()) {
+        getSocketInterface()->setLocalCertificate(certificate);
+    }
+}
+
+void OutgoingTcpThread::loadSnakeOilKey()
+{
+    const QByteArray decoded = FileUtils::decodeBase64EncodedResourceFile(SNAKEOIL_BASE64_KEY);
+    const QSslKey sslKey(decoded, QSsl::Rsa, QSsl::Pem);
+
+    if (!sslKey.isNull() && getSocketInterface()) {
+        getSocketInterface()->setPrivateKey(sslKey);
+    }
+}
+
+void OutgoingTcpThread::loadSnakeOilCerts()
+{
+    // Certificate
+    loadSnakeOilCertificate();
+
+    // Private Key
+    loadSnakeOilKey();
+}
+
 void OutgoingTcpThread::loadSSLCerts(bool allowSnakeOil)
 {
     auto sock = getSocketInterface();
+
     if (!sock) {
-        qWarning() << "loadSSLCerts called with null socket";
+        emit errorMessage("loadSSLCerts called with null socketInterface");
+        return;
+    }
+
+    if (allowSnakeOil)
+    {
+        loadSnakeOilCerts();
         return;
     }
 
     const QSettings& settings = getSettings();
 
-    if (!allowSnakeOil) {
-        // Production / user-provided certs
-        QString certPath = settings.value("sslLocalCertificatePath").toString();
-        QString keyPath  = settings.value("sslPrivateKeyPath").toString();
+    // Production / user-provided certs
+    QString certPath = settings.value(SET_LOCAL_CERTIFICATE_PATH).toString();
+    QString keyPath  = settings.value(SSL_PRIVATE_KEY_PATH).toString();
 
-        if (!certPath.isEmpty()) {
-            sock->setLocalCertificate(certPath);
-        }
-        if (!keyPath.isEmpty()) {
-            sock->setPrivateKey(keyPath);
+    if (!certPath.isEmpty()) {
+        sock->setLocalCertificate(certPath);
+
+        if (!sock->hasLocalCertificate()) {
+            emit errorMessage("SSL: Failed to load certificate from: " + certPath);
         }
     }
-    else {
-        // Snake oil / default self-signed certs (for testing)
-        QString defaultCertFile = CERTFILE;
-        QString defaultKeyFile  = KEYFILE;
+    if (!keyPath.isEmpty()) {
+        sock->setPrivateKey(keyPath);
 
-        QFile certfile(defaultCertFile);
-        QFile keyfile(defaultKeyFile);
-
-        if (certfile.open(QIODevice::ReadOnly)) {
-            QSslCertificate certificate(&certfile, QSsl::Pem);
-            certfile.close();
-            if (!certificate.isNull()) {
-                sock->setLocalCertificate(certificate);
-            }
-        }
-
-        if (keyfile.open(QIODevice::ReadOnly)) {
-            QSslKey sslKey(&keyfile, QSsl::Rsa, QSsl::Pem);
-            keyfile.close();
-            if (!sslKey.isNull()) {
-                sock->setPrivateKey(sslKey);
-            }
+        if (!sock->hasPrivateKey()) {
+            emit errorMessage("SSL: Failed to load private key from: " + keyPath);
         }
     }
 }
@@ -294,7 +312,7 @@ bool OutgoingTcpThread::handleOutgoingSSL()
     }
 
     // Load certificates / keys
-    loadSSLCerts(true);        // true = allow snake oil defaults
+    loadSSLCerts(getSettings().value(LOAD_SNAKEOIL_CERTS, true).toBool());
 
     sslSocketInterface->setProtocol(QSsl::AnyProtocol);
 

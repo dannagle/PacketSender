@@ -72,10 +72,10 @@ bool BaseTcpThread::isValid() const
 
 PacketSenderQSslSocketInterface* BaseTcpThread::getSocketInterface() const
 {
-    qDebug() << "=== getSocket() called ===";
-    qDebug() << "  socketInterface:" << (socketInterface ? "YES" : "NULL");
-    qDebug() << "  socket (unique_ptr):" << (socket ? "YES" : "NULL");
-    qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
+    // qDebug() << "=== getSocket() called ===";
+    // qDebug() << "  socketInterface:" << (socketInterface ? "YES" : "NULL");
+    // qDebug() << "  socket (unique_ptr):" << (socket ? "YES" : "NULL");
+    // qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
 
     return socketInterface.get();
 }
