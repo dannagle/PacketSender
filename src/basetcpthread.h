@@ -78,8 +78,6 @@ protected:
 #endif
 
 
-private:
-    std::unique_ptr<QSslSocket> socket;
 // protected slots:
 //     virtual void onConnected();
 //     virtual void onSocketError(QSslSocket::SocketError error);

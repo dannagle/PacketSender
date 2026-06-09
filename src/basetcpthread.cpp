@@ -10,7 +10,6 @@ void BaseTcpThread::debugSocketState() const
 {
     qDebug() << "=== BaseTcpThread::debugSocketState ===";
     qDebug() << "socketInterface:" << (socketInterface ? "PRESENT" : "NULL");
-    qDebug() << "socket (unique_ptr):" << (socket ? "PRESENT" : "NULL");
     qDebug() << "getSocketInterface() returns:" << getSocketInterface();
 }
 
