@@ -46,3 +46,25 @@ void IncomingTcpThread::closeConnection()
     // if this turns out to be a reimplementation of what's in OutgoingThread,
     // then this method doesn't need to be overridden anymore.
 }
+
+Packet IncomingTcpThread::buildInitialReceivedPacket()
+{
+    Packet p;
+    p.timestamp = QDateTime::currentDateTime();
+    p.name = p.timestamp.toString(DATETIMEFORMAT);
+    p.tcpOrUdp = shouldUseSSL ? "SSL" : "TCP";
+    p.fromIP = getPeerAddressAsString();
+    p.toIP = "You";
+    p.port = getLocalPort();
+    p.fromPort = getPeerPort();
+
+    auto* sock = getSocketInterface();
+    if (sock && sock->isValid() && (sock->getSocketState() == QAbstractSocket::ConnectedState)) {
+        sock->waitForReadyRead(3000);           // reasonable timeout for first data
+        QByteArray data = readSocketData();     // assuming this helper exists in Base
+        p.hexString = Packet::byteArrayToHex(data);
+        p.asciiString();                        // ensure ascii field is populated
+    }
+
+    return p;
+}

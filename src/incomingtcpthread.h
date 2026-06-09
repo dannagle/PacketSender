@@ -33,7 +33,7 @@ public:
 
 protected:
     void closeConnection() override;
-    // Packet buildInitialReceivedPacket();
+    virtual Packet buildInitialReceivedPacket();
 
     //     void run() override;
     //
