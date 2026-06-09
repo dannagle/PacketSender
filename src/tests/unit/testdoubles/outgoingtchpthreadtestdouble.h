@@ -4,7 +4,6 @@
 
 #ifndef OUTGOINGTCHPTHREADTESTDOUBLE_H
 #define OUTGOINGTCHPTHREADTESTDOUBLE_H
-#include <qtestcase.h>
 
 #include "realqsslsocket.h"
 #include "../../outgoingtcpthread.h"
