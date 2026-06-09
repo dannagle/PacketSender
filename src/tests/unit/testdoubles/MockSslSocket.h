@@ -292,6 +292,23 @@ public:
 
     mutable int setLocalCertificateCallCount = 0;
 
+    bool shouldSetDescriptorSucceed = true;
+    int getSocketDescriptor() const override
+    {
+        return mockSocketDescriptor;
+    }
+
+    bool setSocketDescriptor(qintptr socketDescriptor,
+                             QAbstractSocket::SocketState state,
+                             QIODeviceBase::OpenMode openMode) override
+    {
+        mockSocketDescriptor = static_cast<int>(socketDescriptor);
+        mockState = state;
+        mockOpenMode = openMode;
+
+        return shouldSetDescriptorSucceed;
+    }
+
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;
@@ -305,5 +322,9 @@ private:
     quint16 mockPeerPort = 0;
     quint16 mockLocalPort = 0;
     QSsl::SslProtocol protocol;
+
+    int mockSocketDescriptor = 0;
+    OpenMode mockOpenMode = ReadWrite;
+
 };
 #endif //MOCKSSLSOCKET_H

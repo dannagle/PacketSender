@@ -33,6 +33,7 @@ public:
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
 
     [[nodiscard]] virtual bool isValid() const;
+    [[nodiscard]] bool getShouldUseSSL() const {return shouldUseSSL;}
     PacketSenderQSslSocketInterface* getSocketInterface() const;
     // virtual void sendPersistent(const Packet& packet);
 
@@ -70,6 +71,7 @@ protected:
 
     bool managedByConnection = false;
     bool closeRequest = false;
+    bool shouldUseSSL = false;
 
 #ifdef CONSOLE_MODE
     bool consoleMode = true;

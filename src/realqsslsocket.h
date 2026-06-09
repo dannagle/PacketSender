@@ -58,6 +58,12 @@ public:
     bool hasPrivateKey() const override;
     void setProtocol(QSsl::SslProtocol protocol) override;
 
+    [[nodiscard]] int getSocketDescriptor() const override;
+    bool setSocketDescriptor(
+        qintptr socketDescriptor,
+        QAbstractSocket::SocketState state = QAbstractSocket::ConnectedState,
+        QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite) override;
+
     [[nodiscard]] QSslSocket* rawSocket() const override { return socket; }
 
     void close() override;

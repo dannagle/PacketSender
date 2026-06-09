@@ -171,6 +171,17 @@ void RealQSslSocket::setProtocol(QSsl::SslProtocol protocol)
     socket->setProtocol(protocol);
 }
 
+int RealQSslSocket::getSocketDescriptor() const
+{
+    return static_cast<int>(socket->socketDescriptor());
+}
+
+bool RealQSslSocket::setSocketDescriptor(qintptr socketDescriptor, QAbstractSocket::SocketState state,
+                                         QIODeviceBase::OpenMode openMode)
+{
+    return socket->setSocketDescriptor(socketDescriptor, state, openMode);
+}
+
 void RealQSslSocket::close()
 {
     socket->close();

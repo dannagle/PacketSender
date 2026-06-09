@@ -70,6 +70,14 @@ public:
     virtual bool hasLocalCertificate() const = 0;
     virtual bool hasPrivateKey() const = 0;
 
+    [[nodiscard]] virtual int getSocketDescriptor() const = 0;   // or qintptr, depending on your code
+
+    // NEW: setter - mirror Qt's signature for compatibility
+    virtual bool setSocketDescriptor(qintptr socketDescriptor,
+                                     QAbstractSocket::SocketState state = QAbstractSocket::ConnectedState,
+                                     QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite) = 0;
+
+
     // Helper for gradual migration
     [[nodiscard]] virtual QSslSocket* rawSocket() const { return nullptr; }
 

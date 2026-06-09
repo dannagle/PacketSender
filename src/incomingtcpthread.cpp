@@ -1,0 +1,48 @@
+//
+// Created by Tomas Gallucci on 6/8/26.
+//
+
+#include "incomingtcpthread.h"
+#include "basetcpthread.h"
+#include "realqsslsocket.h"
+
+PacketSenderQSslSocketInterface* IncomingTcpThread::createSocketWithDescriptor(int socketDescriptor)
+{
+
+    qDebug() << "socketDescriptor in helper method: " << socketDescriptor;
+
+    auto realSocket = std::make_unique<RealQSslSocket>(new QSslSocket());
+
+    // IMPORTANT: Set the descriptor BEFORE passing to base
+    if (!realSocket->setSocketDescriptor(socketDescriptor)) {
+        // handle error - e.g. throw or log
+        throw std::runtime_error("Failed to set socket descriptor on QSslSocket");
+    }
+
+    return realSocket.release();
+}
+
+IncomingTcpThread::IncomingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
+                                     bool isSecure,
+                                     QObject* parent)
+    : BaseTcpThread(socketInterface, parent)
+{
+    shouldUseSSL = isSecure;
+}
+
+IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
+                                     bool isSecure,
+                                     QObject* parent)
+    : IncomingTcpThread(createSocketWithDescriptor(socketDescriptor),
+                        isSecure,
+                        parent)
+{
+}
+
+IncomingTcpThread::~IncomingTcpThread() = default;
+
+void IncomingTcpThread::closeConnection()
+{
+    // if this turns out to be a reimplementation of what's in OutgoingThread,
+    // then this method doesn't need to be overridden anymore.
+}
