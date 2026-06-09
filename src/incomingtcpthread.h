@@ -34,13 +34,13 @@ public:
 protected:
     void closeConnection() override;
     virtual Packet buildInitialReceivedPacket();
+    virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
 
     //     void run() override;
     //
     //     virtual void handleIncomingConnection();
     //     virtual void performSSLHandshakeIfNeeded();
     //     virtual Packet buildInitialReceivedPacket();
-    //     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
 
     static PacketSenderQSslSocketInterface* createSocketWithDescriptor(int socketDescriptor);
 };

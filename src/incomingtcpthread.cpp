@@ -5,6 +5,7 @@
 #include "incomingtcpthread.h"
 #include "basetcpthread.h"
 #include "realqsslsocket.h"
+#include "settingnames.h"
 
 PacketSenderQSslSocketInterface* IncomingTcpThread::createSocketWithDescriptor(int socketDescriptor)
 {
@@ -67,4 +68,28 @@ Packet IncomingTcpThread::buildInitialReceivedPacket()
     }
 
     return p;
+}
+
+void IncomingTcpThread::sendSmartReplyIfConfigured(const Packet& receivedPacket)
+{
+    const QSettings& settings = getSettings();
+
+    const bool sendResponseEnabled = settings.value(SEND_RESPONSE, false).toBool();
+    const QString responseHex = settings.value(RESPONSE_HEX, "").toString().trimmed();
+
+    QDEBUG() << "\nsendResponseEnabled: " << sendResponseEnabled << "\n";
+    QDEBUG() << "\nresponseHex: " << responseHex << "\n";
+
+    if (!sendResponseEnabled || responseHex.isEmpty()) {
+        return;
+    }
+
+    Packet reply = receivedPacket;           // copy metadata (timestamp, IPs, ports, etc.)
+    reply.hexString = responseHex;
+
+    QString expanded = Packet::macroSwap(reply.asciiString());
+    reply.hexString = Packet::ASCIITohex(expanded);
+
+    QDEBUG() << "about to call sendOutgoingPacket";
+    sendOutgoingPacket(reply);
 }

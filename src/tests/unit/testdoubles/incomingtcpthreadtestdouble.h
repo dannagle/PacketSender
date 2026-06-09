@@ -6,7 +6,7 @@
 #define INCOMINGTCPTHREADTESTDOUBLE_H
 #include "../../../incomingtcpthread.h"
 
-class IncomingTcpThreadTestDouble : IncomingTcpThread
+class IncomingTcpThreadTestDouble : public IncomingTcpThread
 {
 public:
     // Main constructor (used by tests and convenience constructor)
@@ -33,6 +33,12 @@ public:
 
     }
 
+    bool wasMethodCalled(const QString& methodName) const
+    {
+        return std::find(callSequence.begin(), callSequence.end(), methodName)
+               != callSequence.end();
+    }
+
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
@@ -48,6 +54,11 @@ public:
         return buildInitialReceivedPacket();
     }
 
+    void callSendSmartReplyIfConfigured(Packet& packet)
+    {
+        return sendSmartReplyIfConfigured(packet);
+    }
+
     /****************************************************************************************
      *                                                                                      *
      *                             METHOD CALL COUNTERS                                     *
@@ -57,6 +68,8 @@ public:
      *                                                                                      *
      ****************************************************************************************/
     int buildInitialReceivedPacketCallCount = 0;
+    int sendOutgoingPacketCallCount = 0;
+    int sendSmartReplyIfConfiguredCallCount = 0;
 
 protected:
     /****************************************************************************************
@@ -71,13 +84,31 @@ protected:
      *     4. Return the result                                                             *
      *                                                                                      *
      ****************************************************************************************/
-Packet buildInitialReceivedPacket() override
-{
-    buildInitialReceivedPacketCallCount++;
-    callSequence.push_back("buildInitialReceivedPacket");
 
-    return IncomingTcpThread::buildInitialReceivedPacket();
-}
+    Packet buildInitialReceivedPacket() override
+    {
+        buildInitialReceivedPacketCallCount++;
+        callSequence.push_back("buildInitialReceivedPacket");
+
+        return IncomingTcpThread::buildInitialReceivedPacket();
+    }
+
+    void sendOutgoingPacket(Packet& packet) override
+    {
+        sendOutgoingPacketCallCount++;
+        callSequence.push_back("sendOutgoingPacket");
+
+        BaseTcpThread::sendOutgoingPacket(packet);
+    }
+
+
+    void sendSmartReplyIfConfigured(const Packet& packet) override
+    {
+        sendSmartReplyIfConfiguredCallCount++;
+        callSequence.push_back("sendSmartReplyIfConfigured");
+
+        IncomingTcpThread::sendSmartReplyIfConfigured(packet);
+    }
 
 private:
     mutable std::vector<QString> callSequence;

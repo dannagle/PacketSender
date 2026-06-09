@@ -24,6 +24,14 @@ private slots:
     void testBuildInitialReceivedPacket_socketInterfaceIsNotNullptr();
     void testBuildInitialReceivedPacket_socketInterfaceState_isNotConnected();
 
+    // sendSmartReplyIfConfigured() tests
+    void testSendSmartReplyIfConfigured_SendResponseSetting_isFalse();
+    void testSendSmartReplyIfConfigured_SendResponseSetting_defaultValue_isFalse();
+    void testSendSmartReplyIfConfigured_ResponseHexSetting_isEmptyString();
+    void testSendSmartReplyIfConfigured_ResponseHexSetting_defaultValue_isEmptyString();
+    void testSendSmartReplyIfConfigured_successPath();
+    void testSendSmartReplyIfConfigured_successPath_withMacroExpansion();
+
 private:
     static constexpr int TEST_PORT_NUMBER = 666;
 };

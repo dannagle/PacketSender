@@ -3,14 +3,17 @@
 //
 
 #include <QtTest>
+#include <QTcpServer>
+#include <QSignalSpy>
 
 #include "incomingtcpthreadtests.h"
 
-#include <QTcpServer>
 
+#include "settingnames.h"
 #include "testutils.h"
 #include "../../incomingtcpthread.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
+#include "basetcpthread.h"
 
 QTcpServer& startQTcpServer()
 {
@@ -126,4 +129,102 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNot
     p.fromPort = 0;
     p.hexString = mockReadData.toHex(' ').toUpper() + " ";
     QCOMPARE(normalizedPacket, p);
+}
+
+// sendSmartReplyIfConfigured() tests
+void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_SendResponseSetting_isFalse()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(SEND_RESPONSE, false);
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(!thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_SendResponseSetting_defaultValue_isFalse()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(RESPONSE_HEX, "response that will never be sent");
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(!thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_ResponseHexSetting_isEmptyString()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(SEND_RESPONSE, true);
+    settings.setValue(RESPONSE_HEX, "");
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(!thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+    void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_ResponseHexSetting_defaultValue_isEmptyString()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(SEND_RESPONSE, true);
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(!thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(SEND_RESPONSE, true);
+    settings.setValue(RESPONSE_HEX, "0F BA BA");
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    QCOMPARE(packetSentSpy.first().first().value<Packet>().hexString, "0F BA BA ");
+}
+
+void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath_withMacroExpansion()
+{
+    QSettings& settings = getSettings();
+    settings.setValue(SEND_RESPONSE, true);
+    settings.setValue(RESPONSE_HEX, "7B 7B 43 4F 55 4E 54 45 52 7D 7D"); // hex for {COUNTER}
+    settings.sync();
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+
+    auto p = TestUtils::createPacketForTest();
+    thread.callSendSmartReplyIfConfigured(p);
+    QVERIFY(thread.wasMethodCalled("sendOutgoingPacket"));
+    QCOMPARE(packetSentSpy.count(), 1);
+
+    QCOMPARE(packetSentSpy.first().first().value<Packet>().hexString.trimmed(), "31");
 }
