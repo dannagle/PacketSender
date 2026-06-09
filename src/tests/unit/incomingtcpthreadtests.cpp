@@ -78,6 +78,28 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNul
     QCOMPARE(normalizedPacket, p);
 }
 
+void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsInvalid()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->setIsValid(false);
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    QVERIFY(returnedPacket.hexString.isEmpty());
+}
+
+void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceState_isNotConnected()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->setMockState(QAbstractSocket::SocketState::UnconnectedState);
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    QVERIFY(returnedPacket.hexString.isEmpty());
+}
+
 void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNotNullptr()
 {
     const QString mockDataString = "foo bar baz";

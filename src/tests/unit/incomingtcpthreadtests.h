@@ -20,7 +20,9 @@ private slots:
 
     // buildInitialReceivedPacket() tests
     void testBuildInitialReceivedPacket_socketInterfaceIsNullptr();
+    void testBuildInitialReceivedPacket_socketInterfaceIsInvalid();
     void testBuildInitialReceivedPacket_socketInterfaceIsNotNullptr();
+    void testBuildInitialReceivedPacket_socketInterfaceState_isNotConnected();
 
 private:
     static constexpr int TEST_PORT_NUMBER = 666;
