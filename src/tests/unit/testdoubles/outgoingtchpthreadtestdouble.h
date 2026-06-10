@@ -7,8 +7,9 @@
 
 #include "realqsslsocket.h"
 #include "../../outgoingtcpthread.h"
+#include "utils/calltracker.h"
 
-class OutgoingTcpThreadTestDouble : public OutgoingTcpThread
+class OutgoingTcpThreadTestDouble : public OutgoingTcpThread, public CallTracker
 {
 public:
     explicit OutgoingTcpThreadTestDouble(PacketSenderQSslSocketInterface* socketInterface,
@@ -58,40 +59,10 @@ public:
     }
 
     int forceExitAfterNIterations = 2;
-
-    int prepareOutgoingPacketCallCount = 0;
-    int sendOutgoingPacketCallCount = 0;
-    int baseSendOutgoingPacketCallCount = 0;
-    int closeConnectionCallCount = 0;
-    int sleepCallCount = 0;
-    mutable int shouldContinuePersistentConnectionLoopCallCount = 0;
-    mutable int shouldStopPersistentConnectionLoopCallCount = 0;
     mutable int persistentConnectionLoopIterationsCount = 0;
-    int handlePersistentIdleCaseCallCount = 0;
-    int buildReceivedPacketCallCount = 0;
-    int processIncomingDataCallCount = 0;
-    int waitForAndProcessIncomingDataCallCount = 0;
-    int interruptibleWaitForReadyReadCallCount = 0;
-    int buildReplyPacketCallCount = 0;
-    mutable int shouldSendReplyCallCount = 0;
-    mutable int sendReplyIfNeededCallCount = 0;
-    int getSmartResponseDataCallCount = 0;
-    int handleOutgoingPlainTcpCallCount = 0;
-    int handleConnectionFailureCallCount = 0;
-    int loadSSLCertsCallCount = 0;
-    int loadSnakeOilCertsCallCount = 0;
-    int handleOutgoingSSLHandshakeSuccessCallCount = 0;
-    int handleOutgoingSSLHandshakeFailureCallCount = 0;
-    int handleOutgoingSSLCallCount = 0;
-    int persistentConnectionLoopCallCount = 0;
-
-    bool wasMethodCalled(const QString& methodName) const
-    {
-        return std::find(callSequence.begin(), callSequence.end(), methodName)
-               != callSequence.end();
-    }
-
-    const std::vector<QString>& getCallSequence() const { return callSequence; }
+    mutable int shouldContinuePersistentConnectionLoopCallCount = 0;
+    int baseSendOutgoingPacketCallCount = 0;
+    int sleepCallCount = 0;
 
     void callPrepareOutgoingSendPacket()
     {
@@ -205,15 +176,13 @@ protected:
 
     void prepareOutgoingPacket() override
     {
-        prepareOutgoingPacketCallCount++;
-        callSequence.push_back("prepareOutgoingPacket");
+        recordCall(PREPARE_OUTGOING_PACKET());
         OutgoingTcpThread::prepareOutgoingPacket();
     }
 
     void sendOutgoingPacket() override
     {
-        sendOutgoingPacketCallCount++;
-        callSequence.push_back("sendOutgoingPacket");
+        recordCall(SEND_OUTGOING_PACKET());
         OutgoingTcpThread::sendOutgoingPacket();
     }
 
@@ -226,34 +195,32 @@ protected:
 
     void closeConnection() override
     {
-        closeConnectionCallCount++;
-        callSequence.push_back("closeConnection");
+        recordCall(CLOSE_CONNECTION());
         OutgoingTcpThread::closeConnection();
     }
 
     void sleep(unsigned long usecs) override
     {
         sleepCallCount++;
-        callSequence.push_back("usleep " + QString::number(usecs) + " usecs");
+        recordCall("usleep " + QString::number(usecs) + " usecs");
         OutgoingTcpThread::sleep(usecs);
     }
 
     Packet buildReceivedPacket() override
     {
-        buildReceivedPacketCallCount++;
-        callSequence.push_back("buildReceivedPacket");
+        recordCall(BUILD_RECEIVED_PACKET());
         return OutgoingTcpThread::buildReceivedPacket();
     }
 
     void processIncomingData() override
     {
-        processIncomingDataCallCount++;
-        callSequence.push_back("processIncomingData");
+        recordCall(PROCESS_INCOMING_DATA());
         OutgoingTcpThread::processIncomingData();
     }
 
     bool shouldContinuePersistentLoop() const override
     {
+        recordCall(SHOULD_CONTINUE_PERSISTENT_LOOP());
         shouldContinuePersistentConnectionLoopCallCount++;
         persistentConnectionLoopIterationsCount++;
 
@@ -267,28 +234,26 @@ protected:
 
     bool shouldStopPersistentConnectionLoop() const override
     {
-        shouldStopPersistentConnectionLoopCallCount++;
+        recordCall(SHOULD_STOP_PERSISTENT_CONNECTION_LOOP());
         return OutgoingTcpThread::shouldStopPersistentConnectionLoop();
     }
 
     void handlePersistentIdleCase(int idleThresholdMs) override
     {
-        handlePersistentIdleCaseCallCount++;
+        recordCall(HANDLE_PERSISTENT_IDLE_CASE());
         OutgoingTcpThread::handlePersistentIdleCase(idleThresholdMs);
     }
 
     bool interruptibleWaitForReadyRead(int timeoutMs) override
     {
-        interruptibleWaitForReadyReadCallCount++;
-        callSequence.push_back("interruptibleWaitForReadyRead");
+        recordCall(INTERRUPTABLE_WAIT_FOR_READY_READ());
 
         return BaseTcpThread::interruptibleWaitForReadyRead(timeoutMs);
     }
 
     void waitForAndProcessIncomingData() override
     {
-        waitForAndProcessIncomingDataCallCount++;
-        callSequence.push_back("waitForAndProcessIncomingData");
+        recordCall(WAIT_FOR_AND_PROCESS_INCOMING_DATA());
 
         OutgoingTcpThread::waitForAndProcessIncomingData();
     }
@@ -296,56 +261,49 @@ protected:
 
     Packet buildReplyPacket(const Packet& receivedPacket, const QByteArray& responseData) override
     {
-        buildReplyPacketCallCount++;
-        callSequence.push_back("buildReplyPacket");
+        recordCall(BUILD_REPLY_PACKET());
 
         return OutgoingTcpThread::buildReplyPacket(receivedPacket, responseData);
     }
 
     bool shouldSendReply() const override
     {
-        shouldSendReplyCallCount++;
-        callSequence.push_back("shouldSendReply");
+        recordCall(SHOULD_SEND_REPLY());
 
         return OutgoingTcpThread::shouldSendReply();
     }
 
     void sendReplyIfNeeded(const Packet& receivedPacket) override
     {
-        sendReplyIfNeededCallCount++;
-        callSequence.push_back("sendReplyIfNeeded");
+        recordCall(SEND_REPLY_IF_NEEDED());
 
         OutgoingTcpThread::sendReplyIfNeeded(receivedPacket);
     }
 
     QByteArray getSmartResponseData(const Packet& receivedPacket) override
     {
-        getSmartResponseDataCallCount++;
-        callSequence.push_back("getSmartResponseData");
+        recordCall(GET_SMART_RESPONSE_DATA());
 
         return OutgoingTcpThread::getSmartResponseData(receivedPacket);
     }
 
     bool handleOutgoingPlainTCP() override
     {
-        handleOutgoingPlainTcpCallCount++;
-        callSequence.push_back("handleOutgoingPlainTCP");
+        recordCall(HANDLE_OUTGOING_PLAIN_TCP());
 
         return OutgoingTcpThread::handleOutgoingPlainTCP();
     }
 
     void handleConnectionFailure() override
     {
-        handleConnectionFailureCallCount++;
-        callSequence.push_back("handleConnectionFailure");
+        recordCall(HANDLE_CONNECTION_FAILURE());
 
         OutgoingTcpThread::handleConnectionFailure();
     }
 
     void loadSSLCerts(bool allowSnakeOil) override
     {
-        loadSSLCertsCallCount++;
-        callSequence.push_back("loadSSLCerts");
+        recordCall(LOAD_SSL_CERTS());
         lastAllowSnakeOilValue = allowSnakeOil;
 
         OutgoingTcpThread::loadSSLCerts(allowSnakeOil);
@@ -353,46 +311,40 @@ protected:
 
     void loadSnakeOilCerts() override
     {
-        loadSnakeOilCertsCallCount++;
-        callSequence.push_back("loadSnakeOilCerts");
+        recordCall(LOAD_SNAKEOIL_CERTS_());
 
         OutgoingTcpThread::loadSnakeOilCerts();
     }
 
     void handleOutgoingSSLHandshakeSuccess() override
     {
-        handleOutgoingSSLHandshakeSuccessCallCount++;
-        callSequence.push_back("handleOutgoingSSLHandshakeSuccess");
+        recordCall(HANDLE_OUTGOING_SSL_HANDSHAKE_SUCCESS());
 
         OutgoingTcpThread::handleOutgoingSSLHandshakeSuccess();
     }
 
     void handleOutgoingSSLHandshakeFailure() override
     {
-        handleOutgoingSSLHandshakeFailureCallCount++;
-        callSequence.push_back("handleOutgoingSSLHandshakeFailure");
+        recordCall(HANDLE_OUTGOING_SSL_HANDSHAKE_FAILURE());
 
         OutgoingTcpThread::handleOutgoingSSLHandshakeFailure();
     }
 
     bool handleOutgoingSSL() override
     {
-        handleOutgoingSSLCallCount++;
-        callSequence.push_back("handleOutgoingSSL");
+        recordCall(HANDLE_OUTGOING_SSL());
 
         return OutgoingTcpThread::handleOutgoingSSL();
     }
 
     void persistentConnectionLoop() override
     {
-        persistentConnectionLoopCallCount++;
-        callSequence.push_back("persistentConnectionLoop");
+        recordCall(PERSISTENT_CONNECTION_LOOP());
 
         OutgoingTcpThread::persistentConnectionLoop();
     }
 
 private:
-    mutable std::vector<QString> callSequence;
     bool simulateRequestInterruptionCalled = false;
 };
 

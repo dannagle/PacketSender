@@ -5,8 +5,9 @@
 #ifndef INCOMINGTCPTHREADTESTDOUBLE_H
 #define INCOMINGTCPTHREADTESTDOUBLE_H
 #include "../../../incomingtcpthread.h"
+#include "utils/calltracker.h"
 
-class IncomingTcpThreadTestDouble : public IncomingTcpThread
+class IncomingTcpThreadTestDouble : public IncomingTcpThread, public CallTracker
 {
 public:
     // Main constructor (used by tests and convenience constructor)
@@ -31,12 +32,6 @@ public:
     ~IncomingTcpThreadTestDouble() override
     {
 
-    }
-
-    bool wasMethodCalled(const QString& methodName) const
-    {
-        return std::find(callSequence.begin(), callSequence.end(), methodName)
-               != callSequence.end();
     }
 
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
@@ -64,18 +59,12 @@ public:
         emitSSLDiagnosticPackets();
     }
 
-    /****************************************************************************************
-     *                                                                                      *
-     *                             METHOD CALL COUNTERS                                     *
-     *                                                                                      *
-     *   All call counters for overridden methods are declared in this section.             *
-     *   They are incremented at the beginning of each corresponding override.              *
-     *                                                                                      *
-     ****************************************************************************************/
-    int buildInitialReceivedPacketCallCount = 0;
-    int sendOutgoingPacketCallCount = 0;
-    int sendSmartReplyIfConfiguredCallCount = 0;
-    int emitSSLDiagnosticPacketsCallCount = 0;
+    void callPerformSSLHandshakeIfNeeded()
+    {
+        performSSLHandshakeIfNeeded();
+    }
+
+    bool lastAllowSnakeOilValue;
 
 protected:
     /****************************************************************************************
@@ -93,38 +82,47 @@ protected:
 
     Packet buildInitialReceivedPacket() override
     {
-        buildInitialReceivedPacketCallCount++;
-        callSequence.push_back("buildInitialReceivedPacket");
-
+        recordCall(BUILD_INITIAL_RECEIVED_PACKET());
         return IncomingTcpThread::buildInitialReceivedPacket();
     }
 
     void sendOutgoingPacket(Packet& packet) override
     {
-        sendOutgoingPacketCallCount++;
-        callSequence.push_back("sendOutgoingPacket");
-
+        recordCall(SEND_OUTGOING_PACKET());
         BaseTcpThread::sendOutgoingPacket(packet);
     }
 
     void sendSmartReplyIfConfigured(const Packet& packet) override
     {
-        sendSmartReplyIfConfiguredCallCount++;
-        callSequence.push_back("sendSmartReplyIfConfigured");
-
+        recordCall(SEND_SMART_REPLY_IF_CONFIGURED());
         IncomingTcpThread::sendSmartReplyIfConfigured(packet);
     }
 
     void emitSSLDiagnosticPackets() override
     {
-        emitSSLDiagnosticPacketsCallCount++;
-        callSequence.push_back("emitSSLDiagnosticPackets");
-
+        recordCall(EMIT_SSL_DIAGNOSTIC_PACKETS());
         IncomingTcpThread::emitSSLDiagnosticPackets();
     }
 
-private:
-    mutable std::vector<QString> callSequence;
+    void performSSLHandshakeIfNeeded() override
+    {
+        recordCall(PERFORM_SSL_HANDSHAKE_IF_NEEDED());
+        IncomingTcpThread::performSSLHandshakeIfNeeded();
+    }
+
+    void loadSSLCerts(bool allowSnakeOil) override
+    {
+        recordCall(LOAD_SSL_CERTS());
+        lastAllowSnakeOilValue = allowSnakeOil;
+
+        IncomingTcpThread::loadSSLCerts(allowSnakeOil);
+    }
+
+    void loadSnakeOilCerts() override
+    {
+        recordCall(LOAD_SNAKEOIL_CERTS_());
+        IncomingTcpThread::loadSnakeOilCerts();
+    }
 };
 
 #endif //INCOMINGTCPTHREADTESTDOUBLE_H

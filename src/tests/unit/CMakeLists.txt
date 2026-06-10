@@ -14,6 +14,7 @@ add_executable(${TEST_NAME}
     testdoubles/MockSslSocket.h
 
     testutils.cpp
+    utils/calltracker.cpp
 
     ../../translations.cpp
     translation_tests.cpp
