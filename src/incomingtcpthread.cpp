@@ -42,12 +42,6 @@ IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
 
 IncomingTcpThread::~IncomingTcpThread() = default;
 
-void IncomingTcpThread::closeConnection()
-{
-    // if this turns out to be a reimplementation of what's in OutgoingThread,
-    // then this method doesn't need to be overridden anymore.
-}
-
 Packet IncomingTcpThread::buildInitialReceivedPacket()
 {
     Packet p;

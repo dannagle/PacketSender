@@ -42,7 +42,6 @@ protected:
     void run() override;
     virtual void prepareOutgoingPacket();
     virtual void sendOutgoingPacket();
-    void closeConnection() override;
 
     virtual Packet buildReplyPacket(const Packet &receivedPacket, const QByteArray &responseData);
 

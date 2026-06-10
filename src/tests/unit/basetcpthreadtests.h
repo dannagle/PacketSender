@@ -64,6 +64,12 @@ private slots:
 
     void testSendOutgoingPacket_packetHasData_emitsConnectionStatusSendingData();
     void testSendOutgoingPacket_packetHasData_emitsPacketSent();
+
+    // closeConnection() tests
+    void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
+    void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();
+    void testCloseConnection_CloseCalled();
+    void testCloseConnection_emitsConnectionStatus_Disconnected();
 };
 
 

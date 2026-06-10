@@ -486,9 +486,6 @@ void OutgoingTcpThreadTests::testGetSmartResponseData()
 
     settings.sync();
 
-    // TODO: Setup smart config #1 (or whichever) for matching tests
-    // For now we can at least test the disabled / no-match paths
-
     Packet received = TestUtils::createPacketForTest();
     received.hexString = incomingHex;
 
@@ -503,51 +500,4 @@ void OutgoingTcpThreadTests::testGetSmartResponseData()
     // Optional: check call tracking
     const auto& calls = thread.getCallSequence();
     QVERIFY(std::find(calls.begin(), calls.end(), "getSmartResponseData") != calls.end());
-}
-
-// closeConnection() tests
-void OutgoingTcpThreadTests::testCloseConnection_SocketIsConnected_DisconnectFromHostCalled()
-{
-    auto *mockSock = new MockSslSocket();
-    mockSock->setMockConnected(true);
-    mockSock->setMockState(QAbstractSocket::ConnectedState);
-
-    Packet p = createPacketForTest();
-    OutgoingTcpThreadTestDouble thread(mockSock, p);
-
-    thread.callCloseConnection();
-    QVERIFY(mockSock != nullptr);
-    QCOMPARE(mockSock->disconnectFromHostCallCount, 1);
-}
-
-void OutgoingTcpThreadTests::testCloseConnection_SocketIsClosing_DisconnectFromHostCalled()
-{
-    auto *mockSock = new MockSslSocket();
-    mockSock->setMockConnected(true);
-    mockSock->setMockState(QAbstractSocket::ClosingState);
-
-    Packet p = createPacketForTest();
-    OutgoingTcpThreadTestDouble thread(mockSock, p);
-
-    thread.callCloseConnection();
-    QCOMPARE(mockSock->disconnectFromHostCallCount, 1);
-}
-
-void OutgoingTcpThreadTests::testCloseConnection_CloseCalled()
-{
-    auto *mockSock = new MockSslSocket();
-    OutgoingTcpThreadTestDouble thread(mockSock, createPacketForTest());
-    thread.callCloseConnection();
-    QCOMPARE(mockSock->closeCallCount, 1);
-}
-
-void OutgoingTcpThreadTests::testCloseConnection_emitsConnectionStatus_Disconnected()
-{
-    auto *mockSock = new MockSslSocket();
-
-    OutgoingTcpThreadTestDouble thread(mockSock, createPacketForTest());
-    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
-    thread.callCloseConnection();
-    QCOMPARE(connectionStatusSpy.count(), 1);
-    QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Disconnected");
 }

@@ -53,12 +53,6 @@ private slots:
     void testGetSmartResponseData_data();
     void testGetSmartResponseData();
 
-    // closeConnection() tests
-    void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
-    void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();
-    void testCloseConnection_CloseCalled();
-    void testCloseConnection_emitsConnectionStatus_Disconnected();
-
 private:
     inline static const QString DEFAULT_ADDRESS = QStringLiteral("127.0.0.1");
     static constexpr unsigned int DEFAULT_PORT = 9999;

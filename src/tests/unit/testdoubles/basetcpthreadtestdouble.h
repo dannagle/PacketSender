@@ -8,7 +8,7 @@
 #include "MockSslSocket.h"
 #include "../../../basetcpthread.h"
 
-class BaseTcpThreadTestDouble : public BaseTcpThread
+class BaseTcpThreadTestDouble : public BaseTcpThread, public CallTracker
 {
     Q_OBJECT
 
@@ -28,6 +28,11 @@ public:
         sendOutgoingPacket(packet);
     }
 
+    void callCloseConnection()
+    {
+        closeConnection();
+    }
+
 protected:
     // Minimal implementation of the pure virtual method
     void run() override
@@ -35,10 +40,10 @@ protected:
         // Do nothing for most tests, or QThread::run() if you want default behavior
     }
 
-    // Minimal implementation of the pure virtual method
     void closeConnection() override
     {
-        // Do nothing
+        recordCall(CLOSE_CONNECTION());
+        BaseTcpThread::closeConnection();
     }
 };
 

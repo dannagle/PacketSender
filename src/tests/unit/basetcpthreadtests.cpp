@@ -373,3 +373,48 @@ void BaseTcpThreadTests::testSendOutgoingPacket_packetHasData_emitsPacketSent()
     Packet emittedPacket = packetSentSpy.first().first().value<Packet>();
     QVERIFY(emittedPacket == p);
 }
+
+// closeConnection() tests
+void BaseTcpThreadTests::testCloseConnection_SocketIsConnected_DisconnectFromHostCalled()
+{
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockState(QAbstractSocket::ConnectedState);
+
+    BaseTcpThreadTestDouble thread(mockSock);
+
+    thread.callCloseConnection();
+    QVERIFY(mockSock != nullptr);
+    QCOMPARE(mockSock->disconnectFromHostCallCount, 1);
+}
+
+void BaseTcpThreadTests::testCloseConnection_SocketIsClosing_DisconnectFromHostCalled()
+{
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true);
+    mockSock->setMockState(QAbstractSocket::ClosingState);
+
+    BaseTcpThreadTestDouble thread(mockSock);
+
+    thread.callCloseConnection();
+    QCOMPARE(mockSock->disconnectFromHostCallCount, 1);
+}
+
+void BaseTcpThreadTests::testCloseConnection_CloseCalled()
+{
+    auto *mockSock = new MockSslSocket();
+    BaseTcpThreadTestDouble thread(mockSock);
+    thread.callCloseConnection();
+    QCOMPARE(mockSock->closeCallCount, 1);
+}
+
+void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatus_Disconnected()
+{
+    auto *mockSock = new MockSslSocket();
+
+    BaseTcpThreadTestDouble thread(mockSock);
+    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+    thread.callCloseConnection();
+    QCOMPARE(connectionStatusSpy.count(), 1);
+    QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Disconnected");
+}

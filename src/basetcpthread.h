@@ -63,7 +63,7 @@ protected:
     [[nodiscard]] virtual QByteArray readSocketData();
 
     virtual void sendOutgoingPacket(Packet& packet);
-    virtual void closeConnection() = 0;
+    virtual void closeConnection();
     virtual void sleep(unsigned long usec);
 
     [[nodiscard]] virtual QHostAddress getSocketPeerAddress() const;
