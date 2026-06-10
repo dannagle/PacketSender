@@ -36,10 +36,8 @@ protected:
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
     virtual void emitSSLDiagnosticPackets();
     virtual void performSSLHandshakeIfNeeded();
-
-    //     void run() override;
-    //
-    //     virtual void handleIncomingConnection();
+    virtual void handleIncomingConnection();
+    void run() override;
 
     static PacketSenderQSslSocketInterface* createSocketWithDescriptor(int socketDescriptor);
 };

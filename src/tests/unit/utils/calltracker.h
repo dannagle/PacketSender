@@ -24,6 +24,15 @@ public:
 
     void clearCallSequence() const;
 
+    // all
+    static QString RUN() { return QStringLiteral("run"); }
+
+
+    // BaseTcpThread
+    static QString LOAD_SSL_CERTS() { return QStringLiteral("loadSSLCerts"); }
+    static QString LOAD_SNAKEOIL_CERTS_() { return QStringLiteral("loadSnakeOilCerts"); }
+    static QString CLOSE_CONNECTION() { return QStringLiteral("closeConnection"); }
+
     // OutgoingTcpThread
     static QString PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("persistentConnectionLoop"); }
     static QString HANDLE_OUTGOING_SSL() { return QStringLiteral("handleOutgoingSSL"); }
@@ -46,17 +55,12 @@ public:
     static QString PREPARE_OUTGOING_PACKET() { return QStringLiteral("prepareOutgoingPacket"); }
 
 
-
     // IncomingTcpThread
     static QString BUILD_INITIAL_RECEIVED_PACKET() { return QStringLiteral("buildInitialReceivedPacket"); }
     static QString SEND_SMART_REPLY_IF_CONFIGURED() { return QStringLiteral("sendSmartReplyIfConfigured"); }
     static QString EMIT_SSL_DIAGNOSTIC_PACKETS() { return QStringLiteral("emitSSLDiagnosticPackets"); }
     static QString PERFORM_SSL_HANDSHAKE_IF_NEEDED() { return QStringLiteral("performSSLHandshakeIfNeeded"); }
-
-    static QString LOAD_SSL_CERTS() { return QStringLiteral("loadSSLCerts"); }
-    static QString LOAD_SNAKEOIL_CERTS_() { return QStringLiteral("loadSnakeOilCerts"); }
-
-    static QString CLOSE_CONNECTION() { return QStringLiteral("closeConnection"); }
+    static QString HANDLE_INCOMING_CONNECTION() { return QStringLiteral("handleIncomingConnection"); }
 
     // MockSslSocket
     static QString IGNORE_SSL_ERRORS() { return QStringLiteral("ignoreSslErrors"); }

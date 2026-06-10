@@ -38,6 +38,7 @@ private slots:
     void testEmitSSLDiagnosticPackets_socketNullptr_emits0SentPackets();
     void testEmitSSLDiagnosticPackets_socketNotEncrypted_emits0SentPackets();
     void testEmitSSLDiagnosticPackets_successPath();
+    void testPerformSSLHandshakeIfNeeded_shouldUseSslIsFalse_doesNotCallSSLMethods();
 
     // performSSLHandshakeIfNeeded() tests
     void testPerformSSLHandshakeIfNeeded_socketInterfaceIsNullptr_emitsErrorMessage();
@@ -50,6 +51,16 @@ private slots:
     void testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors();
     void testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors_doesNotCallEmitSSLDiagnosisPackets();
     void testPerformSSLHandshakeIfNeeded_successPath_callsEmitSSLDiagnosisPackets();
+
+    // handleIncomingConnection() tests
+    void testHandleIncomingConnection_socketInterfaceIsNullptr_emitsErrorMessage();
+    void testHandleIncomingConnection_emitsConnectionStatus_incomingConnectionAccepted();
+    void testHandleIncomingConnection_successPath();
+    void testHandleIncomingConnection_successPath_emitsReceivedPacket();
+    void testRun_exitsEarly_ifSocketInterfaceIsNullPtr();
+
+    // run() tests
+    void testRun_callSequence();
 
 private:
     static constexpr int TEST_PORT_NUMBER = 666;

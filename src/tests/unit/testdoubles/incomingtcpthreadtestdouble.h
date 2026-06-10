@@ -64,6 +64,16 @@ public:
         performSSLHandshakeIfNeeded();
     }
 
+    void callHandleIncomingConnection()
+    {
+        handleIncomingConnection();
+    }
+
+    void callRun()
+    {
+        run();
+    }
+
     bool lastAllowSnakeOilValue;
 
 protected:
@@ -122,6 +132,24 @@ protected:
     {
         recordCall(LOAD_SNAKEOIL_CERTS_());
         IncomingTcpThread::loadSnakeOilCerts();
+    }
+
+    void handleIncomingConnection() override
+    {
+        recordCall(HANDLE_INCOMING_CONNECTION());
+        IncomingTcpThread::handleIncomingConnection();
+    }
+
+    void run() override
+    {
+        recordCall(RUN());
+        IncomingTcpThread::run();
+    }
+
+    void closeConnection() override
+    {
+        recordCall(CLOSE_CONNECTION());
+        IncomingTcpThread::closeConnection();
     }
 };
 

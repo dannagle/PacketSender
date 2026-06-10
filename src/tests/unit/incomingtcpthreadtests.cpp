@@ -335,9 +335,23 @@ void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_successPath()
     }
 }
 // performSSLHandshakeIfNeeded() tests
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_shouldUseSslIsFalse_doesNotCallSSLMethods()
+{
+    constexpr bool shouldUseSSL = false;
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(sock->getCallCount(CallTracker::LOAD_SNAKEOIL_CERTS_()), 0);
+    QCOMPARE(sock->getCallCount(CallTracker::LOAD_SSL_CERTS()), 0);
+}
+
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_socketInterfaceIsNullptr_emitsErrorMessage()
 {
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    constexpr bool shouldUseSSL = true;
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), shouldUseSSL);
     thread.setSocketForTest(nullptr);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -366,7 +380,8 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSet
     QFETCH(int, useSnakeOilCallCount);
     QFETCH(int, loadSSLCertsCallCount);
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    constexpr bool shouldUseSSL = true;
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), shouldUseSSL);
 
     if (useSnakeOil.has_value())
     {
@@ -395,9 +410,9 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors()
     QFETCH(std::optional<bool>, ignoreSslErrorsSetting);
     QFETCH(int, ignoreSSlErrorsCallCount);
 
-
+    constexpr bool shouldUseSSL = true;
     auto sock = TestUtils::createMockSocketForTest();
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
 
     if (ignoreSslErrorsSetting.has_value())
     {
@@ -412,8 +427,9 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors()
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callStartServerEncryption()
 {
+    constexpr bool shouldUseSSL = true;
     auto sock = TestUtils::createMockSocketForTest();
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
 
     thread.callPerformSSLHandshakeIfNeeded();
     QCOMPARE(sock->getCallCount(CallTracker::START_SERVER_ENCRYPTION()), 1);
@@ -424,7 +440,8 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
     auto sock = TestUtils::createMockSocketForTest();
     sock->setMockEncrypted(true);
 
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    constexpr bool shouldUseSSL = true;
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
 
     thread.callPerformSSLHandshakeIfNeeded();
@@ -438,7 +455,8 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
     auto sock = TestUtils::createMockSocketForTest();
     sock->mockSSLHandshakeShouldSucceed = false;
 
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    constexpr bool shouldUseSSL = true;
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
 
     thread.callPerformSSLHandshakeIfNeeded();
@@ -453,7 +471,8 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
     auto sock = TestUtils::createMockSocketForTest();
     sock->mockSSLHandshakeShouldSucceed = false;
 
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    constexpr bool shouldUseSSL = true;
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
 
     thread.callPerformSSLHandshakeIfNeeded();
@@ -462,12 +481,115 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_successPath_callsEmitSSLDiagnosisPackets()
 {
+    constexpr bool shouldUseSSL = true;
     auto sock = TestUtils::createMockSocketForTest();
     sock->mockSSLHandshakeShouldSucceed = true;
 
-    auto thread = IncomingTcpThreadTestDouble(sock);
+    auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
 
     thread.callPerformSSLHandshakeIfNeeded();
     QCOMPARE(thread.getCallCount(CallTracker::EMIT_SSL_DIAGNOSTIC_PACKETS()), 1);
+}
+
+// handleIncomingConnection() tests
+void IncomingTcpThreadTests::testHandleIncomingConnection_socketInterfaceIsNullptr_emitsErrorMessage()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.setSocketForTest(nullptr);
+    thread.callHandleIncomingConnection();
+    QCOMPARE(errorMessageSpy.count(), 1);
+    QCOMPARE(errorMessageSpy.first().first().value<QString>(), "handleIncomingConnection: null socket interface");
+}
+
+void IncomingTcpThreadTests::testHandleIncomingConnection_emitsConnectionStatus_incomingConnectionAccepted()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+
+    thread.callHandleIncomingConnection();
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(connectionStatusSpy.count(), 1);
+    QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Incoming connection accepted");
+}
+
+void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callHandleIncomingConnection();
+    QCOMPARE(errorMessageSpy.count(), 0);
+
+    std::vector<QString> expectedCallSequence = {
+        CallTracker::HANDLE_INCOMING_CONNECTION(),
+        CallTracker::PERFORM_SSL_HANDSHAKE_IF_NEEDED(),
+        CallTracker::BUILD_INITIAL_RECEIVED_PACKET(),
+        CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()
+    };
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+}
+
+void IncomingTcpThreadTests::testHandleIncomingConnection_successPath_emitsReceivedPacket()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy packetReceivedSpy(&thread, &BaseTcpThread::packetReceived);
+
+    thread.callHandleIncomingConnection();
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(packetReceivedSpy.count(), 1);
+
+    const auto returnedPacket = packetReceivedSpy.first().first().value<Packet>();
+    QVERIFY(returnedPacket.timestamp.isValid());
+    QCOMPARE(returnedPacket.name, returnedPacket.timestamp.toString(DATETIMEFORMAT));
+
+    auto normalizedPacket = returnedPacket;
+    normalizedPacket.name = "";
+
+    Packet p;
+    p.name = "";
+    p.tcpOrUdp = "TCP";
+    p.fromIP = "127.0.0.1";
+    p.toIP = "You";
+    p.port = 0;
+    p.fromPort = 0;
+    QCOMPARE(normalizedPacket, p);
+}
+
+void IncomingTcpThreadTests::testRun_exitsEarly_ifSocketInterfaceIsNullPtr()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    thread.setSocketForTest(nullptr);
+
+    thread.callRun();
+
+    // we only care about the calls made directly from run()
+    const auto callSequence =  thread.getCallSequence();
+    const std::vector<QString> expectedCallSequence = {CallTracker::RUN()};
+    QCOMPARE(callSequence, expectedCallSequence);
+}
+
+void IncomingTcpThreadTests::testRun_callSequence()
+{
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    thread.callRun();
+
+    // we only care about the calls made directly from run()
+    const auto callSequence =  thread.getCallSequence();
+    QCOMPARE(callSequence.at(0), CallTracker::RUN());
+    QCOMPARE(callSequence.at(1), CallTracker::HANDLE_INCOMING_CONNECTION());
+    QCOMPARE(callSequence.back(), CallTracker::CLOSE_CONNECTION());
 }

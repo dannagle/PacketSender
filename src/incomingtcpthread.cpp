@@ -124,6 +124,11 @@ void IncomingTcpThread::emitSSLDiagnosticPackets()
 
 void IncomingTcpThread::performSSLHandshakeIfNeeded()
 {
+    if (!shouldUseSSL)
+    {
+        return;
+    }
+
     auto* sock = getSocketInterface();
     if (!sock) {
         emit errorMessage("performSSLHandshakeIfNeeded: null socket");
@@ -157,4 +162,33 @@ void IncomingTcpThread::performSSLHandshakeIfNeeded()
 
     // === 4. Emit diagnostic packets (this is the part that was in old TCPThread) ===
     emitSSLDiagnosticPackets();
+}
+
+void IncomingTcpThread::handleIncomingConnection()
+{
+    auto* sock = getSocketInterface();
+    if (!sock) {
+        emit errorMessage("handleIncomingConnection: null socket interface");
+        return;
+    }
+
+    emit connectionStatus("Incoming connection accepted");
+
+    performSSLHandshakeIfNeeded();
+
+    const Packet received = buildInitialReceivedPacket();
+    emit packetReceived(received);
+
+    sendSmartReplyIfConfigured(received);
+}
+
+void IncomingTcpThread::run()
+{
+    if (!getSocketInterface()) {
+        emit errorMessage("IncomingTcpThread: no socket interface");
+        return;
+    }
+
+    handleIncomingConnection();
+    closeConnection();
 }
