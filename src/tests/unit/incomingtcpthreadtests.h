@@ -32,6 +32,11 @@ private slots:
     void testSendSmartReplyIfConfigured_successPath();
     void testSendSmartReplyIfConfigured_successPath_withMacroExpansion();
 
+    // emitSSLDiagnosticPackets() tests
+    void testEmitSSLDiagnosticPackets_socketNullptr_emits0SentPackets();
+    void testEmitSSLDiagnosticPackets_socketNotEncrypted_emits0SentPackets();
+    void testEmitSSLDiagnosticPackets_successPath();
+
 private:
     static constexpr int TEST_PORT_NUMBER = 666;
 };

@@ -69,6 +69,12 @@ protected:
     [[nodiscard]] virtual QHostAddress getSocketPeerAddress() const;
     [[nodiscard]] virtual bool isSocketValid() const;
 
+    // ssl cert methods
+    void loadSnakeOilCertificate();
+    void loadSnakeOilKey();
+    virtual void loadSnakeOilCerts();
+    virtual void loadSSLCerts(bool allowSnakeOil);
+
     bool managedByConnection = false;
     bool closeRequest = false;
     bool shouldUseSSL = false;

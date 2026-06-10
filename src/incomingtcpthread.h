@@ -35,6 +35,7 @@ protected:
     void closeConnection() override;
     virtual Packet buildInitialReceivedPacket();
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
+    virtual void emitSSLDiagnosticPackets();
 
     //     void run() override;
     //

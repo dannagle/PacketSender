@@ -55,6 +55,7 @@ public:
                        const QByteArray& passPhrase) override;
     void setPrivateKey(const QSslKey &key) override;
     bool hasLocalCertificate() const override;
+    QSslCertificate localCertificate() const override;
     bool hasPrivateKey() const override;
     void setProtocol(QSsl::SslProtocol protocol) override;
 

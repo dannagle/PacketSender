@@ -46,12 +46,6 @@ protected:
 
     virtual Packet buildReplyPacket(const Packet &receivedPacket, const QByteArray &responseData);
 
-    // SSL cert methods
-    virtual void loadSSLCerts(bool allowSnakeOil);
-    virtual void loadSnakeOilCerts();
-    void loadSnakeOilCertificate();
-    void loadSnakeOilKey();
-
     // SSL reaction methods
     virtual void handleOutgoingSSLHandshakeSuccess();
     virtual void handleOutgoingSSLHandshakeFailure();

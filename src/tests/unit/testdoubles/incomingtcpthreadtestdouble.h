@@ -59,6 +59,11 @@ public:
         return sendSmartReplyIfConfigured(packet);
     }
 
+    void callEmitSSLDiagnosticPackets()
+    {
+        emitSSLDiagnosticPackets();
+    }
+
     /****************************************************************************************
      *                                                                                      *
      *                             METHOD CALL COUNTERS                                     *
@@ -70,6 +75,7 @@ public:
     int buildInitialReceivedPacketCallCount = 0;
     int sendOutgoingPacketCallCount = 0;
     int sendSmartReplyIfConfiguredCallCount = 0;
+    int emitSSLDiagnosticPacketsCallCount = 0;
 
 protected:
     /****************************************************************************************
@@ -101,13 +107,20 @@ protected:
         BaseTcpThread::sendOutgoingPacket(packet);
     }
 
-
     void sendSmartReplyIfConfigured(const Packet& packet) override
     {
         sendSmartReplyIfConfiguredCallCount++;
         callSequence.push_back("sendSmartReplyIfConfigured");
 
         IncomingTcpThread::sendSmartReplyIfConfigured(packet);
+    }
+
+    void emitSSLDiagnosticPackets() override
+    {
+        emitSSLDiagnosticPacketsCallCount++;
+        callSequence.push_back("emitSSLDiagnosticPackets");
+
+        IncomingTcpThread::emitSSLDiagnosticPackets();
     }
 
 private:

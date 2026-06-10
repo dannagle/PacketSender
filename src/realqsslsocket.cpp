@@ -161,6 +161,11 @@ bool RealQSslSocket::hasLocalCertificate() const
     return !rawSocket()->localCertificate().isNull();
 }
 
+QSslCertificate RealQSslSocket::localCertificate() const
+{
+    return socket->localCertificate();
+}
+
 bool RealQSslSocket::hasPrivateKey() const
 {
     return !rawSocket()->privateKey().isNull();

@@ -136,6 +136,11 @@ public:
         return !mockLocalCertificate.isNull();
     }
 
+    QSslCertificate localCertificate() const override
+    {
+        return mockLocalCertificate;
+    }
+
     bool hasPrivateKey() const override
     {
         return !lastPrivateKey.isNull();

@@ -93,3 +93,39 @@ void IncomingTcpThread::sendSmartReplyIfConfigured(const Packet& receivedPacket)
     QDEBUG() << "about to call sendOutgoingPacket";
     sendOutgoingPacket(reply);
 }
+
+void IncomingTcpThread::emitSSLDiagnosticPackets()
+{
+    auto* sock = getSocketInterface();
+    if (!sock || !sock->isEncrypted()) {
+        return;
+    }
+
+    Packet info;
+    info.timestamp = QDateTime::currentDateTime();
+    info.name = info.timestamp.toString(DATETIMEFORMAT);
+    info.toIP = "You";
+    info.port = getLocalPort();
+    info.fromIP = getPeerAddressAsString();
+    info.fromPort = getPeerPort();
+    info.tcpOrUdp = "SSL";
+
+    // Cipher info
+    QSslCipher cipher = sock->sessionCipher();
+    info.errorString = "Encrypted with " + cipher.encryptionMethod();
+    emit packetSent(info);
+
+    info.errorString = "Authenticated with " + cipher.authenticationMethod();
+    emit packetSent(info);
+
+    // Certificate info
+    info.errorString = "Peer cert issued by " +
+        sock->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+    QDEBUG() << "(3) info.errorString: " << info.errorString;
+    emit packetSent(info);
+
+    info.errorString = "Our Cert issued by " +
+        sock->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
+    QDEBUG() << "(4) info.errorString: " << info.errorString;
+    emit packetSent(info);
+}

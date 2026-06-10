@@ -228,3 +228,100 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath_withMacr
 
     QCOMPARE(packetSentSpy.first().first().value<Packet>().hexString.trimmed(), "31");
 }
+
+// emitSSLDiagnosticPackets() tests
+void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_socketNullptr_emits0SentPackets()
+{
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    thread.setSocketForTest(nullptr);
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+    thread.callEmitSSLDiagnosticPackets();
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_socketNotEncrypted_emits0SentPackets()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->setMockEncrypted(false);
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+    thread.callEmitSSLDiagnosticPackets();
+    QCOMPARE(packetSentSpy.count(), 0);
+}
+
+Packet normalizeDiagnosticSslPacket(const Packet &packet)
+{
+    Packet normalizedPacket = packet;
+
+    normalizedPacket.timestamp = QDateTime();
+    normalizedPacket.name = "";
+    normalizedPacket.errorString = "";
+
+    return normalizedPacket;
+}
+
+void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_successPath()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->setMockEncrypted(true);
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
+    thread.callEmitSSLDiagnosticPackets();
+    QCOMPARE(packetSentSpy.count(), 4);
+
+    Packet expectedPacket;
+    expectedPacket.toIP = "You";
+    expectedPacket.port = 0;
+    expectedPacket.fromIP = "127.0.0.1";
+    expectedPacket.fromPort = 0;
+    expectedPacket.tcpOrUdp = "SSL";
+
+    // === Packet 1: Encryption method ===
+    {
+        const Packet p = packetSentSpy.at(0).at(0).value<Packet>();
+
+        QVERIFY(p.timestamp.isValid());
+        QCOMPARE(p.name, p.timestamp.toString(DATETIMEFORMAT));
+        QVERIFY(p.errorString.startsWith("Encrypted with "));
+
+        QCOMPARE(normalizeDiagnosticSslPacket(p), expectedPacket);
+    }
+
+    // === Packet 2: Authentication method ===
+    {
+        const Packet p = packetSentSpy.at(1).at(0).value<Packet>();
+
+        QVERIFY(p.timestamp.isValid());
+        QCOMPARE(p.name, p.timestamp.toString(DATETIMEFORMAT));
+        QVERIFY(p.errorString.startsWith("Authenticated with "));
+
+        QCOMPARE(normalizeDiagnosticSslPacket(p), expectedPacket);
+    }
+
+    // === Packet 3: Peer certificate ===
+    {
+        const Packet p = packetSentSpy.at(2).at(0).value<Packet>();
+
+        QVERIFY(p.timestamp.isValid());
+        QCOMPARE(p.name, p.timestamp.toString(DATETIMEFORMAT));
+        QVERIFY(p.errorString.startsWith("Peer cert issued by "));
+
+        QCOMPARE(normalizeDiagnosticSslPacket(p), expectedPacket);
+    }
+
+    // === Packet 4: Local certificate ===
+    {
+        const Packet p = packetSentSpy.at(3).at(0).value<Packet>();
+
+        QVERIFY(p.timestamp.isValid());
+        QCOMPARE(p.name, p.timestamp.toString(DATETIMEFORMAT));
+        QVERIFY(p.errorString.startsWith("Our Cert issued by "));
+
+        QCOMPARE(normalizeDiagnosticSslPacket(p), expectedPacket);
+    }
+}

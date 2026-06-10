@@ -6,6 +6,11 @@
 #include <QAbstractSocket>
 #include "basetcpthread.h"
 
+#include <QSslKey>
+
+#include "fileutils.h"
+#include "settingnames.h"
+
 void BaseTcpThread::debugSocketState() const
 {
     qDebug() << "=== BaseTcpThread::debugSocketState ===";
@@ -202,5 +207,71 @@ QString BaseTcpThread::getPeerAddressAsString() const
         QString result = addr.toString();
         qDebug() << "  IPv4 result =" << result;
         return result;
+    }
+}
+
+void  BaseTcpThread::loadSnakeOilCertificate()
+{
+    const QByteArray decoded = FileUtils::decodeBase64EncodedResourceFile(SNAKEOIL_BASE64_CERT);
+    const QSslCertificate certificate(decoded, QSsl::Pem);
+
+    if (!certificate.isNull() && getSocketInterface()) {
+        getSocketInterface()->setLocalCertificate(certificate);
+    }
+}
+
+void BaseTcpThread::loadSnakeOilKey()
+{
+    const QByteArray decoded = FileUtils::decodeBase64EncodedResourceFile(SNAKEOIL_BASE64_KEY);
+    const QSslKey sslKey(decoded, QSsl::Rsa, QSsl::Pem);
+
+    if (!sslKey.isNull() && getSocketInterface()) {
+        getSocketInterface()->setPrivateKey(sslKey);
+    }
+}
+
+void BaseTcpThread::loadSnakeOilCerts()
+{
+    // Certificate
+    loadSnakeOilCertificate();
+
+    // Private Key
+    loadSnakeOilKey();
+}
+
+void BaseTcpThread::loadSSLCerts(bool allowSnakeOil)
+{
+    auto sock = getSocketInterface();
+
+    if (!sock) {
+        emit errorMessage("loadSSLCerts called with null socketInterface");
+        return;
+    }
+
+    if (allowSnakeOil)
+    {
+        loadSnakeOilCerts();
+        return;
+    }
+
+    const QSettings& settings = getSettings();
+
+    // Production / user-provided certs
+    QString certPath = settings.value(SET_LOCAL_CERTIFICATE_PATH).toString();
+    QString keyPath  = settings.value(SSL_PRIVATE_KEY_PATH).toString();
+
+    if (!certPath.isEmpty()) {
+        sock->setLocalCertificate(certPath);
+
+        if (!sock->hasLocalCertificate()) {
+            emit errorMessage("SSL: Failed to load certificate from: " + certPath);
+        }
+    }
+    if (!keyPath.isEmpty()) {
+        sock->setPrivateKey(keyPath);
+
+        if (!sock->hasPrivateKey()) {
+            emit errorMessage("SSL: Failed to load private key from: " + keyPath);
+        }
     }
 }

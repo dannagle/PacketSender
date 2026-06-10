@@ -77,6 +77,7 @@ public:
                                      QAbstractSocket::SocketState state = QAbstractSocket::ConnectedState,
                                      QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite) = 0;
 
+    virtual QSslCertificate localCertificate() const = 0;
 
     // Helper for gradual migration
     [[nodiscard]] virtual QSslSocket* rawSocket() const { return nullptr; }
