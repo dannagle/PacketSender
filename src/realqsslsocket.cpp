@@ -176,6 +176,11 @@ void RealQSslSocket::setProtocol(QSsl::SslProtocol protocol)
     socket->setProtocol(protocol);
 }
 
+void RealQSslSocket::startServerEncryption()
+{
+    socket->startServerEncryption();
+}
+
 int RealQSslSocket::getSocketDescriptor() const
 {
     return static_cast<int>(socket->socketDescriptor());

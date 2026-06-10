@@ -121,11 +121,46 @@ void IncomingTcpThread::emitSSLDiagnosticPackets()
     // Certificate info
     info.errorString = "Peer cert issued by " +
         sock->peerCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-    QDEBUG() << "(3) info.errorString: " << info.errorString;
     emit packetSent(info);
 
     info.errorString = "Our Cert issued by " +
         sock->localCertificate().issuerInfo(QSslCertificate::CommonName).join("\n");
-    QDEBUG() << "(4) info.errorString: " << info.errorString;
     emit packetSent(info);
+}
+
+void IncomingTcpThread::performSSLHandshakeIfNeeded()
+{
+    auto* sock = getSocketInterface();
+    if (!sock) {
+        emit errorMessage("performSSLHandshakeIfNeeded: null socket");
+        return;
+    }
+
+    const QSettings& settings = getSettings();
+    const bool useSnakeOil = settings.value(LOAD_SNAKEOIL_CERTS, true).toBool();   // "serverSnakeOilCheck"
+
+    // === 1. Load certificates (reuse logic from OutgoingTcpThread) ===
+    if (useSnakeOil) {
+        loadSnakeOilCerts();
+    } else {
+        loadSSLCerts(useSnakeOil);
+    }
+
+    // === 2. Standard SSL setup ===
+    sock->setProtocol(QSsl::AnyProtocol);
+
+    if (settings.value(IGNORE_SSL_CHECK, true).toBool()) {
+        sock->ignoreSslErrors();
+    }
+
+    // === 3. Start server-side encryption ===
+    sock->startServerEncryption();
+
+    if (!sock->waitForEncrypted(5000)) {
+        emit errorMessage("Incoming SSL handshake failed (waitForEncrypted timeout)");
+        return;
+    }
+
+    // === 4. Emit diagnostic packets (this is the part that was in old TCPThread) ===
+    emitSSLDiagnosticPackets();
 }

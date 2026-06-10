@@ -57,6 +57,12 @@ public:
     static QString LOAD_SNAKEOIL_CERTS_() { return QStringLiteral("loadSnakeOilCerts"); }
 
     static QString CLOSE_CONNECTION() { return QStringLiteral("closeConnection"); }
+
+    // MockSslSocket
+    static QString IGNORE_SSL_ERRORS() { return QStringLiteral("ignoreSslErrors"); }
+    static QString START_SERVER_ENCRYPTION() { return QStringLiteral("startServerEncryption"); }
+    static QString WAIT_FOR_ENCRYPTED() { return QStringLiteral("waitForEncrypted"); }
+
 };
 
 #endif //CALLTRACKER_H

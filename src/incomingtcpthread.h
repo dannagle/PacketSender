@@ -36,12 +36,11 @@ protected:
     virtual Packet buildInitialReceivedPacket();
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
     virtual void emitSSLDiagnosticPackets();
+    virtual void performSSLHandshakeIfNeeded();
 
     //     void run() override;
     //
     //     virtual void handleIncomingConnection();
-    //     virtual void performSSLHandshakeIfNeeded();
-    //     virtual Packet buildInitialReceivedPacket();
 
     static PacketSenderQSslSocketInterface* createSocketWithDescriptor(int socketDescriptor);
 };

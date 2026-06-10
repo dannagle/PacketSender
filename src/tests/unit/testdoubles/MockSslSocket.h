@@ -11,9 +11,10 @@
 #include <QSslKey>
 
 #include "../../packetsenderqsslsocketinterface.h"
+#include "utils/calltracker.h"
 
 // Mock QSslSocket for testing (or use a real one in a controlled way)
-class MockSslSocket : public QSslSocket, public PacketSenderQSslSocketInterface {
+class MockSslSocket : public QSslSocket, public PacketSenderQSslSocketInterface, public CallTracker {
     Q_OBJECT
 public:
     explicit MockSslSocket(QObject *parent = nullptr)
@@ -48,7 +49,12 @@ public:
 
     bool makeWaitForConnectedReturnFalse = false;
     bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return makeWaitForConnectedReturnFalse? false: mockConnected; }
-    bool waitForEncrypted(int msecs = 30000) override { qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
+    bool waitForEncrypted(int msecs = 30000) override
+    {
+        qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted;
+        recordCall(WAIT_FOR_ENCRYPTED());
+        return mockEncrypted;
+    }
     bool isEncrypted() const override {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
     bool waitForReadyRead(int msecs) override
     {
@@ -164,10 +170,28 @@ public:
     QList<QSslError> sslHandshakeErrors() const override { return mockSslHandshakeErrors; }
 #endif
 
-    // === PacketSenderQSslSocketInterface methods ===
     QSslCertificate peerCertificate() const override
     {
         return QSslSocket::peerCertificate();
+    }
+
+    bool startServerEncryptionCalled;
+    bool mockSSLHandshakeShouldSucceed = true;
+
+    void startServerEncryption() override
+    {
+        recordCall(START_SERVER_ENCRYPTION());
+
+        startServerEncryptionCalled = true;
+
+        // Only succeed if the test wants it to
+        if (mockSSLHandshakeShouldSucceed) {
+            mockEncrypted = true;
+            emit encrypted();
+        } else {
+            mockEncrypted = false;
+            // Optionally emit error signals here if your code listens to them
+        }
     }
 
     void connectToHostEncrypted(const QString& hostName, quint16 port,
@@ -177,12 +201,12 @@ public:
 
     }
 
-    int ignoreSslErrorsCallCount = 0;
     void ignoreSslErrors() override
     {
-        ignoreSslErrorsCallCount++;
-        qDebug("ignoreSslErrors called in MockSslSocket");
+        qDebug() << "inside ignoreSslErrors() in MockSslSocket";
+        recordCall(IGNORE_SSL_ERRORS());
     }
+
 
     // Mock setters
     void setMockConnected(bool val)

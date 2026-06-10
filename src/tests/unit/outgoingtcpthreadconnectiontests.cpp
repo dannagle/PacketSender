@@ -357,7 +357,7 @@ void OutgoingTcpThreadConnectionTests::testHandleOutgoingSSL_callsIgnoreSSLCheck
     settings.sync();
 
     thread.callHandleOutgoingSSL();
-    QCOMPARE(mockSock->ignoreSslErrorsCallCount, 1);
+    QCOMPARE(mockSock->getCallCount(CallTracker::IGNORE_SSL_ERRORS()), 1);
 }
 
 void OutgoingTcpThreadConnectionTests::testHandleOutgoingSSL_doesNoCallIgnoreSSLCheck_IgnoreSSLCheckSettingIsFalse()
@@ -374,7 +374,7 @@ void OutgoingTcpThreadConnectionTests::testHandleOutgoingSSL_doesNoCallIgnoreSSL
     settings.sync();
 
     thread.callHandleOutgoingSSL();
-    QCOMPARE(mockSock->ignoreSslErrorsCallCount, 0);
+    QCOMPARE(mockSock->getCallCount(CallTracker::IGNORE_SSL_ERRORS()), 0);
 }
 
 void OutgoingTcpThreadConnectionTests::testHandleOutgoingSSL_callsLoadSSLCerts()

@@ -73,7 +73,7 @@ inline QSettings& getSettings()
 {
     // === Unit Test Path ===
     if (QCoreApplication::applicationName().contains("unittest", Qt::CaseInsensitive)) {
-        qWarning() << "inside test version of getSettings";
+        // qWarning() << "inside test version of getSettings";
 
         static QTemporaryFile* testSettingsFile = nullptr;
 
@@ -85,17 +85,17 @@ inline QSettings& getSettings()
             }
         }
 
-        qWarning() << "testSettingsFile: " << testSettingsFile->fileName();
+        // qWarning() << "testSettingsFile: " << testSettingsFile->fileName();
         QFile snakeoilKey("://ps.key.base64");
         QFile snakeoilCert("://ps.pem.base64");
         QFile snakeoilCA("://snakeoilca.crt.base64");
 
-        qDebug() << "snakeoilKey (://ps.key.base64) exists(): " << snakeoilKey.exists() << "\n"
-            << "snakeoilKey.filename: " << snakeoilKey.fileName() << "\n"
-            << "snakeoilCert (://ps.pem.base64) exists(): " << snakeoilCert.exists() << "\n"
-            << "snakeoilCert.filename: " << snakeoilCert.fileName() << "\n"
-            << "snakeoilCA (://snakeoilca.crt.base64) exists(): " << snakeoilCA.exists() << "\n"
-            << "snakeoilCA.filename: " << snakeoilCert.fileName();
+        // qDebug() << "snakeoilKey (://ps.key.base64) exists(): " << snakeoilKey.exists() << "\n"
+        //     << "snakeoilKey.filename: " << snakeoilKey.fileName() << "\n"
+        //     << "snakeoilCert (://ps.pem.base64) exists(): " << snakeoilCert.exists() << "\n"
+        //     << "snakeoilCert.filename: " << snakeoilCert.fileName() << "\n"
+        //     << "snakeoilCA (://snakeoilca.crt.base64) exists(): " << snakeoilCA.exists() << "\n"
+        //     << "snakeoilCA.filename: " << snakeoilCert.fileName();
 
 
         static QSettings testSettings(testSettingsFile->fileName(), QSettings::IniFormat);

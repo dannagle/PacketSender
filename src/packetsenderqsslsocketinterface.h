@@ -78,6 +78,7 @@ public:
                                      QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite) = 0;
 
     virtual QSslCertificate localCertificate() const = 0;
+    virtual void startServerEncryption() = 0;
 
     // Helper for gradual migration
     [[nodiscard]] virtual QSslSocket* rawSocket() const { return nullptr; }

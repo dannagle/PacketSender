@@ -12,6 +12,8 @@ class IncomingTcpThreadTests : public QObject
     Q_OBJECT
 
 private slots:
+    void init();
+
     // constructor tests
     void testConstructor_assignsSocketDescriptor();
     void testConstructor_assignsIsSecure();
@@ -36,6 +38,18 @@ private slots:
     void testEmitSSLDiagnosticPackets_socketNullptr_emits0SentPackets();
     void testEmitSSLDiagnosticPackets_socketNotEncrypted_emits0SentPackets();
     void testEmitSSLDiagnosticPackets_successPath();
+
+    // performSSLHandshakeIfNeeded() tests
+    void testPerformSSLHandshakeIfNeeded_socketInterfaceIsNullptr_emitsErrorMessage();
+    void testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSetting_data();
+    void testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSetting();
+    void testPerformSSLHandshakeIfNeeded_ignoreSSLErrors_data();
+    void testPerformSSLHandshakeIfNeeded_ignoreSSLErrors();
+    void testPerformSSLHandshakeIfNeeded_callStartServerEncryption();
+    void testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasNoErrors();
+    void testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors();
+    void testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors_doesNotCallEmitSSLDiagnosisPackets();
+    void testPerformSSLHandshakeIfNeeded_successPath_callsEmitSSLDiagnosisPackets();
 
 private:
     static constexpr int TEST_PORT_NUMBER = 666;

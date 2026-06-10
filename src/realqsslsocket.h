@@ -58,6 +58,7 @@ public:
     QSslCertificate localCertificate() const override;
     bool hasPrivateKey() const override;
     void setProtocol(QSsl::SslProtocol protocol) override;
+    void startServerEncryption() override;
 
     [[nodiscard]] int getSocketDescriptor() const override;
     bool setSocketDescriptor(

@@ -14,6 +14,8 @@
 #include "../../incomingtcpthread.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
 #include "basetcpthread.h"
+#include "settings.h"
+#include "utils/calltracker.h"
 
 QTcpServer& startQTcpServer()
 {
@@ -27,6 +29,13 @@ int getValidDescriptor()
     const int validDescriptor = static_cast<int>(startQTcpServer().socketDescriptor());
     QDEBUG() << "validDescriptor: " << validDescriptor;
     return validDescriptor;
+}
+
+void IncomingTcpThreadTests::init()
+{
+    QSettings& settings = getSettings();
+    settings.clear();
+    settings.sync();
 }
 
 
@@ -324,4 +333,141 @@ void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_successPath()
 
         QCOMPARE(normalizeDiagnosticSslPacket(p), expectedPacket);
     }
+}
+// performSSLHandshakeIfNeeded() tests
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_socketInterfaceIsNullptr_emitsErrorMessage()
+{
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    thread.setSocketForTest(nullptr);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(errorMessageSpy.count(), 1);
+    QCOMPARE(errorMessageSpy.first().first().value<QString>(), "performSSLHandshakeIfNeeded: null socket");
+
+    QCOMPARE(thread.getCallSequence(), {"performSSLHandshakeIfNeeded"});
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSetting_data()
+{
+    QTest::addColumn<std::optional<bool>>("useSnakeOil");
+    QTest::addColumn<int>("useSnakeOilCallCount");
+    QTest::addColumn<int>("loadSSLCertsCallCount");
+
+    QTest::newRow("use SnakeOil Certs")  << std::optional<bool>{true} << 1 << 0;
+    QTest::newRow("do NOT use SnakeOil Certs")  << std::optional<bool>{false}  << 0 << 1;
+    QTest::newRow("default is to use SnakeOil Certs")  << std::optional<bool>{}  << 1 << 0;
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSetting()
+{
+    QFETCH(std::optional<bool>, useSnakeOil);
+    QFETCH(int, useSnakeOilCallCount);
+    QFETCH(int, loadSSLCertsCallCount);
+
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+
+    if (useSnakeOil.has_value())
+    {
+        QSettings& settings = getSettings();
+        settings.setValue(LOAD_SNAKEOIL_CERTS, useSnakeOil.value());
+        settings.sync();
+    }
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(thread.getCallCount(CallTracker::LOAD_SNAKEOIL_CERTS_()), useSnakeOilCallCount);
+    QCOMPARE(thread.getCallCount(CallTracker::LOAD_SSL_CERTS()), loadSSLCertsCallCount);
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors_data()
+{
+    QTest::addColumn<std::optional<bool>>("ignoreSslErrorsSetting");
+    QTest::addColumn<int>("ignoreSSlErrorsCallCount");
+
+    QTest::newRow("ignoreSSLErrors setting true")  << std::optional<bool>{true} << 1;
+    QTest::newRow("ignoreSSLErrors setting false")  << std::optional<bool>{false}  << 0;
+    QTest::newRow("ignoreSSLErrors setting default")  << std::optional<bool>{} << 1;
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors()
+{
+    QFETCH(std::optional<bool>, ignoreSslErrorsSetting);
+    QFETCH(int, ignoreSSlErrorsCallCount);
+
+
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    if (ignoreSslErrorsSetting.has_value())
+    {
+        QSettings& settings = getSettings();
+        settings.setValue(IGNORE_SSL_CHECK, ignoreSslErrorsSetting.value());
+        settings.sync();
+    }
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(sock->getCallCount(CallTracker::IGNORE_SSL_ERRORS()), ignoreSSlErrorsCallCount);
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callStartServerEncryption()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(sock->getCallCount(CallTracker::START_SERVER_ENCRYPTION()), 1);
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasNoErrors()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->setMockEncrypted(true);
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(sock->getCallCount(CallTracker::WAIT_FOR_ENCRYPTED()), 1);
+
+    QCOMPARE(errorMessageSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->mockSSLHandshakeShouldSucceed = false;
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(sock->getCallCount(CallTracker::WAIT_FOR_ENCRYPTED()), 1);
+
+    QCOMPARE(errorMessageSpy.count(), 1);
+    QCOMPARE(errorMessageSpy.first().first().value<QString>(), "Incoming SSL handshake failed (waitForEncrypted timeout)");
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors_doesNotCallEmitSSLDiagnosisPackets()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->mockSSLHandshakeShouldSucceed = false;
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(thread.getCallCount(CallTracker::EMIT_SSL_DIAGNOSTIC_PACKETS()), 0);
+}
+
+void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_successPath_callsEmitSSLDiagnosisPackets()
+{
+    auto sock = TestUtils::createMockSocketForTest();
+    sock->mockSSLHandshakeShouldSucceed = true;
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+
+    thread.callPerformSSLHandshakeIfNeeded();
+    QCOMPARE(thread.getCallCount(CallTracker::EMIT_SSL_DIAGNOSTIC_PACKETS()), 1);
 }
