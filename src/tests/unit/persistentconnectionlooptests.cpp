@@ -13,7 +13,7 @@
 
 #include <memory>
 
-#include "testutils.h"
+#include "utils/testutils.h"
 
 #include "persistentconnectionlooptests.h"
 

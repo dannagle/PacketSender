@@ -14,7 +14,7 @@
 
 #include <memory>
 
-#include "testutils.h"
+#include "utils/testutils.h"
 
 void TcpThread_QApplicationNeeded_tests::testDestructorWaitsGracefullyWhenManaged()
 {

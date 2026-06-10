@@ -13,7 +13,7 @@ add_executable(${TEST_NAME}
     testdoubles/testtcpthreadclass.h
     testdoubles/MockSslSocket.h
 
-    testutils.cpp
+    utils/testutils.cpp
     utils/calltracker.cpp
 
     ../../translations.cpp

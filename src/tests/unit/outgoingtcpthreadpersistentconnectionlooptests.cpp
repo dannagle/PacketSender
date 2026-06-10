@@ -5,7 +5,7 @@
 #include "outgoingtcpthreadpersistentconnectionlooptests.h"
 
 #include "settingnames.h"
-#include "testutils.h"
+#include "utils/testutils.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
 
 void OutgoingTcpThreadPersistentConnectionLoopTests::testShouldContinuePersistentLoop_returnsTrueWhenAllConditionsMet()

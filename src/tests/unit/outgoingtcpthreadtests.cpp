@@ -9,7 +9,7 @@
 #include "outgoingtcpthreadtests.h"
 
 #include "settingnames.h"
-#include "testutils.h"
+#include "utils/testutils.h"
 #include "../../outgoingtcpthread.h"
 #include "../../packet.h"
 #include "testdoubles/MockSslSocket.h"

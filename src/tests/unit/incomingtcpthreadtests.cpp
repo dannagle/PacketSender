@@ -10,7 +10,7 @@
 
 
 #include "settingnames.h"
-#include "testutils.h"
+#include "utils/testutils.h"
 #include "../../incomingtcpthread.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
 #include "basetcpthread.h"

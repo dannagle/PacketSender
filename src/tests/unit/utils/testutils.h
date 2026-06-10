@@ -8,7 +8,7 @@
 #include <QtTest>
 
 #include "packet.h"
-#include "testdoubles/MockSslSocket.h"
+#include "../testdoubles/MockSslSocket.h"
 
 class TestUtils
 {

@@ -2,7 +2,6 @@
 // Created by Tomas Gallucci on 4/3/26.
 //
 
-#include <QtTest/QTest.h>
 #include <QSignalSpy>
 
 #include "testutils.h"

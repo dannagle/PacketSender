@@ -6,7 +6,7 @@
 
 #include "fileutils.h"
 #include "settingnames.h"
-#include "testutils.h"
+#include "utils/testutils.h"
 #include "testdoubles/outgoingtchpthreadtestdouble.h"
 #include "testdoubles/MockSslSocket.h"
 
