@@ -27,6 +27,10 @@ private slots:
     void testIsSecure_data();
     void testIsSecure();
 
+    // isIncoming() tests
+    void testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread();
+    void testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

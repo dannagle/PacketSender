@@ -30,6 +30,7 @@ public:
 
     [[nodiscard]] int getSocketDescriptor() const { return socketInterface->getSocketDescriptor(); }
 
+    bool isIncoming() const override { return true; }
 
 protected:
     virtual Packet buildInitialReceivedPacket();

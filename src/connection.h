@@ -24,7 +24,7 @@ public:
     [[nodiscard]] bool isConnected() const;
     [[nodiscard]] bool isSecure() const;
     // [[nodiscard]] bool isPersistent() const;
-    // [[nodiscard]] bool isIncoming() const;
+    [[nodiscard]] bool isIncoming() const;
 
     // void send(const Packet& packet);
     // void close();

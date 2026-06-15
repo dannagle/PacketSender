@@ -53,3 +53,8 @@ bool Connection::isSecure() const
 {
     return thread_->isSocketEncrypted();
 }
+
+bool Connection::isIncoming() const
+{
+    return thread_->isIncoming();
+}

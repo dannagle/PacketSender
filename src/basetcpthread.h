@@ -34,6 +34,7 @@ public:
 
     [[nodiscard]] virtual bool isValid() const;
     [[nodiscard]] virtual bool isConnected() const;
+    [[nodiscard]] virtual bool isIncoming() const { return false; }
     [[nodiscard]] bool getShouldUseSSL() const {return shouldUseSSL;}
     PacketSenderQSslSocketInterface* getSocketInterface() const;
     // virtual void sendPersistent(const Packet& packet);

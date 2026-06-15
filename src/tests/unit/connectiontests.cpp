@@ -111,3 +111,18 @@ void ConnectionTests::testIsSecure()
 
     QCOMPARE(connection.isSecure(), expectedReturnValue);
 }
+
+// isIncoming() tests
+void ConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread()
+{
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    Connection connection(std::move(thread));
+    QCOMPARE(connection.isIncoming(), true);
+}
+
+void ConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread()
+{
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    Connection connection(std::move(thread));
+    QCOMPARE(connection.isIncoming(), true);
+}
