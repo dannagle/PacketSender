@@ -27,6 +27,10 @@ private slots:
     void testIsValid_returnsFalseWithNullSocket();
     void testIsValid_returnsFalseForFreshUnconnectedSocket();
 
+    void testIsConnected_data();
+    void testIsConnected();
+    void testIsConnected_socketInterfaceIsNullPtr();
+
     // isSocketEncrypted() tests
     void testIsSocketEncrypted_returnsFalseWhenNotEncrypted();
     void testIsSocketEncrypted_returnsSocketState();

@@ -65,6 +65,7 @@ set(
   brucethepoodle.cpp
   connection.cpp
   connectionmanager.cpp
+  deprecatedconnection.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp
@@ -98,6 +99,7 @@ set(
   outgoingtcpthread.cpp
   incomingtcpthread.cpp
   fileutils.cpp
+  connection.cpp
 )
 
 

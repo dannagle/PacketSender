@@ -23,6 +23,16 @@ public:
         getSocketPtrByReference().reset(newSocket);
     }
 
+    void setSocketConnectionState(QAbstractSocket::SocketState mockSocketState)
+    {
+        auto& basePtr = getSocketPtrByReference();
+        if (typeid(basePtr) == typeid(MockSslSocket))
+        {
+            auto* mockSocket = dynamic_cast<MockSslSocket*>(basePtr.get());
+            mockSocket->setMockState(mockSocketState);
+        }
+    }
+
     void callSendOutgoingPacket(Packet &packet)
     {
         sendOutgoingPacket(packet);

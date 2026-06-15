@@ -74,6 +74,15 @@ bool BaseTcpThread::isValid() const
     return isSocketValid();
 }
 
+bool BaseTcpThread::isConnected() const
+{
+    auto* s = getSocketInterface();
+    if (!s) {
+        return false;
+    }
+    return s->getSocketState() == QAbstractSocket::ConnectedState;
+}
+
 PacketSenderQSslSocketInterface* BaseTcpThread::getSocketInterface() const
 {
     // qDebug() << "=== getSocket() called ===";

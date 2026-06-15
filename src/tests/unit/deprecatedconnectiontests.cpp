@@ -5,21 +5,21 @@
 #include <QtTest/QTest.h>
 
 // test header files
-#include "connection_tests.h"
+#include "deprecatedconnectiontests.h"
 #include "testdoubles/testtcpthreadclass.h"
 
 // code header files
-#include "connection.h"
+#include "deprecatedconnection.h"
 
 // TestConnection::ConnectionTests(){}
 // TestConnection::~ConnectionTests(){}
 
-class TestConnection : public Connection
+class TestConnection : public DeprecatedConnection
 {
 public:
     TestConnection(const QString &host, quint16 port, const Packet &initial = Packet(),
                    QObject *parent = nullptr)
-        : Connection(host, port, initial, nullptr, std::make_unique<TestTcpThreadClass>(host, port, initial, nullptr))
+        : DeprecatedConnection(host, port, initial, nullptr, std::make_unique<TestTcpThreadClass>(host, port, initial, nullptr))
     {
         m_threadWaitTimeoutMs = testThreadShutdownWaitMs;
 
@@ -27,7 +27,7 @@ public:
 
     TestConnection(int socketDescriptor, bool isSecure = false,
         bool persistent = true, QObject *parent = nullptr)
-        : Connection(socketDescriptor, isSecure, persistent, nullptr,
+        : DeprecatedConnection(socketDescriptor, isSecure, persistent, nullptr,
                  std::make_unique<TestTcpThreadClass>(socketDescriptor, isSecure, persistent, nullptr))
     {
         m_threadWaitTimeoutMs = testThreadShutdownWaitMs;
@@ -36,25 +36,25 @@ public:
     TestConnection(int socketDescriptor, bool isSecure, bool persistent,
                    QObject *parent,
                    std::unique_ptr<TestTcpThreadClass> thread)
-        : Connection(socketDescriptor, isSecure, persistent, parent, std::move(thread))
+        : DeprecatedConnection(socketDescriptor, isSecure, persistent, parent, std::move(thread))
     {
     }
 
-    using Connection::getThread;
-    using Connection::getThreadStarted;
+    using DeprecatedConnection::getThread;
+    using DeprecatedConnection::getThreadStarted;
 
 private:
     static constexpr int testThreadShutdownWaitMs = 100;
 };
 
-void ConnectionTests::testCreationAndId()
+void DeprecatedConnectionTests::testCreationAndId()
 {
     TestConnection conn("127.0.0.1", 12345);
     QVERIFY(!conn.id().isEmpty());
     QVERIFY(conn.id().length() > 20);  // typical UUID string length without braces
 }
 
-void ConnectionTests::testDestructionDoesNotCrash()
+void DeprecatedConnectionTests::testDestructionDoesNotCrash()
 {
     // Scope-based destruction
     {
@@ -65,7 +65,7 @@ void ConnectionTests::testDestructionDoesNotCrash()
     QVERIFY(true);
 }
 
-void ConnectionTests::testMultipleInstancesHaveUniqueIds()
+void DeprecatedConnectionTests::testMultipleInstancesHaveUniqueIds()
 {
     TestConnection a("host1", 1000);
     TestConnection b("host2", 2000);
@@ -74,7 +74,7 @@ void ConnectionTests::testMultipleInstancesHaveUniqueIds()
 }
 
 // basic thread lifecycle test
-void ConnectionTests::testThreadStartsAndStops()
+void DeprecatedConnectionTests::testThreadStartsAndStops()
 {
     TestConnection conn("127.0.0.1", 12345);
 
@@ -89,7 +89,7 @@ void ConnectionTests::testThreadStartsAndStops()
     // but no crash = good enough for now
 }
 
-void ConnectionTests::testIncomingConstructor_setsModeFlagsCorrectly()
+void DeprecatedConnectionTests::testIncomingConstructor_setsModeFlagsCorrectly()
 {
     const int dummyDescriptor = 9876;
     bool isSecure = false;
@@ -110,7 +110,7 @@ void ConnectionTests::testIncomingConstructor_setsModeFlagsCorrectly()
     // QCOMPARE(conn.socketDescriptor(), qintptr(dummyDescriptor));
 }
 
-void ConnectionTests::testIncomingConstructor_generatesValidId()
+void DeprecatedConnectionTests::testIncomingConstructor_generatesValidId()
 {
     TestConnection conn(54321, false, true);
 
@@ -122,7 +122,7 @@ void ConnectionTests::testIncomingConstructor_generatesValidId()
     // Optional: more strict UUID format check if desired
 }
 
-void ConnectionTests::testIncomingConstructor_threadCreatedAndStartSucceeds()
+void DeprecatedConnectionTests::testIncomingConstructor_threadCreatedAndStartSucceeds()
 {
     TestConnection conn(1111, false, true);
 
@@ -135,7 +135,7 @@ void ConnectionTests::testIncomingConstructor_threadCreatedAndStartSucceeds()
     // QCOMPARE(errorSpy.count(), 0);
 }
 
-void ConnectionTests::testIncomingConstructor_variations_securePersistent()
+void DeprecatedConnectionTests::testIncomingConstructor_variations_securePersistent()
 {
     // Variant 1: secure + non-persistent
     {

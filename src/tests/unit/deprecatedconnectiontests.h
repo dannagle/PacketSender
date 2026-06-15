@@ -8,7 +8,7 @@
 #include <QtTest/QTest>
 #include <QElapsedTimer>
 
-class ConnectionTests : public QObject
+class DeprecatedConnectionTests : public QObject
 {
     Q_OBJECT
 

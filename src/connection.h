@@ -1,118 +1,54 @@
 //
-// Created by Tomas Gallucci on 3/5/26.
+// Created by Tomas Gallucci on 6/14/26.
 //
 
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-
-#pragma once
-
 #include <QObject>
-#include <QString>
-#include <QUuid>
-#include <QSslSocket>
-
-#include <memory>  // for std::unique_ptr
-
+#include <memory>
 #include "packet.h"
-#include "tcpthread.h"
+#include "basetcpthread.h"
 
-// forward declarations
-class Packet;
-
-/**
- * @brief RAII-style wrapper for a persistent connection.
- *        Initially minimal; will later own a TCPThread or similar.
- */
-
-/**
- * Represents a high-level TCP (or SSL) connection managed by PacketSender.
- *
- * Note: In strict TCP terms, a connection is a 4-tuple: (local IP, local port, remote IP, remote port)
- * Here, a Connection object owns and manages one side of that (the local socket + thread).
- *
- */
 class Connection : public QObject
 {
     Q_OBJECT
 
 public:
-    // target constructor
-    explicit Connection(std::unique_ptr<TCPThread> thread,
-                        bool isIncoming = false,
-                        bool isSecure = false,
-                        bool isPersistent = true,
-                        qintptr socketDescriptor = -1,
-                        QObject *parent = nullptr);
-    explicit Connection(const QString &host,
-                        quint16 port,
-                        const Packet &initialPacket = Packet(),
-                        QObject *parent = nullptr,
-                        std::unique_ptr<TCPThread> thread = nullptr);
-    // Server/incoming constructor
-    explicit Connection(int socketDescriptor,
-                        bool isSecure = false,
-                        bool isPersistent = true,
-                        QObject *parent = nullptr,
-                        std::unique_ptr<TCPThread> thread = nullptr);
+    explicit Connection(std::unique_ptr<BaseTcpThread> thread,
+                        QObject* parent = nullptr);
+
     ~Connection() override;
 
     [[nodiscard]] QString id() const;
     [[nodiscard]] bool isConnected() const;
-    [[nodiscard]] bool isSecure() const;
-    [[nodiscard]] bool isIncoming() const { return m_isIncoming; }
-    [[nodiscard]] bool isPersistent() const { return m_isPersistent; }  // rename if you prefer isPersistentConnection()
-    [[nodiscard]] qintptr socketDescriptor() const { return m_socketDescriptor; }
+    // [[nodiscard]] bool isSecure() const;
+    // [[nodiscard]] bool isPersistent() const;
+    // [[nodiscard]] bool isIncoming() const;
 
-    void send(const Packet &packet);
-    void start();
+    // void send(const Packet& packet);
+    // void close();
 
-    /**
-     * Closes this side of the connection and cleans up the underlying socket/thread.
-     * This does NOT send a TCP FIN in all cases — it depends on the implementation.
-    */
-    void close();
-
-signals:
-    // NEW: forward important signals from TCPThread
-    void dataReceived(const Packet &packet);
-    void stateChanged(const QString &stateMessage);  // or use enum later
-    void errorOccurred(const QString &errorString);
+    signals:
+    void dataReceived(const Packet& packet);
+    void stateChanged(const QString& message);
+    void errorOccurred(const QString& errorString);
     void disconnected();
 
 private slots:
-    void onThreadPacketReceived(const Packet &p);
-    void onThreadConnectStatus(const QString &msg);
-    void onThreadError(QSslSocket::SocketError error);
-
-private:
-    void setupThreadConnections();
-    void shutdownThreadSafely(int timeoutMs = 2000);
-    bool m_isClosing = false;
-
-
-
-    QString m_id;
-    // QString m_host;       // uncomment later if needed for reconnect
-    // quint16 m_port = 0;
-    std::unique_ptr<TCPThread> m_thread;  // RAII ownership of the thread
-    bool m_threadStarted = false;
-    bool m_isIncoming = false;
-    bool m_isSecure = false;
-    bool m_isPersistent = false;
-    qintptr m_socketDescriptor = -1;
-
-    static constexpr int threadShutdownWaitMs = 10000;
+    // void onThreadPacketReceived(const Packet& p);
+    // void onThreadPacketSent(const Packet& p);
+    // void onThreadConnectionStatus(const QString& msg);
+    // void onThreadError(const QString& errorMsg);
 
 protected:
-    [[nodiscard]] TCPThread* getThread() const { return m_thread.get(); }
-    [[nodiscard]] bool getThreadStarted() const { return m_threadStarted; }
+    std::unique_ptr<BaseTcpThread> thread_;
+    bool isIncoming_ = false;
 
-    int m_threadWaitTimeoutMs = 10000;
-
-    void assignUniqueId() {m_id = QUuid::createUuid().toString(QUuid::WithoutBraces);}
+private:
+    // void setupSignalConnections();
+    void assignUniqueId();
+    std::optional<QString> id_;
 };
 
-
-#endif //CONNECTION_H
+#endif // CONNECTION_H

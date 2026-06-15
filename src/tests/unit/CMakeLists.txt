@@ -20,7 +20,10 @@ add_executable(${TEST_NAME}
     translation_tests.cpp
 
     ../../connection.cpp
-    connection_tests.cpp
+    connectiontests.cpp
+
+#    ../../deprecatedconnection.cpp
+#    deprecatedconnectiontests.cpp
 
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp

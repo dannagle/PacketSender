@@ -10,6 +10,7 @@
 #include "realqsslsocket.h"
 #include "testdoubles/basetcpthreadtestdouble.h"
 #include "testdoubles/MockSslSocket.h"
+#include "utils/testutils.h"
 
 Packet getPacketForTest()
 {
@@ -93,6 +94,35 @@ void BaseTcpThreadTests::testIsValid_returnsFalseForFreshUnconnectedSocket()
     // We do neither in the BaseTcpThreadTestDouble constructor
     BaseTcpThreadTestDouble thread(new RealQSslSocket(new QSslSocket()));
     QCOMPARE(thread.isValid(), false);
+}
+
+void BaseTcpThreadTests::testIsConnected_data()
+{
+    QTest::addColumn<QAbstractSocket::SocketState>("socketState");
+    QTest::addColumn<bool>("expectedReturnValue");
+
+    QTest::newRow("connected")  << QAbstractSocket::SocketState::ConnectedState << true;
+    QTest::newRow("not connected")  << QAbstractSocket::SocketState::UnconnectedState << false;
+
+}
+
+void BaseTcpThreadTests::testIsConnected()
+{
+    QFETCH(QAbstractSocket::SocketState, socketState);
+    QFETCH(bool, expectedReturnValue);
+
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockState(socketState);
+
+    const BaseTcpThreadTestDouble thread(mockSock);
+    QCOMPARE(thread.isConnected(), expectedReturnValue);
+}
+
+void BaseTcpThreadTests::testIsConnected_socketInterfaceIsNullPtr()
+{
+    BaseTcpThreadTestDouble thread(TestUtils::createMockSocketForTest());
+    thread.setSocketForTest(nullptr);
+    QCOMPARE(thread.isConnected(), false);
 }
 
 void BaseTcpThreadTests::testIsSocketEncrypted_returnsFalseWhenNotEncrypted()

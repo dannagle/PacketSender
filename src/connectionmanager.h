@@ -8,6 +8,7 @@
 
 #include <memory>
 #include <unordered_map>
+
 #include "connection.h"
 
 class ConnectionManager : public QObject

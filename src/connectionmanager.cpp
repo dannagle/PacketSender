@@ -17,44 +17,44 @@ ConnectionManager::~ConnectionManager()
 quint64 ConnectionManager::createPersistent(const QString &host, quint16 port,
                                             const Packet &initialPacket)
 {
-    auto conn = std::make_unique<Connection>(host, port, initialPacket, this);
+    // auto conn = std::make_unique<Connection>(host, port, initialPacket, this);
 
     quint64 id = m_nextId++;
-    m_connections.emplace(id, std::move(conn));
+    // m_connections.emplace(id, std::move(conn));
 
     // Connect with renamed capture to avoid shadowing the signal name
-    connect(m_connections[id].get(), &Connection::dataReceived,
-            this, [this, connId = id](const Packet &p) { emit dataReceived(connId, p); });
+    // connect(m_connections[id].get(), &DeprecatedConnection::dataReceived,
+    //         this, [this, connId = id](const Packet &p) { emit dataReceived(connId, p); });
+    //
+    // connect(m_connections[id].get(), &DeprecatedConnection::stateChanged,
+    //         this, [this, connId = id](const QString &s) { emit stateChanged(connId, s); });
+    //
+    // connect(m_connections[id].get(), &DeprecatedConnection::errorOccurred,
+    //         this, [this, connId = id](const QString &e) { emit errorOccurred(connId, e); });
+    //
+    // connect(m_connections[id].get(), &DeprecatedConnection::disconnected,
+    //         this, [this, connId = id]() { emit disconnected(connId); });
 
-    connect(m_connections[id].get(), &Connection::stateChanged,
-            this, [this, connId = id](const QString &s) { emit stateChanged(connId, s); });
-
-    connect(m_connections[id].get(), &Connection::errorOccurred,
-            this, [this, connId = id](const QString &e) { emit errorOccurred(connId, e); });
-
-    connect(m_connections[id].get(), &Connection::disconnected,
-            this, [this, connId = id]() { emit disconnected(connId); });
-
-    m_connections[id]->start();
+    // m_connections[id]->start();
 
     return id;
 }
 
 void ConnectionManager::send(quint64 id, const Packet &packet)
 {
-    auto it = m_connections.find(id);
-    if (it != m_connections.end()) {
-        it->second->send(packet);
-    }
+    // auto it = m_connections.find(id);
+    // if (it != m_connections.end()) {
+    //     it->second->send(packet);
+    // }
 }
 
 void ConnectionManager::close(quint64 id)
 {
-    auto it = m_connections.find(id);
-    if (it != m_connections.end()) {
-        it->second->close();  // Assuming you add close() to Connection
-        m_connections.erase(it);
-    }
+    // auto it = m_connections.find(id);
+    // if (it != m_connections.end()) {
+    //     it->second->close();  // Assuming you add close() to Connection
+    //     m_connections.erase(it);
+    // }
 }
 
 void ConnectionManager::shutdownAll()
