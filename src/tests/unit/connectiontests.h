@@ -23,6 +23,10 @@ private slots:
     void testIsConnected_data();
     void testIsConnected();
 
+    // isSecure() tests
+    void testIsSecure_data();
+    void testIsSecure();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

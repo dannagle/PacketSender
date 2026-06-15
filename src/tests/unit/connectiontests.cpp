@@ -41,10 +41,29 @@ void ConnectionTests::testIsConnected_data()
     QTest::addColumn<bool>("expectedReturnValue");
 
 
-
     QTest::newRow("connected")  << QAbstractSocket::SocketState::ConnectedState << true;
     QTest::newRow("not connected")  << QAbstractSocket::SocketState::UnconnectedState << false;
 }
+
+void ConnectionTests::testIsConnected()
+{
+    QFETCH(QAbstractSocket::SocketState, socketState);
+    QFETCH(bool, expectedReturnValue);
+
+    auto mockSock = std::make_unique<MockSslSocket>();
+    mockSock->setMockState(socketState);
+
+    auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
+    Connection connection(std::move(thread));
+
+    QCOMPARE(connection.isConnected(), expectedReturnValue);
+}
+
+/*
+ * I've left the next bit commented out instead of deleting it
+ * so I know how to do return this kind of thing later. I'll try to remember to delete it
+ * before I submit the PR for final review.
+ */
 
 // void ConnectionTests::testIsConnected_data()
 // {
@@ -67,17 +86,28 @@ void ConnectionTests::testIsConnected_data()
 //     QCOMPARE(thread->isConnected(), expectedReturnValue);
 // }
 
-void ConnectionTests::testIsConnected()
+// isSecure() tests
+void ConnectionTests::testIsSecure_data()
 {
-    QFETCH(QAbstractSocket::SocketState, socketState);
+    QTest::addColumn<bool>("isSecure");
+    QTest::addColumn<bool>("expectedReturnValue");
+
+
+
+    QTest::newRow("true")  << true << true;
+    QTest::newRow("false")  << false << false;
+}
+
+void ConnectionTests::testIsSecure()
+{
+    QFETCH(bool, isSecure);
     QFETCH(bool, expectedReturnValue);
 
     auto mockSock = std::make_unique<MockSslSocket>();
-    mockSock->setMockState(socketState);
+    mockSock->setMockEncrypted(isSecure);
 
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
     Connection connection(std::move(thread));
 
-    QCOMPARE(connection.isConnected(), expectedReturnValue);
+    QCOMPARE(connection.isSecure(), expectedReturnValue);
 }
-
