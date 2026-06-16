@@ -20,7 +20,7 @@ add_executable(${TEST_NAME}
     translation_tests.cpp
 
     ../../connections/basetcpconnection.cpp
-    basetcpconnectiontests.cpp
+        connection/basetcpconnectiontests.cpp
 
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp

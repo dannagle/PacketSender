@@ -5,14 +5,14 @@
 #include "basetcpconnectiontests.h"
 
 #include "incomingtcpthread.h"
-#include "../../connections/basetcpconnection.h"
-#include "utils/testutils.h"
+#include "../../../connections/basetcpconnection.h"
+#include "../utils/testutils.h"
 
 #include <QUuid>
 #include <QtTest>
 
 #include "outgoingtcpthread.h"
-#include "testdoubles/basetcpthreadtestdouble.h"
+#include "../testdoubles/basetcpthreadtestdouble.h"
 
 // constructor tests
 void BaseTcpConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()

@@ -6,7 +6,7 @@
 
 #include <QtTest/Qtest.h>
 
-#include "BaseTcpConnectionTests.h"
+#include "connection/basetcpconnectiontests.h"
 #include "connectionmanager_tests.h"
 #include "persistentconnectionlooptests.h"
 #include "tcpthreadqapplicationneededtests.h"
