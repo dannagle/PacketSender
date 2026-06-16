@@ -74,13 +74,13 @@ void OutgoingTcpThreadTests::testConstructor_setsPersistentFlagFromPacket()
     p.persistent = flagOnPacket;
 
     OutgoingTcpThreadTestDouble thread(p);
-    QCOMPARE(thread.getPersistentFlagValue(), expectedValue);
+    QCOMPARE(thread.isPersistent(), expectedValue);
 }
 
 void OutgoingTcpThreadTests::testConstructor_packetFlagNotExplicitlySetOutsideOfInitInPacket()
 {
     OutgoingTcpThreadTestDouble thread(TestUtils::createPacketForTest());
-    QCOMPARE(thread.getPersistentFlagValue(), false);
+    QCOMPARE(thread.isPersistent(), false);
 }
 
 void OutgoingTcpThreadTests::testGetDestinationAddress()

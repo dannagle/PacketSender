@@ -125,6 +125,12 @@ void BaseTcpThreadTests::testIsConnected_socketInterfaceIsNullPtr()
     QCOMPARE(thread.isConnected(), false);
 }
 
+void BaseTcpThreadTests::testIsPersistent_isFalseInBaseTcpThread()
+{
+    const auto thread = BaseTcpThread(TestUtils::createMockSocketForTest());
+    QCOMPARE(thread.isPersistent(), false);
+}
+
 void BaseTcpThreadTests::testIsSocketEncrypted_returnsFalseWhenNotEncrypted()
 {
     auto *mockSock = new MockSslSocket();

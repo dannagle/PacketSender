@@ -54,6 +54,11 @@ bool Connection::isSecure() const
     return thread_->isSocketEncrypted();
 }
 
+bool Connection::isPersistent() const
+{
+    return thread_->isPersistent();
+}
+
 bool Connection::isIncoming() const
 {
     return thread_->isIncoming();

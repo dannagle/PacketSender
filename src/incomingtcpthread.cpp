@@ -25,17 +25,21 @@ PacketSenderQSslSocketInterface* IncomingTcpThread::createSocketWithDescriptor(i
 
 IncomingTcpThread::IncomingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
                                      bool isSecure,
+                                     bool isPersistent,
                                      QObject* parent)
     : BaseTcpThread(socketInterface, parent)
 {
     shouldUseSSL = isSecure;
+    persistent = isPersistent;
 }
 
 IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
                                      bool isSecure,
+                                     bool isPersistent,
                                      QObject* parent)
     : IncomingTcpThread(createSocketWithDescriptor(socketDescriptor),
                         isSecure,
+                        isPersistent,
                         parent)
 {
 }

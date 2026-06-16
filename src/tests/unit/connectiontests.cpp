@@ -11,6 +11,7 @@
 #include <QUuid>
 #include <QtTest>
 
+#include "outgoingtcpthread.h"
 #include "testdoubles/basetcpthreadtestdouble.h"
 
 // constructor tests
@@ -92,8 +93,6 @@ void ConnectionTests::testIsSecure_data()
     QTest::addColumn<bool>("isSecure");
     QTest::addColumn<bool>("expectedReturnValue");
 
-
-
     QTest::newRow("true")  << true << true;
     QTest::newRow("false")  << false << false;
 }
@@ -125,4 +124,52 @@ void ConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread(
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
     Connection connection(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
+}
+
+// isPersistent() tests
+// ==================== INCOMING TESTS ====================
+
+void ConnectionTests::testIsPersistent_Incoming_data()
+{
+    QTest::addColumn<bool>("isPersistent");
+
+    QTest::newRow("true")  << true;
+    QTest::newRow("false") << false;
+}
+
+void ConnectionTests::testIsPersistent_Incoming()
+{
+    QFETCH(bool, isPersistent);
+
+    constexpr bool isEncrypted = false;
+    const auto socket = TestUtils::createMockSocketForTest();
+
+    auto thread = std::make_unique<IncomingTcpThread>(socket, isEncrypted, isPersistent);
+
+    Connection connection(std::move(thread));
+    QCOMPARE(connection.isPersistent(), isPersistent);
+}
+
+// ==================== OUTGOING TESTS ====================
+
+void ConnectionTests::testIsPersistent_Outgoing_data()
+{
+    QTest::addColumn<bool>("isPersistent");
+
+    QTest::newRow("true")  << true;
+    QTest::newRow("false") << false;
+}
+
+void ConnectionTests::testIsPersistent_Outgoing()
+{
+    QFETCH(bool, isPersistent);
+
+    const auto socket = TestUtils::createMockSocketForTest();
+    auto packet = TestUtils::createPacketForTest();
+    packet.persistent = isPersistent;
+
+    auto thread = std::make_unique<OutgoingTcpThread>(socket, packet);
+
+    const Connection connection(std::move(thread));
+    QCOMPARE(connection.isPersistent(), isPersistent);
 }

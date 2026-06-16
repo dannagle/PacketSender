@@ -31,11 +31,6 @@ public:
         return this->commandLineReplyPacket;
     }
 
-    bool getPersistentFlagValue()
-    {
-        return OutgoingTcpThread::persistentFlagValue();
-    }
-
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);

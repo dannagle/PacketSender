@@ -54,6 +54,14 @@ void IncomingTcpThreadTests::testConstructor_assignsIsSecure()
     QCOMPARE(thread.getShouldUseSSL(), true);
 }
 
+void IncomingTcpThreadTests::testConstructor_assignsPersistent()
+{
+    constexpr bool isSecure = true;
+    constexpr bool isPersistent = true;
+    auto const thread = IncomingTcpThread(getValidDescriptor(), isSecure, isPersistent);
+    QCOMPARE(thread.isPersistent(), isPersistent);
+}
+
 
 // buildInitialReceivedPacket() tests
 void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNullptr_data()

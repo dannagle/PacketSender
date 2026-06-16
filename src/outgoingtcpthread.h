@@ -67,13 +67,11 @@ protected:
     virtual bool shouldSendReply() const;
     virtual void sendReplyIfNeeded(const Packet& receivedPacket);
     virtual void persistentConnectionLoop();
-    virtual bool persistentFlagValue() { return persistent; }
 
     Packet      sendPacket;
     Packet      commandLineReplyPacket;
 
     bool        consoleMode = false;
-    bool        persistent = false;
     bool        receiveBeforeSend = false;
     int         delayAfterConnect = 0;
 

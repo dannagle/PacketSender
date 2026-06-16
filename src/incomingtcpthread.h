@@ -19,11 +19,13 @@ public:
     // Main constructor (used by tests and convenience constructor)
     explicit IncomingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
                                bool isSecure = false,
+                               bool isPersistent = false,
                                QObject* parent = nullptr);
 
     // Convenience constructor (normal production use)
     explicit IncomingTcpThread(int socketDescriptor,
                                bool isSecure = false,
+                               bool isPersistent = false,
                                QObject* parent = nullptr);
 
     ~IncomingTcpThread() override;

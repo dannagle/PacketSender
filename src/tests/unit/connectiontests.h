@@ -31,6 +31,14 @@ private slots:
     void testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread();
     void testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread();
 
+    // isPersistent() tests
+    void testIsPersistent_Incoming_data();
+    void testIsPersistent_Incoming();
+    void testIsPersistent_Outgoing_data();
+    void testIsPersistent_Outgoing();
+    // void testIsPersistent_data();
+    // void testIsPersistent();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

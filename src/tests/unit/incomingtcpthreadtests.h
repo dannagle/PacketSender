@@ -17,6 +17,7 @@ private slots:
     // constructor tests
     void testConstructor_assignsSocketDescriptor();
     void testConstructor_assignsIsSecure();
+    void testConstructor_assignsPersistent();
 
     void testBuildInitialReceivedPacket_socketInterfaceIsNullptr_data();
 

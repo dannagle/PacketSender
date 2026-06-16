@@ -35,6 +35,7 @@ public:
     [[nodiscard]] virtual bool isValid() const;
     [[nodiscard]] virtual bool isConnected() const;
     [[nodiscard]] virtual bool isIncoming() const { return false; }
+    [[nodiscard]] virtual bool isPersistent() const { return persistent; }
     [[nodiscard]] bool getShouldUseSSL() const {return shouldUseSSL;}
     PacketSenderQSslSocketInterface* getSocketInterface() const;
     // virtual void sendPersistent(const Packet& packet);
@@ -80,6 +81,7 @@ protected:
     bool managedByConnection = false;
     bool closeRequest = false;
     bool shouldUseSSL = false;
+    bool persistent = false;
 
 #ifdef CONSOLE_MODE
     bool consoleMode = true;
