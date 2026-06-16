@@ -9,7 +9,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "connection.h"
+#include "connections/basetcpconnection.h"
 
 class ConnectionManager : public QObject
 {
@@ -47,7 +47,7 @@ private slots:
     void onConnectionDisconnected();
 
 protected:
-    std::unordered_map<quint64, std::unique_ptr<Connection>> m_connections;
+    std::unordered_map<quint64, std::unique_ptr<BaseTcpConnection>> m_connections;
     quint64 m_nextId = 1;
 };
 

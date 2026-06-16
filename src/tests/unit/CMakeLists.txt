@@ -19,11 +19,8 @@ add_executable(${TEST_NAME}
     ../../translations.cpp
     translation_tests.cpp
 
-    ../../connection.cpp
-    connectiontests.cpp
-
-#    ../../deprecatedconnection.cpp
-#    deprecatedconnectiontests.cpp
+    ../../connections/basetcpconnection.cpp
+    basetcpconnectiontests.cpp
 
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp

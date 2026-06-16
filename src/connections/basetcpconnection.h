@@ -7,18 +7,18 @@
 
 #include <QObject>
 #include <memory>
-#include "packet.h"
-#include "basetcpthread.h"
+#include "../packet.h"
+#include "../basetcpthread.h"
 
-class Connection : public QObject
+class BaseTcpConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit Connection(std::unique_ptr<BaseTcpThread> thread,
+    explicit BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
                         QObject* parent = nullptr);
 
-    ~Connection() override;
+    ~BaseTcpConnection() override;
 
     [[nodiscard]] QString id() const;
     [[nodiscard]] bool isConnected() const;

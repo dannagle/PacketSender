@@ -9,9 +9,8 @@
 
 #include "basetcpthread.h"
 #include "testdoubles/basetcpthreadtestdouble.h"
-#include "testdoubles/MockSslSocket.h"
 
-class ConnectionTests : public QObject
+class BaseTcpConnectionTests : public QObject
 {
     Q_OBJECT
 

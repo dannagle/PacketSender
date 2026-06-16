@@ -2,13 +2,13 @@
 // Created by Tomas Gallucci on 6/14/26.
 //
 
-#include "connection.h"
+#include "basetcpconnection.h"
 
-#include "basetcpthread.h"
+#include "../basetcpthread.h"
 #include <QUuid>
 #include <QDebug>
 
-Connection::Connection(std::unique_ptr<BaseTcpThread> thread,
+BaseTcpConnection::BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
                        QObject* parent)
     : QObject(parent)
     , thread_(std::move(thread))
@@ -24,12 +24,12 @@ Connection::Connection(std::unique_ptr<BaseTcpThread> thread,
              << "(thread type:" << thread_->metaObject()->className() << ")";
 }
 
-Connection::~Connection()
+BaseTcpConnection::~BaseTcpConnection()
 {
     // close();   // RAII: ensure clean shutdown
 }
 
-void Connection::assignUniqueId()
+void BaseTcpConnection::assignUniqueId()
 {
     if (id_.has_value())
     {
@@ -39,27 +39,27 @@ void Connection::assignUniqueId()
     id_ = QUuid::createUuid().toString(QUuid::WithoutBraces);
 }
 
-QString Connection::id() const
+QString BaseTcpConnection::id() const
 {
     return id_.has_value()? id_.value() : "";
 }
 
-bool Connection::isConnected() const
+bool BaseTcpConnection::isConnected() const
 {
     return thread_->isConnected();
 }
 
-bool Connection::isSecure() const
+bool BaseTcpConnection::isSecure() const
 {
     return thread_->isSocketEncrypted();
 }
 
-bool Connection::isPersistent() const
+bool BaseTcpConnection::isPersistent() const
 {
     return thread_->isPersistent();
 }
 
-bool Connection::isIncoming() const
+bool BaseTcpConnection::isIncoming() const
 {
     return thread_->isIncoming();
 }

@@ -6,13 +6,13 @@
 
 #include <QtTest/Qtest.h>
 
+#include "BaseTcpConnectionTests.h"
 #include "connectionmanager_tests.h"
 #include "persistentconnectionlooptests.h"
 #include "tcpthreadqapplicationneededtests.h"
 #include "translation_tests.h"
 #include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
-#include "connectiontests.h"
 #include "deprecatedconnectiontests.h"
 #include "incomingtcpthreadtests.h"
 #include "outgoingtcpthreadpersistentconnectionlooptests.h"
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 
     // Then non-GUI or independent tests
     // runNonGuiTest(new TcpThreadTests());
-    runNonGuiTest(new ConnectionTests());
+    runNonGuiTest(new BaseTcpConnectionTests());
     // runNonGuiTest(new DeprecatedConnectionTests());
     // runNonGuiTest(new ConnectionManagerTests());
     runNonGuiTest(new PacketTests());

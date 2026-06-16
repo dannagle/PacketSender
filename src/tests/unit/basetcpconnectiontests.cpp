@@ -2,10 +2,10 @@
 // Created by Tomas Gallucci on 6/14/26.
 //
 
-#include "connectiontests.h"
+#include "basetcpconnectiontests.h"
 
 #include "incomingtcpthread.h"
-#include "../../connection.h"
+#include "../../connections/basetcpconnection.h"
 #include "utils/testutils.h"
 
 #include <QUuid>
@@ -15,10 +15,10 @@
 #include "testdoubles/basetcpthreadtestdouble.h"
 
 // constructor tests
-void ConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()
+void BaseTcpConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    auto connection = std::make_unique<Connection>(std::move(thread));
+    auto connection = std::make_unique<BaseTcpConnection>(std::move(thread));
 
     const QString id = connection->id();
     QUuid uuid(id);
@@ -26,7 +26,7 @@ void ConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()
     QCOMPARE(uuid.toString(QUuid::WithoutBraces), id);
 }
 
-std::unique_ptr<BaseTcpThreadTestDouble> ConnectionTests::createThreadWithConnectionState(
+std::unique_ptr<BaseTcpThreadTestDouble> BaseTcpConnectionTests::createThreadWithConnectionState(
     QAbstractSocket::SocketState socketState)
 {
     auto *mockSock = new MockSslSocket();
@@ -36,7 +36,7 @@ std::unique_ptr<BaseTcpThreadTestDouble> ConnectionTests::createThreadWithConnec
 }
 
 // isConnected() tests
-void ConnectionTests::testIsConnected_data()
+void BaseTcpConnectionTests::testIsConnected_data()
 {
     QTest::addColumn<QAbstractSocket::SocketState>("socketState");
     QTest::addColumn<bool>("expectedReturnValue");
@@ -46,7 +46,7 @@ void ConnectionTests::testIsConnected_data()
     QTest::newRow("not connected")  << QAbstractSocket::SocketState::UnconnectedState << false;
 }
 
-void ConnectionTests::testIsConnected()
+void BaseTcpConnectionTests::testIsConnected()
 {
     QFETCH(QAbstractSocket::SocketState, socketState);
     QFETCH(bool, expectedReturnValue);
@@ -55,7 +55,7 @@ void ConnectionTests::testIsConnected()
     mockSock->setMockState(socketState);
 
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
-    Connection connection(std::move(thread));
+    BaseTcpConnection connection(std::move(thread));
 
     QCOMPARE(connection.isConnected(), expectedReturnValue);
 }
@@ -66,7 +66,7 @@ void ConnectionTests::testIsConnected()
  * before I submit the PR for final review.
  */
 
-// void ConnectionTests::testIsConnected_data()
+// void BaseTcpConnectionTests::testIsConnected_data()
 // {
 //     QTest::addColumn<BaseTcpThreadTestDouble*>("thread");
 //     QTest::addColumn<bool>("expectedReturnValue");
@@ -77,7 +77,7 @@ void ConnectionTests::testIsConnected()
 //     QTest::newRow("not connected")  << createThreadWithConnectionState(QAbstractSocket::SocketState::UnconnectedState).release() << false;
 // }
 
-// void ConnectionTests::testIsConnected()
+// void BaseTcpConnectionTests::testIsConnected()
 // {
 //     QFETCH(BaseTcpThreadTestDouble*, thread);
 //     QFETCH(bool, expectedReturnValue);
@@ -88,7 +88,7 @@ void ConnectionTests::testIsConnected()
 // }
 
 // isSecure() tests
-void ConnectionTests::testIsSecure_data()
+void BaseTcpConnectionTests::testIsSecure_data()
 {
     QTest::addColumn<bool>("isSecure");
     QTest::addColumn<bool>("expectedReturnValue");
@@ -97,7 +97,7 @@ void ConnectionTests::testIsSecure_data()
     QTest::newRow("false")  << false << false;
 }
 
-void ConnectionTests::testIsSecure()
+void BaseTcpConnectionTests::testIsSecure()
 {
     QFETCH(bool, isSecure);
     QFETCH(bool, expectedReturnValue);
@@ -106,30 +106,30 @@ void ConnectionTests::testIsSecure()
     mockSock->setMockEncrypted(isSecure);
 
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
-    Connection connection(std::move(thread));
+    BaseTcpConnection connection(std::move(thread));
 
     QCOMPARE(connection.isSecure(), expectedReturnValue);
 }
 
 // isIncoming() tests
-void ConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread()
+void BaseTcpConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    Connection connection(std::move(thread));
+    BaseTcpConnection connection(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
 }
 
-void ConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread()
+void BaseTcpConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    Connection connection(std::move(thread));
+    BaseTcpConnection connection(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
 }
 
 // isPersistent() tests
 // ==================== INCOMING TESTS ====================
 
-void ConnectionTests::testIsPersistent_Incoming_data()
+void BaseTcpConnectionTests::testIsPersistent_Incoming_data()
 {
     QTest::addColumn<bool>("isPersistent");
 
@@ -137,7 +137,7 @@ void ConnectionTests::testIsPersistent_Incoming_data()
     QTest::newRow("false") << false;
 }
 
-void ConnectionTests::testIsPersistent_Incoming()
+void BaseTcpConnectionTests::testIsPersistent_Incoming()
 {
     QFETCH(bool, isPersistent);
 
@@ -146,13 +146,13 @@ void ConnectionTests::testIsPersistent_Incoming()
 
     auto thread = std::make_unique<IncomingTcpThread>(socket, isEncrypted, isPersistent);
 
-    Connection connection(std::move(thread));
+    BaseTcpConnection connection(std::move(thread));
     QCOMPARE(connection.isPersistent(), isPersistent);
 }
 
 // ==================== OUTGOING TESTS ====================
 
-void ConnectionTests::testIsPersistent_Outgoing_data()
+void BaseTcpConnectionTests::testIsPersistent_Outgoing_data()
 {
     QTest::addColumn<bool>("isPersistent");
 
@@ -160,7 +160,7 @@ void ConnectionTests::testIsPersistent_Outgoing_data()
     QTest::newRow("false") << false;
 }
 
-void ConnectionTests::testIsPersistent_Outgoing()
+void BaseTcpConnectionTests::testIsPersistent_Outgoing()
 {
     QFETCH(bool, isPersistent);
 
@@ -170,6 +170,6 @@ void ConnectionTests::testIsPersistent_Outgoing()
 
     auto thread = std::make_unique<OutgoingTcpThread>(socket, packet);
 
-    const Connection connection(std::move(thread));
+    const BaseTcpConnection connection(std::move(thread));
     QCOMPARE(connection.isPersistent(), isPersistent);
 }

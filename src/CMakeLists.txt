@@ -63,7 +63,7 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
-  connection.cpp
+  connections/basetcpconnection.cpp
   connectionmanager.cpp
   deprecatedconnection.cpp
   irisandmarigold.cpp
@@ -99,7 +99,6 @@ set(
   outgoingtcpthread.cpp
   incomingtcpthread.cpp
   fileutils.cpp
-  connection.cpp
 )
 
 
