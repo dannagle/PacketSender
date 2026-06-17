@@ -14,18 +14,6 @@
 #include "outgoingtcpthread.h"
 #include "../testdoubles/basetcpthreadtestdouble.h"
 
-// constructor tests
-void BaseTcpConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()
-{
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    auto connection = std::make_unique<BaseTcpConnection>(std::move(thread));
-
-    const QString id = connection->id();
-    QUuid uuid(id);
-    QVERIFY(uuid.isNull() == false);
-    QCOMPARE(uuid.toString(QUuid::WithoutBraces), id);
-}
-
 std::unique_ptr<BaseTcpThreadTestDouble> BaseTcpConnectionTests::createThreadWithConnectionState(
     QAbstractSocket::SocketState socketState)
 {

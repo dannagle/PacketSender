@@ -8,7 +8,6 @@
 #include <QObject>
 
 #include "basetcpthreadtestdouble.h"
-#include "../../src/basetcpthread.h"
 #include "../utils/calltracker.h"
 #include "connections/basetcpconnection.h"
 #include "tests/unit/utils/testutils.h"
@@ -19,14 +18,14 @@ class BaseTcpConnectionTestDouble : public BaseTcpConnection, public CallTracker
 
     explicit BaseTcpConnectionTestDouble(std::unique_ptr<BaseTcpThread> thread,
                                   QObject* parent = nullptr)
-                : Connection(std::move(thread), parent)
+                : BaseTcpConnection(std::move(thread), parent)
     {
 
     }
 
     /** Convenience constructor that creates a mock thread internally */
     explicit BaseTcpConnectionTestDouble(QObject* parent = nullptr)
-        : Connection(std::make_unique<BaseTcpThreadTestDouble>(
+        : BaseTcpConnection(std::make_unique<BaseTcpThreadTestDouble>(
             TestUtils::createMockSocketForTest()), parent)
     {
 

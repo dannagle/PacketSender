@@ -2,15 +2,17 @@
 // Created by Tomas Gallucci on 6/14/26.
 //
 
-#ifndef CONNECTION_H
-#define CONNECTION_H
+#ifndef BASETCPCONNECTION_H
+#define BASETCPCONNECTION_H
 
 #include <QObject>
 #include <memory>
+
+#include "connection.h"
 #include "../packet.h"
 #include "../basetcpthread.h"
 
-class BaseTcpConnection : public QObject
+class BaseTcpConnection : public Connection
 {
     Q_OBJECT
 
@@ -20,20 +22,20 @@ public:
 
     ~BaseTcpConnection() override;
 
-    [[nodiscard]] QString id() const;
-    [[nodiscard]] bool isConnected() const;
-    [[nodiscard]] bool isSecure() const;
-    [[nodiscard]] bool isPersistent() const;
-    [[nodiscard]] bool isIncoming() const;
+    [[nodiscard]] QString id() const override;
+    [[nodiscard]] bool isConnected() const override;
+    [[nodiscard]] bool isSecure() const override;
+    [[nodiscard]] bool isPersistent() const override;
+    [[nodiscard]] bool isIncoming() const override;
 
     // void send(const Packet& packet);
     // void close();
 
-    signals:
-    void dataReceived(const Packet& packet);
-    void stateChanged(const QString& message);
-    void errorOccurred(const QString& errorString);
-    void disconnected();
+    // signals:
+    // void dataReceived(const Packet& packet);
+    // void stateChanged(const QString& message);
+    // void errorOccurred(const QString& errorString);
+    // void disconnected();
 
 private slots:
     // void onThreadPacketReceived(const Packet& p);
@@ -47,8 +49,6 @@ protected:
 
 private:
     // void setupSignalConnections();
-    void assignUniqueId();
-    std::optional<QString> id_;
 };
 
-#endif // CONNECTION_H
+#endif // BASETCPCONNECTION_H

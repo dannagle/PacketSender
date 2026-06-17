@@ -63,6 +63,7 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  connections/connection.cpp
   connections/basetcpconnection.cpp
   connectionmanager.cpp
   deprecatedconnection.cpp

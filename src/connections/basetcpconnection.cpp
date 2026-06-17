@@ -10,14 +10,13 @@
 
 BaseTcpConnection::BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
                        QObject* parent)
-    : QObject(parent)
+    : Connection(parent)
     , thread_(std::move(thread))
 {
     if (!thread_) {
         throw std::invalid_argument("Connection: thread cannot be null");
     }
 
-    assignUniqueId();
     // setupSignalConnections();
 
     qDebug() << "Connection created:" << id_
@@ -27,16 +26,6 @@ BaseTcpConnection::BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
 BaseTcpConnection::~BaseTcpConnection()
 {
     // close();   // RAII: ensure clean shutdown
-}
-
-void BaseTcpConnection::assignUniqueId()
-{
-    if (id_.has_value())
-    {
-        throw std::runtime_error("unique id is already set for Connection object");
-    }
-
-    id_ = QUuid::createUuid().toString(QUuid::WithoutBraces);
 }
 
 QString BaseTcpConnection::id() const

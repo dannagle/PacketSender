@@ -2,8 +2,8 @@
 // Created by Tomas Gallucci on 6/14/26.
 //
 
-#ifndef CONNECTIONTESTS_H
-#define CONNECTIONTESTS_H
+#ifndef BASETCPCONNECTIONTESTS_H
+#define BASETCPCONNECTIONTESTS_H
 
 #include <QObject>
 
@@ -15,9 +15,6 @@ class BaseTcpConnectionTests : public QObject
     Q_OBJECT
 
 private slots:
-    // constructor tests
-    void testConnectionConstructor_createsConnectionObjectWithID();
-
     // isConnected() tests
     void testIsConnected_data();
     void testIsConnected();
@@ -43,4 +40,4 @@ private:
 };
 
 
-#endif //CONNECTIONTESTS_H
+#endif //BASETCPCONNECTIONTESTS_H

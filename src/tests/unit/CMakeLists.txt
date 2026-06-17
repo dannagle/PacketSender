@@ -19,8 +19,12 @@ add_executable(${TEST_NAME}
     ../../translations.cpp
     translation_tests.cpp
 
+    ../../connections/connection.cpp
+    testdoubles/ConnectionTestDouble.h
+    connections/connectiontests.cpp
+
     ../../connections/basetcpconnection.cpp
-        connection/basetcpconnectiontests.cpp
+    connections/basetcpconnectiontests.cpp
 
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
