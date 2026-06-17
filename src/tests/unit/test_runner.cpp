@@ -14,7 +14,6 @@
 #include "translation_tests.h"
 #include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
-#include "deprecatedconnectiontests.h"
 #include "incomingtcpthreadtests.h"
 #include "outgoingtcpthreadpersistentconnectionlooptests.h"
 #include "outgoingtcpthreadconnectiontests.h"
@@ -59,7 +58,6 @@ int main(int argc, char *argv[])
     // runNonGuiTest(new TcpThreadTests());
     runNonGuiTest(new BaseTcpConnectionTests());
     runNonGuiTest(new ConnectionTests());
-    // runNonGuiTest(new DeprecatedConnectionTests());
     // runNonGuiTest(new ConnectionManagerTests());
     runNonGuiTest(new PacketTests());
 

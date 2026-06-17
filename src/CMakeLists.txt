@@ -66,7 +66,6 @@ set(
   connections/connection.cpp
   connections/basetcpconnection.cpp
   connectionmanager.cpp
-  deprecatedconnection.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp
