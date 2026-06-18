@@ -33,6 +33,9 @@ private slots:
     void testIsPersistent_Outgoing_data();
     void testIsPersistent_Outgoing();
 
+    // getClassName() tests
+    void testGetClassName();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

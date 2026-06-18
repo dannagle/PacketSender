@@ -71,6 +71,7 @@ private slots:
 */
 protected:
     void assignUniqueId();
+    [[nodiscard]] virtual QString getClassName() const;
 
     std::optional<QString> id_;
 };

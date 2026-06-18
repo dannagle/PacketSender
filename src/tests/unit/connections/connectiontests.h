@@ -9,8 +9,13 @@
 
 class ConnectionTests : public QObject
 {
+    Q_OBJECT
 private slots:
+    // constructor tests
     void testConnectionConstructor_createsConnectionObjectWithID();
+
+    // getClassName() tests
+    void testGetClassName();
 };
 
 

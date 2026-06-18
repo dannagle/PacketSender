@@ -7,8 +7,9 @@
 #include <QObject>
 
 #include "connections/connection.h"
+#include "utils/calltracker.h"
 
-class ConnectionTestDouble : public Connection
+class ConnectionTestDouble : public Connection, public CallTracker
 {
     Q_OBJECT
 public:
@@ -22,6 +23,10 @@ public:
     [[nodiscard]] bool isPersistent() const override { return persistent; };
     [[nodiscard]] bool isIncoming() const override { return incoming; };
 
+    [[nodiscard]] QString callGetClassName() const
+    {
+        return Connection::getClassName();
+    }
 };
 
 #endif //CONNECTIONTESTDOUBLE_H

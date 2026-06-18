@@ -20,7 +20,6 @@
 #include "outgoingtcpthreadtests.h"
 #include "packettests.h"
 #include "singlesendoutgoingtcpthreadtests.h"
-#include "testdoubles/BaseTcpConnectionTestDouble.h"
 
 int main(int argc, char *argv[])
 {

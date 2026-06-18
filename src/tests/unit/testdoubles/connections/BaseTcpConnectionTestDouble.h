@@ -2,19 +2,20 @@
 // Created by Tomas Gallucci on 6/14/26.
 //
 
-#ifndef CONNECTIONTESTDOUBLE_H
-#define CONNECTIONTESTDOUBLE_H
+#ifndef BASETCPCONNECTIONTESTDOUBLE_H
+#define BASETCPCONNECTIONTESTDOUBLE_H
 
 #include <QObject>
 
-#include "basetcpthreadtestdouble.h"
-#include "../utils/calltracker.h"
+#include "../basetcpthreadtestdouble.h"
+#include "../../utils/calltracker.h"
 #include "connections/basetcpconnection.h"
 #include "tests/unit/utils/testutils.h"
 
 class BaseTcpConnectionTestDouble : public BaseTcpConnection, public CallTracker
 {
     Q_OBJECT
+public:
 
     explicit BaseTcpConnectionTestDouble(std::unique_ptr<BaseTcpThread> thread,
                                   QObject* parent = nullptr)
@@ -38,6 +39,10 @@ class BaseTcpConnectionTestDouble : public BaseTcpConnection, public CallTracker
         thread_ = std::move(thread);
     }
 
+    [[nodiscard]] QString callGetClassName() const
+    {
+        return BaseTcpConnection::getClassName();
+    }
 };
 
-#endif //CONNECTIONTESTDOUBLE_H
+#endif //BASETCPCONNECTIONTESTDOUBLE_H

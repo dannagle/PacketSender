@@ -31,3 +31,8 @@ void Connection::assignUniqueId()
 
     id_ = QUuid::createUuid().toString(QUuid::WithoutBraces);
 }
+
+QString Connection::getClassName() const
+{
+    return metaObject()->className();
+}

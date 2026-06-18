@@ -12,6 +12,7 @@
 
 #include "outgoingtcpthread.h"
 #include "../testdoubles/basetcpthreadtestdouble.h"
+#include "testdoubles/connections/BaseTcpConnectionTestDouble.h"
 
 std::unique_ptr<BaseTcpThreadTestDouble> BaseTcpConnectionTests::createThreadWithConnectionState(
     QAbstractSocket::SocketState socketState)
@@ -159,4 +160,11 @@ void BaseTcpConnectionTests::testIsPersistent_Outgoing()
 
     const BaseTcpConnection connection(std::move(thread));
     QCOMPARE(connection.isPersistent(), isPersistent);
+}
+
+void BaseTcpConnectionTests::testGetClassName()
+{
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    BaseTcpConnectionTestDouble connection(std::move(thread));
+    QCOMPARE(connection.callGetClassName(), "BaseTcpConnectionTestDouble");
 }
