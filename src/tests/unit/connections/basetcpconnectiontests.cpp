@@ -8,7 +8,6 @@
 #include "../../../connections/basetcpconnection.h"
 #include "../utils/testutils.h"
 
-#include <QUuid>
 #include <QtTest>
 
 #include "outgoingtcpthread.h"
