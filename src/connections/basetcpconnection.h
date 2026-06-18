@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "connection.h"
+#include "incomingtcpthread.h"
 #include "../packet.h"
 #include "../basetcpthread.h"
 
@@ -22,7 +23,6 @@ public:
 
     ~BaseTcpConnection() override;
 
-    [[nodiscard]] QString id() const override;
     [[nodiscard]] bool isConnected() const override;
     [[nodiscard]] bool isSecure() const override;
     [[nodiscard]] bool isPersistent() const override;

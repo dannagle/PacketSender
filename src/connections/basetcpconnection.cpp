@@ -28,11 +28,6 @@ BaseTcpConnection::~BaseTcpConnection()
     // close();   // RAII: ensure clean shutdown
 }
 
-QString BaseTcpConnection::id() const
-{
-    return id_.has_value()? id_.value() : "";
-}
-
 bool BaseTcpConnection::isConnected() const
 {
     return thread_->isConnected();
