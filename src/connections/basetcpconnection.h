@@ -45,7 +45,6 @@ private slots:
 
 protected:
     std::unique_ptr<BaseTcpThread> thread_;
-    bool isIncoming_ = false;
 
 private:
     // void setupSignalConnections();
