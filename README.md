@@ -104,7 +104,7 @@ The Android version is located [on Google Play](https://play.google.com/store/ap
 
 <a id="ios"></a>
 ## iOS Mobile App
-The Packet Sender for iOS is fully native, contain bare minimum permissions, and collects no data. This is software that respsects you. Thank you for supporting this effort.
+The Packet Sender for iOS is fully native, contain bare minimum permissions, and collects no data. This is software that respects you. Thank you for supporting this effort.
 
 The iOS version is located [on the Apple App Store](https://apps.apple.com/app/id1558236648#?platform=iphone)
 
@@ -133,7 +133,7 @@ Packet Sender is identical for all the desktop versions. The only difference is 
   * \XX gets translated to XX in hex
   * \n, \r, \t will get translated to 0A, 0D, and 09
   * HEX numbers are space delimited
-    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct. It is very fault-tolerent.
+    * The HEX field will attempt to interpret other common delimiters (such as commas, colons (Wireshark), semicolons, " 0x", etc) and auto-correct. It is very fault-tolerant.
     * A single stream of HEX is also supported. If the number of bytes is odd, Packet Sender will assume the front byte needs a zero and then auto-correct.
   * Example ASCII: hello world\r
   * Example HEX: 68 65 6c 6c 6f 20 77 6f 72 6c 64 0d
@@ -257,12 +257,12 @@ If there is an SSL error, Packet Sender will output it to the traffic log. If th
 
 ## Multicast (Experimental)
 
-Packet Sender's multicast support is triggered by attempting to send to a IPv4 multicast address or from the mulitcast submenu. The feature is currently experimental and has these known problems.
+Packet Sender's multicast support is triggered by attempting to send to a IPv4 multicast address or from the multicast submenu. The feature is currently experimental and has these known problems.
 
 * Packet Sender abandons IPv6 support when joining multicast.
 * And stays abandoned until you revisit settings or attempt to send to IPv6
 * On wifi, it sometimes takes 20 seconds for multicast join to actually take effect.
-* Packet Sender has no logic to rejoin a mulitcast group if the switch reboots or some other common error.
+* Packet Sender has no logic to rejoin a multicast group if the switch reboots or some other common error.
 
 There is no IPv6 multicast support, though it is on the roadmap. Sponsors wanting IPv6 multicast support are welcome to contact me.
 
@@ -305,8 +305,8 @@ https://cloud.packetsender.com/help
 Packet Sender has a "portable" mode. At launch, it will look for `portablemode.txt` and populate any missing settings files in that run-time directory. These files are  `packets.ini`, `ps_settings.ini`, `ps.key`, and `ps.pem`.
 You may also have some files portable and the other in their standard location by removing portablemode.txt.
 
-### DDLs that can be removed in Console-only portable Mode
-If you do not require the GUI, you may remove these DDLs
+### DLLs that can be removed in Console-only portable Mode
+If you do not require the GUI, you may remove these DLLs
 - Qt6Svg.dll
 - Qt6Widgets.dll
 - Qt6Gui.dll
@@ -318,8 +318,8 @@ If you do not require the GUI, you may remove these DDLs
 
 Note that DLLs with `+` characters in their names that can cause problems with Windows command-line copy if you do not surround them with `"` .
 
-### DDLs that can be removed if you do not need secure connections
-If you do not require SSL, you may remove these DDLs
+### DLLs that can be removed if you do not need secure connections
+If you do not require SSL, you may remove these DLLs
 - libcrypto-1_1-x64.dll
 - libssl-1_1-x64.dll
 
@@ -383,7 +383,7 @@ Persistent connections are not supported via the command line.
 <a id="http"></a>
 # HTTP/HTTPS POST & GET
 Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
-Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will udpate to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load FIle (when POST is selected). 
+Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will update to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load File (when POST is selected). 
 
 ## Sending HTTP/HTTPS GET/POST Requests
 ![](/screenshots/ps_http_getfields.PNG)
@@ -398,7 +398,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 ### For POST Requests:
 * You can manually add in the data into the *Data* field.
 	* Format would go: key=value
-	* For multiple paramaters: key=value&key=value&key=value
+	* For multiple parameters: key=value&key=value&key=value
 * Or you can click on the *Generate Data* button
 
 <img src="/screenshots/ps_http_datagenerator.PNG" width="400" height="284">
