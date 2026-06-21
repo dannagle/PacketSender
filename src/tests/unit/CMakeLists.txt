@@ -31,6 +31,10 @@ add_executable(${TEST_NAME}
     testdoubles/connections/incomingtcpconnectiontestdouble.h
     connections/incomingtcpconnectiontests.cpp
 
+    ../../connections/outgoingtcpconnection.cpp
+    testdoubles/connections/OutgoingTcpConnectionTestDouble.h
+    connections/outgoingtcpconnectiontests.cpp
+
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
 

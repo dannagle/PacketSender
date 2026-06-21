@@ -53,6 +53,8 @@ public:
     static QString BUILD_RECEIVED_PACKET() { return QStringLiteral("buildReceivedPacket"); }
     static QString SEND_OUTGOING_PACKET() { return QStringLiteral("sendOutgoingPacket"); }
     static QString PREPARE_OUTGOING_PACKET() { return QStringLiteral("prepareOutgoingPacket"); }
+    static QString OUTGOINGTCPTHREAD_SHUTDOWN() { return QStringLiteral("OutgoingTcpThread shutdown"); }
+    static QString OUTGOINGTCPTHREAD_STOP() { return QStringLiteral("OutgoingTcpThread stop"); }
 
 
     // IncomingTcpThread
