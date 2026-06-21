@@ -7,6 +7,7 @@
 #include "basetcpthread.h"
 
 #include <QSslKey>
+#include <QUuid>
 
 #include "fileutils.h"
 #include "settingnames.h"
@@ -31,6 +32,8 @@ BaseTcpThread::BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
     if (QSslSocket* realSocket = socketInterface->rawSocket()) {
         realSocket->setParent(this);
     }
+
+    assignUniqueId();
 }
 
 BaseTcpThread::~BaseTcpThread()
@@ -85,6 +88,11 @@ bool BaseTcpThread::interruptibleWaitForReadyRead(const int timeoutMs)
     }
 
     return false;
+}
+
+QString BaseTcpThread::id() const
+{
+    return id_.has_value() ? id_.value() : QString();
 }
 
 bool BaseTcpThread::isValid() const
@@ -320,4 +328,14 @@ void BaseTcpThread::loadSSLCerts(bool allowSnakeOil)
             emit errorMessage("SSL: Failed to load private key from: " + keyPath);
         }
     }
+}
+
+void BaseTcpThread::assignUniqueId()
+{
+    if (id_.has_value())
+    {
+        throw std::runtime_error("unique id is already set for Connection object");
+    }
+
+    id_ = QUuid::createUuid().toString(QUuid::WithoutBraces);
 }

@@ -28,6 +28,8 @@ public:
                            QObject* parent = nullptr);
     ~BaseTcpThread() override;
 
+    QString id() const;
+
     virtual void shutdown();
     virtual void stop();
     virtual bool shouldStop() const;
@@ -83,6 +85,9 @@ protected:
     bool closeRequest = false;
     bool shouldUseSSL = false;
     bool persistent = false;
+
+    void assignUniqueId();
+    std::optional<QString> id_;
 
 #ifdef CONSOLE_MODE
     bool consoleMode = true;
