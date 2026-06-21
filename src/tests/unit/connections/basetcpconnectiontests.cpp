@@ -176,3 +176,22 @@ void BaseTcpConnectionTests::testGetClassName()
     connection.setThread(std::move(thread));
     QCOMPARE(connection.callGetClassName(), "BaseTcpConnectionTestDouble");
 }
+
+void BaseTcpConnectionTests::testSend_throwsRuntimeException()
+{
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
+
+    const auto p = TestUtils::createPacketForTest();
+
+    try
+    {
+        connection.send(p);
+        QFAIL("send should have thrown");
+    } catch(std::runtime_error& e)
+    {
+        QCOMPARE(QString::fromStdString(e.what()),
+                 QString("Unsupported Operation: BaseTcpConnectionTestDouble cannot send Packet"));
+    }
+}

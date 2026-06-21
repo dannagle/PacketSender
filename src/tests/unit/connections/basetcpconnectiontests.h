@@ -36,6 +36,9 @@ private slots:
     // getClassName() tests
     void testGetClassName();
 
+    // send() tests
+    void testSend_throwsRuntimeException();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

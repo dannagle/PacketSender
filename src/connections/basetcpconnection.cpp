@@ -42,4 +42,10 @@ bool BaseTcpConnection::isIncoming() const
 {
     return thread_ && thread_->isIncoming();
 }
+
+void BaseTcpConnection::send(const Packet& packet)
+{
+    const auto errorMessage = "Unsupported Operation: "
+        + getClassName() + " cannot send Packet";
+    throw std::runtime_error(errorMessage.toUtf8());
 }

@@ -27,6 +27,13 @@ public:
     {
         return Connection::getClassName();
     }
+
+    void send(const Packet& packet) override
+    {
+        const auto errorMessage = "Unsupported Operation: "
+        + getClassName() + " cannot send Packet";
+        throw std::runtime_error(errorMessage.toUtf8());
+    }
 };
 
 #endif //CONNECTIONTESTDOUBLE_H
