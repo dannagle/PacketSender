@@ -11,6 +11,13 @@
 
 class OutgoingTcpThreadTestDouble : public OutgoingTcpThread, public CallTracker
 {
+    Q_OBJECT
+
+signals:
+    void outgoingThreadTestDoubleAboutToShutdown();   // emitted when shutdown/stop is requested
+    void threadTestDoubleDestructorCalled();         // emitted when the object is actually deleted
+    void runStarted(Qt::HANDLE threadId);           // emitted when run is called so we can get the thread id
+
 public:
     explicit OutgoingTcpThreadTestDouble(PacketSenderQSslSocketInterface* socketInterface,
                                          const Packet& packet)
@@ -20,6 +27,20 @@ public:
     explicit OutgoingTcpThreadTestDouble(const Packet& packetToSend)
         : OutgoingTcpThreadTestDouble(new MockSslSocket(), packetToSend)   // delegates to main constructor
     {}
+
+    explicit OutgoingTcpThreadTestDouble(const Packet& packetToSend, QObject *parent)
+        : OutgoingTcpThread(new MockSslSocket(), packetToSend, parent)
+    {}
+
+    ~OutgoingTcpThreadTestDouble() override
+    {
+        emit threadTestDoubleDestructorCalled();
+    }
+
+    Qt::HANDLE getThreadIdCapturedInRun() const
+    {
+        return threadId;
+    }
 
     Packet& getSendPacketByReference()
     {
@@ -39,12 +60,22 @@ public:
     void stop() override
     {
         simulateRequestInterruptionCalled = true;
+
+        recordCall(CallTracker::OUTGOINGTCPTHREAD_STOP());
+        OutgoingTcpThread::stop();
     }
 
     [[nodiscard]] bool shouldStop() const override
     {
         QDEBUG() << "simulateRequestInterruptionCalled in test double: " << simulateRequestInterruptionCalled;
         return simulateRequestInterruptionCalled;
+    }
+
+    void shutdown() override
+    {
+        emit outgoingThreadTestDoubleAboutToShutdown();
+        recordCall(CallTracker::OUTGOINGTCPTHREAD_SHUTDOWN());
+        OutgoingTcpThread::shutdown();
     }
 
     bool loopExitedCleanly() const
@@ -339,8 +370,17 @@ protected:
         OutgoingTcpThread::persistentConnectionLoop();
     }
 
+    void run() override
+    {
+        emit runStarted(currentThreadId());
+        threadId = currentThreadId();
+        recordCall(RUN());
+        OutgoingTcpThread::run();
+    }
+
 private:
     bool simulateRequestInterruptionCalled = false;
+    Qt::HANDLE threadId = nullptr;
 };
 
 #endif //OUTGOINGTCHPTHREADTESTDOUBLE_H
