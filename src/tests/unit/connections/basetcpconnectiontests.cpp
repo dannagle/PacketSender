@@ -43,7 +43,9 @@ void BaseTcpConnectionTests::testIsConnected()
     mockSock->setMockState(socketState);
 
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
-    BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
+    // BaseTcpConnection connection(std::move(thread));
 
     QCOMPARE(connection.isConnected(), expectedReturnValue);
 }
@@ -94,7 +96,8 @@ void BaseTcpConnectionTests::testIsSecure()
     mockSock->setMockEncrypted(isSecure);
 
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
-    BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
 
     QCOMPARE(connection.isSecure(), expectedReturnValue);
 }
@@ -103,14 +106,16 @@ void BaseTcpConnectionTests::testIsSecure()
 void BaseTcpConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
 }
 
 void BaseTcpConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
 }
 
@@ -134,7 +139,8 @@ void BaseTcpConnectionTests::testIsPersistent_Incoming()
 
     auto thread = std::make_unique<IncomingTcpThread>(socket, isEncrypted, isPersistent);
 
-    BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
     QCOMPARE(connection.isPersistent(), isPersistent);
 }
 
@@ -158,13 +164,15 @@ void BaseTcpConnectionTests::testIsPersistent_Outgoing()
 
     auto thread = std::make_unique<OutgoingTcpThread>(socket, packet);
 
-    const BaseTcpConnection connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
     QCOMPARE(connection.isPersistent(), isPersistent);
 }
 
 void BaseTcpConnectionTests::testGetClassName()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
-    BaseTcpConnectionTestDouble connection(std::move(thread));
+    auto connection = BaseTcpConnectionTestDouble();
+    connection.setThread(std::move(thread));
     QCOMPARE(connection.callGetClassName(), "BaseTcpConnectionTestDouble");
 }

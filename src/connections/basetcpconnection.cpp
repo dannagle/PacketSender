@@ -7,43 +7,39 @@
 #include "../basetcpthread.h"
 #include <QUuid>
 #include <QDebug>
+#include<exception>
 
-BaseTcpConnection::BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
-                       QObject* parent)
+BaseTcpConnection::BaseTcpConnection(QObject* parent)
     : Connection(parent)
-    , thread_(std::move(thread))
 {
-    if (!thread_) {
-        throw std::invalid_argument("Connection: thread cannot be null");
-    }
-
-    // setupSignalConnections();
-
-    qDebug() << "Connection created:" << id_
-             << "(thread type:" << thread_->metaObject()->className() << ")";
 }
 
 BaseTcpConnection::~BaseTcpConnection()
 {
-    // close();   // RAII: ensure clean shutdown
+    if (thread_) {
+        thread_->stop(); // RAII: ensure clean shutdown
+        thread_->quit();
+        thread_->wait();        // Important: wait for the thread to finish
+    }
 }
 
 bool BaseTcpConnection::isConnected() const
 {
-    return thread_->isConnected();
+    return thread_ && thread_->isConnected();
 }
 
 bool BaseTcpConnection::isSecure() const
 {
-    return thread_->isSocketEncrypted();
+    return thread_ && thread_->isSocketEncrypted();
 }
 
 bool BaseTcpConnection::isPersistent() const
 {
-    return thread_->isPersistent();
+    return thread_ && thread_->isPersistent();
 }
 
 bool BaseTcpConnection::isIncoming() const
 {
-    return thread_->isIncoming();
+    return thread_ && thread_->isIncoming();
+}
 }

@@ -18,8 +18,7 @@ class BaseTcpConnection : public Connection
     Q_OBJECT
 
 public:
-    explicit BaseTcpConnection(std::unique_ptr<BaseTcpThread> thread,
-                        QObject* parent = nullptr);
+    explicit BaseTcpConnection(QObject* parent = nullptr);
 
     ~BaseTcpConnection() override;
 

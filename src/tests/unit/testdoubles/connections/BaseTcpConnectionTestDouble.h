@@ -17,20 +17,19 @@ class BaseTcpConnectionTestDouble : public BaseTcpConnection, public CallTracker
     Q_OBJECT
 public:
 
-    explicit BaseTcpConnectionTestDouble(std::unique_ptr<BaseTcpThread> thread,
-                                  QObject* parent = nullptr)
-                : BaseTcpConnection(std::move(thread), parent)
+    explicit BaseTcpConnectionTestDouble(QObject* parent = nullptr)
+                : BaseTcpConnection(parent)
     {
 
     }
 
     /** Convenience constructor that creates a mock thread internally */
-    explicit BaseTcpConnectionTestDouble(QObject* parent = nullptr)
-        : BaseTcpConnection(std::make_unique<BaseTcpThreadTestDouble>(
-            TestUtils::createMockSocketForTest()), parent)
-    {
-
-    }
+    // explicit BaseTcpConnectionTestDouble(QObject* parent = nullptr)
+    //     : BaseTcpConnection(std::make_unique<BaseTcpThreadTestDouble>(
+    //         TestUtils::createMockSocketForTest()), parent)
+    // {
+    //
+    // }
 
     ~BaseTcpConnectionTestDouble() override = default;
 
