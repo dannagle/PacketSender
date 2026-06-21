@@ -39,6 +39,24 @@ BaseTcpThread::~BaseTcpThread()
     // No explicit deleteLater() needed here
 }
 
+void BaseTcpThread::shutdown()
+{
+    if (isRunning())
+    {
+        stop();                    // Use our own stop abstraction
+        quit();                    // Ask event loop to exit
+        bool finished = wait(2500); // Slightly longer timeout is safer
+
+        if (!finished)
+        {
+            qWarning() << metaObject()->className() << "did not stop cleanly within timeout";
+            terminate();           // Last resort
+        }
+    }
+
+    closeConnection();             // Always try to clean up socket
+}
+
 void BaseTcpThread::stop()
 {
     requestInterruption();

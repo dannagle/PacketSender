@@ -28,6 +28,7 @@ public:
                            QObject* parent = nullptr);
     ~BaseTcpThread() override;
 
+    virtual void shutdown();
     virtual void stop();
     virtual bool shouldStop() const;
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
