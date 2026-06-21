@@ -27,6 +27,10 @@ add_executable(${TEST_NAME}
     testdoubles/connections/BaseTcpConnectionTestDouble.h
     connections/basetcpconnectiontests.cpp
 
+    ../../connections/incomingtcpconnection.cpp
+    testdoubles/connections/incomingtcpconnectiontestdouble.h
+    connections/incomingtcpconnectiontests.cpp
+
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
 

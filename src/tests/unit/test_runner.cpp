@@ -20,6 +20,7 @@
 #include "outgoingtcpthreadtests.h"
 #include "packettests.h"
 #include "singlesendoutgoingtcpthreadtests.h"
+#include "connections/incomingtcpconnectiontests.h"
 
 int main(int argc, char *argv[])
 {
@@ -57,6 +58,7 @@ int main(int argc, char *argv[])
     // runNonGuiTest(new TcpThreadTests());
     runNonGuiTest(new BaseTcpConnectionTests());
     runNonGuiTest(new ConnectionTests());
+    runNonGuiTest(new IncomingTcpConnectionTests());
     // runNonGuiTest(new ConnectionManagerTests());
     runNonGuiTest(new PacketTests());
 
