@@ -37,6 +37,7 @@ OutgoingTcpThread::OutgoingTcpThread(const Packet& packetToSend,
 
 OutgoingTcpThread::~OutgoingTcpThread()
 {
+    stop();
 }
 
 QString OutgoingTcpThread::getDestinationAddress() const
