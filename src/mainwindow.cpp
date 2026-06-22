@@ -1583,6 +1583,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
         bool isHTTP  = upperText.contains("HTTP") ||
                        upperText.contains("GET")  ||
                        upperText.contains("POST") ||
+                       upperText.contains("PUT") ||
                        upperText.contains("DELETE");
 
         if (isHTTP) {
@@ -1591,6 +1592,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             // Normalize the method
             QString method = "GET";  // default
             if (upperText.contains("POST"))        method = "POST";
+            else if (upperText.contains("PUT"))    method = "PUT";
             else if (upperText.contains("DELETE")) method = "DELETE";
 
             updatePacket.tcpOrUdp = isHTTPS ? "HTTPS" : "HTTP";
@@ -2752,10 +2754,15 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         ui->packetPortEdit->setText("80");
     }
 
-    const auto isPost = selectedText.contains("post") && isHttp;
-    const auto isDelete = selectedText.contains("delete") && isHttp;
+    const auto isGet    = selectedText.contains("get");
+    const auto isPost   = selectedText.contains("post");
+    const auto isPut    = selectedText.contains("put");
+    const auto isDelete = selectedText.contains("delete");
 
-    const bool shouldShowDataField = isPost || isDelete;
+    const bool shouldShowDataField = isPost || isPut || isDelete;
+
+    // Use nice HTTP UI for GET/POST/PUT/DELETE on both http and https
+    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isDelete);
 
     /////////////////////////////////dtls add line edit for adding path for cert
 

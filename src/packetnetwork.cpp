@@ -1153,6 +1153,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
             QDEBUG() << "http post request";
             http->post(request, sendpacket.getByteArray());
 
+        } else if (sendpacket.isPUT()) {
+            http->put(request, bytes);
         } else if (sendpacket.isDELETE()) {
             if (bytes.isEmpty()) {
                 http->deleteResource(request);

@@ -278,6 +278,15 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTP Put</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTP Delete</string>
               </property>
               <property name="icon">
@@ -297,6 +306,15 @@
              <item>
               <property name="text">
                <string>HTTPS Post</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Put</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">

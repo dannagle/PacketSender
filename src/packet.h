@@ -70,7 +70,9 @@ class Packet
         bool isHTTP();
         bool isHTTPS();
         bool isPOST();
+        bool isPUT();
         bool isDELETE();
+        bool isPATCH();
 
         QDateTime timestamp;
 

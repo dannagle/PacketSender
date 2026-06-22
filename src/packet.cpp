@@ -93,6 +93,9 @@ bool Packet::isPOST()
     return  isHTTP() && ((tcpOrUdp.trimmed().toLower().contains("post")));
 }
 
+bool Packet::isPUT() {
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("put");
+}
 
 bool Packet::isDELETE() {
     return isHTTP() && (tcpOrUdp.trimmed().toLower().contains("delete"));
