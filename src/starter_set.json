@@ -376,5 +376,44 @@
         "sendresponse": "0",
         "tcporudp": "UDP",
         "toip": "1.1.1.1"
+    },
+    {
+        "name": "HTTPBin PUT Test",
+        "tcporudp": "HTTPS Put",
+        "toip": "httpbin.org",
+        "port": "443",
+        "requestpath": "/put",
+        "asciistring": "ewogICJuYW1lIjogIlBhY2tldFNlbmRlciIsCiAgIm1ldGhvZCI6ICJQVVQgdGVzdCIKfQ==",
+        "hexstring": "",
+        "repeat": 0,
+        "persist": 0,
+        "sendresponse": "0",
+        "receiveBeforeSend": "0"
+    },
+    {
+        "name": "HTTPBin PATCH Test",
+        "tcporudp": "HTTPS Patch",
+        "toip": "httpbin.org",
+        "port": "443",
+        "requestpath": "/patch",
+        "asciistring": "ewogICJzdGF0dXMiOiAidXBkYXRlZCIsCiAgInVwZGF0ZWRfYnkiOiAiUGFja2V0U2VuZGVyIgp9",
+        "hexstring": "",
+        "repeat": 0,
+        "persist": 0,
+        "sendresponse": "0",
+        "receiveBeforeSend": "0"
+    },
+    {
+        "name": "HTTPBin DELETE Test",
+        "tcporudp": "HTTPS Delete",
+        "toip": "httpbin.org",
+        "port": "443",
+        "requestpath": "/delete",
+        "asciistring": "",
+        "hexstring": "",
+        "repeat": 0,
+        "persist": 0,
+        "sendresponse": "0",
+        "receiveBeforeSend": "0"
     }
 ]
