@@ -2742,6 +2742,16 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 
     const auto isHttps = selectedText.contains("https");
     const auto isHttp  = selectedText.contains("http") && !isHttps;
+
+    // === Smart port defaulting ===
+    int currentPort = ui->packetPortEdit->text().trimmed().toInt();
+
+    if (isHttps && (currentPort == 80 || currentPort == 0)) {
+        ui->packetPortEdit->setText("443");
+    } else if (isHttp && (currentPort == 443 || currentPort == 0)) {
+        ui->packetPortEdit->setText("80");
+    }
+
     const auto isPost = selectedText.contains("post") && isHttp;
     const auto isDelete = selectedText.contains("delete") && isHttp;
 
