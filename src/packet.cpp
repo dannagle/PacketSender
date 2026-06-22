@@ -82,15 +82,15 @@ bool Packet::isUDP()
 
 bool Packet::isHTTP()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("http")));
+    return tcpOrUdp.trimmed().toLower().contains("http");
 }
 bool Packet::isHTTPS()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("https")));
+    return tcpOrUdp.trimmed().toLower().contains("https");
 }
 bool Packet::isPOST()
 {
-    return  isHTTP() && ((tcpOrUdp.trimmed().toLower().contains("post")));
+    return  isHTTP() && tcpOrUdp.trimmed().toLower().contains("post");
 }
 
 bool Packet::isPUT() {
@@ -98,7 +98,8 @@ bool Packet::isPUT() {
 }
 
 bool Packet::isDELETE() {
-    return isHTTP() && (tcpOrUdp.trimmed().toLower().contains("delete"));
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("delete");
+}
 
 bool Packet::isPATCH() {
     return isHTTP() && tcpOrUdp.trimmed().toLower().contains("patch");
@@ -106,7 +107,7 @@ bool Packet::isPATCH() {
 
 bool Packet::isTCP()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL()));
+    return tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL();
 }
 
 float Packet::oneDecimal(float value)
