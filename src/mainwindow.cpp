@@ -1584,6 +1584,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
                        upperText.contains("GET")  ||
                        upperText.contains("POST") ||
                        upperText.contains("PUT") ||
+                       upperText.contains("PATCH") ||
                        upperText.contains("DELETE");
 
         if (isHTTP) {
@@ -1594,6 +1595,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             if (upperText.contains("POST"))        method = "POST";
             else if (upperText.contains("PUT"))    method = "PUT";
             else if (upperText.contains("DELETE")) method = "DELETE";
+            else if (upperText.contains("PATCH"))  method = "PATCH";
 
             updatePacket.tcpOrUdp = isHTTPS ? "HTTPS" : "HTTP";
             updatePacket.tcpOrUdp.append(" " + method);
@@ -2757,12 +2759,13 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     const auto isGet    = selectedText.contains("get");
     const auto isPost   = selectedText.contains("post");
     const auto isPut    = selectedText.contains("put");
+    const auto isPatch  = selectedText.contains("patch");
     const auto isDelete = selectedText.contains("delete");
 
-    const bool shouldShowDataField = isPost || isPut || isDelete;
+    const bool shouldShowDataField = isPost || isPut || isPatch || isDelete;
 
-    // Use nice HTTP UI for GET/POST/PUT/DELETE on both http and https
-    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isDelete);
+    // Use nice HTTP UI for GET/POST/PUT/PATCH/DELETE on both http and https
+    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isPatch || isDelete);
 
     /////////////////////////////////dtls add line edit for adding path for cert
 
@@ -2795,7 +2798,7 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         }
     }
 
-    // Show ASCII/Data field for raw modes OR when we have POST/PUT/DELETE
+    // Show ASCII/Data field for raw modes OR when we have POST/PUT/PATCH/DELETE
     for (int i = 0; i < ui->asciiLayout->count(); ++i) {
         QWidget *w = ui->asciiLayout->itemAt(i)->widget();
         if (w != nullptr) {

@@ -99,6 +99,9 @@ bool Packet::isPUT() {
 
 bool Packet::isDELETE() {
     return isHTTP() && (tcpOrUdp.trimmed().toLower().contains("delete"));
+
+bool Packet::isPATCH() {
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("patch");
 }
 
 bool Packet::isTCP()

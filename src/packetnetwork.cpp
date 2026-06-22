@@ -1155,6 +1155,8 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         } else if (sendpacket.isPUT()) {
             http->put(request, bytes);
+        } else if (sendpacket.isPATCH()) {
+            http->sendCustomRequest(request, "PATCH", bytes);
         } else if (sendpacket.isDELETE()) {
             if (bytes.isEmpty()) {
                 http->deleteResource(request);
