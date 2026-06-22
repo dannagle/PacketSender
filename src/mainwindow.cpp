@@ -2779,25 +2779,27 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         ui->asciiLabel->setText("ASCII");
     }
 
-
+    // Hide HEX for nice HTTP(S) protocols
     for (int i = 0; i < ui->hexHorizLayout->count(); ++i) {
         QWidget *w = ui->hexHorizLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible(!isHttp);
+        if (w != nullptr) {
+            w->setVisible(!isNiceHttpProtocol);
         }
     }
 
+    // Show Request field for nice HTTP(S) protocols
     for (int i = 0; i < ui->requestLayout->count(); ++i) {
         QWidget *w = ui->requestLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible(isHttp);
+        if (w != nullptr) {
+            w->setVisible(isNiceHttpProtocol);
         }
     }
 
+    // Show ASCII/Data field for raw modes OR when we have POST/PUT/DELETE
     for (int i = 0; i < ui->asciiLayout->count(); ++i) {
         QWidget *w = ui->asciiLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible((!isHttp) || shouldShowDataField);
+        if (w != nullptr) {
+            w->setVisible(!isNiceHttpProtocol || shouldShowDataField);
         }
     }
 
