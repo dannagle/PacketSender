@@ -10,7 +10,7 @@
 
 [![Downloads](https://img.shields.io/github/downloads/dannagle/PacketSender/total.svg)](https://packetsender.com/download)
 
-Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets as well as HTTP/HTTPS requests and panel generation. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use. If you find the app useful, please consider donating/sponsoring so development may continue.
+Packet Sender is an open source utility to allow sending and receiving TCP, UDP, and SSL (encrypted TCP) packets as well as HTTP/HTTPS requests (GET, POST, PUT, PATCH, and DELETE) and panel generation. The mainline branch officially supports Windows, Mac, and Desktop Linux (with Qt). Other places may recompile and redistribute Packet Sender. Packet Sender is free and licensed GPL v2 or later. It can be used for both commercial and personal use. If you find the app useful, please consider donating/sponsoring so development may continue.
 
 
 
@@ -381,11 +381,28 @@ Persistent connections are not supported via the command line.
 
 
 <a id="http"></a>
-# HTTP/HTTPS POST & GET
-Packet Sender supports sending POST/GET requests via HTTP and HTTPS. 
-Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET, HTTPS POST. When selecting HTTP(S), input fields will update to: Name, Request, Address, Data (when POST is selected), Generate Data button (when POST is selected), Load File (when POST is selected). 
+### HTTP/HTTPS Requests
 
-## Sending HTTP/HTTPS GET/POST Requests
+Packet Sender includes a clean, user-friendly interface for making HTTP and HTTPS requests. You can easily:
+
+- Choose from **GET, POST, PUT, PATCH, DELETE**
+- Set custom request paths
+- Send JSON, form data, or raw bodies
+- View full response headers and body
+
+#### Supported Methods
+
+| Method  | Use Case                        | Body Supported |
+|---------|---------------------------------|----------------|
+| GET     | Retrieve data                   | No             |
+| POST    | Create / submit data            | Yes            |
+| PUT     | Replace entire resource         | Yes            |
+| PATCH   | Partial update of a resource    | Yes            |
+| DELETE  | Delete a resource               | Optional       |
+
+**PATCH** is particularly useful for sending partial updates using `application/json` or `application/json-patch+json`. 
+
+## Sending HTTP/HTTPS GET/POST/PUT/PATCH/DELETE Requests
 ![](/screenshots/ps_http_getfields.PNG)
 * Select HTTP(S) GET or POST from the protocol dropdown
 * In *Address* field input the domain or IP
@@ -395,7 +412,7 @@ Protocol dropdown includes the following options: HTTP GET, HTTP POST, HTTPS GET
 
 **You may also paste a complete URL in the Request field and Packet Sender will parse and auto-populate the other fields.**
 
-### For POST Requests:
+### For POST/PUT/PATCH/DELETE Requests:
 * You can manually add in the data into the *Data* field.
 	* Format would go: key=value
 	* For multiple parameters: key=value&key=value&key=value
