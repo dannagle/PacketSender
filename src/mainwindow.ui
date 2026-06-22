@@ -278,6 +278,15 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTP Delete</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTPS Get</string>
               </property>
               <property name="icon">
@@ -288,6 +297,15 @@
              <item>
               <property name="text">
                <string>HTTPS Post</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Delete</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">
@@ -699,7 +717,7 @@
      <x>0</x>
      <y>0</y>
      <width>909</width>
-     <height>21</height>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

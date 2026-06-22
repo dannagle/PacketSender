@@ -93,6 +93,11 @@ bool Packet::isPOST()
     return  isHTTP() && ((tcpOrUdp.trimmed().toLower().contains("post")));
 }
 
+
+bool Packet::isDELETE() {
+    return isHTTP() && (tcpOrUdp.trimmed().toLower().contains("delete"));
+}
+
 bool Packet::isTCP()
 {
     return ((tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL()));

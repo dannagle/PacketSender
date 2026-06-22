@@ -1573,27 +1573,31 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
         updatePacket.repeat = repeat;
     }
     if (datatype == Settings::METHOD_STR) {
-        if ((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL")) {
-            updatePacket.tcpOrUdp = newText.trimmed().toUpper();
-        }
-        auto isHTTP = newText.trimmed().toUpper().contains("HTTP") || newText.trimmed().toUpper().contains("GET") || newText.trimmed().toUpper().contains("POST");
+        QString upperText = newText.trimmed().toUpper();
 
-        if(isHTTP) {
-            auto isHTTPS = (newText.trimmed().toUpper().contains("HTTPS"));
-            auto isPOST = newText.trimmed().toUpper().contains("POST");
-            updatePacket.tcpOrUdp = "HTTP";
-            if(isHTTPS) {
-                updatePacket.tcpOrUdp.append("S");
-            }
-            if(isPOST) {
-                updatePacket.tcpOrUdp.append(" Post");
-            } else {
-                updatePacket.tcpOrUdp.append(" Get");
-            }
+        if (upperText == "TCP" || upperText == "UDP" || upperText == "SSL") {
+            updatePacket.tcpOrUdp = upperText;
+            return;  // early exit for non-HTTP
         }
 
+        bool isHTTP  = upperText.contains("HTTP") ||
+                       upperText.contains("GET")  ||
+                       upperText.contains("POST") ||
+                       upperText.contains("DELETE");
 
+        if (isHTTP) {
+            bool isHTTPS = upperText.contains("HTTPS");
+
+            // Normalize the method
+            QString method = "GET";  // default
+            if (upperText.contains("POST"))        method = "POST";
+            else if (upperText.contains("DELETE")) method = "DELETE";
+
+            updatePacket.tcpOrUdp = isHTTPS ? "HTTPS" : "HTTP";
+            updatePacket.tcpOrUdp.append(" " + method);
+        }
     }
+
     if (datatype == Settings::ASCII_STR) {
         QString hex = Packet::ASCIITohex(newText);
         updatePacket.hexString = hex;
@@ -2732,10 +2736,16 @@ void MainWindow::on_actionDonate_Thank_You_triggered()
 
 void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 {
+    Q_UNUSED(arg1)
 
-    QString selectedText = ui->udptcpComboBox->currentText().toLower();
-    auto isHttp = selectedText.contains("http");
-    auto isPost = selectedText.contains("post") && isHttp;
+    const QString selectedText = ui->udptcpComboBox->currentText().toLower();
+
+    const auto isHttps = selectedText.contains("https");
+    const auto isHttp  = selectedText.contains("http") && !isHttps;
+    const auto isPost = selectedText.contains("post") && isHttp;
+    const auto isDelete = selectedText.contains("delete") && isHttp;
+
+    const bool shouldShowDataField = isPost || isDelete;
 
     /////////////////////////////////dtls add line edit for adding path for cert
 
@@ -2770,11 +2780,11 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     for (int i = 0; i < ui->asciiLayout->count(); ++i) {
         QWidget *w = ui->asciiLayout->itemAt(i)->widget();
         if(w != nullptr) {
-            w->setVisible((!isHttp) || isPost);
+            w->setVisible((!isHttp) || shouldShowDataField);
         }
     }
 
-    ui->genPostDataButton->setVisible(isPost);
+    ui->genPostDataButton->setVisible(shouldShowDataField);
 }
 
 
