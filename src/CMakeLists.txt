@@ -13,6 +13,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Gui
     Network
     Widgets
+    LinguistTools
 )
 
 set(
@@ -88,6 +89,17 @@ set(
   dtlsserver.cpp
   dtlsthread.cpp
 )
+
+qt_add_translations(PacketSender
+    TS_FILES
+    languages/packetsender_de.ts
+    languages/packetsender_fr.ts
+    languages/packetsender_hi.ts
+    languages/packetsender_en.ts
+    languages/packetsender_es.ts
+    languages/packetsender_it.ts
+    languages/packetsender_cn.ts
+  )
 
 set(
   PACKETSENDER_QRC
