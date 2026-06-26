@@ -46,7 +46,7 @@ IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
 
 IncomingTcpThread::~IncomingTcpThread() = default;
 
-Packet IncomingTcpThread::buildInitialReceivedPacket()
+Packet IncomingTcpThread::buildReceivedPacket()
 {
     Packet p;
     p.timestamp = QDateTime::currentDateTime();
@@ -180,7 +180,7 @@ void IncomingTcpThread::handleIncomingConnection()
 
     performSSLHandshakeIfNeeded();
 
-    const Packet received = buildInitialReceivedPacket();
+    const Packet received = buildReceivedPacket();
     emit packetReceived(received);
 
     sendSmartReplyIfConfigured(received);

@@ -44,9 +44,9 @@ public:
     // ═════════════════════════════════════════════════════════════════════════════
     //                 All call* methods (incoming command handlers)
     // ═════════════════════════════════════════════════════════════════════════════
-    Packet callBuildInitialReceivedPacket()
+    Packet callBuildReceivedPacket()
     {
-        return buildInitialReceivedPacket();
+        return buildReceivedPacket();
     }
 
     void callSendSmartReplyIfConfigured(Packet& packet)
@@ -90,10 +90,10 @@ protected:
      *                                                                                      *
      ****************************************************************************************/
 
-    Packet buildInitialReceivedPacket() override
+    Packet buildReceivedPacket() override
     {
-        recordCall(BUILD_INITIAL_RECEIVED_PACKET());
-        return IncomingTcpThread::buildInitialReceivedPacket();
+        recordCall(BUILD_RECEIVED_PACKET());
+        return IncomingTcpThread::buildReceivedPacket();
     }
 
     void sendOutgoingPacket(Packet& packet) override

@@ -26,6 +26,7 @@ public:
 
     // all
     static QString RUN() { return QStringLiteral("run"); }
+    static QString BUILD_RECEIVED_PACKET() { return QStringLiteral("buildReceivedPacket"); }
 
 
     // BaseTcpThread
@@ -58,7 +59,6 @@ public:
 
 
     // IncomingTcpThread
-    static QString BUILD_INITIAL_RECEIVED_PACKET() { return QStringLiteral("buildInitialReceivedPacket"); }
     static QString SEND_SMART_REPLY_IF_CONFIGURED() { return QStringLiteral("sendSmartReplyIfConfigured"); }
     static QString EMIT_SSL_DIAGNOSTIC_PACKETS() { return QStringLiteral("emitSSLDiagnosticPackets"); }
     static QString PERFORM_SSL_HANDSHAKE_IF_NEEDED() { return QStringLiteral("performSSLHandshakeIfNeeded"); }

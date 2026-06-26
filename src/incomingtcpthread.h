@@ -35,7 +35,7 @@ public:
     bool isIncoming() const override { return true; }
 
 protected:
-    virtual Packet buildInitialReceivedPacket();
+    virtual Packet buildReceivedPacket();
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
     virtual void emitSSLDiagnosticPackets();
     virtual void performSSLHandshakeIfNeeded();

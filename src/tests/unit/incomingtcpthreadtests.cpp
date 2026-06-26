@@ -81,7 +81,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNul
     auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), isSecure);
     thread.setSocketForTest(nullptr);
 
-    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    const auto returnedPacket = thread.callBuildReceivedPacket();
     QVERIFY(returnedPacket.timestamp.isValid());
     QCOMPARE(returnedPacket.name, returnedPacket.timestamp.toString(DATETIMEFORMAT));
 
@@ -105,7 +105,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsInv
 
     auto thread = IncomingTcpThreadTestDouble(sock);
 
-    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    const auto returnedPacket = thread.callBuildReceivedPacket();
     QVERIFY(returnedPacket.hexString.isEmpty());
 }
 
@@ -116,7 +116,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceState
 
     auto thread = IncomingTcpThreadTestDouble(sock);
 
-    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    const auto returnedPacket = thread.callBuildReceivedPacket();
     QVERIFY(returnedPacket.hexString.isEmpty());
 }
 
@@ -130,7 +130,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNot
 
     auto thread = IncomingTcpThreadTestDouble(sock);
 
-    const auto returnedPacket = thread.callBuildInitialReceivedPacket();
+    const auto returnedPacket = thread.callBuildReceivedPacket();
     QVERIFY(returnedPacket.timestamp.isValid());
     QCOMPARE(returnedPacket.name, returnedPacket.timestamp.toString(DATETIMEFORMAT));
 
@@ -540,7 +540,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
     std::vector<QString> expectedCallSequence = {
         CallTracker::HANDLE_INCOMING_CONNECTION(),
         CallTracker::PERFORM_SSL_HANDSHAKE_IF_NEEDED(),
-        CallTracker::BUILD_INITIAL_RECEIVED_PACKET(),
+        CallTracker::BUILD_RECEIVED_PACKET(),
         CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()
     };
     QCOMPARE(thread.getCallSequence(), expectedCallSequence);
