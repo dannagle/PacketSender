@@ -32,7 +32,7 @@ public:
 
     virtual void shutdown();
     virtual void stop();
-    virtual bool shouldStop() const;
+    [[nodiscard]] virtual bool shouldStop() const;
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
     [[nodiscard]] virtual bool isInterruptionRequested() const;
 
@@ -41,7 +41,7 @@ public:
     [[nodiscard]] virtual bool isIncoming() const { return false; }
     [[nodiscard]] virtual bool isPersistent() const { return persistent; }
     [[nodiscard]] bool getShouldUseSSL() const {return shouldUseSSL;}
-    PacketSenderQSslSocketInterface* getSocketInterface() const;
+    [[nodiscard]] PacketSenderQSslSocketInterface* getSocketInterface() const;
     // virtual void sendPersistent(const Packet& packet);
 
     // Common query helpers - public because they are safe and widely useful
@@ -102,5 +102,7 @@ protected:
 //     virtual void onSocketError(QSslSocket::SocketError error);
 //     virtual void onStateChanged(QAbstractSocket::SocketState state);
 };
+
+
 
 #endif // BASETCPTHREAD_H
