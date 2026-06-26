@@ -63,6 +63,11 @@ private slots:
     // run() tests
     void testRun_callSequence();
 
+    // persistentConnectionLoop() tests
+    void testPersistentConnectionLoop_socketInterfaceIsNullptr();
+    void testPersistentConnectionLoop_successPath();
+    void testPersistentConnectionLoop_successPath_emitsReceivedPacket();
+
 private:
     static constexpr int TEST_PORT_NUMBER = 666;
 };

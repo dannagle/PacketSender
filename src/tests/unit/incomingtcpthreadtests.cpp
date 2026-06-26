@@ -601,3 +601,54 @@ void IncomingTcpThreadTests::testRun_callSequence()
     QCOMPARE(callSequence.at(1), CallTracker::HANDLE_INCOMING_CONNECTION());
     QCOMPARE(callSequence.back(), CallTracker::CLOSE_CONNECTION());
 }
+
+// persistentConnectionLoop() tests
+void IncomingTcpThreadTests::testPersistentConnectionLoop_socketInterfaceIsNullptr()
+{
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    thread.setSocketForTest(nullptr);
+
+    thread.callPersistentConnectionLoop();
+    QVERIFY(!thread.wasMethodCalled(CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP()));
+}
+
+void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    const QByteArray data = "Mary had a little lamb";
+    mockSock->setMockReadData(data);
+    mockSock->setMockConnected(true);
+
+    auto thread = IncomingTcpThreadTestDouble(mockSock);
+    thread.numberOfPersistentConnectionLoopIterationsDesired = 2;
+    thread.isInterruptionRequestedReturnValue = false;
+
+    thread.callPersistentConnectionLoop();
+
+    std::vector<QString> expectedCallSequence = {
+        CallTracker::PERSISTENT_CONNECTION_LOOP(),
+        CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP(),
+        CallTracker::IS_INTERRUPTION_REQUESTED(),
+        CallTracker::BUILD_RECEIVED_PACKET(),
+        CallTracker::SEND_SMART_REPLY_IF_CONFIGURED(),
+        CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP(),
+    };
+    QCOMPARE(thread.getCallSequence(), expectedCallSequence);
+}
+
+void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath_emitsReceivedPacket()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    const QByteArray data = "Mary had a little lamb";
+    mockSock->setMockReadData(data);
+    mockSock->setMockConnected(true);
+
+    auto thread = IncomingTcpThreadTestDouble(mockSock);
+    thread.numberOfPersistentConnectionLoopIterationsDesired = 2;
+    thread.isInterruptionRequestedReturnValue = false;
+
+    QSignalSpy packetReceivedSpy(&thread, &BaseTcpThread::packetReceived);
+
+    thread.callPersistentConnectionLoop();
+    QCOMPARE(packetReceivedSpy.count(), 1);
+}

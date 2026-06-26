@@ -33,6 +33,8 @@ public:
     static QString LOAD_SSL_CERTS() { return QStringLiteral("loadSSLCerts"); }
     static QString LOAD_SNAKEOIL_CERTS_() { return QStringLiteral("loadSnakeOilCerts"); }
     static QString CLOSE_CONNECTION() { return QStringLiteral("closeConnection"); }
+    static QString SHOULD_STOP_PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("shouldStopPersistentConnectionLoop"); }
+    static QString IS_INTERRUPTION_REQUESTED() { return QStringLiteral("isInterruptionRequested"); }
 
     // OutgoingTcpThread
     static QString PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("persistentConnectionLoop"); }
@@ -48,10 +50,8 @@ public:
     static QString WAIT_FOR_AND_PROCESS_INCOMING_DATA() { return QStringLiteral("waitForAndProcessIncomingData"); }
     static QString INTERRUPTABLE_WAIT_FOR_READY_READ() { return QStringLiteral("interruptibleWaitForReadyRead"); }
     static QString HANDLE_PERSISTENT_IDLE_CASE() { return QStringLiteral("handlePersistentIdleCase"); }
-    static QString SHOULD_STOP_PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("shouldStopPersistentConnectionLoop"); }
     static QString SHOULD_CONTINUE_PERSISTENT_LOOP() { return QStringLiteral("shouldContinuePersistentLoop"); }
     static QString PROCESS_INCOMING_DATA() { return QStringLiteral("processIncomingData"); }
-    static QString BUILD_RECEIVED_PACKET() { return QStringLiteral("buildReceivedPacket"); }
     static QString SEND_OUTGOING_PACKET() { return QStringLiteral("sendOutgoingPacket"); }
     static QString PREPARE_OUTGOING_PACKET() { return QStringLiteral("prepareOutgoingPacket"); }
     static QString OUTGOINGTCPTHREAD_SHUTDOWN() { return QStringLiteral("OutgoingTcpThread shutdown"); }

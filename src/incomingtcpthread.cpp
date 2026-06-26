@@ -168,6 +168,27 @@ void IncomingTcpThread::performSSLHandshakeIfNeeded()
     emitSSLDiagnosticPackets();
 }
 
+void IncomingTcpThread::persistentConnectionLoop()
+{
+    auto* sock = getSocketInterface();
+    if (!sock) return;
+
+    while (!shouldStop())
+    {
+        if (sock->waitForReadyRead(500))
+        {
+            const Packet received = buildReceivedPacket();
+            if (!received.hexString.isEmpty())
+            {
+                emit packetReceived(received);
+                sendSmartReplyIfConfigured(received);
+            }
+        }
+
+        QThread::msleep(10);   // prevent tight CPU loop
+    }
+}
+
 void IncomingTcpThread::handleIncomingConnection()
 {
     auto* sock = getSocketInterface();

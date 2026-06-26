@@ -39,6 +39,17 @@ public:
         getSocketPtrByReference().reset(newSocket);
     }
 
+    bool shouldStop() const override
+    {
+        recordCall(CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP());
+
+        if (getCallCount(SHOULD_STOP_PERSISTENT_CONNECTION_LOOP()) >= numberOfPersistentConnectionLoopIterationsDesired)
+        {
+            return true;
+        }
+
+        return IncomingTcpThread::shouldStop();
+    }
 
     bool isInterruptionRequested() const override
     {
@@ -55,6 +66,8 @@ public:
 public:
     bool shouldCallIncomingTcpThreadIsInterruptionRequested = false;
     bool isInterruptionRequestedReturnValue = true;
+    int numberOfPersistentConnectionLoopIterationsDesired = 0;
+
     // ═════════════════════════════════════════════════════════════════════════════
     //                              CALL* SECTION
     // ═════════════════════════════════════════════════════════════════════════════
@@ -88,6 +101,11 @@ public:
     void callRun()
     {
         run();
+    }
+
+    void callPersistentConnectionLoop()
+    {
+        persistentConnectionLoop();
     }
 
     bool lastAllowSnakeOilValue;
@@ -167,6 +185,15 @@ protected:
         recordCall(CLOSE_CONNECTION());
         IncomingTcpThread::closeConnection();
     }
+
+    void persistentConnectionLoop() override
+    {
+        recordCall(PERSISTENT_CONNECTION_LOOP());
+        IncomingTcpThread::persistentConnectionLoop();
+    }
+
+private:
+    int shouldStopCallCount = 0;
 };
 
 #endif //INCOMINGTCPTHREADTESTDOUBLE_H
