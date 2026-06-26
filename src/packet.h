@@ -89,6 +89,7 @@ class Packet
         QString asciiString();
 
         void saveToDB();
+        void setHttpMethod(const QString &method, const QString &url = QString());
 
         static Packet generateWakeOnLAN(QString &mac, int port);
 

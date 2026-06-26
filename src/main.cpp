@@ -592,26 +592,31 @@ int main(int argc, char *argv[])
 
 
         QString name = parser.value(nameOption);
-
-        QString httpMethod = parser.value(httpOption).trimmed().toUpper();
-
-
-
+        const QString httpMethod = parser.value(httpOption).trimmed().toUpper();
         QString filePath = parser.value(fileOption);
-
-
         QString address = "";
         QString addressOriginal = "";
         unsigned int port = 0;
 
         int argssize = args.size();
         QDEBUGVAR(argssize);
+
         QString data, dataString;
         data.clear();
         dataString.clear();
         if (argssize >= 1) {
             address = args[0];
         }
+
+        auto exitWithError = [&](const QString &message = QString()) {
+            if (!message.isEmpty()) {
+                OUTIF() << message;
+            }
+
+            filePath.clear();
+            OUTPUT();
+            exit(-1);
+        };
 
 
         if(wol) {
@@ -645,35 +650,46 @@ int main(int argc, char *argv[])
 
         if(http) {
             if(parser.isSet(httpOption)) {
-                if(httpMethod != "GET" && httpMethod != "POST") {
-                    OUTIF() << "Error: supported HTTP methods are GET and POST. Specified: " << httpMethod;
-                    filePath.clear();
-                    OUTPUT();
-                    return -1;
+                qDebug() << "Before replace - tcpOrUdp =" << sendPacket.tcpOrUdp;
+
+                // Key = uppercase (for comparison), Value = Title Case (for display)
+                static const QMap<QString, QString> validMethods = {
+                    {"GET",    "Get"},
+                    {"POST",   "Post"},
+                    {"PUT",    "Put"},
+                    {"DELETE", "Delete"},
+                    {"PATCH",  "Patch"}
+                };
+
+                if(!validMethods.contains(httpMethod)) {
+                    OUTIF() << "Error: supported HTTP methods are GET, POST, PUT, DELETE, PATCH.";
+                    OUTIF() << "You specified: " << httpMethod;
+                    exitWithError();
                 }
 
-                if(name.isEmpty()) {
-                    if(address.isEmpty()) {
-                        OUTIF() << "Error: URL is required after HTTP method is no name is supplied.";
-                        filePath.clear();
-                        OUTPUT();
-                        return -1;
-                    }
+                if(name.isEmpty() && address.isEmpty()) {
+                    OUTIF() << "Error: URL is required after HTTP method if no name is supplied.";
+                    exitWithError();
                 }
 
-                if(httpMethod == "POST") {
+                // Only these methods require a body
+                static const QSet<QString> methodsRequiringBody = {"POST", "PUT", "PATCH"};
+
+                if(methodsRequiringBody.contains(httpMethod)) {
                     if(argssize < 2) {
-                        OUTIF() << "Error: data is required after specifying POST.";
-                        filePath.clear();
-                        OUTPUT();
-                        return -1;
+                        OUTIF() << "Error: data is required after specifying " << httpMethod;
+                        exitWithError();
                     } else {
                         data = args[1];
                     }
                 }
+                else if (httpMethod == "DELETE" && argssize >= 2) {
+                    data = args[1];        // optional body
+                }
 
+                sendPacket.setHttpMethod(httpMethod, address);
+                qDebug() << "After calling sendPacket.setHttpMethod - tcpOrUdp =" << sendPacket.tcpOrUdp;
             }
-
         } else {
             if (argssize >= 2) {
                 port = args[1].toUInt();
@@ -1069,17 +1085,20 @@ int main(int argc, char *argv[])
         // Test packet 1:  .\packetsender.com --name "HTTPS POST Params"
         // Test packet 2: .\packetsender.com --http GET "https://httpbin.org/get"
         // Test packet 3: .\packetsender.com --http POST "https://httpbin.org/post" "{""hello"":1}"
+        // Test packet 4: .\packetsender.com --http PUT "http://httpbin.org/put" "test put body"
+        // Test packet 5: .\packetsender.com --http PUT "http://httpbin.org/put" '{"name": "test", "value": 123}'
+        // Test packet 6: .\packetsender.com --http PUT "https://httpbin.org/put" "secure put data"
+        // Test packet 7: .\packetsender.com --http PATCH "http://httpbin.org/patch" "test patch body"
+        // Test packet 8: .\packetsender.com --http PATCH "http://httpbin.org/patch" '{"updated": true, "status": "active"}'
+        // Test packet 9: .\packetsender.com --http PATCH "https://httpbin.org/patch" "secure patch data"
+        // Test packet 10: .\packetsender.com --http DELETE "http://httpbin.org/delete"
+        // Test packet 11: .\packetsender.com --http DELETE "https://httpbin.org/delete"
 
         if(http) {            
             if ((!address.isEmpty()) && address.contains("://")) {
                 sendPacket.requestPath = Packet::getRequestFromURL(address);
-                sendPacket.tcpOrUdp = Packet::getMethodFromURL(address);
                 sendPacket.port = Packet::getPortFromURL(address);
                 sendPacket.toIP = Packet::getHostFromURL(address);
-            }
-
-            if(httpMethod.contains("POST")) {
-                sendPacket.tcpOrUdp.replace("Get", "Post");
             }
 
             sendPacket.persistent = false;
