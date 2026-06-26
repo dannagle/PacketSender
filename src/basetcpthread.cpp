@@ -70,6 +70,11 @@ bool BaseTcpThread::shouldStop() const
     return isInterruptionRequested();
 }
 
+bool BaseTcpThread::isInterruptionRequested() const
+{
+    return QThread::isInterruptionRequested();
+}
+
 bool BaseTcpThread::interruptibleWaitForReadyRead(const int timeoutMs)
 {
     const int chunk = 50;  // check every 50 ms

@@ -34,6 +34,7 @@ public:
     virtual void stop();
     virtual bool shouldStop() const;
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
+    [[nodiscard]] virtual bool isInterruptionRequested() const;
 
     [[nodiscard]] virtual bool isValid() const;
     [[nodiscard]] virtual bool isConnected() const;

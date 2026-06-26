@@ -39,6 +39,22 @@ public:
         getSocketPtrByReference().reset(newSocket);
     }
 
+
+    bool isInterruptionRequested() const override
+    {
+        recordCall(CallTracker::IS_INTERRUPTION_REQUESTED());
+        if (shouldCallIncomingTcpThreadIsInterruptionRequested)
+        {
+            return IncomingTcpThread::isInterruptionRequested();
+        } else
+        {
+            return isInterruptionRequestedReturnValue;
+        }
+    }
+
+public:
+    bool shouldCallIncomingTcpThreadIsInterruptionRequested = false;
+    bool isInterruptionRequestedReturnValue = true;
     // ═════════════════════════════════════════════════════════════════════════════
     //                              CALL* SECTION
     // ═════════════════════════════════════════════════════════════════════════════
