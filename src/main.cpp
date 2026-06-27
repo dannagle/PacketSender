@@ -650,7 +650,7 @@ int main(int argc, char *argv[])
 
         if(http) {
             if(parser.isSet(httpOption)) {
-                qDebug() << "Before replace - tcpOrUdp =" << sendPacket.tcpOrUdp;
+                QDEBUG() << "Before replace - tcpOrUdp =" << sendPacket.tcpOrUdp;
 
                 // Key = uppercase (for comparison), Value = Title Case (for display)
                 static const QMap<QString, QString> validMethods = {
@@ -688,7 +688,7 @@ int main(int argc, char *argv[])
                 }
 
                 sendPacket.setHttpMethod(httpMethod, address);
-                qDebug() << "After calling sendPacket.setHttpMethod - tcpOrUdp =" << sendPacket.tcpOrUdp;
+                QDEBUG() << "After calling sendPacket.setHttpMethod - tcpOrUdp =" << sendPacket.tcpOrUdp;
             }
         } else {
             if (argssize >= 2) {
