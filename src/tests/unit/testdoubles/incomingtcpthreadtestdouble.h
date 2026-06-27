@@ -116,10 +116,9 @@ protected:
      *                                                                                      *
      *  All overridden virtual methods follow this exact pattern:                           *
      *                                                                                      *
-     *     1. Increment the corresponding call counter                                      *
-     *     2. Record the method name in callHistory (vector<QString>)                       *
-     *     3. Forward the call to the real implementation (if set)                          *
-     *     4. Return the result                                                             *
+     *     1. Record the method call                                                        *
+     *     2. Forward the call to the real implementation (if set)                          *
+     *     3. Return the result                                                             *
      *                                                                                      *
      ****************************************************************************************/
 
