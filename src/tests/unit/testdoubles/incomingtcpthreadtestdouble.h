@@ -63,7 +63,6 @@ public:
         }
     }
 
-public:
     bool shouldCallIncomingTcpThreadIsInterruptionRequested = false;
     bool isInterruptionRequestedReturnValue = true;
     int numberOfPersistentConnectionLoopIterationsDesired = 0;
