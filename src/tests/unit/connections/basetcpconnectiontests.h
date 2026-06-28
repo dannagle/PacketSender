@@ -39,6 +39,14 @@ private slots:
     // send() tests
     void testSend_throwsRuntimeException();
 
+    // terminate() tests
+    void testTerminate_startState_threadIsDisconnected();
+    void testTerminate_startState_threadIsNullptr();
+    void testTerminate_startState_threadIsConnected();
+
+    // close() tests
+    void testClose_callsTerminate();
+
 private:
     std::unique_ptr<BaseTcpThreadTestDouble> createThreadWithConnectionState(QAbstractSocket::SocketState socketState);
 };

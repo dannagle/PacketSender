@@ -14,15 +14,6 @@ BaseTcpConnection::BaseTcpConnection(QObject* parent)
 {
 }
 
-BaseTcpConnection::~BaseTcpConnection()
-{
-    if (thread_) {
-        thread_->stop(); // RAII: ensure clean shutdown
-        thread_->quit();
-        thread_->wait();        // Important: wait for the thread to finish
-    }
-}
-
 bool BaseTcpConnection::isConnected() const
 {
     return thread_ && thread_->isConnected();
@@ -49,3 +40,37 @@ void BaseTcpConnection::send(const Packet& packet)
         + getClassName() + " cannot send Packet";
     throw std::runtime_error(errorMessage.toUtf8());
 }
+
+void BaseTcpConnection::terminateConnection()
+{
+    qDebug() << qPrintable("in BaseTcpConnection::terminateConnection");
+
+    const bool connectedBeforeCloseCalled = isConnected();
+
+    if (thread_)
+    {
+        thread_->shutdown();
+        thread_.reset();
+    }
+
+    if (connectedBeforeCloseCalled && !isConnected())
+    {
+        emit disconnected();
+    }
+}
+
+void BaseTcpConnection::close()
+{
+    /*
+     * close() is the public API. terminate() is the source of truth
+     *
+     * I don't forsee a reason to do anything else besides (English language) terminate
+     * inside of close(). Since I want the same behavior in close() and ~BaseTcpConnection()
+     * I want to have that common logic in one place so if the implementation of the public
+     * API needs to change in the future, it can do so without having to refactor the common
+     * logic. Or, if for some unknown reason the common logic needs to change, it's at least
+     * separate from the public API.
+     */
+    terminateConnection();
+}
+

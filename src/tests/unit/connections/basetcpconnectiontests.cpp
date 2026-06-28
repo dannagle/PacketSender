@@ -12,6 +12,7 @@
 
 #include "outgoingtcpthread.h"
 #include "../testdoubles/basetcpthreadtestdouble.h"
+#include "testdoubles/incomingtcpthreadtestdouble.h"
 #include "testdoubles/connections/BaseTcpConnectionTestDouble.h"
 
 std::unique_ptr<BaseTcpThreadTestDouble> BaseTcpConnectionTests::createThreadWithConnectionState(
@@ -194,4 +195,74 @@ void BaseTcpConnectionTests::testSend_throwsRuntimeException()
         QCOMPARE(QString::fromStdString(e.what()),
                  QString("Unsupported Operation: BaseTcpConnectionTestDouble cannot send Packet"));
     }
+}
+
+// terminate() tests
+void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockState(QAbstractSocket::SocketState::UnconnectedState);
+
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
+    QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
+    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
+
+    auto connection = BaseTcpConnectionTestDouble();
+    QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
+
+    connection.setThread(std::move(thread));
+
+    connection.callTerminateConnection();
+    QCOMPARE(shutdownSignalSpy.count(), 1); // 1 because it gets called in the destructor
+    QCOMPARE(destructorSignalSpy.count(), 1);
+    QCOMPARE(disconnectedSpy.count(), 0);
+}
+
+void BaseTcpConnectionTests::testTerminate_startState_threadIsNullptr()
+{
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketForTest());
+    QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
+    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
+
+    auto connection = BaseTcpConnectionTestDouble();
+    QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
+
+    connection.setThread(nullptr);
+
+    connection.callTerminateConnection();
+    QCOMPARE(shutdownSignalSpy.count(), 0); // destructor not called
+    QCOMPARE(destructorSignalSpy.count(), 0);
+    QCOMPARE(disconnectedSpy.count(), 0);
+}
+
+void BaseTcpConnectionTests::testTerminate_startState_threadIsConnected()
+{
+    auto mockSock = TestUtils::createMockSocketForTest();
+    mockSock->setMockState(QAbstractSocket::SocketState::ConnectedState);
+
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
+    QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
+    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
+
+    auto connection = BaseTcpConnectionTestDouble();
+    QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
+
+    connection.setThread(std::move(thread));
+
+    connection.callTerminateConnection();
+    QCOMPARE(shutdownSignalSpy.count(), 1); // called in destructor
+    QCOMPARE(destructorSignalSpy.count(), 1);
+    QCOMPARE(disconnectedSpy.count(), 1);
+}
+
+// close() tests
+void BaseTcpConnectionTests::testClose_callsTerminate()
+{
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketForTest());
+    auto connection = BaseTcpConnectionTestDouble();
+
+    connection.setThread(std::move(thread));
+    connection.close();
+    QVERIFY(connection.wasMethodCalled(CallTracker::TERMINATE_CONNECTION()));
+    QCOMPARE(connection.getCallCount(CallTracker::TERMINATE_CONNECTION()), 1);
 }

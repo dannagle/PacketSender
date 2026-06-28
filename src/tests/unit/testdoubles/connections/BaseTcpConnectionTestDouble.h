@@ -38,10 +38,45 @@ public:
         thread_ = std::move(thread);
     }
 
+    BaseTcpThread& getThreadByReference() const
+    {
+        return *thread_;
+    }
+
+    // ═════════════════════════════════════════════════════════════════════════════
+    //                              CALL* SECTION
+    // ═════════════════════════════════════════════════════════════════════════════
+    //                              All call* methods
+    // ═════════════════════════════════════════════════════════════════════════════
+
     [[nodiscard]] QString callGetClassName() const
     {
         return BaseTcpConnection::getClassName();
     }
+
+    void callTerminateConnection()
+    {
+        terminateConnection();
+    }
+
+protected:
+    /****************************************************************************************
+     *                                                                                      *
+     *                                  OVERRIDES SECTION                                   *
+     *                                                                                      *
+     *  All overridden virtual methods follow this exact pattern:                           *
+     *                                                                                      *
+     *     1. Record the method call                                                        *
+     *     2. Forward the call to the real implementation (if set)                          *
+     *     3. Return the result                                                             *
+     *                                                                                      *
+     ****************************************************************************************/
+    void terminateConnection() override
+    {
+        recordCall(TERMINATE_CONNECTION());
+        BaseTcpConnection::terminateConnection();
+    }
+
 };
 
 #endif //BASETCPCONNECTIONTESTDOUBLE_H

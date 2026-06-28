@@ -49,7 +49,7 @@ public:
     ~Connection() override;
 
     virtual void send(const Packet& packet) = 0;
-    // virtual void close() = 0;
+    virtual void close() = 0;
 
     [[nodiscard]] virtual QString id() const;
     [[nodiscard]] virtual bool isConnected() const = 0;

@@ -20,7 +20,7 @@ class BaseTcpConnection : public Connection
 public:
     explicit BaseTcpConnection(QObject* parent = nullptr);
 
-    ~BaseTcpConnection() override;
+    ~BaseTcpConnection() override = default;
 
     [[nodiscard]] bool isConnected() const override;
     [[nodiscard]] bool isSecure() const override;
@@ -28,7 +28,7 @@ public:
     [[nodiscard]] bool isIncoming() const override;
 
     virtual void send(const Packet& packet) override;
-    // void close();
+    void close() override;
 
     // signals:
     // void dataReceived(const Packet& packet);
@@ -44,6 +44,7 @@ private slots:
 
 protected:
     std::unique_ptr<BaseTcpThread> thread_;
+    virtual void terminateConnection();
 
 private:
     // void setupSignalConnections();

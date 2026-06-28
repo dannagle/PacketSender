@@ -60,6 +60,7 @@ add_executable(${TEST_NAME}
 
     ../../incomingtcpthread.cpp
     incomingtcpthreadtests.cpp
+    testdoubles/incomingtcpthreadtestdouble.h
 
     ../../packet.cpp
     packettests.cpp

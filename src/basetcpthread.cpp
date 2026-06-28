@@ -38,8 +38,7 @@ BaseTcpThread::BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
 
 BaseTcpThread::~BaseTcpThread()
 {
-    // Qt's parent-child system will clean up the socket
-    // No explicit deleteLater() needed here
+    BaseTcpThread::shutdown();
 }
 
 void BaseTcpThread::shutdown()

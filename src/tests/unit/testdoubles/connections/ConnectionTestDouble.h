@@ -34,6 +34,11 @@ public:
         + getClassName() + " cannot send Packet";
         throw std::runtime_error(errorMessage.toUtf8());
     }
+
+    void close() override
+    {
+
+    }
 };
 
 #endif //CONNECTIONTESTDOUBLE_H

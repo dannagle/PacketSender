@@ -9,6 +9,7 @@
 
 class IncomingTcpThreadTestDouble : public IncomingTcpThread, public CallTracker
 {
+    Q_OBJECT
 public:
     // Main constructor (used by tests and convenience constructor)
     explicit IncomingTcpThreadTestDouble(PacketSenderQSslSocketInterface* socketInterface,
@@ -31,7 +32,7 @@ public:
 
     ~IncomingTcpThreadTestDouble() override
     {
-
+        destructorCalled();
     }
 
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
@@ -49,6 +50,14 @@ public:
         }
 
         return IncomingTcpThread::shouldStop();
+    }
+
+    void shutdown() override
+    {
+        qDebug() << "Shutting down IncomingTcpThreadTestDouble...";
+        emit shutdownCalled();
+        recordCall(INCOMINGTCPTHREAD_SHUTDOWN());
+        IncomingTcpThread::shutdown();
     }
 
     bool isInterruptionRequested() const override
@@ -108,6 +117,10 @@ public:
     }
 
     bool lastAllowSnakeOilValue;
+
+signals:
+    void shutdownCalled();
+    void destructorCalled();
 
 protected:
     /****************************************************************************************

@@ -24,7 +24,11 @@ public:
 
     void clearCallSequence() const;
 
-    // all
+    // Connection
+    static QString TERMINATE_CONNECTION() { return QStringLiteral("terminateconnection"); }
+
+
+    // TcpThreads
     static QString RUN() { return QStringLiteral("run"); }
     static QString BUILD_RECEIVED_PACKET() { return QStringLiteral("buildReceivedPacket"); }
 
@@ -63,6 +67,7 @@ public:
     static QString EMIT_SSL_DIAGNOSTIC_PACKETS() { return QStringLiteral("emitSSLDiagnosticPackets"); }
     static QString PERFORM_SSL_HANDSHAKE_IF_NEEDED() { return QStringLiteral("performSSLHandshakeIfNeeded"); }
     static QString HANDLE_INCOMING_CONNECTION() { return QStringLiteral("handleIncomingConnection"); }
+    static QString INCOMINGTCPTHREAD_SHUTDOWN() { return QStringLiteral("IncomingTcpThread shutdown"); }
 
     // MockSslSocket
     static QString IGNORE_SSL_ERRORS() { return QStringLiteral("ignoreSslErrors"); }
