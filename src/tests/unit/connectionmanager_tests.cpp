@@ -86,3 +86,17 @@ void ConnectionManagerTests::testClose()
     QVERIFY(map.find(1) != map.end());
     QVERIFY(map.find(3) != map.end());
 }
+
+// shutdownAll() tests
+void ConnectionManagerTests::testShutdownAll()
+{
+    ConnectionManagerTestDouble manager;
+    QCOMPARE(manager.getMap().size(), 0);
+
+    manager.createOutgoingTcpConnection();
+    manager.createIncomingTcpConnection();
+    QCOMPARE(manager.getMap().size(), 2);
+
+    manager.shutdownAll();
+    QCOMPARE(manager.getMap().size(), 0);
+}
