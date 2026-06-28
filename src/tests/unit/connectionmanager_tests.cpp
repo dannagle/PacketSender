@@ -8,18 +8,7 @@
 
 
 
-// void ConnectionManagerTests::init()
-// {
-//     manager = std::make_unique<TestConnectionManager>();
-// }
-//
-// void ConnectionManagerTests::cleanup()
-// {
-//     manager->shutdownAll();
-//     manager.reset();
-// }
-//
-
+// createIncomingTcpConnection() tests
 void ConnectionManagerTests::testCreateIncomingTcpConnection_returnsPair()
 {
     ConnectionManagerTestDouble manager;
@@ -31,6 +20,7 @@ void ConnectionManagerTests::testCreateIncomingTcpConnection_returnsPair()
     QCOMPARE(pair.second->metaObject()->className(), "IncomingTcpConnection");
 }
 
+// createOutgoingTcpConnection() tests
 void ConnectionManagerTests::testCreateOutgoingTcpConnection_returnsPair()
 {
     ConnectionManagerTestDouble manager;
@@ -56,6 +46,7 @@ void ConnectionManagerTests::testCreateMultipleConnections_idIncreasesMonotonica
     QCOMPARE(pair2.first, 2);
 }
 
+// close() tests
 void ConnectionManagerTests::testClose()
 {
     int expectedSize = 0;
