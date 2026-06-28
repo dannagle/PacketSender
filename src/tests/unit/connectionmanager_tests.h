@@ -27,6 +27,7 @@ private slots:
 
     // create*() tests
     void testCreateMultipleConnections_idIncreasesMonotonically();
+    void testClose();
 
     //     void testCloseRemovesConnection();
 //     void testShutdownAllClearsAllConnections();

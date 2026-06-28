@@ -56,3 +56,33 @@ void ConnectionManagerTests::testCreateMultipleConnections_idIncreasesMonotonica
     QCOMPARE(pair2.first, 2);
 }
 
+void ConnectionManagerTests::testClose()
+{
+    int expectedSize = 0;
+
+    ConnectionManagerTestDouble manager;
+    QCOMPARE(manager.getMap().size(), expectedSize);
+
+    // Test Philosophy: we can demonstrate this works with 2 connections,
+    // but two connections gives us a 50/50 chance of screwing up the test
+    // setup but still getting the expected result. 3 elements make inference.
+
+    auto pair1 = manager.createOutgoingTcpConnection();
+    QCOMPARE(manager.getMap().size(), ++expectedSize);
+    QCOMPARE(pair1.first, 1);
+
+    auto pair2 = manager.createIncomingTcpConnection();
+    QCOMPARE(manager.getMap().size(), ++expectedSize);
+    QCOMPARE(pair2.first, 2);
+
+    auto pair3 = manager.createIncomingTcpConnection();
+    QCOMPARE(manager.getMap().size(), ++expectedSize);
+    QCOMPARE(pair3.first, 3);
+
+    manager.close(2);
+    QCOMPARE(manager.getMap().size(), --expectedSize);
+
+    auto map = std::move(manager.getMap());
+    QVERIFY(map.find(1) != map.end());
+    QVERIFY(map.find(3) != map.end());
+}
