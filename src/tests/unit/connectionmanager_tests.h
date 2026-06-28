@@ -19,9 +19,16 @@ private slots:
 //     void init();
 //     void cleanup();
 //
-     void testCreateIncomingTcpConnection_returnsPair();
-     void testCreateOutgoingTcpConnection_returnsPair();
-//     void testCloseRemovesConnection();
+    // createIncomingTcpConnection() tests
+    void testCreateIncomingTcpConnection_returnsPair();
+
+    // createOutgoingTcpConnection() tests
+    void testCreateOutgoingTcpConnection_returnsPair();
+
+    // create*() tests
+    void testCreateMultipleConnections_idIncreasesMonotonically();
+
+    //     void testCloseRemovesConnection();
 //     void testShutdownAllClearsAllConnections();
 };
 

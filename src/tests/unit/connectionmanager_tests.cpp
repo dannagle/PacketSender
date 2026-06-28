@@ -41,3 +41,18 @@ void ConnectionManagerTests::testCreateOutgoingTcpConnection_returnsPair()
     QCOMPARE(pair.first, 1);
     QCOMPARE(pair.second->metaObject()->className(), "OutgoingTcpConnection");
 }
+
+void ConnectionManagerTests::testCreateMultipleConnections_idIncreasesMonotonically()
+{
+    ConnectionManagerTestDouble manager;
+    QCOMPARE(manager.getMap().size(), 0);
+
+    auto pair1 = manager.createOutgoingTcpConnection();
+    QCOMPARE(manager.getMap().size(), 1);
+    QCOMPARE(pair1.first, 1);
+
+    auto pair2 = manager.createIncomingTcpConnection();
+    QCOMPARE(manager.getMap().size(), 2);
+    QCOMPARE(pair2.first, 2);
+}
+
