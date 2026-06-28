@@ -27,7 +27,7 @@ public:
     [[nodiscard]] bool isPersistent() const override;
     [[nodiscard]] bool isIncoming() const override;
 
-    virtual void send(const Packet& packet) override;
+    void send(const Packet& packet) override;
     void close() override;
 
     // signals:
