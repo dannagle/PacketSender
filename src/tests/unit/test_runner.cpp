@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
 
     // Then non-GUI or independent tests
     // runNonGuiTest(new TcpThreadTests());
-    runNonGuiTest(new ConnectionTests());
+    runNonGuiTest(new PacketTests());
     runNonGuiTest(new BaseTcpConnectionTests());
     runNonGuiTest(new IncomingTcpConnectionTests());
     runNonGuiTest(new OutgoingTcpConnectionTests());
-    // runNonGuiTest(new ConnectionManagerTests());
-    runNonGuiTest(new PacketTests());
+    runNonGuiTest(new ConnectionTests());
+    runNonGuiTest(new ConnectionManagerTests());
 
     if (failures == 0) {
         qInfo() << "All tests passed!";

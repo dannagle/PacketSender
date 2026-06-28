@@ -8,9 +8,12 @@
 
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 #include "packet.h"
 #include "connections/connection.h"
+#include "connections/incomingtcpconnection.h"
+#include "connections/outgoingtcpconnection.h"
 
 class ConnectionManager : public QObject
 {
@@ -20,6 +23,9 @@ public:
     explicit ConnectionManager(QObject *parent = nullptr);
     ~ConnectionManager() override;
 
+    // Factory methods - explicit about type for future extensibility
+    std::pair<quint64, IncomingTcpConnection*> createIncomingTcpConnection();
+    std::pair<quint64, OutgoingTcpConnection*> createOutgoingTcpConnection();
 
     // Send data to connection by ID
     void send(quint64 id, const Packet &packet);

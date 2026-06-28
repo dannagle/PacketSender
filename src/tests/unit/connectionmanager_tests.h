@@ -9,32 +9,20 @@
 #include <QtTest/QTest>
 #include "connectionmanager.h"
 
-// NEW: Test-specific subclass to expose private state for verification
-class TestConnectionManager : public ConnectionManager
-{
-public:
-    using ConnectionManager::ConnectionManager;
-
-    // Test accessors (expose private members safely)
-    const auto& connections() const { return m_connections; }
-    quint64 nextId() const { return m_nextId; }
-};
 
 class ConnectionManagerTests : public QObject
 {
     Q_OBJECT
 
-private:
-    std::unique_ptr<TestConnectionManager> manager;
 
 private slots:
-    void init();
-    void cleanup();
-
-    void testCreateReturnsValidId();
-    void testCloseRemovesConnection();
-    void testShutdownAllClearsAllConnections();
-    void testSignalForwardingIncludesId();
+//     void init();
+//     void cleanup();
+//
+     void testCreateIncomingTcpConnection_returnsPair();
+     void testCreateOutgoingTcpConnection_returnsPair();
+//     void testCloseRemovesConnection();
+//     void testShutdownAllClearsAllConnections();
 };
 
 

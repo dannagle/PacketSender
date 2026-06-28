@@ -37,6 +37,7 @@ add_executable(${TEST_NAME}
 
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
+    testdoubles/connections/connectionmanagertestdouble.h
 
     ../../tcpthread.cpp
     ../../persistentLoopConnection.cpp
