@@ -70,6 +70,9 @@ class Packet
         bool isHTTP();
         bool isHTTPS();
         bool isPOST();
+        bool isPUT();
+        bool isDELETE();
+        bool isPATCH();
 
         QDateTime timestamp;
 
@@ -86,6 +89,7 @@ class Packet
         QString asciiString();
 
         void saveToDB();
+        void setHttpMethod(const QString &method, const QString &url = QString());
 
         static Packet generateWakeOnLAN(QString &mac, int port);
 

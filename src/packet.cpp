@@ -82,20 +82,32 @@ bool Packet::isUDP()
 
 bool Packet::isHTTP()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("http")));
+    return tcpOrUdp.trimmed().toLower().contains("http");
 }
 bool Packet::isHTTPS()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("https")));
+    return tcpOrUdp.trimmed().toLower().contains("https");
 }
 bool Packet::isPOST()
 {
-    return  isHTTP() && ((tcpOrUdp.trimmed().toLower().contains("post")));
+    return  isHTTP() && tcpOrUdp.trimmed().toLower().contains("post");
+}
+
+bool Packet::isPUT() {
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("put");
+}
+
+bool Packet::isDELETE() {
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("delete");
+}
+
+bool Packet::isPATCH() {
+    return isHTTP() && tcpOrUdp.trimmed().toLower().contains("patch");
 }
 
 bool Packet::isTCP()
 {
-    return ((tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL()));
+    return tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL();
 }
 
 float Packet::oneDecimal(float value)
@@ -615,6 +627,33 @@ void Packet::saveToDB()
     settings.setValue(name + "/timestamp", timestamp.toString("ddd, d MMM yyyy hh:mm:ss"));
 
 
+}
+
+void Packet::setHttpMethod(const QString& method, const QString& url)
+{
+    QString upper = method.trimmed().toUpper();
+
+    // Determine protocol (prefer url if available, fallback to current state)
+    QString protocol = "HTTP";
+    if (!url.isEmpty()) {
+        if (url.startsWith("https://", Qt::CaseInsensitive)) {
+            protocol = "HTTPS";
+        }
+    } else if (tcpOrUdp.contains("HTTPS", Qt::CaseInsensitive)) {
+        protocol = "HTTPS";
+    }
+
+    // Determine display method name
+    QString displayMethod;
+    if (upper == "GET") {
+        displayMethod = "Get";
+    } else {
+        displayMethod = upper[0].toUpper() + upper.mid(1).toLower();
+    }
+
+    tcpOrUdp = protocol + " " + displayMethod;
+
+    QDEBUG() << "Packet::setHttpMethod() ->" << tcpOrUdp;
 }
 
 Packet Packet::generateWakeOnLAN(QString &mac, int port)

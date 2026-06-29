@@ -1573,27 +1573,35 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
         updatePacket.repeat = repeat;
     }
     if (datatype == Settings::METHOD_STR) {
-        if ((newText.trimmed().toUpper() == "TCP") || (newText.trimmed().toUpper() == "UDP") || (newText.trimmed().toUpper() == "SSL")) {
-            updatePacket.tcpOrUdp = newText.trimmed().toUpper();
-        }
-        auto isHTTP = newText.trimmed().toUpper().contains("HTTP") || newText.trimmed().toUpper().contains("GET") || newText.trimmed().toUpper().contains("POST");
+        QString upperText = newText.trimmed().toUpper();
 
-        if(isHTTP) {
-            auto isHTTPS = (newText.trimmed().toUpper().contains("HTTPS"));
-            auto isPOST = newText.trimmed().toUpper().contains("POST");
-            updatePacket.tcpOrUdp = "HTTP";
-            if(isHTTPS) {
-                updatePacket.tcpOrUdp.append("S");
-            }
-            if(isPOST) {
-                updatePacket.tcpOrUdp.append(" Post");
-            } else {
-                updatePacket.tcpOrUdp.append(" Get");
-            }
+        if (upperText == "TCP" || upperText == "UDP" || upperText == "SSL") {
+            updatePacket.tcpOrUdp = upperText;
+            return;  // early exit for non-HTTP
         }
 
+        bool isHTTP  = upperText.contains("HTTP") ||
+                       upperText.contains("GET")  ||
+                       upperText.contains("POST") ||
+                       upperText.contains("PUT") ||
+                       upperText.contains("PATCH") ||
+                       upperText.contains("DELETE");
 
+        if (isHTTP) {
+            bool isHTTPS = upperText.contains("HTTPS");
+
+            // Normalize the method
+            QString method = "GET";  // default
+            if (upperText.contains("POST"))        method = "POST";
+            else if (upperText.contains("PUT"))    method = "PUT";
+            else if (upperText.contains("DELETE")) method = "DELETE";
+            else if (upperText.contains("PATCH"))  method = "PATCH";
+
+            updatePacket.tcpOrUdp = isHTTPS ? "HTTPS" : "HTTP";
+            updatePacket.tcpOrUdp.append(" " + method);
+        }
     }
+
     if (datatype == Settings::ASCII_STR) {
         QString hex = Packet::ASCIITohex(newText);
         updatePacket.hexString = hex;
@@ -2732,10 +2740,32 @@ void MainWindow::on_actionDonate_Thank_You_triggered()
 
 void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
 {
+    Q_UNUSED(arg1)
 
-    QString selectedText = ui->udptcpComboBox->currentText().toLower();
-    auto isHttp = selectedText.contains("http");
-    auto isPost = selectedText.contains("post") && isHttp;
+    const QString selectedText = ui->udptcpComboBox->currentText().toLower();
+
+    const auto isHttps = selectedText.contains("https");
+    const auto isHttp  = selectedText.contains("http") && !isHttps;
+
+    // === Smart port defaulting ===
+    int currentPort = ui->packetPortEdit->text().trimmed().toInt();
+
+    if (isHttps && (currentPort == 80 || currentPort == 0)) {
+        ui->packetPortEdit->setText("443");
+    } else if (isHttp && (currentPort == 443 || currentPort == 0)) {
+        ui->packetPortEdit->setText("80");
+    }
+
+    const auto isGet    = selectedText.contains("get");
+    const auto isPost   = selectedText.contains("post");
+    const auto isPut    = selectedText.contains("put");
+    const auto isPatch  = selectedText.contains("patch");
+    const auto isDelete = selectedText.contains("delete");
+
+    const bool shouldShowDataField = isPost || isPut || isPatch || isDelete;
+
+    // Use nice HTTP UI for GET/POST/PUT/PATCH/DELETE on both http and https
+    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isPatch || isDelete);
 
     /////////////////////////////////dtls add line edit for adding path for cert
 
@@ -2752,29 +2782,31 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
         ui->asciiLabel->setText("ASCII");
     }
 
-
+    // Hide HEX for nice HTTP(S) protocols
     for (int i = 0; i < ui->hexHorizLayout->count(); ++i) {
         QWidget *w = ui->hexHorizLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible(!isHttp);
+        if (w != nullptr) {
+            w->setVisible(!isNiceHttpProtocol);
         }
     }
 
+    // Show Request field for nice HTTP(S) protocols
     for (int i = 0; i < ui->requestLayout->count(); ++i) {
         QWidget *w = ui->requestLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible(isHttp);
+        if (w != nullptr) {
+            w->setVisible(isNiceHttpProtocol);
         }
     }
 
+    // Show ASCII/Data field for raw modes OR when we have POST/PUT/PATCH/DELETE
     for (int i = 0; i < ui->asciiLayout->count(); ++i) {
         QWidget *w = ui->asciiLayout->itemAt(i)->widget();
-        if(w != nullptr) {
-            w->setVisible((!isHttp) || isPost);
+        if (w != nullptr) {
+            w->setVisible(!isNiceHttpProtocol || shouldShowDataField);
         }
     }
 
-    ui->genPostDataButton->setVisible(isPost);
+    ui->genPostDataButton->setVisible(shouldShowDataField);
 }
 
 

@@ -13,6 +13,7 @@ find_package(Qt6 REQUIRED COMPONENTS
     Gui
     Network
     Widgets
+    LinguistTools
 )
 
 set(
@@ -89,6 +90,7 @@ set(
   dtlsthread.cpp
 )
 
+
 set(
   PACKETSENDER_QRC
   packetsender.qrc
@@ -130,6 +132,18 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
   Qt6::Network
   Qt6::Widgets
 )
+
+
+qt_add_translations(${PROJECT_NAME}
+    TS_FILES
+    languages/packetsender_de.ts
+    languages/packetsender_fr.ts
+    languages/packetsender_hi.ts
+    languages/packetsender_en.ts
+    languages/packetsender_es.ts
+    languages/packetsender_it.ts
+    languages/packetsender_cn.ts
+  )
 
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Build architectures for Mac OS X" FORCE)
 
