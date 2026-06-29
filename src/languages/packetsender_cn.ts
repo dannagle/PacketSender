@@ -29,13 +29,13 @@
         <translation>PacketSender.com</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="34"/>
+        <location filename="../about.cpp" line="35"/>
         <source>
 Commit Hash: </source>
         <translation>版本摘要：</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="39"/>
+        <location filename="../about.cpp" line="40"/>
         <source>About Packet Sender</source>
         <translation>关于Packet Sender</translation>
     </message>
@@ -92,13 +92,13 @@ Commit Hash: </source>
     </message>
     <message>
         <location filename="../cloudui.ui" line="140"/>
-        <location filename="../cloudui.cpp" line="466"/>
+        <location filename="../cloudui.cpp" line="476"/>
         <source>Login</source>
         <translation>登录</translation>
     </message>
     <message>
         <location filename="../cloudui.ui" line="150"/>
-        <location filename="../cloudui.cpp" line="465"/>
+        <location filename="../cloudui.cpp" line="475"/>
         <source>Create a new account.</source>
         <translation>创建新账户</translation>
     </message>
@@ -179,42 +179,42 @@ Commit Hash: </source>
         <translation>保存数据包到Packet Sender云</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="83"/>
+        <location filename="../cloudui.cpp" line="93"/>
         <source>Cloud</source>
         <translation>云</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="100"/>
+        <location filename="../cloudui.cpp" line="110"/>
         <source>Saving </source>
         <translation>正在保存</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="100"/>
+        <location filename="../cloudui.cpp" line="110"/>
         <source> packet set to cloud</source>
         <translation>数据包传输至云</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="470"/>
+        <location filename="../cloudui.cpp" line="480"/>
         <source>Login instead.</source>
         <translation>更改登录</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="471"/>
+        <location filename="../cloudui.cpp" line="481"/>
         <source>Sign-up</source>
         <translation>登录</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="528"/>
+        <location filename="../cloudui.cpp" line="538"/>
         <source>Delete Set</source>
         <translation>删除集</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="533"/>
+        <location filename="../cloudui.cpp" line="543"/>
         <source>Delete the set </source>
         <translation>删除集</translation>
     </message>
     <message>
-        <location filename="../cloudui.cpp" line="533"/>
+        <location filename="../cloudui.cpp" line="543"/>
         <source> from cloud?</source>
         <translation>来自云？</translation>
     </message>
@@ -222,63 +222,38 @@ Commit Hash: </source>
 <context>
     <name>DtlsAssociation</name>
     <message>
-        <location filename="../association.cpp" line="88"/>
-        <source>: connecting UDP socket first ...</source>
-        <translation>：正在尝试连接UDP套接字...</translation>
-    </message>
-    <message>
-        <location filename="../association.cpp" line="96"/>
-        <source>: failed to start a handshake - </source>
-        <translation>：握手失败-</translation>
-    </message>
-    <message>
-        <location filename="../association.cpp" line="108"/>
+        <location filename="../association.cpp" line="133"/>
         <source>: starting a handshake</source>
         <translation>：开始握手</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="116"/>
-        <source>: UDP socket is now in ConnectedState, continue with handshake ...</source>
-        <translation>：UDP套接字已连接，开始尝试握手...</translation>
-    </message>
-    <message>
-        <location filename="../association.cpp" line="125"/>
-        <location filename="../association.cpp" line="133"/>
+        <location filename="../association.cpp" line="215"/>
+        <location filename="../association.cpp" line="223"/>
         <source>: spurious read notification?</source>
         <translation>：伪造已读通知？</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="155"/>
+        <location filename="../association.cpp" line="245"/>
         <source>: zero-length datagram received?</source>
         <translation>：未收到回应</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="162"/>
-        <source>: handshake error - </source>
-        <translation>：握手错误-</translation>
-    </message>
-    <message>
-        <location filename="../association.cpp" line="169"/>
-        <source>: encrypted connection established!</source>
-        <translation>：已建立加密连接！</translation>
-    </message>
-    <message>
-        <location filename="../association.cpp" line="173"/>
+        <location filename="../association.cpp" line="279"/>
         <source>: continuing with handshake ...</source>
         <translation>：正在尝试握手...</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="185"/>
+        <location filename="../association.cpp" line="293"/>
         <source>: handshake timeout, trying to re-transmit</source>
         <translation>：握手超时，尝试重传中</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="189"/>
+        <location filename="../association.cpp" line="297"/>
         <source>: failed to re-transmit - </source>
         <translation>：重传失败-</translation>
     </message>
     <message>
-        <location filename="../association.cpp" line="198"/>
+        <location filename="../association.cpp" line="306"/>
         <source>: providing pre-shared key ...</source>
         <translation>：协商预主密钥中...</translation>
     </message>
@@ -306,57 +281,57 @@ Commit Hash: </source>
         <translation>未知协议.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="109"/>
+        <location filename="../dtlsserver.cpp" line="110"/>
         <source>A spurious read notification</source>
         <translation>一个错误的已读通知</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="119"/>
+        <location filename="../dtlsserver.cpp" line="120"/>
         <source>Failed to read a datagram: </source>
         <translation>读取数据失败：</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="130"/>
+        <location filename="../dtlsserver.cpp" line="131"/>
         <source>Failed to extract peer info (address, port)</source>
         <translation>无法提取对端信息（地址，端口）</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="235"/>
+        <location filename="../dtlsserver.cpp" line="236"/>
         <source>PSK callback, received a client&apos;s identity: </source>
         <translation>PKS回调，收到客户端&apos;s 身份：</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="283"/>
+        <location filename="../dtlsserver.cpp" line="284"/>
         <source>: Connection encrypted. </source>
         <translation>：建立加密连接.</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="309"/>
+        <location filename="../dtlsserver.cpp" line="310"/>
         <source>Could not send response</source>
         <translation>无法发送响应</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="249"/>
+        <location filename="../dtlsserver.cpp" line="250"/>
         <source>: verified, starting a handshake</source>
         <translation>：已验证，开始握手</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="261"/>
+        <location filename="../dtlsserver.cpp" line="262"/>
         <source>DTLS error: </source>
         <translation>DTLS错误：</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="263"/>
+        <location filename="../dtlsserver.cpp" line="264"/>
         <source>: not verified yet</source>
         <translation>：未验证</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="280"/>
+        <location filename="../dtlsserver.cpp" line="281"/>
         <source>: handshake is in progress ...</source>
         <translation>：握手中...</translation>
     </message>
     <message>
-        <location filename="../dtlsserver.cpp" line="314"/>
+        <location filename="../dtlsserver.cpp" line="315"/>
         <source>0 byte dgram, could be a re-connect attempt?</source>
         <translation>0字节数据，可能正尝试重新连接？</translation>
     </message>
@@ -398,11 +373,16 @@ Commit Hash: </source>
     </message>
     <message>
         <location filename="../languagechooser.ui" line="187"/>
+        <source>中文</source>
+        <translation>中文</translation>
+    </message>
+    <message>
+        <location filename="../languagechooser.ui" line="223"/>
         <source>Italiano</source>
         <translation>意大利语</translation>
     </message>
     <message>
-        <location filename="../languagechooser.ui" line="206"/>
+        <location filename="../languagechooser.ui" line="242"/>
         <source>OK / Aceptar</source>
         <translation>确认</translation>
     </message>
@@ -526,696 +506,725 @@ Commit Hash: </source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="281"/>
+        <source>HTTP Put</source>
+        <translation>HTTP Put</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="290"/>
+        <source>HTTP Patch</source>
+        <translation>HTTP Patch</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="299"/>
+        <source>HTTP Delete</source>
+        <translation>HTTP Delete</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="308"/>
         <source>HTTPS Get</source>
         <translation>HTTPS Get</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="290"/>
+        <location filename="../mainwindow.ui" line="317"/>
         <source>HTTPS Post</source>
         <translation>HTTPS Post</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="302"/>
-        <location filename="../mainwindow.cpp" line="1142"/>
-        <location filename="../mainwindow.cpp" line="1811"/>
+        <location filename="../mainwindow.ui" line="326"/>
+        <source>HTTPS Put</source>
+        <translation>HTTPS Put</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="335"/>
+        <source>HTTPS Patch</source>
+        <translation>HTTPS Patch</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="344"/>
+        <source>HTTPS Delete</source>
+        <translation>HTTPS Delete</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="356"/>
+        <location filename="../mainwindow.cpp" line="1147"/>
+        <location filename="../mainwindow.cpp" line="1824"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="309"/>
+        <location filename="../mainwindow.ui" line="363"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="331"/>
+        <location filename="../mainwindow.ui" line="385"/>
         <source>Cipher Suites:</source>
         <translation>加密套件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="339"/>
-        <location filename="../mainwindow.ui" line="349"/>
+        <location filename="../mainwindow.ui" line="393"/>
+        <location filename="../mainwindow.ui" line="403"/>
         <source>AES256-GCM-SHA384</source>
         <translation>AES256-GCM-SHA384</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="344"/>
-        <location filename="../mainwindow.ui" line="354"/>
+        <location filename="../mainwindow.ui" line="398"/>
+        <location filename="../mainwindow.ui" line="408"/>
         <source>AES128-GCM-SHA256</source>
         <translation>AES128-GCM-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="359"/>
+        <location filename="../mainwindow.ui" line="413"/>
         <source>AES128-SHA256</source>
         <translation>AES128-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="364"/>
+        <location filename="../mainwindow.ui" line="418"/>
         <source>AES256-SHA384</source>
         <translation>AES256-SHA384</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="369"/>
+        <location filename="../mainwindow.ui" line="423"/>
         <source>AES128-SHA</source>
         <translation>AES128-SHA</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="374"/>
+        <location filename="../mainwindow.ui" line="428"/>
         <source>AES256-SHA</source>
         <translation>AES256-SHA</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="379"/>
+        <location filename="../mainwindow.ui" line="433"/>
         <source>CHACHA20-POLY1305-SHA256</source>
         <translation>CHACHA20-POLY1305-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="384"/>
+        <location filename="../mainwindow.ui" line="438"/>
         <source>RC4-MD5</source>
         <translation>RC4-MD5</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="389"/>
+        <location filename="../mainwindow.ui" line="443"/>
         <source>RC4-SHA</source>
         <translation>RC4-SHA</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="394"/>
+        <location filename="../mainwindow.ui" line="448"/>
         <source>CAMELLIA128-SHA256</source>
         <translation>CAMELLIA128-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="399"/>
+        <location filename="../mainwindow.ui" line="453"/>
         <source>CAMELLIA256-SHA</source>
         <translation>CAMELLIA256-SHA</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="404"/>
+        <location filename="../mainwindow.ui" line="458"/>
         <source>ECDHE-RSA-AES128-GCM-SHA256</source>
         <translation>ECDHE-RSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="409"/>
+        <location filename="../mainwindow.ui" line="463"/>
         <source>ECDHE-RSA-AES256-GCM-SHA384</source>
         <translation>ECDHE-RSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="414"/>
+        <location filename="../mainwindow.ui" line="468"/>
         <source>ECDHE-ECDSA-AES128-GCM-SHA256</source>
         <translation>ECDHE-ECDSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="419"/>
+        <location filename="../mainwindow.ui" line="473"/>
         <source>ECDHE-ECDSA-AES256-GCM-SHA384</source>
         <translation>ECDHE-ECDSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="424"/>
+        <location filename="../mainwindow.ui" line="478"/>
         <source>DHE-RSA-AES128-GCM-SHA256</source>
         <translation>DHE-RSA-AES128-GCM-SHA256</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="429"/>
+        <location filename="../mainwindow.ui" line="483"/>
         <source>DHE-RSA-AES256-GCM-SHA384</source>
         <translation>DHE-RSA-AES256-GCM-SHA384</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="450"/>
+        <location filename="../mainwindow.ui" line="504"/>
         <source>Host Name (CN)</source>
         <translation>主机名称</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="470"/>
+        <location filename="../mainwindow.ui" line="524"/>
         <source>Persistent DTLS</source>
         <translation>保持DTLS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="490"/>
+        <location filename="../mainwindow.ui" line="544"/>
         <source>Add Server Verification of The Client   </source>
         <translation>添加验证客户端的服务器 </translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
+        <location filename="../mainwindow.ui" line="574"/>
         <source>Search Saved Packets...</source>
         <translation>查找保存的数据包...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="548"/>
+        <location filename="../mainwindow.ui" line="602"/>
         <source>Generate Panel!</source>
         <translation>生成面板！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="571"/>
+        <location filename="../mainwindow.ui" line="625"/>
         <source>Delete Saved Packet</source>
         <translation>删除保存的数据包</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="578"/>
+        <location filename="../mainwindow.ui" line="632"/>
         <source>Persistent TCP</source>
         <translation>保持TCP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="615"/>
+        <location filename="../mainwindow.ui" line="669"/>
         <source>Clear Log</source>
         <translation>清空日志</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="635"/>
+        <location filename="../mainwindow.ui" line="689"/>
         <source>Log Traffic</source>
         <translation>日志流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="645"/>
+        <location filename="../mainwindow.ui" line="699"/>
         <source>Save Log</source>
         <translation>保存日志</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="652"/>
+        <location filename="../mainwindow.ui" line="706"/>
         <source>Save Traffic Packet</source>
         <translation>保存数据包流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="659"/>
+        <location filename="../mainwindow.ui" line="713"/>
         <source>Copy to Clipboard</source>
         <translation>复制到剪贴板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="707"/>
+        <location filename="../mainwindow.ui" line="761"/>
         <source>&amp;File</source>
         <translation>&amp;文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="716"/>
+        <location filename="../mainwindow.ui" line="770"/>
         <source>&amp;Help</source>
         <translation>&amp;帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="726"/>
+        <location filename="../mainwindow.ui" line="780"/>
         <source>&amp;Tools</source>
         <translation>&amp;工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="736"/>
+        <location filename="../mainwindow.ui" line="790"/>
         <source>&amp;Multicast</source>
         <translation>&amp;多播</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="742"/>
+        <location filename="../mainwindow.ui" line="796"/>
         <source>Panels</source>
         <translation>控制面板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="760"/>
+        <location filename="../mainwindow.ui" line="814"/>
         <source>E&amp;xit</source>
         <translation>&amp;退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="772"/>
+        <location filename="../mainwindow.ui" line="826"/>
         <source>&amp;Settings</source>
         <translation>&amp;设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="784"/>
+        <location filename="../mainwindow.ui" line="838"/>
         <source>&amp;About</source>
         <translation>&amp;关于</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="796"/>
+        <location filename="../mainwindow.ui" line="850"/>
         <source>&amp;Import Database</source>
         <translation>&amp;导入数据库</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="808"/>
+        <location filename="../mainwindow.ui" line="862"/>
         <source>&amp;Export Database</source>
         <translation>&amp;导出数据库</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="816"/>
+        <location filename="../mainwindow.ui" line="870"/>
         <source>Persistent Connection</source>
         <translation>保持连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="825"/>
+        <location filename="../mainwindow.ui" line="879"/>
         <source>&amp;Subnet Calculator</source>
         <translation>&amp;子网计算</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="837"/>
+        <location filename="../mainwindow.ui" line="891"/>
         <source>D&amp;onate (Thank You!)</source>
         <translation>&amp;捐赠（感谢！）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="845"/>
+        <location filename="../mainwindow.ui" line="899"/>
         <source>Documentation</source>
         <translation>文档</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="857"/>
+        <location filename="../mainwindow.ui" line="911"/>
         <source>&amp;Documentation</source>
         <translation>&amp;文档</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="865"/>
+        <location filename="../mainwindow.ui" line="919"/>
         <source>Export To Cloud</source>
         <translation>导出到云</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="874"/>
+        <location filename="../mainwindow.ui" line="928"/>
         <source>&amp;Cloud Save and Share</source>
         <translation>&amp;保存到云并共享</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="886"/>
+        <location filename="../mainwindow.ui" line="940"/>
         <source>&amp;Join/Leave IPv4</source>
         <translation>&amp;加入/离开 IPv4</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="898"/>
+        <location filename="../mainwindow.ui" line="952"/>
         <source>Android App</source>
         <translation>Android应用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="910"/>
+        <location filename="../mainwindow.ui" line="964"/>
         <source>iOS App</source>
         <translation>iOS应用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="922"/>
+        <location filename="../mainwindow.ui" line="976"/>
         <source>Follow on Twitter</source>
         <translation>在Twitter关注</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="934"/>
+        <location filename="../mainwindow.ui" line="988"/>
         <source>Connect on LinkedIn</source>
         <translation>连接到LinkedIn</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="946"/>
+        <location filename="../mainwindow.ui" line="1000"/>
         <source>Intense &amp;Traffic Generator</source>
         <translation>&amp;生成大量流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="958"/>
+        <location filename="../mainwindow.ui" line="1012"/>
         <source>Forums</source>
         <translation>论坛</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="966"/>
+        <location filename="../mainwindow.ui" line="1020"/>
         <source>Load Starter Panel</source>
         <translation>加载启动面板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="971"/>
+        <location filename="../mainwindow.ui" line="1025"/>
         <source>Empty Panel Project</source>
         <translation>空项目面板</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="980"/>
+        <location filename="../mainwindow.ui" line="1034"/>
         <source>Wake-On-LAN / Magic Packet</source>
         <translation>局域网唤醒/魔术数据包</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="634"/>
-        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="639"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>Updates.</source>
         <translation>更新.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="638"/>
+        <location filename="../mainwindow.cpp" line="643"/>
         <source>There is a new Packet Sender available.
 
 Download?</source>
         <translation>有新版本可下载</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="671"/>
         <source>Let Packet Sender check for updates weekly?</source>
         <translation>让Packet Sender每周检查更新？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="710"/>
+        <location filename="../mainwindow.cpp" line="715"/>
         <source>Packet Sender Updated!</source>
         <translation>更新成功！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="714"/>
+        <location filename="../mainwindow.cpp" line="719"/>
         <source>Updated to </source>
         <translation>更新到</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="714"/>
+        <location filename="../mainwindow.cpp" line="719"/>
         <source>!
 
 Would you like to read the release notes?</source>
         <translation>你想阅读发布日志吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="781"/>
+        <location filename="../mainwindow.cpp" line="786"/>
         <source>Clear Log </source>
         <translation>清空日志</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="805"/>
-        <location filename="../mainwindow.cpp" line="828"/>
-        <location filename="../mainwindow.cpp" line="850"/>
-        <location filename="../mainwindow.cpp" line="871"/>
+        <location filename="../mainwindow.cpp" line="810"/>
+        <location filename="../mainwindow.cpp" line="833"/>
+        <location filename="../mainwindow.cpp" line="855"/>
+        <location filename="../mainwindow.cpp" line="876"/>
         <source> Ports</source>
         <translation>端口数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="834"/>
+        <location filename="../mainwindow.cpp" line="839"/>
         <source>UDP Server Disabled</source>
         <translation>UDP服务器不可用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="856"/>
+        <location filename="../mainwindow.cpp" line="861"/>
         <source>SSL Server Disabled</source>
         <translation>SSL服务器不可用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="878"/>
+        <location filename="../mainwindow.cpp" line="883"/>
         <source>TCP Server Disabled</source>
         <translation>TCP服务器不可用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1098"/>
-        <location filename="../mainwindow.cpp" line="1339"/>
+        <location filename="../mainwindow.cpp" line="1103"/>
+        <location filename="../mainwindow.cpp" line="1344"/>
         <source>Multicast detected.</source>
         <translation>检测到多播</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1102"/>
+        <location filename="../mainwindow.cpp" line="1107"/>
         <source>Do you wish to join the multicast group?</source>
         <translation>你想加入到多播组吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1118"/>
-        <location filename="../mainwindow.cpp" line="1361"/>
+        <location filename="../mainwindow.cpp" line="1123"/>
+        <location filename="../mainwindow.cpp" line="1366"/>
         <source>Broadcast with responses!</source>
         <translation>带回复的广播！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1122"/>
-        <location filename="../mainwindow.cpp" line="1365"/>
+        <location filename="../mainwindow.cpp" line="1127"/>
+        <location filename="../mainwindow.cpp" line="1370"/>
         <source>You are sending a broadcast packet with responses enabled.
 
 This could cause traffic flooding. Continue?</source>
         <translation>你正在发送带回复的广播。这有可能造成流量泛洪，要继续吗？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="291"/>
-        <location filename="../mainwindow.cpp" line="1136"/>
-        <location filename="../mainwindow.cpp" line="1401"/>
-        <location filename="../mainwindow.cpp" line="2019"/>
+        <location filename="../mainwindow.cpp" line="297"/>
+        <location filename="../mainwindow.cpp" line="1141"/>
+        <location filename="../mainwindow.cpp" line="1406"/>
+        <location filename="../mainwindow.cpp" line="2032"/>
         <source>Resending</source>
         <translation>重新发送中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="811"/>
+        <location filename="../mainwindow.cpp" line="816"/>
         <source>DTLS Server Disabled</source>
         <translation>DTLS服务器不可用</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1142"/>
+        <location filename="../mainwindow.cpp" line="1147"/>
         <source>bytes</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1169"/>
+        <location filename="../mainwindow.cpp" line="1174"/>
         <source>Name cannot be blank.</source>
         <translation>名称不能为空.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1173"/>
+        <location filename="../mainwindow.cpp" line="1178"/>
         <source>Name is empty.</source>
         <translation>名称为空.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1223"/>
+        <location filename="../mainwindow.cpp" line="1228"/>
         <source>This computer does not support SSL.
 
 Expected SSL:</source>
         <translation>此计算机不支持SSL，预期的SSL：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1227"/>
+        <location filename="../mainwindow.cpp" line="1232"/>
         <source>No SSL Library.</source>
         <translation>无SSL库.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1280"/>
+        <location filename="../mainwindow.cpp" line="1285"/>
         <source>Address cannot be blank.</source>
         <translation>地址不能为空.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1284"/>
+        <location filename="../mainwindow.cpp" line="1289"/>
         <source>Address is empty.</source>
         <translation>地址是空的.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1295"/>
+        <location filename="../mainwindow.cpp" line="1300"/>
         <source>Port cannot be blank/zero.</source>
         <translation>端口不能为空或0.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1299"/>
+        <location filename="../mainwindow.cpp" line="1304"/>
         <source>Port is zero.</source>
         <translation>端口是0.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1313"/>
+        <location filename="../mainwindow.cpp" line="1318"/>
         <source>IPv6?</source>
         <translation>IPv6?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1317"/>
+        <location filename="../mainwindow.cpp" line="1322"/>
         <source>Enable IPv6 support?</source>
         <translation>开启IPv6支持？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1343"/>
+        <location filename="../mainwindow.cpp" line="1348"/>
         <source>Join UDP multicast group?</source>
         <translation>加入UDP的多播组？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1381"/>
+    <location filename="../mainwindow.cpp" line="1390"/>
         <source>Resend TCP with persistent connections!</source>
         <translation>使用长连接重新发送TCP！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1385"/>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows!
 
 Uncheck persistent connection? (Recommended)</source>
         <translation>正在使用长连接重新发送数据包，该操作可能导致出现多个窗口，取消选中长连接吗？（推荐）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1420"/>
-        <location filename="../mainwindow.cpp" line="2082"/>
+        <location filename="../mainwindow.cpp" line="1425"/>
+        <location filename="../mainwindow.cpp" line="2095"/>
         <source>No packets selected.</source>
         <translation>未选中任何数据包.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1424"/>
+        <location filename="../mainwindow.cpp" line="1429"/>
         <source>Select a packet.</source>
         <translation>选择数据包.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1474"/>
+        <location filename="../mainwindow.cpp" line="1479"/>
         <source>Invalid Address / DNS failed</source>
         <translation>不可用的地址/DNS解析失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1497"/>
+        <location filename="../mainwindow.cpp" line="1502"/>
         <source>Invalid Port</source>
         <translation>不可用的端口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1941"/>
+        <location filename="../mainwindow.cpp" line="1954"/>
         <source>Clear Log (0)</source>
         <translation>清空日志</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1960"/>
+        <location filename="../mainwindow.cpp" line="1973"/>
         <source>Save Packet</source>
         <translation>保存数据包</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1961"/>
+        <location filename="../mainwindow.cpp" line="1974"/>
         <source>Packet name:</source>
         <translation>数据包名称：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2086"/>
+        <location filename="../mainwindow.cpp" line="2099"/>
         <source>Clipboard unchanged.</source>
         <translation>剪贴板未变更.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2147"/>
+        <location filename="../mainwindow.cpp" line="2160"/>
         <source>Save Traffic Log</source>
         <translation>保存流量日志</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="2168"/>
         <source>TIME</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="2168"/>
         <source>From IP</source>
         <translation>来自于IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="2168"/>
         <source>From Port</source>
         <translation>来自于端口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="2168"/>
         <source>To IP</source>
         <translation>去往IP</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2156"/>
+        <location filename="../mainwindow.cpp" line="2169"/>
         <source>To Port</source>
         <translation>去往端口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2156"/>
+        <location filename="../mainwindow.cpp" line="2169"/>
         <source>Method</source>
         <translation>方法</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2156"/>
+        <location filename="../mainwindow.cpp" line="2169"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2404"/>
+        <location filename="../mainwindow.cpp" line="2417"/>
         <source>Import JSON</source>
         <translation>导入JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2406"/>
-        <location filename="../mainwindow.cpp" line="2473"/>
+        <location filename="../mainwindow.cpp" line="2419"/>
+        <location filename="../mainwindow.cpp" line="2486"/>
         <source>JSON db (*.json)</source>
         <translation>JSON数据(*.json)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2430"/>
-        <location filename="../mainwindow.cpp" line="2567"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2580"/>
         <source>Found </source>
         <translation>发现</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2430"/>
-        <location filename="../mainwindow.cpp" line="2567"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2580"/>
         <source> packets!</source>
         <translation>数据包！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2434"/>
-        <location filename="../mainwindow.cpp" line="2571"/>
+        <location filename="../mainwindow.cpp" line="2447"/>
+        <location filename="../mainwindow.cpp" line="2584"/>
         <source>Import </source>
         <translation>导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2434"/>
-        <location filename="../mainwindow.cpp" line="2571"/>
+        <location filename="../mainwindow.cpp" line="2447"/>
+        <location filename="../mainwindow.cpp" line="2584"/>
         <source> packets?
 
 Packet Sender will overwrite packets with the same name.</source>
         <translation>数据包？Packet Sender将以相同的名称覆盖数据包.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2437"/>
-        <location filename="../mainwindow.cpp" line="2458"/>
-        <location filename="../mainwindow.cpp" line="2574"/>
-        <location filename="../mainwindow.cpp" line="2595"/>
+        <location filename="../mainwindow.cpp" line="2450"/>
+        <location filename="../mainwindow.cpp" line="2471"/>
+        <location filename="../mainwindow.cpp" line="2587"/>
+        <location filename="../mainwindow.cpp" line="2608"/>
         <source>Import Cancelled</source>
         <translation>取消导入</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2445"/>
+        <location filename="../mainwindow.cpp" line="2458"/>
         <source>Import Finished</source>
         <translation>导入成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2451"/>
-        <location filename="../mainwindow.cpp" line="2588"/>
+        <location filename="../mainwindow.cpp" line="2464"/>
+        <location filename="../mainwindow.cpp" line="2601"/>
         <source>Not a database</source>
         <translation>不是一个数据库</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2455"/>
-        <location filename="../mainwindow.cpp" line="2592"/>
+        <location filename="../mainwindow.cpp" line="2468"/>
+        <location filename="../mainwindow.cpp" line="2605"/>
         <source>Found no packets in this file. It may not be a Packet Sender export</source>
         <translation>在该文件未发现任何数据包，这可能不是Packet Sender导出的</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2472"/>
+        <location filename="../mainwindow.cpp" line="2485"/>
         <source>Save JSON</source>
         <translation>保存JSON</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2494"/>
-        <location filename="../mainwindow.cpp" line="2627"/>
+        <location filename="../mainwindow.cpp" line="2507"/>
+        <location filename="../mainwindow.cpp" line="2640"/>
         <source>Export: </source>
         <translation>导出：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2498"/>
+        <location filename="../mainwindow.cpp" line="2511"/>
         <source>Could not save</source>
         <translation>保存失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2502"/>
+        <location filename="../mainwindow.cpp" line="2515"/>
         <source>Could not open </source>
         <translation>打开失败</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2548"/>
-        <location filename="../mainwindow.cpp" line="2673"/>
+        <location filename="../mainwindow.cpp" line="2561"/>
+        <location filename="../mainwindow.cpp" line="2686"/>
         <source>Import File</source>
         <translation>导入文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2550"/>
-        <location filename="../mainwindow.cpp" line="2605"/>
+        <location filename="../mainwindow.cpp" line="2563"/>
+        <location filename="../mainwindow.cpp" line="2618"/>
         <source>INI db (*.ini)</source>
         <translation>配置文件数据(*.ini)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2604"/>
+        <location filename="../mainwindow.cpp" line="2617"/>
         <source>Save File</source>
         <translation>保存文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2675"/>
+        <location filename="../mainwindow.cpp" line="2688"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2699"/>
+        <location filename="../mainwindow.cpp" line="2712"/>
         <source>Max size exceeded!</source>
         <translation>超过最大允许值！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2703"/>
+        <location filename="../mainwindow.cpp" line="2716"/>
         <source>The HEX field supports up to 10,922 bytes. The data has been truncated.</source>
         <translation>HEX数据最多支持10922字节，数据已被截断.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2709"/>
+        <location filename="../mainwindow.cpp" line="2722"/>
         <source>Loading </source>
         <translation>加载中</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2709"/>
+        <location filename="../mainwindow.cpp" line="2722"/>
         <source> bytes</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2789"/>
+        <location filename="../mainwindow.cpp" line="2826"/>
         <source>Invalid MAC Address.</source>
         <translation>不可用的MAC地址.</translation>
     </message>
@@ -1303,12 +1312,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 <context>
     <name>PacketNetwork</name>
     <message>
-        <location filename="../packetnetwork.cpp" line="311"/>
+        <location filename="../packetnetwork.cpp" line="324"/>
         <source>Port bind error.</source>
         <translation>端口绑定错误.</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="315"/>
+        <location filename="../packetnetwork.cpp" line="328"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024.
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
@@ -1316,7 +1325,7 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
         请使用管理员权限启动后尝试.</translation>
     </message>
     <message>
-        <location filename="../packetnetwork.cpp" line="316"/>
+        <location filename="../packetnetwork.cpp" line="329"/>
         <source>Packet Sender attempted (and failed) to bind to port [PORT].
 
  - Are you running multiple instances?
@@ -1886,17 +1895,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="2940"/>
+        <location filename="../mainwindow.cpp" line="2977"/>
         <source>Multi-line editor</source>
         <translation>多行编辑</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2946"/>
+        <location filename="../mainwindow.cpp" line="2983"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2947"/>
+        <location filename="../mainwindow.cpp" line="2984"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
@@ -1904,68 +1913,68 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../packet.cpp" line="276"/>
-        <location filename="../settings.cpp" line="47"/>
+        <location filename="../packet.cpp" line="288"/>
+        <location filename="../settings.cpp" line="55"/>
         <source>Send</source>
         <translation>发送</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="277"/>
+        <location filename="../packet.cpp" line="289"/>
         <source>Send &lt;b&gt;</source>
         <translation>发送 &lt;b&gt;</translation>
     </message>
     <message>
-        <location filename="../packet.cpp" line="648"/>
+        <location filename="../packet.cpp" line="687"/>
         <source>Received an invalid MAC address</source>
         <translation>收到一个不可用的MAC地址</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="50"/>
+        <location filename="../settings.cpp" line="58"/>
         <source>Name</source>
         <translation>名称</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="53"/>
+        <location filename="../settings.cpp" line="61"/>
         <source>Resend</source>
         <translation>重新发送</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="56"/>
+        <location filename="../settings.cpp" line="64"/>
         <source>To Address</source>
         <translation>到地址</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="59"/>
+        <location filename="../settings.cpp" line="67"/>
         <source>To Port</source>
         <translation>到端口</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="62"/>
+        <location filename="../settings.cpp" line="70"/>
         <source>Method</source>
         <translation>方法</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="65"/>
+        <location filename="../settings.cpp" line="73"/>
         <source>Request Path</source>
         <translation>请求路径</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="68"/>
+        <location filename="../settings.cpp" line="76"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="71"/>
+        <location filename="../settings.cpp" line="79"/>
         <source>From IP</source>
         <translation>来自于IP</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="74"/>
+        <location filename="../settings.cpp" line="82"/>
         <source>From Port</source>
         <translation>来自于端口</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="77"/>
+        <location filename="../settings.cpp" line="85"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -2067,11 +2076,11 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="210"/>
-        <location filename="../settings.ui" line="795"/>
-        <location filename="../settings.ui" line="826"/>
-        <location filename="../settings.ui" line="867"/>
-        <location filename="../settings.ui" line="919"/>
+        <location filename="../settings.ui" line="818"/>
+        <location filename="../settings.ui" line="849"/>
+        <location filename="../settings.ui" line="890"/>
         <location filename="../settings.ui" line="942"/>
+        <location filename="../settings.ui" line="965"/>
         <source>HEX</source>
         <translation>HEX   </translation>
     </message>
@@ -2204,7 +2213,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="497"/>
-        <location filename="../settings.cpp" line="1081"/>
+        <location filename="../settings.cpp" line="1099"/>
         <source>Host</source>
         <translation>主机名</translation>
     </message>
@@ -2220,7 +2229,7 @@ Selecting No will generate new IDs and append.</source>
     </message>
     <message>
         <location filename="../settings.ui" line="527"/>
-        <location filename="../settings.cpp" line="1152"/>
+        <location filename="../settings.cpp" line="1170"/>
         <source>HTTP Header</source>
         <translation>HTTP Header</translation>
     </message>
@@ -2273,260 +2282,274 @@ Selecting No will generate new IDs and append.</source>
         <translation>混杂模式</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="660"/>
-        <source>Use Dark Theme (requires restart)</source>
-        <translation>使用黑暗主题（需要重启生效）</translation>
-    </message>
-    <message>
-        <location filename="../settings.ui" line="669"/>
+        <location filename="../settings.ui" line="692"/>
         <source>Language (Requires Restart)</source>
         <translation>语言（需要重启生效）</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="678"/>
+        <location filename="../settings.ui" line="701"/>
         <source>Copy to Clipboard button uses raw data</source>
         <translation>复制原始数据到剪贴板</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="685"/>
+        <location filename="../settings.ui" line="708"/>
         <source>Rolling 100-entry traffic log</source>
         <translation>滚动100条流量日志</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="692"/>
+        <location filename="../settings.ui" line="715"/>
         <source>Restore previous session</source>
         <translation>回复上个会话</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="699"/>
+        <location filename="../settings.ui" line="722"/>
         <source>Periodically check for updates</source>
         <translation>定期检查更新</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="706"/>
+        <location filename="../settings.ui" line="729"/>
         <source>Use ellipsis [...] for long data entries (helps performance)</source>
         <translation>对长数据条目使用省略号[…]（有助于提高性能）</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="713"/>
+        <location filename="../settings.ui" line="736"/>
         <source>Auto-Launch Starter Panel</source>
         <translation>自动启动启动面板</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="750"/>
+        <location filename="../settings.ui" line="773"/>
         <source>Smart Responses</source>
         <translation>智能响应</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="758"/>
+        <location filename="../settings.ui" line="781"/>
         <source>Send a Smart Response with Macro Support</source>
         <translation>通过宏支持发送智能响应</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="806"/>
+        <location filename="../settings.ui" line="829"/>
         <source>Response 5</source>
         <translation>响应 5</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="790"/>
-        <location filename="../settings.ui" line="821"/>
-        <location filename="../settings.ui" line="862"/>
-        <location filename="../settings.ui" line="914"/>
+        <location filename="../settings.ui" line="813"/>
+        <location filename="../settings.ui" line="844"/>
+        <location filename="../settings.ui" line="885"/>
         <location filename="../settings.ui" line="937"/>
+        <location filename="../settings.ui" line="960"/>
         <source>Mixed ASCII</source>
         <translation>混合ASCII</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="813"/>
-        <location filename="../settings.ui" line="834"/>
-        <location filename="../settings.ui" line="851"/>
-        <location filename="../settings.ui" line="875"/>
-        <location filename="../settings.ui" line="957"/>
+        <location filename="../settings.ui" line="836"/>
+        <location filename="../settings.ui" line="857"/>
+        <location filename="../settings.ui" line="874"/>
+        <location filename="../settings.ui" line="898"/>
+        <location filename="../settings.ui" line="980"/>
         <source>Enable</source>
         <translation>开启</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="967"/>
+        <location filename="../settings.ui" line="990"/>
         <source>Response 4</source>
         <translation>响应 4</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="821"/>
         <source>If Packet data equals</source>
-        <translation>如果数据包内容等于</translation>
+        <translation type="vanished">如果数据包内容等于</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="828"/>
+        <location filename="../settings.ui" line="919"/>
         <source>Reply with</source>
         <translation>答复于</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="889"/>
+        <location filename="../settings.ui" line="912"/>
         <source>Encoding</source>
         <translation>编码</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="950"/>
+        <location filename="../settings.ui" line="973"/>
         <source>Response 1</source>
         <translation>响应 1</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="841"/>
+        <location filename="../settings.ui" line="864"/>
         <source>Response 2</source>
         <translation>响应 2</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="882"/>
+        <location filename="../settings.ui" line="662"/>
+        <source>Theme</source>
+        <translation>主题</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="670"/>
+        <source>System</source>
+        <translation>系统</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="675"/>
+        <source>Light</source>
+        <translation>光</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="680"/>
+        <source>Dark</source>
+        <translation>黑暗</translation>
+    </message>
+    <message>
+        <location filename="../settings.ui" line="905"/>
         <source>Search term</source>
         <translation>检索</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="906"/>
+        <location filename="../settings.ui" line="929"/>
         <source>Response 3</source>
         <translation>响应 3</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="977"/>
+        <location filename="../settings.ui" line="1000"/>
         <source>Search Method      </source>
         <translation>检索方法</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="985"/>
-        <location filename="../settings.ui" line="1009"/>
-        <location filename="../settings.ui" line="1033"/>
-        <location filename="../settings.ui" line="1057"/>
-        <location filename="../settings.ui" line="1081"/>
+        <location filename="../settings.ui" line="1008"/>
+        <location filename="../settings.ui" line="1032"/>
+        <location filename="../settings.ui" line="1056"/>
+        <location filename="../settings.ui" line="1080"/>
+        <location filename="../settings.ui" line="1104"/>
         <source>Exact Match</source>
         <translation>完全匹配</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="990"/>
-        <location filename="../settings.ui" line="1014"/>
-        <location filename="../settings.ui" line="1038"/>
-        <location filename="../settings.ui" line="1062"/>
-        <location filename="../settings.ui" line="1086"/>
+        <location filename="../settings.ui" line="1013"/>
+        <location filename="../settings.ui" line="1037"/>
+        <location filename="../settings.ui" line="1061"/>
+        <location filename="../settings.ui" line="1085"/>
+        <location filename="../settings.ui" line="1109"/>
         <source>Contains</source>
         <translation>包含</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="995"/>
-        <location filename="../settings.ui" line="1019"/>
-        <location filename="../settings.ui" line="1043"/>
-        <location filename="../settings.ui" line="1067"/>
-        <location filename="../settings.ui" line="1091"/>
+        <location filename="../settings.ui" line="1018"/>
+        <location filename="../settings.ui" line="1042"/>
+        <location filename="../settings.ui" line="1066"/>
+        <location filename="../settings.ui" line="1090"/>
+        <location filename="../settings.ui" line="1114"/>
         <source>Starts With</source>
         <translation>开始于</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1000"/>
-        <location filename="../settings.ui" line="1024"/>
-        <location filename="../settings.ui" line="1048"/>
-        <location filename="../settings.ui" line="1072"/>
-        <location filename="../settings.ui" line="1096"/>
+        <location filename="../settings.ui" line="1023"/>
+        <location filename="../settings.ui" line="1047"/>
+        <location filename="../settings.ui" line="1071"/>
+        <location filename="../settings.ui" line="1095"/>
+        <location filename="../settings.ui" line="1119"/>
         <source>Ends With</source>
         <translation>结束于</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1118"/>
+        <location filename="../settings.ui" line="1141"/>
         <source>Available macros: {{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</source>
         <translation>可用宏：{{DATE}} {{TIME}} {{RANDOM}} {{UNIXTIME}} {{UNIQUE}} {{COUNTER}}</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1125"/>
+        <location filename="../settings.ui" line="1148"/>
         <source>Packet Sender will swap macro with a real value before sending</source>
         <translation>Packet Sender将在发送之前用实际值交换宏</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1136"/>
+        <location filename="../settings.ui" line="1159"/>
         <source>{{DATE}} format (Requires Restart)</source>
         <translation>{{DATE}} 格式 （需要重启后生效）</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1153"/>
-        <location filename="../settings.ui" line="1194"/>
+        <location filename="../settings.ui" line="1176"/>
+        <location filename="../settings.ui" line="1217"/>
         <source>Example</source>
         <translation>示例</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1177"/>
+        <location filename="../settings.ui" line="1200"/>
         <source>{{TIME}} format (Requires Restart)</source>
         <translation>{{TIME}} 格式 （需要重启后生效）</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="1238"/>
+        <location filename="../settings.ui" line="1261"/>
         <source>Online Documentation</source>
         <translation>在线文档</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="125"/>
+        <location filename="../settings.cpp" line="134"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="441"/>
+        <location filename="../settings.cpp" line="478"/>
         <source>Bad IP.</source>
         <translation>无效IP.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="445"/>
+        <location filename="../settings.cpp" line="482"/>
         <source>Packet Sender cannot bind invalid IP </source>
         <translation>Packet Sender无法绑定到无效IP</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="459"/>
+        <location filename="../settings.cpp" line="496"/>
         <source>TCP and SSL non-zero port conflict.</source>
         <translation>TCP和SSL非零端口冲突.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="463"/>
+        <location filename="../settings.cpp" line="500"/>
         <source>Packet Sender cannot bind TCP and SSL to the same port.</source>
         <translation>Packet Sender无法将TCP和SSL绑定到同一端口.</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="832"/>
+        <location filename="../settings.cpp" line="850"/>
         <source>Open Directory</source>
         <translation>打开目录</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="853"/>
+        <location filename="../settings.cpp" line="871"/>
         <source>Choose Cert</source>
         <translation>选择证书</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="853"/>
-        <location filename="../settings.cpp" line="869"/>
+        <location filename="../settings.cpp" line="871"/>
+        <location filename="../settings.cpp" line="887"/>
         <source>*.*</source>
         <translation>*.*</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="869"/>
+        <location filename="../settings.cpp" line="887"/>
         <source>Choose Key</source>
         <translation>选择密钥</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1081"/>
-        <location filename="../settings.cpp" line="1150"/>
+        <location filename="../settings.cpp" line="1099"/>
+        <location filename="../settings.cpp" line="1168"/>
         <source>Key</source>
         <translation>密钥</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1081"/>
-        <location filename="../settings.cpp" line="1151"/>
+        <location filename="../settings.cpp" line="1099"/>
+        <location filename="../settings.cpp" line="1169"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1146"/>
+        <location filename="../settings.cpp" line="1164"/>
         <source>UN/ClientID</source>
         <translation>用户名/客户端ID</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1147"/>
+        <location filename="../settings.cpp" line="1165"/>
         <source>PW/Access</source>
         <translation>口令/接入</translation>
     </message>
     <message>
-        <location filename="../settings.cpp" line="1148"/>
+        <location filename="../settings.cpp" line="1166"/>
         <source>HTTP Auth Header</source>
         <translation>HTTP Auth Header</translation>
     </message>
@@ -2624,12 +2647,11 @@ Selecting No will generate new IDs and append.</source>
         <translation>清楚</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.cpp" line="24"/>
+        <location filename="../subnetcalc.cpp" line="26"/>
         <source>IPv4 Subnet Calculator</source>
         <translation>IPv4子网计算</translation>
     </message>
     <message>
-        <location filename="../subnetcalc.cpp" line="26"/>
         <source>Your non-loopback addresses:
 
 </source>
