@@ -62,6 +62,7 @@ private slots:
 
     // run() tests
     void testRun_callSequence();
+    void testRun_callSequence_withPersistence();
 
     // persistentConnectionLoop() tests
     void testPersistentConnectionLoop_socketInterfaceIsNullptr();

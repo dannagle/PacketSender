@@ -602,6 +602,37 @@ void IncomingTcpThreadTests::testRun_callSequence()
     QCOMPARE(callSequence.back(), CallTracker::CLOSE_CONNECTION());
 }
 
+void IncomingTcpThreadTests::testRun_callSequence_withPersistence()
+{
+    constexpr bool isPersistent = true;
+    constexpr bool isSecure = false;
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), isSecure, isPersistent);
+    thread.callRun();
+
+    // we only care about the calls made directly from run()
+    const auto callSequence =  thread.getCallSequence();
+    const std::vector expectedBeginningCallSequence = {
+        CallTracker::RUN(),
+        CallTracker::HANDLE_INCOMING_CONNECTION()
+    };
+
+    const QStringList errorMessageList1(expectedBeginningCallSequence.begin(), expectedBeginningCallSequence.end());
+    QVERIFY2(
+        TestUtils::qStringVectorStartsWith(callSequence, expectedBeginningCallSequence),
+        qPrintable("Call sequence did not begin with [" + errorMessageList1.join(",") + "]"));
+
+
+    const std::vector expectedEndingCallSequence = {
+        CallTracker::PERSISTENT_CONNECTION_LOOP(),
+        CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP(),
+        CallTracker::CLOSE_CONNECTION()
+    };
+    const QStringList errorMessageList2(expectedBeginningCallSequence.begin(), expectedBeginningCallSequence.end());
+    QVERIFY2(
+        TestUtils::qStringVectorEndsWith(callSequence, expectedEndingCallSequence),
+        qPrintable("Call sequence did not begin with [" + errorMessageList2.join(",") + "]"));
+}
+
 // persistentConnectionLoop() tests
 void IncomingTcpThreadTests::testPersistentConnectionLoop_socketInterfaceIsNullptr()
 {

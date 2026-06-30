@@ -14,8 +14,9 @@ public:
     // Main constructor (used by tests and convenience constructor)
     explicit IncomingTcpThreadTestDouble(PacketSenderQSslSocketInterface* socketInterface,
                                bool isSecure = false,
+                               bool isPersistent = false,
                                QObject* parent = nullptr)
-                                   : IncomingTcpThread(socketInterface, isSecure, parent)
+                                   : IncomingTcpThread(socketInterface, isSecure, isPersistent, parent)
     {
 
     }
@@ -23,8 +24,9 @@ public:
     // Convenience constructor (normal production use)
     explicit IncomingTcpThreadTestDouble(int socketDescriptor,
                                bool isSecure = false,
+                               bool isPersistent = false,
                                QObject* parent = nullptr)
-                                   : IncomingTcpThread(socketDescriptor, isSecure, parent)
+                                   : IncomingTcpThread(socketDescriptor, isSecure, isPersistent, parent)
     {
         // Don't use this constructor because it will create a RealQSsl object
         // in IncomingTcpThread

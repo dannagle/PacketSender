@@ -215,5 +215,11 @@ void IncomingTcpThread::run()
     }
 
     handleIncomingConnection();
+
+    if (persistent)
+    {
+        persistentConnectionLoop();
+    }
+
     closeConnection();
 }
