@@ -67,12 +67,6 @@ public:
     void errorOccurred(const QString& errorString);
     void disconnected();
 
-/* from old/deprecated first attempt at Connection
-private slots:
-    void onThreadPacketReceived(const Packet &p);
-    void onThreadConnectStatus(const QString &msg);
-    void onThreadError(QSslSocket::SocketError error);
-*/
 protected:
     void assignUniqueId();
     [[nodiscard]] virtual QString getClassName() const;
