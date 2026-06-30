@@ -42,7 +42,6 @@ public:
     [[nodiscard]] virtual bool isPersistent() const { return persistent; }
     [[nodiscard]] bool getShouldUseSSL() const {return shouldUseSSL;}
     [[nodiscard]] PacketSenderQSslSocketInterface* getSocketInterface() const;
-    // virtual void sendPersistent(const Packet& packet);
 
     // Common query helpers - public because they are safe and widely useful
     [[nodiscard]] virtual bool isSocketEncrypted() const;
@@ -62,10 +61,6 @@ public:
     void disconnected();
 
 protected:
-    // virtual void run() override = 0;
-    //
-    // void wireupSocketSignals(QSslSocket* socket);
-
     std::unique_ptr<PacketSenderQSslSocketInterface>& getSocketPtrByReference() {return socketInterface;}
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
     [[nodiscard]] virtual QByteArray readSocketData();
