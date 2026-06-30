@@ -59,6 +59,7 @@ public:
     void connectionStatus(const QString& message);
     void error(QSslSocket::SocketError socketError);
     void errorMessage(const QString& msg);
+    void disconnected();
 
 protected:
     // virtual void run() override = 0;

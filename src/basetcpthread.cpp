@@ -236,6 +236,7 @@ void BaseTcpThread::closeConnection()
         s->close();
 
         emit connectionStatus("Disconnected");
+        emit disconnected();
         QDEBUG() << "Single packet sent. Disconnected.";
     }
 }

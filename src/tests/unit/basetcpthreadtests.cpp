@@ -450,7 +450,21 @@ void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatus_Disconnected(
 
     BaseTcpThreadTestDouble thread(mockSock);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+    QCOMPARE(connectionStatusSpy.count(), 0);
+
     thread.callCloseConnection();
     QCOMPARE(connectionStatusSpy.count(), 1);
     QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Disconnected");
+}
+
+void BaseTcpThreadTests::testCloseConnection_emitsDisconnectedSignal()
+{
+    auto *mockSock = new MockSslSocket();
+
+    BaseTcpThreadTestDouble thread(mockSock);
+    QSignalSpy disconnectedStatusSpy(&thread, &BaseTcpThread::disconnected);
+    QCOMPARE(disconnectedStatusSpy.count(), 0);
+
+    thread.callCloseConnection();
+    QCOMPARE(disconnectedStatusSpy.count(), 1);
 }
