@@ -19,6 +19,9 @@ public:
     static MockSslSocket* createMockSocketForTest();
     static QString extractResourceToTempFile(const QString& resourcePath);
     static void setupProductionSnakeOilCertsForTest();
+
+    static bool qStringVectorStartsWith(const std::vector<QString>& vec, const std::vector<QString>& prefix);
+    static bool qStringVectorEndsWith(const std::vector<QString>& vec, const std::vector<QString>& suffix);
 };
 
 

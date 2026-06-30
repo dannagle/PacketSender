@@ -101,3 +101,15 @@ void TestUtils::setupProductionSnakeOilCertsForTest()
     settings.setValue(LOAD_SNAKEOIL_CERTS, false);
     settings.sync();
 }
+
+bool TestUtils::qStringVectorStartsWith(const std::vector<QString>& vec, const std::vector<QString>& prefix)
+{
+    if (prefix.size() > vec.size()) return false;
+    return std::equal(prefix.begin(), prefix.end(), vec.begin());
+}
+
+bool TestUtils::qStringVectorEndsWith(const std::vector<QString>& vec, const std::vector<QString>& suffix)
+{
+    if (suffix.size() > vec.size()) return false;
+    return std::equal(suffix.begin(), suffix.end(), vec.end() - suffix.size());
+}
