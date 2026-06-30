@@ -18,6 +18,9 @@ private slots:
     // send() tests
     void testSend_throwsRuntimeException();
 
+    // receiveData() tests
+    void test_receiveData_threadDoesNotExist();
+    void test_receiveData_replacesExistingThread();
 };
 
 

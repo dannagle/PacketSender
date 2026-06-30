@@ -6,6 +6,7 @@
 #define INCOMINGTCPTHREADTESTDOUBLE_H
 #include "../../../incomingtcpthread.h"
 #include "utils/calltracker.h"
+#include "testdoubles/MockSslSocket.h"
 
 class IncomingTcpThreadTestDouble : public IncomingTcpThread, public CallTracker
 {
@@ -32,6 +33,28 @@ public:
         // in IncomingTcpThread
     }
 
+    explicit IncomingTcpThreadTestDouble(int socketDescriptor, QObject* parent = nullptr)
+    : IncomingTcpThreadTestDouble(createSocketWithDescriptorInTestDouble(socketDescriptor), false, false, parent)
+    {
+        QDEBUG() << "used correct constructor";
+    }
+
+    static PacketSenderQSslSocketInterface* createSocketWithDescriptorInTestDouble(int socketDescriptor)
+    {
+
+        qDebug() << "socketDescriptor in helper method: " << socketDescriptor;
+
+        auto mockSslSocket = std::make_unique<MockSslSocket>();
+
+        // IMPORTANT: Set the descriptor BEFORE passing to base
+        if (!mockSslSocket->setSocketDescriptor(socketDescriptor)) {
+            // handle error - e.g. throw or log
+            throw std::runtime_error("Failed to set socket descriptor on QSslSocket");
+        }
+
+        return mockSslSocket.release();
+    }
+
     ~IncomingTcpThreadTestDouble() override
     {
         destructorCalled();
@@ -40,6 +63,11 @@ public:
     void setSocketForTest(PacketSenderQSslSocketInterface* newSocket)
     {
         getSocketPtrByReference().reset(newSocket);
+    }
+
+    void setPersistent(bool isPersistent)
+    {
+        persistent = isPersistent;
     }
 
     bool shouldStop() const override
@@ -77,6 +105,11 @@ public:
     bool shouldCallIncomingTcpThreadIsInterruptionRequested = false;
     bool isInterruptionRequestedReturnValue = true;
     int numberOfPersistentConnectionLoopIterationsDesired = 0;
+
+    Qt::HANDLE getThreadIdCapturedInRun() const
+    {
+        return threadId;
+    }
 
     // ═════════════════════════════════════════════════════════════════════════════
     //                              CALL* SECTION
@@ -123,6 +156,8 @@ public:
 signals:
     void shutdownCalled();
     void destructorCalled();
+    // void threadTestDoubleDestructorCalled();         // emitted when the object is actually deleted
+    void runStarted(Qt::HANDLE threadId);           // emitted when run is called so we can get the thread id
 
 protected:
     /****************************************************************************************
@@ -189,6 +224,8 @@ protected:
 
     void run() override
     {
+        emit runStarted(currentThreadId());
+        threadId = currentThreadId();
         recordCall(RUN());
         IncomingTcpThread::run();
     }
@@ -207,6 +244,7 @@ protected:
 
 private:
     int shouldStopCallCount = 0;
+    Qt::HANDLE threadId = nullptr;
 };
 
 #endif //INCOMINGTCPTHREADTESTDOUBLE_H

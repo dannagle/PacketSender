@@ -15,12 +15,12 @@ class ConnectionTestDouble : public Connection, public CallTracker
 public:
     bool connected = false;
     bool encrypted = false;
-    bool persistent = false;
+    bool persistent_ = false;
     bool incoming = false;
 
     [[nodiscard]] bool isConnected() const override { return connected; };
     [[nodiscard]] bool isSecure() const override { return encrypted; };
-    [[nodiscard]] bool isPersistent() const override { return persistent; };
+    [[nodiscard]] bool isPersistent() const override { return persistent_; };
     [[nodiscard]] bool isIncoming() const override { return incoming; };
 
     [[nodiscard]] QString callGetClassName() const
@@ -32,6 +32,17 @@ public:
     {
         const auto errorMessage = "Unsupported Operation: "
         + getClassName() + " cannot send Packet";
+        throw std::runtime_error(errorMessage.toUtf8());
+    }
+
+    void receiveData(const int port, bool isSecure, bool persistent) override
+    {
+        Q_UNUSED(port);
+        Q_UNUSED(isSecure);
+        Q_UNUSED(persistent);
+
+        const auto errorMessage = "Unsupported Operation: "
+            + getClassName() + " cannot receive data";
         throw std::runtime_error(errorMessage.toUtf8());
     }
 
