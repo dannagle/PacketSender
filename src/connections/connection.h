@@ -30,7 +30,7 @@
  *       ├── BaseUdpConnection
  *       │       └── UdpConnection (usually no separate in/out)
  *       │
- *       └── ... (future protocols: QUIC, WebSocket, SCTP, etc.)
+ *       └── ... (future protocols: RS-232 [aka serial] QUIC, WebSocket, SCTP, etc.)
  *
  * Design Principle:
  * - Connection itself knows nothing about specific protocols.
