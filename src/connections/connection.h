@@ -62,6 +62,7 @@ public:
 
     signals:
     void dataReceived(const Packet& packet);
+    void packetSent(const Packet& packet);
     void stateChanged(const QString& message);
     void errorOccurred(const QString& errorString);
     void disconnected();
@@ -75,6 +76,8 @@ private slots:
 protected:
     void assignUniqueId();
     [[nodiscard]] virtual QString getClassName() const;
+
+    virtual void setupSignalConnections() = 0;
 
     std::optional<QString> id_;
 };

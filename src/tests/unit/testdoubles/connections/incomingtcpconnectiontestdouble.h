@@ -8,7 +8,7 @@
 #include "connections/incomingtcpconnection.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
 
-class IncomingTcpConnectionTestDouble : public IncomingTcpConnection
+class IncomingTcpConnectionTestDouble : public IncomingTcpConnection, public CallTracker
 {
     Q_OBJECT
 public:
@@ -37,12 +37,19 @@ public:
         return *t;
     }
 
-    std::unique_ptr<IncomingTcpThread> makeIncomingTcpThread(int socketDescriptor, bool isSecure, bool isPersistent)
+    std::unique_ptr<IncomingTcpThread> makeIncomingTcpThread(int socketDescriptor, bool isSecure, bool isPersistent) override
     {
         auto newThread = std::make_unique<IncomingTcpThreadTestDouble>(socketDescriptor, this);
         newThread->setPersistent(isPersistent);
         dynamic_cast<MockSslSocket*>(newThread->getSocketInterface())->setMockEncrypted(isSecure);
         return newThread;
+    }
+
+protected:
+    void setupSignalConnections() override
+    {
+        recordCall(SETUP_SIGNAL_CONNECTIONS());
+        IncomingTcpConnection::setupSignalConnections();
     }
 };
 

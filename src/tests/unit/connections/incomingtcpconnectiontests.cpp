@@ -81,6 +81,7 @@ void IncomingTcpConnectionTests::test_receiveData_replacesExistingThread()
     connection.setThread(std::move(initialThread));
 
     QVERIFY(connection.getThread().wasMethodCalled(CallTracker::RUN()) == false); // hasn't started yet
+    QCOMPARE(connection.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 0);
 
     // 2. Call send() — this should shutdown the old thread and create a new one
     connection.receiveData(0, isSecure, isPersistent);
@@ -95,4 +96,5 @@ void IncomingTcpConnectionTests::test_receiveData_replacesExistingThread()
     QTRY_VERIFY_WITH_TIMEOUT(newThread.getThreadIdCapturedInRun() != nullptr, 500);
 
     QVERIFY2(newThread.id() != initialThreadId, "send() did not replace the old thread with a new one");
+    QCOMPARE(connection.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 1);
 }

@@ -11,7 +11,7 @@
 #include "../../outgoingtcpthread.h"
 #include "../unit/testdoubles/outgoingtchpthreadtestdouble.h"
 
-class OutgoingTcpConnectionTestDouble : public OutgoingTcpConnection
+class OutgoingTcpConnectionTestDouble : public OutgoingTcpConnection, public CallTracker
 {
     Q_OBJECT
 
@@ -46,6 +46,12 @@ protected:
     {
         qDebug() << "makeOutgoingTcpThread override in OutgoingTcpConnectionTestDouble";
         return std::make_unique<OutgoingTcpThreadTestDouble>(packet, this);
+    }
+
+    void setupSignalConnections() override
+    {
+        recordCall(SETUP_SIGNAL_CONNECTIONS());
+        OutgoingTcpConnection::setupSignalConnections();
     }
 };
 

@@ -45,6 +45,7 @@ void OutgoingTcpConnectionTests::test_send_replacesExistingThread()
     connection.setThread(std::move(initialThread));
 
     QVERIFY(connection.getThread().wasMethodCalled(CallTracker::RUN()) == false); // hasn't started yet
+    QCOMPARE(connection.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 0); // haven't used this Connection yet, so we haven't had to set up signal connections yet
 
     // 2. Call send() — this should shutdown the old thread and create a new one
     connection.send(packet);
@@ -59,6 +60,8 @@ void OutgoingTcpConnectionTests::test_send_replacesExistingThread()
     QTRY_VERIFY_WITH_TIMEOUT(newThread.getThreadIdCapturedInRun() != nullptr, 500);
 
     QVERIFY2(newThread.id() != initialThreadId, "send() did not replace the old thread with a new one");
+
+    QTRY_COMPARE_WITH_TIMEOUT(connection.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()),1, 500);
 }
 
 // receivedData() tests
@@ -73,5 +76,4 @@ void OutgoingTcpConnectionTests::testReceiveData()
     {
         QCOMPARE(e.what(), "Unsupported Operation: OutgoingTcpConnectionTestDouble cannot receive data");
     }
-
 }

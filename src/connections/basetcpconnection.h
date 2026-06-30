@@ -47,6 +47,8 @@ protected:
     std::unique_ptr<BaseTcpThread> thread_;
     virtual void terminateConnection();
 
+    void setupSignalConnections() override;
+
 private:
     // void setupSignalConnections();
 };

@@ -39,6 +39,7 @@ public:
     static QString CLOSE_CONNECTION() { return QStringLiteral("closeConnection"); }
     static QString SHOULD_STOP_PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("shouldStopPersistentConnectionLoop"); }
     static QString IS_INTERRUPTION_REQUESTED() { return QStringLiteral("isInterruptionRequested"); }
+    static QString SETUP_SIGNAL_CONNECTIONS() { return QStringLiteral("setupSignalConnections"); }
 
     // OutgoingTcpThread
     static QString PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("persistentConnectionLoop"); }

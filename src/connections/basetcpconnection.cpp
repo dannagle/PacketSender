@@ -70,6 +70,26 @@ void BaseTcpConnection::terminateConnection()
     }
 }
 
+void BaseTcpConnection::setupSignalConnections()
+{
+    if (!thread_) return;
+
+    connect(thread_.get(), &BaseTcpThread::packetReceived,
+            this, &Connection::dataReceived);
+
+    connect(thread_.get(), &BaseTcpThread::packetSent,
+            this, &Connection::packetSent);
+
+    connect(thread_.get(), &BaseTcpThread::connectionStatus,
+            this, &Connection::stateChanged);
+
+    connect(thread_.get(), &BaseTcpThread::errorMessage,
+            this, &Connection::errorOccurred);
+
+    connect(thread_.get(), &BaseTcpThread::disconnected,
+            this, &Connection::disconnected);
+}
+
 void BaseTcpConnection::close()
 {
     /*

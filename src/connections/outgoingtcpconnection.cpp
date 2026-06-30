@@ -23,7 +23,7 @@ void OutgoingTcpConnection::send(const Packet& packet)
         // Create fresh thread for this send
         thread_ = makeOutgoingTcpThread(packet);
 
-        // setupSignalConnections();
+        setupSignalConnections();
         thread_->start();
     }
     catch (const std::exception& e)

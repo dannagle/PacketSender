@@ -50,6 +50,12 @@ public:
     {
 
     }
+
+protected:
+    void setupSignalConnections() override
+    {
+
+    }
 };
 
 #endif //CONNECTIONTESTDOUBLE_H

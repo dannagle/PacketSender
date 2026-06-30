@@ -23,7 +23,7 @@ void IncomingTcpConnection::receiveData(const int socketDescriptor, const bool i
         // Create fresh thread for this send
         thread_ = makeIncomingTcpThread(socketDescriptor, isSecure, persistent);
 
-        // setupSignalConnections();
+        setupSignalConnections();
         thread_->start();
     }
     catch (const std::exception& e)
