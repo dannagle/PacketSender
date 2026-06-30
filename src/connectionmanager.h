@@ -38,6 +38,7 @@ public:
 
 signals:
     // Forwarded with connection ID prefix
+    void packetSent(quint64 id, const Packet& packet);
     void dataReceived(quint64 id, const Packet& packet);
     void stateChanged(quint64 id, const QString& message);
     void errorOccurred(quint64 id, const QString& errorString);
@@ -47,7 +48,7 @@ protected:
     std::unordered_map<quint64, std::unique_ptr<Connection>> connections;
     quint64 nextId = 1;
 
-    // void setupConnectionSignals(Connection* conn, quint64 id);
+    virtual void setupConnectionSignals(Connection* conn, quint64 id);
 };
 
 

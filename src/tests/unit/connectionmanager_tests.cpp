@@ -20,6 +20,16 @@ void ConnectionManagerTests::testCreateIncomingTcpConnection_returnsPair()
     QCOMPARE(pair.second->metaObject()->className(), "IncomingTcpConnection");
 }
 
+void ConnectionManagerTests::testCreateIncomingTcpConnection_callsSetupConnectionSignals()
+{
+    ConnectionManagerTestDouble manager;
+    QCOMPARE(manager.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 0);
+
+    manager.createIncomingTcpConnection();
+    QCOMPARE(manager.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 1);
+
+}
+
 // createOutgoingTcpConnection() tests
 void ConnectionManagerTests::testCreateOutgoingTcpConnection_returnsPair()
 {
@@ -30,6 +40,15 @@ void ConnectionManagerTests::testCreateOutgoingTcpConnection_returnsPair()
     QCOMPARE(manager.getMap().size(), 1);
     QCOMPARE(pair.first, 1);
     QCOMPARE(pair.second->metaObject()->className(), "OutgoingTcpConnection");
+}
+
+void ConnectionManagerTests::testCreateOutgoingTcpConnection_callsSetupConnectionSignals()
+{
+    ConnectionManagerTestDouble manager;
+    QCOMPARE(manager.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 0);
+
+    manager.createOutgoingTcpConnection();
+    QCOMPARE(manager.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 1);
 }
 
 void ConnectionManagerTests::testCreateMultipleConnections_idIncreasesMonotonically()

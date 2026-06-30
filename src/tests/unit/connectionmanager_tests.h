@@ -21,9 +21,11 @@ private slots:
 //
     // createIncomingTcpConnection() tests
     void testCreateIncomingTcpConnection_returnsPair();
+    void testCreateIncomingTcpConnection_callsSetupConnectionSignals();
 
     // createOutgoingTcpConnection() tests
     void testCreateOutgoingTcpConnection_returnsPair();
+    void testCreateOutgoingTcpConnection_callsSetupConnectionSignals();
 
     // create*() tests
     void testCreateMultipleConnections_idIncreasesMonotonically();
