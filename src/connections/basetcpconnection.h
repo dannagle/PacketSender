@@ -28,6 +28,7 @@ public:
     [[nodiscard]] bool isIncoming() const override;
 
     void send(const Packet& packet) override;
+    void receiveData(int socketDescriptor, bool isSecure = false, bool persistent = false) override;
     void close() override;
 
     // signals:

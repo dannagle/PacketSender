@@ -197,6 +197,19 @@ void BaseTcpConnectionTests::testSend_throwsRuntimeException()
     }
 }
 
+void BaseTcpConnectionTests::testReceiveData_throwsRuntimeException()
+{
+    try
+    {
+        BaseTcpConnectionTestDouble connection;
+        connection.receiveData(0);
+        QFAIL("BaseTcpConnection.receivedData() should have thrown");
+    } catch (std::runtime_error& e)
+    {
+        QCOMPARE(e.what(), "Unsupported Operation: BaseTcpConnectionTestDouble cannot receive data");
+    }
+}
+
 // terminate() tests
 void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
 {

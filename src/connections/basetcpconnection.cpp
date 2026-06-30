@@ -41,6 +41,17 @@ void BaseTcpConnection::send(const Packet& packet)
     throw std::runtime_error(errorMessage.toUtf8());
 }
 
+void BaseTcpConnection::receiveData(const int socketDescriptor, const bool isSecure, const bool persistent)
+{
+    Q_UNUSED(socketDescriptor);
+    Q_UNUSED(isSecure);
+    Q_UNUSED(persistent);
+
+    const auto errorMessage = "Unsupported Operation: "
+        + getClassName() + " cannot receive data";
+    throw std::runtime_error(errorMessage.toUtf8());
+}
+
 void BaseTcpConnection::terminateConnection()
 {
     qDebug() << qPrintable("in BaseTcpConnection::terminateConnection");

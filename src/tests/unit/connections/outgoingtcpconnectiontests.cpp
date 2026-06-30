@@ -60,3 +60,18 @@ void OutgoingTcpConnectionTests::test_send_replacesExistingThread()
 
     QVERIFY2(newThread.id() != initialThreadId, "send() did not replace the old thread with a new one");
 }
+
+// receivedData() tests
+void OutgoingTcpConnectionTests::testReceiveData()
+{
+    try
+    {
+        OutgoingTcpConnectionTestDouble connection;
+        connection.receiveData(0);
+        QFAIL("OutgoingTcpConnection.receivedData() should have thrown");
+    } catch (std::runtime_error& e)
+    {
+        QCOMPARE(e.what(), "Unsupported Operation: OutgoingTcpConnectionTestDouble cannot receive data");
+    }
+
+}

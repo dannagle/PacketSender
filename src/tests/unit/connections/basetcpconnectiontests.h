@@ -39,6 +39,9 @@ private slots:
     // send() tests
     void testSend_throwsRuntimeException();
 
+    // receiveData() tests
+    void testReceiveData_throwsRuntimeException();
+
     // terminate() tests
     void testTerminate_startState_threadIsDisconnected();
     void testTerminate_startState_threadIsNullptr();

@@ -14,6 +14,7 @@ class OutgoingTcpConnectionTests : public QObject
 private slots:
     void test_send_threadDoesNotExist();
     void test_send_replacesExistingThread();
+    void testReceiveData();
 };
 
 

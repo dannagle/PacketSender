@@ -48,7 +48,10 @@ public:
     explicit Connection(QObject* parent = nullptr);
     ~Connection() override;
 
+    // TCP methods
     virtual void send(const Packet& packet) = 0;
+    virtual void receiveData(int socketDescriptor, bool isSecure = false, bool persistent = false) = 0;
+
     virtual void close() = 0;
 
     [[nodiscard]] virtual QString id() const;
