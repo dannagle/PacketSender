@@ -328,8 +328,8 @@ public:
     }
 
     bool setSocketDescriptor(qintptr socketDescriptor,
-                             QAbstractSocket::SocketState state,
-                             QIODeviceBase::OpenMode openMode) override
+                            QAbstractSocket::SocketState state = QAbstractSocket::ConnectedState,
+                            QIODeviceBase::OpenMode openMode = QIODeviceBase::ReadWrite) override
     {
         mockSocketDescriptor = static_cast<int>(socketDescriptor);
         mockState = state;
