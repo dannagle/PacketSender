@@ -59,6 +59,10 @@ void BaseTcpThread::shutdown()
     closeConnection();             // Always try to clean up socket
 }
 
+bool BaseTcpThread::isThreadRunning() const
+{
+    return threadState.load() == ThreadState::Running || threadState.load() == ThreadState::Stopping;
+}
 
 QString BaseTcpThread::getThreadStateAsString() const
 {
