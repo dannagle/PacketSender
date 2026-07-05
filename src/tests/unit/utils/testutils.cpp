@@ -6,6 +6,8 @@
 
 #include "testutils.h"
 
+#include <QTcpServer>
+
 #include "settingnames.h"
 #include "globals.h"
 
@@ -112,4 +114,11 @@ bool TestUtils::qStringVectorEndsWith(const std::vector<QString>& vec, const std
 {
     if (suffix.size() > vec.size()) return false;
     return std::equal(suffix.begin(), suffix.end(), vec.end() - suffix.size());
+}
+
+QTcpServer& TestUtils::startQTcpServer()
+{
+    auto *server = new QTcpServer();
+    server->listen(QHostAddress::LocalHost);
+    return *server;
 }

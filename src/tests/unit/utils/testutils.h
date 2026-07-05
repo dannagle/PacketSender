@@ -6,6 +6,7 @@
 #define TESTUTILS_H
 
 #include <QtTest>
+#include <QTcpServer>
 
 #include "packet.h"
 #include "../testdoubles/MockSslSocket.h"
@@ -22,6 +23,7 @@ public:
 
     static bool qStringVectorStartsWith(const std::vector<QString>& vec, const std::vector<QString>& prefix);
     static bool qStringVectorEndsWith(const std::vector<QString>& vec, const std::vector<QString>& suffix);
+    static QTcpServer& startQTcpServer();
 };
 
 

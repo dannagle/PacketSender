@@ -17,16 +17,9 @@
 #include "settings.h"
 #include "utils/calltracker.h"
 
-QTcpServer& startQTcpServer()
-{
-    auto *server = new QTcpServer();
-    server->listen(QHostAddress::LocalHost);
-    return *server;
-}
-
 int getValidDescriptor()
 {
-    const int validDescriptor = static_cast<int>(startQTcpServer().socketDescriptor());
+    const int validDescriptor = static_cast<int>(TestUtils::startQTcpServer().socketDescriptor());
     QDEBUG() << "validDescriptor: " << validDescriptor;
     return validDescriptor;
 }
