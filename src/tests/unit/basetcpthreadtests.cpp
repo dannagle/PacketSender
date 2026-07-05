@@ -444,9 +444,10 @@ void BaseTcpThreadTests::testCloseConnection_CloseCalled()
     QCOMPARE(mockSock->closeCallCount, 1);
 }
 
-void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatus_Disconnected()
+void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatusDisconnected_whenSocketIsInConnectedState()
 {
     auto *mockSock = new MockSslSocket();
+    mockSock->setMockConnected(true); // sets state to QAbstractSocket::SocketState::Connected
 
     BaseTcpThreadTestDouble thread(mockSock);
     QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
@@ -457,14 +458,29 @@ void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatus_Disconnected(
     QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Disconnected");
 }
 
-void BaseTcpThreadTests::testCloseConnection_emitsDisconnectedSignal()
+void BaseTcpThreadTests::testCloseConnection_emitsConnectionStatusDisconnected_whenSocketIsInClosingState()
 {
     auto *mockSock = new MockSslSocket();
+    mockSock->setMockState(QAbstractSocket::SocketState::ClosingState);
 
     BaseTcpThreadTestDouble thread(mockSock);
-    QSignalSpy disconnectedStatusSpy(&thread, &BaseTcpThread::disconnected);
-    QCOMPARE(disconnectedStatusSpy.count(), 0);
+    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+    QCOMPARE(connectionStatusSpy.count(), 0);
 
     thread.callCloseConnection();
-    QCOMPARE(disconnectedStatusSpy.count(), 1);
+    QCOMPARE(connectionStatusSpy.count(), 1);
+    QCOMPARE(connectionStatusSpy.first().first().value<QString>(), "Disconnected");
+}
+
+void BaseTcpThreadTests::testCloseConnection_doesNotEmitConnectionStatusDisconnected_whenSocketIsNotClosingOrConnectedState()
+{
+    auto *mockSock = new MockSslSocket();
+    mockSock->setMockState(QAbstractSocket::SocketState::UnconnectedState);
+
+    BaseTcpThreadTestDouble thread(mockSock);
+    QSignalSpy connectionStatusSpy(&thread, &BaseTcpThread::connectionStatus);
+    QCOMPARE(connectionStatusSpy.count(), 0);
+
+    thread.callCloseConnection();
+    QCOMPARE(connectionStatusSpy.count(), 0);
 }

@@ -77,8 +77,9 @@ private slots:
     void testCloseConnection_SocketIsConnected_DisconnectFromHostCalled();
     void testCloseConnection_SocketIsClosing_DisconnectFromHostCalled();
     void testCloseConnection_CloseCalled();
-    void testCloseConnection_emitsConnectionStatus_Disconnected();
-    void testCloseConnection_emitsDisconnectedSignal();
+    void testCloseConnection_emitsConnectionStatusDisconnected_whenSocketIsInConnectedState();
+    void testCloseConnection_emitsConnectionStatusDisconnected_whenSocketIsInClosingState();
+    void testCloseConnection_doesNotEmitConnectionStatusDisconnected_whenSocketIsNotClosingOrConnectedState();
 };
 
 
