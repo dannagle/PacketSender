@@ -9,6 +9,17 @@
 #include <QDebug>
 #include<exception>
 
+
+Connection::State BaseTcpConnection::stateFromMessage(const QString& msg) const
+{
+    qDebug() << "BaseTcpConnection::stateFromMessage msg: " << msg;
+    if (auto it = messageToState.find(msg); it != messageToState.end()) {
+        qDebug() << "found " << msg;
+        return it->second;
+    }
+    return State::Active;   // default
+}
+
 BaseTcpConnection::BaseTcpConnection(QObject* parent)
     : Connection(parent)
 {

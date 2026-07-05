@@ -35,6 +35,7 @@ protected:
     virtual void terminateConnection();
 
     void setupSignalConnections() override;
+    State stateFromMessage(const QString& msg) const;
 };
 
 #endif // BASETCPCONNECTION_H
