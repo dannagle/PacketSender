@@ -38,13 +38,22 @@ BaseTcpThread::BaseTcpThread(PacketSenderQSslSocketInterface* socketInterface,
 
 BaseTcpThread::~BaseTcpThread()
 {
-    BaseTcpThread::shutdown();
+    if (isThreadRunning())
+    {
+        shutdown();   // stop and clean up
+    } else
+    {
+        // else already stopped - just clean up socket
+        closeConnection();
+    }
 }
 
 void BaseTcpThread::shutdown()
 {
-    if (isRunning())
+    if (isThreadRunning())
+        QDEBUG() << "We were running. Stopping.";
     {
+        threadState = ThreadState::Stopping;
         stop();                    // Use our own stop abstraction
         quit();                    // Ask event loop to exit
         bool finished = wait(2500); // Slightly longer timeout is safer
@@ -53,7 +62,9 @@ void BaseTcpThread::shutdown()
         {
             qWarning() << metaObject()->className() << "did not stop cleanly within timeout";
             terminate();           // Last resort
+            wait(2500); // Slightly longer timeout is safer
         }
+        threadState = ThreadState::Stopped;
     }
 
     closeConnection();             // Always try to clean up socket
@@ -78,7 +89,14 @@ QString BaseTcpThread::getThreadStateAsString() const
 
 void BaseTcpThread::stop()
 {
-    requestInterruption();
+    if (isThreadRunning())
+    {
+        QDEBUG() << "Thread was running";
+        requestInterruption();
+    } else
+    {
+        QDEBUG() << "Thread was not running";
+    }
 }
 
 bool BaseTcpThread::shouldStop() const
