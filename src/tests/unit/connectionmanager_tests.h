@@ -16,9 +16,6 @@ class ConnectionManagerTests : public QObject
 
 
 private slots:
-//     void init();
-//     void cleanup();
-//
     // createIncomingTcpConnection() tests
     void testCreateIncomingTcpConnection_returnsPair();
     void testCreateIncomingTcpConnection_callsSetupConnectionSignals();
