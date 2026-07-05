@@ -4,9 +4,6 @@
 
 #include "connectionmanager_tests.h"
 #include "testdoubles/connections/connectionmanagertestdouble.h"
-#include <QSignalSpy>
-
-
 
 // createIncomingTcpConnection() tests
 void ConnectionManagerTests::testCreateIncomingTcpConnection_returnsPair()
