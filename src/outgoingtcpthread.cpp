@@ -59,18 +59,33 @@ bool OutgoingTcpThread::isValid() const
     return BaseTcpThread::isValid();
 }
 
+void OutgoingTcpThread::run_debugMessage()
+{
+    qDebug() << "OutgoingTcpThread state at beginning of run(): " << getThreadStateAsString();
+    qDebug() << "=== OutgoingTcpThread::run() STARTED ===";
+    qDebug() << "QThread::currentThreadID:" << QThread::currentThreadId();
+    qDebug() << "Packet to send:" << sendPacket.toIP << ":" << sendPacket.port;
+}
+
 void OutgoingTcpThread::run()
 {
-    // === 1. Establish connection (plain TCP or SSL) ===
+    run_debugMessage();
+
     if (sendPacket.isSSL()) {
+        qDebug() << "Starting SSL handshake";
         if (!handleOutgoingSSL()) {
-            return;                    // SSL handshake failed - errors already emitted
+            qDebug() << "SSL handshake failed";
+            return;
         }
     } else {
+        qDebug() << "Starting plain TCP connect";
         if (!handleOutgoingPlainTCP()) {
-            return;                    // plain TCP connect failed - errors already emitted
+            qDebug() << "Plain TCP connect failed";
+            return;
         }
     }
+
+    qDebug() << "Connection established, sending packet";
 
     // === 2. We are now successfully connected (plain or SSL) ===
     if (sendPacket.delayAfterConnect > 0) {
@@ -88,7 +103,9 @@ void OutgoingTcpThread::run()
         persistentConnectionLoop();    // pure loop only
     }
 
-    closeConnection();                 // Single cleanup point for both single-shot and persistent
+    closeConnection();                 // Single cleanup point for
+
+    qDebug() << "OutgoingTcpThread::run() finished";
 }
 
 void OutgoingTcpThread::prepareOutgoingPacket()

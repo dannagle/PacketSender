@@ -76,8 +76,11 @@ protected:
     int         delayAfterConnect = 0;
 
 private:
+    // debug messages
     void outgoingConnectionDebugMessage(bool connectSuccess);
+    void run_debugMessage();
     void idleDebugMessage(bool isIdleCondition) const;
+
     mutable std::optional<QDateTime> lastIdleStatusEmitTime;
 };
 
