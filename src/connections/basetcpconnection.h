@@ -30,26 +30,11 @@ public:
     void receiveData(int socketDescriptor, bool isSecure = false, bool persistent = false) override;
     void close() override;
 
-    // signals:
-    // void dataReceived(const Packet& packet);
-    // void stateChanged(const QString& message);
-    // void errorOccurred(const QString& errorString);
-    // void disconnected();
-
-private slots:
-    // void onThreadPacketReceived(const Packet& p);
-    // void onThreadPacketSent(const Packet& p);
-    // void onThreadConnectionStatus(const QString& msg);
-    // void onThreadError(const QString& errorMsg);
-
 protected:
     std::unique_ptr<BaseTcpThread> thread_;
     virtual void terminateConnection();
 
     void setupSignalConnections() override;
-
-private:
-    // void setupSignalConnections();
 };
 
 #endif // BASETCPCONNECTION_H
