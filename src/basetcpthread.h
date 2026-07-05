@@ -52,7 +52,7 @@ public:
 
     std::unique_ptr<PacketSenderQSslSocketInterface> socketInterface;
 
-    signals:
+signals:
     void packetSent(const Packet& packet);
     void packetReceived(const Packet& packet);
     void connectionStatus(const QString& message);
