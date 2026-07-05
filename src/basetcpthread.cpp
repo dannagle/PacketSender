@@ -257,20 +257,24 @@ void BaseTcpThread::sendOutgoingPacket(Packet& packet)
 void BaseTcpThread::closeConnection()
 {
     const auto s = getSocketInterface();
-    if (s)
-    {
-        if (getSocketState() == QAbstractSocket::ConnectedState ||
-            getSocketState() == QAbstractSocket::ClosingState) {
+    if (!s) return;
+
+    bool shouldEmit = false;
+    if (getSocketState() == QAbstractSocket::ConnectedState ||
+        getSocketState() == QAbstractSocket::ClosingState) {
             QDEBUG() << "got inside if statement that calls disconnectFromHost()";
             s->disconnectFromHost();
             s->waitForDisconnected(500);  // shorter timeout is fine here
-            }
+            shouldEmit = true;
+        }
 
-        s->close();
+    s->close();
 
+    QDEBUG() << "shouldEmit in BaseTcpThread::closeConnection: " << shouldEmit;
+
+    if (shouldEmit)
+    {
         emit connectionStatus("Disconnected");
-        emit disconnected();
-        QDEBUG() << "Single packet sent. Disconnected.";
     }
 }
 
