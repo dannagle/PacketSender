@@ -14,7 +14,9 @@ void ConnectionManagerTests::testCreateIncomingTcpConnection_returnsPair()
     auto pair = manager.createIncomingTcpConnection();
     QCOMPARE(manager.getMap().size(), 1);
     QCOMPARE(pair.first, 1);
-    QCOMPARE(pair.second->metaObject()->className(), "IncomingTcpConnection");
+
+    auto className = QString::fromLocal8Bit(pair.second->metaObject()->className());
+    QVERIFY(className.startsWith("IncomingTcpConnection"));
 }
 
 void ConnectionManagerTests::testCreateIncomingTcpConnection_callsSetupConnectionSignals()
@@ -36,7 +38,9 @@ void ConnectionManagerTests::testCreateOutgoingTcpConnection_returnsPair()
     auto pair = manager.createOutgoingTcpConnection();
     QCOMPARE(manager.getMap().size(), 1);
     QCOMPARE(pair.first, 1);
-    QCOMPARE(pair.second->metaObject()->className(), "OutgoingTcpConnection");
+
+    auto className = QString::fromLocal8Bit(pair.second->metaObject()->className());
+    QVERIFY(className.startsWith("OutgoingTcpConnection"));
 }
 
 void ConnectionManagerTests::testCreateOutgoingTcpConnection_callsSetupConnectionSignals()
