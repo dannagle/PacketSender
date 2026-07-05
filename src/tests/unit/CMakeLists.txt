@@ -71,6 +71,7 @@ add_executable(${TEST_NAME}
     ../../fileutils.cpp
 
     ../../packetsender.qrc
+    ../../ConnectionStatusMessages.h
 )
 
 target_include_directories(${TEST_NAME} PRIVATE

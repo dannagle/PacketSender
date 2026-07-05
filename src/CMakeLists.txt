@@ -99,6 +99,7 @@ set(
   outgoingtcpthread.cpp
   incomingtcpthread.cpp
   fileutils.cpp
+  ConnectionStatusMessages.h
 )
 
 
