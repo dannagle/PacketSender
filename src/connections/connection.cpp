@@ -50,3 +50,17 @@ QString Connection::getClassName() const
 {
     return metaObject()->className();
 }
+
+std::ostream& operator<<(std::ostream& os, const Connection::State& state)
+{
+    switch (state)
+    {
+        case Connection::State::Created: os << "Created"; return os;
+        case Connection::State::Active: os << "Active"; return os;
+        case Connection::State::Inactive: os << "InActive"; return os;
+        case Connection::State::Idle: os << "Idle"; return os;
+        case Connection::State::Closing: os << "Closing"; return os;
+        case Connection::State::Closed: os << "Closed"; return os;
+        case Connection::State::Error: os << "Error"; return os;
+    }
+}

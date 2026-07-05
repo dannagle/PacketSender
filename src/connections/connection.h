@@ -91,5 +91,6 @@ protected:
     std::atomic<State> state_ = State::Created;
 };
 
+std::ostream& operator<<(std::ostream& os, const Connection::State& state);
 
 #endif //CONNECTION_H
