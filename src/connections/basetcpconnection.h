@@ -9,7 +9,6 @@
 #include <memory>
 
 #include "connection.h"
-#include "incomingtcpthread.h"
 #include "../packet.h"
 #include "../basetcpthread.h"
 
