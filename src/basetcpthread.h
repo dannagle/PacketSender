@@ -78,7 +78,6 @@ protected:
     virtual void loadSnakeOilCerts();
     virtual void loadSSLCerts(bool allowSnakeOil);
 
-    bool managedByConnection = false;
     bool closeRequest = false;
     bool shouldUseSSL = false;
     bool persistent = false;
