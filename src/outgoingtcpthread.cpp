@@ -9,7 +9,6 @@
 
 #include "realqsslsocket.h"
 #include "settingnames.h"
-#include "fileutils.h"
 
 OutgoingTcpThread::OutgoingTcpThread(PacketSenderQSslSocketInterface* socketInterface,
                                      const Packet& packetToSend,
