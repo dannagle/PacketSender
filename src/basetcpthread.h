@@ -61,6 +61,14 @@ signals:
     void disconnected();
 
 protected:
+    enum class ThreadState {
+        Created,
+        Running,
+        Stopping,
+        Stopped,
+        Error
+    };
+
     std::unique_ptr<PacketSenderQSslSocketInterface>& getSocketPtrByReference() {return socketInterface;}
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
     [[nodiscard]] virtual QByteArray readSocketData();
@@ -84,6 +92,7 @@ protected:
 
     void assignUniqueId();
     std::optional<QString> id_;
+    std::atomic<ThreadState> threadState = ThreadState::Created;
 
 #ifdef CONSOLE_MODE
     bool consoleMode = true;
