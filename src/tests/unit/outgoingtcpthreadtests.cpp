@@ -13,7 +13,7 @@
 #include "../../outgoingtcpthread.h"
 #include "../../packet.h"
 #include "testdoubles/MockSslSocket.h"
-#include "testdoubles/outgoingtchpthreadtestdouble.h"
+#include "testdoubles/outgoingtcpthreadtestdouble.h"
 
 
 // defaults are "127.0.0.1" and 9999 respectfully

@@ -7,7 +7,7 @@
 #include "settingnames.h"
 #include "../../packet.h"
 #include "testdoubles/MockSslSocket.h"
-#include "testdoubles/outgoingtchpthreadtestdouble.h"
+#include "testdoubles/outgoingtcpthreadtestdouble.h"
 #include "utils/testutils.h"
 
 void SingleSendOutgoingTcpThreadTests::testRun_SocketSuccessfullyConnected_emitsConnectionStatus_Connected()

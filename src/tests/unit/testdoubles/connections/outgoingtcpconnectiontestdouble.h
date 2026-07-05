@@ -9,7 +9,7 @@
 
 #include "../../connections/outgoingtcpconnection.h"
 #include "../../outgoingtcpthread.h"
-#include "../unit/testdoubles/outgoingtchpthreadtestdouble.h"
+#include "../unit/testdoubles/outgoingtcpthreadtestdouble.h"
 
 class OutgoingTcpConnectionTestDouble : public OutgoingTcpConnection, public CallTracker
 {
@@ -42,10 +42,27 @@ public:
     }
 
 protected:
+    // std::unique_ptr<OutgoingTcpThread> makeOutgoingTcpThread(const Packet& packet) override
+    // {
+    //     qDebug() << "makeOutgoingTcpThread override in OutgoingTcpConnectionTestDouble";
+    //     return std::make_unique<OutgoingTcpThreadTestDouble>(packet, this);
+    // }
+
     std::unique_ptr<OutgoingTcpThread> makeOutgoingTcpThread(const Packet& packet) override
     {
         qDebug() << "makeOutgoingTcpThread override in OutgoingTcpConnectionTestDouble";
-        return std::make_unique<OutgoingTcpThreadTestDouble>(packet, this);
+
+        auto thread = std::make_unique<OutgoingTcpThreadTestDouble>(packet, this);
+
+        // Set up mock socket
+        auto mockSocket = std::make_unique<MockSslSocket>();
+        mockSocket->setMockConnected(true);
+        mockSocket->setIsValid(true);
+        mockSocket->setMockState(QAbstractSocket::ConnectedState);
+
+        thread->setSocketForTest(mockSocket.release());
+
+        return thread;
     }
 
     void setupSignalConnections() override

@@ -7,7 +7,7 @@
 #include "fileutils.h"
 #include "settingnames.h"
 #include "utils/testutils.h"
-#include "testdoubles/outgoingtchpthreadtestdouble.h"
+#include "testdoubles/outgoingtcpthreadtestdouble.h"
 #include "testdoubles/MockSslSocket.h"
 
 void OutgoingTcpThreadConnectionTests::testHandleOutgoingPlainTCP_callsConnectToHost()
