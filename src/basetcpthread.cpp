@@ -203,8 +203,6 @@ bool BaseTcpThread::isSocketValid() const
 
 QAbstractSocket::NetworkLayerProtocol BaseTcpThread::getIPConnectionProtocol() const
 {
-    qWarning() << "does this go bang if we try to do !getSocketInterface(): " << !getSocketInterface();
-
     if (!getSocketInterface()) {
         qWarning() << "getIPConnectionProtocol() called on BaseTcpThread with null socket";
         return QAbstractSocket::IPv4Protocol;   // safe default
