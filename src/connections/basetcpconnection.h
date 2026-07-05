@@ -19,7 +19,7 @@ class BaseTcpConnection : public Connection
 public:
     explicit BaseTcpConnection(QObject* parent = nullptr);
 
-    ~BaseTcpConnection() override = default;
+    ~BaseTcpConnection() override;
 
     [[nodiscard]] bool isConnected() const override;
     [[nodiscard]] bool isSecure() const override;
