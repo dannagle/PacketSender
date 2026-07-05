@@ -91,11 +91,6 @@ protected:
     bool consoleMode = false;
 #endif
 
-
-// protected slots:
-//     virtual void onConnected();
-//     virtual void onSocketError(QSslSocket::SocketError error);
-//     virtual void onStateChanged(QAbstractSocket::SocketState state);
 };
 
 
