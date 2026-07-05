@@ -7,6 +7,7 @@
 #include <QMetaEnum>
 #include <QSslKey>
 
+#include "ConnectionStatusMessages.h"
 #include "realqsslsocket.h"
 #include "settingnames.h"
 
@@ -280,21 +281,34 @@ bool OutgoingTcpThread::handleOutgoingSSL()
 
 bool OutgoingTcpThread::handleOutgoingPlainTCP()
 {
+    QDEBUG() << "before connecting to host";
     getSocketInterface()->connectToHost(sendPacket.toIP,
                                sendPacket.port,
                                QIODevice::ReadWrite,
                                getIPConnectionProtocol());
 
-    bool success = getSocketInterface()->waitForConnected(5000);
+    QDEBUG() << "connected to host:";
+
+    const bool success = getSocketInterface()->waitForConnected(5000);
+    QDEBUG() << "waited up to 5 seconds. success: " << success;
     outgoingConnectionDebugMessage(success);
 
-    success ? emit connectionStatus("Connected") : handleConnectionFailure();
+    if (success)
+    {
+        QDEBUG() << "emitting connectionStatus connected";
+        emit connectionStatus(ConnectionStatusMessages::CONNECTED());
+        threadState = ThreadState::Running;
+    } else
+    {
+        handleConnectionFailure();
+    }
+
     return success;
 }
 
 void OutgoingTcpThread::handleConnectionFailure()
 {
-    emit connectionStatus("Could not connect.");
+    emit connectionStatus(ConnectionStatusMessages::COULD_NOT_CONNECT());
     emit errorMessage("Could not connect to " + sendPacket.toIP + ":" + QString::number(sendPacket.port));
 
     sendPacket.errorString = "Could not connect";
