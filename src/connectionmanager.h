@@ -7,6 +7,7 @@
 
 
 #include <memory>
+#include <QMutex>
 #include <unordered_map>
 #include <utility>
 
