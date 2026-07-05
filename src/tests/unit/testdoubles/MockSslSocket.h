@@ -85,10 +85,10 @@ public:
         return data.size();
     }
 
-    bool shouldWaitForDisconectedReturnTrue = true;
+    bool shouldWaitForDisconnectedReturnTrue = true;
     bool waitForDisconnected(int msecs) override
     {
-        return shouldWaitForDisconectedReturnTrue;
+        return shouldWaitForDisconnectedReturnTrue;
     }
 
     // === Certificate / Key variables ===
