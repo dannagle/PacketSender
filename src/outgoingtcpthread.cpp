@@ -241,9 +241,11 @@ bool OutgoingTcpThread::handleOutgoingSSL()
 {
     QDEBUG() << "Starting SSL connection to" << sendPacket.toIP << ":" << sendPacket.port;
     const auto sslSocketInterface = getSocketInterface();
+    threadState = ThreadState::Running;
     if (!sslSocketInterface) {
         qWarning() << "Failed to get QSslSocket";
         handleConnectionFailure();
+        threadState = ThreadState::Error;
         return false;
     }
 
