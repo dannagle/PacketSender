@@ -23,6 +23,8 @@ public:
     explicit ConnectionManager(QObject *parent = nullptr);
     ~ConnectionManager() override;
 
+    bool hasConnection(quint64 id);
+
     // Factory methods - explicit about type for future extensibility
     std::pair<quint64, IncomingTcpConnection*> createIncomingTcpConnection();
     std::pair<quint64, OutgoingTcpConnection*> createOutgoingTcpConnection();
@@ -49,6 +51,12 @@ protected:
     quint64 nextId = 1;
 
     virtual void setupConnectionSignals(Connection* conn, quint64 id);
+
+    virtual std::unique_ptr<OutgoingTcpConnection> createOutgoingTcpConnectionObject();
+    virtual std::unique_ptr<IncomingTcpConnection> createIncomingTcpConnectionObject();
+
+private:
+    QMutex mutex;   // protects thread shutdown
 };
 
 

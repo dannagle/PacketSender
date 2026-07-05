@@ -16,6 +16,11 @@ ConnectionManager::~ConnectionManager()
     shutdownAll();  // RAII: clean up on manager destruction
 }
 
+bool ConnectionManager::hasConnection(quint64 id)
+{
+    return connections.find(id) != connections.end();
+}
+
 void ConnectionManager::setupConnectionSignals(Connection* conn, quint64 id)
 {
     if (!conn) return;
@@ -41,32 +46,50 @@ void ConnectionManager::setupConnectionSignals(Connection* conn, quint64 id)
 
     connect(conn, &Connection::disconnected,
             this, [this, id]() {
-                emit disconnected(id);
+                if (
+                    const auto it = connections.find(id);
+                    it != connections.end() && it->second->isConnected())
+                {
+                    // QDEBUG() << "calling close() on connection in ConnectionManager::disconnect()";
+                    QDEBUG() << "removing connection from map in ConnectionManager::disconnect()";
+                    it->second->close();
+                    connections.erase(id);
+                    emit disconnected(id);
+                }
             });
+}
+
+std::unique_ptr<OutgoingTcpConnection> ConnectionManager::createOutgoingTcpConnectionObject()
+{
+    return std::make_unique<OutgoingTcpConnection>(this);
+}
+
+std::unique_ptr<IncomingTcpConnection> ConnectionManager::createIncomingTcpConnectionObject()
+{
+    return std::make_unique<IncomingTcpConnection>(this);
 }
 
 std::pair<quint64, IncomingTcpConnection*> ConnectionManager::createIncomingTcpConnection()
 {
-    auto conn = std::make_unique<IncomingTcpConnection>(this);
-
+    auto conn = createIncomingTcpConnectionObject();
     quint64 id = nextId++;
-    setupConnectionSignals(conn.get(), id);
 
     IncomingTcpConnection* rawPtr = conn.get();
     connections[id] = std::move(conn);
+    setupConnectionSignals(connections[id].get(), id);
 
     return {id, rawPtr};
 }
 
 std::pair<quint64, OutgoingTcpConnection*> ConnectionManager::createOutgoingTcpConnection()
 {
-    auto conn = std::make_unique<OutgoingTcpConnection>(this);
+    auto conn = createOutgoingTcpConnectionObject();
 
     quint64 id = nextId++;
-    setupConnectionSignals(conn.get(), id);
 
     OutgoingTcpConnection* rawPtr = conn.get();
     connections[id] = std::move(conn);
+    setupConnectionSignals(connections[id].get(), id);
 
     return {id, rawPtr};
 }
@@ -81,11 +104,23 @@ void ConnectionManager::send(quint64 id, const Packet &packet)
 
 void ConnectionManager::close(quint64 id)
 {
-    auto it = connections.find(id);
-    if (it != connections.end()) {
-        it->second->close();
-        connections.erase(it);
+    QMutexLocker locker(&mutex);
+    const auto it = connections.find(id);
+
+    if (it == connections.end()) {
+        QDEBUG() << "returning early from ConnectionManager::close()";
+        return;                     // early return — very clear
     }
+
+    if (it->second->isConnected()) {
+        QDEBUG() << "calling close on thread in ConnectionManager::close()";
+        it->second->close();
+        QDEBUG() << "called close on thread in ConnectionManager::close()";
+    }
+
+    QDEBUG() << "about to erase thread in ConnectionManager::close()";
+    connections.erase(it);
+    QDEBUG() << "erased thread in ConnectionManager::close()";
 }
 
 void ConnectionManager::shutdownAll()
