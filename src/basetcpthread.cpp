@@ -59,6 +59,19 @@ void BaseTcpThread::shutdown()
     closeConnection();             // Always try to clean up socket
 }
 
+
+QString BaseTcpThread::getThreadStateAsString() const
+{
+    switch (threadState.load())
+    {
+        case ThreadState::Created: return QStringLiteral("Created");
+        case ThreadState::Running: return QStringLiteral("Running");
+        case ThreadState::Stopping: return QStringLiteral("Stopping");
+        case ThreadState::Stopped: return QStringLiteral("Stopped");
+        case ThreadState::Error: return QStringLiteral("Error");
+    }
+}
+
 void BaseTcpThread::stop()
 {
     requestInterruption();

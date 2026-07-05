@@ -31,6 +31,7 @@ public:
     QString id() const;
 
     virtual void shutdown();
+    QString getThreadStateAsString() const;
     virtual void stop();
     [[nodiscard]] virtual bool shouldStop() const;
     virtual bool interruptibleWaitForReadyRead(int timeoutMs);
