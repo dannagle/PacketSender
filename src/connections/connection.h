@@ -48,6 +48,19 @@ public:
     explicit Connection(QObject* parent = nullptr);
     ~Connection() override;
 
+    enum class State {
+        Created,
+        Active,
+        Inactive,
+        Idle,
+        Closing,
+        Closed,
+        Error
+    };
+
+    [[nodiscard]] State getConnectionState() const {return state_;}
+    [[nodiscard]] QString getConnectionStateAsQstring() const;
+
     // TCP methods
     virtual void send(const Packet& packet) = 0;
     virtual void receiveData(int socketDescriptor, bool isSecure = false, bool persistent = false) = 0;
@@ -74,8 +87,9 @@ protected:
     virtual void setupSignalConnections() = 0;
 
     std::optional<QString> id_;
-};
 
+    std::atomic<State> state_ = State::Created;
+};
 
 
 #endif //CONNECTION_H
