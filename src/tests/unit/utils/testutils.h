@@ -24,6 +24,15 @@ public:
     static bool qStringVectorStartsWith(const std::vector<QString>& vec, const std::vector<QString>& prefix);
     static bool qStringVectorEndsWith(const std::vector<QString>& vec, const std::vector<QString>& suffix);
     static QTcpServer& startQTcpServer();
+
+    // Returns true if any signal in the spy matches the predicate
+    static bool signalSpyContains(QSignalSpy& spy,
+                           const std::function<bool(const QList<QVariant>&)>& predicate);
+
+    // Convenience overloads
+    static bool signalSpyContainsMessage(QSignalSpy& spy, const QString& message);
+    static bool signalSpyContainsMessageStartsWith(QSignalSpy& spy, const QString& prefix);
+    static bool signalSpyContainsMessageEndsWith(QSignalSpy& spy, const QString& suffix);
 };
 
 

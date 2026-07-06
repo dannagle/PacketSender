@@ -122,3 +122,35 @@ QTcpServer& TestUtils::startQTcpServer()
     server->listen(QHostAddress::LocalHost);
     return *server;
 }
+
+bool TestUtils::signalSpyContains(QSignalSpy& spy,
+                                  const std::function<bool(const QList<QVariant>&)>& predicate)
+{
+    for (const auto& args : spy) {
+        if (predicate(args)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool TestUtils::signalSpyContainsMessage(QSignalSpy& spy, const QString& message)
+{
+    return signalSpyContains(spy, [&](const QList<QVariant>& args) {
+        return !args.isEmpty() && args.first().toString() == message;
+    });
+}
+
+bool TestUtils::signalSpyContainsMessageStartsWith(QSignalSpy& spy, const QString& prefix)
+{
+    return signalSpyContains(spy, [&](const QList<QVariant>& args) {
+        return !args.isEmpty() && args.first().toString().startsWith(prefix);
+    });
+}
+
+bool TestUtils::signalSpyContainsMessageEndsWith(QSignalSpy& spy, const QString& suffix)
+{
+    return signalSpyContains(spy, [&](const QList<QVariant>& args) {
+        return !args.isEmpty() && args.first().toString().endsWith(suffix);
+    });
+}
