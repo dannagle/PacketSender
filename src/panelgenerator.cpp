@@ -110,7 +110,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     //remove menu options.
     ui->menuLoad->deleteLater();
     ui->menuSettings->deleteLater();
-    ui->menuExport->deleteLater();
 
 #endif
 
