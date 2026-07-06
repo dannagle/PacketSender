@@ -21,6 +21,8 @@ private slots:
     void testDefaultStateIsCreated();
     void testTerminate_TransitionsStateToClosing_whenThreadIsNullptr();
     void testTerminate_TransitionsStateToClosed_whenThreadIsNOTNullptr();
+    void testHandleOutgoingPlainTCP_success_setsConnectionStateToActive();
+    void testHandleOutgoingPlainTCP_unsuccessful_setsConnectionStateToInactive();
 };
 
 

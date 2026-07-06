@@ -10,6 +10,8 @@
 #include "connections/connection.h"
 #include "../testdoubles/connections/ConnectionTestDouble.h"
 #include "testdoubles/connections/BaseTcpConnectionTestDouble.h"
+#include "testdoubles/connections/outgoingtcpconnectiontestdouble.h"
+#include "utils/testutils.h"
 
 void ConnectionTests::testDefaultStateIsCreated()
 {
@@ -38,6 +40,49 @@ void ConnectionTests::testTerminate_TransitionsStateToClosed_whenThreadIsNOTNull
     connection.callTerminateConnection();
     QCOMPARE(connection.getConnectionState(), Connection::State::Closed);
 }
+
+void ConnectionTests::testHandleOutgoingPlainTCP_success_setsConnectionStateToActive()
+{
+    auto conn = OutgoingTcpConnectionTestDouble();
+    QDEBUG() << conn.id();
+    conn.desiredSocketConfigurationForTest =
+        OutgoingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_OUTGOING_PLAIN_TCP_SUCCESS;
+
+    QSignalSpy stateChangedSpy(&conn, &Connection::stateChanged);
+
+
+    Packet testPacket = TestUtils::createPacketForTest();
+    conn.send(testPacket);
+
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(
+            stateChangedSpy, ConnectionStatusMessages::CONNECTED()
+        ),
+    1500);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(conn.getConnectionState(), Connection::State::Active, 1000);
+}
+
+void ConnectionTests::testHandleOutgoingPlainTCP_unsuccessful_setsConnectionStateToInactive()
+{
+    auto conn = OutgoingTcpConnectionTestDouble();
+    QDEBUG() << conn.id();
+    conn.desiredSocketConfigurationForTest =
+        OutgoingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_OUTGOING_PLAIN_TCP_UNSUCCESSFUL;
+
+    QSignalSpy stateChangedSpy(&conn, &Connection::stateChanged);
+
+
+    Packet testPacket = TestUtils::createPacketForTest();
+    conn.send(testPacket);
+
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(
+            stateChangedSpy, ConnectionStatusMessages::COULD_NOT_CONNECT()
+        ),
+    1500);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(conn.getConnectionState(), Connection::State::Inactive, 1000);
+}
+
 
 
 void ConnectionTests::testConnectionConstructor_createsConnectionObjectWithID()
