@@ -16,8 +16,8 @@ class BaseTcpConnectionTests : public QObject
 
 private slots:
     // isConnected() tests
-    void testIsConnected_data();
-    void testIsConnected();
+    void testIsConnected_isNotDeterminedDirectlyBySocketConnectivity_data();
+    void testIsConnected_isNotDeterminedDirectlyBySocketConnectivity();
 
     // isSecure() tests
     void testIsSecure_data();

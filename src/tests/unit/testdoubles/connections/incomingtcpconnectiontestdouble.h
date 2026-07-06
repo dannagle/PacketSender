@@ -26,7 +26,7 @@ public:
     [[nodiscard]] IncomingTcpThreadTestDouble& getThread() const
     {
         if (!thread_) {
-            throw std::runtime_error("thread_ is null - send() was never called or failed to create the thread");
+            throw std::runtime_error("thread_ is null - receiveData() was never called or failed to create the thread");
         }
 
         auto* t = dynamic_cast<IncomingTcpThreadTestDouble*>(thread_.get());

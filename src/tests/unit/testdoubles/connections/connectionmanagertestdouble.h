@@ -5,6 +5,8 @@
 #ifndef CONNECTIONMANAGERTESTDOUBLE_H
 #define CONNECTIONMANAGERTESTDOUBLE_H
 #include "connectionmanager.h"
+#include "incomingtcpconnectiontestdouble.h"
+#include "outgoingtcpconnectiontestdouble.h"
 #include "utils/calltracker.h"
 
 class ConnectionManagerTestDouble: public ConnectionManager, public CallTracker
@@ -27,6 +29,16 @@ protected:
     {
         recordCall(SETUP_SIGNAL_CONNECTIONS());
         ConnectionManager::setupConnectionSignals(conn, id);
+    }
+
+    std::unique_ptr<OutgoingTcpConnection> createOutgoingTcpConnectionObject() override
+    {
+        return std::make_unique<OutgoingTcpConnectionTestDouble>();
+    }
+
+    std::unique_ptr<IncomingTcpConnection> createIncomingTcpConnectionObject() override
+    {
+        return std::make_unique<IncomingTcpConnectionTestDouble>();
     }
 
 };

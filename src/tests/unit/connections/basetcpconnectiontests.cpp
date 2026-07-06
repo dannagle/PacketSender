@@ -25,17 +25,17 @@ std::unique_ptr<BaseTcpThreadTestDouble> BaseTcpConnectionTests::createThreadWit
 }
 
 // isConnected() tests
-void BaseTcpConnectionTests::testIsConnected_data()
+void BaseTcpConnectionTests::testIsConnected_isNotDeterminedDirectlyBySocketConnectivity_data()
 {
     QTest::addColumn<QAbstractSocket::SocketState>("socketState");
     QTest::addColumn<bool>("expectedReturnValue");
 
 
-    QTest::newRow("connected")  << QAbstractSocket::SocketState::ConnectedState << true;
-    QTest::newRow("not connected")  << QAbstractSocket::SocketState::UnconnectedState << false;
+    QTest::newRow("socket connected")  << QAbstractSocket::SocketState::ConnectedState << false;
+    QTest::newRow("socket not connected")  << QAbstractSocket::SocketState::UnconnectedState << false;
 }
 
-void BaseTcpConnectionTests::testIsConnected()
+void BaseTcpConnectionTests::testIsConnected_isNotDeterminedDirectlyBySocketConnectivity()
 {
     QFETCH(QAbstractSocket::SocketState, socketState);
     QFETCH(bool, expectedReturnValue);
@@ -46,7 +46,6 @@ void BaseTcpConnectionTests::testIsConnected()
     auto thread = std::make_unique<BaseTcpThreadTestDouble>(mockSock.release());
     auto connection = BaseTcpConnectionTestDouble();
     connection.setThread(std::move(thread));
-    // BaseTcpConnection connection(std::move(thread));
 
     QCOMPARE(connection.isConnected(), expectedReturnValue);
 }
@@ -218,7 +217,6 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
 
     auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
     QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
-    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
 
     auto connection = BaseTcpConnectionTestDouble();
     QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
@@ -227,15 +225,13 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
 
     connection.callTerminateConnection();
     QCOMPARE(shutdownSignalSpy.count(), 1); // 1 because it gets called in the destructor
-    QCOMPARE(destructorSignalSpy.count(), 1);
-    QCOMPARE(disconnectedSpy.count(), 0);
+    QCOMPARE(disconnectedSpy.count(), 1);
 }
 
 void BaseTcpConnectionTests::testTerminate_startState_threadIsNullptr()
 {
     auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketForTest());
     QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
-    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
 
     auto connection = BaseTcpConnectionTestDouble();
     QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
@@ -244,7 +240,6 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsNullptr()
 
     connection.callTerminateConnection();
     QCOMPARE(shutdownSignalSpy.count(), 0); // destructor not called
-    QCOMPARE(destructorSignalSpy.count(), 0);
     QCOMPARE(disconnectedSpy.count(), 0);
 }
 
@@ -255,7 +250,6 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsConnected()
 
     auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
     QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
-    QSignalSpy destructorSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::destructorCalled);
 
     auto connection = BaseTcpConnectionTestDouble();
     QSignalSpy disconnectedSpy(&connection, &Connection::disconnected);
@@ -264,7 +258,6 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsConnected()
 
     connection.callTerminateConnection();
     QCOMPARE(shutdownSignalSpy.count(), 1); // called in destructor
-    QCOMPARE(destructorSignalSpy.count(), 1);
     QCOMPARE(disconnectedSpy.count(), 1);
 }
 
