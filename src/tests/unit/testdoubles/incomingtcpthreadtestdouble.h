@@ -70,6 +70,11 @@ public:
         persistent = isPersistent;
     }
 
+    void setShouldUseSSL(const bool shouldUseSSL)
+    {
+        this->shouldUseSSL = shouldUseSSL;
+    }
+
     bool shouldStop() const override
     {
         recordCall(CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP());

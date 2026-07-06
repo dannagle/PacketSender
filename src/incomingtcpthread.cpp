@@ -183,6 +183,8 @@ void IncomingTcpThread::performSSLHandshakeIfNeeded()
         return;
     }
 
+    emit connectionStatus(ConnectionStatusMessages::SSL_CONNECTED());
+
     // === 4. Emit diagnostic packets (this is the part that was in old TCPThread) ===
     emitSSLDiagnosticPackets();
 }

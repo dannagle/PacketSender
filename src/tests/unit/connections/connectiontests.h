@@ -21,6 +21,7 @@ private slots:
     void testDefaultStateIsCreated();
     void testSocketSuccessfullySetsSocketDescriptor_TransitionsStateToActive();
     void testSocketDisconnectedBeforeIncomingDataRead_TransitionsStateToInactive();
+    void testIncomingSSL_success_setsConnectionStateToActive();
     void testTerminate_TransitionsStateToClosing_whenThreadIsNullptr();
     void testTerminate_TransitionsStateToClosed_whenThreadIsNOTNullptr();
     void testHandleOutgoingPlainTCP_success_setsConnectionStateToActive();

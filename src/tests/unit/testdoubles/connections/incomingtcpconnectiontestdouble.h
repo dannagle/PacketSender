@@ -41,6 +41,7 @@ public:
     {
         HANDLE_INCOMING_PLAIN_TCP_SUCCESS,
         HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ,
+        HANDLE_INCOMING_SSL_SUCCESS
     };
 
     SocketConfigurationForTest desiredSocketConfigurationForTest = SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_SUCCESS;
@@ -49,15 +50,12 @@ public:
     {
         auto newThread = std::make_unique<IncomingTcpThreadTestDouble>(socketDescriptor, this);
         newThread->setPersistent(isPersistent);
+        newThread->setShouldUseSSL(isSecure);
 
         // Configure the mock socket before passing it to the thread
         auto mockSocket = configureSocketForTest();
         newThread->setSocketForTest(mockSocket.release());
 
-        // Set SSL state if needed
-        if (auto* mock = dynamic_cast<MockSslSocket*>(newThread->getSocketInterface())) {
-            mock->setMockEncrypted(isSecure);
-        }
         return newThread;
     }
 
@@ -77,6 +75,8 @@ private:
             return createIncomingPlainTcpSuccessful();
         case SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ:
             return createIncomingPlainTcpSocketUnconnected();
+        case SocketConfigurationForTest::HANDLE_INCOMING_SSL_SUCCESS:
+            return createSSlSuccessful();
         }
 
         // Fallback
@@ -91,6 +91,13 @@ private:
         mockSock->setMockState(QAbstractSocket::ConnectedState);
         mockSock->setMockConnected(true);
 
+        return mockSock;
+    }
+
+    std::unique_ptr<MockSslSocket> createSSlSuccessful()
+    {
+        auto mockSock = createIncomingPlainTcpSuccessful();
+        mockSock->setMockEncrypted(true);
         return mockSock;
     }
 
