@@ -178,7 +178,9 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 
     renderEditMode();
 
-
+    ui->actionWin_Package->setVisible(false);
+    ui->actionLinux_Package->setVisible(false);
+    ui->actionMac_Package->setVisible(false);
 
 }
 
