@@ -59,12 +59,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 
     packetNetwork = nullptr;
 
-
-
-    // not working... not sure if ever will work
-    ui->menuExport->deleteLater();
-
-
 #ifdef RENDER_ONLY
     QDEBUG() << " panel RENDER_ONLY mode";
 #else
@@ -116,7 +110,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
     //remove menu options.
     ui->menuLoad->deleteLater();
     ui->menuSettings->deleteLater();
-    ui->menuExport->deleteLater();
 
 #endif
 
@@ -184,7 +177,9 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 
     renderEditMode();
 
-
+    ui->actionWin_Package->setVisible(false);
+    ui->actionLinux_Package->setVisible(false);
+    ui->actionMac_Package->setVisible(false);
 
 }
 
