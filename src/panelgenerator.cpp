@@ -59,12 +59,6 @@ PanelGenerator::PanelGenerator(QWidget *parent) :
 
     packetNetwork = nullptr;
 
-
-
-    // not working... not sure if ever will work
-    ui->menuExport->deleteLater();
-
-
 #ifdef RENDER_ONLY
     QDEBUG() << " panel RENDER_ONLY mode";
 #else
