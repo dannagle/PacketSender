@@ -4,6 +4,7 @@
 
 #include "incomingtcpthread.h"
 #include "basetcpthread.h"
+#include "ConnectionStatusMessages.h"
 #include "realqsslsocket.h"
 #include "settingnames.h"
 
@@ -29,8 +30,16 @@ IncomingTcpThread::IncomingTcpThread(PacketSenderQSslSocketInterface* socketInte
                                      QObject* parent)
     : BaseTcpThread(socketInterface, parent)
 {
+    if (socketInterface->getSocketDescriptor() == 0)
+    {
+        throw std::runtime_error("Socket descriptor is zero");
+    }
+
     shouldUseSSL = isSecure;
     persistent = isPersistent;
+
+    // as much as we may want to emit `ConnectionStatus()` here, we can't because the signals
+    // don't get connected to the slots until after this constructor runs.
 }
 
 IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
@@ -60,9 +69,19 @@ Packet IncomingTcpThread::buildReceivedPacket()
     auto* sock = getSocketInterface();
     if (sock && sock->isValid() && (sock->getSocketState() == QAbstractSocket::ConnectedState)) {
         sock->waitForReadyRead(3000);           // reasonable timeout for first data
+
+        emit connectionStatus(ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED());
+
         QByteArray data = readSocketData();     // assuming this helper exists in Base
         p.hexString = Packet::byteArrayToHex(data);
         p.asciiString();                        // ensure ascii field is populated
+    } else
+    {
+        // we probably can't get here because the socket would have been validated in the constructor
+        // however, in an abundance of caution, it's possible we could have had a valid connection
+        // but not be connected to the socket despite the fact we set the socketDescriptor in the constructor
+        // which had to return true indicating a successful connection to the socket. "Anyway,"
+        emit connectionStatus(ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED());
     }
 
     return p;
@@ -196,8 +215,6 @@ void IncomingTcpThread::handleIncomingConnection()
         emit errorMessage("handleIncomingConnection: null socket interface");
         return;
     }
-
-    emit connectionStatus("Incoming connection accepted");
 
     performSSLHandshakeIfNeeded();
 

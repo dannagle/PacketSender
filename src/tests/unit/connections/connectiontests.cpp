@@ -10,6 +10,7 @@
 #include "connections/connection.h"
 #include "../testdoubles/connections/ConnectionTestDouble.h"
 #include "testdoubles/connections/BaseTcpConnectionTestDouble.h"
+#include "testdoubles/connections/incomingtcpconnectiontestdouble.h"
 #include "testdoubles/connections/outgoingtcpconnectiontestdouble.h"
 #include "utils/testutils.h"
 
@@ -19,6 +20,45 @@ void ConnectionTests::testDefaultStateIsCreated()
     QCOMPARE(connection.getConnectionState(), Connection::State::Created);
 }
 
+void ConnectionTests::testSocketSuccessfullySetsSocketDescriptor_TransitionsStateToActive()
+{
+    IncomingTcpConnectionTestDouble connection {};
+    QCOMPARE(connection.getConnectionState(), Connection::State::Created);
+
+    constexpr bool isSecure = false;
+    constexpr bool isPersistent = false;
+
+    QSignalSpy stateChangedSpy(&connection, &Connection::stateChanged);
+
+    connection.receiveData(TestUtils::startQTcpServer().socketDescriptor(), isSecure, isPersistent);
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(
+            stateChangedSpy, ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED()
+        ),
+    1500);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(connection.getConnectionState(), Connection::State::Active, 1000);
+}
+
+void ConnectionTests::testSocketDisconnectedBeforeIncomingDataRead_TransitionsStateToInactive()
+{
+    IncomingTcpConnectionTestDouble connection {};
+    QCOMPARE(connection.getConnectionState(), Connection::State::Created);
+
+    constexpr bool isSecure = false;
+    constexpr bool isPersistent = false;
+
+    QSignalSpy stateChangedSpy(&connection, &Connection::stateChanged);
+
+    connection.desiredSocketConfigurationForTest =
+        IncomingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ;
+    connection.receiveData(TestUtils::startQTcpServer().socketDescriptor(), isSecure, isPersistent);
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(
+            stateChangedSpy, ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED()
+        ),
+    1500);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(connection.getConnectionState(), Connection::State::Inactive, 1000);
+}
 
 void ConnectionTests::testTerminate_TransitionsStateToClosing_whenThreadIsNullptr()
 {

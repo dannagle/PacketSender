@@ -37,11 +37,27 @@ public:
         return *t;
     }
 
+    enum class SocketConfigurationForTest
+    {
+        HANDLE_INCOMING_PLAIN_TCP_SUCCESS,
+        HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ,
+    };
+
+    SocketConfigurationForTest desiredSocketConfigurationForTest = SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_SUCCESS;
+
     std::unique_ptr<IncomingTcpThread> makeIncomingTcpThread(int socketDescriptor, bool isSecure, bool isPersistent) override
     {
         auto newThread = std::make_unique<IncomingTcpThreadTestDouble>(socketDescriptor, this);
         newThread->setPersistent(isPersistent);
-        dynamic_cast<MockSslSocket*>(newThread->getSocketInterface())->setMockEncrypted(isSecure);
+
+        // Configure the mock socket before passing it to the thread
+        auto mockSocket = configureSocketForTest();
+        newThread->setSocketForTest(mockSocket.release());
+
+        // Set SSL state if needed
+        if (auto* mock = dynamic_cast<MockSslSocket*>(newThread->getSocketInterface())) {
+            mock->setMockEncrypted(isSecure);
+        }
         return newThread;
     }
 
@@ -51,6 +67,44 @@ protected:
         recordCall(SETUP_SIGNAL_CONNECTIONS());
         IncomingTcpConnection::setupSignalConnections();
     }
+
+private:
+    std::unique_ptr<MockSslSocket> configureSocketForTest()
+    {
+        switch (desiredSocketConfigurationForTest)
+        {
+        case SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_SUCCESS:
+            return createIncomingPlainTcpSuccessful();
+        case SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ:
+            return createIncomingPlainTcpSocketUnconnected();
+        }
+
+        // Fallback
+        return std::make_unique<MockSslSocket>();
+    }
+
+    std::unique_ptr<MockSslSocket> createIncomingPlainTcpSuccessful()
+    {
+        auto mockSock = std::make_unique<MockSslSocket>();
+
+        mockSock->setIsValid(true);
+        mockSock->setMockState(QAbstractSocket::ConnectedState);
+        mockSock->setMockConnected(true);
+
+        return mockSock;
+    }
+
+    std::unique_ptr<MockSslSocket> createIncomingPlainTcpSocketUnconnected()
+    {
+        auto mockSock = std::make_unique<MockSslSocket>();
+
+        mockSock->setIsValid(true);
+        mockSock->setMockState(QAbstractSocket::UnconnectedState);
+        mockSock->setMockConnected(false);
+
+        return mockSock;
+    }
+
 };
 
 #endif //INCOMINGTCPCONNECTIONTESTDOUBLE_H
