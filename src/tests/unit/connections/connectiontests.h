@@ -16,6 +16,11 @@ private slots:
 
     // getClassName() tests
     void testGetClassName();
+
+    // State tests
+    void testDefaultStateIsCreated();
+    void testTerminate_TransitionsStateToClosing_whenThreadIsNullptr();
+    void testTerminate_TransitionsStateToClosed_whenThreadIsNOTNullptr();
 };
 
 
