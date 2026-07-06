@@ -41,7 +41,8 @@ public:
     {
         HANDLE_INCOMING_PLAIN_TCP_SUCCESS,
         HANDLE_INCOMING_PLAIN_TCP_UNSUCCESSFUL_READ,
-        HANDLE_INCOMING_SSL_SUCCESS
+        HANDLE_INCOMING_SSL_SUCCESS,
+        HANDLE_INCOMING_SSL_FAILURE
     };
 
     SocketConfigurationForTest desiredSocketConfigurationForTest = SocketConfigurationForTest::HANDLE_INCOMING_PLAIN_TCP_SUCCESS;
@@ -77,6 +78,8 @@ private:
             return createIncomingPlainTcpSocketUnconnected();
         case SocketConfigurationForTest::HANDLE_INCOMING_SSL_SUCCESS:
             return createSSlSuccessful();
+        case SocketConfigurationForTest::HANDLE_INCOMING_SSL_FAILURE:
+            return createSslFailure();
         }
 
         // Fallback
@@ -98,6 +101,17 @@ private:
     {
         auto mockSock = createIncomingPlainTcpSuccessful();
         mockSock->setMockEncrypted(true);
+        return mockSock;
+    }
+
+    std::unique_ptr<MockSslSocket> createSslFailure()
+    {
+        auto mockSock = createIncomingPlainTcpSuccessful();
+        mockSock->setMockEncrypted(true);
+
+        const QList<QSslError> errors = { QSslError(QSslError::SelfSignedCertificate) };
+        mockSock->setMockSslErrors(errors);
+
         return mockSock;
     }
 

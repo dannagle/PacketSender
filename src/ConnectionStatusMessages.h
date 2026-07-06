@@ -15,6 +15,7 @@ public:
     static QString SENDING_DATA() { return QStringLiteral("Sending data: "); }
     static QString DISCONNECTED() { return QStringLiteral("Disconnected"); }
     static QString SSL_CONNECTED() { return QStringLiteral("SSL Connected"); }
+    static QString SSL_HANDSHAKE_FAILED() { return QStringLiteral("SSL Handshake Failed"); }
     static QString CONNECTED() { return QStringLiteral("Connected"); }
     static QString COULD_NOT_CONNECT() { return QStringLiteral("Could not connect."); }
     static QString CONNECTED_AND_IDLE() { return QStringLiteral("Connected and idle."); }

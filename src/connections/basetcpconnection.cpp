@@ -16,6 +16,7 @@ const std::unordered_map<QString, Connection::State> messageToState = {
     {ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED(), Connection::State::Active},
     {ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED(), Connection::State::Inactive},
     {ConnectionStatusMessages::SSL_CONNECTED(), Connection::State::Active},
+    {ConnectionStatusMessages::SSL_HANDSHAKE_FAILED(), Connection::State::Inactive},
     // {ConnectionStatusMessages::DISCONNECTED(), Connection::State::Idle},
     // {ConnectionStatusMessages::ERROR(), Connection::State::Error},
     // {ConnectionStatusMessages::CONNECTING(), Connection::State::Active},

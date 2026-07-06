@@ -80,6 +80,26 @@ void ConnectionTests::testIncomingSSL_success_setsConnectionStateToActive()
     QCOMPARE(conn.getConnectionState(), Connection::State::Active);
 }
 
+void ConnectionTests::testIncomingSSL_failure_setsConnectionStateToInactive()
+{
+    IncomingTcpConnectionTestDouble conn;
+    conn.desiredSocketConfigurationForTest =
+        IncomingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_INCOMING_SSL_FAILURE;
+
+    QSignalSpy stateChangedSpy(&conn, &Connection::stateChanged);
+
+    constexpr bool isSecure = true;
+    constexpr bool isPersistent = false;
+
+    conn.receiveData(TestUtils::startQTcpServer().socketDescriptor(), isSecure, isPersistent);
+
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_CONNECTED()),
+        1500);
+
+    QCOMPARE(conn.getConnectionState(), Connection::State::Active);
+}
+
 void ConnectionTests::testTerminate_TransitionsStateToClosing_whenThreadIsNullptr()
 {
     BaseTcpConnectionTestDouble connection {};
