@@ -21,7 +21,7 @@ void OutgoingTcpConnection::send(const Packet& packet)
     try
     {
         // Create fresh thread for this send
-        thread_ = makeOutgoingTcpThread(packet);
+        thread_ = std::move(makeOutgoingTcpThread(packet));
 
         setupSignalConnections();
         thread_->start();
