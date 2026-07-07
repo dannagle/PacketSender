@@ -10,6 +10,7 @@
 
 #include "settingnames.h"
 #include "globals.h"
+#include "connections/connection.h"
 
 void TestUtils::debugSpy(const QSignalSpy& spy)
 {
@@ -163,4 +164,50 @@ bool TestUtils::signalSpyContainsMessageEndsWith(QSignalSpy& spy, const QString&
     return signalSpyContains(spy, [&](const QList<QVariant>& args) {
         return !args.isEmpty() && args.first().toString().endsWith(suffix);
     });
+}
+
+int TestUtils::signalSpyCountMessage(QSignalSpy& spy, const QString& message)
+{
+    int count = 0;
+    for (const auto& args : spy) {
+        if (!args.isEmpty() && args.first().toString() == message) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int TestUtils::signalSpyCountMessageStartsWith(QSignalSpy& spy, const QString& prefix)
+{
+    int count = 0;
+    for (const auto& args : spy) {
+        if (!args.isEmpty() && args.first().toString().startsWith(prefix)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int TestUtils::signalSpyCountMessageEndsWith(QSignalSpy& spy, const QString& suffix)
+{
+    int count = 0;
+    for (const auto& args : spy) {
+        if (!args.isEmpty() && args.first().toString().endsWith(suffix)) {
+            count++;
+        }
+    }
+    return count;
+}
+
+constexpr std::string_view TestUtils::toString(Connection::State state) {
+    switch (state) {
+    case Connection::State::Created:  return "Created";
+    case Connection::State::Active:   return "Active";
+    case Connection::State::Inactive: return "Inactive";
+    case Connection::State::Idle:     return "Idle";
+    case Connection::State::Closing:  return "Closing";
+    case Connection::State::Closed:   return "Closed";
+    case Connection::State::Error:    return "Error";
+    }
+    return "Unknown";
 }

@@ -10,6 +10,7 @@
 
 #include "packet.h"
 #include "../testdoubles/MockSslSocket.h"
+#include "connections/connection.h"
 
 class TestUtils
 {
@@ -34,6 +35,12 @@ public:
     static bool signalSpyContainsMessage(QSignalSpy& spy, const QString& message);
     static bool signalSpyContainsMessageStartsWith(QSignalSpy& spy, const QString& prefix);
     static bool signalSpyContainsMessageEndsWith(QSignalSpy& spy, const QString& suffix);
+
+    // Count helpers
+    static int signalSpyCountMessage(QSignalSpy& spy, const QString& message);
+    static int signalSpyCountMessageStartsWith(QSignalSpy& spy, const QString& prefix);
+    static int signalSpyCountMessageEndsWith(QSignalSpy& spy, const QString& suffix);
+    static constexpr std::string_view toString(Connection::State state);
 };
 
 
