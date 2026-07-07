@@ -60,11 +60,32 @@ public:
         return newThread;
     }
 
+    std::vector<Connection::State> states;
+
+    QString printStates() const
+    {
+        QStringList list;
+
+        for (const auto state : states)
+        {
+            list << Connection::stateToString(state);
+        }
+
+        return list.join(",");
+    }
+
 protected:
     void setupSignalConnections() override
     {
         recordCall(SETUP_SIGNAL_CONNECTIONS());
         IncomingTcpConnection::setupSignalConnections();
+    }
+
+    void setState(State state) override
+    {
+        QDEBUG() << "setState in IncomingTcpConnection";
+        states.push_back(state);
+        BaseTcpConnection::setState(state);
     }
 
 private:
@@ -109,8 +130,7 @@ private:
         auto mockSock = createIncomingPlainTcpSuccessful();
         mockSock->setMockEncrypted(true);
 
-        const QList<QSslError> errors = { QSslError(QSslError::SelfSignedCertificate) };
-        mockSock->setMockSslErrors(errors);
+        mockSock->makeWaitForEncryptedReturnFalse = true;
 
         return mockSock;
     }

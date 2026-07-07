@@ -52,6 +52,20 @@ public:
 
     SocketConfigurationForTest desiredSocketConfigurationForTest = SocketConfigurationForTest::DEFAULT;
 
+    std::vector<Connection::State> states;
+
+    QString printStates() const
+    {
+        QStringList list;
+
+        for (const auto state : states)
+        {
+            list << Connection::stateToString(state);
+        }
+
+        return list.join(",");
+    }
+
 protected:
     std::unique_ptr<OutgoingTcpThread> makeOutgoingTcpThread(const Packet& packet) override
     {
@@ -69,6 +83,14 @@ protected:
         recordCall(SETUP_SIGNAL_CONNECTIONS());
         OutgoingTcpConnection::setupSignalConnections();
     }
+
+    void setState(State state) override
+    {
+        states.push_back(state);
+        BaseTcpConnection::setState(state);
+    }
+
+
 private:
     std::unique_ptr<MockSslSocket> defaultSocketConditions()
     {

@@ -48,6 +48,22 @@ public:
         return state_;
     }
 
+    std::vector<Connection::State> states;
+
+    QString printStates() const
+    {
+
+        QStringList list;
+
+        for (const auto state : states)
+        {
+            list << Connection::stateToString(state);
+        }
+
+        return list.join(",");
+    }
+
+
     // ═════════════════════════════════════════════════════════════════════════════
     //                              CALL* SECTION
     // ═════════════════════════════════════════════════════════════════════════════
@@ -80,6 +96,12 @@ protected:
     {
         recordCall(TERMINATE_CONNECTION());
         BaseTcpConnection::terminateConnection();
+    }
+
+    void setState(State state) override
+    {
+        states.emplace_back(state);
+        BaseTcpConnection::setState(state);
     }
 
 };

@@ -48,14 +48,15 @@ public:
     QSslCipher sessionCipher() const override { return mockCipher; }
 
     bool makeWaitForConnectedReturnFalse = false;
-    bool waitForConnected(int msecs = 30000) override { qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; return makeWaitForConnectedReturnFalse? false: mockConnected; }
+    bool makeWaitForEncryptedReturnFalse = false;
+    bool waitForConnected(int msecs = 30000) override { /* qDebug() << "=== MOCK waitForConnected called → returning" << mockConnected; */ return makeWaitForConnectedReturnFalse? false: mockConnected; }
     bool waitForEncrypted(int msecs = 30000) override
     {
         qDebug() << "=== MOCK waitForEncrypted called → returning" << mockEncrypted;
         recordCall(WAIT_FOR_ENCRYPTED());
-        return mockEncrypted;
+        return mockEncrypted && !makeWaitForEncryptedReturnFalse; // if mockSocket->makeWaitForConnectedReturnFalse == true, we want the function to return false
     }
-    bool isEncrypted() const override {qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; return mockEncrypted; }
+    bool isEncrypted() const override { /* qDebug() << "=== MOCK isEncrypted called → returning" << mockEncrypted; */ return mockEncrypted; }
     bool waitForReadyRead(int msecs) override
     {
         // this is a down and dirty implementation
