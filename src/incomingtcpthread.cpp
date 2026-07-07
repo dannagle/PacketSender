@@ -32,6 +32,7 @@ IncomingTcpThread::IncomingTcpThread(PacketSenderQSslSocketInterface* socketInte
 {
     if (socketInterface->getSocketDescriptor() == 0)
     {
+        QDEBUG() << "before throwing: socket descriptor is 0";
         throw std::runtime_error("Socket descriptor is zero");
     }
 
