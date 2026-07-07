@@ -54,6 +54,7 @@ int main(int argc, char *argv[])
     runGuiTest(new OutgoingTcpThreadPersistentConnectionLoopTests());
     runGuiTest(new OutgoingTcpThreadConnectionTests());
     runGuiTest(new IncomingTcpThreadTests());
+    runGuiTest(new ConnectionManagerTests());
 
     // Then non-GUI or independent tests
     // runNonGuiTest(new TcpThreadTests());
@@ -62,7 +63,6 @@ int main(int argc, char *argv[])
     runNonGuiTest(new IncomingTcpConnectionTests());
     runNonGuiTest(new OutgoingTcpConnectionTests());
     runNonGuiTest(new ConnectionTests());
-    runNonGuiTest(new ConnectionManagerTests());
 
     if (failures == 0) {
         qInfo() << "All tests passed!";
