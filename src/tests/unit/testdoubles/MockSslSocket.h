@@ -338,6 +338,11 @@ public:
         return shouldSetDescriptorSucceed;
     }
 
+    void setMockSocketDescriptor(int socketDescriptor)
+    {
+        this->mockSocketDescriptor = socketDescriptor;
+    }
+
 private:
     bool mockConnected = false;
     bool mockEncrypted = false;

@@ -11,7 +11,7 @@
 
 void IncomingTcpConnectionTests::testIsIncoming()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto conn = std::make_unique<IncomingTcpConnectionTestDouble>();
     conn->setThread(std::move(thread));
     QCOMPARE(conn->isIncoming(), true);
@@ -19,7 +19,7 @@ void IncomingTcpConnectionTests::testIsIncoming()
 
 void IncomingTcpConnectionTests::testSend_throwsRuntimeException()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = std::make_unique<IncomingTcpConnectionTestDouble>();
 
     const auto p = TestUtils::createPacketForTest();
@@ -47,7 +47,7 @@ void IncomingTcpConnectionTests::test_receiveData_threadDoesNotExist()
     constexpr bool isPersistent = false;
     auto connection = IncomingTcpConnectionTestDouble();
 
-    connection.receiveData(0, isSecure, isPersistent);
+    connection.receiveData(555, isSecure, isPersistent);
 
     // Wait up to 500ms for the RUN() call to be recorded
     QTRY_VERIFY_WITH_TIMEOUT(
@@ -84,7 +84,7 @@ void IncomingTcpConnectionTests::test_receiveData_replacesExistingThread()
     QCOMPARE(connection.getCallCount(CallTracker::SETUP_SIGNAL_CONNECTIONS()), 0);
 
     // 2. Call send() — this should shutdown the old thread and create a new one
-    connection.receiveData(0, isSecure, isPersistent);
+    connection.receiveData(777, isSecure, isPersistent);
 
     // 3. Verify the old thread was cleaned up
     // Wait up to 500ms for the RUN() call to be recorded

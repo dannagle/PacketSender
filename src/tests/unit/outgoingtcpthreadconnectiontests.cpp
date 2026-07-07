@@ -4,6 +4,7 @@
 
 #include "outgoingtcpthreadconnectiontests.h"
 
+#include "ConnectionStatusMessages.h"
 #include "fileutils.h"
 #include "settingnames.h"
 #include "utils/testutils.h"
@@ -423,7 +424,7 @@ void OutgoingTcpThreadConnectionTests::testRun_SSL_success()
 
     QVERIFY(thread.wasMethodCalled("handleOutgoingSSL"));
     QCOMPARE(connectionStatusSpy.count(), 3);  // Connected, Sending data, Disconnected
-    QCOMPARE(connectionStatusSpy.at(0).at(0).value<QString>(), "SSL Connected");
+    QCOMPARE(connectionStatusSpy.at(0).at(0).value<QString>(), ConnectionStatusMessages::SSL_CONNECTED());
 }
 
 void OutgoingTcpThreadConnectionTests::testRun_SSL_handshakeFailure()

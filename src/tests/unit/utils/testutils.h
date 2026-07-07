@@ -18,6 +18,7 @@ public:
     static Packet createPacketForTest();
     static Packet createIdlePacketForTest();
     static MockSslSocket* createMockSocketForTest();
+    static MockSslSocket* createMockSocketWithSocketDescriptorOtherThan0();
     static QString extractResourceToTempFile(const QString& resourcePath);
     static void setupProductionSnakeOilCertsForTest();
 

@@ -60,6 +60,16 @@ MockSslSocket* TestUtils::createMockSocketForTest()
     return mockSock;
 }
 
+MockSslSocket* TestUtils::createMockSocketWithSocketDescriptorOtherThan0()
+{
+    auto mockSock = createMockSocketForTest();
+
+    mockSock->setMockSocketDescriptor(555);
+
+    return mockSock;
+
+}
+
 QString TestUtils::extractResourceToTempFile(const QString& resourcePath)
 {
     QFile resource(resourcePath);

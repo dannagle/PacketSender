@@ -71,7 +71,10 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNul
     QFETCH(bool, isSecure);
     QFETCH(QString, protocolName);
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), isSecure);
+    auto mockSock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+
+    auto thread = IncomingTcpThreadTestDouble(mockSock, isSecure);
+    QDEBUG() << "Does setting socket to nullptr go boom?";
     thread.setSocketForTest(nullptr);
 
     const auto returnedPacket = thread.callBuildReceivedPacket();
@@ -93,7 +96,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNul
 
 void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsInvalid()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setIsValid(false);
 
     auto thread = IncomingTcpThreadTestDouble(sock);
@@ -104,7 +107,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsInv
 
 void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceState_isNotConnected()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setMockState(QAbstractSocket::SocketState::UnconnectedState);
 
     auto thread = IncomingTcpThreadTestDouble(sock);
@@ -118,7 +121,7 @@ void IncomingTcpThreadTests::testBuildInitialReceivedPacket_socketInterfaceIsNot
     const QString mockDataString = "foo bar baz";
     QByteArray mockReadData = mockDataString.toUtf8();
 
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setMockReadData(mockReadData);
 
     auto thread = IncomingTcpThreadTestDouble(sock);
@@ -148,7 +151,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_SendResponseSetting_
     settings.setValue(SEND_RESPONSE, false);
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -163,7 +166,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_SendResponseSetting_
     settings.setValue(RESPONSE_HEX, "response that will never be sent");
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -179,7 +182,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_ResponseHexSetting_i
     settings.setValue(RESPONSE_HEX, "");
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -194,7 +197,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_ResponseHexSetting_i
     settings.setValue(SEND_RESPONSE, true);
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -210,7 +213,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath()
     settings.setValue(RESPONSE_HEX, "0F BA BA");
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -228,7 +231,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath_withMacr
     settings.setValue(RESPONSE_HEX, "7B 7B 43 4F 55 4E 54 45 52 7D 7D"); // hex for {COUNTER}
     settings.sync();
 
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
 
     auto p = TestUtils::createPacketForTest();
@@ -242,7 +245,7 @@ void IncomingTcpThreadTests::testSendSmartReplyIfConfigured_successPath_withMacr
 // emitSSLDiagnosticPackets() tests
 void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_socketNullptr_emits0SentPackets()
 {
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     thread.setSocketForTest(nullptr);
 
     QSignalSpy packetSentSpy(&thread, &BaseTcpThread::packetSent);
@@ -252,7 +255,7 @@ void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_socketNullptr_emits0Se
 
 void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_socketNotEncrypted_emits0SentPackets()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setMockEncrypted(false);
 
     auto thread = IncomingTcpThreadTestDouble(sock);
@@ -275,7 +278,7 @@ Packet normalizeDiagnosticSslPacket(const Packet &packet)
 
 void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_successPath()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setMockEncrypted(true);
 
     auto thread = IncomingTcpThreadTestDouble(sock);
@@ -339,7 +342,7 @@ void IncomingTcpThreadTests::testEmitSSLDiagnosticPackets_successPath()
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_shouldUseSslIsFalse_doesNotCallSSLMethods()
 {
     constexpr bool shouldUseSSL = false;
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -352,7 +355,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_shouldUseSslIsFalse
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_socketInterfaceIsNullptr_emitsErrorMessage()
 {
     constexpr bool shouldUseSSL = true;
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), shouldUseSSL);
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0(), shouldUseSSL);
     thread.setSocketForTest(nullptr);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -382,7 +385,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSet
     QFETCH(int, loadSSLCertsCallCount);
 
     constexpr bool shouldUseSSL = true;
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), shouldUseSSL);
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0(), shouldUseSSL);
 
     if (useSnakeOil.has_value())
     {
@@ -412,7 +415,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors()
     QFETCH(int, ignoreSSlErrorsCallCount);
 
     constexpr bool shouldUseSSL = true;
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
 
     if (ignoreSslErrorsSetting.has_value())
@@ -429,7 +432,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_ignoreSSLErrors()
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callStartServerEncryption()
 {
     constexpr bool shouldUseSSL = true;
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
 
     thread.callPerformSSLHandshakeIfNeeded();
@@ -438,7 +441,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callStartServerEncr
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasNoErrors()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->setMockEncrypted(true);
 
     constexpr bool shouldUseSSL = true;
@@ -453,7 +456,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->mockSSLHandshakeShouldSucceed = false;
 
     constexpr bool shouldUseSSL = true;
@@ -469,7 +472,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypted_hasErrors_doesNotCallEmitSSLDiagnosisPackets()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->mockSSLHandshakeShouldSucceed = false;
 
     constexpr bool shouldUseSSL = true;
@@ -483,7 +486,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_callWaitForEncrypte
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_successPath_callsEmitSSLDiagnosisPackets()
 {
     constexpr bool shouldUseSSL = true;
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     sock->mockSSLHandshakeShouldSucceed = true;
 
     auto thread = IncomingTcpThreadTestDouble(sock, shouldUseSSL);
@@ -496,7 +499,7 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_successPath_callsEm
 // handleIncomingConnection() tests
 void IncomingTcpThreadTests::testHandleIncomingConnection_socketInterfaceIsNullptr_emitsErrorMessage()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock);
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
 
@@ -508,7 +511,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_socketInterfaceIsNullp
 
 void IncomingTcpThreadTests::testHandleIncomingConnection_emitsConnectionStatus_incomingConnectionAccepted()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -522,7 +525,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_emitsConnectionStatus_
 
 void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -541,7 +544,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
 
 void IncomingTcpThreadTests::testHandleIncomingConnection_successPath_emitsReceivedPacket()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     auto thread = IncomingTcpThreadTestDouble(sock);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -570,7 +573,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath_emitsRecei
 
 void IncomingTcpThreadTests::testRun_exitsEarly_ifSocketInterfaceIsNullPtr()
 {
-    auto sock = TestUtils::createMockSocketForTest();
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
 
     auto thread = IncomingTcpThreadTestDouble(sock);
     thread.setSocketForTest(nullptr);
@@ -585,7 +588,7 @@ void IncomingTcpThreadTests::testRun_exitsEarly_ifSocketInterfaceIsNullPtr()
 
 void IncomingTcpThreadTests::testRun_callSequence()
 {
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     thread.callRun();
 
     // we only care about the calls made directly from run()
@@ -599,7 +602,7 @@ void IncomingTcpThreadTests::testRun_callSequence_withPersistence()
 {
     constexpr bool isPersistent = true;
     constexpr bool isSecure = false;
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest(), isSecure, isPersistent);
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0(), isSecure, isPersistent);
     thread.callRun();
 
     // we only care about the calls made directly from run()
@@ -629,7 +632,7 @@ void IncomingTcpThreadTests::testRun_callSequence_withPersistence()
 // persistentConnectionLoop() tests
 void IncomingTcpThreadTests::testPersistentConnectionLoop_socketInterfaceIsNullptr()
 {
-    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketForTest());
+    auto thread = IncomingTcpThreadTestDouble(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     thread.setSocketForTest(nullptr);
 
     thread.callPersistentConnectionLoop();
@@ -638,7 +641,7 @@ void IncomingTcpThreadTests::testPersistentConnectionLoop_socketInterfaceIsNullp
 
 void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath()
 {
-    auto mockSock = TestUtils::createMockSocketForTest();
+    auto mockSock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     const QByteArray data = "Mary had a little lamb";
     mockSock->setMockReadData(data);
     mockSock->setMockConnected(true);
@@ -662,7 +665,7 @@ void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath()
 
 void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath_emitsReceivedPacket()
 {
-    auto mockSock = TestUtils::createMockSocketForTest();
+    auto mockSock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     const QByteArray data = "Mary had a little lamb";
     mockSock->setMockReadData(data);
     mockSock->setMockConnected(true);

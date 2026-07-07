@@ -105,7 +105,7 @@ void BaseTcpConnectionTests::testIsSecure()
 // isIncoming() tests
 void BaseTcpConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpThread()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = BaseTcpConnectionTestDouble();
     connection.setThread(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
@@ -113,7 +113,7 @@ void BaseTcpConnectionTests::testIsIncoming_returnsTrue_whenThreadIsIncomingTcpT
 
 void BaseTcpConnectionTests::testIsIncoming_returnsFalse_whenThreadIsOutgoingTcpThread()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = BaseTcpConnectionTestDouble();
     connection.setThread(std::move(thread));
     QCOMPARE(connection.isIncoming(), true);
@@ -135,7 +135,7 @@ void BaseTcpConnectionTests::testIsPersistent_Incoming()
     QFETCH(bool, isPersistent);
 
     constexpr bool isEncrypted = false;
-    const auto socket = TestUtils::createMockSocketForTest();
+    const auto socket = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
 
     auto thread = std::make_unique<IncomingTcpThread>(socket, isEncrypted, isPersistent);
 
@@ -171,7 +171,7 @@ void BaseTcpConnectionTests::testIsPersistent_Outgoing()
 
 void BaseTcpConnectionTests::testGetClassName()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = BaseTcpConnectionTestDouble();
     connection.setThread(std::move(thread));
     QCOMPARE(connection.callGetClassName(), "BaseTcpConnectionTestDouble");
@@ -179,7 +179,7 @@ void BaseTcpConnectionTests::testGetClassName()
 
 void BaseTcpConnectionTests::testSend_throwsRuntimeException()
 {
-    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = BaseTcpConnectionTestDouble();
     connection.setThread(std::move(thread));
 
@@ -212,7 +212,7 @@ void BaseTcpConnectionTests::testReceiveData_throwsRuntimeException()
 // terminate() tests
 void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
 {
-    auto mockSock = TestUtils::createMockSocketForTest();
+    auto mockSock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     mockSock->setMockState(QAbstractSocket::SocketState::UnconnectedState);
 
     auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
@@ -230,7 +230,7 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsDisconnected()
 
 void BaseTcpConnectionTests::testTerminate_startState_threadIsNullptr()
 {
-    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     QSignalSpy shutdownSignalSpy(thread.get(), &IncomingTcpThreadTestDouble::shutdownCalled);
 
     auto connection = BaseTcpConnectionTestDouble();
@@ -245,7 +245,7 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsNullptr()
 
 void BaseTcpConnectionTests::testTerminate_startState_threadIsConnected()
 {
-    auto mockSock = TestUtils::createMockSocketForTest();
+    auto mockSock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
     mockSock->setMockState(QAbstractSocket::SocketState::ConnectedState);
 
     auto thread = std::make_unique<IncomingTcpThreadTestDouble>(mockSock);
@@ -264,7 +264,7 @@ void BaseTcpConnectionTests::testTerminate_startState_threadIsConnected()
 // close() tests
 void BaseTcpConnectionTests::testClose_callsTerminate()
 {
-    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketForTest());
+    auto thread = std::make_unique<IncomingTcpThreadTestDouble>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = BaseTcpConnectionTestDouble();
 
     connection.setThread(std::move(thread));
