@@ -46,6 +46,8 @@ public:
         DEFAULT,
         HANDLE_OUTGOING_PLAIN_TCP_SUCCESS,
         HANDLE_OUTGOING_PLAIN_TCP_UNSUCCESSFUL,
+        HANDLE_OUTGOING_SSL_SUCCESS,
+        HANDLE_OUTGOING_SSL_UNSUCCESSFUL,
     };
 
     SocketConfigurationForTest desiredSocketConfigurationForTest = SocketConfigurationForTest::DEFAULT;
@@ -96,6 +98,34 @@ private:
 
         return mockSocket;
     }
+
+    std::unique_ptr<MockSslSocket> makeHandleSslTcpSuccessful()
+    {
+        QDEBUG() << "called makeHandlePlainTcpSuccessful()";
+        auto mockSocket = defaultSocketConditions();
+
+        mockSocket->setMockEncrypted(true);
+        mockSocket->shouldCallConnectToHost = false;
+
+        return mockSocket;
+    }
+
+    std::unique_ptr<MockSslSocket> makeHandleSslTcpUnsuccessful()
+    {
+        QDEBUG() << "called makeHandlePlainTcpSuccessful()";
+        auto mockSocket = defaultSocketConditions();
+
+        mockSocket->setMockEncrypted(true);
+
+        QList<QSslError> errors = { QSslError(QSslError::SelfSignedCertificate) };
+        mockSocket->setMockSslErrors(errors);
+
+        mockSocket->shouldCallConnectToHost = false;
+        mockSocket->makeWaitForConnectedReturnFalse = true;
+
+        return mockSocket;
+    }
+
     std::unique_ptr<MockSslSocket> configureSocketForTest()
     {
         switch (desiredSocketConfigurationForTest)
@@ -103,11 +133,10 @@ private:
             case SocketConfigurationForTest::DEFAULT: return defaultSocketConditions();
             case SocketConfigurationForTest::HANDLE_OUTGOING_PLAIN_TCP_SUCCESS: return makeHandlePlainTcpSuccessful();
             case SocketConfigurationForTest::HANDLE_OUTGOING_PLAIN_TCP_UNSUCCESSFUL: return makeHandlePlainTcpUnsuccessful();
+            case SocketConfigurationForTest::HANDLE_OUTGOING_SSL_SUCCESS: return makeHandleSslTcpSuccessful();
+            case SocketConfigurationForTest::HANDLE_OUTGOING_SSL_UNSUCCESSFUL: return makeHandleSslTcpUnsuccessful();
         }
     }
 };
-
-static_assert(!std::is_abstract_v<OutgoingTcpConnectionTestDouble>,
-          "This class is still abstract");
 
 #endif //OUTGOINGTCPCONNECTIONTESTDOUBLE_H

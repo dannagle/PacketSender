@@ -23,6 +23,8 @@ private slots:
     void testSocketDisconnectedBeforeIncomingDataRead_TransitionsStateToInactive();
     void testIncomingSSL_success_setsConnectionStateToActive();
     void testIncomingSSL_failure_setsConnectionStateToInactive();
+    void testHandleOutgoingSSL_success_setsConnectionStateToActive();
+    void testHandleOutgoingSSL_failure_setsConnectionStateToInactive();
     void testTerminate_TransitionsStateToClosing_whenThreadIsNullptr();
     void testTerminate_TransitionsStateToClosed_whenThreadIsNOTNullptr();
     void testHandleOutgoingPlainTCP_success_setsConnectionStateToActive();

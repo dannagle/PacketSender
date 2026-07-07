@@ -100,6 +100,44 @@ void ConnectionTests::testIncomingSSL_failure_setsConnectionStateToInactive()
     QCOMPARE(conn.getConnectionState(), Connection::State::Active);
 }
 
+void ConnectionTests::testHandleOutgoingSSL_success_setsConnectionStateToActive()
+{
+    auto conn = OutgoingTcpConnectionTestDouble();
+    conn.desiredSocketConfigurationForTest =
+        OutgoingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_OUTGOING_SSL_SUCCESS;
+
+    QSignalSpy stateChangedSpy(&conn, &Connection::stateChanged);
+
+    Packet testPacket = TestUtils::createPacketForTest();  // assume you have this helper
+    testPacket.tcpOrUdp = "SSL";
+    conn.send(testPacket);
+
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_CONNECTED()),
+        2000);
+
+    QCOMPARE(conn.getConnectionState(), Connection::State::Active);
+}
+
+void ConnectionTests::testHandleOutgoingSSL_failure_setsConnectionStateToInactive()
+{
+    auto conn = OutgoingTcpConnectionTestDouble();
+    conn.desiredSocketConfigurationForTest =
+        OutgoingTcpConnectionTestDouble::SocketConfigurationForTest::HANDLE_OUTGOING_SSL_UNSUCCESSFUL;
+
+    QSignalSpy stateChangedSpy(&conn, &Connection::stateChanged);
+
+    Packet testPacket = TestUtils::createPacketForTest();  // assume you have this helper
+    testPacket.tcpOrUdp = "SSL";
+    conn.send(testPacket);
+
+    QTRY_VERIFY_WITH_TIMEOUT(
+        TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_HANDSHAKE_FAILED()),
+        2000);
+
+    QCOMPARE(conn.getConnectionState(), Connection::State::Inactive);
+}
+
 void ConnectionTests::testTerminate_TransitionsStateToClosing_whenThreadIsNullptr()
 {
     BaseTcpConnectionTestDouble connection {};
