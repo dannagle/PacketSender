@@ -68,10 +68,13 @@ Packet IncomingTcpThread::buildReceivedPacket()
     p.fromPort = getPeerPort();
 
     auto* sock = getSocketInterface();
-    if (sock && sock->isValid() && (sock->getSocketState() == QAbstractSocket::ConnectedState)) {
+    if (sock && sock->isValid() && (sock->getSocketState() == QAbstractSocket::ConnectedState) && !hasSslError) {
         sock->waitForReadyRead(3000);           // reasonable timeout for first data
 
-        emit connectionStatus(ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED());
+        if (!shouldUseSSL)
+        {
+            emit connectionStatus(ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED());
+        }
 
         QByteArray data = readSocketData();     // assuming this helper exists in Base
         p.hexString = Packet::byteArrayToHex(data);
@@ -180,6 +183,9 @@ void IncomingTcpThread::performSSLHandshakeIfNeeded()
     sock->startServerEncryption();
 
     if (!sock->waitForEncrypted(5000)) {
+        QDEBUG() << "emitting SSL Error message in IncomingTcpThread";
+        emit connectionStatus(ConnectionStatusMessages::SSL_HANDSHAKE_FAILED());
+        hasSslError = true;
         emit errorMessage("Incoming SSL handshake failed (waitForEncrypted timeout)");
         return;
     }

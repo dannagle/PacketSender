@@ -96,6 +96,8 @@ protected:
     std::optional<QString> id_;
     std::atomic<ThreadState> threadState = ThreadState::Created;
 
+    bool hasSslError = false;
+
 #ifdef CONSOLE_MODE
     bool consoleMode = true;
 #else

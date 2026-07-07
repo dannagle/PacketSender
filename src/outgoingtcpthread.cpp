@@ -270,10 +270,11 @@ bool OutgoingTcpThread::handleOutgoingSSL()
     outgoingConnectionDebugMessage(connected && encrypted);
 
     if (connected && encrypted) {
-        emit connectionStatus("SSL Connected");
+        emit connectionStatus(ConnectionStatusMessages::SSL_CONNECTED());
         handleOutgoingSSLHandshakeSuccess();
         return true;
     } else {
+        emit connectionStatus(ConnectionStatusMessages::SSL_HANDSHAKE_FAILED());
         handleOutgoingSSLHandshakeFailure();
         return false;
     }
