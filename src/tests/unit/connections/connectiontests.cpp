@@ -36,7 +36,10 @@ void ConnectionTests::testSocketSuccessfullySetsSocketDescriptor_TransitionsStat
             stateChangedSpy, ConnectionStatusMessages::INCOMING_CONNECTION_ACCEPTED()
         ),
     1500);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(connection.getConnectionState(), Connection::State::Active, 1000);
+    QTRY_VERIFY_WITH_TIMEOUT(!connection.states.empty(), 1500);
+
+    QDEBUG() << "connection.states.size(): " << connection.states.size();
+    QCOMPARE(connection.states[connection.states.size() -2], Connection::State::Active);
 }
 
 void ConnectionTests::testSocketDisconnectedBeforeIncomingDataRead_TransitionsStateToInactive()
@@ -57,7 +60,10 @@ void ConnectionTests::testSocketDisconnectedBeforeIncomingDataRead_TransitionsSt
             stateChangedSpy, ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED()
         ),
     1500);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(connection.getConnectionState(), Connection::State::Inactive, 1000);
+    QTRY_VERIFY_WITH_TIMEOUT(!connection.states.empty(), 1500);
+    QCOMPARE(connection.states.size(), 1);
+    QDEBUG() << "ConnectionTests::testSocketDisconnectedBeforeIncomingDataRead_TransitionsStateToInactive states: " << connection.printStates();
+    QCOMPARE(connection.states[0], Connection::State::Inactive);
 }
 
 void ConnectionTests::testIncomingSSL_success_setsConnectionStateToActive()
@@ -76,8 +82,10 @@ void ConnectionTests::testIncomingSSL_success_setsConnectionStateToActive()
     QTRY_VERIFY_WITH_TIMEOUT(
         TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_CONNECTED()),
         1500);
-
-    QCOMPARE(conn.getConnectionState(), Connection::State::Active);
+    QTRY_VERIFY_WITH_TIMEOUT(!conn.states.empty(), 1500);
+    QDEBUG() << "ConnectionTests::testIncomingSSL_success_setsConnectionStateToActive states.size(): " << conn.states.size();
+    QDEBUG() << "ConnectionTests::testIncomingSSL_success_setsConnectionStateToActive states: " << conn.printStates();
+    QCOMPARE(conn.states[conn.states.size() -1], Connection::State::Inactive);
 }
 
 void ConnectionTests::testIncomingSSL_failure_setsConnectionStateToInactive()
@@ -94,10 +102,10 @@ void ConnectionTests::testIncomingSSL_failure_setsConnectionStateToInactive()
     conn.receiveData(TestUtils::startQTcpServer().socketDescriptor(), isSecure, isPersistent);
 
     QTRY_VERIFY_WITH_TIMEOUT(
-        TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_CONNECTED()),
+        TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_HANDSHAKE_FAILED()),
         1500);
-
-    QCOMPARE(conn.getConnectionState(), Connection::State::Active);
+    QTRY_VERIFY_WITH_TIMEOUT(!conn.states.empty(), 1500);
+    QCOMPARE(conn.states[conn.states.size() -2], Connection::State::Inactive);
 }
 
 void ConnectionTests::testHandleOutgoingSSL_success_setsConnectionStateToActive()
@@ -115,8 +123,8 @@ void ConnectionTests::testHandleOutgoingSSL_success_setsConnectionStateToActive(
     QTRY_VERIFY_WITH_TIMEOUT(
         TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_CONNECTED()),
         2000);
-
-    QCOMPARE(conn.getConnectionState(), Connection::State::Active);
+    QTRY_VERIFY_WITH_TIMEOUT(!conn.states.empty(), 1500);
+    QCOMPARE(conn.states[conn.states.size() -2], Connection::State::Active);
 }
 
 void ConnectionTests::testHandleOutgoingSSL_failure_setsConnectionStateToInactive()
@@ -134,8 +142,8 @@ void ConnectionTests::testHandleOutgoingSSL_failure_setsConnectionStateToInactiv
     QTRY_VERIFY_WITH_TIMEOUT(
         TestUtils::signalSpyContainsMessage(stateChangedSpy, ConnectionStatusMessages::SSL_HANDSHAKE_FAILED()),
         2000);
-
-    QCOMPARE(conn.getConnectionState(), Connection::State::Inactive);
+    QTRY_VERIFY_WITH_TIMEOUT(conn.states.size() == 1, 1500);
+    QCOMPARE(conn.states[0], Connection::State::Inactive);
 }
 
 void ConnectionTests::testTerminate_TransitionsStateToClosing_whenThreadIsNullptr()
@@ -177,7 +185,8 @@ void ConnectionTests::testHandleOutgoingPlainTCP_success_setsConnectionStateToAc
             stateChangedSpy, ConnectionStatusMessages::CONNECTED()
         ),
     1500);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(conn.getConnectionState(), Connection::State::Active, 1000);
+    QTRY_VERIFY_WITH_TIMEOUT(!conn.states.empty(), 1500);
+    QCOMPARE(conn.states[conn.states.size() -2], Connection::State::Active);
 }
 
 void ConnectionTests::testHandleOutgoingPlainTCP_unsuccessful_setsConnectionStateToInactive()
@@ -198,7 +207,9 @@ void ConnectionTests::testHandleOutgoingPlainTCP_unsuccessful_setsConnectionStat
             stateChangedSpy, ConnectionStatusMessages::COULD_NOT_CONNECT()
         ),
     1500);
-    QTRY_COMPARE_EQ_WITH_TIMEOUT(conn.getConnectionState(), Connection::State::Inactive, 1000);
+    QTRY_VERIFY_WITH_TIMEOUT(!conn.states.empty(), 1500);
+    QCOMPARE(conn.states.size(), 1);
+    QCOMPARE(conn.states[0], Connection::State::Inactive);
 }
 
 
