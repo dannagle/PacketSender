@@ -19,17 +19,23 @@ Connection::~Connection()
 
 QString Connection::getConnectionStateAsQstring() const
 {
-    switch (state_.load())
+    return stateToString(state_);
+}
+
+QString Connection::stateToString(const State state)
+{
+    switch (state)
     {
-        case State::Created: return "Created";
-        case State::Active: return "Active";
-        case State::Inactive: return "Inactive";
-        case State::Idle: return "Idle";
-        case State::Closing: return "Closing";
-        case State::Closed: return "Closed";
-        case State::Error: return "Error";
+    case State::Created: return "Created";
+    case State::Active: return "Active";
+    case State::Inactive: return "Inactive";
+    case State::Idle: return "Idle";
+    case State::Closing: return "Closing";
+    case State::Closed: return "Closed";
+    case State::Error: return "Error";
     }
 }
+
 
 QString Connection::id() const
 {

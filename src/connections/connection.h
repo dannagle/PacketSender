@@ -60,6 +60,7 @@ public:
 
     [[nodiscard]] State getConnectionState() const {return state_;}
     [[nodiscard]] QString getConnectionStateAsQstring() const;
+    [[nodiscard]] static QString stateToString(State state);
 
     // TCP methods
     virtual void send(const Packet& packet) = 0;

@@ -36,6 +36,7 @@ protected:
 
     void setupSignalConnections() override;
     State stateFromMessage(const QString& msg) const;
+    virtual void setState(State state);
 };
 
 #endif // BASETCPCONNECTION_H

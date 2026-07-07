@@ -17,7 +17,7 @@ const std::unordered_map<QString, Connection::State> messageToState = {
     {ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED(), Connection::State::Inactive},
     {ConnectionStatusMessages::SSL_CONNECTED(), Connection::State::Active},
     {ConnectionStatusMessages::SSL_HANDSHAKE_FAILED(), Connection::State::Inactive},
-    // {ConnectionStatusMessages::DISCONNECTED(), Connection::State::Idle},
+    {ConnectionStatusMessages::DISCONNECTED(), Connection::State::Inactive},
     // {ConnectionStatusMessages::ERROR(), Connection::State::Error},
     // {ConnectionStatusMessages::CONNECTING(), Connection::State::Active},
 };
@@ -29,7 +29,13 @@ Connection::State BaseTcpConnection::stateFromMessage(const QString& msg) const
         qDebug() << "found " << msg;
         return it->second;
     }
-    return State::Active;   // default
+    qDebug() << "did not find " << msg;
+    return State::Error;   // default
+}
+
+void BaseTcpConnection::setState(State state)
+{
+    state_ = state;
 }
 
 BaseTcpConnection::BaseTcpConnection(QObject* parent)
@@ -138,10 +144,13 @@ void BaseTcpConnection::setupSignalConnections()
 
     connect(thread_.get(), &BaseTcpThread::connectionStatus,
         this, [this](const QString& msg) {
-            QDEBUG() << "does thread exist in lambda " << !(!this->thread_);
-            // QDEBUG() << "internal thread_ id for thread calling lambda " << this->thread_->id();
             qDebug() << "connectionStatus lambda executed with msg: " << msg;
-            state_ = stateFromMessage(msg);
+
+            if (msg.startsWith("Sending data: ") && state_.load() == State::Active) return;
+
+            setState(stateFromMessage(msg));
+            QDEBUG() << "state_ is now: " << getConnectionStateAsQstring();
+
             emit stateChanged(msg);
         }, Qt::DirectConnection);
 
