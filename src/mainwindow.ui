@@ -269,6 +269,15 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTP Query</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTP Post</string>
               </property>
               <property name="icon">
@@ -306,6 +315,15 @@
              <item>
               <property name="text">
                <string>HTTPS Get</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>HTTPS Query</string>
               </property>
               <property name="icon">
                <iconset resource="packetsender.qrc">
