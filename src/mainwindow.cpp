@@ -1594,6 +1594,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             QString method = "GET";  // default
             if (upperText.contains("POST"))        method = "POST";
             else if (upperText.contains("PUT"))    method = "PUT";
+            else if (upperText.contains("QUERY"))    method = "QUERY";
             else if (upperText.contains("DELETE")) method = "DELETE";
             else if (upperText.contains("PATCH"))  method = "PATCH";
 
@@ -2757,15 +2758,16 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     }
 
     const auto isGet    = selectedText.contains("get");
+    const auto isQuery  = selectedText.contains("query");
     const auto isPost   = selectedText.contains("post");
     const auto isPut    = selectedText.contains("put");
     const auto isPatch  = selectedText.contains("patch");
     const auto isDelete = selectedText.contains("delete");
 
-    const bool shouldShowDataField = isPost || isPut || isPatch || isDelete;
+    const bool shouldShowDataField = isQuery || isPost || isPut || isPatch || isDelete;
 
-    // Use nice HTTP UI for GET/POST/PUT/PATCH/DELETE on both http and https
-    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isPatch || isDelete);
+    // Use nice HTTP UI for GET/QUERY/POST/PUT/PATCH/DELETE on both http and https
+    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isQuery || isPost || isPut || isPatch || isDelete);
 
     /////////////////////////////////dtls add line edit for adding path for cert
 

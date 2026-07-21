@@ -1103,12 +1103,21 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
         QHash<QString, QString> bonusHeaders = Settings::getRawHTTPHeaders(sendpacket.toIP);
 
+        QDEBUG() << "=== Bonus Headers ===";
+        QDEBUG() << "bonusHeaders.size(): " << bonusHeaders.size();
+        for (auto it = bonusHeaders.constBegin(); it != bonusHeaders.constEnd(); ++it) {
+            QDEBUG() << it.key() << ":" << it.value();
+        }
 
-        //QDEBUGVAR(sendpacket.toIP);
-        //QDEBUGVAR(sendpacket.requestPath);
         QDEBUGVAR(url);
-        //return;
+
         QNetworkRequest request = QNetworkRequest(QUrl(url));
+
+        // Apply user-defined headers first (from Settings)
+        foreach(QString key, bonusHeaders.keys()) {
+            QDEBUG()<<"Setting header" << key << bonusHeaders[key];
+            request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
+        }
 
         sendpacket.fromIP = "You";
         sendpacket.fromPort = 0;
@@ -1117,10 +1126,6 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         }
 
         http->setProperty("persistent", sendpacket.persistent);
-        foreach(QString key, bonusHeaders.keys()) {
-            QDEBUG()<<"Setting header" << key << bonusHeaders[key];
-            request.setRawHeader(key.toLatin1(), bonusHeaders[key].toLatin1());
-        }
 
         if(translateMacroSend) {
             QString data = Packet::macroSwap(sendpacket.asciiString());
@@ -1130,43 +1135,49 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         QByteArray bytes = sendpacket.getByteArray();
         QString bytes_trimmed = QString(bytes.trimmed());
 
-        if(sendpacket.isPOST()) {
-            request.setHeader(QNetworkRequest::ContentTypeHeader,
-                "application/x-www-form-urlencoded");
+        // === AUTO CONTENT-TYPE DETECTION (only if not already set) ===
+        bool hasBody = sendpacket.isPOST() || sendpacket.isPUT() ||
+                       sendpacket.isPATCH() || sendpacket.isQUERY() ||
+                       (sendpacket.isDELETE() && !bytes.isEmpty());
 
-            if(Settings::detectJSON_XML()) {
+        if (hasBody && !request.hasRawHeader("Content-Type")) {
 
-                if ((bytes_trimmed.startsWith("{") && bytes_trimmed.endsWith("}")) ||
-                    (bytes_trimmed.startsWith("[") && bytes_trimmed.endsWith("]")) )  {
-                    request.setHeader(QNetworkRequest::ContentTypeHeader,
-                        "application/json");
-                }
+            QString contentType = "application/x-www-form-urlencoded";
+            QString trimmed = QString(sendpacket.getByteArray()).trimmed();
 
-
-                if (bytes_trimmed.startsWith("<") && bytes_trimmed.endsWith(">")) {
-                    request.setHeader(QNetworkRequest::ContentTypeHeader,
-                        "application/xml");
+            if (Settings::detectJSON_XML()) {
+                if ((trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+                    (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
+                    contentType = "application/json";
+                    }
+                else if (trimmed.startsWith("<") && trimmed.endsWith(">")) {
+                    contentType = "application/xml";
                 }
             }
 
+            QDEBUG() << "about to set Content-Type Header... contentType: " << contentType;
+            request.setHeader(QNetworkRequest::ContentTypeHeader, contentType);
+        }
 
-            QDEBUG() << "http post request";
-            http->post(request, sendpacket.getByteArray());
+        if (sendpacket.isDELETE() && bytes.isEmpty()) {
+            http->deleteResource(request);
+        }
+        else {
+            // Everything else uses sendCustomRequest
+            QByteArray verb;
 
-        } else if (sendpacket.isPUT()) {
-            http->put(request, bytes);
-        } else if (sendpacket.isPATCH()) {
-            http->sendCustomRequest(request, "PATCH", bytes);
-        } else if (sendpacket.isDELETE()) {
-            if (bytes.isEmpty()) {
-                http->deleteResource(request);
+            if (sendpacket.isPOST())      verb = "POST";
+            else if (sendpacket.isPUT())  verb = "PUT";
+            else if (sendpacket.isPATCH()) verb = "PATCH";
+            else if (sendpacket.isQUERY()) verb = "QUERY";
+            else if (sendpacket.isDELETE()) verb = "DELETE";
+
+            if (!verb.isEmpty()) {
+                QDEBUG() << "HTTP" << verb << "request";
+                http->sendCustomRequest(request, verb, bytes);
             } else {
-                http->sendCustomRequest(request, "DELETE", bytes );
+                http->get(request);
             }
-        } else
-        {
-            QDEBUG() << "http get request";
-            http->get(request);
         }
 
         emit packetSent(sendpacket);
