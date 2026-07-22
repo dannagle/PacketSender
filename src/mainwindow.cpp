@@ -2427,9 +2427,7 @@ void MainWindow::on_actionSettings_triggered()
     Settings settings(this);
     int accepted = settings.exec();
     if (accepted) {
-        setIPMode();
-        applyNetworkSettings();
-        loadPacketsTable();
+        updateAppAfterSettingsDialogCloses();
     }
 }
 
