@@ -369,6 +369,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="headerButton">
+             <property name="text">
+              <string>Headers</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="testPacketButton">
              <property name="text">
               <string>Send</string>
