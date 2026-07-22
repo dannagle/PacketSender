@@ -358,6 +358,17 @@ Settings::~Settings()
     delete ui;
 }
 
+void Settings::setCurrentTab(const QString &tabName) {
+    if (ui->settingsTabWidget) {
+        for (int i = 0; i < ui->settingsTabWidget->count(); ++i) {
+            if (ui->settingsTabWidget->tabText(i).contains(tabName, Qt::CaseInsensitive)) {
+                ui->settingsTabWidget->setCurrentIndex(i);
+                return;
+            }
+        }
+    }
+}
+
 
 bool Settings::needLanguage()
 {
