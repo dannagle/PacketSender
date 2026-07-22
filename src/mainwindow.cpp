@@ -60,6 +60,7 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
+#include "ui_settings.h"
 #include "wakeonlan.h"
 
 int MainWindow::isSessionOpen = false;
@@ -76,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    connect(ui->headerButton, &QPushButton::clicked,
+        this, &MainWindow::on_headersButton_clicked);
 
     QCheckBox* leaveSessionOpen;
     QCheckBox* twoVerify;
@@ -1195,6 +1198,17 @@ void MainWindow::on_savePacketButton_clicked()
     //ui->searchLineEdit->setText("");
     loadPacketsTable();
 
+}
+
+void MainWindow::on_headersButton_clicked() {
+    Settings settings(this);
+    settings.setCurrentTab("HTTP");   // or whatever the tab name/index is
+
+    int accepted = settings.exec();
+
+    if (accepted) {
+        updateAppAfterSettingsDialogCloses();
+    }
 }
 
 void MainWindow::saveSession(Packet sessionPacket)

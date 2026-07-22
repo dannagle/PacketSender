@@ -134,6 +134,8 @@ class MainWindow : public QMainWindow
 
         void on_savePacketButton_clicked();
 
+        void on_headersButton_clicked();
+
         void on_testPacketButton_clicked();
 
         void on_deletePacketButton_clicked();
