@@ -1213,6 +1213,12 @@ void MainWindow::saveSession(Packet sessionPacket)
 
 }
 
+void MainWindow::updateAppAfterSettingsDialogCloses() {
+    setIPMode();
+    applyNetworkSettings();
+    loadPacketsTable();
+}
+
 
 void MainWindow::on_testPacketButton_clicked()
 {

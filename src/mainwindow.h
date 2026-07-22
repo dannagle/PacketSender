@@ -276,6 +276,7 @@ class MainWindow : public QMainWindow
 
         void setIPMode();
         void saveSession(Packet sessionPacket);
+        void updateAppAfterSettingsDialogCloses();
 
         void packetsImported(QList<Packet> packetSet);
 };
