@@ -1241,20 +1241,6 @@ void MainWindow::on_testPacketButton_clicked()
         QDEBUG() "=== dataText: " << dataText << " isEmpty(): " << dataText.isEmpty();
 
         if (dataText.isEmpty()) {
-            QLineEdit* field = ui->packetASCIIEdit;
-            QString originalStyle = field->styleSheet();
-            const QString orangeBorder = "QLineEdit { border: 2px solid #FF9800; }";
-
-            // Flash 4 times using singleShot (same pattern that worked before)
-            for (int i = 0; i < 4; ++i) {
-                QTimer::singleShot(i * 500, field, [field, orangeBorder]() {
-                    field->setStyleSheet(orangeBorder);
-                });
-
-                QTimer::singleShot(i * 500 + 250, field, [field, originalStyle]() {
-                    field->setStyleSheet(originalStyle);
-                });
-            }
 
             statusBarMessage("Warning: QUERY sent with empty body. Most servers expect query data.", 4000);
         }
