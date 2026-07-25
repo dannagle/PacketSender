@@ -1241,14 +1241,7 @@ void MainWindow::on_testPacketButton_clicked()
         QDEBUG() "=== dataText: " << dataText << " isEmpty(): " << dataText.isEmpty();
 
         if (dataText.isEmpty()) {
-            statusBar()->setStyleSheet("QStatusBar { color: #FF8800; font-weight: bold; }");
-            QThread::msleep(50); // small wait for the stylesheet to get applied before we use it
             statusBarMessage("Warning: QUERY has empty body", 6000);
-
-            // Reset style after the message disappears
-            QTimer::singleShot(6500, this, [this]() {
-                statusBar()->setStyleSheet("");
-            });
         }
     }
 
