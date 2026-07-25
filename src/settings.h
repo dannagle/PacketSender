@@ -78,6 +78,8 @@ class Settings : public QDialog
         explicit Settings(QWidget *parent = nullptr, MainWindow* mw = nullptr);
         ~Settings();
 
+        void setCurrentTab(const QString &tabName);
+
         static QStringList defaultPacketTableHeader();
         static QStringList defaultTrafficTableHeader();
 

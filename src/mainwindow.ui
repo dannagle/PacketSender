@@ -269,6 +269,15 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTP Query</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTP Post</string>
               </property>
               <property name="icon">
@@ -314,6 +323,15 @@
              </item>
              <item>
               <property name="text">
+               <string>HTTPS Query</string>
+              </property>
+              <property name="icon">
+               <iconset resource="packetsender.qrc">
+                <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>HTTPS Post</string>
               </property>
               <property name="icon">
@@ -348,6 +366,13 @@
                 <normaloff>:/icons/tx_http.png</normaloff>:/icons/tx_http.png</iconset>
               </property>
              </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="headerButton">
+             <property name="text">
+              <string>Headers</string>
+             </property>
             </widget>
            </item>
            <item>

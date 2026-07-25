@@ -134,6 +134,8 @@ class MainWindow : public QMainWindow
 
         void on_savePacketButton_clicked();
 
+        void on_headersButton_clicked();
+
         void on_testPacketButton_clicked();
 
         void on_deletePacketButton_clicked();
@@ -276,6 +278,7 @@ class MainWindow : public QMainWindow
 
         void setIPMode();
         void saveSession(Packet sessionPacket);
+        void updateAppAfterSettingsDialogCloses();
 
         void packetsImported(QList<Packet> packetSet);
 };

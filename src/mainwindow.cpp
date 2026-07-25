@@ -60,6 +60,7 @@
 #include "cloudui.h"
 #include "postdatagen.h"
 #include "panelgenerator.h"
+#include "ui_settings.h"
 #include "wakeonlan.h"
 
 int MainWindow::isSessionOpen = false;
@@ -76,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+    connect(ui->headerButton, &QPushButton::clicked,
+        this, &MainWindow::on_headersButton_clicked);
 
     QCheckBox* leaveSessionOpen;
     QCheckBox* twoVerify;
@@ -1197,6 +1200,17 @@ void MainWindow::on_savePacketButton_clicked()
 
 }
 
+void MainWindow::on_headersButton_clicked() {
+    Settings settings(this);
+    settings.setCurrentTab("HTTP");   // or whatever the tab name/index is
+
+    int accepted = settings.exec();
+
+    if (accepted) {
+        updateAppAfterSettingsDialogCloses();
+    }
+}
+
 void MainWindow::saveSession(Packet sessionPacket)
 {
     Q_UNUSED(sessionPacket)
@@ -1213,9 +1227,24 @@ void MainWindow::saveSession(Packet sessionPacket)
 
 }
 
+void MainWindow::updateAppAfterSettingsDialogCloses() {
+    setIPMode();
+    applyNetworkSettings();
+    loadPacketsTable();
+}
+
 
 void MainWindow::on_testPacketButton_clicked()
 {
+    if (ui->udptcpComboBox->currentText().contains("QUERY", Qt::CaseInsensitive)) {
+        QString dataText = ui->packetASCIIEdit->text().trimmed();
+        QDEBUG() "=== dataText: " << dataText << " isEmpty(): " << dataText.isEmpty();
+
+        if (dataText.isEmpty()) {
+            statusBarMessage("Warning: QUERY has empty body", 6000);
+        }
+    }
+
     Packet testPacket;
     static QStringList noMCastList;
     testPacket.init();
@@ -1594,6 +1623,7 @@ void MainWindow::on_packetsTable_itemChanged(QTableWidgetItem *item)
             QString method = "GET";  // default
             if (upperText.contains("POST"))        method = "POST";
             else if (upperText.contains("PUT"))    method = "PUT";
+            else if (upperText.contains("QUERY"))    method = "QUERY";
             else if (upperText.contains("DELETE")) method = "DELETE";
             else if (upperText.contains("PATCH"))  method = "PATCH";
 
@@ -2396,9 +2426,7 @@ void MainWindow::on_actionSettings_triggered()
     Settings settings(this);
     int accepted = settings.exec();
     if (accepted) {
-        setIPMode();
-        applyNetworkSettings();
-        loadPacketsTable();
+        updateAppAfterSettingsDialogCloses();
     }
 }
 
@@ -2757,15 +2785,16 @@ void MainWindow::on_udptcpComboBox_currentIndexChanged(const QString &arg1)
     }
 
     const auto isGet    = selectedText.contains("get");
+    const auto isQuery  = selectedText.contains("query");
     const auto isPost   = selectedText.contains("post");
     const auto isPut    = selectedText.contains("put");
     const auto isPatch  = selectedText.contains("patch");
     const auto isDelete = selectedText.contains("delete");
 
-    const bool shouldShowDataField = isPost || isPut || isPatch || isDelete;
+    const bool shouldShowDataField = isQuery || isPost || isPut || isPatch || isDelete;
 
-    // Use nice HTTP UI for GET/POST/PUT/PATCH/DELETE on both http and https
-    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isPost || isPut || isPatch || isDelete);
+    // Use nice HTTP UI for GET/QUERY/POST/PUT/PATCH/DELETE on both http and https
+    const bool isNiceHttpProtocol = (isHttp || isHttps) && (isGet || isQuery || isPost || isPut || isPatch || isDelete);
 
     /////////////////////////////////dtls add line edit for adding path for cert
 

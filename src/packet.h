@@ -69,6 +69,8 @@ class Packet
         bool isUDP();
         bool isHTTP();
         bool isHTTPS();
+
+        bool isQUERY();
         bool isPOST();
         bool isPUT();
         bool isDELETE();

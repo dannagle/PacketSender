@@ -88,6 +88,12 @@ bool Packet::isHTTPS()
 {
     return tcpOrUdp.trimmed().toLower().contains("https");
 }
+
+bool Packet::isQUERY() {
+    QDEBUG() << "isQUERY: " << (isHTTP() && tcpOrUdp.trimmed().toLower().contains("query"));
+    return  isHTTP() && tcpOrUdp.trimmed().toLower().contains("query");
+}
+
 bool Packet::isPOST()
 {
     return  isHTTP() && tcpOrUdp.trimmed().toLower().contains("post");
