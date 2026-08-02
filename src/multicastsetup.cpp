@@ -132,10 +132,33 @@ void MulticastSetup::on_joinButton_clicked()
         if (yesno == QMessageBox::No) {
             return;
         }
+
         packetNetwork->setIPmode(4);
         packetNetwork->kill();
         packetNetwork->init();
+    }
 
+    QNetworkInterface iface = ui->interfaceListDropDown->currentData().value<QNetworkInterface>();
+
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Critical);          // red X (circle with X on most platforms)
+    msgBox.setWindowTitle(tr("Multicast Join Failed"));
+    msgBox.setText(tr("Could not join the multicast group."));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+
+    if (!iface.isValid()) {
+        msgBox.exec();
+        return;
+    }
+
+    bool ok = packetNetwork->joinMulticast(ip, iface);
+
+    if (!ok) {
+        msgBox.setInformativeText(
+            tr("Interface: %1\nGroup: %2\n\nThe system refused the join request.")
+                .arg(iface.humanReadableName().isEmpty() ? iface.name() : iface.humanReadableName())
+                .arg(ip));
+        msgBox.exec();
     }
 
     QDEBUGVAR(packetNetwork->multicastStringList());
