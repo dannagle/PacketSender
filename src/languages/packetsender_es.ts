@@ -1253,7 +1253,7 @@ Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2850"/>
+        <location filename="../mainwindow.cpp" line="2856"/>
         <source>Invalid MAC Address.</source>
         <translation>Dirección MAC no válida</translation>
     </message>
@@ -1961,17 +1961,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="3001"/>
+        <location filename="../mainwindow.cpp" line="3007"/>
         <source>Multi-line editor</source>
         <translation>Editor Multi Líneas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3007"/>
+        <location filename="../mainwindow.cpp" line="3013"/>
         <source>Update</source>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3008"/>
+        <location filename="../mainwindow.cpp" line="3014"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>

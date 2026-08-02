@@ -1031,7 +1031,7 @@ Expected SSL:</source>
         <source>You are resending a TCP packet with persistent connections. The UI could spawn numerous windows! 
 
 Uncheck persistent connection? (Recommended)</source>
-        <translation type="">正在使用长连接重新发送数据包，该操作可能导致出现多个窗口，取消选中长连接吗？（推荐）</translation>
+        <translation>正在使用长连接重新发送数据包，该操作可能导致出现多个窗口，取消选中长连接吗？（推荐）</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1454"/>
@@ -1240,7 +1240,7 @@ Packet Sender will overwrite packets with the same name.</source>
         <translation>字节</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2850"/>
+        <location filename="../mainwindow.cpp" line="2856"/>
         <source>Invalid MAC Address.</source>
         <translation>不可用的MAC地址.</translation>
     </message>
@@ -1390,7 +1390,6 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
 
  - 是否尝试绑定到不存在的自定义 IP？</translation>
     </message>
-
 </context>
 <context>
     <name>PanelGenerator</name>
@@ -1951,17 +1950,17 @@ Selecting No will generate new IDs and append.</source>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="3001"/>
+        <location filename="../mainwindow.cpp" line="3007"/>
         <source>Multi-line editor</source>
         <translation>多行编辑</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3007"/>
+        <location filename="../mainwindow.cpp" line="3013"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3008"/>
+        <location filename="../mainwindow.cpp" line="3014"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>

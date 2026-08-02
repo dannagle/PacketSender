@@ -1254,7 +1254,7 @@ Paketsender überschreibt Pakete mit demselben Namen.</translation>
         <translation> bytes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2850"/>
+        <location filename="../mainwindow.cpp" line="2856"/>
         <source>Invalid MAC Address.</source>
         <translation>Ungültige MAC-Adresse</translation>
     </message>
@@ -1961,17 +1961,17 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
 <context>
     <name>PreviewFilter</name>
     <message>
-        <location filename="../mainwindow.cpp" line="3001"/>
+        <location filename="../mainwindow.cpp" line="3007"/>
         <source>Multi-line editor</source>
         <translation>Mehrzeiliger Editor</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3007"/>
+        <location filename="../mainwindow.cpp" line="3013"/>
         <source>Update</source>
         <translation>Aktualisierung</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="3008"/>
+        <location filename="../mainwindow.cpp" line="3014"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>
