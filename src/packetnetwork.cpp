@@ -422,8 +422,6 @@ void PacketNetwork::init()
 
     }
 
-    reJoinMulticast();
-
     foreach (tcpPort, tcpPortList) {
 
         if(!activateTCP) {
@@ -649,86 +647,120 @@ QList<int> PacketNetwork::getSSLPortsBound()
 }
 
 
-QUdpSocket * PacketNetwork::findMulticast(QString multicast)
+QUdpSocket * PacketNetwork::findMulticast(const QString &multicast) const
 {
-    QUdpSocket *udp = nullptr;
-
-    if(joinedMulticast.contains(multicast)) {
-        if(udpServers.size() > 0) {
-            udp = this->udpServers.first();
+    for (const MulticastMembership &m : joinedMulticast) {
+        if (m.address == multicast && !udpServers.isEmpty()) {
+            return udpServers.first();
         }
     }
-
-    return udp;
-
+    return nullptr;
 }
 
-QStringList PacketNetwork::multicastStringList()
+QStringList PacketNetwork::multicastStringList() const
 {
-    return joinedMulticast;
-}
-
-void PacketNetwork::reJoinMulticast()
-{
-    return; // this code does not work...
-
-    if(joinedMulticast.isEmpty()) return;
-    if(udpServers.isEmpty()) return;
-    QUdpSocket *udp = udpServers.first();
-    if(udp == nullptr) return;
-
-    QString multicast;
-
-    if(udp->state() == QAbstractSocket::BoundState) {
-        foreach (multicast, joinedMulticast) {
-            QDEBUG() << "rejoin" << multicast << udp->localPort();
-            if(!udp->joinMulticastGroup(QHostAddress(multicast))) {
-                QDEBUG() << udp->errorString();
-            }
-        }
+    QStringList list;
+    for (const MulticastMembership &m : joinedMulticast) {
+        QString name = m.iface.humanReadableName().isEmpty()
+                       ? m.iface.name()
+                       : m.iface.humanReadableName();
+        list << QString("%1  on  %2").arg(m.address, name);
     }
+    return list;
 }
-
-
 
 void PacketNetwork::leaveMulticast()
 {
-    QUdpSocket *udp;
-    QString multicast;
+    if (udpServers.isEmpty()) return;
+    QUdpSocket *udp = udpServers.first();
+    if (!udp) return;
 
-    foreach (multicast, joinedMulticast) {
-        foreach (udp, udpServers) {
-            QDEBUG() << "Leaving" << multicast << udp->leaveMulticastGroup(QHostAddress(multicast));
-        }
+    for (const MulticastMembership &m : joinedMulticast) {
+        bool ok = udp->leaveMulticastGroup(QHostAddress(m.address), m.iface);
+        QDEBUG() << "Leaving" << m.address << "on" << m.iface.name() << "→" << ok;
     }
+
     joinedMulticast.clear();
 }
 
-void PacketNetwork::joinMulticast(QString address)
+bool PacketNetwork::leaveMulticast(const QString &address, const QNetworkInterface &iface)  // leave ONE
 {
-    if(udpServers.isEmpty()) return;
+    if (udpServers.isEmpty()) return false;
     QUdpSocket *udp = udpServers.first();
-    if(udp == nullptr) return;
+    if (!udp) return false;
 
-    if(udp->state() == QAbstractSocket::BoundState) {
-        QDEBUG() << "Joining " << address << ":" << udp->localPort() <<
-        udp->joinMulticastGroup(QHostAddress(address));
-        joinedMulticast << address;
-        joinedMulticast.removeDuplicates();
-    }
+    MulticastMembership key{address, iface};
+    int idx = joinedMulticast.indexOf(key);
+    if (idx == -1)
+        return false;
 
-    QDEBUGVAR(joinedMulticast);
+    const MulticastMembership &m = joinedMulticast.at(idx);
+    bool ok = udp->leaveMulticastGroup(QHostAddress(m.address), m.iface);
+    QDEBUG() << "Leaving" << m.address << "on" << m.iface.name() << "→" << ok;
 
-
-
+    joinedMulticast.removeAt(idx);
+    return ok;
 }
 
-
-bool PacketNetwork::canSendMulticast(QString address)
+bool PacketNetwork::leaveMulticast(const QString &address, const QString &ifaceName)
 {
+    for (const MulticastMembership &m : joinedMulticast) {
+        QString name = m.iface.humanReadableName().isEmpty()
+                       ? m.iface.name()
+                       : m.iface.humanReadableName();
 
-    return joinedMulticast.contains(address);
+        if (m.address == address && name == ifaceName) {
+            return leaveMulticast(address, m.iface);
+        }
+    }
+    return false;
+}
 
+bool PacketNetwork::joinMulticast(const QString& address, const QNetworkInterface &iface)
+{
+    if (udpServers.isEmpty()) return false;
+
+    if (!iface.isValid()) {
+        QDEBUG() << "joinMulticast: invalid interface";
+        return false;
+    }
+
+    QUdpSocket *udp = udpServers.first();
+    if (udp == nullptr) return false;
+
+    if (udp->state() != QAbstractSocket::BoundState) return false;
+
+    for (const MulticastMembership &m : joinedMulticast) {
+        if (m.address == address && m.iface.index() == iface.index()) {
+            QDEBUG() << "Already joined" << address << "on" << iface.name();
+            return true;
+        }
+    }
+
+    bool ok = udp->joinMulticastGroup(QHostAddress(address), iface);
+    QDEBUG() << "Joining" << address << "on" << iface.name() << "→" << ok;
+
+    if (ok) {
+        MulticastMembership m;
+        m.address = address;
+        m.iface = iface;
+        joinedMulticast.append(m);
+    } else {
+        QDEBUG() << "joinMulticastGroup failed:" << udp->errorString();
+        // Later you can surface this error to the UI
+    }
+
+    // QDEBUGVAR(joinedMulticast);
+    return true;
+}
+
+bool PacketNetwork::canSendMulticast(const QString &address) const
+{
+    for (const MulticastMembership &m : joinedMulticast) {
+        if (m.address == address)
+            return true;
+    }
+    return false;
 }
 
 

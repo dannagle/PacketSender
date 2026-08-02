@@ -35,7 +35,20 @@
 #include "dtlsserver.h"
 
 
+struct MulticastMembership {
+        QString address;
+        QNetworkInterface iface;
 
+        bool operator==(const MulticastMembership &other) const
+        {
+                return address == other.address && iface.index() == other.iface.index();
+        }
+
+        bool operator!=(const MulticastMembership &other) const
+        {
+                return !(*this == other);
+        }
+};
 
 class PacketNetwork : public QObject
 {
@@ -60,7 +73,7 @@ class PacketNetwork : public QObject
         QList<int> getTCPPortsBound();
         QList<int> getSSLPortsBound();
 
-        QStringList multicastStringList();
+        QStringList multicastStringList() const;
 
         bool consoleMode;
 
@@ -96,11 +109,13 @@ class PacketNetwork : public QObject
 
         static bool isMulticast(QString ip);
 
-        void joinMulticast(QString address);
-        bool canSendMulticast(QString address);
-        void reJoinMulticast();
+        bool joinMulticast(const QString& address, const QNetworkInterface &iface);
+        [[nodiscard]] bool canSendMulticast(const QString &address) const;
         void leaveMulticast();
-        QUdpSocket * findMulticast(QString multicast);
+        bool leaveMulticast(const QString &address, const QNetworkInterface &iface); // leave single multicast group on a given interface
+        bool leaveMulticast(const QString &address, const QString &ifaceName);
+
+        QUdpSocket * findMulticast(const QString &multicast) const;
         static bool DTLSisSupported();
         QList<DtlsServer *> dtlsServers;
 
@@ -130,7 +145,7 @@ private slots:
 private:
         //mapping of joined multicast groups
         //format is 239.255.120.19:5009, 239.255.120.23:5009
-        QStringList joinedMulticast;
+        QList<MulticastMembership> joinedMulticast;   // group address → interface
 
         QList<ThreadedTCPServer *> allTCPServers();
 

@@ -17,6 +17,10 @@ class MulticastSetup : public QDialog
 
 public:
     explicit MulticastSetup(PacketNetwork * pNetwork, QWidget *parent = nullptr);
+
+    void setupSignals();
+    void setupButtonDefaults();
+
     void setIP(QString ip);
     ~MulticastSetup();
 
@@ -26,9 +30,13 @@ private slots:
 
     void on_leaveButton_clicked();
 
+    void on_leaveSelectedGroupButton_clicked();
+
 private:
     Ui::MulticastSetup *ui;
     PacketNetwork * packetNetwork;
+
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // MULTICASTSETUP_H
