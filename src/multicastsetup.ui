@@ -45,7 +45,7 @@
    <item>
     <widget class="QListWidget" name="mcastLW">
      <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+      <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
      </property>
     </widget>
    </item>
@@ -59,12 +59,19 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="leaveSelectedGroupButton">
+       <property name="text">
+        <string>Leave Selected Group</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="standardButtons">
-        <set>QDialogButtonBox::Ok</set>
+        <set>QDialogButtonBox::StandardButton::Ok</set>
        </property>
       </widget>
      </item>
