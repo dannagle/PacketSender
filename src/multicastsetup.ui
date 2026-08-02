@@ -33,6 +33,9 @@
     </layout>
    </item>
    <item>
+    <widget class="QComboBox" name="interfaceListDropDown"/>
+   </item>
+   <item>
     <widget class="QLabel" name="infoLabel">
      <property name="text">
       <string/>
