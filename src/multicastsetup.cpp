@@ -159,6 +159,9 @@ void MulticastSetup::on_joinButton_clicked()
                 .arg(iface.humanReadableName().isEmpty() ? iface.name() : iface.humanReadableName())
                 .arg(ip));
         msgBox.exec();
+    } else {
+        // we successfully joined a multicast, so we can safely delete the IP address
+        ui->ipaddressEdit->clear();
     }
 
     QDEBUGVAR(packetNetwork->multicastStringList());
