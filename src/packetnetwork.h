@@ -38,6 +38,16 @@
 struct MulticastMembership {
         QString address;
         QNetworkInterface iface;
+
+        bool operator==(const MulticastMembership &other) const
+        {
+                return address == other.address && iface.index() == other.iface.index();
+        }
+
+        bool operator!=(const MulticastMembership &other) const
+        {
+                return !(*this == other);
+        }
 };
 
 class PacketNetwork : public QObject
