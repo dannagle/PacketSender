@@ -1305,7 +1305,7 @@ Paketsender überschreibt Pakete mit demselben Namen.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="78"/>
-        <source>Packet Sender supports multicast when binded to IPv4. 
+        <source>Packet Sender supports multicast when bounded to IPv4. 
 Turn off IPv6 and switch to IPv4 mode?</source>
         <translation>Paket Sender unterstützt Multicast, wenn er an IPv4 gebunden ist.
         Schalten Sie IPv6 aus und wechseln Sie in den IPv4-Modus?</translation>

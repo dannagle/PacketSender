@@ -1290,7 +1290,7 @@ Packet Sender will overwrite packets with the same name.</source>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="78"/>
-        <source>Packet Sender supports multicast when binded to IPv4. 
+        <source>Packet Sender supports multicast when bounded to IPv4. 
 Turn off IPv6 and switch to IPv4 mode?</source>
         <translation type="unfinished"></translation>
     </message>

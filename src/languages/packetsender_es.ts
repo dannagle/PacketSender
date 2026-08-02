@@ -1304,7 +1304,7 @@ Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="78"/>
-        <source>Packet Sender supports multicast when binded to IPv4. 
+        <source>Packet Sender supports multicast when bounded to IPv4. 
 Turn off IPv6 and switch to IPv4 mode?</source>
         <translation>Packet Sender admite difusión múltiple cuando está vinculado a IPv4.
 ¿Desactivar IPv6 y cambiar al modo IPv4?</translation>
