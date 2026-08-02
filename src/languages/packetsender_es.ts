@@ -503,7 +503,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
         <source>HTTP Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="281"/>
@@ -533,7 +533,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="326"/>
         <source>HTTPS Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPS Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="335"/>
@@ -558,7 +558,7 @@ Hash de confirmación: </translation>
     <message>
         <location filename="../mainwindow.ui" line="374"/>
         <source>Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Encabezados</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="381"/>
@@ -1283,7 +1283,7 @@ Packet Sender sobrescribirá los paquetes con el mismo nombre</translation>
     <message>
         <location filename="../multicastsetup.ui" line="64"/>
         <source>Leave Selected Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Salir del grupo seleccionado</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="21"/>
@@ -1332,12 +1332,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
     <message>
         <location filename="../multicastsetup.cpp" line="179"/>
         <source>Multicast Join Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Falló al unirse al multicast</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="180"/>
         <source>Could not join the multicast group.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudo unir al grupo de multidifusión.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="192"/>
@@ -1345,17 +1345,20 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 Group: %2
 
 The system refused the join request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interfaz: %1
+Grupo: %2
+
+El sistema rechazó la solicitud de ingreso.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="236"/>
         <source>Leave failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Falló al salir</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="237"/>
         <source>Could not leave the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudo salir del grupo seleccionado.</translation>
     </message>
 </context>
 <context>

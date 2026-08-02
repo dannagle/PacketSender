@@ -503,7 +503,7 @@ Hash eintragen: </translation>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
         <source>HTTP Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="281"/>
@@ -533,7 +533,7 @@ Hash eintragen: </translation>
     <message>
         <location filename="../mainwindow.ui" line="326"/>
         <source>HTTPS Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPS Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="335"/>
@@ -558,7 +558,7 @@ Hash eintragen: </translation>
     <message>
         <location filename="../mainwindow.ui" line="374"/>
         <source>Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Header</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="381"/>
@@ -1284,7 +1284,7 @@ Paketsender überschreibt Pakete mit demselben Namen.</translation>
     <message>
         <location filename="../multicastsetup.ui" line="64"/>
         <source>Leave Selected Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte Gruppe verlassen</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="21"/>
@@ -1333,12 +1333,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
     <message>
         <location filename="../multicastsetup.cpp" line="179"/>
         <source>Multicast Join Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Beitritt zum Multicast fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="180"/>
         <source>Could not join the multicast group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Multicast-Gruppe konnte nicht beigetreten werden.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="192"/>
@@ -1346,17 +1346,20 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 Group: %2
 
 The system refused the join request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnittstelle: %1
+Gruppe: %2
+
+Das System hat die Beitrittsanfrage abgelehnt.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="236"/>
         <source>Leave failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Verlassen fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="237"/>
         <source>Could not leave the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die ausgewählte Gruppe konnte nicht verlassen werden.</translation>
     </message>
 </context>
 <context>
@@ -2100,7 +2103,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
     <message>
         <location filename="../settings.ui" line="111"/>
         <source>Enable DTLS Servers</source>
-        <translation></translation>
+        <translation>DTLS-Server aktivieren</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="126"/>
@@ -2145,7 +2148,7 @@ Wenn Sie Nein wählen, werden neue IDs erzeugt und angehängt.</translation>
         <location filename="../settings.ui" line="942"/>
         <location filename="../settings.ui" line="965"/>
         <source>HEX</source>
-        <translation></translation>
+        <translation>HEX</translation>
     </message>
     <message>
         <location filename="../settings.ui" line="225"/>

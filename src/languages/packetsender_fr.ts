@@ -503,7 +503,7 @@ Engagez le Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
         <source>HTTP Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="281"/>
@@ -528,17 +528,17 @@ Engagez le Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="317"/>
         <source>HTTPS Get</source>
-        <translation>HTTP Get</translation>
+        <translation>HTTPS Get</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="326"/>
         <source>HTTPS Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPS Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="335"/>
         <source>HTTPS Post</source>
-        <translation>HTTP Post</translation>
+        <translation>HTTPS Post</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="344"/>
@@ -558,7 +558,7 @@ Engagez le Hash: </translation>
     <message>
         <location filename="../mainwindow.ui" line="374"/>
         <source>Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>En-têtes</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="381"/>
@@ -1283,7 +1283,7 @@ Le Packet Sender écrasera les paquets portant le même nom.</translation>
     <message>
         <location filename="../multicastsetup.ui" line="64"/>
         <source>Leave Selected Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Quitter le groupe sélectionné</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="21"/>
@@ -1332,12 +1332,12 @@ Désactiver IPv6 et passer en mode IPv4?</translation>
     <message>
         <location filename="../multicastsetup.cpp" line="179"/>
         <source>Multicast Join Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l’adhésion au multicast</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="180"/>
         <source>Could not join the multicast group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de rejoindre le groupe multicast.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="192"/>
@@ -1345,17 +1345,20 @@ Désactiver IPv6 et passer en mode IPv4?</translation>
 Group: %2
 
 The system refused the join request.</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface : %1
+Groupe : %2
+
+Le système a refusé la demande d’adhésion.</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="236"/>
         <source>Leave failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec du départ</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="237"/>
         <source>Could not leave the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de quitter le groupe sélectionné.</translation>
     </message>
 </context>
 <context>
@@ -2009,7 +2012,7 @@ En sélectionnant Non, de nouveaux identifiants seront générés et les donnée
     <message>
         <location filename="../settings.cpp" line="67"/>
         <source>To Port</source>
-        <translation></translation>
+        <translation>Vers le port</translation>
     </message>
     <message>
         <location filename="../settings.cpp" line="70"/>

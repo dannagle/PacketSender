@@ -502,7 +502,7 @@ Commit Hash: </source>
     <message>
         <location filename="../mainwindow.ui" line="272"/>
         <source>HTTP Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="281"/>
@@ -532,7 +532,7 @@ Commit Hash: </source>
     <message>
         <location filename="../mainwindow.ui" line="326"/>
         <source>HTTPS Query</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTPS Query</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="335"/>
@@ -557,7 +557,7 @@ Commit Hash: </source>
     <message>
         <location filename="../mainwindow.ui" line="374"/>
         <source>Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>头部字段</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="381"/>
@@ -1270,7 +1270,7 @@ Packet Sender will overwrite packets with the same name.</source>
     <message>
         <location filename="../multicastsetup.ui" line="64"/>
         <source>Leave Selected Group</source>
-        <translation type="unfinished"></translation>
+        <translation>离开所选组</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="21"/>
@@ -1319,12 +1319,12 @@ Turn off IPv6 and switch to IPv4 mode?</source>
     <message>
         <location filename="../multicastsetup.cpp" line="179"/>
         <source>Multicast Join Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>加入多播失败</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="180"/>
         <source>Could not join the multicast group.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法加入多播组。</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="192"/>
@@ -1332,17 +1332,20 @@ Turn off IPv6 and switch to IPv4 mode?</source>
 Group: %2
 
 The system refused the join request.</source>
-        <translation type="unfinished"></translation>
+        <translation>接口: %1
+组: %2
+
+系统拒绝了加入请求。</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="236"/>
         <source>Leave failed</source>
-        <translation type="unfinished"></translation>
+        <translation>离开失败</translation>
     </message>
     <message>
         <location filename="../multicastsetup.cpp" line="237"/>
         <source>Could not leave the selected group.</source>
-        <translation type="unfinished"></translation>
+        <translation>无法离开所选组。</translation>
     </message>
 </context>
 <context>
@@ -1370,7 +1373,9 @@ The system refused the join request.</source>
         <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. 
 
 Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Packet Sender 尝试绑定端口 [PORT] 失败，因为该端口小于 1024。
+
+特权端口需要以管理员/Root 权限运行 Packet Sender。</translation>
     </message>
     <message>
         <location filename="../packetnetwork.cpp" line="329"/>
@@ -1379,25 +1384,13 @@ Privileged ports requires running Packet Sender with admin-level / root permissi
  - Are you running multiple instances? 
 
  - Trying to bind to a missing custom IP?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024.
+        <translation>Packet Sender 尝试绑定端口 [PORT] 失败。
 
-Privileged ports requires running Packet Sender with admin-level / root permissions.</source>
-        <translation type="vanished">Packet Sender尝试绑定到端口失败，端口小于1024.
-        请使用管理员权限启动后尝试.</translation>
-    </message>
-    <message>
-        <source>Packet Sender attempted (and failed) to bind to port [PORT].
+ - 你是否正在运行多个实例？
 
- - Are you running multiple instances?
-
- - Trying to bind to a missing custom IP?</source>
-        <translation type="vanished">Packet Sender尝试绑定到端口失败.
-        -您正在运行多播实例？
-        -尝试绑定到一个自定义的IP？</translation>
+ - 是否尝试绑定到不存在的自定义 IP？</translation>
     </message>
+
 </context>
 <context>
     <name>PanelGenerator</name>
@@ -2418,10 +2411,6 @@ Selecting No will generate new IDs and append.</source>
         <translation>响应 4</translation>
     </message>
     <message>
-        <source>If Packet data equals</source>
-        <translation type="vanished">如果数据包内容等于</translation>
-    </message>
-    <message>
         <location filename="../settings.ui" line="919"/>
         <source>Reply with</source>
         <translation>答复于</translation>
@@ -2715,19 +2704,13 @@ Selecting No will generate new IDs and append.</source>
         <translation>IPv4子网计算</translation>
     </message>
     <message>
-        <source>Your non-loopback addresses:
-
-</source>
-        <translation type="vanished">您的非回环地址：
-
-        </translation>
-    </message>
-    <message>
         <location filename="../subnetcalc.cpp" line="26"/>
         <source>Your non-loopback addresses: 
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>您的非回环地址：
+
+</translation>
     </message>
     <message>
         <location filename="../subnetcalc.cpp" line="267"/>
