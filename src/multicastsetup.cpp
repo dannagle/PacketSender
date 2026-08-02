@@ -1,4 +1,7 @@
 #include "multicastsetup.h"
+
+#include <qevent.h>
+
 #include "ui_multicastsetup.h"
 
 #include <QMessageBox>
@@ -175,4 +178,14 @@ void MulticastSetup::on_leaveSelectedGroupButton_clicked()
     }
 
     init();   // refresh the list
+}
+
+bool MulticastSetup::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == ui->ipaddressEdit && event->type() == QEvent::KeyPress) {
+        if (QKeyEvent const *keyEvent = static_cast<QKeyEvent*>(event); keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+            on_joinButton_clicked();          // run the join logic
+            return true;                     // <-- eat the event so the dialog never sees it
+        }
+    }
+    return QDialog::eventFilter(obj, event);
 }

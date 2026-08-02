@@ -31,6 +31,8 @@ private slots:
 private:
     Ui::MulticastSetup *ui;
     PacketNetwork * packetNetwork;
+
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // MULTICASTSETUP_H
