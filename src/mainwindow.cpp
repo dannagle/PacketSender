@@ -1920,11 +1920,6 @@ void MainWindow::slowRefreshTimerTimeout()
     if(titleString != oldtitle) {
         setWindowTitle(titleString);
     }
-
-
-    //In case the multicast switch had a problem, rejoin all groups.
-    packetNetwork.reJoinMulticast();
-
 }
 
 void MainWindow::refreshTimerTimeout()

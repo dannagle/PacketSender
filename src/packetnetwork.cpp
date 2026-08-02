@@ -422,8 +422,6 @@ void PacketNetwork::init()
 
     }
 
-    reJoinMulticast();
-
     foreach (tcpPort, tcpPortList) {
 
         if(!activateTCP) {
@@ -668,23 +666,10 @@ QStringList PacketNetwork::multicastStringList()
     return joinedMulticast;
 }
 
-void PacketNetwork::reJoinMulticast()
 {
-    return; // this code does not work...
-
-    if(joinedMulticast.isEmpty()) return;
-    if(udpServers.isEmpty()) return;
     QUdpSocket *udp = udpServers.first();
-    if(udp == nullptr) return;
 
-    QString multicast;
 
-    if(udp->state() == QAbstractSocket::BoundState) {
-        foreach (multicast, joinedMulticast) {
-            QDEBUG() << "rejoin" << multicast << udp->localPort();
-            if(!udp->joinMulticastGroup(QHostAddress(multicast))) {
-                QDEBUG() << udp->errorString();
-            }
         }
     }
 }

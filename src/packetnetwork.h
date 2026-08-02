@@ -98,7 +98,6 @@ class PacketNetwork : public QObject
 
         void joinMulticast(QString address);
         bool canSendMulticast(QString address);
-        void reJoinMulticast();
         void leaveMulticast();
         QUdpSocket * findMulticast(QString multicast);
         static bool DTLSisSupported();

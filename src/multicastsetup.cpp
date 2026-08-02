@@ -37,8 +37,6 @@ void MulticastSetup::init()
         ui->infoLabel->setText(infoText);
     }
 
-
-
     QStringList mcastStringList = packetNetwork->multicastStringList();
     ui->mcastLW->clear();
     ui->mcastLW->addItems(mcastStringList);
@@ -85,7 +83,7 @@ void MulticastSetup::on_joinButton_clicked()
         packetNetwork->init();
 
     }
-    packetNetwork->joinMulticast(ip);
+
     QDEBUGVAR(packetNetwork->multicastStringList());
     init();
 }
