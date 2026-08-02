@@ -40,6 +40,56 @@ void MulticastSetup::init()
     QStringList mcastStringList = packetNetwork->multicastStringList();
     ui->mcastLW->clear();
     ui->mcastLW->addItems(mcastStringList);
+
+    // remember previous dropdown selection if the dialog is being updated or repoened
+    QString previousSelection;
+    if (ui->interfaceListDropDown->currentIndex() >= 0) {
+        previousSelection = ui->interfaceListDropDown->currentText();
+    }
+
+    // populate dropdown with potentially useful candidates
+    ui->interfaceListDropDown->clear();
+
+    const auto interfaces = QNetworkInterface::allInterfaces();
+
+    for (const QNetworkInterface &iface : interfaces) {
+        // Skip obviously useless ones
+        if (!iface.isValid()) continue;
+        if (iface.flags() & QNetworkInterface::IsLoopBack) continue;
+        if (!(iface.flags() & QNetworkInterface::IsUp)) continue;
+        if (!(iface.flags() & QNetworkInterface::IsRunning)) continue;
+        if (!(iface.flags() & QNetworkInterface::CanMulticast)) continue;
+
+        // Build a readable name
+        QString name = iface.humanReadableName();
+        if (name.isEmpty()) name = iface.name();
+
+        // Optionally show the first IPv4 address
+        QString ipStr;
+        for (const QNetworkAddressEntry &entry : iface.addressEntries()) {
+            if (entry.ip().protocol() == QAbstractSocket::IPv4Protocol && !entry.ip().isLoopback()) {
+                ipStr = entry.ip().toString();
+                break;
+            }
+        }
+
+        // Optional: skip interfaces with no IPv4 (removes most utun/anpi/awdl noise)
+        if (ipStr.isEmpty()) continue;
+
+        QString display = name;
+        if (!ipStr.isEmpty())
+            display += QString(" (%1)").arg(ipStr);
+
+        // Store the whole QNetworkInterface as user data
+        ui->interfaceListDropDown->addItem(display, QVariant::fromValue(iface));
+    }
+
+    int idx = ui->interfaceListDropDown->findText(previousSelection);
+    if (idx >= 0) {
+        ui->interfaceListDropDown->setCurrentIndex(idx);          // restore previous
+    } else if (ui->interfaceListDropDown->count() > 0) {
+        ui->interfaceListDropDown->setCurrentIndex(0);            // fallback to first
+    }
 }
 
 MulticastSetup::~MulticastSetup()
