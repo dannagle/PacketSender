@@ -73,7 +73,8 @@ void MulticastSetup::on_joinButton_clicked()
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Packet Sender supports multicast when binded to IPv4. \nTurn off IPv6 and switch to IPv4 mode?"));
+        msgBox.setText(tr("Packet Sender supports multicast when bound to IPv4. \nTurn off IPv6 and switch to IPv4 mode?"));
+
         int yesno = msgBox.exec();
         if (yesno == QMessageBox::No) {
             return;
