@@ -20,6 +20,24 @@ MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     init();
 }
 
+
+void MulticastSetup::setupButtonDefaults()
+{
+    ui->leaveSelectedGroupButton->setEnabled(false);
+
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setAutoDefault(true);
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
+
+    ui->joinButton->setAutoDefault(false);
+    ui->joinButton->setDefault(false);
+
+    // adds filter that allows the return or enter keys to
+    // submit the IP address and not propagate the key press
+    // if we wind up showing the IP address warning dialog
+    // which would close both the warning dialog and this multicst dialog
+    ui->ipaddressEdit->installEventFilter(this);
+}
+
 void MulticastSetup::setIP(QString ip)
 {
     ui->ipaddressEdit->setText(ip);
