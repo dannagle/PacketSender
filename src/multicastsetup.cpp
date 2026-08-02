@@ -13,6 +13,9 @@ MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     this->packetNetwork = pNetwork;
     ui->setupUi(this);
 
+    setupSignals();
+    setupButtonDefaults();
+
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     setWindowTitle(tr("IPv4 Multicast Setup (Experimental)"));
