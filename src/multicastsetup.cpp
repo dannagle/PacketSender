@@ -96,3 +96,33 @@ void MulticastSetup::on_leaveButton_clicked()
     packetNetwork->leaveMulticast();
     init();
 }
+
+void MulticastSetup::on_leaveSelectedGroupButton_clicked()
+{
+    QListWidgetItem *item = ui->mcastLW->currentItem();
+    if (!item) return;
+
+    // The text we put in the list looks like:  "229.148.44.10  on  en0"
+    const QString text = item->text();
+    const QStringList parts = text.split("  on  ", Qt::SkipEmptyParts);
+
+    if (parts.size() != 2) {
+        QDEBUG() << "Could not parse list item:" << text;
+        return;
+    }
+
+    const QString address = parts[0].trimmed();
+    const QString ifaceName = parts[1].trimmed();
+
+    // Find the matching membership
+    bool left = false;
+
+    left = packetNetwork->leaveMulticast(address, ifaceName);
+
+    if (!left) {
+        QMessageBox::warning(this, tr("Leave failed"),
+                             tr("Could not leave the selected group."));
+    }
+
+    init();   // refresh the list
+}

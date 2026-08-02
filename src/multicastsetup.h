@@ -26,6 +26,8 @@ private slots:
 
     void on_leaveButton_clicked();
 
+    void on_leaveSelectedGroupButton_clicked();
+
 private:
     Ui::MulticastSetup *ui;
     PacketNetwork * packetNetwork;
