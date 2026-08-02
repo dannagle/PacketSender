@@ -35,7 +35,10 @@
 #include "dtlsserver.h"
 
 
-
+struct MulticastMembership {
+        QString address;
+        QNetworkInterface iface;
+};
 
 class PacketNetwork : public QObject
 {
