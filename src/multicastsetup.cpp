@@ -20,6 +20,19 @@ MulticastSetup::MulticastSetup(PacketNetwork *pNetwork, QWidget *parent) :
     init();
 }
 
+void MulticastSetup::setupSignals()
+{
+    // enable the Leave Selected Group button if we have selected a connected multicast in the list
+    connect(ui->mcastLW, &QListWidget::itemSelectionChanged, this, [this]() {
+        ui->leaveSelectedGroupButton->setEnabled(!ui->mcastLW->selectedItems().isEmpty());
+    });
+
+    // allow return and enter (the latter is the 10-key key) to submit the ip address as if we clicked "join"
+    connect(ui->ipaddressEdit, &QLineEdit::returnPressed, this, [this]() {
+        // Defer so the Return key event is fully finished before we show any QMessageBox
+        QTimer::singleShot(0, ui->joinButton, &QPushButton::click);
+    });
+}
 
 void MulticastSetup::setupButtonDefaults()
 {
