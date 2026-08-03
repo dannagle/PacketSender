@@ -65,6 +65,8 @@ set(
   brucethepoodle.cpp
   connections/connection.cpp
   connections/basetcpconnection.cpp
+  connections/incomingtcpconnection.cpp
+  connections/outgoingtcpconnection.cpp
   connectionmanager.cpp
   irisandmarigold.cpp
   cloudui.cpp
