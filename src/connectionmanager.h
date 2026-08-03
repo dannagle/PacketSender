@@ -53,6 +53,8 @@ protected:
 
     virtual void setupConnectionSignals(Connection* conn, quint64 id);
 
+    // these methods exist so I didn't have to make the public API virtual, but we can
+    // still override the creation of objects in test doubles
     virtual std::unique_ptr<OutgoingTcpConnection> createOutgoingTcpConnectionObject();
     virtual std::unique_ptr<IncomingTcpConnection> createIncomingTcpConnectionObject();
 
