@@ -16,8 +16,18 @@ PacketSenderQSslSocketInterface* IncomingTcpThread::createSocketWithDescriptor(i
     auto realSocket = std::make_unique<RealQSslSocket>(new QSslSocket());
 
     // IMPORTANT: Set the descriptor BEFORE passing to base
-    if (!realSocket->setSocketDescriptor(socketDescriptor)) {
+    bool ok = realSocket->setSocketDescriptor(
+        socketDescriptor,
+        QAbstractSocket::ConnectedState,   // the socket is already connected
+        QIODevice::ReadWrite
+    );
+
+    if (!ok) {
         // handle error - e.g. throw or log
+        qDebug() << "setSocketDescriptor" << socketDescriptor
+         // << "ok?" << realSocket->setSocketDescriptor(socketDescriptor)
+         << "ok? " << ok << "\n"
+         << "error:" << realSocket->rawSocket()->errorString();
         throw std::runtime_error("Failed to set socket descriptor on QSslSocket");
     }
 
