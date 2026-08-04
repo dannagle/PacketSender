@@ -3,8 +3,6 @@ name: Feature request
 about: Suggest an idea for this project
 title: "[IDEA]"
 labels: ''
-assignees: 'dannagle'
-
 ---
 
 **Desktop, Mobile, Command Line?**
