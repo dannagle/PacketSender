@@ -25,7 +25,6 @@ PacketSenderQSslSocketInterface* IncomingTcpThread::createSocketWithDescriptor(i
     if (!ok) {
         // handle error - e.g. throw or log
         qDebug() << "setSocketDescriptor" << socketDescriptor
-         // << "ok?" << realSocket->setSocketDescriptor(socketDescriptor)
          << "ok? " << ok << "\n"
          << "error:" << realSocket->rawSocket()->errorString();
         throw std::runtime_error("Failed to set socket descriptor on QSslSocket");
