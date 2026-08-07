@@ -34,6 +34,9 @@ public:
 
     bool isIncoming() const override { return true; }
 
+public slots:
+    void sendPacket(Packet packet);
+
 protected:
     virtual Packet buildReceivedPacket();
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);

@@ -65,6 +65,11 @@ IncomingTcpThread::IncomingTcpThread(int socketDescriptor,
 
 IncomingTcpThread::~IncomingTcpThread() = default;
 
+void IncomingTcpThread::sendPacket(Packet packet)
+{
+    sendOutgoingPacket(packet);
+}
+
 Packet IncomingTcpThread::buildReceivedPacket()
 {
     Packet p;
