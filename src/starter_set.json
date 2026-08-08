@@ -378,7 +378,7 @@
         "toip": "1.1.1.1"
     },
     {
-        "name": "HTTPBin PUT Test",
+        "name": "HTTPS PUT Test",
         "tcporudp": "HTTPS Put",
         "toip": "httpbin.org",
         "port": "443",
@@ -391,7 +391,7 @@
         "receiveBeforeSend": "0"
     },
     {
-        "name": "HTTPBin PATCH Test",
+        "name": "HTTPS PATCH Test",
         "tcporudp": "HTTPS Patch",
         "toip": "httpbin.org",
         "port": "443",
@@ -404,7 +404,7 @@
         "receiveBeforeSend": "0"
     },
     {
-        "name": "HTTPBin DELETE Test",
+        "name": "HTTPS DELETE Test",
         "tcporudp": "HTTPS Delete",
         "toip": "httpbin.org",
         "port": "443",
