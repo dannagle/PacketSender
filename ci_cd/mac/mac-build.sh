@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/zsh
+# Mac build script for Packet Sender
 
 if [ -z "$1" ]
   then
@@ -40,7 +41,24 @@ sed -i '' '/BEGIN/,/END/c\
 ' globals.h
 
 echo "Replacing Info.plist with $BUILD_VERSION"
-sed -i '' 's/<string>1.0<\/string>/<string>'$BUILD_VERSION'<\/string>/' Info.plist
+plutil -replace CFBundleShortVersionString -string "$BUILD_VERSION" Info.plist
+
+
+if [[ ! -f "Info.plist" ]]; then
+  echo "Error: File not found at 'Info.plist'" >&2
+  exit 1
+fi
+
+CURRENT_BUILD=$(plutil -extract CFBundleVersion raw "Info.plist" 2>/dev/null || echo "0")
+if ! [[ "$CURRENT_BUILD" =~ ^[0-9]+$ ]]; then
+  echo "Error: CFBundleVersion ($CURRENT_BUILD) is not a simple integer." >&2
+  exit 1
+fi
+NEW_BUILD=$(( CURRENT_BUILD + 1 ))
+
+plutil -replace CFBundleVersion -string "$NEW_BUILD" "Info.plist"
+echo "Updated CFBundleVersion: $CURRENT_BUILD -> $NEW_BUILD"
+
 
 export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
 
