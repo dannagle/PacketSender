@@ -1,4 +1,5 @@
-#!/usr/bin/zsh
+#!/bin/zsh
+
 # Mac build script for Packet Sender
 
 if [ -z "$1" ]
