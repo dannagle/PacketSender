@@ -37,13 +37,13 @@ cd PacketSender/src
 git checkout development
 
 echo "Replacing globals.h with $BUILD_VERSION"
-sed -i '' '/BEGIN/,/END/c\
-#define SW_VERSION "v'$BUILD_VERSION'"
-' globals.h
+php ci_cd/windows/win-prebuild.php
 
 echo "Replacing Info.plist with $BUILD_VERSION"
 plutil -replace CFBundleShortVersionString -string "$BUILD_VERSION" Info.plist
 plutil -replace CFBundleVersion -string "$BUILD_VERSION" Info.plist
+
+
 
 
 export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
