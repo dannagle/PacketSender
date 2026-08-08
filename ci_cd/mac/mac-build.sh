@@ -35,6 +35,7 @@ git clone /Users/dannagle/github/PacketSender
 git checkout development
 
 echo "Replacing globals.h with $BUILD_VERSION"
+echo "$BUILD_VERSION" > buildversion.txt
 php ci_cd/windows/win-prebuild.php
 
 cd PacketSender/src
