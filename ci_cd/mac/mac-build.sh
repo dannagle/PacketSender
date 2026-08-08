@@ -32,13 +32,14 @@ mkdir workspace
 cd workspace
 # git clone --depth 1 -b development git@github.com:dannagle/PacketSender.git
 git clone /Users/dannagle/github/PacketSender
-git checkout development
+cd PacketSender
 
+git checkout development
 echo "Replacing globals.h with $BUILD_VERSION"
 echo "$BUILD_VERSION" > buildversion.txt
 php ci_cd/windows/win-prebuild.php
 
-cd PacketSender/src
+cd src
 
 echo "Replacing Info.plist with $BUILD_VERSION"
 plutil -replace CFBundleShortVersionString -string "$BUILD_VERSION" Info.plist
