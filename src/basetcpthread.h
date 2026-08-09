@@ -75,6 +75,7 @@ protected:
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
     [[nodiscard]] virtual QByteArray readSocketData();
 
+    virtual bool isValidForSending(Packet& packet, QString* errorMessage) const;
     virtual void sendOutgoingPacket(Packet& packet);
     virtual void closeConnection();
     virtual void sleep(unsigned long usec);

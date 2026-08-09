@@ -218,6 +218,72 @@ void OutgoingTcpThreadTests::testBuildReplyPacket()
     QCOMPARE(normalizedReply, expectedReply);
 }
 
+// isValidForSending() tests
+void OutgoingTcpThreadTests::testIsValidForSending_portIsZero()
+{
+    // this is not the packet we'll use for testing isValidForSending, jus the one to pass to the constructor
+    const Packet validPassedInPacket = createPacketForTest("127.0.0.1", 9999);
+    OutgoingTcpThreadTestDouble thread(TestUtils::createMockSocketForTest(), validPassedInPacket);
+
+    Packet p;
+    p.toIP = "";
+    p.port = 0;
+    p.hexString = "AA BB CC DD";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, false);
+    QCOMPARE(errorMessage, "Port must be a positive number");
+}
+
+void OutgoingTcpThreadTests::testIsValidForSending_hexStringIsEmpty()
+{
+    const Packet validPassedInPacket = createPacketForTest("127.0.0.1", 9999);
+    OutgoingTcpThreadTestDouble thread(TestUtils::createMockSocketForTest(), validPassedInPacket);
+
+    Packet p;
+    p.toIP = "";
+    p.port = 9999;
+    p.hexString = "";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, false);
+    QCOMPARE(errorMessage, "No data to send (hexString is empty)");
+}
+
+void OutgoingTcpThreadTests::testIsValidForSending_toIPIsEmpty()
+{
+    const Packet validPassedInPacket = createPacketForTest("127.0.0.1", 9999);
+    OutgoingTcpThreadTestDouble thread(TestUtils::createMockSocketForTest(), validPassedInPacket);
+
+    Packet p;
+    p.toIP = "";
+    p.port = 9999;
+    p.hexString = "not an empty hex string";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, false);
+    QCOMPARE(errorMessage, "Destination address (toIP) is empty");
+}
+
+void OutgoingTcpThreadTests::testIsValidForSending_happyPath()
+{
+    const Packet validPassedInPacket = createPacketForTest("127.0.0.1", 9999);
+    OutgoingTcpThreadTestDouble thread(TestUtils::createMockSocketForTest(), validPassedInPacket);
+
+    Packet p;
+    p.toIP = "127.0.0.1";
+    p.port = 9999;
+    p.hexString = "AA BB CC DD";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QVERIFY(errorMessage.isEmpty());
+    QCOMPARE(returnValue, true);
+}
+
 // shouldSendReply() tests
 void OutgoingTcpThreadTests::testShouldSendReply_data()
 {
@@ -348,10 +414,11 @@ bool normalizeReplyPacket(const Packet& returnedPacket, Packet& outPacket, QStri
 std::vector<QString> getSendReplyIfNeededExpectedCallSequence()
 {
     std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("sendReplyIfNeeded");
-    expectedCallSequence.push_back("shouldSendReply");
-    expectedCallSequence.push_back("buildReplyPacket");
-    expectedCallSequence.push_back("getSmartResponseData");
+    expectedCallSequence.push_back(CallTracker::SEND_REPLY_IF_NEEDED());
+    expectedCallSequence.push_back(CallTracker::SHOULD_SEND_REPLY());
+    expectedCallSequence.push_back(CallTracker::BUILD_REPLY_PACKET());
+    expectedCallSequence.push_back(CallTracker::GET_SMART_RESPONSE_DATA());
+    expectedCallSequence.push_back(CallTracker::OUTGOINGTCPTHREAD_ISVALIDFORSENDING());
     // because BaseTcpThread::sendOutgoingPacket is called via a qualified call,
     // our override isn't called, so we don't get the sequence here
     return expectedCallSequence;
@@ -435,6 +502,7 @@ void OutgoingTcpThreadTests::testSendReplyIfNeeded_doesNOTSendPacket_whenNoRespo
     thread.callSendReplyIfNeeded(thread.getSendPacketByReference());
 
     std::vector<QString> expectedCallSequence = getSendReplyIfNeededExpectedCallSequence();
+    expectedCallSequence.pop_back();
     QCOMPARE(thread.getCallSequence(), expectedCallSequence);
 
     QCOMPARE(errorSpy.count(), 0);

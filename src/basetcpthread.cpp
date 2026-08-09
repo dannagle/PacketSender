@@ -168,6 +168,21 @@ QByteArray BaseTcpThread::readSocketData()
     return socketInterface ? socketInterface->readData() : "";
 }
 
+bool BaseTcpThread::isValidForSending(Packet& packet, QString* errorMessage = nullptr) const
+{
+    if (packet.port == 0) {
+        if (errorMessage) *errorMessage = "Port must be a positive number";
+        return false;
+    }
+
+    if (packet.getByteArray().isEmpty()) {
+        if (errorMessage) *errorMessage = "No data to send (hexString is empty)";
+        return false;
+    }
+
+    return true;
+}
+
 bool BaseTcpThread::isSocketEncrypted() const
 {
     return socketInterface ? socketInterface->isEncrypted() : false;
@@ -235,8 +250,7 @@ void BaseTcpThread::sendOutgoingPacket(Packet& packet)
         return;
     }
 
-    QString errorMsg;
-    if (!(packet.isValidForSending(&errorMsg)))
+    if (QString errorMsg; !(isValidForSending(packet, &errorMsg)))
     {
         qDebug() << "=== VALIDATION FAILED ===";
         qDebug() << "Error message from isValidForSending:" << errorMsg;

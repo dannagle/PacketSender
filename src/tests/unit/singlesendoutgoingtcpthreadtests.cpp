@@ -127,11 +127,12 @@ void SingleSendOutgoingTcpThreadTests::testRun_successPath_callsMethodsInCorrect
     const auto& callSequence = thread.getCallSequence();
 
     std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("handleOutgoingPlainTCP");
-    expectedCallSequence.push_back("prepareOutgoingPacket");
-    expectedCallSequence.push_back("sendOutgoingPacket");
-    expectedCallSequence.push_back("processIncomingData");
-    expectedCallSequence.push_back("closeConnection");
+    expectedCallSequence.push_back(CallTracker::HANDLE_OUTGOING_PLAIN_TCP());
+    expectedCallSequence.push_back(CallTracker::PREPARE_OUTGOING_PACKET());
+    expectedCallSequence.push_back(CallTracker::SEND_OUTGOING_PACKET());
+    expectedCallSequence.push_back(CallTracker::OUTGOINGTCPTHREAD_ISVALIDFORSENDING());
+    expectedCallSequence.push_back(CallTracker::PROCESS_INCOMING_DATA());
+    expectedCallSequence.push_back(CallTracker::CLOSE_CONNECTION());
     QCOMPARE(callSequence, expectedCallSequence);
 }
 
@@ -149,12 +150,13 @@ void SingleSendOutgoingTcpThreadTests::testRun_respectsDelayAfterConnect()
     auto callSequence = thread.getCallSequence();
 
     std::vector<QString> expectedCallSequence;
-    expectedCallSequence.push_back("handleOutgoingPlainTCP");
+    expectedCallSequence.push_back(CallTracker::HANDLE_OUTGOING_PLAIN_TCP());
     expectedCallSequence.push_back("usleep 100000 usecs");
-    expectedCallSequence.push_back("prepareOutgoingPacket");
-    expectedCallSequence.push_back("sendOutgoingPacket");
-    expectedCallSequence.push_back("processIncomingData");
-    expectedCallSequence.push_back("closeConnection");
+    expectedCallSequence.push_back(CallTracker::PREPARE_OUTGOING_PACKET());
+    expectedCallSequence.push_back(CallTracker::SEND_OUTGOING_PACKET());
+    expectedCallSequence.push_back(CallTracker::OUTGOINGTCPTHREAD_ISVALIDFORSENDING());
+    expectedCallSequence.push_back(CallTracker::PROCESS_INCOMING_DATA());
+    expectedCallSequence.push_back(CallTracker::CLOSE_CONNECTION());
     QCOMPARE(callSequence, expectedCallSequence);
 }
 

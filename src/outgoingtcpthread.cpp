@@ -167,6 +167,19 @@ Packet OutgoingTcpThread::buildReplyPacket(const Packet& receivedPacket,
     return reply;
 }
 
+bool OutgoingTcpThread::isValidForSending(Packet& packet, QString* errorMessage) const  
+{
+    if (BaseTcpThread::isValidForSending(packet, errorMessage))
+    {
+        if (packet.toIP.isEmpty()) {
+            if (errorMessage) *errorMessage = "Destination address (toIP) is empty";
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 void OutgoingTcpThread::handleOutgoingSSLHandshakeSuccess()
 {
     auto sslSocket = getSocketInterface();

@@ -40,6 +40,7 @@ public:
     static QString SHOULD_STOP_PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("shouldStopPersistentConnectionLoop"); }
     static QString IS_INTERRUPTION_REQUESTED() { return QStringLiteral("isInterruptionRequested"); }
     static QString SETUP_SIGNAL_CONNECTIONS() { return QStringLiteral("setupSignalConnections"); }
+    static QString BASETCPTHREAD_ISVALIDFORSENDING() { return QStringLiteral("basetcpthreadisvalidforsending"); }
 
     // OutgoingTcpThread
     static QString PERSISTENT_CONNECTION_LOOP() { return QStringLiteral("persistentConnectionLoop"); }
@@ -61,6 +62,7 @@ public:
     static QString PREPARE_OUTGOING_PACKET() { return QStringLiteral("prepareOutgoingPacket"); }
     static QString OUTGOINGTCPTHREAD_SHUTDOWN() { return QStringLiteral("OutgoingTcpThread shutdown"); }
     static QString OUTGOINGTCPTHREAD_STOP() { return QStringLiteral("OutgoingTcpThread stop"); }
+    static QString OUTGOINGTCPTHREAD_ISVALIDFORSENDING() { return QStringLiteral("outgoingtcpthreadisvalidforsending"); }
 
 
     // IncomingTcpThread

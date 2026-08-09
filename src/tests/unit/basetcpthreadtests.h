@@ -59,6 +59,11 @@ private slots:
     void testGetPeerAddressAsString_returnsEmptyStringWhenSocketPeerAddressIsNull();
     void testGetPeerAddressAsString_returnsIPV6();
 
+    // isValidForSending() tests
+    void testIsValidForSending_portIsZero();
+    void testIsValidForSending_hexStringIsEmpty();
+    void testIsValidForSending_happyPath();
+
     // sendOutgoingPacket() tests
     void testSendOutgoingPacket_socketIsNullptr_emitsConnectionStatusError();
     void testSendOutgoingPacket_socketIsNullptr_emitsErrorSignalWithSocketAccessError();
@@ -66,7 +71,7 @@ private slots:
     void testSendOutgoingPacket_socketIsNotInConnectedState_emitsConnectionStatusError();
     void testSendOutgoingPacket_socketIsNotInConnectedState_emitsErrorSignalWithSocketAccessError();
 
-    void testSendOutgoingPacket_packetToIpEmpty_emitsErrorMessage_DestinationAddressToIpIsEmpty();
+    void testSendOutgoingPacket_packetToIpEmpty_doesNOTemitErrorMessage_DestinationAddressToIpIsEmpty();
     void testSendOutgoingPacket_packetPortIsZero_emitsErrorMessage_PortMustBeAPositiveNumber();
     void testSendOutgoingPacket_packetHasNoData_emitsErrorMessage_NoDataToSend();
 

@@ -95,6 +95,11 @@ public:
         prepareOutgoingPacket();
     }
 
+    bool callIsValidForSending(Packet& packet, QString* errorMessage)
+    {
+        return isValidForSending(packet, errorMessage);
+    }
+
     void callCloseConnection()
     {
         closeConnection();
@@ -204,6 +209,12 @@ protected:
     {
         recordCall(PREPARE_OUTGOING_PACKET());
         OutgoingTcpThread::prepareOutgoingPacket();
+    }
+
+    bool isValidForSending(Packet& packet, QString* errorMessage) const override
+    {
+        recordCall(OUTGOINGTCPTHREAD_ISVALIDFORSENDING());
+        return OutgoingTcpThread::isValidForSending(packet, errorMessage);
     }
 
     void sendOutgoingPacket() override

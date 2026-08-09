@@ -39,6 +39,12 @@ private slots:
     void testBuildReplyPacket_data();
     void testBuildReplyPacket();
 
+    // isValidForSending() tests
+    void testIsValidForSending_portIsZero();
+    void testIsValidForSending_hexStringIsEmpty();
+    void testIsValidForSending_toIPIsEmpty();
+    void testIsValidForSending_happyPath();
+
     // shouldSendReply() tests
     void testShouldSendReply_data();
     void testShouldSendReply();

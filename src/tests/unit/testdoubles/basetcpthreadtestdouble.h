@@ -33,6 +33,11 @@ public:
         }
     }
 
+    bool callIsValidForSending(Packet& packet, QString* errorMessage = nullptr) const
+    {
+        return isValidForSending(packet, errorMessage);
+    }
+
     void callSendOutgoingPacket(Packet &packet)
     {
         sendOutgoingPacket(packet);
@@ -48,6 +53,12 @@ protected:
     void run() override
     {
         // Do nothing for most tests, or QThread::run() if you want default behavior
+    }
+
+    bool isValidForSending(Packet& packet, QString* errorMessage) const override
+    {
+        recordCall(BASETCPTHREAD_ISVALIDFORSENDING());
+        return BaseTcpThread::isValidForSending(packet, errorMessage);
     }
 
     void closeConnection() override

@@ -44,6 +44,7 @@ protected:
     virtual void sendOutgoingPacket();
 
     virtual Packet buildReplyPacket(const Packet &receivedPacket, const QByteArray &responseData);
+    bool isValidForSending(Packet& packet, QString* errorMessage) const override;
 
     // SSL reaction methods
     virtual void handleOutgoingSSLHandshakeSuccess();

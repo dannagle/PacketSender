@@ -267,6 +267,52 @@ void BaseTcpThreadTests::testGetPeerAddressAsString_returnsIPV6()
     QCOMPARE(thread.getPeerAddressAsString(), address);
 }
 
+// isValidForSending() tests
+void BaseTcpThreadTests::testIsValidForSending_portIsZero()
+{
+    BaseTcpThreadTestDouble thread(TestUtils::createMockSocketForTest());
+
+    Packet p;
+    p.toIP = "";
+    p.port = 0;
+    p.hexString = "AA BB CC DD";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, false);
+    QCOMPARE(errorMessage, "Port must be a positive number");
+}
+
+void BaseTcpThreadTests::testIsValidForSending_hexStringIsEmpty()
+{
+    BaseTcpThreadTestDouble thread(TestUtils::createMockSocketForTest());
+
+    Packet p;
+    p.toIP = "";
+    p.port = 9999;
+    p.hexString = "";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, false);
+    QCOMPARE(errorMessage, "No data to send (hexString is empty)");
+}
+
+void BaseTcpThreadTests::testIsValidForSending_happyPath()
+{
+    BaseTcpThreadTestDouble thread(TestUtils::createMockSocketForTest());
+
+    Packet p;
+    p.toIP = "";
+    p.port = 9999;
+    p.hexString = "AA BB CC DD";
+
+    QString errorMessage;
+    bool returnValue = thread.callIsValidForSending(p, &errorMessage);
+    QCOMPARE(returnValue, true);
+    QVERIFY(errorMessage.isEmpty());
+}
+
 // testSendOutgoingPacket() tests
 void BaseTcpThreadTests::testSendOutgoingPacket_socketIsNullptr_emitsConnectionStatusError()
 {
@@ -323,7 +369,7 @@ void BaseTcpThreadTests::testSendOutgoingPacket_socketIsNotInConnectedState_emit
          QAbstractSocket::SocketAccessError);
 }
 
-void BaseTcpThreadTests::testSendOutgoingPacket_packetToIpEmpty_emitsErrorMessage_DestinationAddressToIpIsEmpty()
+void BaseTcpThreadTests::testSendOutgoingPacket_packetToIpEmpty_doesNOTemitErrorMessage_DestinationAddressToIpIsEmpty()
 {
     auto *mockSock = new MockSslSocket();
     mockSock->setMockState(QAbstractSocket::SocketState::ConnectedState);
@@ -335,10 +381,7 @@ void BaseTcpThreadTests::testSendOutgoingPacket_packetToIpEmpty_emitsErrorMessag
     p.toIP = "";
 
     thread.callSendOutgoingPacket(p);
-
-    QCOMPARE(errorMessageSpy.count(), 1);
-    QCOMPARE(errorMessageSpy.first().at(0).toString(),
-             QString("Destination address (toIP) is empty"));
+    QCOMPARE(errorMessageSpy.count(), 0);
 }
 
 void BaseTcpThreadTests::testSendOutgoingPacket_packetPortIsZero_emitsErrorMessage_PortMustBeAPositiveNumber()
@@ -357,7 +400,6 @@ void BaseTcpThreadTests::testSendOutgoingPacket_packetPortIsZero_emitsErrorMessa
     QCOMPARE(errorMessageSpy.count(), 1);
     QCOMPARE(errorMessageSpy.first().at(0).toString(),
              QString("Port must be a positive number"));
-
 }
 
 void BaseTcpThreadTests::testSendOutgoingPacket_packetHasNoData_emitsErrorMessage_NoDataToSend()

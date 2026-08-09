@@ -459,14 +459,15 @@ void OutgoingTcpThreadConnectionTests::testRun_SSL_callsMethodsInCorrectOrder()
     const auto& callSequence = thread.getCallSequence();
 
     const std::vector<QString> expected = {
-        "handleOutgoingSSL",
-        "loadSSLCerts",
-        "loadSnakeOilCerts",
-        "handleOutgoingSSLHandshakeSuccess",
-        "prepareOutgoingPacket",
-        "sendOutgoingPacket",
-        "processIncomingData",
-        "closeConnection"
+        CallTracker::HANDLE_OUTGOING_SSL(),
+        CallTracker::LOAD_SSL_CERTS(),
+        CallTracker::LOAD_SNAKEOIL_CERTS_(),
+        CallTracker::HANDLE_OUTGOING_SSL_HANDSHAKE_SUCCESS(),
+        CallTracker::PREPARE_OUTGOING_PACKET(),
+        CallTracker::SEND_OUTGOING_PACKET(),
+        CallTracker::OUTGOINGTCPTHREAD_ISVALIDFORSENDING(),
+        CallTracker::PROCESS_INCOMING_DATA(),
+        CallTracker::CLOSE_CONNECTION(),
     };
     QCOMPARE(callSequence, expected);
 }
