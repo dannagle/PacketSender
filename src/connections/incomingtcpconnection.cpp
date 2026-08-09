@@ -24,6 +24,23 @@ void IncomingTcpConnection::receiveData(const int socketDescriptor, const bool i
         thread_ = makeIncomingTcpThread(socketDescriptor, isSecure, persistent);
 
         setupSignalConnections();
+
+        // Window/manager will call Connection::send → we forward to the thread
+        connect(this, &IncomingTcpConnection::sendRequested,
+            static_cast<IncomingTcpThread*>(thread_.get()),
+            &IncomingTcpThread::sendPacket,
+            Qt::QueuedConnection
+        );
+
+        // Move the socket onto the worker thread *before* start()
+        if (auto *iface = thread_->getSocketInterface()) {
+            if (auto *real = iface->rawSocket()) {
+                real->setParent(nullptr);
+                real->moveToThread(thread_.get());
+            }
+        }
+
+        // start the thread
         thread_->start();
     }
     catch (const std::exception& e)
