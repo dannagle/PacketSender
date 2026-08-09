@@ -42,6 +42,8 @@ protected:
     virtual void sendSmartReplyIfConfigured(const Packet& receivedPacket);
     virtual void emitSSLDiagnosticPackets();
     virtual void performSSLHandshakeIfNeeded();
+
+    virtual void processReceivedPacket();
     virtual void persistentConnectionLoop();
     virtual void handleIncomingConnection();
     void run() override;

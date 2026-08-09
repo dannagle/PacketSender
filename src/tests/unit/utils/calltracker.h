@@ -65,6 +65,7 @@ public:
 
     // IncomingTcpThread
     static QString SEND_SMART_REPLY_IF_CONFIGURED() { return QStringLiteral("sendSmartReplyIfConfigured"); }
+    static QString INCOMINGTCPTHREAD_PROCESSRECEIVEDPACKET() { return QStringLiteral("incomingprocessreceivedpacket"); }
     static QString EMIT_SSL_DIAGNOSTIC_PACKETS() { return QStringLiteral("emitSSLDiagnosticPackets"); }
     static QString PERFORM_SSL_HANDSHAKE_IF_NEEDED() { return QStringLiteral("performSSLHandshakeIfNeeded"); }
     static QString HANDLE_INCOMING_CONNECTION() { return QStringLiteral("handleIncomingConnection"); }

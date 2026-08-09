@@ -210,6 +210,15 @@ void IncomingTcpThread::performSSLHandshakeIfNeeded()
     emitSSLDiagnosticPackets();
 }
 
+void IncomingTcpThread::processReceivedPacket()
+{
+    if (const Packet received = buildReceivedPacket(); !received.hexString.isEmpty())
+    {
+        emit packetReceived(received);
+        sendSmartReplyIfConfigured(received);
+    }
+}
+
 void IncomingTcpThread::persistentConnectionLoop()
 {
     auto* sock = getSocketInterface();
@@ -219,12 +228,7 @@ void IncomingTcpThread::persistentConnectionLoop()
     {
         if (sock->waitForReadyRead(500))
         {
-            const Packet received = buildReceivedPacket();
-            if (!received.hexString.isEmpty())
-            {
-                emit packetReceived(received);
-                sendSmartReplyIfConfigured(received);
-            }
+            processReceivedPacket();
         }
 
         QThread::msleep(10);   // prevent tight CPU loop
@@ -241,10 +245,7 @@ void IncomingTcpThread::handleIncomingConnection()
 
     performSSLHandshakeIfNeeded();
 
-    const Packet received = buildReceivedPacket();
-    emit packetReceived(received);
-
-    sendSmartReplyIfConfigured(received);
+    processReceivedPacket();
 }
 
 void IncomingTcpThread::run()

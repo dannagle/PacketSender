@@ -156,6 +156,11 @@ public:
         persistentConnectionLoop();
     }
 
+    void callProcessReceivedPacket()
+    {
+        processReceivedPacket();
+    }
+
     bool lastAllowSnakeOilValue;
 
 signals:
@@ -193,6 +198,12 @@ protected:
     {
         recordCall(SEND_SMART_REPLY_IF_CONFIGURED());
         IncomingTcpThread::sendSmartReplyIfConfigured(packet);
+    }
+
+    void processReceivedPacket() override
+    {
+        recordCall(INCOMINGTCPTHREAD_PROCESSRECEIVEDPACKET());
+        IncomingTcpThread::processReceivedPacket();
     }
 
     void emitSSLDiagnosticPackets() override

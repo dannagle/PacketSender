@@ -58,7 +58,15 @@ private slots:
     void testHandleIncomingConnection_emitsConnectionStatus_incomingConnectionAccepted();
     void testHandleIncomingConnection_successPath();
     void testHandleIncomingConnection_successPath_emitsReceivedPacket();
+    void testHandleIncomingConnection_emptyData_doesNOTemitReceivedPacket();
     void testRun_exitsEarly_ifSocketInterfaceIsNullPtr();
+
+    // processReceivedPacket() tests
+    void testProcessReceivedPacket_doesNOTEmitPacketReceived_whenHexStringIsEmpty();
+    void testProcessReceivedPacket_doesNOTcallSendSmartReplyIfConfigured();
+    void testProcessReceivedPacket_happyPath_emitsPacketReceived();
+    void testProcessReceivedPacket_happyPath_callsSendSmartReplyIfConfigured();
+
 
     // run() tests
     void testRun_callSequence();

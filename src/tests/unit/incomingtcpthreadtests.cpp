@@ -526,6 +526,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_emitsConnectionStatus_
 void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
 {
     auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData("pork is a nice sweet meat");
     auto thread = IncomingTcpThreadTestDouble(sock);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -536,6 +537,7 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
     std::vector<QString> expectedCallSequence = {
         CallTracker::HANDLE_INCOMING_CONNECTION(),
         CallTracker::PERFORM_SSL_HANDSHAKE_IF_NEEDED(),
+        CallTracker::INCOMINGTCPTHREAD_PROCESSRECEIVEDPACKET(),
         CallTracker::BUILD_RECEIVED_PACKET(),
         CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()
     };
@@ -544,7 +546,11 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath()
 
 void IncomingTcpThreadTests::testHandleIncomingConnection_successPath_emitsReceivedPacket()
 {
+    const auto dataString = QByteArray("foo bar baz");
+
     auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData(dataString);
+
     auto thread = IncomingTcpThreadTestDouble(sock);
 
     QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
@@ -568,9 +574,73 @@ void IncomingTcpThreadTests::testHandleIncomingConnection_successPath_emitsRecei
     p.toIP = "You";
     p.port = 0;
     p.fromPort = 0;
+    p.hexString = Packet::byteArrayToHex(dataString);
     QCOMPARE(normalizedPacket, p);
 }
 
+void IncomingTcpThreadTests::testHandleIncomingConnection_emptyData_doesNOTemitReceivedPacket()
+{
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    auto thread = IncomingTcpThreadTestDouble(sock);
+
+    QSignalSpy errorMessageSpy(&thread, &BaseTcpThread::errorMessage);
+    QSignalSpy packetReceivedSpy(&thread, &BaseTcpThread::packetReceived);
+
+    thread.callHandleIncomingConnection();
+    QCOMPARE(errorMessageSpy.count(), 0);
+    QCOMPARE(packetReceivedSpy.count(), 0);
+}
+
+// processReceivedPacket() tests
+void IncomingTcpThreadTests::testProcessReceivedPacket_doesNOTEmitPacketReceived_whenHexStringIsEmpty()
+{
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData(QByteArray()); // empty hexString
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy packetReceivedSpy(&thread, &IncomingTcpThread::packetReceived);
+
+    thread.callProcessReceivedPacket();
+    QCOMPARE(packetReceivedSpy.count(), 0);
+}
+
+void IncomingTcpThreadTests::testProcessReceivedPacket_doesNOTcallSendSmartReplyIfConfigured()
+{
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData(QByteArray()); // empty hexString
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QCOMPARE(thread.getCallSequence(), {});
+
+    thread.callProcessReceivedPacket();
+    QCOMPARE(thread.wasMethodCalled(CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()), false);
+}
+
+void IncomingTcpThreadTests::testProcessReceivedPacket_happyPath_emitsPacketReceived()
+{
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData("This is the song that never ends"); // empty hexString
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QSignalSpy packetReceivedSpy(&thread, &IncomingTcpThread::packetReceived);
+
+    thread.callProcessReceivedPacket();
+    QCOMPARE(packetReceivedSpy.count(), 1);
+}
+
+void IncomingTcpThreadTests::testProcessReceivedPacket_happyPath_callsSendSmartReplyIfConfigured()
+{
+    auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
+    sock->setMockReadData("This is the song that never ends"); // empty hexString
+
+    auto thread = IncomingTcpThreadTestDouble(sock);
+    QCOMPARE(thread.getCallSequence(), {});
+
+    thread.callProcessReceivedPacket();
+    QCOMPARE(thread.wasMethodCalled(CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()), true);
+}
+
+// run() tests
 void IncomingTcpThreadTests::testRun_exitsEarly_ifSocketInterfaceIsNullPtr()
 {
     auto sock = TestUtils::createMockSocketWithSocketDescriptorOtherThan0();
@@ -656,6 +726,7 @@ void IncomingTcpThreadTests::testPersistentConnectionLoop_successPath()
         CallTracker::PERSISTENT_CONNECTION_LOOP(),
         CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP(),
         CallTracker::IS_INTERRUPTION_REQUESTED(),
+        CallTracker::INCOMINGTCPTHREAD_PROCESSRECEIVEDPACKET(),
         CallTracker::BUILD_RECEIVED_PACKET(),
         CallTracker::SEND_SMART_REPLY_IF_CONFIGURED(),
         CallTracker::SHOULD_STOP_PERSISTENT_CONNECTION_LOOP(),
