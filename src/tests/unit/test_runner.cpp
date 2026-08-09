@@ -1,10 +1,14 @@
 //
-// Created by Tomas Gallucci on 3/5/26.
+// Created by Tomas Gallucci on 8/8/26.
 //
 
-// src/tests/unit/main.cpp
 
-#include <QtTest/Qtest.h>
+#include <QApplication>
+#include <QFile>
+#include <QIODevice>
+#include <QString>
+#include <qtestcase.h>
+#include <qxmlstream.h>
 
 #include "connections/connectiontests.h"
 #include "connections/basetcpconnectiontests.h"
@@ -23,28 +27,118 @@
 #include "connections/incomingtcpconnectiontests.h"
 #include "connections/outgoingtcpconnectiontests.h"
 
+struct TestSummary {
+    int total = 0;
+    int failures = 0;
+    int skipped = 0;
+    int errors = 0;
+
+    TestSummary &operator+=(const TestSummary &other) {
+        total    += other.total;
+        failures += other.failures;
+        skipped  += other.skipped;
+        errors   += other.errors;
+        return *this;
+    }
+};
+
+TestSummary parseJUnitXml(const QString &fileName)
+{
+    TestSummary summary;
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return summary;
+
+    QXmlStreamReader xml(&file);
+    while (!xml.atEnd()) {
+        xml.readNext();
+        if (xml.isStartElement() && xml.name() == QLatin1String("testsuite")) {
+            summary.total    += xml.attributes().value("tests").toInt();
+            summary.failures += xml.attributes().value("failures").toInt();
+            summary.skipped  += xml.attributes().value("skipped").toInt();
+            summary.errors   += xml.attributes().value("errors").toInt();
+        }
+    }
+    return summary;
+}
+
+// Helper that runs after every qExec
+void finishTest(QObject *testObject,
+                const QString &reportFile,
+                TestSummary &grandTotal)
+{
+    TestSummary s = parseJUnitXml(reportFile);
+    grandTotal += s;
+
+    // qInfo().noquote() << QString("Totals: %1 passed, %2 failed, %3 skipped, %4 blacklisted")
+    //                         .arg(s.total - s.failures - s.skipped - s.errors)
+    //                         .arg(s.failures)
+    //                         .arg(s.skipped)
+    //                         .arg(0);
+
+    delete testObject;
+}
+
+QStringList buildTestArgs(int argc, char *argv[], const QString &reportFile)
+{
+    QStringList args;
+    for (int i = 0; i < argc; ++i)
+        args << QString::fromLocal8Bit(argv[i]);
+
+    // Keep normal console output
+    args << "-o" << "-,txt";
+
+    // Machine-readable report
+    args << "-o" << reportFile + ",junitxml";
+
+    return args;
+}
+
 int main(int argc, char *argv[])
 {
-    int failures = 0;
+    int totalFailures = 0;
+    int testsRun = 0;
+    TestSummary grandTotal;
+    QStringList reportFiles;
 
-    /* Run each test class in sequence
-     * Use auto so we don't need to know the exact type
-     */
+    const QString reportDir = "test-results";
 
-    // Run GUI-dependent tests with their own QApplication
-    auto runGuiTest = [&failures, &argc, &argv](QObject *testObject) {
+    // Clean up from previous runs; mostly for running tests over and over locally, not for CI pipeline
+    QDir dir(reportDir);
+    if (dir.exists()) {
+        if (!dir.removeRecursively())
+        {
+            throw std::runtime_error("Could not delete existing test report directory");
+        }
+    }
+    if (! QDir().mkpath(reportDir))
+    {
+        throw std::runtime_error("Could not create test report directory");
+    }
+
+    auto runGuiTest = [&](QObject *testObject) {
+        const QString reportFile = QString("%1/test-results-%2.xml")
+                                        .arg(reportDir)
+                                        .arg(++testsRun, 2, 10, QChar('0'));
+
+        QStringList args = buildTestArgs(argc, argv, reportFile);
+
         QApplication localApp(argc, argv);
-        failures += QTest::qExec(testObject, argc, argv);
-        delete testObject;
+        totalFailures += QTest::qExec(testObject, args);
+        finishTest(testObject, reportFile, grandTotal);
     };
 
-    // Run pure non-GUI tests without QApplication
-    auto runNonGuiTest = [&failures, argc, argv](QObject *testObject) {
-        failures += QTest::qExec(testObject, argc, argv);
-        delete testObject;
+    auto runNonGuiTest = [&](QObject *testObject) {
+        const QString reportFile = QString("%1/test-results-%2.xml")
+                                        .arg(reportDir)
+                                        .arg(++testsRun, 2, 10, QChar('0'));
+        QStringList args = buildTestArgs(argc, argv, reportFile);
+
+        QCoreApplication app(argc, argv);
+        totalFailures += QTest::qExec(testObject, args);
+        finishTest(testObject, reportFile, grandTotal);
     };
 
-    // Order matters: translation tests first (they install translators)
     runGuiTest(new TranslationTests());
     // runGuiTest(new TcpThread_QApplicationNeeded_tests());
     // runGuiTest(new PersistentConnectionLoopTests());
@@ -56,19 +150,27 @@ int main(int argc, char *argv[])
     runGuiTest(new IncomingTcpThreadTests());
     runGuiTest(new ConnectionManagerTests());
 
-    // Then non-GUI or independent tests
-    // runNonGuiTest(new TcpThreadTests());
     runNonGuiTest(new PacketTests());
     runNonGuiTest(new BaseTcpConnectionTests());
     runNonGuiTest(new IncomingTcpConnectionTests());
     runNonGuiTest(new OutgoingTcpConnectionTests());
     runNonGuiTest(new ConnectionTests());
+    // ---------------------------------------------------------------
 
-    if (failures == 0) {
+    // Final summary
+    qInfo().noquote() << "\n========================================";
+    qInfo().noquote() << "Test run finished:" << QDateTime::currentDateTime().toString(Qt::ISODate);
+    qInfo().noquote() << QString("Test classes executed : %1").arg(testsRun);
+    qInfo().noquote() << QString("Total tests           : %1").arg(grandTotal.total);
+    qInfo().noquote() << QString("Failures              : %1").arg(grandTotal.failures);
+    qInfo().noquote() << QString("Skipped               : %1").arg(grandTotal.skipped);
+    qInfo().noquote() << QString("Errors                : %1").arg(grandTotal.errors);
+    qInfo().noquote() << "========================================";
+
+    if (grandTotal.failures == 0 && grandTotal.errors == 0)
         qInfo() << "All tests passed!";
-    } else {
-        qWarning() << "Tests failed! Total failures:" << failures;
-    }
+    else
+        qWarning() << "Some tests failed or had errors!";
 
-    return failures;  // 0 = all passed, non-zero = failures
+    return (grandTotal.failures + grandTotal.errors) > 0 ? 1 : 0;
 }
