@@ -35,6 +35,9 @@ class PersistentConnection : public QDialog
         void initDTLS();
 
         void initWithThread(TCPThread *thethread, quint16 portNum);
+
+        [[nodiscard]] quint64 connectionId() const { return connectionId_; }
+
     signals:
         void persistentPacketSend(Packet sendpacket);
         void closeConnection();
@@ -88,6 +91,8 @@ private:
         QStringList previousCommands;
 
         bool darkMode;
+
+        quint64 connectionId_ = 0;
 
         void loadComboBox();
         void loadTrafficView();
