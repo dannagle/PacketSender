@@ -27,7 +27,32 @@ ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent
     packetReply.clear();
 }
 
+void ThreadedTCPServer::setupGlobalLogging()
+{
+    static bool done = false;
+    if (done)
+        return;
+    done = true;
 
+    if (!consoleMode) {
+        connect(connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    packetReceivedECHO(p);
+                });
+        connect(connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    packetSentECHO(p);
+                });
+    } else {
+        connect(connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    outputTCPPacket(p);
+                });
+        connect(connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    outputTCPPacket(p);
+                });
+    }
 }
 
 {
