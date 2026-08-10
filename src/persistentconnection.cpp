@@ -173,6 +173,23 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
     QApplication::processEvents();
 }
 
+void PersistentConnection::initWithConnection(quint64 connectionId, quint16 port, bool isSecure)
+{
+    connectionId_ = connectionId;
+
+    if (isSecure) {
+        setWindowTitle("SSL://You:" + QString::number(port));
+    } else {
+        setWindowTitle("TCP://You:" + QString::number(port));
+    }
+
+    QApplication::processEvents();
+
+    ui->stopResendingButton->hide();
+
+    QApplication::processEvents();
+}
+
 
 void PersistentConnection::init()
 {
