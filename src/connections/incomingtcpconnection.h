@@ -16,6 +16,9 @@ public:
 
     void receiveData(const int socketDescriptor, const bool isSecure, const bool persistent) override;
     virtual std::unique_ptr<IncomingTcpThread> makeIncomingTcpThread(int socketDescriptor, bool isSecure, bool isPersistent);
+private:
+    signals:
+        void sendRequested(Packet packet);
 };
 
 
