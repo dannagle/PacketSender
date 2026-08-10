@@ -14,7 +14,7 @@ class IncomingTcpConnection : public BaseTcpConnection
 public:
     explicit IncomingTcpConnection(QObject* parent = nullptr);
 
-    void receiveData(const int socketDescriptor, const bool isSecure, const bool persistent) override;
+    void receiveData(int socketDescriptor, bool isSecure, bool persistent) override;
     virtual std::unique_ptr<IncomingTcpThread> makeIncomingTcpThread(int socketDescriptor, bool isSecure, bool isPersistent);
 
     void send(const Packet& packet) override;
