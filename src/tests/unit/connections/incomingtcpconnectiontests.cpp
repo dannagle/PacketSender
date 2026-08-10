@@ -17,7 +17,7 @@ void IncomingTcpConnectionTests::testIsIncoming()
     QCOMPARE(conn->isIncoming(), true);
 }
 
-void IncomingTcpConnectionTests::testSend_throwsRuntimeException()
+void IncomingTcpConnectionTests::testSend_EmitsSendRequested_whenThreadIsNotNullPtr()
 {
     auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
     auto connection = std::make_unique<IncomingTcpConnectionTestDouble>();
@@ -26,19 +26,29 @@ void IncomingTcpConnectionTests::testSend_throwsRuntimeException()
 
     connection->setThread(std::move(thread));
 
-    try
-    {
-        connection->send(p);
-        QFAIL("send should have thrown");
-    } catch(std::runtime_error& e)
-    {
-        // Because we're using a TestDouble, the error message will read
-        // "Unsupported Operation: IncomingTcpConnectionTestDouble cannot send Packet"
-        // but production code will read "Unsupported Operation: IncomingTcpConnection\\w* cannot send Packet"
-        QRegularExpression re("Unsupported Operation: IncomingTcpConnection\\w* cannot send Packet");
-        auto fromString = QString::fromStdString(e.what());
-        QVERIFY(re.match(fromString).hasMatch());
-    }
+    QSignalSpy sendRequestedSpy(connection.get(), &IncomingTcpConnectionTestDouble::sendRequested);
+    connection->send(p);
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(sendRequestedSpy.count(), 1, 1000);
+}
+
+void IncomingTcpConnectionTests::testSend_EmitsErrorOccurred_whenThreadIsNullPtr()
+{
+    // auto thread = std::make_unique<IncomingTcpThread>(TestUtils::createMockSocketWithSocketDescriptorOtherThan0());
+    auto connection = std::make_unique<IncomingTcpConnectionTestDouble>();
+
+    const auto p = TestUtils::createPacketForTest();
+
+    // connection->setThread(std::move(thread));
+
+    QSignalSpy sendRequestedSpy(connection.get(), &IncomingTcpConnectionTestDouble::sendRequested);
+    QSignalSpy errorOccurredSpy(connection.get(), &IncomingTcpConnectionTestDouble::errorOccurred);
+
+    connection->send(p);
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(errorOccurredSpy.count(), 1, 1000);
+    QCOMPARE(errorOccurredSpy.first().first(), "No active thread to send on");
+
+    QTRY_COMPARE_EQ_WITH_TIMEOUT(sendRequestedSpy.count(), 0, 1000);
 }
 
 void IncomingTcpConnectionTests::test_receiveData_threadDoesNotExist()

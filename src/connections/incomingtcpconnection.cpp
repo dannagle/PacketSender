@@ -39,3 +39,12 @@ std::unique_ptr<IncomingTcpThread> IncomingTcpConnection::makeIncomingTcpThread(
     return std::make_unique<IncomingTcpThread>(socketDescriptor, isSecure, persistent, this);
 }
 
+void IncomingTcpConnection::send(const Packet& packet)
+{
+    if (!thread_) {
+        emit errorOccurred("No active thread to send on");
+        return;
+    }
+    emit sendRequested(packet);
+}
+

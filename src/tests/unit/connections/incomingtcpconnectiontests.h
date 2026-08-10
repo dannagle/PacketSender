@@ -16,7 +16,8 @@ private slots:
     void testIsIncoming();
 
     // send() tests
-    void testSend_throwsRuntimeException();
+    void testSend_EmitsSendRequested_whenThreadIsNotNullPtr();
+    void testSend_EmitsErrorOccurred_whenThreadIsNullPtr();
 
     // receiveData() tests
     void test_receiveData_threadDoesNotExist();
