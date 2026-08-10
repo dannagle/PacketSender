@@ -5,6 +5,7 @@
 #include <QTcpServer>
 #include <QList>
 
+#include "connectionmanager.h"
 #include "tcpthread.h"
 #ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
@@ -22,6 +23,7 @@ class ThreadedTCPServer : public QTcpServer
 
     protected:
         void incomingConnection(qintptr socketDescriptor);
+        ConnectionManager* connectionManager;
 
     signals:
         void packetReceived(Packet sendpacket);
