@@ -26,6 +26,7 @@
 #include <QHostAddress>
 #include "tcpthread.h"
 #include "packet.h"
+#include "connectionmanager.h"
 #ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
 #endif
@@ -119,6 +120,8 @@ class PacketNetwork : public QObject
         static bool DTLSisSupported();
         QList<DtlsServer *> dtlsServers;
 
+        ConnectionManager* getConnectionManager() { return &connectionManager; };
+
 
     signals:
         void packetReceived(Packet sendpacket);
@@ -135,6 +138,8 @@ public slots:
         void packetToSend(Packet sendpacket);
         void on_twoVerify_StateChanged();
 
+protected:
+        ConnectionManager connectionManager;
 
 private slots:
         void httpFinished(QNetworkReply* pReply);
