@@ -123,6 +123,8 @@ void PacketNetwork::kill()
     }
     dtlsServers.clear();
 
+    connectionManager.shutdownAll();
+
     QDEBUG();
 
     QCoreApplication::processEvents();
