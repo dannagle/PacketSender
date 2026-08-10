@@ -100,16 +100,7 @@ void PersistentConnection::aboutToClose()
 {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
-    QDEBUG() << "checking thread null";
-    if (thread == NULL) {
-        QDEBUG() << "pointer is null";
-    } else {
-        QDEBUG() << "requesting stop";
-        thread->closeRequest = true;
-    }
-
-    //cannot reliably call "wait" on a thread, so just exit.
-
+    emit closeConnection();
 }
 
 void PersistentConnection::statusReceiver(QString message)
