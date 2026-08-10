@@ -102,11 +102,11 @@ bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const Q
 
     encrypted = isEncrypted;
 
-
-    tcpthreadList.clear();
 #ifndef CONSOLE_BUILD
     pcList.clear();
 #endif
+
+    setupGlobalLogging();
 
     bool bindResult = listen(
                           IPV4_OR_IPV6
@@ -114,7 +114,6 @@ bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const Q
 
     QDEBUG() << "Binding" << serverPort() << bindResult;
     return bindResult;
-
 }
 
 void ThreadedTCPServer::responsePacket(Packet packetToSend)
