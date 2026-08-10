@@ -21,6 +21,10 @@ class ThreadedTCPServer : public QTcpServer
         bool init(quint16 port, bool isEncrypted, const QString& ipMode);
         void setupGlobalLogging();
 
+        #ifndef CONSOLE_BUILD
+            void setupPersistentWindowConnections(PersistentConnection *pcWindow, quint64 id);
+        #endif
+
         void responsePacket(Packet packetToSend);
 
     protected:
