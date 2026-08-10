@@ -44,16 +44,10 @@ class ThreadedTCPServer : public QTcpServer
         void outputTCPPacket(Packet receivePacket);
 
 
-
     private:
-        QList<TCPThread *> threads;
         Packet packetReply;
 
-
-
-        QList<TCPThread *> tcpthreadList;
 #ifndef CONSOLE_BUILD
-
         QList<PersistentConnection *> pcList;
 #endif
 

@@ -22,7 +22,6 @@ ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent
 {
     connectionManager = manager;
 
-    threads.clear();
     consoleMode = false;
     packetReply.clear();
 }
