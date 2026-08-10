@@ -126,77 +126,37 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
 {
     QDEBUG() << "new tcp connection";
 
-    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
-    bool persistentConnectCheck = settings.value("persistentTCPCheck", false).toBool() && (!consoleMode);
-
-    QDEBUGVAR(persistentConnectCheck);
-
-    TCPThread *thread = new TCPThread(socketDescriptor, this);
-    thread->isSecure = encrypted;
-    thread->packetReply = packetReply;
-    thread->consoleMode = consoleMode;
-    QDEBUGVAR(thread->isSecure);
-    if (persistentConnectCheck) {
-#ifndef CONSOLE_BUILD
-
-        PersistentConnection * pcWindow = new PersistentConnection();
-        thread->incomingPersistent = true;
-        pcWindow->initWithThread(thread, serverPort());
-
-
-        connect(thread, SIGNAL(finished()), pcWindow, SLOT(socketDisconnected()));
-
-
-        QDEBUG() << ": thread Connection attempt " <<
-                 connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
-                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
-                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
-
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
-
-        thread->start();
-
-        pcWindow->show();
-
-        //Prevent Qt from auto-destroying these windows.
-        //TODO: Use a real connection manager.
-        pcList.append(pcWindow);
-
-        //TODO: Use a real connection manager.
-        //prevent Qt from auto-destorying this thread while it tries to close.
-        tcpthreadList.append(thread);
-#endif
-    } else {
-
-        connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
-
-
-        if(consoleMode) {
-            QDEBUG() << "consoleout" << connect(thread, &TCPThread::packetReceived,
-                    this, &ThreadedTCPServer::outputTCPPacket);
-
-            QDEBUG() << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(outputTCPPacket(Packet)));
-
-
-        } else {
-            QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                     << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                     << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-        }
-
-        thread->start();
-
+    if (!connectionManager) {
+        QDEBUG() << "connectionManager is null";
+        return;
     }
 
+    // Decide whether this should be a persistent (GUI) connection
+    QSettings settings(SETTINGSFILE, QSettings::IniFormat);
+    const bool isPersistentConnection =
+        settings.value("persistentTCPCheck", false).toBool() && !consoleMode;
 
+    QDEBUGVAR(isPersistentConnection);
+
+    auto [id, conn] = connectionManager->createIncomingTcpConnection();
+
+#ifndef CONSOLE_BUILD
+    // ---------------------------------------------------------------
+    // Persistent GUI path – create the dedicated window and wire it
+    // ---------------------------------------------------------------
+    if (isPersistentConnection) {
+        PersistentConnection *pcWindow = new PersistentConnection();
+        pcWindow->initWithConnection(id, serverPort(), encrypted);
+        setupPersistentWindowConnections(pcWindow, id);
+
+        pcWindow->show();
+        pcList.append(pcWindow);   // keep the window alive
+    }
+#endif
+
+    // Hand the socket over to the connection object
+    conn->receiveData(socketDescriptor, encrypted, isPersistentConnection);
 }
-
 
 void ThreadedTCPServer::outputTCPPacket(Packet receivePacket)
 {
