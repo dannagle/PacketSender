@@ -409,6 +409,18 @@ void PersistentConnection::packetSentSlot(Packet pkt)
 
 void PersistentConnection::packetReceivedSlot(Packet pkt)
 {
+    if (
+        sendPacket.toIP.isEmpty()
+        && !pkt.fromIP.isEmpty()
+        && pkt.fromIP.toLower() != "you") {
+            sendPacket.toIP = pkt.fromIP;
+            sendPacket.port = pkt.fromPort;
+
+            if (sendPacket.tcpOrUdp.isEmpty())
+            {
+                sendPacket.tcpOrUdp = pkt.tcpOrUdp;
+            }
+    }
     packetSentSlot(pkt);
 }
 
