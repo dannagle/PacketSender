@@ -75,7 +75,8 @@ public:
 
 
 PacketNetwork::PacketNetwork(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    connectionManager(this)
 {
 
     joinedMulticast.clear();
