@@ -432,7 +432,7 @@ void PacketNetwork::init()
         }
 
 
-        tcp = new ThreadedTCPServer(this);
+        tcp = new ThreadedTCPServer(getConnectionManager(), this);
         tcp->init(tcpPort, false, ipMode);
         tcpServers.append(tcp);
 
@@ -444,7 +444,7 @@ void PacketNetwork::init()
             continue;
         }
 
-        ssl = new ThreadedTCPServer(this);
+        ssl = new ThreadedTCPServer(getConnectionManager(), this);
         ssl->init(sslPort, true, ipMode);
         sslServers.append(ssl);
 

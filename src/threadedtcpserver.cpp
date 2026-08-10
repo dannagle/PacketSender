@@ -17,13 +17,15 @@
 #include "tcpthread.h"
 #include "packet.h"
 
-ThreadedTCPServer::ThreadedTCPServer(QObject *parent) :
-    QTcpServer(parent)
+ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent)
+    : QTcpServer(parent)
 {
+    connectionManager = manager;
 
     threads.clear();
     consoleMode = false;
     packetReply.clear();
+}
 
 
 }
