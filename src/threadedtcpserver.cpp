@@ -30,9 +30,10 @@ ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent
 
 }
 
-bool ThreadedTCPServer::init(quint16 port, bool isEncrypted, QString ipMode)
 {
 
+bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const QString& ipMode)
+{
     Q_UNUSED(ipMode); //actually is used via macro.
 
     encrypted = isEncrypted;
