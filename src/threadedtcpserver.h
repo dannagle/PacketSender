@@ -26,10 +26,6 @@ class ThreadedTCPServer : public QTcpServer
         void incomingConnection(qintptr socketDescriptor);
         ConnectionManager* connectionManager;
 
-    signals:
-        void packetReceived(Packet sendpacket);
-        void toStatusBar(const QString & message, int timeout = 0, bool override = false);
-        void packetSent(Packet sendpacket);
     private:
         Packet packetReply;
 
