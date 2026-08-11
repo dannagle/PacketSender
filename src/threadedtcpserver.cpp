@@ -85,22 +85,3 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     // Hand the socket over to the connection object
     conn->receiveData(socketDescriptor, encrypted, isPersistentConnection);
 }
-
-void ThreadedTCPServer::packetReceivedECHO(Packet sendpacket)
-{
-    emit packetReceived(sendpacket);
-}
-
-void ThreadedTCPServer::toStatusBarECHO(const QString &message, int timeout, bool override)
-{
-    emit toStatusBar(message, timeout, override);
-
-}
-
-void ThreadedTCPServer::packetSentECHO(Packet sendpacket)
-{
-    emit packetSent(sendpacket);
-
-}
-
-
