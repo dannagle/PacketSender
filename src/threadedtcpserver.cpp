@@ -14,7 +14,6 @@
 #include <QStandardPaths>
 
 #include "globals.h"
-#include "tcpthread.h"
 #include "packet.h"
 #include "connections/persistentconnectionwiring.h"
 
@@ -27,34 +26,6 @@ ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent
     packetReply.clear();
 }
 
-void ThreadedTCPServer::setupGlobalLogging()
-{
-    static bool done = false;
-    if (done)
-        return;
-    done = true;
-
-    if (!consoleMode) {
-        connect(connectionManager, &ConnectionManager::dataReceived,
-                this, [this](quint64, const Packet &p) {
-                    packetReceivedECHO(p);
-                });
-        connect(connectionManager, &ConnectionManager::packetSent,
-                this, [this](quint64, const Packet &p) {
-                    packetSentECHO(p);
-                });
-    } else {
-        connect(connectionManager, &ConnectionManager::dataReceived,
-                this, [this](quint64, const Packet &p) {
-                    outputTCPPacket(p);
-                });
-        connect(connectionManager, &ConnectionManager::packetSent,
-                this, [this](quint64, const Packet &p) {
-                    outputTCPPacket(p);
-                });
-    }
-}
-
 bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const QString& ipMode)
 {
     Q_UNUSED(ipMode); //actually is used via macro.
@@ -64,8 +35,6 @@ bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const Q
 #ifndef CONSOLE_BUILD
     pcList.clear();
 #endif
-
-    setupGlobalLogging();
 
     bool bindResult = listen(
                           IPV4_OR_IPV6

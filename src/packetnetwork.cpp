@@ -168,6 +168,31 @@ void PacketNetwork::outputPacket(Packet receivePacket)
     out.flush();
 }
 
+void PacketNetwork::setupConnectionLogging()
+{
+    if (consoleMode)
+    {
+        connect(&connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    outputPacket(p);
+                });
+        connect(&connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    outputPacket(p);
+                });
+    } else
+    {
+        connect(&connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    packetReceivedECHO(p);
+                });
+        connect(&connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    packetSentECHO(p);
+                });
+    }
+}
+
 QString PacketNetwork::getIPmode()
 {
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);

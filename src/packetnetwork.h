@@ -92,6 +92,7 @@ class PacketNetwork : public QObject
         bool persistentConnectCheck;
         bool isSecure;
         void setIPmode(int mode);
+        void setupConnectionLogging();
         static QString getIPmode();
 
         bool DTLSListening();
