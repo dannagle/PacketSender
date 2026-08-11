@@ -16,6 +16,7 @@
 #include "globals.h"
 #include "tcpthread.h"
 #include "packet.h"
+#include "connections/persistentconnectionwiring.h"
 
 ThreadedTCPServer::ThreadedTCPServer(ConnectionManager* manager, QObject* parent)
     : QTcpServer(parent)
@@ -53,47 +54,6 @@ void ThreadedTCPServer::setupGlobalLogging()
                 });
     }
 }
-
-#ifndef CONSOLE_BUILD
-void ThreadedTCPServer::setupPersistentWindowConnections(PersistentConnection *pcWindow, const quint64 id)
-{
-    // Window → Manager
-    connect(pcWindow, &PersistentConnection::persistentPacketSend,
-            this, [this, id](const Packet &p) {
-                connectionManager->send(id, p);
-            });
-
-    connect(pcWindow, &PersistentConnection::closeConnection,
-            this, [this, id]() {
-                connectionManager->close(id);
-            });
-
-    // Manager → Window (filtered by id)
-    connect(connectionManager, &ConnectionManager::stateChanged,
-            pcWindow, [pcWindow, id](quint64 cid, const QString &msg) {
-                if (cid == id)
-                    pcWindow->statusReceiver(msg);
-            });
-
-    connect(connectionManager, &ConnectionManager::packetSent,
-            pcWindow, [pcWindow, id](quint64 cid, const Packet &p) {
-                if (cid == id)
-                    pcWindow->packetSentSlot(p);
-            });
-
-    connect(connectionManager, &ConnectionManager::dataReceived,
-            pcWindow, [pcWindow, id](quint64 cid, const Packet &p) {
-                if (cid == id)
-                    pcWindow->packetReceivedSlot(p);
-            });
-
-    connect(connectionManager, &ConnectionManager::disconnected,
-            pcWindow, [pcWindow, id](quint64 cid) {
-                if (cid == id)
-                    pcWindow->socketDisconnected();
-            });
-}
-#endif
 
 bool ThreadedTCPServer::init(const quint16 port, const bool isEncrypted, const QString& ipMode)
 {
@@ -146,7 +106,7 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     if (isPersistentConnection) {
         PersistentConnection *pcWindow = new PersistentConnection();
         pcWindow->initWithConnection(id, serverPort(), encrypted);
-        setupPersistentWindowConnections(pcWindow, id);
+        PersistentConnectionWiring::setupPersistentWindowConnections(pcWindow, connectionManager, id);
 
         pcWindow->show();
         pcList.append(pcWindow);   // keep the window alive
