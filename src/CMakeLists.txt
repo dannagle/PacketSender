@@ -102,6 +102,7 @@ set(
   incomingtcpthread.cpp
   fileutils.cpp
   ConnectionStatusMessages.h
+  connections/persistentconnectionwiring.cpp
 )
 
 
