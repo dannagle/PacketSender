@@ -37,7 +37,6 @@ class ThreadedTCPServer : public QTcpServer
         void packetReceivedECHO(Packet sendpacket);
         void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
         void packetSentECHO(Packet sendpacket);
-        void outputTCPPacket(Packet receivePacket);
 
 
     private:

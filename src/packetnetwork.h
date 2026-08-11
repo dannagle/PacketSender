@@ -133,6 +133,7 @@ public slots:
         void packetReceivedECHO(Packet sendpacket);
         void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
         void packetSentECHO(Packet sendpacket);
+        void outputPacket(Packet receivePacket);
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);

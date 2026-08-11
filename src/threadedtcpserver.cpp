@@ -117,31 +117,6 @@ void ThreadedTCPServer::incomingConnection(qintptr socketDescriptor)
     conn->receiveData(socketDescriptor, encrypted, isPersistentConnection);
 }
 
-void ThreadedTCPServer::outputTCPPacket(Packet receivePacket)
-{
-    QTextStream out(stdout);
-
-    out << "\nFrom: " << receivePacket.fromIP << ", Port:" << receivePacket.fromPort;
-    out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
-
-    if(!receivePacket.errorString.isEmpty()) {
-        out << "\nError/Info:" << receivePacket.errorString;
-    }
-
-    if (!receivePacket.hexString.isEmpty()) {
-        out << "\nResponse HEX:" << receivePacket.hexString;
-        out << "\nResponse ASCII:" << receivePacket.asciiString();
-    }
-
-    out << ENDL;
-
-    out.flush();
-
-
-}
-
-
-
 void ThreadedTCPServer::packetReceivedECHO(Packet sendpacket)
 {
     emit packetReceived(sendpacket);
