@@ -53,7 +53,9 @@ void BaseTcpThread::shutdown()
     if (isThreadRunning())
         QDEBUG() << "We were running. Stopping.";
     {
+        acceptingSends = false;
         threadState = ThreadState::Stopping;
+
         stop();                    // Use our own stop abstraction
         quit();                    // Ask event loop to exit
         bool finished = wait(2500); // Slightly longer timeout is safer
@@ -65,6 +67,11 @@ void BaseTcpThread::shutdown()
             wait(2500); // Slightly longer timeout is safer
         }
         threadState = ThreadState::Stopped;
+    }
+
+    {
+        QMutexLocker lock(&sendQueueMutex);
+        sendQueue.clear();
     }
 
     closeConnection();             // Always try to clean up socket
@@ -156,6 +163,31 @@ PacketSenderQSslSocketInterface* BaseTcpThread::getSocketInterface() const
     // qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
 
     return socketInterface.get();
+}
+
+void BaseTcpThread::enqueuePacket(const Packet& packet)
+{
+    if (!acceptingSends.load())
+        return;
+
+    QMutexLocker lock(&sendQueueMutex);
+    sendQueue.enqueue(packet);
+}
+
+void BaseTcpThread::drainSendQueue()
+{
+
+    QMutexLocker lock(&sendQueueMutex);
+
+    if (sendQueue.isEmpty())
+        return;
+
+    while (!sendQueue.isEmpty()) {
+        Packet p = sendQueue.dequeue();
+        lock.unlock();
+        sendOutgoingPacket(p);   // existing method
+        lock.relock();
+    }
 }
 
 QAbstractSocket::SocketState BaseTcpThread::getSocketState() const

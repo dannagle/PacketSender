@@ -67,7 +67,7 @@ IncomingTcpThread::~IncomingTcpThread() = default;
 
 void IncomingTcpThread::sendPacket(Packet packet)
 {
-    sendOutgoingPacket(packet);
+    enqueuePacket(packet);
 }
 
 Packet IncomingTcpThread::buildReceivedPacket()
@@ -226,6 +226,8 @@ void IncomingTcpThread::persistentConnectionLoop()
 
     while (!shouldStop())
     {
+        drainSendQueue();
+
         if (sock->waitForReadyRead(500))
         {
             processReceivedPacket();
@@ -262,5 +264,6 @@ void IncomingTcpThread::run()
         persistentConnectionLoop();
     }
 
+    drainSendQueue();
     closeConnection();
 }

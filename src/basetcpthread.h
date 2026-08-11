@@ -5,6 +5,8 @@
 #ifndef BASETCPTHREAD_H
 #define BASETCPTHREAD_H
 
+#include <QMutex>
+#include <qqueue.h>
 #include <QThread>
 #include <QSslSocket>
 #include "packet.h"
@@ -70,6 +72,13 @@ protected:
         Stopped,
         Error
     };
+
+    QMutex sendQueueMutex;
+    QQueue<Packet> sendQueue;
+    std::atomic<bool> acceptingSends{true};
+
+    virtual void enqueuePacket(const Packet &packet); // only called from main thread
+    virtual void drainSendQueue(); // only called from worker thread inside *TcpThread objects
 
     std::unique_ptr<PacketSenderQSslSocketInterface>& getSocketPtrByReference() {return socketInterface;}
     [[nodiscard]] virtual QAbstractSocket::SocketState getSocketState() const;
