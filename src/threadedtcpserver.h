@@ -6,7 +6,6 @@
 #include <QList>
 
 #include "connectionmanager.h"
-#include "tcpthread.h"
 #ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
 #endif
