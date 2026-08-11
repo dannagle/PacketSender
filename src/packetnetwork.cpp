@@ -376,6 +376,8 @@ void PacketNetwork::init()
     const QString lowPortText = tr("Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
     const QString portConsumedText = tr("Packet Sender attempted (and failed) to bind to port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?");
 
+    setupConnectionLogging();
+
 #ifdef RENDER_ONLY
     tcpPortList.clear();
     sslPortList.clear();
