@@ -515,18 +515,7 @@ void PacketNetwork::init()
             }
 
         }
-
-
-        QDEBUG() << connect(tcp, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(tcp, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(tcp, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
     }
-
-
-
-
 
     sendResponse = settings.value("sendReponse", false).toBool();
     responseData = (settings.value("responseHex", "")).toString();
