@@ -25,6 +25,7 @@ public:
     [[nodiscard]] bool isSecure() const override;
     [[nodiscard]] bool isPersistent() const override;
     [[nodiscard]] bool isIncoming() const override;
+    void moveSocketToWorkerThread();
 
     void send(const Packet& packet) override;
     void receiveData(int socketDescriptor, bool isSecure = false, bool persistent = false) override;

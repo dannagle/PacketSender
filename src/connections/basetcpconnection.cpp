@@ -18,6 +18,7 @@ const std::unordered_map<QString, Connection::State> messageToState = {
     {ConnectionStatusMessages::SSL_CONNECTED(), Connection::State::Active},
     {ConnectionStatusMessages::SSL_HANDSHAKE_FAILED(), Connection::State::Inactive},
     {ConnectionStatusMessages::DISCONNECTED(), Connection::State::Inactive},
+    {ConnectionStatusMessages::CONNECTED_AND_IDLE(), Connection::State::Active},
     // {ConnectionStatusMessages::ERROR(), Connection::State::Error},
     // {ConnectionStatusMessages::CONNECTING(), Connection::State::Active},
 };
@@ -74,6 +75,17 @@ bool BaseTcpConnection::isPersistent() const
 bool BaseTcpConnection::isIncoming() const
 {
     return thread_ && thread_->isIncoming();
+}
+
+void BaseTcpConnection::moveSocketToWorkerThread()
+{
+    if (!thread_) return;
+    if (auto *iface = thread_->getSocketInterface()) {
+        if (auto *real = iface->rawSocket()) {
+            real->setParent(nullptr);
+            real->moveToThread(thread_.get());
+        }
+    }
 }
 
 void BaseTcpConnection::send(const Packet& packet)
