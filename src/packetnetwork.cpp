@@ -503,12 +503,12 @@ void PacketNetwork::init()
             if(tcp->serverPort() < 1024 && tcp->serverPort() > 0) {
 
                 QString msgText = lowPortText;
-                msgText.replace("[PORT]", QString::number(udpPort));
+                msgText.replace("[PORT]", QString::number(tcp->serverPort()));
                 msgBoxBindError.setText(msgText);
                 msgBoxBindError.exec();
             } else {
                 QString msgText = portConsumedText;
-                msgText.replace("[PORT]", QString::number(udpPort));
+                msgText.replace("[PORT]", QString::number(tcp->serverPort()));
                 msgBoxBindError.setText(msgText);
                 msgBoxBindError.exec();
 
