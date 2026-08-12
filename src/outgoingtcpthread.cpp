@@ -431,7 +431,7 @@ void OutgoingTcpThread::processIncomingData()
     if (!received.hexString.isEmpty()) {
         emit packetReceived(received);
 
-        // TODO: Smart response logic will go here later
+        // send smart response if there is one. Also sends console reply
         sendReplyIfNeeded(received);
     }
 }
