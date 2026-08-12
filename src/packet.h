@@ -75,7 +75,7 @@ class Packet
         bool isPUT();
         bool isDELETE();
         bool isPATCH();
-        bool isValidForSending(QString* errorMessage = nullptr);
+        bool isValidForSending(QString* errorMessage = nullptr) const;
 
         QDateTime timestamp;
 
@@ -88,7 +88,7 @@ class Packet
         static QString byteArrayToHex(QByteArray data);
         static QByteArray HEXtoByteArray(QString thehex);
         static QString removeIPv6Mapping(QHostAddress ipv6);
-        QByteArray getByteArray();
+        QByteArray getByteArray() const;
         QString asciiString();
 
         void saveToDB();

@@ -116,7 +116,7 @@ bool Packet::isTCP()
     return tcpOrUdp.trimmed().toLower().contains("tcp") || isSSL();
 }
 
-bool Packet::isValidForSending(QString* errorMessage)
+bool Packet::isValidForSending(QString* errorMessage) const
 {
     if (toIP.isEmpty()) {
         if (errorMessage) *errorMessage = "Destination address (toIP) is empty";
@@ -596,7 +596,7 @@ int Packet::hexToInt(QChar hex)
 
 }
 
-QByteArray Packet::getByteArray()
+QByteArray Packet::getByteArray() const
 {
     return HEXtoByteArray(hexString);
 }
