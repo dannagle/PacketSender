@@ -55,6 +55,7 @@ public:
     virtual QString getPeerAddressAsString() const;
 
     std::unique_ptr<PacketSenderQSslSocketInterface> socketInterface;
+    virtual void enqueuePacket(const Packet &packet); // only called from main thread
 
 signals:
     void packetSent(const Packet& packet);
@@ -77,7 +78,6 @@ protected:
     QQueue<Packet> sendQueue;
     std::atomic<bool> acceptingSends{true};
 
-    virtual void enqueuePacket(const Packet &packet); // only called from main thread
     virtual void drainSendQueue(); // only called from worker thread inside *TcpThread objects
 
     std::unique_ptr<PacketSenderQSslSocketInterface>& getSocketPtrByReference() {return socketInterface;}
