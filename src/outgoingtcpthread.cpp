@@ -352,7 +352,7 @@ void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
     if (!lastIdleStatusEmitTime.has_value() ||
         lastIdleStatusEmitTime->msecsTo(now) >= idleThresholdMs) {
 
-        emit connectionStatus("Connected and idle.");
+        emit connectionStatus(ConnectionStatusMessages::CONNECTED_AND_IDLE());
         lastIdleStatusEmitTime = now;
     }
 
@@ -426,7 +426,7 @@ void OutgoingTcpThread::processIncomingData()
 void OutgoingTcpThread::waitForAndProcessIncomingData()
 {
     QDEBUG() << "receiveBeforeSend mode: waiting for incoming data...";
-    emit connectionStatus("Waiting for data before send");
+    emit connectionStatus(ConnectionStatusMessages::WAITING_FOR_DATA_BEFORE_SEND());
 
     // Wait for data (interruptible)
     interruptibleWaitForReadyRead(500);

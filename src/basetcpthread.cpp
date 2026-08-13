@@ -9,6 +9,7 @@
 #include <QSslKey>
 #include <QUuid>
 
+#include "ConnectionStatusMessages.h"
 #include "fileutils.h"
 #include "settingnames.h"
 
@@ -261,14 +262,14 @@ void BaseTcpThread::sendOutgoingPacket(Packet& packet)
     PacketSenderQSslSocketInterface* psSocketInterface = getSocketInterface();
     if (!psSocketInterface) {
         qWarning() << "sendOutgoingPacket: No socket available";
-        emit connectionStatus("Error: No socket available");
+        emit connectionStatus(ConnectionStatusMessages::ERROR_NO_SOCKET_AVAILABLE());
         emit error(QAbstractSocket::SocketAccessError);
         return;
     }
 
     if (getSocketState() != QAbstractSocket::ConnectedState) {
         qWarning() << "sendOutgoingPacket: Socket is not connected (state =" << getSocketState() << ")";
-        emit connectionStatus("Error: Socket not connected");
+        emit connectionStatus(ConnectionStatusMessages::ERROR_SOCKET_NOT_CONNECTED());
         emit error(QAbstractSocket::SocketAccessError);
         return;
     }
@@ -311,7 +312,7 @@ void BaseTcpThread::closeConnection()
 
     if (shouldEmit)
     {
-        emit connectionStatus("Disconnected");
+        emit connectionStatus(ConnectionStatusMessages::DISCONNECTED());
     }
 }
 
