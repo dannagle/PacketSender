@@ -103,6 +103,7 @@ void OutgoingTcpThread::run()
         persistentConnectionLoop();    // pure loop only
     }
 
+    drainSendQueue();
     closeConnection();                 // Single cleanup point for
 
     qDebug() << "OutgoingTcpThread::run() finished";
@@ -505,20 +506,15 @@ void OutgoingTcpThread::persistentConnectionLoop()
             break;
         }
 
-        const bool isIdleCondition = sendPacket.hexString.isEmpty() &&
-            sendPacket.persistent &&
-            getSocketInterface()->bytesAvailable() == 0;
-        idleDebugMessage(isIdleCondition);
+        drainSendQueue();
 
-        if (sendPacket.receiveBeforeSend)
-        {
-            waitForAndProcessIncomingData();
-        } else if (isIdleCondition)
-        {
-            handlePersistentIdleCase(2000);
-        }
-        else {
+        if (getSocketInterface()->bytesAvailable() > 0) {
             processIncomingData();
+        } else if (sendPacket.receiveBeforeSend) {
+            waitForAndProcessIncomingData();
+        } else {
+            // Idle: block briefly so we don't spin
+            handlePersistentIdleCase(2000);  // already does interruptibleWaitForReadyRead
         }
     }
 
