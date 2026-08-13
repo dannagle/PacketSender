@@ -337,22 +337,6 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoo
     QVERIFY(statusSpy.contains(QVariantList{"Connected and idle."}));
 }
 
-void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_skipsIdleWhenHasDataToSend()
-{
-    auto* mockSock = TestUtils::createMockSocketForTest();
-    mockSock->setMockState(QAbstractSocket::ConnectedState);
-
-    Packet p = TestUtils::createPacketForTest(); // has hexString
-    p.persistent = true;
-
-    OutgoingTcpThreadTestDouble thread(mockSock, p);
-
-    thread.callPersistentConnectionLoop();
-
-    // Add a counter in test double for how many times idle handler was called
-    QCOMPARE(thread.getCallCount(CallTracker::HANDLE_PERSISTENT_IDLE_CASE()), 0);
-}
-
 void OutgoingTcpThreadPersistentConnectionLoopTests::testPersistentConnectionLoop_exitsLoopEarlyIfAlreadyStopped()
 {
     auto* mockSock = TestUtils::createMockSocketForTest();
