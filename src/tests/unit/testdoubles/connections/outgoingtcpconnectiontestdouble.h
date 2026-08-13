@@ -9,7 +9,7 @@
 
 #include "../../connections/outgoingtcpconnection.h"
 #include "../../../../tcpThreads/outgoingtcpthread.h"
-#include "../unit/testdoubles/outgoingtcpthreadtestdouble.h"
+#include "../unit/testdoubles/tcpThreads/outgoingtcpthreadtestdouble.h"
 
 class OutgoingTcpConnectionTestDouble : public OutgoingTcpConnection, public CallTracker
 {

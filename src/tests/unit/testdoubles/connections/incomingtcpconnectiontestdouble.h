@@ -6,7 +6,7 @@
 #define INCOMINGTCPCONNECTIONTESTDOUBLE_H
 
 #include "connections/incomingtcpconnection.h"
-#include "testdoubles/incomingtcpthreadtestdouble.h"
+#include "testdoubles/tcpThreads/incomingtcpthreadtestdouble.h"
 
 class IncomingTcpConnectionTestDouble : public IncomingTcpConnection, public CallTracker
 {

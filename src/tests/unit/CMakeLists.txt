@@ -43,18 +43,18 @@ add_executable(${TEST_NAME}
 
     ../../tcpThreads/basetcpthread.cpp
     tcpThreads/basetcpthreadtests.cpp
-    testdoubles/basetcpthreadtestdouble.h
+    testdoubles/tcpThreads/basetcpthreadtestdouble.h
 
     ../../tcpThreads/outgoingtcpthread.cpp
     tcpThreads/outgoingtcpthreadtests.cpp
     tcpThreads/singlesendoutgoingtcpthreadtests.cpp
     tcpThreads/outgoingtcpthreadpersistentconnectionlooptests.cpp
     tcpThreads/outgoingtcpthreadconnectiontests.cpp
-    testdoubles/outgoingtcpthreadtestdouble.h
+    testdoubles/tcpThreads/outgoingtcpthreadtestdouble.h
 
     ../../tcpThreads/incomingtcpthread.cpp
     tcpThreads/incomingtcpthreadtests.cpp
-    testdoubles/incomingtcpthreadtestdouble.h
+    testdoubles/tcpThreads/incomingtcpthreadtestdouble.h
 
     ../../packet.cpp
     packettests.cpp

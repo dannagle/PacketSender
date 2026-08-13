@@ -12,7 +12,7 @@
 #include "settingnames.h"
 #include "utils/testutils.h"
 #include "../../tcpThreads/incomingtcpthread.h"
-#include "testdoubles/incomingtcpthreadtestdouble.h"
+#include "testdoubles/tcpThreads/incomingtcpthreadtestdouble.h"
 #include "../../tcpThreads/basetcpthread.h"
 #include "settings.h"
 #include "utils/calltracker.h"

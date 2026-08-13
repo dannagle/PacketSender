@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include "../basetcpthreadtestdouble.h"
+#include "../tcpThreads/basetcpthreadtestdouble.h"
 #include "../../utils/calltracker.h"
 #include "connections/basetcpconnection.h"
 #include "tests/unit/utils/testutils.h"

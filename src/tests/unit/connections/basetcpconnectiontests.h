@@ -8,7 +8,7 @@
 #include <QObject>
 
 #include "../../tcpThreads/basetcpthread.h"
-#include "../testdoubles/basetcpthreadtestdouble.h"
+#include "../testdoubles/tcpThreads/basetcpthreadtestdouble.h"
 
 class BaseTcpConnectionTests : public QObject
 {

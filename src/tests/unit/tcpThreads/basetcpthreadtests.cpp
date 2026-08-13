@@ -8,7 +8,7 @@
 #include <QSignalSpy>
 
 #include "realqsslsocket.h"
-#include "testdoubles/basetcpthreadtestdouble.h"
+#include "testdoubles/tcpThreads/basetcpthreadtestdouble.h"
 #include "testdoubles/MockSslSocket.h"
 #include "utils/testutils.h"
 
