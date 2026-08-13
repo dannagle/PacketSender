@@ -121,15 +121,11 @@ bool BaseTcpThread::interruptibleWaitForReadyRead(const int timeoutMs)
     const int chunk = 50;  // check every 50 ms
     int remaining = timeoutMs;
 
-    QDEBUG() << "initial remaining: " << remaining;
-
     while (remaining > 0 && !shouldStop()) {
         if (getSocketInterface() && getSocketInterface()->waitForReadyRead(chunk)) {
-            QDEBUG() << "inside if waitForReadyRead(chunk)";
             return true;
         }
         remaining -= chunk;
-        QDEBUG() << "remaining after substraction: " << remaining;
         msleep(1);  // tiny yield
     }
 
@@ -157,11 +153,6 @@ bool BaseTcpThread::isConnected() const
 
 PacketSenderQSslSocketInterface* BaseTcpThread::getSocketInterface() const
 {
-    // qDebug() << "=== getSocket() called ===";
-    // qDebug() << "  socketInterface:" << (socketInterface ? "YES" : "NULL");
-    // qDebug() << "  socket (unique_ptr):" << (socket ? "YES" : "NULL");
-    // qDebug() << "  socketInterface? socketInterface->rawSocket() : nullptr: " << ((socketInterface? socketInterface->rawSocket() : nullptr) ? "NOT NULL" : "NULL");
-
     return socketInterface.get();
 }
 

@@ -332,18 +332,10 @@ void OutgoingTcpThread::handleConnectionFailure()
 
 bool OutgoingTcpThread::shouldContinuePersistentLoop() const
 {
-    QDEBUG() << "\nshouldContinuePersistentLoop()\n"
-        << "isInterruptionRequested(): " << isInterruptionRequested() << "\n"
-        << "getSocketInterface(): " << getSocketInterface() << "\n"
-        << "getSocketState(): " << getSocketState() << "\n"
-        << "getSocketState() == QAbstractSocket::ConnectedState: " << (getSocketState() == QAbstractSocket::ConnectedState) << "\n"
-        << "!shouldStop(): " << !shouldStop() << "\n";
-
     bool result =  !shouldStop() &&
         getSocketInterface() &&
         getSocketState() == QAbstractSocket::ConnectedState;
 
-    QDEBUG() << "result: " << result;
     return result;
 }
 
@@ -356,17 +348,11 @@ void OutgoingTcpThread::handlePersistentIdleCase(int idleThresholdMs)
 {
     const QDateTime now = QDateTime::currentDateTime();
 
-    QDEBUG() << "IDLE PATH TAKEN"
-        << "hexString empty =" << sendPacket.hexString.isEmpty()
-        << "persistent =" << sendPacket.persistent
-        << "bytesAvailable =" << (getSocketInterface() ? getSocketInterface()->bytesAvailable() : -1);
-
     // NOSONAR - if-with-initializer reduces readability here
     if (!lastIdleStatusEmitTime.has_value() ||
         lastIdleStatusEmitTime->msecsTo(now) >= idleThresholdMs) {
 
         emit connectionStatus("Connected and idle.");
-        QDEBUG() << ">>> Emitted 'Connected and idle.'";
         lastIdleStatusEmitTime = now;
     }
 

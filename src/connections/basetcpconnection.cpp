@@ -25,12 +25,12 @@ const std::unordered_map<QString, Connection::State> messageToState = {
 
 Connection::State BaseTcpConnection::stateFromMessage(const QString& msg) const
 {
-    qDebug() << "BaseTcpConnection::stateFromMessage msg: " << msg;
+    // qDebug() << "BaseTcpConnection::stateFromMessage msg: " << msg;
     if (auto it = messageToState.find(msg); it != messageToState.end()) {
-        qDebug() << "found " << msg;
+        // qDebug() << "found " << msg;
         return it->second;
     }
-    qDebug() << "did not find " << msg;
+    qDebug() << "BaseTcpConnection::stateFromMessage did not find " << msg;
     return State::Error;   // default
 }
 
@@ -156,12 +156,12 @@ void BaseTcpConnection::setupSignalConnections()
 
     connect(thread_.get(), &BaseTcpThread::connectionStatus,
         this, [this](const QString& msg) {
-            qDebug() << "connectionStatus lambda executed with msg: " << msg;
+            // qDebug() << "connectionStatus lambda executed with msg: " << msg;
 
             if (msg.startsWith("Sending data: ") && state_.load() == State::Active) return;
 
             setState(stateFromMessage(msg));
-            QDEBUG() << "state_ is now: " << getConnectionStateAsQstring();
+            // QDEBUG() << "state_ is now: " << getConnectionStateAsQstring();
 
             emit stateChanged(msg);
         }, Qt::DirectConnection);
