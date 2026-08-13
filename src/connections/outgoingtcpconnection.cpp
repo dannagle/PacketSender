@@ -11,19 +11,42 @@ OutgoingTcpConnection::OutgoingTcpConnection(QObject* parent)
 
 void OutgoingTcpConnection::send(const Packet& packet)
 {
-    // Clean up any previous thread (one-shot finished, or we want a fresh one)
+    QString errorMessage;
+    if (!packet.isValidForSending(&errorMessage))
+    {
+        QDEBUG() << "from OutgoingTcpConnection::send: " << errorMessage;
+        return;
+    }
+
+    const bool canReuseThread =
+        thread_
+        && thread_->isThreadRunning()
+        && isPersistent();
+
+    qDebug() << "Outgoing send"
+         << "reuse=" << canReuseThread
+         << "localPort=" << (thread_ ? thread_->getLocalPort() : 0)
+         << "thread=" << thread_.get();
+
+    if (canReuseThread)
+    {
+        // Live persistent connection — enqueue only, do not touch thread_
+        thread_->enqueuePacket(packet);
+        return;
+    }
+
+    // Clean up any previous thread (e.g. one-shot finished, or, in future, if we want a fresh one)
     if (thread_)
     {
         thread_->shutdown();
         thread_.reset();
     }
-
     try
     {
         // Create fresh thread for this send
         thread_ = std::move(makeOutgoingTcpThread(packet));
-
         setupSignalConnections();
+        moveSocketToWorkerThread();
         thread_->start();
     }
     catch (const std::exception& e)
