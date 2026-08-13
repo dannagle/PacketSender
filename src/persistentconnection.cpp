@@ -176,7 +176,11 @@ void PersistentConnection::initWithConnection(quint64 connectionId, quint16 port
 
     QApplication::processEvents();
 
-    ui->stopResendingButton->hide();
+    reSendPacket.clear();
+    if (sendPacket.repeat > 0)
+        reSendPacket = sendPacket;   // includes toIP
+    else
+        ui->stopResendingButton->hide();
 
     QApplication::processEvents();
 }
@@ -319,9 +323,11 @@ void PersistentConnection::refreshTimerTimeout()
         ui->timeLabel->setText(datestamp);
 
         QDateTime now = QDateTime::currentDateTime();
-        int repeatMS = (int)(reSendPacket.repeat * 1000 - 100);
-        if (reSendPacket.timestamp.addMSecs(repeatMS) < now) {
-            reSendPacket.timestamp = now;
+        if (reSendPacket.repeat > 0
+            && !reSendPacket.toIP.isEmpty()
+            && reSendPacket.timestamp.addMSecs(int(reSendPacket.repeat * 1000 - 100)) < now)
+        {
+            reSendPacket.timestamp = QDateTime::currentDateTime();
             emit persistentPacketSend(reSendPacket);
         }
 

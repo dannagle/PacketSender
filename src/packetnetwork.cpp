@@ -27,8 +27,7 @@
 #include <QStringList>
 #include "dtlsthread.h"
 #include "dtlsserver.h"
-
-
+#include "connections/persistentconnectionwiring.h"
 
 
 #ifdef CONSOLE_BUILD
@@ -988,6 +987,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.receiveBeforeSend = receiveBeforeSend;
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
+
     if(consoleMode) {
         sendpacket.persistent = false;
     }
@@ -997,62 +997,33 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         sendpacket.hexString = Packet::ASCIITohex(data);
     }
 
-#ifndef CONSOLE_BUILD
-    if (sendpacket.persistent && (sendpacket.isTCP())) {
-        //spawn a window.
-        PersistentConnection * pcWindow = new PersistentConnection();
-        TCPThread * thread = new TCPThread(sendpacket, this);
-        pcWindow->sendPacket = sendpacket;
-        pcWindow->init();
-        pcWindow->thread = thread;
-
-
-        QDEBUG() << ": thread Connection attempt " <<
-                 connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
-                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
-                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
-
-
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
-        //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
-        //        this, SLOT(toTrafficLog(Packet)));
-
-        pcWindow->show();
-        thread->start();
-
-
-        //Network manager will manage this thread so the UI window doesn't need to.
-        tcpthreadList.append(thread);
-
-        return;
-
-    }
-#endif
-
-    QHostAddress address;
-    address.setAddress(sendpacket.toIP);
-
-
+    // ---------------------------------------------------------------
+    // TCP / SSL (both persistent and one-shot)
+    // ---------------------------------------------------------------
     if (sendpacket.isTCP()) {
-        QDEBUG() << "Send this packet:" << sendpacket.name;
+#ifndef CONSOLE_BUILD
+        if (sendpacket.persistent) {
+            auto [id, conn] = connectionManager.createOutgoingTcpConnection();
 
+            PersistentConnection *pcWindow = new PersistentConnection();
+            pcWindow->sendPacket = sendpacket;
+            pcWindow->initWithConnection(id, sendpacket.port, sendpacket.isSSL());
 
-        TCPThread *thread = new TCPThread(sendpacket, this);
+            // Re-use the shared helper (same one Incoming uses)
+            PersistentConnectionWiring::setupPersistentWindowConnections(
+                pcWindow, &connectionManager, id);
 
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
-
-        //Prevent Qt from auto-destroying these threads.
-        //TODO: Develop a real thread manager.
-        tcpthreadList.append(thread);
-        thread->start();
+            conn->send(sendpacket);   // creates + starts the OutgoingTcpThread
+            pcWindow->show();
+            // (optional) keep the window alive the same way the server does
+            // pcList.append(pcWindow);  // only if you still maintain a list here
+            return;
+        }
+#endif
+        // One-shot (or console) outgoing TCP
+        auto [id, conn] = connectionManager.createOutgoingTcpConnection();
+        conn->send(sendpacket);
+        // Logging is already handled by setupConnectionLogging()
         return;
     }
 
