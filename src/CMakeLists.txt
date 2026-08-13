@@ -85,7 +85,6 @@ set(
   sendpacketbutton.cpp
   settings.cpp
   subnetcalc.cpp
-  tcpthread.cpp
   threadedtcpserver.cpp
   udpflooding.cpp
   languagechooser.cpp
@@ -94,7 +93,6 @@ set(
   association.cpp
   dtlsserver.cpp
   dtlsthread.cpp
-  persistentLoopConnection.cpp
   packetsenderqsslsocketinterface.h
   realqsslsocket.cpp
   basetcpthread.cpp

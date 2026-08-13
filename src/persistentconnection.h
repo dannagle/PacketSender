@@ -6,7 +6,6 @@
 #include <QStringList>
 
 #include "packet.h"
-#include "tcpthread.h"
 #include "dtlsthread.h"
 
 namespace Ui
@@ -26,15 +25,12 @@ class PersistentConnection : public QDialog
         ~PersistentConnection();
         Packet sendPacket;
         Packet reSendPacket;
-        TCPThread *thread;
         Dtlsthread *dthread;
 
         static const QString RESEND_BUTTON_STYLE;
 
         void init();
         void initDTLS();
-
-        void initWithThread(TCPThread *thethread, quint16 portNum);
 
         [[nodiscard]] quint64 connectionId() const { return connectionId_; }
         void initWithConnection(quint64 connectionId, quint16 port, bool isSecure);

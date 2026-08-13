@@ -10,7 +10,6 @@ set(TEST_NAME "packetsender_unittests")
 
 add_executable(${TEST_NAME}
     test_runner.cpp
-    testdoubles/testtcpthreadclass.h
     testdoubles/MockSslSocket.h
 
     utils/testutils.cpp
@@ -38,12 +37,6 @@ add_executable(${TEST_NAME}
     ../../connectionmanager.cpp
     connectionmanager_tests.cpp
     testdoubles/connections/connectionmanagertestdouble.h
-
-    ../../tcpthread.cpp
-    ../../persistentLoopConnection.cpp
-    tcpthreadtests.cpp
-    tcpthreadqapplicationneededtests.cpp
-    persistentconnectionlooptests.cpp
 
     ../../packetsenderqsslsocketinterface.h
     ../../realqsslsocket.cpp

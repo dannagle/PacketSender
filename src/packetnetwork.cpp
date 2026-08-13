@@ -321,8 +321,6 @@ void PacketNetwork::init()
     sslServers.clear();
     receiveBeforeSend = false;
     delayAfterConnect = 0;
-    tcpthreadList.clear();
-    pcList.clear();
 
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -1015,8 +1013,6 @@ void PacketNetwork::packetToSend(Packet sendpacket)
 
             conn->send(sendpacket);   // creates + starts the OutgoingTcpThread
             pcWindow->show();
-            // (optional) keep the window alive the same way the server does
-            // pcList.append(pcWindow);  // only if you still maintain a list here
             return;
         }
 #endif

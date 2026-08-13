@@ -24,7 +24,6 @@
 #include <QDateTime>
 #include <QHash>
 #include <QHostAddress>
-#include "tcpthread.h"
 #include "packet.h"
 #include "connectionmanager.h"
 #ifndef CONSOLE_BUILD
@@ -159,12 +158,6 @@ private:
         QList<QNetworkAccessManager *> httpList;
         QList<Dtlsthread *> dtlsthreadList;
 
-        QList<TCPThread *> tcpthreadList;
-#ifdef CONSOLE_BUILD
-        QList<void *> pcList;
-#else
-        QList<PersistentConnection *> pcList;
-#endif
         //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;

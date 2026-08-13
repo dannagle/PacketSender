@@ -13,10 +13,7 @@
 #include "connections/connectiontests.h"
 #include "connections/basetcpconnectiontests.h"
 #include "connectionmanager_tests.h"
-#include "persistentconnectionlooptests.h"
-#include "tcpthreadqapplicationneededtests.h"
 #include "translation_tests.h"
-#include "tcpthreadtests.h"
 #include "basetcpthreadtests.h"
 #include "incomingtcpthreadtests.h"
 #include "outgoingtcpthreadpersistentconnectionlooptests.h"
@@ -140,8 +137,6 @@ int main(int argc, char *argv[])
     };
 
     runGuiTest(new TranslationTests());
-    // runGuiTest(new TcpThread_QApplicationNeeded_tests());
-    // runGuiTest(new PersistentConnectionLoopTests());
     runGuiTest(new BaseTcpThreadTests());
     runGuiTest(new OutgoingTcpThreadTests());
     runGuiTest(new SingleSendOutgoingTcpThreadTests());
