@@ -95,9 +95,9 @@ set(
   dtlsthread.cpp
   packetsenderqsslsocketinterface.h
   realqsslsocket.cpp
-  basetcpthread.cpp
-  outgoingtcpthread.cpp
-  incomingtcpthread.cpp
+  tcpThreads/basetcpthread.cpp
+  tcpThreads/outgoingtcpthread.cpp
+  tcpThreads/incomingtcpthread.cpp
   fileutils.cpp
   ConnectionStatusMessages.h
   connections/persistentconnectionwiring.cpp

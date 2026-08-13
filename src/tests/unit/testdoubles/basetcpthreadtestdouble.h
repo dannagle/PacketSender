@@ -6,7 +6,7 @@
 #define BASETCPTHREADTESTDOUBLE_H
 
 #include "MockSslSocket.h"
-#include "../../../basetcpthread.h"
+#include "../../../tcpThreads/basetcpthread.h"
 
 class BaseTcpThreadTestDouble : public BaseTcpThread, public CallTracker
 {

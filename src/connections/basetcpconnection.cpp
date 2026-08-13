@@ -3,7 +3,7 @@
 //
 
 #include "basetcpconnection.h"
-#include "../basetcpthread.h"
+#include "../tcpThreads/basetcpthread.h"
 #include <QUuid>
 #include <QDebug>
 #include<exception>

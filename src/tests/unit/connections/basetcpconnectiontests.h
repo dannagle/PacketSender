@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include "basetcpthread.h"
+#include "../../tcpThreads/basetcpthread.h"
 #include "../testdoubles/basetcpthreadtestdouble.h"
 
 class BaseTcpConnectionTests : public QObject

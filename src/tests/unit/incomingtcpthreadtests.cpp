@@ -11,9 +11,9 @@
 
 #include "settingnames.h"
 #include "utils/testutils.h"
-#include "../../incomingtcpthread.h"
+#include "../../tcpThreads/incomingtcpthread.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
-#include "basetcpthread.h"
+#include "../../tcpThreads/basetcpthread.h"
 #include "settings.h"
 #include "utils/calltracker.h"
 

@@ -4,7 +4,7 @@
 
 #include "incomingtcpconnectiontests.h"
 
-#include "incomingtcpthread.h"
+#include "../../tcpThreads/incomingtcpthread.h"
 #include "connections/incomingtcpconnection.h"
 #include "testdoubles/connections/incomingtcpconnectiontestdouble.h"
 #include "tests/unit/utils/testutils.h"

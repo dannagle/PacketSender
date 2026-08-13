@@ -8,7 +8,7 @@
 #include <type_traits>
 
 #include "../../connections/outgoingtcpconnection.h"
-#include "../../outgoingtcpthread.h"
+#include "../../../../tcpThreads/outgoingtcpthread.h"
 #include "../unit/testdoubles/outgoingtcpthreadtestdouble.h"
 
 class OutgoingTcpConnectionTestDouble : public OutgoingTcpConnection, public CallTracker

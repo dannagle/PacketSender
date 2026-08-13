@@ -10,7 +10,7 @@
 
 #include "connection.h"
 #include "../packet.h"
-#include "../basetcpthread.h"
+#include "../tcpThreads/basetcpthread.h"
 
 class BaseTcpConnection : public Connection
 {

@@ -5,7 +5,7 @@
 #ifndef INCOMINGTCPCONNECTION_H
 #define INCOMINGTCPCONNECTION_H
 #include "basetcpconnection.h"
-#include "incomingtcpthread.h"
+#include "../tcpThreads/incomingtcpthread.h"
 
 
 class IncomingTcpConnection : public BaseTcpConnection

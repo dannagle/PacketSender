@@ -5,7 +5,7 @@
 #ifndef OUTGOINGTCPCONNECTION_H
 #define OUTGOINGTCPCONNECTION_H
 #include "basetcpconnection.h"
-#include "../outgoingtcpthread.h"
+#include "../tcpThreads/outgoingtcpthread.h"
 
 
 class OutgoingTcpConnection : public BaseTcpConnection

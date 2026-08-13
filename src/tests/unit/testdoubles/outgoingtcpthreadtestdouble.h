@@ -6,7 +6,7 @@
 #define OUTGOINGTCHPTHREADTESTDOUBLE_H
 
 #include "realqsslsocket.h"
-#include "../../outgoingtcpthread.h"
+#include "../../tcpThreads/outgoingtcpthread.h"
 #include "utils/calltracker.h"
 
 class OutgoingTcpThreadTestDouble : public OutgoingTcpThread, public CallTracker

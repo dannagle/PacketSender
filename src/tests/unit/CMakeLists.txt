@@ -41,18 +41,18 @@ add_executable(${TEST_NAME}
     ../../packetsenderqsslsocketinterface.h
     ../../realqsslsocket.cpp
 
-    ../../basetcpthread.cpp
+    ../../tcpThreads/basetcpthread.cpp
     basetcpthreadtests.cpp
     testdoubles/basetcpthreadtestdouble.h
 
-    ../../outgoingtcpthread.cpp
+    ../../tcpThreads/outgoingtcpthread.cpp
     outgoingtcpthreadtests.cpp
     singlesendoutgoingtcpthreadtests.cpp
     outgoingtcpthreadpersistentconnectionlooptests.cpp
     outgoingtcpthreadconnectiontests.cpp
     testdoubles/outgoingtcpthreadtestdouble.h
 
-    ../../incomingtcpthread.cpp
+    ../../tcpThreads/incomingtcpthread.cpp
     incomingtcpthreadtests.cpp
     testdoubles/incomingtcpthreadtestdouble.h
 

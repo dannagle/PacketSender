@@ -4,13 +4,13 @@
 
 #include "basetcpconnectiontests.h"
 
-#include "incomingtcpthread.h"
+#include "../../tcpThreads/incomingtcpthread.h"
 #include "../../../connections/basetcpconnection.h"
 #include "../utils/testutils.h"
 
 #include <QtTest>
 
-#include "outgoingtcpthread.h"
+#include "../../tcpThreads/outgoingtcpthread.h"
 #include "../testdoubles/basetcpthreadtestdouble.h"
 #include "testdoubles/incomingtcpthreadtestdouble.h"
 #include "testdoubles/connections/BaseTcpConnectionTestDouble.h"
