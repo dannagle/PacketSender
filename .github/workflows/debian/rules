@@ -5,8 +5,15 @@ export QT_SELECT = qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	dh $@ --sourcedirectory=src
+	dh $@ --buildsystem=cmake --sourcedirectory=src
+
+override_dh_auto_configure:
+	dh_auto_configure --buildsystem=cmake --sourcedirectory=src -- \
+	-DCMAKE_BUILD_TYPE=Release
 
 override_dh_auto_install:
 	dh_auto_install
-	mv debian/packetsender/usr/bin/PacketSender debian/packetsender/usr/bin/packetsender
+	# CMake target is PacketSender; package expects packetsender
+	if [ -f debian/packetsender/usr/bin/PacketSender ]; then \
+	mv debian/packetsender/usr/bin/PacketSender debian/packetsender/usr/bin/packetsender; \
+	fi
