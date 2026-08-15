@@ -2,7 +2,7 @@
 // Created by Tomas Gallucci on 5/9/26.
 //
 
-#include <QtTest/QTest.h>
+#include <QTest>
 
 #include <utility>
 
