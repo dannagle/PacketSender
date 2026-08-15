@@ -364,7 +364,9 @@ void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_socketInterfaceIsNu
     QCOMPARE(errorMessageSpy.count(), 1);
     QCOMPARE(errorMessageSpy.first().first().value<QString>(), "performSSLHandshakeIfNeeded: null socket");
 
-    QCOMPARE(thread.getCallSequence(), {"performSSLHandshakeIfNeeded"});
+    std::vector<QString> expectedErrorMessages;
+    expectedErrorMessages.push_back("performSSLHandshakeIfNeeded");
+    QCOMPARE(thread.getCallSequence(), expectedErrorMessages);
 }
 
 void IncomingTcpThreadTests::testPerformSSLHandshakeIfNeeded_useSnakeOilCertsSetting_data()
@@ -610,7 +612,7 @@ void IncomingTcpThreadTests::testProcessReceivedPacket_doesNOTcallSendSmartReply
     sock->setMockReadData(QByteArray()); // empty hexString
 
     auto thread = IncomingTcpThreadTestDouble(sock);
-    QCOMPARE(thread.getCallSequence(), {});
+    QVERIFY(thread.getCallSequence().empty());
 
     thread.callProcessReceivedPacket();
     QCOMPARE(thread.wasMethodCalled(CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()), false);
@@ -634,7 +636,7 @@ void IncomingTcpThreadTests::testProcessReceivedPacket_happyPath_callsSendSmartR
     sock->setMockReadData("This is the song that never ends"); // empty hexString
 
     auto thread = IncomingTcpThreadTestDouble(sock);
-    QCOMPARE(thread.getCallSequence(), {});
+    QVERIFY(thread.getCallSequence().empty());
 
     thread.callProcessReceivedPacket();
     QCOMPARE(thread.wasMethodCalled(CallTracker::SEND_SMART_REPLY_IF_CONFIGURED()), true);
