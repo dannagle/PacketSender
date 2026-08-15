@@ -24,8 +24,8 @@
 #include <QDateTime>
 #include <QHash>
 #include <QHostAddress>
-#include "tcpthread.h"
 #include "packet.h"
+#include "connectionmanager.h"
 #ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
 #endif
@@ -91,6 +91,7 @@ class PacketNetwork : public QObject
         bool persistentConnectCheck;
         bool isSecure;
         void setIPmode(int mode);
+        void setupConnectionLogging();
         static QString getIPmode();
 
         bool DTLSListening();
@@ -119,6 +120,8 @@ class PacketNetwork : public QObject
         static bool DTLSisSupported();
         QList<DtlsServer *> dtlsServers;
 
+        ConnectionManager* getConnectionManager() { return &connectionManager; };
+
 
     signals:
         void packetReceived(Packet sendpacket);
@@ -130,11 +133,14 @@ public slots:
         void packetReceivedECHO(Packet sendpacket);
         void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
         void packetSentECHO(Packet sendpacket);
+        void outputPacket(Packet receivePacket);
         void readPendingDatagrams();
         void disconnected();
         void packetToSend(Packet sendpacket);
         void on_twoVerify_StateChanged();
 
+protected:
+        ConnectionManager connectionManager;
 
 private slots:
         void httpFinished(QNetworkReply* pReply);
@@ -152,12 +158,6 @@ private:
         QList<QNetworkAccessManager *> httpList;
         QList<Dtlsthread *> dtlsthreadList;
 
-        QList<TCPThread *> tcpthreadList;
-#ifdef CONSOLE_BUILD
-        QList<void *> pcList;
-#else
-        QList<PersistentConnection *> pcList;
-#endif
         //PS now supports any number of servers.
         QList<ThreadedTCPServer *> tcpServers;
         QList<ThreadedTCPServer *> sslServers;

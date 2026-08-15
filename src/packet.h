@@ -75,6 +75,7 @@ class Packet
         bool isPUT();
         bool isDELETE();
         bool isPATCH();
+        bool isValidForSending(QString* errorMessage = nullptr) const;
 
         QDateTime timestamp;
 
@@ -87,7 +88,7 @@ class Packet
         static QString byteArrayToHex(QByteArray data);
         static QByteArray HEXtoByteArray(QString thehex);
         static QString removeIPv6Mapping(QHostAddress ipv6);
-        QByteArray getByteArray();
+        QByteArray getByteArray() const;
         QString asciiString();
 
         void saveToDB();
@@ -102,7 +103,8 @@ class Packet
         static void populateTableWidgetItem(QTableWidgetItem *tItem, Packet thepacket);
         static Packet fetchTableWidgetItemData(QTableWidgetItem *tItem);
 #endif
-        static SmartResponseConfig fetchSmartConfig(int num, QString importFile);
+        static SmartResponseConfig fetchSmartConfig(int num, const QString& importFile);
+        static SmartResponseConfig fetchSmartConfig(int num, const QSettings& settings);
         static QByteArray smartResponseMatch(QList<SmartResponseConfig> smartList, QByteArray data);
         static QByteArray encodingToByteArray(QString encoding, QString data);
 
@@ -127,6 +129,8 @@ class Packet
 
 
         bool operator()(const Packet* a, const Packet* b) const;
+        bool operator==(const Packet& other) const;
+        bool operator!=(const Packet& other) const;
 
 #ifndef CONSOLE_BUILD
         SendPacketButton * getSendButton(QTableWidget *parent);
@@ -148,5 +152,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(Packet)
+
+QDebug operator<<(QDebug debug, const Packet &packet);
 
 #endif // PACKET_H

@@ -19,7 +19,6 @@
 #include <QFontDatabase>
 #include <QResource>
 
-#include "tcpthread.h"
 #include "globals.h"
 #include <QDebug>
 

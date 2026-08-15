@@ -27,8 +27,7 @@
 #include <QStringList>
 #include "dtlsthread.h"
 #include "dtlsserver.h"
-
-
+#include "connections/persistentconnectionwiring.h"
 
 
 #ifdef CONSOLE_BUILD
@@ -75,7 +74,8 @@ public:
 
 
 PacketNetwork::PacketNetwork(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    connectionManager(this)
 {
 
     joinedMulticast.clear();
@@ -122,6 +122,8 @@ void PacketNetwork::kill()
     }
     dtlsServers.clear();
 
+    connectionManager.shutdownAll();
+
     QDEBUG();
 
     QCoreApplication::processEvents();
@@ -143,6 +145,51 @@ void PacketNetwork::packetSentECHO(Packet sendpacket)
 {
     emit packetSent(sendpacket);
 
+}
+
+void PacketNetwork::outputPacket(Packet receivePacket)
+{
+    QTextStream out(stdout);
+
+    out << "\nFrom: " << receivePacket.fromIP << ", Port:" << receivePacket.fromPort;
+    out << "\nResponse Time:" << QDateTime::currentDateTime().toString(DATETIMEFORMAT);
+
+    if(!receivePacket.errorString.isEmpty()) {
+        out << "\nError/Info:" << receivePacket.errorString;
+    }
+
+    if (!receivePacket.hexString.isEmpty()) {
+        out << "\nResponse HEX:" << receivePacket.hexString;
+        out << "\nResponse ASCII:" << receivePacket.asciiString();
+    }
+
+    out << ENDL;
+    out.flush();
+}
+
+void PacketNetwork::setupConnectionLogging()
+{
+    if (consoleMode)
+    {
+        connect(&connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    outputPacket(p);
+                });
+        connect(&connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    outputPacket(p);
+                });
+    } else
+    {
+        connect(&connectionManager, &ConnectionManager::dataReceived,
+                this, [this](quint64, const Packet &p) {
+                    packetReceivedECHO(p);
+                });
+        connect(&connectionManager, &ConnectionManager::packetSent,
+                this, [this](quint64, const Packet &p) {
+                    packetSentECHO(p);
+                });
+    }
 }
 
 QString PacketNetwork::getIPmode()
@@ -274,8 +321,6 @@ void PacketNetwork::init()
     sslServers.clear();
     receiveBeforeSend = false;
     delayAfterConnect = 0;
-    tcpthreadList.clear();
-    pcList.clear();
 
 
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
@@ -327,6 +372,8 @@ void PacketNetwork::init()
     msgBoxBindError.setIcon(QMessageBox::Warning);
     const QString lowPortText = tr("Packet Sender attempted (and failed) to bind to port [PORT], which is less than 1024. \n\nPrivileged ports requires running Packet Sender with admin-level / root permissions.");
     const QString portConsumedText = tr("Packet Sender attempted (and failed) to bind to port [PORT].\n\n - Are you running multiple instances? \n\n - Trying to bind to a missing custom IP?");
+
+    setupConnectionLogging();
 
 #ifdef RENDER_ONLY
     tcpPortList.clear();
@@ -429,7 +476,7 @@ void PacketNetwork::init()
         }
 
 
-        tcp = new ThreadedTCPServer(this);
+        tcp = new ThreadedTCPServer(getConnectionManager(), this);
         tcp->init(tcpPort, false, ipMode);
         tcpServers.append(tcp);
 
@@ -441,7 +488,7 @@ void PacketNetwork::init()
             continue;
         }
 
-        ssl = new ThreadedTCPServer(this);
+        ssl = new ThreadedTCPServer(getConnectionManager(), this);
         ssl->init(sslPort, true, ipMode);
         sslServers.append(ssl);
 
@@ -453,30 +500,19 @@ void PacketNetwork::init()
             if(tcp->serverPort() < 1024 && tcp->serverPort() > 0) {
 
                 QString msgText = lowPortText;
-                msgText.replace("[PORT]", QString::number(udpPort));
+                msgText.replace("[PORT]", QString::number(tcp->serverPort()));
                 msgBoxBindError.setText(msgText);
                 msgBoxBindError.exec();
             } else {
                 QString msgText = portConsumedText;
-                msgText.replace("[PORT]", QString::number(udpPort));
+                msgText.replace("[PORT]", QString::number(tcp->serverPort()));
                 msgBoxBindError.setText(msgText);
                 msgBoxBindError.exec();
 
             }
 
         }
-
-
-        QDEBUG() << connect(tcp, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(tcp, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(tcp, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
     }
-
-
-
-
 
     sendResponse = settings.value("sendReponse", false).toBool();
     responseData = (settings.value("responseHex", "")).toString();
@@ -949,6 +985,7 @@ void PacketNetwork::packetToSend(Packet sendpacket)
     sendpacket.receiveBeforeSend = receiveBeforeSend;
     sendpacket.delayAfterConnect = delayAfterConnect;
     sendpacket.persistent = persistentConnectCheck;
+
     if(consoleMode) {
         sendpacket.persistent = false;
     }
@@ -958,62 +995,31 @@ void PacketNetwork::packetToSend(Packet sendpacket)
         sendpacket.hexString = Packet::ASCIITohex(data);
     }
 
-#ifndef CONSOLE_BUILD
-    if (sendpacket.persistent && (sendpacket.isTCP())) {
-        //spawn a window.
-        PersistentConnection * pcWindow = new PersistentConnection();
-        TCPThread * thread = new TCPThread(sendpacket, this);
-        pcWindow->sendPacket = sendpacket;
-        pcWindow->init();
-        pcWindow->thread = thread;
-
-
-        QDEBUG() << ": thread Connection attempt " <<
-                 connect(pcWindow, SIGNAL(persistentPacketSend(Packet)), thread, SLOT(sendPersistant(Packet)))
-                 << connect(pcWindow, SIGNAL(closeConnection()), thread, SLOT(closeConnection()))
-                 << connect(thread, SIGNAL(connectStatus(QString)), pcWindow, SLOT(statusReceiver(QString)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), pcWindow, SLOT(packetSentSlot(Packet)));
-
-
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-
-
-        //connect(&packetNetwork, SIGNAL(packetSent(Packet)),
-        //        this, SLOT(toTrafficLog(Packet)));
-
-        pcWindow->show();
-        thread->start();
-
-
-        //Network manager will manage this thread so the UI window doesn't need to.
-        tcpthreadList.append(thread);
-
-        return;
-
-    }
-#endif
-
-    QHostAddress address;
-    address.setAddress(sendpacket.toIP);
-
-
+    // ---------------------------------------------------------------
+    // TCP / SSL (both persistent and one-shot)
+    // ---------------------------------------------------------------
     if (sendpacket.isTCP()) {
-        QDEBUG() << "Send this packet:" << sendpacket.name;
+#ifndef CONSOLE_BUILD
+        if (sendpacket.persistent) {
+            auto [id, conn] = connectionManager.createOutgoingTcpConnection();
 
+            PersistentConnection *pcWindow = new PersistentConnection();
+            pcWindow->sendPacket = sendpacket;
+            pcWindow->initWithConnection(id, sendpacket.port, sendpacket.isSSL());
 
-        TCPThread *thread = new TCPThread(sendpacket, this);
+            // Re-use the shared helper (same one Incoming uses)
+            PersistentConnectionWiring::setupPersistentWindowConnections(
+                pcWindow, &connectionManager, id);
 
-        QDEBUG() << connect(thread, SIGNAL(packetReceived(Packet)), this, SLOT(packetReceivedECHO(Packet)))
-                 << connect(thread, SIGNAL(toStatusBar(QString, int, bool)), this, SLOT(toStatusBarECHO(QString, int, bool)))
-                 << connect(thread, SIGNAL(packetSent(Packet)), this, SLOT(packetSentECHO(Packet)));
-        QDEBUG() << connect(thread, SIGNAL(destroyed()), this, SLOT(disconnected()));
-
-        //Prevent Qt from auto-destroying these threads.
-        //TODO: Develop a real thread manager.
-        tcpthreadList.append(thread);
-        thread->start();
+            conn->send(sendpacket);   // creates + starts the OutgoingTcpThread
+            pcWindow->show();
+            return;
+        }
+#endif
+        // One-shot (or console) outgoing TCP
+        auto [id, conn] = connectionManager.createOutgoingTcpConnection();
+        conn->send(sendpacket);
+        // Logging is already handled by setupConnectionLogging()
         return;
     }
 

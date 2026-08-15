@@ -104,7 +104,7 @@ bool MainPacketReceiver::initUDP(QString host, int port)
 
 bool MainPacketReceiver::initSSL(QString host, int port, bool encrypted)
 {
-    tcpServer = new ThreadedTCPServer(nullptr);
+    tcpServer = new ThreadedTCPServer(packetNetwork->getConnectionManager());
     tcpServer->init(port, encrypted, host);
     tcpServer->consoleMode = true;
     tcpServer->responsePacket(packetReply);

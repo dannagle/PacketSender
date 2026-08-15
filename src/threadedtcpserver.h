@@ -5,7 +5,7 @@
 #include <QTcpServer>
 #include <QList>
 
-#include "tcpthread.h"
+#include "connectionmanager.h"
 #ifndef CONSOLE_BUILD
 #include "persistentconnection.h"
 #endif
@@ -13,39 +13,22 @@ class ThreadedTCPServer : public QTcpServer
 {
         Q_OBJECT
     public:
-        explicit ThreadedTCPServer(QObject *parent = nullptr);
+        explicit ThreadedTCPServer(ConnectionManager* manager, QObject *parent = nullptr);
         bool encrypted;
-
-        bool init(quint16 port, bool isEncrypted, QString ipMode);
         bool consoleMode;
+
+        bool init(quint16 port, bool isEncrypted, const QString& ipMode);
+
         void responsePacket(Packet packetToSend);
 
     protected:
         void incomingConnection(qintptr socketDescriptor);
-
-    signals:
-        void packetReceived(Packet sendpacket);
-        void toStatusBar(const QString & message, int timeout = 0, bool override = false);
-        void packetSent(Packet sendpacket);
-
-
-    public slots:
-        void packetReceivedECHO(Packet sendpacket);
-        void toStatusBarECHO(const QString & message, int timeout = 0, bool override = false);
-        void packetSentECHO(Packet sendpacket);
-        void outputTCPPacket(Packet receivePacket);
-
-
+        ConnectionManager* connectionManager;
 
     private:
-        QList<TCPThread *> threads;
         Packet packetReply;
 
-
-
-        QList<TCPThread *> tcpthreadList;
 #ifndef CONSOLE_BUILD
-
         QList<PersistentConnection *> pcList;
 #endif
 

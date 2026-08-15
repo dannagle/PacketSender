@@ -19,11 +19,19 @@ jobs:
     - name: install_dependencies
       run: |
            sudo apt update
-           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential
+           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential qt6-translations-l10n libgl1-mesa-dev
+    - name: unit tests
+      env:
+        QT_QPA_PLATFORM: offscreen
+      run: |
+        cmake -S src -B build-tests \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DPACKETSENDER_BUILD_TESTS=ON
+        cmake --build build-tests -j"$(nproc)"
+        ctest --test-dir build-tests --output-on-failure
     - name: build
       run: |
            debuild --no-lintian --no-sign
-
     - name: Collect Debian Artifacts
       run: |
         mkdir -p artifacts

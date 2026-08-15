@@ -36,8 +36,7 @@ PersistentConnection::PersistentConnection(QWidget *parent) :
     QDEBUG() << ": refreshTimer Connection attempt " <<
              connect(&refreshTimer, SIGNAL(timeout()), this, SLOT(refreshTimerTimeout()))
              << connect(this, SIGNAL(rejected()), this, SLOT(aboutToClose()))
-             << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()))
-             << connect(this, SIGNAL(dialogIsClosing()), this, SLOT(aboutToClose()));
+             << connect(this, SIGNAL(accepted()), this, SLOT(aboutToClose()));
     QDEBUG() << "Setup timer";
     refreshTimer.setInterval(200);
     refreshTimer.start();
@@ -101,16 +100,7 @@ void PersistentConnection::aboutToClose()
 {
     QDEBUG() << "Stopping timer";
     refreshTimer.stop();
-    QDEBUG() << "checking thread null";
-    if (thread == NULL) {
-        QDEBUG() << "pointer is null";
-    } else {
-        QDEBUG() << "requesting stop";
-        thread->closeRequest = true;
-    }
-
-    //cannot reliably call "wait" on a thread, so just exit.
-
+    emit closeConnection();
 }
 
 void PersistentConnection::statusReceiver(QString message)
@@ -156,20 +146,23 @@ PersistentConnection::~PersistentConnection()
 
 
 
-void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum)
+void PersistentConnection::initWithConnection(quint64 connectionId, quint16 port, bool isSecure)
 {
+    connectionId_ = connectionId;
 
-    thread = thethread;
-
-    if (thread->isSecure) {
-        setWindowTitle("SSL://"+tr("You:") + QString::number(portNum));
+    if (isSecure) {
+        setWindowTitle("SSL://You:" + QString::number(port));
     } else {
-        setWindowTitle("TCP://"+tr("You:") + QString::number(portNum));
+        setWindowTitle("TCP://You:" + QString::number(port));
     }
 
     QApplication::processEvents();
 
-    ui->stopResendingButton->hide();
+    reSendPacket.clear();
+    if (sendPacket.repeat > 0)
+        reSendPacket = sendPacket;   // includes toIP
+    else
+        ui->stopResendingButton->hide();
 
     QApplication::processEvents();
 }
@@ -177,8 +170,6 @@ void PersistentConnection::initWithThread(TCPThread * thethread, quint16 portNum
 
 void PersistentConnection::init()
 {
-
-    this->thread = nullptr;
     QString tcpOrSSL = "TCP";
     if (sendPacket.isSSL()) {
         tcpOrSSL = "SSL";
@@ -312,9 +303,11 @@ void PersistentConnection::refreshTimerTimeout()
         ui->timeLabel->setText(datestamp);
 
         QDateTime now = QDateTime::currentDateTime();
-        int repeatMS = (int)(reSendPacket.repeat * 1000 - 100);
-        if (reSendPacket.timestamp.addMSecs(repeatMS) < now) {
-            reSendPacket.timestamp = now;
+        if (reSendPacket.repeat > 0
+            && !reSendPacket.toIP.isEmpty()
+            && reSendPacket.timestamp.addMSecs(int(reSendPacket.repeat * 1000 - 100)) < now)
+        {
+            reSendPacket.timestamp = QDateTime::currentDateTime();
             emit persistentPacketSend(reSendPacket);
         }
 
@@ -402,6 +395,18 @@ void PersistentConnection::packetSentSlot(Packet pkt)
 
 void PersistentConnection::packetReceivedSlot(Packet pkt)
 {
+    if (
+        sendPacket.toIP.isEmpty()
+        && !pkt.fromIP.isEmpty()
+        && pkt.fromIP.toLower() != "you") {
+            sendPacket.toIP = pkt.fromIP;
+            sendPacket.port = pkt.fromPort;
+
+            if (sendPacket.tcpOrUdp.isEmpty())
+            {
+                sendPacket.tcpOrUdp = pkt.tcpOrUdp;
+            }
+    }
     packetSentSlot(pkt);
 }
 

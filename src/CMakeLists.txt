@@ -25,6 +25,7 @@ set(
   mainwindow.h
   panel.h
   globals.h
+  settingnames.h
   panelgenerator.h
   persistentconnection.h
   persistenthttp.h
@@ -62,6 +63,11 @@ set(
   PACKETSENDER_SRCS
   about.cpp
   brucethepoodle.cpp
+  connections/connection.cpp
+  connections/basetcpconnection.cpp
+  connections/incomingtcpconnection.cpp
+  connections/outgoingtcpconnection.cpp
+  connectionmanager.cpp
   irisandmarigold.cpp
   cloudui.cpp
   main.cpp
@@ -79,7 +85,6 @@ set(
   sendpacketbutton.cpp
   settings.cpp
   subnetcalc.cpp
-  tcpthread.cpp
   threadedtcpserver.cpp
   udpflooding.cpp
   languagechooser.cpp
@@ -88,6 +93,14 @@ set(
   association.cpp
   dtlsserver.cpp
   dtlsthread.cpp
+  packetsenderqsslsocketinterface.h
+  realqsslsocket.cpp
+  tcpThreads/basetcpthread.cpp
+  tcpThreads/outgoingtcpthread.cpp
+  tcpThreads/incomingtcpthread.cpp
+  fileutils.cpp
+  ConnectionStatusMessages.h
+  connections/persistentconnectionwiring.cpp
 )
 
 
@@ -176,6 +189,17 @@ if(APPLE)
       MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist
       OUTPUT_NAME "packetsender"
   )
+endif()
+
+# ==================== UNIT TESTS (QtTest) ====================
+option(PACKETSENDER_BUILD_TESTS "Build unit tests (QtTest)" OFF)
+
+if(PACKETSENDER_BUILD_TESTS)
+  find_package(Qt6 REQUIRED COMPONENTS Test)
+
+  enable_testing()
+
+  add_subdirectory(tests/unit)
 endif()
 
 # -------------------
