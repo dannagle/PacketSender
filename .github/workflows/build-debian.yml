@@ -19,7 +19,7 @@ jobs:
     - name: install_dependencies
       run: |
            sudo apt update
-           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential qt6-translations-l10n
+           sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential qt6-translations-l10n libgl1-mesa-dev
     - name: unit tests
       env:
         QT_QPA_PLATFORM: offscreen
