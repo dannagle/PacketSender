@@ -254,7 +254,6 @@ void OutgoingTcpThreadPersistentConnectionLoopTests::testProcessIncomingData_soc
     expectedCallSequence.push_back("sendReplyIfNeeded");
     QVERIFY(std::equal(expectedCallSequence.begin(), expectedCallSequence.end(),
                    thread.getCallSequence().begin()));
-    // QCOMPARE(expectedCallSequence, thread.getCallSequence());
 }
 
 // waitForAndProcessIncomingData()

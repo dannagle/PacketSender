@@ -2,7 +2,7 @@
 // Created by Tomas Gallucci on 4/11/26.
 //
 
-#include <QtTest/QTest.h>
+#include <QTest>
 #include <QVariant>
 #include <QSignalSpy>
 #include <QTcpServer>
