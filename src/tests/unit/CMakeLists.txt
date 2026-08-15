@@ -64,6 +64,7 @@ add_executable(${TEST_NAME}
     ../../fileutils.cpp
 
     ../../packetsender.qrc
+    ../../translations.qrc
     ../../ConnectionStatusMessages.h
 )
 

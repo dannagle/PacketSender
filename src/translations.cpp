@@ -4,7 +4,7 @@
 
 // Define the static map
 const QMap<QString, std::tuple<QString, QString, QString>> Translations::languageMap = {
-    {"Chinese",  {"qt_zh_cn",     "qtbase_zh_cn",     ":/languages/packetsender_cn.qm"}},
+    {"Chinese",  {"qt_zh_CN",     "qtbase_zh_CN",     ":/languages/packetsender_cn.qm"}},
     {"Spanish",  {"qt_es",         "qtbase_es",         ":/languages/packetsender_es.qm"}},
     {"German",   {"qt_de",         "qtbase_de",         ":/languages/packetsender_de.qm"}},
     {"French",   {"qt_fr",         "qtbase_fr",         ":/languages/packetsender_fr.qm"}},
