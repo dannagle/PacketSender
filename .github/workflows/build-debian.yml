@@ -21,6 +21,8 @@ jobs:
            sudo apt update
            sudo apt install cmake debhelper devscripts qt6-base-dev qt6-base-dev-tools qt6-tools-dev build-essential
     - name: unit tests
+      env:
+        QT_QPA_PLATFORM: offscreen
       run: |
         cmake -S src -B build-tests \
           -DCMAKE_BUILD_TYPE=Release \
