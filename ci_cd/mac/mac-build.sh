@@ -72,10 +72,11 @@ cd build
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 
 
+# Build translations first, then the app
+~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --target release_translations --config Release
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release
 
-
-~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app  -appstore-compliant
+~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app -always-overwrite # -appstore-compliant
 
 mv Release/packetsender.app packetsender.app
 
