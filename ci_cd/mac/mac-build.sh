@@ -76,6 +76,10 @@ rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --target release_translations --config Release
 ~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release
 
+# Force macOS to recognize supported languages
+mkdir -p Release/packetsender.app/Contents/Resources/{en,fr,de,es,it,zh}.lproj
+
+
 ~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app -always-overwrite # -appstore-compliant
 
 mv Release/packetsender.app packetsender.app
