@@ -4,11 +4,11 @@
 
 // Define the static map
 const QMap<QString, std::tuple<QString, QString, QString>> Translations::languageMap = {
-    {"Chinese",  {"qt_zh_cn",     "qtbase_zh_cn",     ":/languages/packetsender_cn.qm"}},
-    {"Spanish",  {"qt_es",         "qtbase_es",         ":/languages/packetsender_es.qm"}},
-    {"German",   {"qt_de",         "qtbase_de",         ":/languages/packetsender_de.qm"}},
-    {"French",   {"qt_fr",         "qtbase_fr",         ":/languages/packetsender_fr.qm"}},
-    {"Italian",  {"qt_it",         "qtbase_it",         ":/languages/packetsender_it.qm"}},
+    {"Chinese",  {"qt_zh_cn",     "qtbase_zh_cn",     ":/i18n/packetsender_cn.qm"}},
+    {"Spanish",  {"qt_es",         "qtbase_es",         ":/i18n/packetsender_es.qm"}},
+    {"German",   {"qt_de",         "qtbase_de",         ":/i18n/packetsender_de.qm"}},
+    {"French",   {"qt_fr",         "qtbase_fr",         ":/i18n/packetsender_fr.qm"}},
+    {"Italian",  {"qt_it",         "qtbase_it",         ":/i18n/packetsender_it.qm"}},
 };
 
 bool Translations::loadAndInstallTranslators(

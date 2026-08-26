@@ -95,7 +95,6 @@ set(
   PACKETSENDER_QRC
   packetsender.qrc
   qdarkstyle/style.qrc
-  translations.qrc
 )
 
 if(APPLE)

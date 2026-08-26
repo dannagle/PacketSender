@@ -58,5 +58,12 @@
         <file>snakeoil.pem.base64</file>
         <file>snakeoilca.crt.base64</file>
         <file>private.key.base64</file>
+        <file>languages/chinese-flag.png</file>
+        <file>languages/english-flag.png</file>
+        <file>languages/french-flag.png</file>
+        <file>languages/german-flag.png</file>
+        <file>languages/hindi-flag.png</file>
+        <file>languages/italian-flag.png</file>
+        <file>languages/spanish-flag.png</file>
     </qresource>
 </RCC>
