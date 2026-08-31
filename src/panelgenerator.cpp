@@ -18,6 +18,8 @@
 #include <QProcess>
 #include <QFontDatabase>
 #include <QResource>
+#include <QResizeEvent>
+#include <QSize>
 
 #include "tcpthread.h"
 #include "globals.h"
@@ -30,6 +32,10 @@ extern void themeTheButton(QPushButton * button);
 
 bool PanelGenerator::darkMode = false;
 bool PanelGenerator::renderOnly = false;
+const int PanelGenerator::baseFontSize = 20;
+const int PanelGenerator::maxFontSize = 50;
+const int PanelGenerator::referenceDimension = 800; // smaller window dimension that maps to baseFontSize
+
 
 PanelGenerator::PanelGenerator(QWidget *parent) :
     QMainWindow(parent),
@@ -198,6 +204,7 @@ void PanelGenerator::clearLayout()
             }
         }
     }
+    panelButtons.clear();
 
     foreach(QWidget * w, statusBarWidgets) {
         statusBar()->removeWidget(w);
@@ -363,12 +370,8 @@ void PanelGenerator::setHeaders()
 
 void PanelGenerator::themePanelButton(QPushButton *button)
 {
-
-    // TODO: make this font resize based on window size.
-
     int id = QFontDatabase::addApplicationFont("://OpenSans-Regular.ttf");
     QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont opensans(family);
 
     auto label = new QLabel(button->text(),button);
     button->setText("");
@@ -377,13 +380,16 @@ void PanelGenerator::themePanelButton(QPushButton *button)
 
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    QFont opensans(family);
+    opensans.setPointSize(panelFontSize(size()));
     label->setFont(opensans);
 
     label->setAutoFillBackground(true);
     if(PanelGenerator::darkMode) {
-        label->setStyleSheet("QLabel { font-size: 20pt; color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+        label->setStyleSheet("QLabel { color: white; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
     } else {
-        label->setStyleSheet("QLabel { font-size: 20pt; color: black; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
+        label->setStyleSheet("QLabel { color: black; background-color: transparent;} QLabel::hover { color: #BC810C; } ");
     }
     label->setCursor(Qt::PointingHandCursor);
     button->setCursor(Qt::PointingHandCursor);
@@ -391,19 +397,46 @@ void PanelGenerator::themePanelButton(QPushButton *button)
     label->update();
     layout->addWidget(label,0,Qt::AlignCenter);
 
+    panelButtons.append(button);
+
+}
+
+int PanelGenerator::panelFontSize(const QSize &windowSize) const
+{
+    int smallerDim = qMin(windowSize.width(), windowSize.height());
+    int scaled = qRound(PanelGenerator::baseFontSize * (qreal)smallerDim / PanelGenerator::referenceDimension);
+    return qBound(PanelGenerator::baseFontSize, scaled, PanelGenerator::maxFontSize);
+}
+
+void PanelGenerator::updatePanelFonts()
+{
+    int fontSize = panelFontSize(size());
+    foreach(QPushButton * button, panelButtons) {
+        QLabel * label = button->findChild<QLabel *>();
+        if (label != nullptr) {
+            QFont font = label->font();
+            font.setPointSize(fontSize);
+            label->setFont(font);
+        }
+    }
+}
+
+void PanelGenerator::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    updatePanelFonts();
+
 }
 
 
 void PanelGenerator::renderEditMode(bool last /* = false */)
 {
-
     clearLayout();
     isViewing = false;
     setHeaders();
     panel.sortButtons();
 
     addLinkButton->show();
-
 
 /*
 Target layout.
