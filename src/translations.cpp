@@ -1,6 +1,7 @@
 // translations.cpp
 #include "translations.h"
 #include <QDebug>
+#include "globals.h"
 
 // Define the static map
 const QMap<QString, std::tuple<QString, QString, QString>> Translations::languageMap = {
@@ -23,9 +24,10 @@ bool Translations::loadAndInstallTranslators(
     bool qtbaseOk = qtbaseTrans.load(qtbaseName, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     bool appOk    = appTrans.load(appQmPath);
 
-    qDebug() << "qt lang loaded"     << qtOk;
-    qDebug() << "base lang loaded"   << qtbaseOk;
-    qDebug() << "app lang loaded"    << appOk;
+    QDEBUG() << "Attempting"     << qtName << qtbaseName << appQmPath;
+    QDEBUG() << "qt lang loaded"     << qtOk;
+    QDEBUG() << "base lang loaded"   << qtbaseOk;
+    QDEBUG() << "app lang loaded"    << appOk;
 
     bool allInstalled =
         QApplication::installTranslator(&qtTrans) &&

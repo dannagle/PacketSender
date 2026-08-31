@@ -383,9 +383,11 @@ QString Settings::language()
 {
 
     QString locale = QLocale::system().name().section("", 0, 2);
-    QDEBUGVAR(locale);
     QSettings settings(SETTINGSFILE, QSettings::IniFormat);
     QString language = settings.value("languageCombo", "English").toString().toLower();
+
+    QDEBUGVAR(language);
+
 
     if(language.contains("chinese")) {
         return "Chinese";
