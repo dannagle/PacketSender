@@ -143,7 +143,7 @@ qt_add_translations(${PROJECT_NAME}
     languages/packetsender_it.ts
     languages/packetsender_cn.ts
   )
-
+  
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Build architectures for Mac OS X" FORCE)
 
 # -------------------

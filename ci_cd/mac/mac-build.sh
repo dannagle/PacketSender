@@ -53,13 +53,14 @@ export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
 mkdir build
 cd build
 
-~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -G Xcode \
+~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake -G Ninja \
+  -DCMAKE_MAKE_PROGRAM="$HOME/Qt/Tools/Ninja/ninja" \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
   -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
-  -DCMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake \
+  -DCMAKE_PREFIX_PATH="$HOME/Qt/6.9.2/macos/lib/cmake" \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-  -DQT_QMAKE_EXECUTABLE=~/Qt/6.9.2/macos/bin/qmake \
+  -DQT_QMAKE_EXECUTABLE="$HOME/Qt/6.9.2/macos/bin/qmake" \
   -DQT_DEBUG_FIND_PACKAGE=ON \
   -DQT_NO_CREATE_VERSIONLESS_TARGETS=OFF \
   -DQT_FEATURE_multimedia=ON \
@@ -67,22 +68,15 @@ cd build
   -DQT_FEATURE_widgets=ON \
   -DQT_FEATURE_gui=ON \
   -DQT_FEATURE_core=ON \
-  ..
-
+  ../src
+  
+  
 rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 
 
-# Build translations first, then the app
-~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --target release_translations --config Release
-~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release
+~/Qt/Tools/CMake/CMake.app/Contents/bin/cmake --build . --config Release 
 
-# Force macOS to recognize supported languages
-mkdir -p Release/packetsender.app/Contents/Resources/{en,fr,de,es,it,zh}.lproj
-
-
-~/Qt/6.9.2/macos/bin/macdeployqt Release/packetsender.app -always-overwrite # -appstore-compliant
-
-mv Release/packetsender.app packetsender.app
+~/Qt/6.9.2/macos/bin/macdeployqt packetsender.app -always-overwrite # -appstore-compliant
 
 /usr/bin/codesign --option runtime --deep --force --sign  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
