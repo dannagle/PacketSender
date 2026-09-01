@@ -16,6 +16,10 @@ find_package(Qt6 REQUIRED COMPONENTS
     LinguistTools
 )
 
+
+qt_standard_project_setup(I18N_TRANSLATED_LANGUAGES es de fr it)
+
+
 set(
   PACKETSENDER_UI_HEADERS
   about.h
@@ -142,8 +146,13 @@ qt_add_translations(${PROJECT_NAME}
     languages/packetsender_es.ts
     languages/packetsender_it.ts
     languages/packetsender_cn.ts
-  )
-  
+    QM_FILES_OUTPUT_VARIABLE my_qm_files
+)
+
+set_source_files_properties(${my_qm_files} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources/languages")
+target_sources(${PROJECT_NAME} PRIVATE ${my_qm_files})
+
+
 set(CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "Build architectures for Mac OS X" FORCE)
 
 # -------------------

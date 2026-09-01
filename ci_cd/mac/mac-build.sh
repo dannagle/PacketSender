@@ -78,6 +78,11 @@ rm -rf /Users/dannagle/github/PacketSender/PacketSender.app || true
 
 ~/Qt/6.9.2/macos/bin/macdeployqt packetsender.app -always-overwrite # -appstore-compliant
 
+# Copy the translations into the app bundle 
+mkdir -p packetsender.app/Contents/Resources/languages/
+cp $HOME/Qt/6.9.2/macos/translations/qt_{es,de,fr,it,zh_CN}.qm packetsender.app/Contents/Resources/languages/
+cp $HOME/Qt/6.9.2/macos/translations/qtbase_{es,de,fr,it,zh_CN}.qm packetsender.app/Contents/Resources/languages/
+
 /usr/bin/codesign --option runtime --deep --force --sign  78011CB7EB94BAD1766EF1B6BF6C9A132F6D0571 --timestamp packetsender.app
 mv packetsender.app PacketSender.app
 mv PacketSender.app /Users/dannagle/github/PacketSender
