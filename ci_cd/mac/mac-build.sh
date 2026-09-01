@@ -47,9 +47,9 @@ plutil -replace CFBundleVersion -string "$BUILD_VERSION" Info.plist
 
 
 
-
 export CMAKE_PREFIX_PATH=~/Qt/6.9.2/macos/lib/cmake
 
+cd ..
 mkdir build
 cd build
 
