@@ -9,8 +9,8 @@ BUILD_VERSION="$1";
 php ci_cd/linux/linux-prebuild.php $BUILD_VERSION
 # exit 99
 cd src
-qmake --version
-qmake PacketSender.pro
+qmake6 --version
+qmake6 PacketSender.pro
 make clean
 make -j4
 ls
