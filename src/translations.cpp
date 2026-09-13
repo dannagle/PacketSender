@@ -3,6 +3,8 @@
 #include <QDebug>
 #include "globals.h"
 // Define the static map
+
+#ifdef __APPLE__
 const QMap<QString, std::tuple<QString, QString, QString>> Translations::languageMap = {
     {"Chinese",  {"qt_zh_CN",  "qtbase_zh_CN",  "packetsender_cn.qm"}},
     {"Spanish",  {"qt_es",     "qtbase_es",     "packetsender_es.qm"}},
@@ -10,6 +12,18 @@ const QMap<QString, std::tuple<QString, QString, QString>> Translations::languag
     {"French",   {"qt_fr",     "qtbase_fr",     "packetsender_fr.qm"}},
     {"Italian",  {"qt_it",     "qtbase_it",     "packetsender_it.qm"}},
 };
+#else
+
+const QMap<QString, std::tuple<QString, QString, QString>> Translations::languageMap = {
+    {"Chinese",  {"qt_zh_CN",  "qtbase_zh_CN",  ":/languages/packetsender_cn.qm"}},
+    {"Spanish",  {"qt_es",     "qtbase_es",     ":/languages/packetsender_es.qm"}},
+    {"German",   {"qt_de",     "qtbase_de",     ":/languages/packetsender_de.qm"}},
+    {"French",   {"qt_fr",     "qtbase_fr",     ":/languages/packetsender_fr.qm"}},
+    {"Italian",  {"qt_it",     "qtbase_it",     ":/languages/packetsender_it.qm"}},
+    };
+
+#endif
+
 
 
 bool Translations::loadAndInstallTranslators(
@@ -23,12 +37,16 @@ bool Translations::loadAndInstallTranslators(
 
 #ifdef __APPLE__
     QString translationDir = QCoreApplication::applicationDirPath() + "/../Resources/languages/";
-#else
-    QString translationDir = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
-#endif
     bool qtOk     = qtTrans.load(qtName,     translationDir);
     bool qtbaseOk = qtbaseTrans.load(qtbaseName, translationDir);
     bool appOk    = appTrans.load(translationDir + appQmPath);
+
+#else
+    QString translationDir = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+    bool qtOk     = qtTrans.load(qtName,     translationDir);
+    bool qtbaseOk = qtbaseTrans.load(qtbaseName, translationDir);
+    bool appOk    = appTrans.load(appQmPath);
+#endif
 
     QDEBUG() << "Attempting"     << qtName << qtbaseName << appQmPath << translationDir;    
     QDEBUG() << "qt lang loaded"     << qtOk;

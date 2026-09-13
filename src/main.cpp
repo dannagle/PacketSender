@@ -103,33 +103,6 @@ void myMessageOutputDisable(QtMsgType type, const QMessageLogContext &context, c
 
 #ifndef CONSOLE_BUILD
 
-bool loadAndInstallTranslators(
-    QTranslator &qtTrans,
-    QTranslator &qtbaseTrans,
-    QTranslator &appTrans,
-    const QString &qtName,
-    const QString &qtbaseName,
-    const QString &appQmPath)
-{
-    bool qtOk     = qtTrans.load(qtName,     QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    bool qtbaseOk = qtbaseTrans.load(qtbaseName, QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    bool appOk    = appTrans.load(appQmPath);
-
-    QDEBUG() << "qt lang loaded"     << qtOk;
-    QDEBUG() << "base lang loaded"   << qtbaseOk;
-    QDEBUG() << "app lang loaded"    << appOk;
-
-    bool allInstalled =
-        QApplication::installTranslator(&qtTrans) &&
-        QApplication::installTranslator(&qtbaseTrans) &&
-        QApplication::installTranslator(&appTrans);
-
-    QDEBUG() << "All translators installed:" << allInstalled;
-
-    return allInstalled;
-}
-
-
 void debugThemeFiles(bool debugMode) {
     if(debugMode) {
         QFile testDark(Settings::DARK_STYLE_SHEET_NAME);
@@ -1488,7 +1461,7 @@ int main(int argc, char *argv[])
 
         QString language = Settings::language();
         Translations::installLanguage(language);
-
+        //return 0;
 
         QFile file_system(":/packetsender.css");
         QFile file_dark(":/qdarkstyle/style.qss");
