@@ -24,6 +24,11 @@ public:
     explicit PanelGenerator(QWidget *parent = nullptr);
     static bool darkMode;
     static bool renderOnly;
+
+    static const int baseFontSize;
+    static const int maxFontSize;
+    static const int referenceDimension; // smaller window dimension that maps to baseFontSize
+
     ~PanelGenerator();
 
     void init(QList<Packet> packets);
@@ -37,6 +42,8 @@ public:
 
     static void showFileInFolder(const QString &path);
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 signals:
     void sendPacket(Packet sendpacket);
@@ -57,7 +64,6 @@ private slots:
     void on_actionSave_As_triggered();
 
     void on_actionLaunch_Panel_triggered();
-
 
     void on_actionPanels_File_triggered();
 
@@ -93,7 +99,10 @@ private:
 
     PacketNetwork * packetNetwork;
 
-
     QPushButton *createQPushButtonWithWordWrap(QWidget *parent, const QString &text);
+
+    QList<QPushButton *> panelButtons;
+    int panelFontSize(const QSize &windowSize) const;
+    void updatePanelFonts();
 };
 
