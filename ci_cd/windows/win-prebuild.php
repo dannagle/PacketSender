@@ -7,17 +7,15 @@ $wininstallertemplate = "/mnt/c/Users/danie/github/naglecode-installers/packetse
 $wininstallerfile = "/mnt/c/Users/danie/github/naglecode-installers/packetsenderinstaller/packetsender64bit.iss";
 $versionflag = "VERSION_GOES_HERE";
 
-if (PHP_OS_FAMILY === 'Windows') {
-    echo "Running on Windows";
-    echo "Replacing installer script with $buildversion\n";
-    $str=file_get_contents($wininstallertemplate);
-    $str=str_replace($versionflag, $buildversion,$str);
-    if(file_put_contents($wininstallerfile, $str) < 5) {
-        echo "Could not write to $wininstallerfile\n";
-        exit(1);
-    }
+echo "Replacing installer script with $buildversion\n";
+$str=file_get_contents($wininstallertemplate);
+$str=str_replace($versionflag, $buildversion,$str);
+if(file_put_contents($wininstallerfile, $str) < 5) {
+    echo "Could not write to $wininstallerfile\n";
+    exit(1);
 }
 
+    
 
 $cppfile = "src/globals.h";
 
