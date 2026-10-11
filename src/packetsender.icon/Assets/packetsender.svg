@@ -1,0 +1,51 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+
+<svg xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  width='400px' height='400px'>
+
+  <title>Packet Sender Logo</title>
+<!--
+Packet Sender and the logo is Copyright Dan Nagle
+http://packetsender.com/
+http://dannagle.com/
+
+-->
+  <style>
+
+    .orangeWiFi { stroke:#FF4E74;fill:none;stroke-width:25; }
+
+    .blueArrow { fill:#382FF7;stroke-width:1;stroke:white; }
+
+  </style>
+<!--
+      <rect class="whiteOut" x="0" y="0" width="400" height="400"/>
+-->
+      <defs>
+        <clipPath id="cutoff">
+          <polygon  points='
+            0 0, 0 100, 100 225, 300 225, 400 100, 400 0
+            '
+            />
+          </clipPath>
+        </defs>
+
+      <circle cx="200" cy="250" r="200" class="orangeWiFi"  clip-path="url(#cutoff)" /> />
+      <circle cx="200" cy="250" r="150" class="orangeWiFi"  clip-path="url(#cutoff)"  /> />
+      <circle cx="200" cy="250" r="100" class="orangeWiFi"  clip-path="url(#cutoff)"  /> />
+      <circle cx="200" cy="250" r="50" class="orangeWiFi"  clip-path="url(#cutoff)"  /> />
+
+
+      <polygon  class="blueArrow" points='
+
+          100 175, 100 225, 300 225, 300 175, 400 250,
+
+          300 325, 300 275, 100 275, 100 325, 0 250
+
+          '
+          />
+
+
+
+</svg>
